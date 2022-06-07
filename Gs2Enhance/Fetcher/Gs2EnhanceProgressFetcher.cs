@@ -44,14 +44,16 @@ namespace Gs2.Unity.UiKit.Gs2Enhance.Fetcher
             {
                 if (_gameSessionHolder != null && _gameSessionHolder.Initialized && 
                     _clientHolder != null && _clientHolder.Initialized &&
-                    Namespace != null)
+                    rate != null)
                 {
                     {
                         var future = _clientHolder.Gs2.Enhance.Namespace(
-                            Namespace.namespaceName
+                            rate.Namespace.namespaceName
                         ).Me(
                             _gameSessionHolder.GameSession
                         ).Progress(
+                            rate.rateName,
+                            ""
                         ).Model();
                         yield return future;
                         if (future.Error != null)
@@ -72,7 +74,7 @@ namespace Gs2.Unity.UiKit.Gs2Enhance.Fetcher
                     if (Progress != null)
                     {
                         var future = _clientHolder.Gs2.Enhance.Namespace(
-                            Namespace.namespaceName
+                            rate.Namespace.namespaceName
                         ).RateModel(
                             Progress.RateName
                         ).Model();
@@ -161,7 +163,7 @@ namespace Gs2.Unity.UiKit.Gs2Enhance.Fetcher
     
     public partial class Gs2EnhanceProgressFetcher
     {
-        public Namespace Namespace;
+        public Rate rate;
     }
 
     /// <summary>

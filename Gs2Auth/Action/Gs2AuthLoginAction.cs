@@ -37,7 +37,6 @@ namespace Gs2.Unity.UiKit.Gs2Auth
         {
             var future = _clientHolder.Gs2.Auth.AccessToken(
             ).Login(
-                userId,
                 key.Grn,
                 body,
                 signature

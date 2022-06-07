@@ -96,8 +96,14 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Fetcher
                             }
                             else
                             {
-                                ItemSet = future.Result;
-                                Fetched = true;
+                                foreach (var item in future.Result)
+                                {
+                                    if (item.Name == itemSet.itemSetName)
+                                    {
+                                        ItemSet = item;
+                                        Fetched = true;
+                                    }
+                                }
                             }
                         }
                         else

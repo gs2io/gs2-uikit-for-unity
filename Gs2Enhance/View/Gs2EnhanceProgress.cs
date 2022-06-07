@@ -62,8 +62,14 @@ namespace Gs2.Unity.UiKit.Gs2Enhance
     {
         public Namespace Namespace
         {
-            get => _progressFetcher.Namespace;
-            set => _progressFetcher.Namespace = value;
+            get => _progressFetcher.rate.Namespace;
+            set => _progressFetcher.rate.Namespace = value;
+        }
+        
+        public Rate Rate
+        {
+            get => _progressFetcher.rate;
+            set => _progressFetcher.rate = value;
         }
     }
 

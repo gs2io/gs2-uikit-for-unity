@@ -15,7 +15,8 @@ namespace Gs2.Unity.UiKit.Core
     public class Gs2ClientHolder : MonoBehaviour
     {
         private Profile _profile;
-
+        public Profile Profile => _profile;
+        
         public Gs2Domain Gs2 { get; private set; }
         public bool Initialized => Gs2 != null;
         

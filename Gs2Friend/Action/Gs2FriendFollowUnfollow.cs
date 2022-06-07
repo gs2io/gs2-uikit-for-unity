@@ -41,7 +41,8 @@ namespace Gs2.Unity.UiKit.Gs2Friend
             ).Me(
                 _gameSessionHolder.GameSession
             ).FollowUser(
-                _followFetcher.follow.userId
+                _followFetcher.follow.userId,
+                true
             ).Unfollow();
             yield return future;
             if (future.Error != null)

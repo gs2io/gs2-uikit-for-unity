@@ -19,29 +19,38 @@
 
 using System;
 using System.Collections;
+#if GS2_ENABLE_UNITASK
+using Cysharp.Threading.Tasks;
+#endif
+using Gs2.Core;
 using Gs2.Core.Exception;
-using Gs2.Unity.Gs2Friend.Model;
-using Gs2.Unity.Gs2Friend.ScriptableObject;
-using Gs2.Unity.UiKit.Core;
-using Gs2.Unity.UiKit.Gs2Friend.Fetcher;
+using Gs2.Unity.Gs2Account.Model;
+using Gs2.Unity.Gs2Auth.Model;
+using Gs2.Unity.Gs2Key.ScriptableObject;
+using Gs2.Unity.Util;
 using UnityEngine;
 using UnityEngine.Events;
+using ErrorEvent = Gs2.Unity.UiKit.Core.ErrorEvent;
+using Namespace = Gs2.Unity.Gs2Account.ScriptableObject.Namespace;
 
-namespace Gs2.Unity.UiKit.Gs2Friend
+namespace Gs2.Unity.UiKit.Core
 {
-    [AddComponentMenu("GS2 UIKit/Friend/Gs2FriendFollowFollow")]
-    public partial class Gs2FriendFollowFollow : MonoBehaviour
+	[AddComponentMenu("GS2 UIKit/Core/Gs2ProfileLoginAction")]
+    public partial class Gs2ProfileLoginAction : MonoBehaviour
     {
         private IEnumerator Process()
         {
-            var future = _clientHolder.Gs2.Friend.Namespace(
-                Namespace.namespaceName
-            ).Me(
-                _gameSessionHolder.GameSession
-            ).FollowUser(
-                targetUserId,
-                true
-            ).Follow();
+            yield return new WaitUntil(() => _clientHolder.Initialized);
+            
+            var future = _clientHolder.Profile.LoginFuture(
+                new Gs2AccountAuthenticator(
+                    session: _clientHolder.Profile.Gs2RestSession,
+                    accountNamespaceName: Namespace.namespaceName,
+                    keyId: key.Grn,
+                    userId: userId,
+                    password: password
+                )
+            );
             yield return future;
             if (future.Error != null)
             {
@@ -56,7 +65,8 @@ namespace Gs2.Unity.UiKit.Gs2Friend
                             onError.Invoke(future.Error, Retry);
                             yield break;
                         }
-                        onFollowComplete.Invoke(this);
+
+                        onLoginComplete.Invoke(EzAccessToken.FromModel(future.Result.AccessToken));
                     }
 
                     onError.Invoke(future.Error, Retry);
@@ -66,7 +76,8 @@ namespace Gs2.Unity.UiKit.Gs2Friend
                 onError.Invoke(future.Error, null);
                 yield break;
             }
-            onFollowComplete.Invoke(this);
+            
+            onLoginComplete.Invoke(EzAccessToken.FromModel(future.Result.AccessToken));
         }
         
         public void OnEnable()
@@ -84,7 +95,7 @@ namespace Gs2.Unity.UiKit.Gs2Friend
     /// Dependent components
     /// </summary>
     
-    public partial class Gs2FriendFollowFollow
+    public partial class Gs2ProfileLoginAction
     {
         private Gs2ClientHolder _clientHolder;
         private Gs2GameSessionHolder _gameSessionHolder;
@@ -100,7 +111,7 @@ namespace Gs2.Unity.UiKit.Gs2Friend
     /// Public properties
     /// </summary>
     
-    public partial class Gs2FriendFollowFollow
+    public partial class Gs2ProfileLoginAction
     {
         
     }
@@ -109,35 +120,38 @@ namespace Gs2.Unity.UiKit.Gs2Friend
     /// Parameters for Inspector
     /// </summary>
     
-    public partial class Gs2FriendFollowFollow
+    public partial class Gs2ProfileLoginAction
     {
         public Namespace Namespace;
-        public string targetUserId;
+        public Key key;
+        public string userId;
+        public string password;
 
-        public void TargetUserId(string value)
+        public void Account(EzAccount account)
         {
-            targetUserId = value;
+            userId = account.UserId;
+            password = account.Password;
         }
     }
 
     /// <summary>
     /// Event handlers
     /// </summary>
-    public partial class Gs2FriendFollowFollow
+    public partial class Gs2ProfileLoginAction
     {
         [Serializable]
-        private class FollowCompleteEvent : UnityEvent<Gs2FriendFollowFollow>
+        private class LoginCompleteEvent : UnityEvent<EzAccessToken>
         {
             
         }
         
         [SerializeField]
-        private FollowCompleteEvent onFollowComplete = new FollowCompleteEvent();
+        private LoginCompleteEvent onLoginComplete = new LoginCompleteEvent();
         
-        public event UnityAction<Gs2FriendFollowFollow> OnFollowComplete
+        public event UnityAction<EzAccessToken> OnLoginComplete
         {
-            add => onFollowComplete.AddListener(value);
-            remove => onFollowComplete.RemoveListener(value);
+            add => onLoginComplete.AddListener(value);
+            remove => onLoginComplete.RemoveListener(value);
         }
 
         [SerializeField]
