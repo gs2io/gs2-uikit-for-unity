@@ -46,7 +46,6 @@ namespace Gs2.Unity.UiKit.Gs2Mission
             _missionTask.missionGroup = missionGroup;
             _missionTask.missionTaskName = missionTask.Name;
             
-            
             var missionTaskFetcher = GetComponentInParent<Gs2MissionMissionTaskFetcher>() ?? GetComponent<Gs2MissionMissionTaskFetcher>();
             var completeFetcher = GetComponentInParent<Gs2MissionCompleteFetcher>() ?? GetComponent<Gs2MissionCompleteFetcher>();
             missionTaskFetcher.missionTask = _missionTask;

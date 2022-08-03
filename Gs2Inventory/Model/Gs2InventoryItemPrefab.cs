@@ -79,8 +79,8 @@ namespace Gs2.Unity.UiKit.Gs2Inventory
     {
         public Item Item
         {
-            get => _inventoryItemFetcher.item;
-            set => _inventoryItemFetcher.item = value;
+            get => _inventoryItemFetcher.Item;
+            set => _inventoryItemFetcher.Item = value;
         }
     }
 

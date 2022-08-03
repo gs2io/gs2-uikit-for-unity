@@ -18,24 +18,24 @@
 
 using System;
 using System.Collections;
-using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Gs2.Core.Exception;
 using Gs2.Unity.Core.Exception;
-using Gs2.Unity.Gs2Inventory.Model;
-using Gs2.Unity.Gs2Inventory.ScriptableObject;
+using Gs2.Unity.Gs2Limit.Model;
+using Gs2.Unity.Gs2Limit.ScriptableObject;
 using Gs2.Unity.UiKit.Core;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace Gs2.Unity.UiKit.Gs2Inventory.Fetcher
+namespace Gs2.Unity.UiKit.Gs2Limit.Fetcher
 {
     /// <summary>
     /// Main
     /// </summary>
 
-    [AddComponentMenu("GS2 UIKit/Inventory/Gs2InventoryItemFetcher")]
-    public partial class Gs2InventoryItemFetcher : MonoBehaviour
+    [AddComponentMenu("GS2 UIKit/Limit/Gs2LimitCounterFetcher")]
+    public partial class Gs2LimitCounterFetcher : MonoBehaviour
     {
         private IEnumerator Fetch()
         {
@@ -44,15 +44,13 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Fetcher
             {
                 if (_gameSessionHolder != null && _gameSessionHolder.Initialized && 
                     _clientHolder != null && _clientHolder.Initialized &&
-                    item != null)
+                    counter != null)
                 {
                     {
-                        var future = _clientHolder.Gs2.Inventory.Namespace(
-                            item.inventory.Namespace.namespaceName
-                        ).InventoryModel(
-                            item.inventory.inventoryName
-                        ).ItemModel(
-                            item.itemName
+                        var future = _clientHolder.Gs2.Limit.Namespace(
+                            counter.limit.Namespace.namespaceName
+                        ).LimitModel(
+                            counter.limit.limitName
                         ).Model();
                         yield return future;
                         if (future.Error != null)
@@ -71,46 +69,35 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Fetcher
                         }
                     }
                     {
-                        var it = _clientHolder.Gs2.Inventory.Namespace(
-                            item.inventory.Namespace.namespaceName
+                        var future = _clientHolder.Gs2.Limit.Namespace(
+                            counter.limit.Namespace.namespaceName
                         ).Me(
                             _gameSessionHolder.GameSession
-                        ).Inventory(
-                            item.inventory.inventoryName
-                        ).ItemSets();
-                        var itemSets = new List<EzItemSet>();
-                        while (it.HasNext())
+                        ).Counter(
+                            counter.limit.limitName,
+                            counter.counterName
+                        ).Model();
+                        yield return future;
+                        if (future.Error != null)
                         {
-                            yield return it.Next();
-                            if (it.Error != null)
+                            if (future.Error is BadRequestException || future.Error is NotFoundException)
                             {
-                                if (it.Error is BadRequestException || it.Error is NotFoundException)
-                                {
-                                    onError.Invoke(e = it.Error, null);
-                                    goto END;
-                                }
-
-                                onError.Invoke(new CanIgnoreException(it.Error), null);
+                                onError.Invoke(e = future.Error, null);
                                 break;
                             }
 
-                            if (it.Current != null)
-                            {
-                                itemSets.Add(it.Current);
-                            }
+                            onError.Invoke(new CanIgnoreException(future.Error), null);
                         }
-
-                        ItemSets = itemSets;
-                        if (Model != null && ItemSets != null)
+                        else
                         {
+                            Counter = future.Result;
                             Fetched = true;
                         }
                     }
                 }
 
-                yield return new WaitForEndOfFrame();
+                yield return new WaitForSeconds(1);
             }
-            END:
             
             var transform1 = transform;
             var builder = new StringBuilder(transform1.name);
@@ -142,7 +129,7 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Fetcher
     /// Dependent components
     /// </summary>
     
-    public partial class Gs2InventoryItemFetcher
+    public partial class Gs2LimitCounterFetcher
     {
         private Gs2ClientHolder _clientHolder;
         private Gs2GameSessionHolder _gameSessionHolder;
@@ -158,10 +145,10 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Fetcher
     /// Public properties
     /// </summary>
     
-    public partial class Gs2InventoryItemFetcher
+    public partial class Gs2LimitCounterFetcher
     {
-        public EzItemModel Model { get; private set; }
-        public List<EzItemSet> ItemSets { get; private set; }
+        public EzLimitModel Model { get; private set; }
+        public EzCounter Counter { get; private set; }
         public bool Fetched { get; private set; }
     }
 
@@ -169,28 +156,15 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Fetcher
     /// Parameters for Inspector
     /// </summary>
     
-    public partial class Gs2InventoryItemFetcher
+    public partial class Gs2LimitCounterFetcher
     {
-        [SerializeField]
-        private Item item;
-        
-        public Item Item
-        {
-            get => item;
-            set
-            {
-                item = value;
-                Fetched = false;
-                Model = null;
-                ItemSets = null;
-            }
-        }
+        public Counter counter;
     }
 
     /// <summary>
     /// Event handlers
     /// </summary>
-    public partial class Gs2InventoryItemFetcher
+    public partial class Gs2LimitCounterFetcher
     {
         [SerializeField]
         internal ErrorEvent onError = new ErrorEvent();

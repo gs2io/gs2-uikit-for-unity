@@ -27,6 +27,8 @@ using Gs2.Unity.Util;
 using UnityEngine;
 using UnityEngine.Events;
 using ErrorEvent = Gs2.Unity.UiKit.Core.ErrorEvent;
+using Gs2ClientHolder = Gs2.Unity.Util.Gs2ClientHolder;
+using Gs2GameSessionHolder = Gs2.Unity.Util.Gs2GameSessionHolder;
 
 namespace Gs2.Unity.UiKit.Gs2Auth
 {

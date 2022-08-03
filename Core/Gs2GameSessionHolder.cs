@@ -1,40 +1,27 @@
-using System;
-using Gs2.Unity.Gs2Auth.Model;
-using Gs2.Unity.Util;
 using UnityEngine;
+using System;
 
 namespace Gs2.Unity.UiKit.Core
 {
-    [AddComponentMenu("GS2 UIKit/Core/Gs2GameSessionHolder")]
-    public class Gs2GameSessionHolder : MonoBehaviour
+    [Obsolete]
+    public class Gs2GameSessionHolder : Util.Gs2GameSessionHolder
     {
-        public GameSession GameSession { get; private set; }
-        public bool Initialized => GameSession != null;
-
         public static Gs2GameSessionHolder Instance
         {
             get
             {
-                var accessTokenHolders = GameObject.FindObjectsOfType<Gs2GameSessionHolder>();
-                if (accessTokenHolders.Length != 1)
+                if (_instance == null)
                 {
-                    Debug.LogError("Either no Gs2GameSessionHolder was found in the scene or more than one was found.");
-                    Debug.LogError("シーン内に Gs2GameSessionHolder が見つからなかったか、2つ以上見つかりました。");
-                    throw new ApplicationException("Either no Gs2GameSessionHolder was found in the scene or more than one was found.");
+                    var clientHolders = FindObjectsOfType<Gs2GameSessionHolder>();
+                    if (clientHolders.Length > 0)
+                    {
+                        return clientHolders[0];
+                    }
+
+                    _instance = new GameObject("Gs2GameSessionHolder").AddComponent<Gs2GameSessionHolder>();
                 }
-
-                return accessTokenHolders[0];
+                return _instance as Gs2GameSessionHolder;
             }
-        }
-
-        public void UpdateAccessToken(EzAccessToken accessToken)
-        {
-            GameSession = new GameSession(accessToken.ToModel());
-        }
-
-        public void Logout()
-        {
-            GameSession = null;
         }
     }
 }
