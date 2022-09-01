@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 namespace Gs2.Unity.UiKit.Gs2Chat

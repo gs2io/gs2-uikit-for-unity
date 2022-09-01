@@ -17,13 +17,10 @@
 // ReSharper disable UnusedAutoPropertyAccessor.Local
 // ReSharper disable CheckNamespace
 
-using System;
-using Gs2.Unity.Gs2Formation.Model;
 using Gs2.Unity.Gs2Formation.ScriptableObject;
-using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Formation.Fetcher;
+using Gs2.Unity.Util;
 using UnityEngine;
-using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2Formation
 {

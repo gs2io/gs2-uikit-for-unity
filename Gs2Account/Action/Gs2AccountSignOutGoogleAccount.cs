@@ -1,11 +1,8 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using Google;
 using Gs2.Core.Exception;
-using Gs2.Core.Model;
-using Gs2.Unity.Core.Exception;
-using Gs2.Unity.UiKit.Core;
+using Gs2.Unity.Util;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -22,7 +19,7 @@ namespace Gs2.Unity.UiKit.Gs2Account
                 GoogleSignIn.DefaultInstance.SignOut();
                 onSignoutComplete.Invoke();
             }
-            catch (Exception e)
+            catch (Gs2Exception e)
             {
                 onError.Invoke(e, null);
             }
@@ -62,7 +59,7 @@ namespace Gs2.Unity.UiKit.Gs2Account
         [SerializeField]
         internal ErrorEvent onError = new ErrorEvent();
         
-        public event UnityAction<Exception, Func<IEnumerator>> OnError
+        public event UnityAction<Gs2Exception, Func<IEnumerator>> OnError
         {
             add => onError.AddListener(value);
             remove => onError.RemoveListener(value);

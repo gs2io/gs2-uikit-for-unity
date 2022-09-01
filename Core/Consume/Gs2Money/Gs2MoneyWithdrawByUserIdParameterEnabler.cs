@@ -1,7 +1,5 @@
-using System;
 using System.Linq;
 using Gs2.Gs2Money.Request;
-using Gs2.Unity.Gs2Money.Model;
 using Gs2.Util.LitJson;
 using UnityEngine;
 

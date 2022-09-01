@@ -19,9 +19,11 @@
 
 using System;
 using System.Collections;
-using Gs2.Unity.UiKit.Core;
+using Gs2.Core.Exception;
+using Gs2.Unity.Util;
 using UnityEngine;
 using UnityEngine.Events;
+using Gs2ClientHolder = Gs2.Unity.UiKit.Core.Gs2ClientHolder;
 
 namespace Gs2.Unity.UiKit.Gs2Account
 {
@@ -38,7 +40,7 @@ namespace Gs2.Unity.UiKit.Gs2Account
                 
                 Gs2ClientHolder.Instance.Gs2.ClearCache();
             }
-            catch (Exception e)
+            catch (Gs2Exception e)
             {
                 onError.Invoke(e, null);
             }
@@ -110,7 +112,7 @@ namespace Gs2.Unity.UiKit.Gs2Account
         [SerializeField]
         internal ErrorEvent onError = new ErrorEvent();
         
-        public event UnityAction<Exception, Func<IEnumerator>> OnError
+        public event UnityAction<Gs2Exception, Func<IEnumerator>> OnError
         {
             add => onError.AddListener(value);
             remove => onError.RemoveListener(value);

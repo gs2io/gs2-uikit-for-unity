@@ -20,15 +20,10 @@
 using System;
 using System.Collections;
 using Gs2.Core.Exception;
-using Gs2.Unity.Gs2Auth.Model;
 using Gs2.Unity.Gs2Key.ScriptableObject;
-using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.Util;
 using UnityEngine;
 using UnityEngine.Events;
-using ErrorEvent = Gs2.Unity.UiKit.Core.ErrorEvent;
-using Gs2ClientHolder = Gs2.Unity.Util.Gs2ClientHolder;
-using Gs2GameSessionHolder = Gs2.Unity.Util.Gs2GameSessionHolder;
 
 namespace Gs2.Unity.UiKit.Gs2Auth
 {
@@ -143,7 +138,7 @@ namespace Gs2.Unity.UiKit.Gs2Auth
     public partial class Gs2AuthLoginAction
     {
         [Serializable]
-        private class LoginCompleteEvent : UnityEvent<EzAccessToken>
+        private class LoginCompleteEvent : UnityEvent<GameSession>
         {
             
         }
@@ -151,7 +146,7 @@ namespace Gs2.Unity.UiKit.Gs2Auth
         [SerializeField]
         private LoginCompleteEvent onLoginComplete = new LoginCompleteEvent();
         
-        public event UnityAction<EzAccessToken> OnLoginComplete
+        public event UnityAction<GameSession> OnLoginComplete
         {
             add => onLoginComplete.AddListener(value);
             remove => onLoginComplete.RemoveListener(value);
@@ -160,7 +155,7 @@ namespace Gs2.Unity.UiKit.Gs2Auth
         [SerializeField]
         internal ErrorEvent onError = new ErrorEvent();
         
-        public event UnityAction<Exception, Func<IEnumerator>> OnError
+        public event UnityAction<Gs2Exception, Func<IEnumerator>> OnError
         {
             add => onError.AddListener(value);
             remove => onError.RemoveListener(value);

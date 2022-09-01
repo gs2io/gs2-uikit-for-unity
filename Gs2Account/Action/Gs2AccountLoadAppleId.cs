@@ -1,5 +1,10 @@
 using System;
 using System.Collections;
+using Gs2.Core.Exception;
+using Gs2.Core.Model;
+using Gs2.Unity.Util;
+using UnityEngine;
+using UnityEngine.Events;
 #if ENABLE_SIGN_IN_WITH_APPLE
 using AppleAuth;
 using AppleAuth.Enums;
@@ -7,11 +12,6 @@ using AppleAuth.Extensions;
 using AppleAuth.Interfaces;
 using AppleAuth.Native;
 #endif
-using Gs2.Core.Exception;
-using Gs2.Core.Model;
-using Gs2.Unity.UiKit.Core;
-using UnityEngine;
-using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2Account
 {
@@ -195,7 +195,7 @@ namespace Gs2.Unity.UiKit.Gs2Account
         [SerializeField]
         internal ErrorEvent onError = new ErrorEvent();
         
-        public event UnityAction<Exception, Func<IEnumerator>> OnError
+        public event UnityAction<Gs2Exception, Func<IEnumerator>> OnError
         {
             add => onError.AddListener(value);
             remove => onError.RemoveListener(value);

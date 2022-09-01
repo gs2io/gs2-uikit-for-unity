@@ -17,13 +17,10 @@
 // ReSharper disable UnusedAutoPropertyAccessor.Local
 // ReSharper disable CheckNamespace
 
-using System;
 using Gs2.Unity.Gs2Inbox.Model;
 using Gs2.Unity.Gs2Inbox.ScriptableObject;
-using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Inbox.Fetcher;
 using UnityEngine;
-using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2Inbox
 {

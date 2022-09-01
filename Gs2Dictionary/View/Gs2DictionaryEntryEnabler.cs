@@ -16,7 +16,6 @@
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
 
-using System;
 using Gs2.Unity.UiKit.Gs2Dictionary.Fetcher;
 using UnityEngine;
 

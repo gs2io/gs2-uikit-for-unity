@@ -17,12 +17,9 @@
 // ReSharper disable UnusedAutoPropertyAccessor.Local
 // ReSharper disable CheckNamespace
 
-using System;
-using Gs2.Unity.Gs2Experience.Model;
 using Gs2.Unity.Gs2Experience.ScriptableObject;
 using Gs2.Unity.UiKit.Gs2Experience.Fetcher;
 using UnityEngine;
-using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2Experience
 {

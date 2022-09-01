@@ -14,10 +14,10 @@
 //    limitations under the License.
 // </copyright>
 
-namespace Google.Impl {
-  using System;
-  using System.Runtime.InteropServices;
+using System;
+using System.Runtime.InteropServices;
 
+namespace Google.Impl {
   /// <summary>
   /// Native future is an interal class that implements the FutureAPIImpl
   /// by calling native methods which are implemented in the native code.
@@ -73,7 +73,7 @@ namespace Google.Impl {
               GoogleSignInImpl.GoogleSignIn_GetImageUrl(userPtr, out_string,
                                                         out_size));
           if (url.Length > 0) {
-            user.ImageUrl = new System.Uri(url);
+            user.ImageUrl = new Uri(url);
           }
 
           user.UserId = OutParamsToString((out_string, out_size) =>

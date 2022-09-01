@@ -19,10 +19,6 @@
 
 using System;
 using System.Collections;
-#if GS2_ENABLE_UNITASK
-using Cysharp.Threading.Tasks;
-#endif
-using Gs2.Core;
 using Gs2.Core.Exception;
 using Gs2.Unity.Gs2Account.Model;
 using Gs2.Unity.Gs2Auth.Model;
@@ -30,8 +26,9 @@ using Gs2.Unity.Gs2Key.ScriptableObject;
 using Gs2.Unity.Util;
 using UnityEngine;
 using UnityEngine.Events;
-using ErrorEvent = Gs2.Unity.UiKit.Core.ErrorEvent;
 using Namespace = Gs2.Unity.Gs2Account.ScriptableObject.Namespace;
+#if GS2_ENABLE_UNITASK
+#endif
 
 namespace Gs2.Unity.UiKit.Core
 {
@@ -97,13 +94,13 @@ namespace Gs2.Unity.UiKit.Core
     
     public partial class Gs2ProfileLoginAction
     {
-        private Gs2ClientHolder _clientHolder;
-        private Gs2GameSessionHolder _gameSessionHolder;
+        private Gs2.Unity.Util.Gs2ClientHolder _clientHolder;
+        private Gs2.Unity.Util.Gs2GameSessionHolder _gameSessionHolder;
 
         public void Awake()
         {
-            _clientHolder = Gs2ClientHolder.Instance;
-            _gameSessionHolder = Gs2GameSessionHolder.Instance;
+            _clientHolder = Gs2.Unity.Util.Gs2ClientHolder.Instance;
+            _gameSessionHolder = Gs2.Unity.Util.Gs2GameSessionHolder.Instance;
         }
     }
 
@@ -157,7 +154,7 @@ namespace Gs2.Unity.UiKit.Core
         [SerializeField]
         internal ErrorEvent onError = new ErrorEvent();
         
-        public event UnityAction<Exception, Func<IEnumerator>> OnError
+        public event UnityAction<Gs2Exception, Func<IEnumerator>> OnError
         {
             add => onError.AddListener(value);
             remove => onError.RemoveListener(value);

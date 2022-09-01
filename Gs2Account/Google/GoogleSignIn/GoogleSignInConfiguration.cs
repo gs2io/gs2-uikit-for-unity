@@ -14,9 +14,9 @@
 //    limitations under the License.
 // </copyright>
 
-namespace Google {
-  using System.Collections.Generic;
+using System.Collections.Generic;
 
+namespace Google {
   /// <summary>
   /// Configuration properties for Google Sign-In.
   /// </summary>

@@ -1,11 +1,11 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Google;
 using Gs2.Core.Exception;
 using Gs2.Core.Model;
-using Gs2.Unity.Core.Exception;
-using Gs2.Unity.UiKit.Core;
+using Gs2.Unity.Util;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -27,7 +27,7 @@ namespace Gs2.Unity.UiKit.Gs2Account
             }
 
             //string userId = null;
-            System.Threading.Tasks.Task<GoogleSignInUser> task = null;
+            Task<GoogleSignInUser> task = null;
             GoogleSignIn.DefaultInstance.SignIn().ContinueWith(_task =>
             {
                 //userId = user.Result.UserId;
@@ -41,7 +41,7 @@ namespace Gs2.Unity.UiKit.Gs2Account
             GoogleSignIn.DefaultInstance.Disconnect();
             
             if (task.IsFaulted) {
-                using (IEnumerator<System.Exception> enumerator =
+                using (IEnumerator<Exception> enumerator =
                     task.Exception.InnerExceptions.GetEnumerator()) {
                     if (enumerator.MoveNext()) {
                         GoogleSignIn.SignInException error =
@@ -158,7 +158,7 @@ namespace Gs2.Unity.UiKit.Gs2Account
         [SerializeField]
         internal ErrorEvent onError = new ErrorEvent();
         
-        public event UnityAction<Exception, Func<IEnumerator>> OnError
+        public event UnityAction<Gs2Exception, Func<IEnumerator>> OnError
         {
             add => onError.AddListener(value);
             remove => onError.RemoveListener(value);

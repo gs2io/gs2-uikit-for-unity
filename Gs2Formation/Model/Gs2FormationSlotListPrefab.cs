@@ -21,10 +21,11 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Gs2.Core.Exception;
 using Gs2.Unity.Gs2Formation.Model;
 using Gs2.Unity.Gs2Formation.ScriptableObject;
-using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Formation.Fetcher;
+using Gs2.Unity.Util;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -91,7 +92,7 @@ namespace Gs2.Unity.UiKit.Gs2Formation
         }
         
         private void OnError(
-            Exception exception, 
+            Gs2Exception exception, 
             Func<IEnumerator> retryFunc
         )
         {

@@ -14,10 +14,10 @@
 //    limitations under the License.
 // </copyright>
 
-namespace Google {
-  using System;
+using System;
 
-    /// <summary> Information for the authenticated user.</summary>
+namespace Google {
+  /// <summary> Information for the authenticated user.</summary>
     public class GoogleSignInUser {
 
     /// <summary> Server AuthCode to be exchanged for an auth token.</summary>

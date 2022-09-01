@@ -20,8 +20,8 @@
 using System;
 using Gs2.Unity.Gs2Enhance.Model;
 using Gs2.Unity.Gs2Enhance.ScriptableObject;
-using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Enhance.Fetcher;
+using Gs2.Unity.Util;
 using UnityEngine;
 using UnityEngine.Events;
 

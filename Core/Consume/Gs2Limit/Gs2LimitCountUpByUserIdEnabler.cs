@@ -1,16 +1,14 @@
 using System;
-using System.Collections;
 using System.Linq;
-#if GS2_ENABLE_UNITASK
-using Cysharp.Threading.Tasks;
-#endif
 using Gs2.Gs2Limit.Request;
-using Gs2.Gs2Money.Request;
-using Gs2.Gs2Stamina.Request;
 using Gs2.Unity.Gs2Limit.Model;
 using Gs2.Util.LitJson;
 using UnityEngine;
-using UnityEngine.Events;
+#if GS2_ENABLE_UNITASK
+using Cysharp.Threading.Tasks;
+#else
+using System.Collections;
+#endif
 
 namespace Gs2.Unity.UiKit.Core.Consume.Gs2Limit
 {
@@ -40,10 +38,10 @@ namespace Gs2.Unity.UiKit.Core.Consume.Gs2Limit
                 {
                     while (!_exit)
                     {
-                        _counter = await Gs2ClientHolder.Instance.Gs2.Limit.Namespace(
+                        _counter = await Gs2.Unity.Util.Gs2ClientHolder.Instance.Gs2.Limit.Namespace(
                             _request.NamespaceName
                         ).Me(
-                            Gs2GameSessionHolder.Instance.GameSession
+                            Gs2.Unity.Util.Gs2GameSessionHolder.Instance.GameSession
                         ).Counter(
                             _request.LimitName,
                             _request.CounterName

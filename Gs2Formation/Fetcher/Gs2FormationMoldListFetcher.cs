@@ -24,10 +24,9 @@ using Gs2.Core.Exception;
 using Gs2.Unity.Core.Exception;
 using Gs2.Unity.Gs2Formation.Model;
 using Gs2.Unity.Gs2Formation.ScriptableObject;
-using Gs2.Unity.UiKit.Core;
+using Gs2.Unity.Util;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.Serialization;
 
 namespace Gs2.Unity.UiKit.Gs2Formation.Fetcher
 {
@@ -40,7 +39,7 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Fetcher
     {
         private IEnumerator Fetch()
         {
-            Exception e;
+            Gs2Exception e;
             while (true)
             {
                 if (_gameSessionHolder != null && _gameSessionHolder.Initialized && 
@@ -182,7 +181,7 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Fetcher
         [SerializeField]
         internal ErrorEvent onError = new ErrorEvent();
         
-        public event UnityAction<Exception, Func<IEnumerator>> OnError
+        public event UnityAction<Gs2Exception, Func<IEnumerator>> OnError
         {
             add => onError.AddListener(value);
             remove => onError.RemoveListener(value);

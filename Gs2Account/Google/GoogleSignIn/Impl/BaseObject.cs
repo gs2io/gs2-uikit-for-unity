@@ -14,12 +14,12 @@
 //    limitations under the License.
 // </copyright>
 
-namespace Google.Impl {
-  using System;
-  using System.Runtime.InteropServices;
-  using System.Text;
-  using UnityEngine;
+using System;
+using System.Runtime.InteropServices;
+using System.Text;
+using UnityEngine;
 
+namespace Google.Impl {
   /// <summary>
   /// Base object manages the pointer to a native object which provides the
   /// implementation of a C# object.

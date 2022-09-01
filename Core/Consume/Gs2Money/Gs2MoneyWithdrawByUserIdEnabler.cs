@@ -1,13 +1,14 @@
 using System;
-using System.Collections;
 using System.Linq;
-#if GS2_ENABLE_UNITASK
-using Cysharp.Threading.Tasks;
-#endif
 using Gs2.Gs2Money.Request;
 using Gs2.Unity.Gs2Money.Model;
 using Gs2.Util.LitJson;
 using UnityEngine;
+#if GS2_ENABLE_UNITASK
+using Cysharp.Threading.Tasks;
+#else
+using System.Collections;
+#endif
 
 namespace Gs2.Unity.UiKit.Core.Consume.Gs2Money
 {
@@ -37,10 +38,10 @@ namespace Gs2.Unity.UiKit.Core.Consume.Gs2Money
                 {
                     while (!_exit)
                     {
-                        _wallet = await Gs2ClientHolder.Instance.Gs2.Money.Namespace(
+                        _wallet = await Gs2.Unity.Util.Gs2ClientHolder.Instance.Gs2.Money.Namespace(
                             _request.NamespaceName
                         ).Me(
-                            Gs2GameSessionHolder.Instance.GameSession
+                            Gs2.Unity.Util.Gs2GameSessionHolder.Instance.GameSession
                         ).Wallet(
                             _request.Slot.Value
                         ).ModelAsync();

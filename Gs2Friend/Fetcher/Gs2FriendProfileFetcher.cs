@@ -1,8 +1,6 @@
-using System;
 using System.Collections;
 using Gs2.Unity.UiKit.Gs2Friend.Fetcher;
 using UnityEngine;
-using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2Friend
 {

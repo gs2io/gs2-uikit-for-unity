@@ -14,13 +14,13 @@
 //  limitations under the License.
 // </copyright>
 
-namespace Google {
-  using System;
-  using System.Runtime.Serialization;
-  using System.Threading.Tasks;
-  using Google.Impl;
-  using UnityEngine;
+using System;
+using System.Runtime.Serialization;
+using System.Threading.Tasks;
+using Google.Impl;
+using UnityEngine;
 
+namespace Google {
   /// <summary>
   /// Google sign in API.
   /// </summary>

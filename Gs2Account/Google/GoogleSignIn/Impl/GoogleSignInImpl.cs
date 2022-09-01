@@ -14,11 +14,11 @@
 //    limitations under the License.
 // </copyright>
 
-namespace Google.Impl {
-  using System;
-  using System.Collections.Generic;
-  using System.Runtime.InteropServices;
+using System;
+using System.Collections.Generic;
+using System.Runtime.InteropServices;
 
+namespace Google.Impl {
   internal class GoogleSignInImpl : BaseObject, ISignInImpl {
 
 #if UNITY_ANDROID

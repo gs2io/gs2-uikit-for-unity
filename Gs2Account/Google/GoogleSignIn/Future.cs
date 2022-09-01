@@ -13,11 +13,12 @@
 //  See the License for the specific language governing permissions and
 //    limitations under the License.
 // </copyright>
-namespace Google {
-  using System.Collections;
-  using System.Threading.Tasks;
-  using UnityEngine;
 
+using System.Collections;
+using System.Threading.Tasks;
+using UnityEngine;
+
+namespace Google {
   /// <summary>
   /// Interface for implementations of the Future<T> API.
   /// </summary>

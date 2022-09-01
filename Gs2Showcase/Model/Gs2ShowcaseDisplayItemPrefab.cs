@@ -19,10 +19,11 @@
 
 using System;
 using System.Collections;
+using Gs2.Core.Exception;
 using Gs2.Unity.Gs2Showcase.Model;
 using Gs2.Unity.Gs2Showcase.ScriptableObject;
-using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Showcase.Fetcher;
+using Gs2.Unity.Util;
 using UnityEngine;
 
 namespace Gs2.Unity.UiKit.Gs2Showcase.Model
@@ -35,7 +36,7 @@ namespace Gs2.Unity.UiKit.Gs2Showcase.Model
         private ErrorEvent _onError;
 
         private void OnError(
-            Exception exception, 
+            Gs2Exception exception, 
             Func<IEnumerator> retryFunc
         )
         {

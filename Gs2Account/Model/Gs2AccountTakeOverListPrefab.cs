@@ -22,7 +22,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Gs2.Unity.Gs2Account.Model;
 using Gs2.Unity.Gs2Account.ScriptableObject;
-using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Account.Fetcher;
 using UnityEngine;
 using UnityEngine.Events;

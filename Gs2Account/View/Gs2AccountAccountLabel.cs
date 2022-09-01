@@ -17,11 +17,10 @@
 // ReSharper disable CheckNamespace
 
 using System;
-using Gs2.Core.Util;
 using Gs2.Unity.UiKit.Core;
-using Gs2.Unity.UiKit.Gs2Account.Fetcher;
 using UnityEngine;
 using UnityEngine.Events;
+using Gs2GameSessionHolder = Gs2.Unity.Util.Gs2GameSessionHolder;
 
 namespace Gs2.Unity.UiKit.Gs2Account
 {

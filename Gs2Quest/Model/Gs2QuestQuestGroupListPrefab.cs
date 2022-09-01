@@ -22,7 +22,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Gs2.Unity.Gs2Quest.Model;
 using Gs2.Unity.Gs2Quest.ScriptableObject;
-using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Quest.Fetcher;
 using Gs2.Unity.UiKit.Gs2Quest.Model;
 using UnityEngine;

@@ -13,9 +13,10 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 // </copyright>
-namespace Google.Impl {
-  using UnityEngine;
 
+using UnityEngine;
+
+namespace Google.Impl {
   ///<summary>Helper object to connect the Sign-in API to the Unity Game Scene.
   ///</summary>
   ///<remarks>This class is added to the scene so that the Google Sign-in API

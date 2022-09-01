@@ -22,8 +22,7 @@ using System.Collections;
 using Gs2.Core.Exception;
 using Gs2.Unity.Gs2Account.Model;
 using Gs2.Unity.Gs2Account.ScriptableObject;
-using Gs2.Unity.UiKit.Core;
-using Gs2.Unity.UiKit.Gs2Account.Fetcher;
+using Gs2.Unity.Util;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -145,7 +144,7 @@ namespace Gs2.Unity.UiKit.Gs2Account
         [SerializeField]
         internal ErrorEvent onError = new ErrorEvent();
         
-        public event UnityAction<Exception, Func<IEnumerator>> OnError
+        public event UnityAction<Gs2Exception, Func<IEnumerator>> OnError
         {
             add => onError.AddListener(value);
             remove => onError.RemoveListener(value);

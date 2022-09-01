@@ -17,12 +17,9 @@
 // ReSharper disable CheckNamespace
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Gs2.Unity.Gs2Showcase.Model;
-using Gs2.Unity.Gs2Showcase.ScriptableObject;
-using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Showcase.Fetcher;
 using Gs2.Unity.UiKit.Gs2Showcase.Model;
 using UnityEngine;
