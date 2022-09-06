@@ -1,21 +1,21 @@
 using System;
 using System.Linq;
-using Gs2.Gs2Money.Request;
+using Gs2.Gs2Inventory.Request;
 using Gs2.Util.LitJson;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace Gs2.Unity.UiKit.Core.Reward.Gs2Money
+namespace Gs2.Unity.UiKit.Core.Reward.Gs2Inventory
 {
-    [AddComponentMenu("GS2 UIKit/Core/Reward/Money/Gs2MoneyDepositByUserIdLabel")]
-    public partial class Gs2MoneyDepositByUserIdLabel : MonoBehaviour
+    [AddComponentMenu("GS2 UIKit/Core/Reward/Inventory/Gs2InventoryAcquireItemSetByUserIdLabel")]
+    public partial class Gs2InventoryAcquireItemSetByUserIdLabel : MonoBehaviour
     {
-        private DepositByUserIdRequest _request;
+        private AcquireItemSetByUserIdRequest _request;
         
         public void Start()
         {
             var acquireActionHolders = GetComponentsInParent<AcquireActionHolder>()
-                .Where(v => v.action == "Gs2Money:DepositByUserId")
+                .Where(v => v.action == "Gs2Inventory:AcquireItemSetByUserId")
                 .ToArray();
             if (acquireActionHolders.Length > 1)
             {
@@ -25,7 +25,7 @@ namespace Gs2.Unity.UiKit.Core.Reward.Gs2Money
             if (acquireActionHolders.Length > 0)
             {
                 var acquireActionHolder = acquireActionHolders.First();
-                _request = DepositByUserIdRequest.FromJson(JsonMapper.ToObject(acquireActionHolder.request));
+                _request = AcquireItemSetByUserIdRequest.FromJson(JsonMapper.ToObject(acquireActionHolder.request));
             }
         }
 
@@ -40,11 +40,11 @@ namespace Gs2.Unity.UiKit.Core.Reward.Gs2Money
                 onUpdate.Invoke(format.Replace(
                     "{namespaceName}", _request.NamespaceName
                 ).Replace(
-                    "{slot}", _request.Slot.ToString()
+                    "{inventoryName}", _request.InventoryName.ToString()
                 ).Replace(
-                    "{price}", $"{_request.Price:#,0}"
+                    "{itemName}", _request.ItemName.ToString()
                 ).Replace(
-                    "{count}", $"{_request.Count:#,0}"
+                    "{acquireCount}", $"{_request.AcquireCount:#,0}"
                 ));
             }
         }
@@ -54,7 +54,7 @@ namespace Gs2.Unity.UiKit.Core.Reward.Gs2Money
     /// Parameters for Inspector
     /// </summary>
     
-    public partial class Gs2MoneyDepositByUserIdLabel
+    public partial class Gs2InventoryAcquireItemSetByUserIdLabel
     {
         public string format;
     }
@@ -62,7 +62,7 @@ namespace Gs2.Unity.UiKit.Core.Reward.Gs2Money
     /// <summary>
     /// Event handlers
     /// </summary>
-    public partial class Gs2MoneyDepositByUserIdLabel
+    public partial class Gs2InventoryAcquireItemSetByUserIdLabel
     {
         [Serializable]
         private class UpdateEvent : UnityEvent<string>
