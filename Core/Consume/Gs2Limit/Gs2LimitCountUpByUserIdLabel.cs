@@ -16,28 +16,38 @@ namespace Gs2.Unity.UiKit.Core.Consume.Gs2Limit
     [AddComponentMenu("GS2 UIKit/Core/Consume/Limit/Gs2LimitCountUpByUserIdLabel")]
     public partial class Gs2LimitCountUpByUserIdLabel : MonoBehaviour
     {
+        private StampSheetActionFetcher _fetcher;
+
         private CountUpByUserIdRequest _request;
         private EzCounter _counter;
         private bool _exit;
-        
+
+        public void Awake()
+        {
+            _fetcher = GetComponentInParent<StampSheetActionFetcher>();
+        }
+
         public void Start()
         {
-            var consumeActionHolders = GetComponentsInParent<ConsumeActionHolder>()
-                .Where(v => v.action == "Gs2Limit:CountUpByUserId")
-                .ToArray();
-            if (consumeActionHolders.Length > 1)
-            {
-                Debug.LogError("duplicate consume action");
-            }
-
-            if (consumeActionHolders.Length > 0)
-            {
-                var consumeActionHolder = consumeActionHolders.First();
-                _request = CountUpByUserIdRequest.FromJson(JsonMapper.ToObject(consumeActionHolder.request));
+            
 #if GS2_ENABLE_UNITASK
-                async UniTask Fetch()
+            async UniTask Fetch()
+            {
+                while (!_exit)
                 {
-                    while (!_exit)
+                    if (_fetcher.Fetched)
+                    {
+                        var acquireActionHolders = GetComponentInParent<StampSheetActionFetcher>()
+                            .ConsumeActions
+                            .Where(v => v.action == "Gs2Limit:CountUpByUserId")
+                            .ToArray();
+                        if (acquireActionHolders.Length > 0)
+                        {
+                            _request = CountUpByUserIdRequest.FromJson(JsonMapper.ToObject(acquireActionHolders.First().request));
+                        }
+                    }
+
+                    if (_request != null)
                     {
                         _counter = await Gs2.Unity.Util.Gs2ClientHolder.Instance.Gs2.Limit.Namespace(
                             _request.NamespaceName
@@ -47,56 +57,67 @@ namespace Gs2.Unity.UiKit.Core.Consume.Gs2Limit
                             _request.LimitName,
                             _request.CounterName
                         ).ModelAsync();
-                        await UniTask.Delay(TimeSpan.FromSeconds(1));
                     }
-                }
 
-                StartCoroutine(Fetch().ToCoroutine());
+                    await UniTask.Delay(TimeSpan.FromSeconds(1));
+                }
+            }
+
+            StartCoroutine(Fetch().ToCoroutine());
 #else
-                IEnumerator Fetch()
+            IEnumerator Fetch()
+            {
+                while (!_exit)
                 {
-                    while (!_exit)
-                    {
-                        var future = Gs2ClientHolder.Instance.Gs2.Limit.Namespace(
-                            _request.NamespaceName
-                        ).Me(
-                            Gs2GameSessionHolder.Instance.GameSession
-                        ).Counter(
-                            _request.LimitName,
-                            _request.CounterName
-                        ).Model();
-                        yield return future;
-                        _counter = future.Result;
-                        yield return new WaitForSeconds(1);
-                    }
+                    var future = Gs2ClientHolder.Instance.Gs2.Limit.Namespace(
+                        _request.NamespaceName
+                    ).Me(
+                        Gs2GameSessionHolder.Instance.GameSession
+                    ).Counter(
+                        _request.LimitName,
+                        _request.CounterName
+                    ).Model();
+                    yield return future;
+                    _counter = future.Result;
+                    yield return new WaitForSeconds(1);
                 }
+            }
 
-                StartCoroutine(Fetch());
+            StartCoroutine(Fetch());
 #endif
+        }
+        
+        public void Update()
+        {
+            if (_fetcher.Fetched)
+            {
+                var acquireActionHolders = GetComponentInParent<StampSheetActionFetcher>()
+                    .ConsumeActions
+                    .Where(v => v.action == "Gs2Limit:CountUpByUserId")
+                    .ToArray();
+                if (acquireActionHolders.Length > 0)
+                {
+                    _request = CountUpByUserIdRequest.FromJson(JsonMapper.ToObject(acquireActionHolders.First().request));
+                    onUpdate.Invoke(format.Replace(
+                        "{namespaceName}", _request.NamespaceName
+                    ).Replace(
+                        "{limitName}", _request.LimitName.ToString()
+                    ).Replace(
+                        "{counterName}", _request.CounterName.ToString()
+                    ).Replace(
+                        "{countUpValue}", _request.CountUpValue.ToString()
+                    ).Replace(
+                        "{maxValue}", _request.MaxValue.ToString()
+                    ).Replace(
+                        "{remainValue}", _counter == null ? "" : (_request.MaxValue - _counter.Count).ToString()
+                    ));
+                }
             }
         }
-
+        
         public void OnDestroy()
         {
             _exit = true;
-        }
-
-        public void Update()
-        {
-            
-            onUpdate.Invoke(format.Replace(
-                "{namespaceName}", _request.NamespaceName
-            ).Replace(
-                "{limitName}", _request.LimitName.ToString()
-            ).Replace(
-                "{counterName}", _request.CounterName.ToString()
-            ).Replace(
-                "{countUpValue}", _request.CountUpValue.ToString()
-            ).Replace(
-                "{maxValue}", _request.MaxValue.ToString()
-            ).Replace(
-                "{remainValue}", _counter == null ? "" : (_request.MaxValue - _counter.Count).ToString()
-            ));
         }
     }
     

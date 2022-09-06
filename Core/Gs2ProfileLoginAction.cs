@@ -63,7 +63,7 @@ namespace Gs2.Unity.UiKit.Core
                             yield break;
                         }
 
-                        onLoginComplete.Invoke(EzAccessToken.FromModel(future.Result.AccessToken));
+                        onLoginComplete.Invoke(new GameSession(future.Result.AccessToken));
                     }
 
                     onError.Invoke(future.Error, Retry);
@@ -74,7 +74,7 @@ namespace Gs2.Unity.UiKit.Core
                 yield break;
             }
             
-            onLoginComplete.Invoke(EzAccessToken.FromModel(future.Result.AccessToken));
+            onLoginComplete.Invoke(new GameSession(future.Result.AccessToken));
         }
         
         public void OnEnable()
@@ -121,7 +121,9 @@ namespace Gs2.Unity.UiKit.Core
     {
         public Namespace Namespace;
         public Key key;
+        [HideInInspector]
         public string userId;
+        [HideInInspector]
         public string password;
 
         public void Account(EzAccount account)
@@ -137,7 +139,7 @@ namespace Gs2.Unity.UiKit.Core
     public partial class Gs2ProfileLoginAction
     {
         [Serializable]
-        private class LoginCompleteEvent : UnityEvent<EzAccessToken>
+        private class LoginCompleteEvent : UnityEvent<GameSession>
         {
             
         }
@@ -145,7 +147,7 @@ namespace Gs2.Unity.UiKit.Core
         [SerializeField]
         private LoginCompleteEvent onLoginComplete = new LoginCompleteEvent();
         
-        public event UnityAction<EzAccessToken> OnLoginComplete
+        public event UnityAction<GameSession> OnLoginComplete
         {
             add => onLoginComplete.AddListener(value);
             remove => onLoginComplete.RemoveListener(value);

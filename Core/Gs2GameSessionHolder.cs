@@ -6,7 +6,7 @@ namespace Gs2.Unity.UiKit.Core
     [Obsolete]
     public class Gs2GameSessionHolder : Util.Gs2GameSessionHolder
     {
-        public static Gs2GameSessionHolder Instance
+        public new static Gs2GameSessionHolder Instance
         {
             get
             {

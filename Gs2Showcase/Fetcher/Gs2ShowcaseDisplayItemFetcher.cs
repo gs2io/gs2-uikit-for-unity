@@ -24,9 +24,14 @@ using Gs2.Core.Exception;
 using Gs2.Unity.Core.Exception;
 using Gs2.Unity.Gs2Showcase.Model;
 using Gs2.Unity.Gs2Showcase.ScriptableObject;
+using Gs2.Unity.UiKit.Core;
+using Gs2.Unity.UiKit.Core.Consume;
+using Gs2.Unity.UiKit.Core.Reward;
 using Gs2.Unity.Util;
 using UnityEngine;
 using UnityEngine.Events;
+using Gs2ClientHolder = Gs2.Unity.Util.Gs2ClientHolder;
+using Gs2GameSessionHolder = Gs2.Unity.Util.Gs2GameSessionHolder;
 
 namespace Gs2.Unity.UiKit.Gs2Showcase.Fetcher
 {
@@ -35,7 +40,7 @@ namespace Gs2.Unity.UiKit.Gs2Showcase.Fetcher
     /// </summary>
 
     [AddComponentMenu("GS2 UIKit/Showcase/Gs2ShowcaseDisplayItemFetcher")]
-    public partial class Gs2ShowcaseDisplayItemFetcher: MonoBehaviour
+    public partial class Gs2ShowcaseDisplayItemFetcher: StampSheetActionFetcher
     {
         private IEnumerator Fetch()
         {
@@ -67,7 +72,15 @@ namespace Gs2.Unity.UiKit.Gs2Showcase.Fetcher
                     else
                     {
                         DisplayItem = future.Result.DisplayItems.FirstOrDefault(v => v.DisplayItemId == displayItem.displayItemId);
-                        Fetched = true;
+                        if (DisplayItem != null)
+                        {
+                            ConsumeActions = DisplayItem.SalesItem.ConsumeActions
+                                .Select(v => new ConsumeAction(v.Action, v.Request))
+                                .ToArray();
+                            AcquireActions = DisplayItem.SalesItem.AcquireActions
+                                .Select(v => new AcquireAction(v.Action, v.Request))
+                                .ToArray();
+                        }
                     }
                 }
 
@@ -123,7 +136,6 @@ namespace Gs2.Unity.UiKit.Gs2Showcase.Fetcher
     public partial class Gs2ShowcaseDisplayItemFetcher
     {
         public EzDisplayItem DisplayItem { get; private set; }
-        public bool Fetched { get; private set; }
     }
 
     /// <summary>

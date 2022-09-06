@@ -18,14 +18,24 @@
 
 using System;
 using System.Collections;
+using System.Linq;
 using System.Text;
+#if GS2_ENABLE_UNITASK
+using Cysharp.Threading.Tasks;
+#else
+using System.Collections;
+#endif
 using Gs2.Core.Exception;
 using Gs2.Unity.Core.Exception;
 using Gs2.Unity.Gs2Mission.Model;
 using Gs2.Unity.Gs2Mission.ScriptableObject;
+using Gs2.Unity.UiKit.Core;
+using Gs2.Unity.UiKit.Core.Reward;
 using Gs2.Unity.Util;
 using UnityEngine;
 using UnityEngine.Events;
+using Gs2ClientHolder = Gs2.Unity.Util.Gs2ClientHolder;
+using Gs2GameSessionHolder = Gs2.Unity.Util.Gs2GameSessionHolder;
 
 namespace Gs2.Unity.UiKit.Gs2Mission.Fetcher
 {
@@ -34,7 +44,7 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Fetcher
     /// </summary>
 
     [AddComponentMenu("GS2 UIKit/Mission/Gs2MissionMissionTaskFetcher")]
-    public partial class Gs2MissionMissionTaskFetcher : MonoBehaviour
+    public partial class Gs2MissionMissionTaskFetcher : StampSheetActionFetcher
     {
         private IEnumerator Fetch()
         {
@@ -66,7 +76,9 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Fetcher
                     else
                     {
                         Task = future.Result;
-                        Fetched = true;
+                        AcquireActions = Task.CompleteAcquireActions
+                            .Select(v => new AcquireAction(v.Action, v.Request))
+                            .ToArray();
                     }
                 }
 
@@ -122,7 +134,6 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Fetcher
     public partial class Gs2MissionMissionTaskFetcher
     {
         public EzMissionTaskModel Task { get; private set; }
-        public bool Fetched { get; private set; }
     }
 
     /// <summary>

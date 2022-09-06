@@ -10,40 +10,32 @@ namespace Gs2.Unity.UiKit.Core.Consume.Gs2Stamina
     [AddComponentMenu("GS2 UIKit/Core/Reward/Stamina/Gs2MoneyWithdrawByUserIdLabel")]
     public partial class Gs2MoneyWithdrawByUserIdLabel : MonoBehaviour
     {
-        private WithdrawByUserIdRequest _request;
-        
-        public void Start()
-        {
-            var acquireActionHolders = GetComponentsInParent<ConsumeActionHolder>()
-                .Where(v => v.action == "Gs2Money:WithdrawByUserId")
-                .ToArray();
-            if (acquireActionHolders.Length > 1)
-            {
-                Debug.LogError("duplicate acquire action");
-            }
+        private StampSheetActionFetcher _fetcher;
 
-            if (acquireActionHolders.Length > 0)
-            {
-                var acquireActionHolder = acquireActionHolders.First();
-                _request = WithdrawByUserIdRequest.FromJson(JsonMapper.ToObject(acquireActionHolder.request));
-            }
+        public void Awake()
+        {
+            _fetcher = GetComponentInParent<StampSheetActionFetcher>();
         }
 
         public void Update()
         {
-            if (_request == null)
+            if (_fetcher.Fetched)
             {
-                onUpdate.Invoke("");
-            }
-            else
-            {
-                onUpdate.Invoke(format.Replace(
-                    "{namespaceName}", _request.NamespaceName
-                ).Replace(
-                    "{slot}", _request.Slot.ToString()
-                ).Replace(
-                    "{count}", $"{_request.Count:#,0}"
-                ));
+                var acquireActionHolders = GetComponentInParent<StampSheetActionFetcher>()
+                    .ConsumeActions
+                    .Where(v => v.action == "Gs2Money:WithdrawByUserId")
+                    .ToArray();
+                if (acquireActionHolders.Length > 0)
+                {
+                    var request = WithdrawByUserIdRequest.FromJson(JsonMapper.ToObject(acquireActionHolders.First().request));
+                    onUpdate.Invoke(format.Replace(
+                        "{namespaceName}", request.NamespaceName
+                    ).Replace(
+                        "{slot}", request.Slot.ToString()
+                    ).Replace(
+                        "{count}", $"{request.Count:#,0}"
+                    ));
+                }
             }
         }
     }

@@ -9,7 +9,7 @@ namespace Gs2.Unity.UiKit.Core.Consume
         public void Update()
         {
             var active = false;
-            foreach (var consumeActionHolder in _consumeActionHolders)
+            foreach (var consumeActionHolder in _fetcher.ConsumeActions)
             {
                 switch (consumeActionHolder.action)
                 {
@@ -91,11 +91,11 @@ namespace Gs2.Unity.UiKit.Core.Consume
     
     public partial class ConsumeActionEnabler
     {
-        private ConsumeActionHolder[] _consumeActionHolders;
+        private StampSheetActionFetcher _fetcher;
 
         public void Awake()
         {
-            _consumeActionHolders = GetComponents<ConsumeActionHolder>().Concat(GetComponentsInParent<ConsumeActionHolder>()).ToArray();
+            _fetcher = GetComponentInParent<StampSheetActionFetcher>();
             Update();
         }
     }

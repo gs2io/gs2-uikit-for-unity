@@ -1,14 +1,14 @@
 using System;
 using System.Linq;
-using Gs2.Gs2Stamina.Request;
+using Gs2.Gs2Inventory.Request;
 using Gs2.Util.LitJson;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace Gs2.Unity.UiKit.Core.Reward.Gs2Stamina
+namespace Gs2.Unity.UiKit.Core.Reward.Gs2Inventory
 {
-    [AddComponentMenu("GS2 UIKit/Core/Reward/Stamina/Gs2StaminaRecoverStaminaByUserIdLabel")]
-    public partial class Gs2StaminaRecoverStaminaByUserIdLabel : MonoBehaviour
+    [AddComponentMenu("GS2 UIKit/Core/Reward/Inventory/Gs2InventoryAcquireItemSetByUserIdLabel")]
+    public partial class Gs2InventoryAcquireItemSetByUserIdLabel : MonoBehaviour
     {
         private StampSheetActionFetcher _fetcher;
 
@@ -23,17 +23,19 @@ namespace Gs2.Unity.UiKit.Core.Reward.Gs2Stamina
             {
                 var acquireActionHolders = GetComponentInParent<StampSheetActionFetcher>()
                     .AcquireActions
-                    .Where(v => v.action == "Gs2Stamina:RecoverStaminaByUserId")
+                    .Where(v => v.action == "Gs2Inventory:AcquireItemSetByUserId")
                     .ToArray();
                 if (acquireActionHolders.Length > 0)
                 {
-                    var request = RecoverStaminaByUserIdRequest.FromJson(JsonMapper.ToObject(acquireActionHolders.First().request));
+                    var request = AcquireItemSetByUserIdRequest.FromJson(JsonMapper.ToObject(acquireActionHolders.First().request));
                     onUpdate.Invoke(format.Replace(
                         "{namespaceName}", request.NamespaceName
                     ).Replace(
-                        "{staminaName}", request.StaminaName
+                        "{inventoryName}", request.InventoryName.ToString()
                     ).Replace(
-                        "{recoverValue}", request.RecoverValue.ToString()
+                        "{itemName}", request.ItemName.ToString()
+                    ).Replace(
+                        "{acquireCount}", $"{request.AcquireCount:#,0}"
                     ));
                 }
             }
@@ -44,7 +46,7 @@ namespace Gs2.Unity.UiKit.Core.Reward.Gs2Stamina
     /// Parameters for Inspector
     /// </summary>
     
-    public partial class Gs2StaminaRecoverStaminaByUserIdLabel
+    public partial class Gs2InventoryAcquireItemSetByUserIdLabel
     {
         public string format;
     }
@@ -52,7 +54,7 @@ namespace Gs2.Unity.UiKit.Core.Reward.Gs2Stamina
     /// <summary>
     /// Event handlers
     /// </summary>
-    public partial class Gs2StaminaRecoverStaminaByUserIdLabel
+    public partial class Gs2InventoryAcquireItemSetByUserIdLabel
     {
         [Serializable]
         private class UpdateEvent : UnityEvent<string>

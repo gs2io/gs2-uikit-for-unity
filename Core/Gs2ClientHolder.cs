@@ -6,7 +6,7 @@ namespace Gs2.Unity.UiKit.Core
     [Obsolete]
     public class Gs2ClientHolder : Util.Gs2ClientHolder
     {
-        public static Gs2ClientHolder Instance
+        public new static Gs2ClientHolder Instance
         {
             get
             {

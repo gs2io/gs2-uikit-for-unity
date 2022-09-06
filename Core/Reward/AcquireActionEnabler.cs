@@ -9,7 +9,7 @@ namespace Gs2.Unity.UiKit.Core.Reward
         public void Update()
         {
             var active = false;
-            foreach (var acquireActionHolder in _acquireActionHolders)
+            foreach (var acquireActionHolder in _fetcher.AcquireActions)
             {
                 switch (acquireActionHolder.action)
                 {
@@ -193,11 +193,11 @@ namespace Gs2.Unity.UiKit.Core.Reward
     
     public partial class AcquireActionEnabler
     {
-        private AcquireActionHolder[] _acquireActionHolders;
+        private StampSheetActionFetcher _fetcher;
 
         public void Awake()
         {
-            _acquireActionHolders = GetComponents<AcquireActionHolder>().Concat(GetComponentsInParent<AcquireActionHolder>()).ToArray();
+            _fetcher = GetComponentInParent<StampSheetActionFetcher>();
             Update();
         }
     }

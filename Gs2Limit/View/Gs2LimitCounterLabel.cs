@@ -33,10 +33,10 @@ namespace Gs2.Unity.UiKit.Gs2Limit
     {
         public void Update()
         {
-            if (_itemSetFetcher.Fetched)
+            if (_fetcher.Fetched)
             {
                 onUpdate.Invoke(format.Replace(
-                    "{value}", _itemSetFetcher.Counter?.Count.ToString() ?? "0"
+                    "{value}", _fetcher.Counter?.Count.ToString() ?? "0"
                 ));
             }
         }
@@ -48,11 +48,11 @@ namespace Gs2.Unity.UiKit.Gs2Limit
     
     public partial class Gs2LimitCounterLabel
     {
-        private Gs2LimitCounterFetcher _itemSetFetcher;
+        private Gs2LimitCounterFetcher _fetcher;
 
         public void Awake()
         {
-            _itemSetFetcher = GetComponentInParent<Gs2LimitCounterFetcher>();
+            _fetcher = GetComponentInParent<Gs2LimitCounterFetcher>();
             Update();
         }
     }

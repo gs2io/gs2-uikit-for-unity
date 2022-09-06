@@ -18,14 +18,25 @@
 
 using System;
 using System.Collections;
+using System.Linq;
 using System.Text;
+#if GS2_ENABLE_UNITASK
+using Cysharp.Threading.Tasks;
+#else
+using System.Collections;
+#endif
 using Gs2.Core.Exception;
 using Gs2.Unity.Core.Exception;
 using Gs2.Unity.Gs2Quest.Model;
 using Gs2.Unity.Gs2Quest.ScriptableObject;
+using Gs2.Unity.UiKit.Core;
+using Gs2.Unity.UiKit.Core.Consume;
+using Gs2.Unity.UiKit.Core.Reward;
 using Gs2.Unity.Util;
 using UnityEngine;
 using UnityEngine.Events;
+using Gs2ClientHolder = Gs2.Unity.Util.Gs2ClientHolder;
+using Gs2GameSessionHolder = Gs2.Unity.Util.Gs2GameSessionHolder;
 
 namespace Gs2.Unity.UiKit.Gs2Quest.Fetcher
 {
@@ -34,7 +45,7 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Fetcher
     /// </summary>
 
     [AddComponentMenu("GS2 UIKit/Quest/Gs2QuestQuestFetcher")]
-    public partial class Gs2QuestQuestFetcher : MonoBehaviour
+    public partial class Gs2QuestQuestFetcher : StampSheetActionFetcher
     {
         private IEnumerator Fetch()
         {
@@ -66,7 +77,9 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Fetcher
                     else
                     {
                         Quest = future.Result;
-                        Fetched = true;
+                        ConsumeActions = Quest.ConsumeActions
+                            .Select(v => new ConsumeAction(v.Action, v.Request))
+                            .ToArray();
                     }
                 }
 
@@ -122,7 +135,6 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Fetcher
     public partial class Gs2QuestQuestFetcher
     {
         public EzQuestModel Quest { get; private set; }
-        public bool Fetched { get; private set; }
     }
 
     /// <summary>

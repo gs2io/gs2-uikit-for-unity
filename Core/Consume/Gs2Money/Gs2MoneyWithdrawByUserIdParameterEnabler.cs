@@ -12,7 +12,8 @@ namespace Gs2.Unity.UiKit.Core.Consume.Gs2Money
         
         public void Start()
         {
-            var consumeActionHolders = GetComponentsInParent<ConsumeActionHolder>()
+            var consumeActionHolders = GetComponentInParent<StampSheetActionFetcher>()
+                .ConsumeActions
                 .Where(v => v.action == "Gs2Money:WithdrawByUserId")
                 .ToArray();
             if (consumeActionHolders.Length > 1)
