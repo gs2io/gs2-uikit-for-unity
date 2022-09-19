@@ -64,8 +64,15 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Fetcher
                     }
                     else
                     {
-                        Progress = future.Result;
-                        Fetched = true;
+                        if (future.Result == null)
+                        {
+                            onNotFound.Invoke();
+                        }
+                        else
+                        {
+                            Progress = future.Result;
+                            Fetched = true;
+                        }
                     }
                 }
 
@@ -138,6 +145,15 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Fetcher
     /// </summary>
     public partial class Gs2QuestProgressFetcher
     {
+        [SerializeField]
+        internal UnityEvent onNotFound = new UnityEvent();
+        
+        public event UnityAction OnNotFound
+        {
+            add => onNotFound.AddListener(value);
+            remove => onNotFound.RemoveListener(value);
+        }
+        
         [SerializeField]
         internal ErrorEvent onError = new ErrorEvent();
         

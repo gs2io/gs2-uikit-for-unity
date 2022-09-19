@@ -19,6 +19,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Gs2.Core.Exception;
 using Gs2.Unity.Core.Exception;
@@ -71,36 +72,26 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Fetcher
                         }
                     }
                     {
-                        var it = _clientHolder.Gs2.Inventory.Namespace(
+                        var future = _clientHolder.Gs2.Inventory.Namespace(
                             item.inventory.Namespace.namespaceName
                         ).Me(
                             _gameSessionHolder.GameSession
                         ).Inventory(
                             item.inventory.inventoryName
-                        ).ItemSets();
-                        var itemSets = new List<EzItemSet>();
-                        while (it.HasNext())
+                        ).ItemSet(
+                            item.itemName,
+                            null
+                        ).Model();
+
+                        yield return future;
+
+                        if (future.Error != null)
                         {
-                            yield return it.Next();
-                            if (it.Error != null)
-                            {
-                                if (it.Error is BadRequestException || it.Error is NotFoundException)
-                                {
-                                    onError.Invoke(e = it.Error, null);
-                                    goto END;
-                                }
-
-                                onError.Invoke(new CanIgnoreException(it.Error), null);
-                                break;
-                            }
-
-                            if (it.Current != null)
-                            {
-                                itemSets.Add(it.Current);
-                            }
+                            onError.Invoke(e = future.Error, null);
+                            break;
                         }
 
-                        ItemSets = itemSets;
+                        ItemSets = future.Result.ToList();
                         if (Model != null && ItemSets != null)
                         {
                             Fetched = true;
@@ -110,7 +101,6 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Fetcher
 
                 yield return new WaitForEndOfFrame();
             }
-            END:
             
             var transform1 = transform;
             var builder = new StringBuilder(transform1.name);
