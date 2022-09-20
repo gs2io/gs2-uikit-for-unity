@@ -73,7 +73,6 @@ namespace Gs2.Unity.UiKit.Core.Consume.Gs2Stamina
                     ).Me(
                         Gs2GameSessionHolder.Instance.GameSession
                     ).Stamina(
-                        _request.StaminaName,
                         _request.StaminaName
                     ).Model();
                     yield return future;
