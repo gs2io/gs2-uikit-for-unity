@@ -68,10 +68,10 @@ namespace Gs2.Unity.UiKit.Core.Consume.Gs2Stamina
             {
                 while (!_exit)
                 {
-                    var future = Gs2ClientHolder.Instance.Gs2.Stamina.Namespace(
+                    var future = Gs2.Unity.Util.Gs2ClientHolder.Instance.Gs2.Stamina.Namespace(
                         _request.NamespaceName
                     ).Me(
-                        Gs2GameSessionHolder.Instance.GameSession
+                        Gs2.Unity.Util.Gs2GameSessionHolder.Instance.GameSession
                     ).Stamina(
                         _request.StaminaName
                     ).Model();

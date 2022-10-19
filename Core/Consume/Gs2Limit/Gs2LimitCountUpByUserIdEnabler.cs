@@ -68,10 +68,10 @@ namespace Gs2.Unity.UiKit.Core.Consume.Gs2Limit
             {
                 while (!_exit)
                 {
-                    var future = Gs2ClientHolder.Instance.Gs2.Limit.Namespace(
+                    var future = Gs2.Unity.Util.Gs2ClientHolder.Instance.Gs2.Limit.Namespace(
                         _request.NamespaceName
                     ).Me(
-                        Gs2GameSessionHolder.Instance.GameSession
+                        Gs2.Unity.Util.Gs2GameSessionHolder.Instance.GameSession
                     ).Counter(
                         _request.LimitName,
                         _request.CounterName
