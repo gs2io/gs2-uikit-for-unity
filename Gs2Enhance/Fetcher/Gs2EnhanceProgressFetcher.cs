@@ -51,8 +51,6 @@ namespace Gs2.Unity.UiKit.Gs2Enhance.Fetcher
                         ).Me(
                             _gameSessionHolder.GameSession
                         ).Progress(
-                            rate.rateName,
-                            ""
                         ).Model();
                         yield return future;
                         if (future.Error != null)
