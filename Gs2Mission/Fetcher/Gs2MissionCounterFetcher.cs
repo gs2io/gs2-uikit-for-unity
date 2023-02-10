@@ -18,12 +18,15 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.Text;
 using System.Text;
 using Gs2.Core.Exception;
 using Gs2.Unity.Core.Exception;
 using Gs2.Unity.Gs2Mission.Model;
 using Gs2.Unity.Gs2Mission.ScriptableObject;
 using Gs2.Unity.Util;
+using Gs2.Unity.UiKit.Gs2Mission.Context;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -33,7 +36,7 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Fetcher
     /// Main
     /// </summary>
 
-    [AddComponentMenu("GS2 UIKit/Mission/Gs2MissionCounterFetcher")]
+	[AddComponentMenu("GS2 UIKit/Mission/Counter/Fetcher/Gs2MissionCounterFetcher")]
     public partial class Gs2MissionCounterFetcher : MonoBehaviour
     {
         private IEnumerator Fetch()
@@ -41,17 +44,19 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Fetcher
             Gs2Exception e;
             while (true)
             {
-                if (_gameSessionHolder != null && _gameSessionHolder.Initialized && 
+                if (_gameSessionHolder != null && _gameSessionHolder.Initialized &&
                     _clientHolder != null && _clientHolder.Initialized &&
-                    missionCounter != null)
+                    _context != null)
                 {
-                    var future = _clientHolder.Gs2.Mission.Namespace(
-                        missionCounter.Namespace.namespaceName
+                    
+                    var domain = this._clientHolder.Gs2.Mission.Namespace(
+                        this._context.Counter.NamespaceName
                     ).Me(
-                        _gameSessionHolder.GameSession
+                        this._gameSessionHolder.GameSession
                     ).Counter(
-                        missionCounter.missionCounterName
-                    ).Model();
+                        this._context.Counter.CounterName
+                    );
+                    var future = domain.Model();
                     yield return future;
                     if (future.Error != null)
                     {
@@ -72,7 +77,7 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Fetcher
 
                 yield return new WaitForSeconds(1);
             }
-            
+
             var transform1 = transform;
             var builder = new StringBuilder(transform1.name);
             var current = transform1.parent;
@@ -82,7 +87,7 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Fetcher
                 builder.Insert(0, current.name + "/");
                 current = current.parent;
             }
-            
+
             Debug.LogError(e);
             Debug.LogError($"{GetType()} の自動更新が停止されました。 {builder}");
             Debug.LogError($"Automatic update of {GetType()} has been stopped. {builder}");
@@ -102,36 +107,38 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Fetcher
     /// <summary>
     /// Dependent components
     /// </summary>
-    
+
     public partial class Gs2MissionCounterFetcher
     {
         private Gs2ClientHolder _clientHolder;
         private Gs2GameSessionHolder _gameSessionHolder;
+        private Gs2MissionCounterContext _context;
 
         public void Awake()
         {
             _clientHolder = Gs2ClientHolder.Instance;
             _gameSessionHolder = Gs2GameSessionHolder.Instance;
+            _context = GetComponentInParent<Gs2MissionCounterContext>();
         }
     }
 
     /// <summary>
     /// Public properties
     /// </summary>
-    
+
     public partial class Gs2MissionCounterFetcher
     {
-        public EzCounter Counter { get; private set; }
+        public Gs2.Unity.Gs2Mission.Model.EzCounter Counter { get; private set; }
         public bool Fetched { get; private set; }
     }
 
     /// <summary>
     /// Parameters for Inspector
     /// </summary>
-    
+
     public partial class Gs2MissionCounterFetcher
     {
-        public MissionCounter missionCounter;
+
     }
 
     /// <summary>
@@ -141,7 +148,7 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Fetcher
     {
         [SerializeField]
         internal ErrorEvent onError = new ErrorEvent();
-        
+
         public event UnityAction<Gs2Exception, Func<IEnumerator>> OnError
         {
             add => onError.AddListener(value);

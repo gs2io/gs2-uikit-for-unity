@@ -8,7 +8,7 @@ using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2Account
 {
-	[AddComponentMenu("GS2 UIKit/Account/Gs2AccountSignOutGoogleAccount")]
+    [AddComponentMenu("GS2 UIKit/Account/SignOut/Action/Google")]
     public partial class Gs2AccountSignOutGoogleAccount : MonoBehaviour
     {
         private IEnumerator Process()

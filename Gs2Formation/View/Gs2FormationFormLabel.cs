@@ -17,6 +17,8 @@
 // ReSharper disable CheckNamespace
 
 using System;
+using Gs2.Core.Util;
+using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Formation.Fetcher;
 using UnityEngine;
 using UnityEngine.Events;
@@ -27,16 +29,22 @@ namespace Gs2.Unity.UiKit.Gs2Formation
     /// Main
     /// </summary>
 
-    [AddComponentMenu("GS2 UIKit/Formation/Gs2FormationFormLabel")]
+	[AddComponentMenu("GS2 UIKit/Formation/Form/View/Gs2FormationFormLabel")]
     public partial class Gs2FormationFormLabel : MonoBehaviour
     {
         public void Update()
         {
-            if (_formFetcher.Fetched)
+            if (_fetcher.Fetched)
             {
-                onUpdate.Invoke(format.Replace(
-                    "{metadata}", _formFetcher.Model.Metadata
-                ));
+                onUpdate.Invoke(
+                    format.Replace(
+                        "{name}", _fetcher.Form.Name.ToString()
+                    ).Replace(
+                        "{index}", _fetcher.Form.Index.ToString()
+                    ).Replace(
+                        "{slots}", _fetcher.Form.Slots.ToString()
+                    )
+                );
             }
         }
     }
@@ -44,14 +52,14 @@ namespace Gs2.Unity.UiKit.Gs2Formation
     /// <summary>
     /// Dependent components
     /// </summary>
-    
+
     public partial class Gs2FormationFormLabel
     {
-        private Gs2FormationFormFetcher _formFetcher;
+        private Gs2FormationFormFetcher _fetcher;
 
         public void Awake()
         {
-            _formFetcher = GetComponentInParent<Gs2FormationFormFetcher>() ?? GetComponent<Gs2FormationFormFetcher>();
+            _fetcher = GetComponentInParent<Gs2FormationFormFetcher>();
             Update();
         }
     }
@@ -59,16 +67,16 @@ namespace Gs2.Unity.UiKit.Gs2Formation
     /// <summary>
     /// Public properties
     /// </summary>
-    
+
     public partial class Gs2FormationFormLabel
     {
-        
+
     }
 
     /// <summary>
     /// Parameters for Inspector
     /// </summary>
-    
+
     public partial class Gs2FormationFormLabel
     {
         public string format;
@@ -82,12 +90,12 @@ namespace Gs2.Unity.UiKit.Gs2Formation
         [Serializable]
         private class UpdateEvent : UnityEvent<string>
         {
-            
+
         }
-        
+
         [SerializeField]
         private UpdateEvent onUpdate = new UpdateEvent();
-        
+
         public event UnityAction<string> OnUpdate
         {
             add => onUpdate.AddListener(value);

@@ -25,6 +25,7 @@ using Gs2.Unity.Core.Exception;
 using Gs2.Unity.Gs2Datastore.Model;
 using Gs2.Unity.Gs2Datastore.ScriptableObject;
 using Gs2.Unity.Util;
+using Gs2.Unity.UiKit.Gs2Datastore.Context;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -34,7 +35,7 @@ namespace Gs2.Unity.UiKit.Gs2Datastore.Fetcher
     /// Main
     /// </summary>
 
-    [AddComponentMenu("GS2 UIKit/Datastore/Gs2DatastoreDataObjectListFetcher")]
+	[AddComponentMenu("GS2 UIKit/Datastore/DataObject/Fetcher/Gs2DatastoreDataObjectListFetcher")]
     public partial class Gs2DatastoreDataObjectListFetcher : MonoBehaviour
     {
         private IEnumerator Fetch()
@@ -44,15 +45,16 @@ namespace Gs2.Unity.UiKit.Gs2Datastore.Fetcher
             {
                 if (_gameSessionHolder != null && _gameSessionHolder.Initialized && 
                     _clientHolder != null && _clientHolder.Initialized &&
-                    user != null)
+                    _context != null)
                 {
-                    var it = _clientHolder.Gs2.Datastore.Namespace(
-                        user.Namespace.namespaceName
-                    ).User(
-                        user.userId
-                    ).DataObjects(
+                    
+                    var domain = this._clientHolder.Gs2.Datastore.Namespace(
+                        this._context.User.NamespaceName
+                    ).Me(
+                        this._gameSessionHolder.GameSession
                     );
-                    var forms = new List<EzDataObject>();
+                    var it = domain.DataObjects();
+                    var items = new List<Gs2.Unity.Gs2Datastore.Model.EzDataObject>();
                     while (it.HasNext())
                     {
                         yield return it.Next();
@@ -70,11 +72,13 @@ namespace Gs2.Unity.UiKit.Gs2Datastore.Fetcher
 
                         if (it.Current != null)
                         {
-                            forms.Add(it.Current);
+                            items.Add(it.Current);
+                        } else {
+                            break;
                         }
                     }
 
-                    DataObjects = forms;
+                    DataObjects = items;
                     Fetched = true;
                 }
 
@@ -116,11 +120,13 @@ namespace Gs2.Unity.UiKit.Gs2Datastore.Fetcher
     {
         private Gs2ClientHolder _clientHolder;
         private Gs2GameSessionHolder _gameSessionHolder;
+        private Gs2DatastoreUserContext _context;
 
         public void Awake()
         {
             _clientHolder = Gs2ClientHolder.Instance;
             _gameSessionHolder = Gs2GameSessionHolder.Instance;
+            _context = GetComponentInParent<Gs2DatastoreUserContext>();
         }
     }
 
@@ -130,7 +136,7 @@ namespace Gs2.Unity.UiKit.Gs2Datastore.Fetcher
     
     public partial class Gs2DatastoreDataObjectListFetcher
     {
-        public List<EzDataObject> DataObjects { get; private set; }
+        public List<Gs2.Unity.Gs2Datastore.Model.EzDataObject> DataObjects { get; private set; }
         public bool Fetched { get; private set; }
     }
 
@@ -140,7 +146,7 @@ namespace Gs2.Unity.UiKit.Gs2Datastore.Fetcher
     
     public partial class Gs2DatastoreDataObjectListFetcher
     {
-        public User user;
+
     }
 
     /// <summary>

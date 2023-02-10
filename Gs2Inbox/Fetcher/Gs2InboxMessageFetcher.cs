@@ -18,12 +18,15 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.Text;
 using System.Text;
 using Gs2.Core.Exception;
 using Gs2.Unity.Core.Exception;
 using Gs2.Unity.Gs2Inbox.Model;
 using Gs2.Unity.Gs2Inbox.ScriptableObject;
 using Gs2.Unity.Util;
+using Gs2.Unity.UiKit.Gs2Inbox.Context;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -33,7 +36,7 @@ namespace Gs2.Unity.UiKit.Gs2Inbox.Fetcher
     /// Main
     /// </summary>
 
-    [AddComponentMenu("GS2 UIKit/Inbox/Gs2InboxMessageFetcher")]
+	[AddComponentMenu("GS2 UIKit/Inbox/Message/Fetcher/Gs2InboxMessageFetcher")]
     public partial class Gs2InboxMessageFetcher : MonoBehaviour
     {
         private IEnumerator Fetch()
@@ -41,40 +44,40 @@ namespace Gs2.Unity.UiKit.Gs2Inbox.Fetcher
             Gs2Exception e;
             while (true)
             {
-                if (_gameSessionHolder != null && _gameSessionHolder.Initialized && 
+                if (_gameSessionHolder != null && _gameSessionHolder.Initialized &&
                     _clientHolder != null && _clientHolder.Initialized &&
-                    message != null)
+                    _context != null)
                 {
+                    
+                    var domain = this._clientHolder.Gs2.Inbox.Namespace(
+                        this._context.Message.NamespaceName
+                    ).Me(
+                        this._gameSessionHolder.GameSession
+                    ).Message(
+                        this._context.Message.MessageName
+                    );
+                    var future = domain.Model();
+                    yield return future;
+                    if (future.Error != null)
                     {
-                        var future = _clientHolder.Gs2.Inbox.Namespace(
-                            message.Namespace.namespaceName
-                        ).Me(
-                            _gameSessionHolder.GameSession
-                        ).Message(
-                            message.messageName
-                        ).Model();
-                        yield return future;
-                        if (future.Error != null)
+                        if (future.Error is BadRequestException || future.Error is NotFoundException)
                         {
-                            if (future.Error is BadRequestException || future.Error is NotFoundException)
-                            {
-                                onError.Invoke(e = future.Error, null);
-                                break;
-                            }
+                            onError.Invoke(e = future.Error, null);
+                            break;
+                        }
 
-                            onError.Invoke(new CanIgnoreException(future.Error), null);
-                        }
-                        else
-                        {
-                            Message = future.Result;
-                            Fetched = true;
-                        }
+                        onError.Invoke(new CanIgnoreException(future.Error), null);
+                    }
+                    else
+                    {
+                        Message = future.Result;
+                        Fetched = true;
                     }
                 }
 
                 yield return new WaitForSeconds(1);
             }
-            
+
             var transform1 = transform;
             var builder = new StringBuilder(transform1.name);
             var current = transform1.parent;
@@ -84,7 +87,7 @@ namespace Gs2.Unity.UiKit.Gs2Inbox.Fetcher
                 builder.Insert(0, current.name + "/");
                 current = current.parent;
             }
-            
+
             Debug.LogError(e);
             Debug.LogError($"{GetType()} の自動更新が停止されました。 {builder}");
             Debug.LogError($"Automatic update of {GetType()} has been stopped. {builder}");
@@ -104,36 +107,38 @@ namespace Gs2.Unity.UiKit.Gs2Inbox.Fetcher
     /// <summary>
     /// Dependent components
     /// </summary>
-    
+
     public partial class Gs2InboxMessageFetcher
     {
         private Gs2ClientHolder _clientHolder;
         private Gs2GameSessionHolder _gameSessionHolder;
+        private Gs2InboxMessageContext _context;
 
         public void Awake()
         {
             _clientHolder = Gs2ClientHolder.Instance;
             _gameSessionHolder = Gs2GameSessionHolder.Instance;
+            _context = GetComponentInParent<Gs2InboxMessageContext>();
         }
     }
 
     /// <summary>
     /// Public properties
     /// </summary>
-    
+
     public partial class Gs2InboxMessageFetcher
     {
-        public EzMessage Message { get; private set; }
+        public Gs2.Unity.Gs2Inbox.Model.EzMessage Message { get; private set; }
         public bool Fetched { get; private set; }
     }
 
     /// <summary>
     /// Parameters for Inspector
     /// </summary>
-    
+
     public partial class Gs2InboxMessageFetcher
     {
-        public Message message;
+
     }
 
     /// <summary>
@@ -143,7 +148,7 @@ namespace Gs2.Unity.UiKit.Gs2Inbox.Fetcher
     {
         [SerializeField]
         internal ErrorEvent onError = new ErrorEvent();
-        
+
         public event UnityAction<Gs2Exception, Func<IEnumerator>> OnError
         {
             add => onError.AddListener(value);

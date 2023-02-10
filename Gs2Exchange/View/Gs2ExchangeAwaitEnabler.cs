@@ -16,8 +16,6 @@
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
 
-using System;
-using Gs2.Core.Util;
 using Gs2.Unity.UiKit.Gs2Exchange.Fetcher;
 using UnityEngine;
 
@@ -27,25 +25,24 @@ namespace Gs2.Unity.UiKit.Gs2Exchange
     /// Main
     /// </summary>
 
-    [AddComponentMenu("GS2 UIKit/Exchange/Gs2ExchangeAwaitEnabler")]
+	[AddComponentMenu("GS2 UIKit/Exchange/Await/Gs2ExchangeAwaitEnabler")]
     public partial class Gs2ExchangeAwaitEnabler : MonoBehaviour
     {
         public void Update()
         {
-            if (!_awaitFetcher.Fetched)
+            if (!_fetcher.Fetched)
             {
                 target.SetActive(loading);
             }
-            else 
+            else
             {
-                var span = UnixTime.FromUnixTime(_awaitFetcher.Await.ExchangedAt).Add(TimeSpan.FromMinutes(_awaitFetcher.Model.LockTime)) - DateTime.UtcNow;
-                if (span.TotalSeconds > 0)
+                if (_fetcher.Await == null)
                 {
-                    target.SetActive(waiting);
+                    target.SetActive(notFound);
                 }
                 else
                 {
-                    target.SetActive(complete);
+                    target.SetActive(loaded);
                 }
             }
         }
@@ -54,36 +51,35 @@ namespace Gs2.Unity.UiKit.Gs2Exchange
     /// <summary>
     /// Dependent components
     /// </summary>
-    
+
     public partial class Gs2ExchangeAwaitEnabler
     {
-        private Gs2ExchangeAwaitFetcher _awaitFetcher;
+        private Gs2ExchangeAwaitFetcher _fetcher;
 
         public void Awake()
         {
-            _awaitFetcher = GetComponentInParent<Gs2ExchangeAwaitFetcher>();
-            Update();
+            _fetcher = GetComponentInParent<Gs2ExchangeAwaitFetcher>();
         }
     }
 
     /// <summary>
     /// Public properties
     /// </summary>
-    
+
     public partial class Gs2ExchangeAwaitEnabler
     {
-        
+
     }
 
     /// <summary>
     /// Parameters for Inspector
     /// </summary>
-    
+
     public partial class Gs2ExchangeAwaitEnabler
     {
         public bool loading;
-        public bool waiting;
-        public bool complete;
+        public bool notFound;
+        public bool loaded;
 
         public GameObject target;
     }
@@ -93,6 +89,6 @@ namespace Gs2.Unity.UiKit.Gs2Exchange
     /// </summary>
     public partial class Gs2ExchangeAwaitEnabler
     {
-        
+
     }
 }

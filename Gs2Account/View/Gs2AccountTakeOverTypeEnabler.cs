@@ -26,14 +26,34 @@ namespace Gs2.Unity.UiKit.Gs2Account
     /// Main
     /// </summary>
 
-	[AddComponentMenu("GS2 UIKit/Account/Gs2AccountTakeOverTypeEnabler")]
+	[AddComponentMenu("GS2 UIKit/Account/TakeOver/View/Properties/Type/Gs2AccountTakeOverTypeEnabler")]
     public partial class Gs2AccountTakeOverTypeEnabler : MonoBehaviour
     {
         public void Update()
         {
-            if (_takeOverFetcher.Fetched)
+            if (_fetcher.Fetched)
             {
-                target.SetActive(enableTypes.Contains(_takeOverFetcher.TakeOver.Type));
+                switch(expression)
+                {
+                    case Expression.In:
+                        target.SetActive(enableTypes.Contains(_fetcher.TakeOver.Type));
+                        break;
+                    case Expression.NotIn:
+                        target.SetActive(!enableTypes.Contains(_fetcher.TakeOver.Type));
+                        break;
+                    case Expression.Less:
+                        target.SetActive(enableType < _fetcher.TakeOver.Type);
+                        break;
+                    case Expression.LessEqual:
+                        target.SetActive(enableType <= _fetcher.TakeOver.Type);
+                        break;
+                    case Expression.Greater:
+                        target.SetActive(enableType > _fetcher.TakeOver.Type);
+                        break;
+                    case Expression.GreaterEqual:
+                        target.SetActive(enableType >= _fetcher.TakeOver.Type);
+                        break;
+                }
             }
             else 
             {
@@ -48,11 +68,11 @@ namespace Gs2.Unity.UiKit.Gs2Account
     
     public partial class Gs2AccountTakeOverTypeEnabler
     {
-        private Gs2AccountTakeOverFetcher _takeOverFetcher;
+        private Gs2AccountTakeOverFetcher _fetcher;
 
         public void Awake()
         {
-            _takeOverFetcher = GetComponentInParent<Gs2AccountTakeOverFetcher>();
+            _fetcher = GetComponentInParent<Gs2AccountTakeOverFetcher>();
         }
     }
 
@@ -71,7 +91,20 @@ namespace Gs2.Unity.UiKit.Gs2Account
     
     public partial class Gs2AccountTakeOverTypeEnabler
     {
+        public enum Expression {
+            In,
+            NotIn,
+            Less,
+            LessEqual,
+            Greater,
+            GreaterEqual,
+        }
+
+        public Expression expression;
+
         public List<int> enableTypes;
+
+        public int enableType;
 
         public GameObject target;
     }

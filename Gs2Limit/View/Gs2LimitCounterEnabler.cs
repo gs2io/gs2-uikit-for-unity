@@ -25,18 +25,25 @@ namespace Gs2.Unity.UiKit.Gs2Limit
     /// Main
     /// </summary>
 
-    [AddComponentMenu("GS2 UIKit/Limit/Gs2LimitCounterEnabler")]
+	[AddComponentMenu("GS2 UIKit/Limit/Counter/Gs2LimitCounterEnabler")]
     public partial class Gs2LimitCounterEnabler : MonoBehaviour
     {
         public void Update()
         {
-            if (!_itemSetFetcher.Fetched)
+            if (!_fetcher.Fetched)
             {
                 target.SetActive(loading);
             }
-            else 
+            else
             {
-                target.SetActive(loaded);
+                if (_fetcher.Counter == null)
+                {
+                    target.SetActive(notFound);
+                }
+                else
+                {
+                    target.SetActive(loaded);
+                }
             }
         }
     }
@@ -44,34 +51,34 @@ namespace Gs2.Unity.UiKit.Gs2Limit
     /// <summary>
     /// Dependent components
     /// </summary>
-    
+
     public partial class Gs2LimitCounterEnabler
     {
-        private Gs2LimitCounterFetcher _itemSetFetcher;
+        private Gs2LimitCounterFetcher _fetcher;
 
         public void Awake()
         {
-            _itemSetFetcher = GetComponentInParent<Gs2LimitCounterFetcher>() ?? GetComponent<Gs2LimitCounterFetcher>();
-            Update();
+            _fetcher = GetComponentInParent<Gs2LimitCounterFetcher>();
         }
     }
 
     /// <summary>
     /// Public properties
     /// </summary>
-    
+
     public partial class Gs2LimitCounterEnabler
     {
-        
+
     }
 
     /// <summary>
     /// Parameters for Inspector
     /// </summary>
-    
+
     public partial class Gs2LimitCounterEnabler
     {
         public bool loading;
+        public bool notFound;
         public bool loaded;
 
         public GameObject target;
@@ -82,6 +89,6 @@ namespace Gs2.Unity.UiKit.Gs2Limit
     /// </summary>
     public partial class Gs2LimitCounterEnabler
     {
-        
+
     }
 }

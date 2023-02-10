@@ -25,18 +25,18 @@ namespace Gs2.Unity.UiKit.Gs2Account
     /// Main
     /// </summary>
 
-	[AddComponentMenu("GS2 UIKit/Account/Gs2AccountTakeOverEnabler")]
+	[AddComponentMenu("GS2 UIKit/Account/TakeOver/Gs2AccountTakeOverEnabler")]
     public partial class Gs2AccountTakeOverEnabler : MonoBehaviour
     {
         public void Update()
         {
-            if (!_messageFetcher.Fetched)
+            if (!_fetcher.Fetched)
             {
                 target.SetActive(loading);
             }
-            else 
+            else
             {
-                if (_messageFetcher.TakeOver == null)
+                if (_fetcher.TakeOver == null)
                 {
                     target.SetActive(notFound);
                 }
@@ -51,30 +51,30 @@ namespace Gs2.Unity.UiKit.Gs2Account
     /// <summary>
     /// Dependent components
     /// </summary>
-    
+
     public partial class Gs2AccountTakeOverEnabler
     {
-        private Gs2AccountTakeOverFetcher _messageFetcher;
+        private Gs2AccountTakeOverFetcher _fetcher;
 
         public void Awake()
         {
-            _messageFetcher = GetComponentInParent<Gs2AccountTakeOverFetcher>();
+            _fetcher = GetComponentInParent<Gs2AccountTakeOverFetcher>();
         }
     }
 
     /// <summary>
     /// Public properties
     /// </summary>
-    
+
     public partial class Gs2AccountTakeOverEnabler
     {
-        
+
     }
 
     /// <summary>
     /// Parameters for Inspector
     /// </summary>
-    
+
     public partial class Gs2AccountTakeOverEnabler
     {
         public bool loading;
@@ -89,6 +89,6 @@ namespace Gs2.Unity.UiKit.Gs2Account
     /// </summary>
     public partial class Gs2AccountTakeOverEnabler
     {
-        
+
     }
 }

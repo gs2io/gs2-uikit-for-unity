@@ -25,6 +25,7 @@ using Gs2.Unity.Core.Exception;
 using Gs2.Unity.Gs2Experience.Model;
 using Gs2.Unity.Gs2Experience.ScriptableObject;
 using Gs2.Unity.Util;
+using Gs2.Unity.UiKit.Gs2Experience.Context;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -34,7 +35,7 @@ namespace Gs2.Unity.UiKit.Gs2Experience.Fetcher
     /// Main
     /// </summary>
 
-    [AddComponentMenu("GS2 UIKit/Experience/Gs2ExperienceStatusListFetcher")]
+	[AddComponentMenu("GS2 UIKit/Experience/Status/Fetcher/Gs2ExperienceStatusListFetcher")]
     public partial class Gs2ExperienceStatusListFetcher : MonoBehaviour
     {
         private IEnumerator Fetch()
@@ -44,55 +45,41 @@ namespace Gs2.Unity.UiKit.Gs2Experience.Fetcher
             {
                 if (_gameSessionHolder != null && _gameSessionHolder.Initialized && 
                     _clientHolder != null && _clientHolder.Initialized &&
-                    experience != null)
+                    _context != null)
                 {
+                    
+                    var domain = this._clientHolder.Gs2.Experience.Namespace(
+                        this._context.User.NamespaceName
+                    ).Me(
+                        this._gameSessionHolder.GameSession
+                    );
+                    var it = domain.Statuses();
+                    var items = new List<Gs2.Unity.Gs2Experience.Model.EzStatus>();
+                    while (it.HasNext())
                     {
-                        var future = _clientHolder.Gs2.Experience.Namespace(
-                            experience.Namespace.namespaceName
-                        ).ExperienceModel(
-                            experience.experienceName
-                        ).Model();
-                        yield return future;
-                        if (future.Error != null)
+                        yield return it.Next();
+                        if (it.Error != null)
                         {
-                            onError.Invoke(e = future.Error, null);
+                            if (it.Error is BadRequestException || it.Error is NotFoundException)
+                            {
+                                onError.Invoke(e = it.Error, null);
+                                goto END;
+                            }
+
+                            onError.Invoke(new CanIgnoreException(it.Error), null);
                             break;
                         }
-                        Model = future.Result;
-                    }
-                    {
-                        var it = _clientHolder.Gs2.Experience.Namespace(
-                            experience.Namespace.namespaceName
-                        ).Me(
-                            _gameSessionHolder.GameSession
-                        ).Statuses(
-                            experience.experienceName
-                        );
-                        var forms = new List<EzStatus>();
-                        while (it.HasNext())
+
+                        if (it.Current != null)
                         {
-                            yield return it.Next();
-                            if (it.Error != null)
-                            {
-                                if (it.Error is BadRequestException || it.Error is NotFoundException)
-                                {
-                                    onError.Invoke(e = it.Error, null);
-                                    goto END;
-                                }
-
-                                onError.Invoke(new CanIgnoreException(it.Error), null);
-                                break;
-                            }
-
-                            if (it.Current != null)
-                            {
-                                forms.Add(it.Current);
-                            }
+                            items.Add(it.Current);
+                        } else {
+                            break;
                         }
-
-                        Statuses = forms;
-                        Fetched = true;
                     }
+
+                    Statuses = items;
+                    Fetched = true;
                 }
 
                 yield return new WaitForSeconds(1);
@@ -133,11 +120,13 @@ namespace Gs2.Unity.UiKit.Gs2Experience.Fetcher
     {
         private Gs2ClientHolder _clientHolder;
         private Gs2GameSessionHolder _gameSessionHolder;
+        private Gs2ExperienceUserContext _context;
 
         public void Awake()
         {
             _clientHolder = Gs2ClientHolder.Instance;
             _gameSessionHolder = Gs2GameSessionHolder.Instance;
+            _context = GetComponentInParent<Gs2ExperienceUserContext>();
         }
     }
 
@@ -147,8 +136,7 @@ namespace Gs2.Unity.UiKit.Gs2Experience.Fetcher
     
     public partial class Gs2ExperienceStatusListFetcher
     {
-        public EzExperienceModel Model { get; private set; }
-        public List<EzStatus> Statuses { get; private set; }
+        public List<Gs2.Unity.Gs2Experience.Model.EzStatus> Statuses { get; private set; }
         public bool Fetched { get; private set; }
     }
 
@@ -158,7 +146,7 @@ namespace Gs2.Unity.UiKit.Gs2Experience.Fetcher
     
     public partial class Gs2ExperienceStatusListFetcher
     {
-        public Experience experience;
+
     }
 
     /// <summary>

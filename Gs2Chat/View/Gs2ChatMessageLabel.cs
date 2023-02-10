@@ -18,6 +18,7 @@
 
 using System;
 using Gs2.Core.Util;
+using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Chat.Fetcher;
 using UnityEngine;
 using UnityEngine.Events;
@@ -28,43 +29,47 @@ namespace Gs2.Unity.UiKit.Gs2Chat
     /// Main
     /// </summary>
 
-	[AddComponentMenu("GS2 UIKit/Chat/Gs2ChatMessageLabel")]
+	[AddComponentMenu("GS2 UIKit/Chat/Message/View/Gs2ChatMessageLabel")]
     public partial class Gs2ChatMessageLabel : MonoBehaviour
     {
-        private DateTime? _createdAt = null;
-        
         public void Update()
         {
-            if (_messageFetcher.Fetched && _createdAt == null)
+            if (_fetcher.Fetched)
             {
-                _createdAt = UnixTime.FromUnixTime(_messageFetcher.Message.CreatedAt).ToLocalTime();
-            }
-
-            if (_createdAt != null)
-            {
-                onUpdate.Invoke(format.Replace(
-                    "{metadata}", _messageFetcher.Message.Metadata
-                ).Replace(
-                    "{yyyy}", _createdAt.Value.ToString("yyyy")
-                ).Replace(
-                    "{yy}", _createdAt.Value.ToString("yy")
-                ).Replace(
-                    "{MM}", _createdAt.Value.ToString("MM")
-                ).Replace(
-                    "{MMM}", _createdAt.Value.ToString("MMM")
-                ).Replace(
-                    "{dd}", _createdAt.Value.ToString("dd")
-                ).Replace(
-                    "{hh}", _createdAt.Value.ToString("hh")
-                ).Replace(
-                    "{HH}", _createdAt.Value.ToString("HH")
-                ).Replace(
-                    "{tt}", _createdAt.Value.ToString("tt")
-                ).Replace(
-                    "{mm}", _createdAt.Value.ToString("mm")
-                ).Replace(
-                    "{ss}", _createdAt.Value.ToString("ss")
-                ));
+                var createdAt = UnixTime.FromUnixTime(_fetcher.Message.CreatedAt).ToLocalTime();
+                onUpdate.Invoke(
+                    format.Replace(
+                        "{name}", _fetcher.Message.Name.ToString()
+                    ).Replace(
+                        "{roomName}", _fetcher.Message.RoomName.ToString()
+                    ).Replace(
+                        "{userId}", _fetcher.Message.UserId.ToString()
+                    ).Replace(
+                        "{category}", _fetcher.Message.Category.ToString()
+                    ).Replace(
+                        "{metadata}", _fetcher.Message.Metadata.ToString()
+                    ).Replace(
+                        "{createdAt:yyyy}", createdAt.ToString("yyyy")
+                    ).Replace(
+                        "{createdAt:yy}", createdAt.ToString("yy")
+                    ).Replace(
+                        "{createdAt:MM}", createdAt.ToString("MM")
+                    ).Replace(
+                        "{createdAt:MMM}", createdAt.ToString("MMM")
+                    ).Replace(
+                        "{createdAt:dd}", createdAt.ToString("dd")
+                    ).Replace(
+                        "{createdAt:hh}", createdAt.ToString("hh")
+                    ).Replace(
+                        "{createdAt:HH}", createdAt.ToString("HH")
+                    ).Replace(
+                        "{createdAt:tt}", createdAt.ToString("tt")
+                    ).Replace(
+                        "{createdAt:mm}", createdAt.ToString("mm")
+                    ).Replace(
+                        "{createdAt:ss}", createdAt.ToString("ss")
+                    )
+                );
             }
         }
     }
@@ -72,14 +77,14 @@ namespace Gs2.Unity.UiKit.Gs2Chat
     /// <summary>
     /// Dependent components
     /// </summary>
-    
+
     public partial class Gs2ChatMessageLabel
     {
-        private Gs2ChatMessageFetcher _messageFetcher;
+        private Gs2ChatMessageFetcher _fetcher;
 
         public void Awake()
         {
-            _messageFetcher = GetComponentInParent<Gs2ChatMessageFetcher>();
+            _fetcher = GetComponentInParent<Gs2ChatMessageFetcher>();
             Update();
         }
     }
@@ -87,16 +92,16 @@ namespace Gs2.Unity.UiKit.Gs2Chat
     /// <summary>
     /// Public properties
     /// </summary>
-    
+
     public partial class Gs2ChatMessageLabel
     {
-        
+
     }
 
     /// <summary>
     /// Parameters for Inspector
     /// </summary>
-    
+
     public partial class Gs2ChatMessageLabel
     {
         public string format;
@@ -110,12 +115,12 @@ namespace Gs2.Unity.UiKit.Gs2Chat
         [Serializable]
         private class UpdateEvent : UnityEvent<string>
         {
-            
+
         }
-        
+
         [SerializeField]
         private UpdateEvent onUpdate = new UpdateEvent();
-        
+
         public event UnityAction<string> OnUpdate
         {
             add => onUpdate.AddListener(value);

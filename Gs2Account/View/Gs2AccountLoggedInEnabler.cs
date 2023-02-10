@@ -25,18 +25,22 @@ namespace Gs2.Unity.UiKit.Gs2Account
     /// Main
     /// </summary>
 
-	[AddComponentMenu("GS2 UIKit/Account/Gs2AccountLoggedInEnabler")]
+    [AddComponentMenu("GS2 UIKit/Account/Account/Enabler/Gs2AccountLoggedInEnabler")]
     public partial class Gs2AccountLoggedInEnabler : MonoBehaviour
     {
         public void Update()
         {
-            if (!_sessionHolder.Initialized)
+            if (_sessionHolder.Initialized)
             {
-                target.SetActive(guest);
+                if (_sessionHolder.GameSession == null) {
+                    target.SetActive(!loggedIn);
+                }
+                else {
+                    target.SetActive(loggedIn);
+                }
             }
-            else 
-            {
-                target.SetActive(loggedIn);
+            else {
+                target.SetActive(!loggedIn);
             }
         }
     }
@@ -70,7 +74,6 @@ namespace Gs2.Unity.UiKit.Gs2Account
     
     public partial class Gs2AccountLoggedInEnabler
     {
-        public bool guest;
         public bool loggedIn;
 
         public GameObject target;

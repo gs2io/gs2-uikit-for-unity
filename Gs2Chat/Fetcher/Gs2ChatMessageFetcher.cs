@@ -24,6 +24,7 @@ using Gs2.Unity.Core.Exception;
 using Gs2.Unity.Gs2Chat.Model;
 using Gs2.Unity.Gs2Chat.ScriptableObject;
 using Gs2.Unity.Util;
+using Gs2.Unity.UiKit.Gs2Chat.Context;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -33,7 +34,7 @@ namespace Gs2.Unity.UiKit.Gs2Chat.Fetcher
     /// Main
     /// </summary>
 
-	[AddComponentMenu("GS2 UIKit/Chat/Gs2ChatMessageFetcher")]
+	[AddComponentMenu("GS2 UIKit/Chat/Message/Fetcher/Gs2ChatMessageFetcher")]
     public partial class Gs2ChatMessageFetcher : MonoBehaviour
     {
         private IEnumerator Fetch()
@@ -41,43 +42,43 @@ namespace Gs2.Unity.UiKit.Gs2Chat.Fetcher
             Gs2Exception e;
             while (true)
             {
-                if (_gameSessionHolder != null && _gameSessionHolder.Initialized && 
+                if (_gameSessionHolder != null && _gameSessionHolder.Initialized &&
                     _clientHolder != null && _clientHolder.Initialized &&
-                    message != null)
+                    _context != null)
                 {
+                    
+                    var domain = this._clientHolder.Gs2.Chat.Namespace(
+                        this._context.Message.NamespaceName
+                    ).Me(
+                        this._gameSessionHolder.GameSession
+                    ).Room(
+                        this._context.Message.RoomName,
+                        this._context.Message.Password
+                    ).Message(
+                        this._context.Message.MessageName
+                    );
+                    var future = domain.Model();
+                    yield return future;
+                    if (future.Error != null)
                     {
-                        var future = _clientHolder.Gs2.Chat.Namespace(
-                            message.room.Namespace.namespaceName
-                        ).Me(
-                            _gameSessionHolder.GameSession
-                        ).Room(
-                            message.room.roomName,
-                            message.room.password
-                        ).Message(
-                            message.messageName
-                        ).Model();
-                        yield return future;
-                        if (future.Error != null)
+                        if (future.Error is BadRequestException || future.Error is NotFoundException)
                         {
-                            if (future.Error is BadRequestException || future.Error is NotFoundException)
-                            {
-                                onError.Invoke(e = future.Error, null);
-                                break;
-                            }
+                            onError.Invoke(e = future.Error, null);
+                            break;
+                        }
 
-                            onError.Invoke(new CanIgnoreException(future.Error), null);
-                        }
-                        else
-                        {
-                            Message = future.Result;
-                            Fetched = true;
-                        }
+                        onError.Invoke(new CanIgnoreException(future.Error), null);
+                    }
+                    else
+                    {
+                        Message = future.Result;
+                        Fetched = true;
                     }
                 }
 
                 yield return new WaitForSeconds(1);
             }
-            
+
             var transform1 = transform;
             var builder = new StringBuilder(transform1.name);
             var current = transform1.parent;
@@ -87,7 +88,7 @@ namespace Gs2.Unity.UiKit.Gs2Chat.Fetcher
                 builder.Insert(0, current.name + "/");
                 current = current.parent;
             }
-            
+
             Debug.LogError(e);
             Debug.LogError($"{GetType()} の自動更新が停止されました。 {builder}");
             Debug.LogError($"Automatic update of {GetType()} has been stopped. {builder}");
@@ -107,23 +108,25 @@ namespace Gs2.Unity.UiKit.Gs2Chat.Fetcher
     /// <summary>
     /// Dependent components
     /// </summary>
-    
+
     public partial class Gs2ChatMessageFetcher
     {
         private Gs2ClientHolder _clientHolder;
         private Gs2GameSessionHolder _gameSessionHolder;
+        private Gs2ChatMessageContext _context;
 
         public void Awake()
         {
             _clientHolder = Gs2ClientHolder.Instance;
             _gameSessionHolder = Gs2GameSessionHolder.Instance;
+            _context = GetComponentInParent<Gs2ChatMessageContext>();
         }
     }
 
     /// <summary>
     /// Public properties
     /// </summary>
-    
+
     public partial class Gs2ChatMessageFetcher
     {
         public EzMessage Message { get; private set; }
@@ -133,10 +136,10 @@ namespace Gs2.Unity.UiKit.Gs2Chat.Fetcher
     /// <summary>
     /// Parameters for Inspector
     /// </summary>
-    
+
     public partial class Gs2ChatMessageFetcher
     {
-        public Message message;
+
     }
 
     /// <summary>
@@ -146,7 +149,7 @@ namespace Gs2.Unity.UiKit.Gs2Chat.Fetcher
     {
         [SerializeField]
         internal ErrorEvent onError = new ErrorEvent();
-        
+
         public event UnityAction<Gs2Exception, Func<IEnumerator>> OnError
         {
             add => onError.AddListener(value);

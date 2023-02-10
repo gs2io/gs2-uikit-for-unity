@@ -17,6 +17,9 @@
 // ReSharper disable CheckNamespace
 
 using System;
+using Gs2.Core.Util;
+using Gs2.Unity.UiKit.Core;
+using Gs2.Unity.UiKit.Gs2Friend.Fetcher;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -26,20 +29,24 @@ namespace Gs2.Unity.UiKit.Gs2Friend
     /// Main
     /// </summary>
 
-    [AddComponentMenu("GS2 UIKit/Friend/Gs2FriendProfileLabel")]
+	[AddComponentMenu("GS2 UIKit/Friend/Profile/View/Gs2FriendProfileLabel")]
     public partial class Gs2FriendProfileLabel : MonoBehaviour
     {
         public void Update()
         {
-            if (_profileFetcher.Fetched)
+            if (_fetcher.Fetched)
             {
-                onUpdate.Invoke(format.Replace(
-                    "{public}", _profileFetcher.PublicProfile
-                ).Replace(
-                    "{follower}", _profileFetcher.FollowerProfile
-                ).Replace(
-                    "{friend}", _profileFetcher.FriendProfile
-                ));
+                onUpdate.Invoke(
+                    format.Replace(
+                        "{userId}", _fetcher.Profile.UserId.ToString()
+                    ).Replace(
+                        "{publicProfile}", _fetcher.Profile.PublicProfile.ToString()
+                    ).Replace(
+                        "{followerProfile}", _fetcher.Profile.FollowerProfile.ToString()
+                    ).Replace(
+                        "{friendProfile}", _fetcher.Profile.FriendProfile.ToString()
+                    )
+                );
             }
         }
     }
@@ -47,14 +54,14 @@ namespace Gs2.Unity.UiKit.Gs2Friend
     /// <summary>
     /// Dependent components
     /// </summary>
-    
+
     public partial class Gs2FriendProfileLabel
     {
-        private Gs2FriendProfileFetcher _profileFetcher;
+        private Gs2FriendProfileFetcher _fetcher;
 
         public void Awake()
         {
-            _profileFetcher = GetComponentInParent<Gs2FriendProfileFetcher>() ?? GetComponent<Gs2FriendProfileFetcher>();
+            _fetcher = GetComponentInParent<Gs2FriendProfileFetcher>();
             Update();
         }
     }
@@ -62,16 +69,16 @@ namespace Gs2.Unity.UiKit.Gs2Friend
     /// <summary>
     /// Public properties
     /// </summary>
-    
+
     public partial class Gs2FriendProfileLabel
     {
-        
+
     }
 
     /// <summary>
     /// Parameters for Inspector
     /// </summary>
-    
+
     public partial class Gs2FriendProfileLabel
     {
         public string format;
@@ -85,12 +92,12 @@ namespace Gs2.Unity.UiKit.Gs2Friend
         [Serializable]
         private class UpdateEvent : UnityEvent<string>
         {
-            
+
         }
-        
+
         [SerializeField]
         private UpdateEvent onUpdate = new UpdateEvent();
-        
+
         public event UnityAction<string> OnUpdate
         {
             add => onUpdate.AddListener(value);

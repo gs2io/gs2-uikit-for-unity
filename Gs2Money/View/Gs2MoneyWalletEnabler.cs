@@ -25,18 +25,25 @@ namespace Gs2.Unity.UiKit.Gs2Money
     /// Main
     /// </summary>
 
-    [AddComponentMenu("GS2 UIKit/Money/Gs2MoneyWalletEnabler")]
+	[AddComponentMenu("GS2 UIKit/Money/Wallet/Gs2MoneyWalletEnabler")]
     public partial class Gs2MoneyWalletEnabler : MonoBehaviour
     {
         public void Update()
         {
-            if (!_walletFetcher.Fetched)
+            if (!_fetcher.Fetched)
             {
                 target.SetActive(loading);
             }
             else
             {
-                target.SetActive(loaded);
+                if (_fetcher.Wallet == null)
+                {
+                    target.SetActive(notFound);
+                }
+                else
+                {
+                    target.SetActive(loaded);
+                }
             }
         }
     }
@@ -44,34 +51,34 @@ namespace Gs2.Unity.UiKit.Gs2Money
     /// <summary>
     /// Dependent components
     /// </summary>
-    
+
     public partial class Gs2MoneyWalletEnabler
     {
-        private Gs2MoneyWalletFetcher _walletFetcher;
+        private Gs2MoneyWalletFetcher _fetcher;
 
         public void Awake()
         {
-            _walletFetcher = GetComponentInParent<Gs2MoneyWalletFetcher>();
-            Update();
+            _fetcher = GetComponentInParent<Gs2MoneyWalletFetcher>();
         }
     }
 
     /// <summary>
     /// Public properties
     /// </summary>
-    
+
     public partial class Gs2MoneyWalletEnabler
     {
-        
+
     }
 
     /// <summary>
     /// Parameters for Inspector
     /// </summary>
-    
+
     public partial class Gs2MoneyWalletEnabler
     {
         public bool loading;
+        public bool notFound;
         public bool loaded;
 
         public GameObject target;
@@ -82,6 +89,6 @@ namespace Gs2.Unity.UiKit.Gs2Money
     /// </summary>
     public partial class Gs2MoneyWalletEnabler
     {
-        
+
     }
 }

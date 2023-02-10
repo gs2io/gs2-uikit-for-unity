@@ -15,7 +15,7 @@ using AppleAuth.Native;
 
 namespace Gs2.Unity.UiKit.Gs2Account
 {
-    [AddComponentMenu("GS2 UIKit/Account/Gs2AccountLoadAppleId")]
+    [AddComponentMenu("GS2 UIKit/Account/SignIn/Action/Apple")]
     public partial class Gs2AccountLoadAppleId : MonoBehaviour
     {
 #if ENABLE_SIGN_IN_WITH_APPLE

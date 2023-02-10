@@ -19,25 +19,33 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using Gs2.Core.Exception;
 using Gs2.Unity.Gs2Account.Model;
-using Gs2.Unity.Gs2Account.ScriptableObject;
 using Gs2.Unity.Util;
+using Gs2.Unity.UiKit.Gs2Account.Context;
 using UnityEngine;
 using UnityEngine.Events;
+using Namespace = Gs2.Unity.Gs2Account.ScriptableObject.Namespace;
+
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 namespace Gs2.Unity.UiKit.Gs2Account
 {
-	[AddComponentMenu("GS2 UIKit/Account/Gs2AccountAccountCreateAction")]
+	[AddComponentMenu("GS2 UIKit/Account/Account/Action/Gs2AccountAccountCreateAction")]
     public partial class Gs2AccountAccountCreateAction : MonoBehaviour
     {
         private IEnumerator Process()
         {
-            yield return new WaitUntil(() => _clientHolder.Initialized);
-
-            var future = _clientHolder.Gs2.Account.Namespace(
-                Namespace.namespaceName
-            ).Create(
+            yield return new WaitUntil(() => this._clientHolder.Initialized);
+            
+            var domain = this._clientHolder.Gs2.Account.Namespace(
+                this._context.Namespace.NamespaceName
+            );
+            var future = domain.Create(
             );
             yield return future;
             if (future.Error != null)
@@ -50,37 +58,43 @@ namespace Gs2.Unity.UiKit.Gs2Account
                         yield return retryFuture;
                         if (retryFuture.Error != null)
                         {
-                            onError.Invoke(future.Error, Retry);
+                            this.onError.Invoke(future.Error, Retry);
                             yield break;
                         }
-                        
-                        var future2 = future.Result.Model();
-                        yield return future2;
-                        
-                        onCreateComplete.Invoke(future2.Result);
+                        var future3 = future.Result.Model();
+                        yield return future3;
+                        if (future3.Error != null)
+                        {
+                            this.onError.Invoke(future3.Error, null);
+                            yield break;
+                        }
+
+                        this.onCreateComplete.Invoke(future3.Result);
                     }
 
-                    onError.Invoke(future.Error, Retry);
+                    this.onError.Invoke(future.Error, Retry);
                     yield break;
                 }
 
-                onError.Invoke(future.Error, null);
+                this.onError.Invoke(future.Error, null);
+                yield break;
+            }
+            var future2 = future.Result.Model();
+            yield return future2;
+            if (future2.Error != null)
+            {
+                this.onError.Invoke(future2.Error, null);
                 yield break;
             }
 
-            {
-                var future2 = future.Result.Model();
-                yield return future2;
-
-                onCreateComplete.Invoke(future2.Result);
-            }
+            this.onCreateComplete.Invoke(future2.Result);
         }
-        
+
         public void OnEnable()
         {
             StartCoroutine(nameof(Process));
         }
-        
+
         public void OnDisable()
         {
             StopCoroutine(nameof(Process));
@@ -90,35 +104,35 @@ namespace Gs2.Unity.UiKit.Gs2Account
     /// <summary>
     /// Dependent components
     /// </summary>
-    
+
     public partial class Gs2AccountAccountCreateAction
     {
         private Gs2ClientHolder _clientHolder;
         private Gs2GameSessionHolder _gameSessionHolder;
+        private Gs2AccountNamespaceContext _context;
 
         public void Awake()
         {
-            _clientHolder = Gs2ClientHolder.Instance;
-            _gameSessionHolder = Gs2GameSessionHolder.Instance;
+            this._clientHolder = Gs2ClientHolder.Instance;
+            this._gameSessionHolder = Gs2GameSessionHolder.Instance;
+            this._context = GetComponentInParent<Gs2AccountNamespaceContext>();
         }
     }
 
     /// <summary>
     /// Public properties
     /// </summary>
-    
+
     public partial class Gs2AccountAccountCreateAction
     {
-        
+
     }
 
     /// <summary>
     /// Parameters for Inspector
     /// </summary>
-    
     public partial class Gs2AccountAccountCreateAction
     {
-        public Namespace Namespace;
     }
 
     /// <summary>
@@ -129,25 +143,46 @@ namespace Gs2.Unity.UiKit.Gs2Account
         [Serializable]
         private class CreateCompleteEvent : UnityEvent<EzAccount>
         {
-            
+
         }
-        
+
         [SerializeField]
         private CreateCompleteEvent onCreateComplete = new CreateCompleteEvent();
-        
         public event UnityAction<EzAccount> OnCreateComplete
         {
-            add => onCreateComplete.AddListener(value);
-            remove => onCreateComplete.RemoveListener(value);
+            add => this.onCreateComplete.AddListener(value);
+            remove => this.onCreateComplete.RemoveListener(value);
         }
 
         [SerializeField]
         internal ErrorEvent onError = new ErrorEvent();
-        
+
         public event UnityAction<Gs2Exception, Func<IEnumerator>> OnError
         {
-            add => onError.AddListener(value);
-            remove => onError.RemoveListener(value);
+            add => this.onError.AddListener(value);
+            remove => this.onError.RemoveListener(value);
         }
     }
+
+#if UNITY_EDITOR
+
+    /// <summary>
+    /// Context Menu
+    /// </summary>
+    public partial class Gs2AccountAccountCreateAction
+    {
+        [MenuItem("GameObject/Game Server Services/Account/Account/Action/Create", priority = 0)]
+        private static void CreateButton()
+        {
+            var prefab = AssetDatabase.LoadAssetAtPath<Gs2AccountAccountCreateAction>(
+                "Assets/Scripts/Runtime/Sdk/Gs2/UiKit/Gs2Account/Prefabs/Action/Gs2AccountAccountCreateAction.prefab"
+            );
+
+            var instance = PrefabUtility.InstantiatePrefab(prefab, Selection.activeTransform);
+
+            Undo.RegisterCreatedObjectUndo(instance, $"Create {instance.name}");
+            Selection.activeObject = instance;
+        }
+    }
+#endif
 }

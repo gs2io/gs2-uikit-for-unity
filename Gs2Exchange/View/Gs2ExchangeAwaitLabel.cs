@@ -18,6 +18,7 @@
 
 using System;
 using Gs2.Core.Util;
+using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Exchange.Fetcher;
 using UnityEngine;
 using UnityEngine.Events;
@@ -28,29 +29,43 @@ namespace Gs2.Unity.UiKit.Gs2Exchange
     /// Main
     /// </summary>
 
-    [AddComponentMenu("GS2 UIKit/Exchange/Gs2ExchangeAwaitLabel")]
+	[AddComponentMenu("GS2 UIKit/Exchange/Await/View/Gs2ExchangeAwaitLabel")]
     public partial class Gs2ExchangeAwaitLabel : MonoBehaviour
     {
         public void Update()
         {
-            if (_awaitFetcher.Fetched)
+            if (_fetcher.Fetched)
             {
-                var span = UnixTime.FromUnixTime(_awaitFetcher.Await.ExchangedAt).Add(TimeSpan.FromMinutes(_awaitFetcher.Model.LockTime)) - DateTime.UtcNow;
-                if (span.TotalSeconds < 0)
-                {
-                    span = TimeSpan.Zero;
-                }
-                onUpdate.Invoke(format.Replace(
-                    "{mm}", span.ToString("mm")
-                ).Replace(
-                    "{ss}", span.ToString("ss")
-                ).Replace(
-                    "{h}", span.ToString("%h")
-                ).Replace(
-                    "{m}", span.ToString("%m")
-                ).Replace(
-                    "{s}", span.ToString("%s")
-                ));
+                var exchangedAt = UnixTime.FromUnixTime(_fetcher.Await.ExchangedAt).ToLocalTime();
+                onUpdate.Invoke(
+                    format.Replace(
+                        "{userId}", _fetcher.Await.UserId.ToString()
+                    ).Replace(
+                        "{rateName}", _fetcher.Await.RateName.ToString()
+                    ).Replace(
+                        "{name}", _fetcher.Await.Name.ToString()
+                    ).Replace(
+                        "{exchangedAt:yyyy}", exchangedAt.ToString("yyyy")
+                    ).Replace(
+                        "{exchangedAt:yy}", exchangedAt.ToString("yy")
+                    ).Replace(
+                        "{exchangedAt:MM}", exchangedAt.ToString("MM")
+                    ).Replace(
+                        "{exchangedAt:MMM}", exchangedAt.ToString("MMM")
+                    ).Replace(
+                        "{exchangedAt:dd}", exchangedAt.ToString("dd")
+                    ).Replace(
+                        "{exchangedAt:hh}", exchangedAt.ToString("hh")
+                    ).Replace(
+                        "{exchangedAt:HH}", exchangedAt.ToString("HH")
+                    ).Replace(
+                        "{exchangedAt:tt}", exchangedAt.ToString("tt")
+                    ).Replace(
+                        "{exchangedAt:mm}", exchangedAt.ToString("mm")
+                    ).Replace(
+                        "{exchangedAt:ss}", exchangedAt.ToString("ss")
+                    )
+                );
             }
         }
     }
@@ -58,14 +73,14 @@ namespace Gs2.Unity.UiKit.Gs2Exchange
     /// <summary>
     /// Dependent components
     /// </summary>
-    
+
     public partial class Gs2ExchangeAwaitLabel
     {
-        private Gs2ExchangeAwaitFetcher _awaitFetcher;
+        private Gs2ExchangeAwaitFetcher _fetcher;
 
         public void Awake()
         {
-            _awaitFetcher = GetComponentInParent<Gs2ExchangeAwaitFetcher>();
+            _fetcher = GetComponentInParent<Gs2ExchangeAwaitFetcher>();
             Update();
         }
     }
@@ -73,16 +88,16 @@ namespace Gs2.Unity.UiKit.Gs2Exchange
     /// <summary>
     /// Public properties
     /// </summary>
-    
+
     public partial class Gs2ExchangeAwaitLabel
     {
-        
+
     }
 
     /// <summary>
     /// Parameters for Inspector
     /// </summary>
-    
+
     public partial class Gs2ExchangeAwaitLabel
     {
         public string format;
@@ -96,12 +111,12 @@ namespace Gs2.Unity.UiKit.Gs2Exchange
         [Serializable]
         private class UpdateEvent : UnityEvent<string>
         {
-            
+
         }
-        
+
         [SerializeField]
         private UpdateEvent onUpdate = new UpdateEvent();
-        
+
         public event UnityAction<string> OnUpdate
         {
             add => onUpdate.AddListener(value);

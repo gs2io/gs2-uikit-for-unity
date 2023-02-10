@@ -16,6 +16,7 @@
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
 
+using System.Collections.Generic;
 using Gs2.Unity.UiKit.Gs2Stamina.Fetcher;
 using UnityEngine;
 
@@ -25,22 +26,38 @@ namespace Gs2.Unity.UiKit.Gs2Stamina
     /// Main
     /// </summary>
 
-    [AddComponentMenu("GS2 UIKit/Stamina/Gs2StaminaStaminaValueEnabler")]
+	[AddComponentMenu("GS2 UIKit/Stamina/Stamina/View/Properties/Value/Gs2StaminaStaminaValueEnabler")]
     public partial class Gs2StaminaStaminaValueEnabler : MonoBehaviour
     {
         public void Update()
         {
-            if (!_staminaFetcher.Fetched)
+            if (_fetcher.Fetched)
             {
-                target.SetActive(loading);
+                switch(expression)
+                {
+                    case Expression.In:
+                        target.SetActive(enableValues.Contains(_fetcher.Stamina.Value));
+                        break;
+                    case Expression.NotIn:
+                        target.SetActive(!enableValues.Contains(_fetcher.Stamina.Value));
+                        break;
+                    case Expression.Less:
+                        target.SetActive(enableValue < _fetcher.Stamina.Value);
+                        break;
+                    case Expression.LessEqual:
+                        target.SetActive(enableValue <= _fetcher.Stamina.Value);
+                        break;
+                    case Expression.Greater:
+                        target.SetActive(enableValue > _fetcher.Stamina.Value);
+                        break;
+                    case Expression.GreaterEqual:
+                        target.SetActive(enableValue >= _fetcher.Stamina.Value);
+                        break;
+                }
             }
-            else if (_staminaFetcher.Stamina.Value < value)
+            else 
             {
-                target.SetActive(shortage);
-            }
-            else
-            {
-                target.SetActive(satisfaction);
+                target.SetActive(false);
             }
         }
     }
@@ -51,12 +68,11 @@ namespace Gs2.Unity.UiKit.Gs2Stamina
     
     public partial class Gs2StaminaStaminaValueEnabler
     {
-        private Gs2StaminaStaminaFetcher _staminaFetcher;
+        private Gs2StaminaStaminaFetcher _fetcher;
 
         public void Awake()
         {
-            _staminaFetcher = GetComponentInParent<Gs2StaminaStaminaFetcher>();
-            Update();
+            _fetcher = GetComponentInParent<Gs2StaminaStaminaFetcher>();
         }
     }
 
@@ -75,11 +91,20 @@ namespace Gs2.Unity.UiKit.Gs2Stamina
     
     public partial class Gs2StaminaStaminaValueEnabler
     {
-        public int value;
-        
-        public bool loading;
-        public bool shortage;
-        public bool satisfaction;
+        public enum Expression {
+            In,
+            NotIn,
+            Less,
+            LessEqual,
+            Greater,
+            GreaterEqual,
+        }
+
+        public Expression expression;
+
+        public List<int> enableValues;
+
+        public int enableValue;
 
         public GameObject target;
     }

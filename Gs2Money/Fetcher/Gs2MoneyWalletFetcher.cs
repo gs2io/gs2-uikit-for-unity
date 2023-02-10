@@ -18,12 +18,15 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.Text;
 using System.Text;
 using Gs2.Core.Exception;
 using Gs2.Unity.Core.Exception;
 using Gs2.Unity.Gs2Money.Model;
 using Gs2.Unity.Gs2Money.ScriptableObject;
 using Gs2.Unity.Util;
+using Gs2.Unity.UiKit.Gs2Money.Context;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -33,7 +36,7 @@ namespace Gs2.Unity.UiKit.Gs2Money.Fetcher
     /// Main
     /// </summary>
 
-    [AddComponentMenu("GS2 UIKit/Money/Gs2MoneyWalletFetcher")]
+	[AddComponentMenu("GS2 UIKit/Money/Wallet/Fetcher/Gs2MoneyWalletFetcher")]
     public partial class Gs2MoneyWalletFetcher : MonoBehaviour
     {
         private IEnumerator Fetch()
@@ -41,17 +44,19 @@ namespace Gs2.Unity.UiKit.Gs2Money.Fetcher
             Gs2Exception e;
             while (true)
             {
-                if (_gameSessionHolder != null && _gameSessionHolder.Initialized && 
+                if (_gameSessionHolder != null && _gameSessionHolder.Initialized &&
                     _clientHolder != null && _clientHolder.Initialized &&
-                    wallet != null)
+                    _context != null)
                 {
-                    var future = _clientHolder.Gs2.Money.Namespace(
-                        wallet.Namespace.namespaceName
+                    
+                    var domain = this._clientHolder.Gs2.Money.Namespace(
+                        this._context.Wallet.NamespaceName
                     ).Me(
-                        _gameSessionHolder.GameSession
+                        this._gameSessionHolder.GameSession
                     ).Wallet(
-                        wallet.slot
-                    ).Model();
+                        this._context.Wallet.Slot
+                    );
+                    var future = domain.Model();
                     yield return future;
                     if (future.Error != null)
                     {
@@ -72,7 +77,7 @@ namespace Gs2.Unity.UiKit.Gs2Money.Fetcher
 
                 yield return new WaitForSeconds(1);
             }
-            
+
             var transform1 = transform;
             var builder = new StringBuilder(transform1.name);
             var current = transform1.parent;
@@ -82,7 +87,7 @@ namespace Gs2.Unity.UiKit.Gs2Money.Fetcher
                 builder.Insert(0, current.name + "/");
                 current = current.parent;
             }
-            
+
             Debug.LogError(e);
             Debug.LogError($"{GetType()} の自動更新が停止されました。 {builder}");
             Debug.LogError($"Automatic update of {GetType()} has been stopped. {builder}");
@@ -102,36 +107,38 @@ namespace Gs2.Unity.UiKit.Gs2Money.Fetcher
     /// <summary>
     /// Dependent components
     /// </summary>
-    
+
     public partial class Gs2MoneyWalletFetcher
     {
         private Gs2ClientHolder _clientHolder;
         private Gs2GameSessionHolder _gameSessionHolder;
+        private Gs2MoneyWalletContext _context;
 
         public void Awake()
         {
             _clientHolder = Gs2ClientHolder.Instance;
             _gameSessionHolder = Gs2GameSessionHolder.Instance;
+            _context = GetComponentInParent<Gs2MoneyWalletContext>();
         }
     }
 
     /// <summary>
     /// Public properties
     /// </summary>
-    
+
     public partial class Gs2MoneyWalletFetcher
     {
-        public EzWallet Wallet { get; private set; }
+        public Gs2.Unity.Gs2Money.Model.EzWallet Wallet { get; private set; }
         public bool Fetched { get; private set; }
     }
 
     /// <summary>
     /// Parameters for Inspector
     /// </summary>
-    
+
     public partial class Gs2MoneyWalletFetcher
     {
-        public Wallet wallet;
+
     }
 
     /// <summary>
@@ -141,7 +148,7 @@ namespace Gs2.Unity.UiKit.Gs2Money.Fetcher
     {
         [SerializeField]
         internal ErrorEvent onError = new ErrorEvent();
-        
+
         public event UnityAction<Gs2Exception, Func<IEnumerator>> OnError
         {
             add => onError.AddListener(value);

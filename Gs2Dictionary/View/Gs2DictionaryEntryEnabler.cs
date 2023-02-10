@@ -25,24 +25,24 @@ namespace Gs2.Unity.UiKit.Gs2Dictionary
     /// Main
     /// </summary>
 
-    [AddComponentMenu("GS2 UIKit/Dictionary/Gs2DictionaryEntryEnabler")]
+	[AddComponentMenu("GS2 UIKit/Dictionary/Entry/Gs2DictionaryEntryEnabler")]
     public partial class Gs2DictionaryEntryEnabler : MonoBehaviour
     {
         public void Update()
         {
-            if (!_itemSetFetcher.Fetched)
+            if (!_fetcher.Fetched)
             {
                 target.SetActive(loading);
             }
-            else 
+            else
             {
-                if (_itemSetFetcher.Entry == null)
+                if (_fetcher.Entry == null)
                 {
-                    target.SetActive(loaded);
+                    target.SetActive(notFound);
                 }
                 else
                 {
-                    target.SetActive(have);
+                    target.SetActive(loaded);
                 }
             }
         }
@@ -51,36 +51,35 @@ namespace Gs2.Unity.UiKit.Gs2Dictionary
     /// <summary>
     /// Dependent components
     /// </summary>
-    
+
     public partial class Gs2DictionaryEntryEnabler
     {
-        private Gs2DictionaryEntryFetcher _itemSetFetcher;
+        private Gs2DictionaryEntryFetcher _fetcher;
 
         public void Awake()
         {
-            _itemSetFetcher = GetComponentInParent<Gs2DictionaryEntryFetcher>() ?? GetComponent<Gs2DictionaryEntryFetcher>();
-            Update();
+            _fetcher = GetComponentInParent<Gs2DictionaryEntryFetcher>();
         }
     }
 
     /// <summary>
     /// Public properties
     /// </summary>
-    
+
     public partial class Gs2DictionaryEntryEnabler
     {
-        
+
     }
 
     /// <summary>
     /// Parameters for Inspector
     /// </summary>
-    
+
     public partial class Gs2DictionaryEntryEnabler
     {
         public bool loading;
+        public bool notFound;
         public bool loaded;
-        public bool have;
 
         public GameObject target;
     }
@@ -90,6 +89,6 @@ namespace Gs2.Unity.UiKit.Gs2Dictionary
     /// </summary>
     public partial class Gs2DictionaryEntryEnabler
     {
-        
+
     }
 }

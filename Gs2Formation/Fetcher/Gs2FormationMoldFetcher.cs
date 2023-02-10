@@ -18,12 +18,15 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.Text;
 using System.Text;
 using Gs2.Core.Exception;
 using Gs2.Unity.Core.Exception;
 using Gs2.Unity.Gs2Formation.Model;
 using Gs2.Unity.Gs2Formation.ScriptableObject;
 using Gs2.Unity.Util;
+using Gs2.Unity.UiKit.Gs2Formation.Context;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -33,7 +36,7 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Fetcher
     /// Main
     /// </summary>
 
-    [AddComponentMenu("GS2 UIKit/Formation/Gs2FormationMoldFetcher")]
+	[AddComponentMenu("GS2 UIKit/Formation/Mold/Fetcher/Gs2FormationMoldFetcher")]
     public partial class Gs2FormationMoldFetcher : MonoBehaviour
     {
         private IEnumerator Fetch()
@@ -41,62 +44,40 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Fetcher
             Gs2Exception e;
             while (true)
             {
-                if (_gameSessionHolder != null && _gameSessionHolder.Initialized && 
+                if (_gameSessionHolder != null && _gameSessionHolder.Initialized &&
                     _clientHolder != null && _clientHolder.Initialized &&
-                    mold != null)
+                    _context != null)
                 {
+                    
+                    var domain = this._clientHolder.Gs2.Formation.Namespace(
+                        this._context.Mold.NamespaceName
+                    ).Me(
+                        this._gameSessionHolder.GameSession
+                    ).Mold(
+                        this._context.Mold.MoldName
+                    );
+                    var future = domain.Model();
+                    yield return future;
+                    if (future.Error != null)
                     {
-                        var future = _clientHolder.Gs2.Formation.Namespace(
-                            mold.Namespace.namespaceName
-                        ).MoldModel(
-                            mold.moldName
-                        ).Model();
-                        yield return future;
-                        if (future.Error != null)
+                        if (future.Error is BadRequestException || future.Error is NotFoundException)
                         {
-                            if (future.Error is BadRequestException || future.Error is NotFoundException)
-                            {
-                                onError.Invoke(e = future.Error, null);
-                                break;
-                            }
+                            onError.Invoke(e = future.Error, null);
+                            break;
+                        }
 
-                            onError.Invoke(new CanIgnoreException(future.Error), null);
-                        }
-                        else
-                        {
-                            Model = future.Result;
-                        }
+                        onError.Invoke(new CanIgnoreException(future.Error), null);
                     }
+                    else
                     {
-                        var future = _clientHolder.Gs2.Formation.Namespace(
-                            mold.Namespace.namespaceName
-                        ).Me(
-                            _gameSessionHolder.GameSession
-                        ).Mold(
-                            mold.moldName
-                        ).Model();
-                        yield return future;
-                        if (future.Error != null)
-                        {
-                            if (future.Error is BadRequestException || future.Error is NotFoundException)
-                            {
-                                onError.Invoke(e = future.Error, null);
-                                break;
-                            }
-
-                            onError.Invoke(new CanIgnoreException(future.Error), null);
-                        }
-                        else
-                        {
-                            Mold = future.Result;
-                            Fetched = true;
-                        }
+                        Mold = future.Result;
+                        Fetched = true;
                     }
                 }
 
                 yield return new WaitForSeconds(1);
             }
-            
+
             var transform1 = transform;
             var builder = new StringBuilder(transform1.name);
             var current = transform1.parent;
@@ -106,7 +87,7 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Fetcher
                 builder.Insert(0, current.name + "/");
                 current = current.parent;
             }
-            
+
             Debug.LogError(e);
             Debug.LogError($"{GetType()} の自動更新が停止されました。 {builder}");
             Debug.LogError($"Automatic update of {GetType()} has been stopped. {builder}");
@@ -126,37 +107,38 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Fetcher
     /// <summary>
     /// Dependent components
     /// </summary>
-    
+
     public partial class Gs2FormationMoldFetcher
     {
         private Gs2ClientHolder _clientHolder;
         private Gs2GameSessionHolder _gameSessionHolder;
+        private Gs2FormationMoldContext _context;
 
         public void Awake()
         {
             _clientHolder = Gs2ClientHolder.Instance;
             _gameSessionHolder = Gs2GameSessionHolder.Instance;
+            _context = GetComponentInParent<Gs2FormationMoldContext>();
         }
     }
 
     /// <summary>
     /// Public properties
     /// </summary>
-    
+
     public partial class Gs2FormationMoldFetcher
     {
-        public EzMoldModel Model { get; private set; }
-        public EzMold Mold { get; private set; }
+        public Gs2.Unity.Gs2Formation.Model.EzMold Mold { get; private set; }
         public bool Fetched { get; private set; }
     }
 
     /// <summary>
     /// Parameters for Inspector
     /// </summary>
-    
+
     public partial class Gs2FormationMoldFetcher
     {
-        public Mold mold;
+
     }
 
     /// <summary>
@@ -166,7 +148,7 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Fetcher
     {
         [SerializeField]
         internal ErrorEvent onError = new ErrorEvent();
-        
+
         public event UnityAction<Gs2Exception, Func<IEnumerator>> OnError
         {
             add => onError.AddListener(value);

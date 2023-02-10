@@ -25,6 +25,7 @@ using Gs2.Unity.Core.Exception;
 using Gs2.Unity.Gs2Account.Model;
 using Gs2.Unity.Gs2Account.ScriptableObject;
 using Gs2.Unity.Util;
+using Gs2.Unity.UiKit.Gs2Account.Context;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -34,7 +35,7 @@ namespace Gs2.Unity.UiKit.Gs2Account.Fetcher
     /// Main
     /// </summary>
 
-	[AddComponentMenu("GS2 UIKit/Account/Gs2AccountTakeOverListFetcher")]
+	[AddComponentMenu("GS2 UIKit/Account/TakeOver/Fetcher/Gs2AccountTakeOverListFetcher")]
     public partial class Gs2AccountTakeOverListFetcher : MonoBehaviour
     {
         private IEnumerator Fetch()
@@ -44,14 +45,16 @@ namespace Gs2.Unity.UiKit.Gs2Account.Fetcher
             {
                 if (_gameSessionHolder != null && _gameSessionHolder.Initialized && 
                     _clientHolder != null && _clientHolder.Initialized &&
-                    Namespace != null)
+                    _context != null)
                 {
-                    var it = _clientHolder.Gs2.Account.Namespace(
-                        Namespace.namespaceName
+                    
+                    var domain = this._clientHolder.Gs2.Account.Namespace(
+                        this._context.Account.NamespaceName
                     ).Me(
-                        _gameSessionHolder.GameSession
-                    ).TakeOvers();
-                    var experienceModels = new List<EzTakeOver>();
+                        this._gameSessionHolder.GameSession
+                    );
+                    var it = domain.TakeOvers();
+                    var items = new List<Gs2.Unity.Gs2Account.Model.EzTakeOver>();
                     while (it.HasNext())
                     {
                         yield return it.Next();
@@ -69,11 +72,13 @@ namespace Gs2.Unity.UiKit.Gs2Account.Fetcher
 
                         if (it.Current != null)
                         {
-                            experienceModels.Add(it.Current);
+                            items.Add(it.Current);
+                        } else {
+                            break;
                         }
                     }
 
-                    TakeOvers = experienceModels;
+                    TakeOvers = items;
                     Fetched = true;
                 }
 
@@ -115,11 +120,13 @@ namespace Gs2.Unity.UiKit.Gs2Account.Fetcher
     {
         private Gs2ClientHolder _clientHolder;
         private Gs2GameSessionHolder _gameSessionHolder;
+        private Gs2AccountAccountContext _context;
 
         public void Awake()
         {
             _clientHolder = Gs2ClientHolder.Instance;
             _gameSessionHolder = Gs2GameSessionHolder.Instance;
+            _context = GetComponentInParent<Gs2AccountAccountContext>();
         }
     }
 
@@ -129,7 +136,7 @@ namespace Gs2.Unity.UiKit.Gs2Account.Fetcher
     
     public partial class Gs2AccountTakeOverListFetcher
     {
-        public List<EzTakeOver> TakeOvers { get; private set; }
+        public List<Gs2.Unity.Gs2Account.Model.EzTakeOver> TakeOvers { get; private set; }
         public bool Fetched { get; private set; }
     }
 
@@ -139,7 +146,7 @@ namespace Gs2.Unity.UiKit.Gs2Account.Fetcher
     
     public partial class Gs2AccountTakeOverListFetcher
     {
-        public Namespace Namespace;
+
     }
 
     /// <summary>

@@ -17,10 +17,11 @@
 // ReSharper disable CheckNamespace
 
 using System;
+using Gs2.Core.Util;
 using Gs2.Unity.UiKit.Core;
+using Gs2.Unity.UiKit.Gs2Account.Fetcher;
 using UnityEngine;
 using UnityEngine.Events;
-using Gs2GameSessionHolder = Gs2.Unity.Util.Gs2GameSessionHolder;
 
 namespace Gs2.Unity.UiKit.Gs2Account
 {
@@ -28,26 +29,41 @@ namespace Gs2.Unity.UiKit.Gs2Account
     /// Main
     /// </summary>
 
-	[AddComponentMenu("GS2 UIKit/Account/Gs2AccountAccountLabel")]
+	[AddComponentMenu("GS2 UIKit/Account/Account/View/Gs2AccountAccountLabel")]
     public partial class Gs2AccountAccountLabel : MonoBehaviour
     {
-        private ShortUuid _shortUuid;
-        
         public void Update()
         {
-            if (_sessionHolder.Initialized)
+            if (_fetcher.Fetched)
             {
-                if (_shortUuid == null)
-                {
-                    _shortUuid = ShortUuid.ParseUuid(_sessionHolder.GameSession.AccessToken.UserId);
-                }
-                onUpdate.Invoke(format.Replace(
-                    "{shortUserId}", _shortUuid.ToString()
-                ));
-            }
-            else
-            {
-                _shortUuid = null;
+                var createdAt = UnixTime.FromUnixTime(_fetcher.Account.CreatedAt).ToLocalTime();
+                onUpdate.Invoke(
+                    format.Replace(
+                        "{userId}", _fetcher.Account.UserId.ToString()
+                    ).Replace(
+                        "{password}", _fetcher.Account.Password.ToString()
+                    ).Replace(
+                        "{createdAt:yyyy}", createdAt.ToString("yyyy")
+                    ).Replace(
+                        "{createdAt:yy}", createdAt.ToString("yy")
+                    ).Replace(
+                        "{createdAt:MM}", createdAt.ToString("MM")
+                    ).Replace(
+                        "{createdAt:MMM}", createdAt.ToString("MMM")
+                    ).Replace(
+                        "{createdAt:dd}", createdAt.ToString("dd")
+                    ).Replace(
+                        "{createdAt:hh}", createdAt.ToString("hh")
+                    ).Replace(
+                        "{createdAt:HH}", createdAt.ToString("HH")
+                    ).Replace(
+                        "{createdAt:tt}", createdAt.ToString("tt")
+                    ).Replace(
+                        "{createdAt:mm}", createdAt.ToString("mm")
+                    ).Replace(
+                        "{createdAt:ss}", createdAt.ToString("ss")
+                    )
+                );
             }
         }
     }
@@ -55,14 +71,14 @@ namespace Gs2.Unity.UiKit.Gs2Account
     /// <summary>
     /// Dependent components
     /// </summary>
-    
+
     public partial class Gs2AccountAccountLabel
     {
-        private Gs2GameSessionHolder _sessionHolder;
+        private Gs2AccountAccountFetcher _fetcher;
 
         public void Awake()
         {
-            _sessionHolder = Gs2GameSessionHolder.Instance;
+            _fetcher = GetComponentInParent<Gs2AccountAccountFetcher>();
             Update();
         }
     }
@@ -70,16 +86,16 @@ namespace Gs2.Unity.UiKit.Gs2Account
     /// <summary>
     /// Public properties
     /// </summary>
-    
+
     public partial class Gs2AccountAccountLabel
     {
-        
+
     }
 
     /// <summary>
     /// Parameters for Inspector
     /// </summary>
-    
+
     public partial class Gs2AccountAccountLabel
     {
         public string format;
@@ -93,12 +109,12 @@ namespace Gs2.Unity.UiKit.Gs2Account
         [Serializable]
         private class UpdateEvent : UnityEvent<string>
         {
-            
+
         }
-        
+
         [SerializeField]
         private UpdateEvent onUpdate = new UpdateEvent();
-        
+
         public event UnityAction<string> OnUpdate
         {
             add => onUpdate.AddListener(value);

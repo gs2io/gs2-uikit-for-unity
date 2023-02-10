@@ -25,6 +25,7 @@ using Gs2.Unity.Core.Exception;
 using Gs2.Unity.Gs2Friend.Model;
 using Gs2.Unity.Gs2Friend.ScriptableObject;
 using Gs2.Unity.Util;
+using Gs2.Unity.UiKit.Gs2Friend.Context;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -34,7 +35,7 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Fetcher
     /// Main
     /// </summary>
 
-    [AddComponentMenu("GS2 UIKit/Friend/Gs2FriendFriendListFetcher")]
+	[AddComponentMenu("GS2 UIKit/Friend/Friend/Fetcher/Gs2FriendFriendListFetcher")]
     public partial class Gs2FriendFriendListFetcher : MonoBehaviour
     {
         private IEnumerator Fetch()
@@ -44,41 +45,41 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Fetcher
             {
                 if (_gameSessionHolder != null && _gameSessionHolder.Initialized && 
                     _clientHolder != null && _clientHolder.Initialized &&
-                    Namespace != null)
+                    _context != null)
                 {
+                    
+                    var domain = this._clientHolder.Gs2.Friend.Namespace(
+                        this._context.User.NamespaceName
+                    ).Me(
+                        this._gameSessionHolder.GameSession
+                    );
+                    var it = domain.Friends();
+                    var items = new List<Gs2.Unity.Gs2Friend.Model.EzFriendUser>();
+                    while (it.HasNext())
                     {
-                        var it = _clientHolder.Gs2.Friend.Namespace(
-                            Namespace.namespaceName
-                        ).Me(
-                            _gameSessionHolder.GameSession
-                        ).Friends(
-                            withProfile
-                        );
-                        var friends = new List<EzFriendUser>();
-                        while (it.HasNext())
+                        yield return it.Next();
+                        if (it.Error != null)
                         {
-                            yield return it.Next();
-                            if (it.Error != null)
+                            if (it.Error is BadRequestException || it.Error is NotFoundException)
                             {
-                                if (it.Error is BadRequestException || it.Error is NotFoundException)
-                                {
-                                    onError.Invoke(e = it.Error, null);
-                                    goto END;
-                                }
-
-                                onError.Invoke(new CanIgnoreException(it.Error), null);
-                                break;
+                                onError.Invoke(e = it.Error, null);
+                                goto END;
                             }
 
-                            if (it.Current != null)
-                            {
-                                friends.Add(it.Current);
-                            }
+                            onError.Invoke(new CanIgnoreException(it.Error), null);
+                            break;
                         }
 
-                        Friends = friends;
-                        Fetched = true;
+                        if (it.Current != null)
+                        {
+                            items.Add(it.Current);
+                        } else {
+                            break;
+                        }
                     }
+
+                    Friends = items;
+                    Fetched = true;
                 }
 
                 yield return new WaitForSeconds(1);
@@ -119,11 +120,13 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Fetcher
     {
         private Gs2ClientHolder _clientHolder;
         private Gs2GameSessionHolder _gameSessionHolder;
+        private Gs2FriendUserContext _context;
 
         public void Awake()
         {
             _clientHolder = Gs2ClientHolder.Instance;
             _gameSessionHolder = Gs2GameSessionHolder.Instance;
+            _context = GetComponentInParent<Gs2FriendUserContext>();
         }
     }
 
@@ -133,7 +136,7 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Fetcher
     
     public partial class Gs2FriendFriendListFetcher
     {
-        public List<EzFriendUser> Friends { get; private set; }
+        public List<Gs2.Unity.Gs2Friend.Model.EzFriendUser> Friends { get; private set; }
         public bool Fetched { get; private set; }
     }
 
@@ -143,8 +146,7 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Fetcher
     
     public partial class Gs2FriendFriendListFetcher
     {
-        public Namespace Namespace;
-        public bool withProfile;
+
     }
 
     /// <summary>

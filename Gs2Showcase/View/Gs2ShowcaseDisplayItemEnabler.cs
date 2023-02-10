@@ -14,31 +14,36 @@
  * permissions and limitations under the License.
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
-// ReSharper disable UnusedAutoPropertyAccessor.Local
 // ReSharper disable CheckNamespace
 
 using Gs2.Unity.UiKit.Gs2Showcase.Fetcher;
 using UnityEngine;
 
-namespace Gs2.Unity.UiKit.GsShowcase
+namespace Gs2.Unity.UiKit.Gs2Showcase
 {
-    [AddComponentMenu("GS2 UIKit/Showcase/Gs2ShowcaseDisplayItemEnabler")]
+    /// <summary>
+    /// Main
+    /// </summary>
+
+	[AddComponentMenu("GS2 UIKit/Showcase/DisplayItem/Gs2ShowcaseDisplayItemEnabler")]
     public partial class Gs2ShowcaseDisplayItemEnabler : MonoBehaviour
     {
-        public void Start()
-        {
-            Update();
-        }
-
         public void Update()
         {
-            if (!_displayItemFetcher.Fetched)
+            if (!_fetcher.Fetched)
             {
                 target.SetActive(loading);
             }
             else
             {
-                target.SetActive(loaded);
+                if (_fetcher.DisplayItem == null)
+                {
+                    target.SetActive(notFound);
+                }
+                else
+                {
+                    target.SetActive(loaded);
+                }
             }
         }
     }
@@ -46,34 +51,34 @@ namespace Gs2.Unity.UiKit.GsShowcase
     /// <summary>
     /// Dependent components
     /// </summary>
-    
+
     public partial class Gs2ShowcaseDisplayItemEnabler
     {
-        private Gs2ShowcaseDisplayItemFetcher _displayItemFetcher;
+        private Gs2ShowcaseDisplayItemFetcher _fetcher;
 
         public void Awake()
         {
-            _displayItemFetcher = GetComponentInParent<Gs2ShowcaseDisplayItemFetcher>() ?? GetComponent<Gs2ShowcaseDisplayItemFetcher>();
-            Update();
+            _fetcher = GetComponentInParent<Gs2ShowcaseDisplayItemFetcher>();
         }
     }
 
     /// <summary>
     /// Public properties
     /// </summary>
-    
+
     public partial class Gs2ShowcaseDisplayItemEnabler
     {
-        
+
     }
 
     /// <summary>
     /// Parameters for Inspector
     /// </summary>
-    
+
     public partial class Gs2ShowcaseDisplayItemEnabler
     {
         public bool loading;
+        public bool notFound;
         public bool loaded;
 
         public GameObject target;
@@ -84,6 +89,6 @@ namespace Gs2.Unity.UiKit.GsShowcase
     /// </summary>
     public partial class Gs2ShowcaseDisplayItemEnabler
     {
-        
+
     }
 }

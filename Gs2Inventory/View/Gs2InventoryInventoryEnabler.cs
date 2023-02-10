@@ -25,18 +25,25 @@ namespace Gs2.Unity.UiKit.Gs2Inventory
     /// Main
     /// </summary>
 
-    [AddComponentMenu("GS2 UIKit/Inventory/Gs2InventoryInventoryEnabler")]
+	[AddComponentMenu("GS2 UIKit/Inventory/Inventory/Gs2InventoryInventoryEnabler")]
     public partial class Gs2InventoryInventoryEnabler : MonoBehaviour
     {
         public void Update()
         {
-            if (!_inventoryFetcher.Fetched)
+            if (!_fetcher.Fetched)
             {
                 target.SetActive(loading);
             }
-            else 
+            else
             {
-                target.SetActive(loaded);
+                if (_fetcher.Inventory == null)
+                {
+                    target.SetActive(notFound);
+                }
+                else
+                {
+                    target.SetActive(loaded);
+                }
             }
         }
     }
@@ -44,34 +51,34 @@ namespace Gs2.Unity.UiKit.Gs2Inventory
     /// <summary>
     /// Dependent components
     /// </summary>
-    
+
     public partial class Gs2InventoryInventoryEnabler
     {
-        private Gs2InventoryInventoryFetcher _inventoryFetcher;
+        private Gs2InventoryInventoryFetcher _fetcher;
 
         public void Awake()
         {
-            _inventoryFetcher = GetComponentInParent<Gs2InventoryInventoryFetcher>() ?? GetComponent<Gs2InventoryInventoryFetcher>();
-            Update();
+            _fetcher = GetComponentInParent<Gs2InventoryInventoryFetcher>();
         }
     }
 
     /// <summary>
     /// Public properties
     /// </summary>
-    
+
     public partial class Gs2InventoryInventoryEnabler
     {
-        
+
     }
 
     /// <summary>
     /// Parameters for Inspector
     /// </summary>
-    
+
     public partial class Gs2InventoryInventoryEnabler
     {
         public bool loading;
+        public bool notFound;
         public bool loaded;
 
         public GameObject target;
@@ -82,6 +89,6 @@ namespace Gs2.Unity.UiKit.Gs2Inventory
     /// </summary>
     public partial class Gs2InventoryInventoryEnabler
     {
-        
+
     }
 }

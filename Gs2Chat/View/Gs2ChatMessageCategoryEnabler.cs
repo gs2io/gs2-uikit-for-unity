@@ -16,7 +16,7 @@
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
 
-using System.Linq;
+using System.Collections.Generic;
 using Gs2.Unity.UiKit.Gs2Chat.Fetcher;
 using UnityEngine;
 
@@ -26,14 +26,34 @@ namespace Gs2.Unity.UiKit.Gs2Chat
     /// Main
     /// </summary>
 
-	[AddComponentMenu("GS2 UIKit/Chat/Gs2ChatMessageCategoryEnabler")]
+	[AddComponentMenu("GS2 UIKit/Chat/Message/View/Properties/Category/Gs2ChatMessageCategoryEnabler")]
     public partial class Gs2ChatMessageCategoryEnabler : MonoBehaviour
     {
         public void Update()
         {
-            if (_messageFetcher.Fetched)
+            if (_fetcher.Fetched)
             {
-                target.SetActive(enableCategories.Contains(_messageFetcher.Message.Category));
+                switch(expression)
+                {
+                    case Expression.In:
+                        target.SetActive(enableCategories.Contains(_fetcher.Message.Category));
+                        break;
+                    case Expression.NotIn:
+                        target.SetActive(!enableCategories.Contains(_fetcher.Message.Category));
+                        break;
+                    case Expression.Less:
+                        target.SetActive(enableCategory < _fetcher.Message.Category);
+                        break;
+                    case Expression.LessEqual:
+                        target.SetActive(enableCategory <= _fetcher.Message.Category);
+                        break;
+                    case Expression.Greater:
+                        target.SetActive(enableCategory > _fetcher.Message.Category);
+                        break;
+                    case Expression.GreaterEqual:
+                        target.SetActive(enableCategory >= _fetcher.Message.Category);
+                        break;
+                }
             }
             else 
             {
@@ -48,11 +68,11 @@ namespace Gs2.Unity.UiKit.Gs2Chat
     
     public partial class Gs2ChatMessageCategoryEnabler
     {
-        private Gs2ChatMessageFetcher _messageFetcher;
+        private Gs2ChatMessageFetcher _fetcher;
 
         public void Awake()
         {
-            _messageFetcher = GetComponentInParent<Gs2ChatMessageFetcher>();
+            _fetcher = GetComponentInParent<Gs2ChatMessageFetcher>();
         }
     }
 
@@ -71,7 +91,20 @@ namespace Gs2.Unity.UiKit.Gs2Chat
     
     public partial class Gs2ChatMessageCategoryEnabler
     {
-        public int[] enableCategories;
+        public enum Expression {
+            In,
+            NotIn,
+            Less,
+            LessEqual,
+            Greater,
+            GreaterEqual,
+        }
+
+        public Expression expression;
+
+        public List<int> enableCategories;
+
+        public int enableCategory;
 
         public GameObject target;
     }

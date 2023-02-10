@@ -25,6 +25,7 @@ using Gs2.Unity.Core.Exception;
 using Gs2.Unity.Gs2Formation.Model;
 using Gs2.Unity.Gs2Formation.ScriptableObject;
 using Gs2.Unity.Util;
+using Gs2.Unity.UiKit.Gs2Formation.Context;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -34,7 +35,7 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Fetcher
     /// Main
     /// </summary>
 
-    [AddComponentMenu("GS2 UIKit/Formation/Gs2FormationMoldListFetcher")]
+	[AddComponentMenu("GS2 UIKit/Formation/Mold/Fetcher/Gs2FormationMoldListFetcher")]
     public partial class Gs2FormationMoldListFetcher : MonoBehaviour
     {
         private IEnumerator Fetch()
@@ -44,67 +45,41 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Fetcher
             {
                 if (_gameSessionHolder != null && _gameSessionHolder.Initialized && 
                     _clientHolder != null && _clientHolder.Initialized &&
-                    Namespace != null)
+                    _context != null)
                 {
+                    
+                    var domain = this._clientHolder.Gs2.Formation.Namespace(
+                        this._context.User.NamespaceName
+                    ).Me(
+                        this._gameSessionHolder.GameSession
+                    );
+                    var it = domain.Molds();
+                    var items = new List<Gs2.Unity.Gs2Formation.Model.EzMold>();
+                    while (it.HasNext())
                     {
-                        var it = _clientHolder.Gs2.Formation.Namespace(
-                            Namespace.namespaceName
-                        ).MoldModels();
-                        var moldModels = new List<EzMoldModel>();
-                        while (it.HasNext())
+                        yield return it.Next();
+                        if (it.Error != null)
                         {
-                            yield return it.Next();
-                            if (it.Error != null)
+                            if (it.Error is BadRequestException || it.Error is NotFoundException)
                             {
-                                if (it.Error is BadRequestException || it.Error is NotFoundException)
-                                {
-                                    onError.Invoke(e = it.Error, null);
-                                    goto END;
-                                }
-
-                                onError.Invoke(new CanIgnoreException(it.Error), null);
-                                break;
+                                onError.Invoke(e = it.Error, null);
+                                goto END;
                             }
 
-                            if (it.Current != null)
-                            {
-                                moldModels.Add(it.Current);
-                            }
+                            onError.Invoke(new CanIgnoreException(it.Error), null);
+                            break;
                         }
 
-                        Models = moldModels;
-                    }
-                    {
-                        var it = _clientHolder.Gs2.Formation.Namespace(
-                            Namespace.namespaceName
-                        ).Me(
-                            _gameSessionHolder.GameSession
-                        ).Molds();
-                        var molds = new List<EzMold>();
-                        while (it.HasNext())
+                        if (it.Current != null)
                         {
-                            yield return it.Next();
-                            if (it.Error != null)
-                            {
-                                if (it.Error is BadRequestException || it.Error is NotFoundException)
-                                {
-                                    onError.Invoke(e = it.Error, null);
-                                    goto END;
-                                }
-
-                                onError.Invoke(new CanIgnoreException(it.Error), null);
-                                break;
-                            }
-
-                            if (it.Current != null)
-                            {
-                                molds.Add(it.Current);
-                            }
+                            items.Add(it.Current);
+                        } else {
+                            break;
                         }
-
-                        Molds = molds;
-                        Fetched = true;
                     }
+
+                    Molds = items;
+                    Fetched = true;
                 }
 
                 yield return new WaitForSeconds(1);
@@ -145,11 +120,13 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Fetcher
     {
         private Gs2ClientHolder _clientHolder;
         private Gs2GameSessionHolder _gameSessionHolder;
+        private Gs2FormationUserContext _context;
 
         public void Awake()
         {
             _clientHolder = Gs2ClientHolder.Instance;
             _gameSessionHolder = Gs2GameSessionHolder.Instance;
+            _context = GetComponentInParent<Gs2FormationUserContext>();
         }
     }
 
@@ -159,8 +136,7 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Fetcher
     
     public partial class Gs2FormationMoldListFetcher
     {
-        public List<EzMoldModel> Models { get; private set; }
-        public List<EzMold> Molds { get; private set; }
+        public List<Gs2.Unity.Gs2Formation.Model.EzMold> Molds { get; private set; }
         public bool Fetched { get; private set; }
     }
 
@@ -170,7 +146,7 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Fetcher
     
     public partial class Gs2FormationMoldListFetcher
     {
-        public Namespace Namespace;
+
     }
 
     /// <summary>

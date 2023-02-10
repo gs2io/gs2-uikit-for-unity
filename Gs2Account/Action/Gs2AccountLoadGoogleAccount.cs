@@ -11,7 +11,7 @@ using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2Account
 {
-	[AddComponentMenu("GS2 UIKit/Account/Gs2AccountLoadGoogleAccount")]
+    [AddComponentMenu("GS2 UIKit/Account/SignIn/Action/Google")]
     public partial class Gs2AccountLoadGoogleAccount : MonoBehaviour
     {
         private IEnumerator Process()

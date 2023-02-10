@@ -18,6 +18,7 @@
 
 using System;
 using Gs2.Core.Util;
+using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Inbox.Fetcher;
 using UnityEngine;
 using UnityEngine.Events;
@@ -28,65 +29,89 @@ namespace Gs2.Unity.UiKit.Gs2Inbox
     /// Main
     /// </summary>
 
-    [AddComponentMenu("GS2 UIKit/Inbox/Gs2InboxMessageLabel")]
+	[AddComponentMenu("GS2 UIKit/Inbox/Message/View/Gs2InboxMessageLabel")]
     public partial class Gs2InboxMessageLabel : MonoBehaviour
     {
-        private DateTime? _receivedAt = null;
-        private DateTime? _expiredAt = null;
-        
         public void Update()
         {
-            if (_messageFetcher.Fetched && _receivedAt == null)
+            if (_fetcher.Fetched)
             {
-                _receivedAt = UnixTime.FromUnixTime(_messageFetcher.Message.ReceivedAt).ToLocalTime();
-                _expiredAt = UnixTime.FromUnixTime(_messageFetcher.Message.ExpiresAt).ToLocalTime();
-            }
-
-            if (_receivedAt != null)
-            {
-                onUpdate.Invoke(format.Replace(
-                    "{metadata}", _messageFetcher.Message.Metadata
-                ).Replace(
-                    "{r:yyyy}", _receivedAt.Value.ToString("yyyy")
-                ).Replace(
-                    "{r:yy}", _receivedAt.Value.ToString("yy")
-                ).Replace(
-                    "{r:MM}", _receivedAt.Value.ToString("MM")
-                ).Replace(
-                    "{r:MMM}", _receivedAt.Value.ToString("MMM")
-                ).Replace(
-                    "{r:dd}", _receivedAt.Value.ToString("dd")
-                ).Replace(
-                    "{r:hh}", _receivedAt.Value.ToString("hh")
-                ).Replace(
-                    "{r:HH}", _receivedAt.Value.ToString("HH")
-                ).Replace(
-                    "{r:tt}", _receivedAt.Value.ToString("tt")
-                ).Replace(
-                    "{r:mm}", _receivedAt.Value.ToString("mm")
-                ).Replace(
-                    "{r:ss}", _receivedAt.Value.ToString("ss")
-                ).Replace(
-                    "{e:yyyy}", _expiredAt?.ToString("yyyy") ?? ""
-                ).Replace(
-                    "{e:yy}", _expiredAt?.ToString("yy") ?? ""
-                ).Replace(
-                    "{e:MM}", _expiredAt?.ToString("MM") ?? ""
-                ).Replace(
-                    "{e:MMM}", _expiredAt?.ToString("MMM") ?? ""
-                ).Replace(
-                    "{e:dd}", _expiredAt?.ToString("dd") ?? ""
-                ).Replace(
-                    "{e:hh}", _expiredAt?.ToString("hh") ?? ""
-                ).Replace(
-                    "{e:HH}", _expiredAt?.ToString("HH") ?? ""
-                ).Replace(
-                    "{e:tt}", _expiredAt?.ToString("tt") ?? ""
-                ).Replace(
-                    "{e:mm}", _expiredAt?.ToString("mm") ?? ""
-                ).Replace(
-                    "{e:ss}", _expiredAt?.ToString("ss") ?? ""
-                ));
+                var receivedAt = UnixTime.FromUnixTime(_fetcher.Message.ReceivedAt).ToLocalTime();
+                var readAt = UnixTime.FromUnixTime(_fetcher.Message.ReadAt).ToLocalTime();
+                var expiresAt = UnixTime.FromUnixTime(_fetcher.Message.ExpiresAt).ToLocalTime();
+                onUpdate.Invoke(
+                    format.Replace(
+                        "{messageId}", _fetcher.Message.MessageId.ToString()
+                    ).Replace(
+                        "{name}", _fetcher.Message.Name.ToString()
+                    ).Replace(
+                        "{metadata}", _fetcher.Message.Metadata.ToString()
+                    ).Replace(
+                        "{isRead}", _fetcher.Message.IsRead.ToString()
+                    ).Replace(
+                        "{readAcquireActions}", _fetcher.Message.ReadAcquireActions.ToString()
+                    ).Replace(
+                        "{receivedAt:yyyy}", receivedAt.ToString("yyyy")
+                    ).Replace(
+                        "{receivedAt:yy}", receivedAt.ToString("yy")
+                    ).Replace(
+                        "{receivedAt:MM}", receivedAt.ToString("MM")
+                    ).Replace(
+                        "{receivedAt:MMM}", receivedAt.ToString("MMM")
+                    ).Replace(
+                        "{receivedAt:dd}", receivedAt.ToString("dd")
+                    ).Replace(
+                        "{receivedAt:hh}", receivedAt.ToString("hh")
+                    ).Replace(
+                        "{receivedAt:HH}", receivedAt.ToString("HH")
+                    ).Replace(
+                        "{receivedAt:tt}", receivedAt.ToString("tt")
+                    ).Replace(
+                        "{receivedAt:mm}", receivedAt.ToString("mm")
+                    ).Replace(
+                        "{receivedAt:ss}", receivedAt.ToString("ss")
+                    ).Replace(
+                        "{readAt:yyyy}", readAt.ToString("yyyy")
+                    ).Replace(
+                        "{readAt:yy}", readAt.ToString("yy")
+                    ).Replace(
+                        "{readAt:MM}", readAt.ToString("MM")
+                    ).Replace(
+                        "{readAt:MMM}", readAt.ToString("MMM")
+                    ).Replace(
+                        "{readAt:dd}", readAt.ToString("dd")
+                    ).Replace(
+                        "{readAt:hh}", readAt.ToString("hh")
+                    ).Replace(
+                        "{readAt:HH}", readAt.ToString("HH")
+                    ).Replace(
+                        "{readAt:tt}", readAt.ToString("tt")
+                    ).Replace(
+                        "{readAt:mm}", readAt.ToString("mm")
+                    ).Replace(
+                        "{readAt:ss}", readAt.ToString("ss")
+                    ).Replace(
+                        "{expiresAt:yyyy}", expiresAt.ToString("yyyy")
+                    ).Replace(
+                        "{expiresAt:yy}", expiresAt.ToString("yy")
+                    ).Replace(
+                        "{expiresAt:MM}", expiresAt.ToString("MM")
+                    ).Replace(
+                        "{expiresAt:MMM}", expiresAt.ToString("MMM")
+                    ).Replace(
+                        "{expiresAt:dd}", expiresAt.ToString("dd")
+                    ).Replace(
+                        "{expiresAt:hh}", expiresAt.ToString("hh")
+                    ).Replace(
+                        "{expiresAt:HH}", expiresAt.ToString("HH")
+                    ).Replace(
+                        "{expiresAt:tt}", expiresAt.ToString("tt")
+                    ).Replace(
+                        "{expiresAt:mm}", expiresAt.ToString("mm")
+                    ).Replace(
+                        "{expiresAt:ss}", expiresAt.ToString("ss")
+                    )
+                );
             }
         }
     }
@@ -94,14 +119,14 @@ namespace Gs2.Unity.UiKit.Gs2Inbox
     /// <summary>
     /// Dependent components
     /// </summary>
-    
+
     public partial class Gs2InboxMessageLabel
     {
-        private Gs2InboxMessageFetcher _messageFetcher;
+        private Gs2InboxMessageFetcher _fetcher;
 
         public void Awake()
         {
-            _messageFetcher = GetComponentInParent<Gs2InboxMessageFetcher>();
+            _fetcher = GetComponentInParent<Gs2InboxMessageFetcher>();
             Update();
         }
     }
@@ -109,16 +134,16 @@ namespace Gs2.Unity.UiKit.Gs2Inbox
     /// <summary>
     /// Public properties
     /// </summary>
-    
+
     public partial class Gs2InboxMessageLabel
     {
-        
+
     }
 
     /// <summary>
     /// Parameters for Inspector
     /// </summary>
-    
+
     public partial class Gs2InboxMessageLabel
     {
         public string format;
@@ -132,12 +157,12 @@ namespace Gs2.Unity.UiKit.Gs2Inbox
         [Serializable]
         private class UpdateEvent : UnityEvent<string>
         {
-            
+
         }
-        
+
         [SerializeField]
         private UpdateEvent onUpdate = new UpdateEvent();
-        
+
         public event UnityAction<string> OnUpdate
         {
             add => onUpdate.AddListener(value);

@@ -27,7 +27,7 @@ using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2Account
 {
-    [AddComponentMenu("GS2 UIKit/Account/Gs2AccountRepositoryLoadAction")]
+    [AddComponentMenu("GS2 UIKit/Account/AccountRepository/Action/Load")]
     public partial class Gs2AccountRepositoryLoadAction : MonoBehaviour
     {
         private IEnumerator Process()

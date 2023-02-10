@@ -27,7 +27,7 @@ using Gs2ClientHolder = Gs2.Unity.Util.Gs2ClientHolder;
 
 namespace Gs2.Unity.UiKit.Gs2Account
 {
-    [AddComponentMenu("GS2 UIKit/Account/Gs2AccountRepositoryDeleteAction")]
+    [AddComponentMenu("GS2 UIKit/Account/AccountRepository/Action/Delete")]
     public partial class Gs2AccountRepositoryDeleteAction : MonoBehaviour
     {
         private IEnumerator Process()

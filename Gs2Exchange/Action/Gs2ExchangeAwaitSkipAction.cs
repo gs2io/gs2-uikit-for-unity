@@ -19,30 +19,39 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using Gs2.Core.Exception;
 using Gs2.Unity.Gs2Exchange.Model;
-using Gs2.Unity.Gs2Exchange.ScriptableObject;
-using Gs2.Unity.UiKit.Gs2Exchange.Fetcher;
 using Gs2.Unity.Util;
+using Gs2.Unity.UiKit.Gs2Exchange.Context;
 using UnityEngine;
 using UnityEngine.Events;
+using Await = Gs2.Unity.Gs2Exchange.ScriptableObject.Await;
+
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 namespace Gs2.Unity.UiKit.Gs2Exchange
 {
+	[AddComponentMenu("GS2 UIKit/Exchange/Await/Action/Gs2ExchangeAwaitSkipAction")]
     public partial class Gs2ExchangeAwaitSkipAction : MonoBehaviour
     {
         private IEnumerator Process()
         {
-            yield return new WaitUntil(() => _awaitFetcher.Fetched);
+            yield return new WaitUntil(() => this._clientHolder.Initialized);
+            yield return new WaitUntil(() => this._gameSessionHolder.Initialized);
             
-            var future = _clientHolder.Gs2.Exchange.Namespace(
-                Await.rate.Namespace.namespaceName
+            var domain = this._clientHolder.Gs2.Exchange.Namespace(
+                this._context.Await_.NamespaceName
             ).Me(
-                _gameSessionHolder.GameSession
+                this._gameSessionHolder.GameSession
             ).Await(
-                Await.awaitName,
-                Await.rate.rateName
-            ).Skip();
+                this._context.Await_.AwaitName
+            );
+            var future = domain.Skip(
+            );
             yield return future;
             if (future.Error != null)
             {
@@ -54,27 +63,27 @@ namespace Gs2.Unity.UiKit.Gs2Exchange
                         yield return retryFuture;
                         if (retryFuture.Error != null)
                         {
-                            onError.Invoke(future.Error, Retry);
+                            this.onError.Invoke(future.Error, Retry);
                             yield break;
                         }
-                        onExchangeComplete.Invoke(_awaitFetcher.Model, _awaitFetcher.Await);
+                        this.onSkipComplete.Invoke(future.Result.TransactionId);
                     }
 
-                    onError.Invoke(future.Error, Retry);
+                    this.onError.Invoke(future.Error, Retry);
                     yield break;
                 }
 
-                onError.Invoke(future.Error, null);
+                this.onError.Invoke(future.Error, null);
                 yield break;
             }
-            onExchangeComplete.Invoke(_awaitFetcher.Model, _awaitFetcher.Await);
+            this.onSkipComplete.Invoke(future.Result.TransactionId);
         }
-        
+
         public void OnEnable()
         {
             StartCoroutine(nameof(Process));
         }
-        
+
         public void OnDisable()
         {
             StopCoroutine(nameof(Process));
@@ -84,41 +93,35 @@ namespace Gs2.Unity.UiKit.Gs2Exchange
     /// <summary>
     /// Dependent components
     /// </summary>
-    
+
     public partial class Gs2ExchangeAwaitSkipAction
     {
         private Gs2ClientHolder _clientHolder;
         private Gs2GameSessionHolder _gameSessionHolder;
-        private Gs2ExchangeAwaitFetcher _awaitFetcher;
+        private Gs2ExchangeAwaitContext _context;
 
         public void Awake()
         {
-            _clientHolder = Gs2ClientHolder.Instance;
-            _gameSessionHolder = Gs2GameSessionHolder.Instance;
-            _awaitFetcher = GetComponentInParent<Gs2ExchangeAwaitFetcher>() ?? GetComponent<Gs2ExchangeAwaitFetcher>();
+            this._clientHolder = Gs2ClientHolder.Instance;
+            this._gameSessionHolder = Gs2GameSessionHolder.Instance;
+            this._context = GetComponentInParent<Gs2ExchangeAwaitContext>();
         }
     }
 
     /// <summary>
     /// Public properties
     /// </summary>
-    
+
     public partial class Gs2ExchangeAwaitSkipAction
     {
-        public Await Await
-        {
-            get => _awaitFetcher.await_;
-            set => _awaitFetcher.await_ = value;
-        }
+
     }
 
     /// <summary>
     /// Parameters for Inspector
     /// </summary>
-    
     public partial class Gs2ExchangeAwaitSkipAction
     {
-        
     }
 
     /// <summary>
@@ -127,27 +130,48 @@ namespace Gs2.Unity.UiKit.Gs2Exchange
     public partial class Gs2ExchangeAwaitSkipAction
     {
         [Serializable]
-        private class ExchangeCompleteEvent : UnityEvent<EzRateModel, EzAwait>
+        private class SkipCompleteEvent : UnityEvent<string>
         {
-            
+
         }
-        
+
         [SerializeField]
-        private ExchangeCompleteEvent onExchangeComplete = new ExchangeCompleteEvent();
-        
-        public event UnityAction<EzRateModel, EzAwait> OnExchangeComplete
+        private SkipCompleteEvent onSkipComplete = new SkipCompleteEvent();
+        public event UnityAction<string> OnSkipComplete
         {
-            add => onExchangeComplete.AddListener(value);
-            remove => onExchangeComplete.RemoveListener(value);
+            add => this.onSkipComplete.AddListener(value);
+            remove => this.onSkipComplete.RemoveListener(value);
         }
 
         [SerializeField]
         internal ErrorEvent onError = new ErrorEvent();
-        
+
         public event UnityAction<Gs2Exception, Func<IEnumerator>> OnError
         {
-            add => onError.AddListener(value);
-            remove => onError.RemoveListener(value);
+            add => this.onError.AddListener(value);
+            remove => this.onError.RemoveListener(value);
         }
     }
+
+#if UNITY_EDITOR
+
+    /// <summary>
+    /// Context Menu
+    /// </summary>
+    public partial class Gs2ExchangeAwaitSkipAction
+    {
+        [MenuItem("GameObject/Game Server Services/Exchange/Await/Action/Skip", priority = 0)]
+        private static void CreateButton()
+        {
+            var prefab = AssetDatabase.LoadAssetAtPath<Gs2ExchangeAwaitSkipAction>(
+                "Assets/Scripts/Runtime/Sdk/Gs2/UiKit/Gs2Exchange/Prefabs/Action/Gs2ExchangeAwaitSkipAction.prefab"
+            );
+
+            var instance = PrefabUtility.InstantiatePrefab(prefab, Selection.activeTransform);
+
+            Undo.RegisterCreatedObjectUndo(instance, $"Create {instance.name}");
+            Selection.activeObject = instance;
+        }
+    }
+#endif
 }

@@ -25,18 +25,25 @@ namespace Gs2.Unity.UiKit.Gs2Formation
     /// Main
     /// </summary>
 
-    [AddComponentMenu("GS2 UIKit/Formation/Gs2FormationFormEnabler")]
+	[AddComponentMenu("GS2 UIKit/Formation/Form/Gs2FormationFormEnabler")]
     public partial class Gs2FormationFormEnabler : MonoBehaviour
     {
         public void Update()
         {
-            if (!_formFetcher.Fetched)
+            if (!_fetcher.Fetched)
             {
                 target.SetActive(loading);
             }
-            else 
+            else
             {
-                target.SetActive(loaded);
+                if (_fetcher.Form == null)
+                {
+                    target.SetActive(notFound);
+                }
+                else
+                {
+                    target.SetActive(loaded);
+                }
             }
         }
     }
@@ -44,33 +51,34 @@ namespace Gs2.Unity.UiKit.Gs2Formation
     /// <summary>
     /// Dependent components
     /// </summary>
-    
+
     public partial class Gs2FormationFormEnabler
     {
-        private Gs2FormationFormFetcher _formFetcher;
+        private Gs2FormationFormFetcher _fetcher;
 
         public void Awake()
         {
-            _formFetcher = GetComponentInParent<Gs2FormationFormFetcher>();
+            _fetcher = GetComponentInParent<Gs2FormationFormFetcher>();
         }
     }
 
     /// <summary>
     /// Public properties
     /// </summary>
-    
+
     public partial class Gs2FormationFormEnabler
     {
-        
+
     }
 
     /// <summary>
     /// Parameters for Inspector
     /// </summary>
-    
+
     public partial class Gs2FormationFormEnabler
     {
         public bool loading;
+        public bool notFound;
         public bool loaded;
 
         public GameObject target;
@@ -81,6 +89,6 @@ namespace Gs2.Unity.UiKit.Gs2Formation
     /// </summary>
     public partial class Gs2FormationFormEnabler
     {
-        
+
     }
 }

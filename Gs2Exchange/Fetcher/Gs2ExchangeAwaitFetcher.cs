@@ -18,12 +18,15 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.Text;
 using System.Text;
 using Gs2.Core.Exception;
 using Gs2.Unity.Core.Exception;
 using Gs2.Unity.Gs2Exchange.Model;
 using Gs2.Unity.Gs2Exchange.ScriptableObject;
 using Gs2.Unity.Util;
+using Gs2.Unity.UiKit.Gs2Exchange.Context;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -33,7 +36,7 @@ namespace Gs2.Unity.UiKit.Gs2Exchange.Fetcher
     /// Main
     /// </summary>
 
-    [AddComponentMenu("GS2 UIKit/Exchange/Gs2ExchangeAwaitFetcher")]
+	[AddComponentMenu("GS2 UIKit/Exchange/Await/Fetcher/Gs2ExchangeAwaitFetcher")]
     public partial class Gs2ExchangeAwaitFetcher : MonoBehaviour
     {
         private IEnumerator Fetch()
@@ -41,63 +44,40 @@ namespace Gs2.Unity.UiKit.Gs2Exchange.Fetcher
             Gs2Exception e;
             while (true)
             {
-                if (_gameSessionHolder != null && _gameSessionHolder.Initialized && 
+                if (_gameSessionHolder != null && _gameSessionHolder.Initialized &&
                     _clientHolder != null && _clientHolder.Initialized &&
-                    await_ != null)
+                    _context != null)
                 {
+                    
+                    var domain = this._clientHolder.Gs2.Exchange.Namespace(
+                        this._context.Await_.NamespaceName
+                    ).Me(
+                        this._gameSessionHolder.GameSession
+                    ).Await(
+                        this._context.Await_.AwaitName
+                    );
+                    var future = domain.Model();
+                    yield return future;
+                    if (future.Error != null)
                     {
-                        var future = _clientHolder.Gs2.Exchange.Namespace(
-                            await_.rate.Namespace.namespaceName
-                        ).RateModel(
-                            await_.rate.rateName
-                        ).Model();
-                        yield return future;
-                        if (future.Error != null)
+                        if (future.Error is BadRequestException || future.Error is NotFoundException)
                         {
-                            if (future.Error is BadRequestException || future.Error is NotFoundException)
-                            {
-                                onError.Invoke(e = future.Error, null);
-                                break;
-                            }
+                            onError.Invoke(e = future.Error, null);
+                            break;
+                        }
 
-                            onError.Invoke(new CanIgnoreException(future.Error), null);
-                        }
-                        else
-                        {
-                            Model = future.Result;
-                        }
+                        onError.Invoke(new CanIgnoreException(future.Error), null);
                     }
+                    else
                     {
-                        var future = _clientHolder.Gs2.Exchange.Namespace(
-                            await_.rate.Namespace.namespaceName
-                        ).Me(
-                            _gameSessionHolder.GameSession
-                        ).Await(
-                            await_.awaitName,
-                            await_.rate.rateName
-                        ).Model();
-                        yield return future;
-                        if (future.Error != null)
-                        {
-                            if (future.Error is BadRequestException || future.Error is NotFoundException)
-                            {
-                                onError.Invoke(e = future.Error, null);
-                                break;
-                            }
-
-                            onError.Invoke(new CanIgnoreException(future.Error), null);
-                        }
-                        else
-                        {
-                            Await = future.Result;
-                            Fetched = true;
-                        }
+                        Await = future.Result;
+                        Fetched = true;
                     }
                 }
 
                 yield return new WaitForSeconds(1);
             }
-            
+
             var transform1 = transform;
             var builder = new StringBuilder(transform1.name);
             var current = transform1.parent;
@@ -107,7 +87,7 @@ namespace Gs2.Unity.UiKit.Gs2Exchange.Fetcher
                 builder.Insert(0, current.name + "/");
                 current = current.parent;
             }
-            
+
             Debug.LogError(e);
             Debug.LogError($"{GetType()} の自動更新が停止されました。 {builder}");
             Debug.LogError($"Automatic update of {GetType()} has been stopped. {builder}");
@@ -127,37 +107,38 @@ namespace Gs2.Unity.UiKit.Gs2Exchange.Fetcher
     /// <summary>
     /// Dependent components
     /// </summary>
-    
+
     public partial class Gs2ExchangeAwaitFetcher
     {
         private Gs2ClientHolder _clientHolder;
         private Gs2GameSessionHolder _gameSessionHolder;
+        private Gs2ExchangeAwaitContext _context;
 
         public void Awake()
         {
             _clientHolder = Gs2ClientHolder.Instance;
             _gameSessionHolder = Gs2GameSessionHolder.Instance;
+            _context = GetComponentInParent<Gs2ExchangeAwaitContext>();
         }
     }
 
     /// <summary>
     /// Public properties
     /// </summary>
-    
+
     public partial class Gs2ExchangeAwaitFetcher
     {
-        public EzRateModel Model { get; private set; }
-        public EzAwait Await { get; private set; }
+        public Gs2.Unity.Gs2Exchange.Model.EzAwait Await { get; private set; }
         public bool Fetched { get; private set; }
     }
 
     /// <summary>
     /// Parameters for Inspector
     /// </summary>
-    
+
     public partial class Gs2ExchangeAwaitFetcher
     {
-        public Await await_;
+
     }
 
     /// <summary>
@@ -167,7 +148,7 @@ namespace Gs2.Unity.UiKit.Gs2Exchange.Fetcher
     {
         [SerializeField]
         internal ErrorEvent onError = new ErrorEvent();
-        
+
         public event UnityAction<Gs2Exception, Func<IEnumerator>> OnError
         {
             add => onError.AddListener(value);

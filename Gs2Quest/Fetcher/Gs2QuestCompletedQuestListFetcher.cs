@@ -18,12 +18,15 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.Text;
 using System.Text;
 using Gs2.Core.Exception;
 using Gs2.Unity.Core.Exception;
 using Gs2.Unity.Gs2Quest.Model;
 using Gs2.Unity.Gs2Quest.ScriptableObject;
 using Gs2.Unity.Util;
+using Gs2.Unity.UiKit.Gs2Quest.Context;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -33,7 +36,7 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Fetcher
     /// Main
     /// </summary>
 
-    [AddComponentMenu("GS2 UIKit/Quest/Gs2QuestCompletedQuestListFetcher")]
+	[AddComponentMenu("GS2 UIKit/Quest/CompletedQuestList/Fetcher/Gs2QuestCompletedQuestListFetcher")]
     public partial class Gs2QuestCompletedQuestListFetcher : MonoBehaviour
     {
         private IEnumerator Fetch()
@@ -41,17 +44,19 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Fetcher
             Gs2Exception e;
             while (true)
             {
-                if (_gameSessionHolder != null && _gameSessionHolder.Initialized && 
+                if (_gameSessionHolder != null && _gameSessionHolder.Initialized &&
                     _clientHolder != null && _clientHolder.Initialized &&
-                    questGroup != null)
+                    _context != null)
                 {
-                    var future = _clientHolder.Gs2.Quest.Namespace(
-                        questGroup.Namespace.namespaceName
+                    
+                    var domain = this._clientHolder.Gs2.Quest.Namespace(
+                        this._context.CompletedQuestList.NamespaceName
                     ).Me(
-                        _gameSessionHolder.GameSession
+                        this._gameSessionHolder.GameSession
                     ).CompletedQuestList(
-                        questGroup.questGroupName
-                    ).Model();
+                        this._context.CompletedQuestList.QuestGroupName
+                    );
+                    var future = domain.Model();
                     yield return future;
                     if (future.Error != null)
                     {
@@ -76,18 +81,18 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Fetcher
             var transform1 = transform;
             var builder = new StringBuilder(transform1.name);
             var current = transform1.parent;
- 
+
             while (current != null)
             {
                 builder.Insert(0, current.name + "/");
                 current = current.parent;
             }
-            
+
             Debug.LogError(e);
             Debug.LogError($"{GetType()} の自動更新が停止されました。 {builder}");
             Debug.LogError($"Automatic update of {GetType()} has been stopped. {builder}");
         }
-        
+
         public void OnEnable()
         {
             StartCoroutine(nameof(Fetch));
@@ -102,36 +107,38 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Fetcher
     /// <summary>
     /// Dependent components
     /// </summary>
-    
+
     public partial class Gs2QuestCompletedQuestListFetcher
     {
         private Gs2ClientHolder _clientHolder;
         private Gs2GameSessionHolder _gameSessionHolder;
+        private Gs2QuestCompletedQuestListContext _context;
 
         public void Awake()
         {
             _clientHolder = Gs2ClientHolder.Instance;
             _gameSessionHolder = Gs2GameSessionHolder.Instance;
+            _context = GetComponentInParent<Gs2QuestCompletedQuestListContext>();
         }
     }
 
     /// <summary>
     /// Public properties
     /// </summary>
-    
+
     public partial class Gs2QuestCompletedQuestListFetcher
     {
-        public EzCompletedQuestList CompletedQuestList { get; private set; }
+        public Gs2.Unity.Gs2Quest.Model.EzCompletedQuestList CompletedQuestList { get; private set; }
         public bool Fetched { get; private set; }
     }
 
     /// <summary>
     /// Parameters for Inspector
     /// </summary>
-    
+
     public partial class Gs2QuestCompletedQuestListFetcher
     {
-        public QuestGroup questGroup;
+
     }
 
     /// <summary>
@@ -141,7 +148,7 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Fetcher
     {
         [SerializeField]
         internal ErrorEvent onError = new ErrorEvent();
-        
+
         public event UnityAction<Gs2Exception, Func<IEnumerator>> OnError
         {
             add => onError.AddListener(value);

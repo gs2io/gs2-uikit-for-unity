@@ -25,6 +25,7 @@ using Gs2.Unity.Core.Exception;
 using Gs2.Unity.Gs2Mission.Model;
 using Gs2.Unity.Gs2Mission.ScriptableObject;
 using Gs2.Unity.Util;
+using Gs2.Unity.UiKit.Gs2Mission.Context;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -34,7 +35,7 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Fetcher
     /// Main
     /// </summary>
 
-    [AddComponentMenu("GS2 UIKit/Mission/Gs2MissionCounterListFetcher")]
+	[AddComponentMenu("GS2 UIKit/Mission/Counter/Fetcher/Gs2MissionCounterListFetcher")]
     public partial class Gs2MissionCounterListFetcher : MonoBehaviour
     {
         private IEnumerator Fetch()
@@ -44,14 +45,16 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Fetcher
             {
                 if (_gameSessionHolder != null && _gameSessionHolder.Initialized && 
                     _clientHolder != null && _clientHolder.Initialized &&
-                    missionGroup != null)
+                    _context != null)
                 {
-                    var it = _clientHolder.Gs2.Mission.Namespace(
-                        missionGroup.Namespace.namespaceName
+                    
+                    var domain = this._clientHolder.Gs2.Mission.Namespace(
+                        this._context.User.NamespaceName
                     ).Me(
-                        _gameSessionHolder.GameSession
-                    ).Counters();
-                    var completes = new List<EzCounter>();
+                        this._gameSessionHolder.GameSession
+                    );
+                    var it = domain.Counters();
+                    var items = new List<Gs2.Unity.Gs2Mission.Model.EzCounter>();
                     while (it.HasNext())
                     {
                         yield return it.Next();
@@ -69,11 +72,13 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Fetcher
 
                         if (it.Current != null)
                         {
-                            completes.Add(it.Current);
+                            items.Add(it.Current);
+                        } else {
+                            break;
                         }
                     }
 
-                    Counters = completes;
+                    Counters = items;
                     Fetched = true;
                 }
 
@@ -115,11 +120,13 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Fetcher
     {
         private Gs2ClientHolder _clientHolder;
         private Gs2GameSessionHolder _gameSessionHolder;
+        private Gs2MissionUserContext _context;
 
         public void Awake()
         {
             _clientHolder = Gs2ClientHolder.Instance;
             _gameSessionHolder = Gs2GameSessionHolder.Instance;
+            _context = GetComponentInParent<Gs2MissionUserContext>();
         }
     }
 
@@ -129,7 +136,7 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Fetcher
     
     public partial class Gs2MissionCounterListFetcher
     {
-        public List<EzCounter> Counters { get; private set; }
+        public List<Gs2.Unity.Gs2Mission.Model.EzCounter> Counters { get; private set; }
         public bool Fetched { get; private set; }
     }
 
@@ -139,7 +146,7 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Fetcher
     
     public partial class Gs2MissionCounterListFetcher
     {
-        public MissionGroup missionGroup;
+
     }
 
     /// <summary>

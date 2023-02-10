@@ -16,6 +16,7 @@
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
 
+using System.Collections.Generic;
 using Gs2.Unity.UiKit.Gs2Money.Fetcher;
 using UnityEngine;
 
@@ -25,22 +26,38 @@ namespace Gs2.Unity.UiKit.Gs2Money
     /// Main
     /// </summary>
 
-    [AddComponentMenu("GS2 UIKit/Money/Gs2MoneyWalletBalanceEnabler")]
+	[AddComponentMenu("GS2 UIKit/Money/Wallet/View/Properties/Balance/Enabler")]
     public partial class Gs2MoneyWalletBalanceEnabler : MonoBehaviour
     {
         public void Update()
         {
-            if (!_walletFetcher.Fetched)
+            if (_fetcher.Fetched)
             {
-                target.SetActive(loading);
+                switch(expression)
+                {
+                    case Expression.In:
+                        target.SetActive(enableBalances.Contains(_fetcher.Wallet.Free + this._fetcher.Wallet.Paid));
+                        break;
+                    case Expression.NotIn:
+                        target.SetActive(!enableBalances.Contains(_fetcher.Wallet.Free + this._fetcher.Wallet.Paid));
+                        break;
+                    case Expression.Less:
+                        target.SetActive(enableBalance < _fetcher.Wallet.Free + this._fetcher.Wallet.Paid);
+                        break;
+                    case Expression.LessEqual:
+                        target.SetActive(enableBalance <= _fetcher.Wallet.Free + this._fetcher.Wallet.Paid);
+                        break;
+                    case Expression.Greater:
+                        target.SetActive(enableBalance > _fetcher.Wallet.Free + this._fetcher.Wallet.Paid);
+                        break;
+                    case Expression.GreaterEqual:
+                        target.SetActive(enableBalance >= _fetcher.Wallet.Free + this._fetcher.Wallet.Paid);
+                        break;
+                }
             }
-            else if ((paidOnly ? _walletFetcher.Wallet.Paid : _walletFetcher.Wallet.Paid + _walletFetcher.Wallet.Free) < balance)
+            else 
             {
-                target.SetActive(shortage);
-            }
-            else
-            {
-                target.SetActive(satisfaction);
+                target.SetActive(false);
             }
         }
     }
@@ -51,12 +68,11 @@ namespace Gs2.Unity.UiKit.Gs2Money
     
     public partial class Gs2MoneyWalletBalanceEnabler
     {
-        private Gs2MoneyWalletFetcher _walletFetcher;
+        private Gs2MoneyWalletFetcher _fetcher;
 
         public void Awake()
         {
-            _walletFetcher = GetComponentInParent<Gs2MoneyWalletFetcher>();
-            Update();
+            _fetcher = GetComponentInParent<Gs2MoneyWalletFetcher>();
         }
     }
 
@@ -75,12 +91,20 @@ namespace Gs2.Unity.UiKit.Gs2Money
     
     public partial class Gs2MoneyWalletBalanceEnabler
     {
-        public int balance;
-        public bool paidOnly;
-        
-        public bool loading;
-        public bool shortage;
-        public bool satisfaction;
+        public enum Expression {
+            In,
+            NotIn,
+            Less,
+            LessEqual,
+            Greater,
+            GreaterEqual,
+        }
+
+        public Expression expression;
+
+        public List<int> enableBalances;
+
+        public int enableBalance;
 
         public GameObject target;
     }

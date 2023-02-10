@@ -25,18 +25,25 @@ namespace Gs2.Unity.UiKit.Gs2Inventory
     /// Main
     /// </summary>
 
-    [AddComponentMenu("GS2 UIKit/Inventory/Gs2InventoryItemSetEnabler")]
+	[AddComponentMenu("GS2 UIKit/Inventory/ItemSet/Gs2InventoryItemSetEnabler")]
     public partial class Gs2InventoryItemSetEnabler : MonoBehaviour
     {
         public void Update()
         {
-            if (!_itemSetFetcher.Fetched)
+            if (!_fetcher.Fetched)
             {
                 target.SetActive(loading);
             }
-            else 
+            else
             {
-                target.SetActive(loaded);
+                if (_fetcher.ItemSet == null)
+                {
+                    target.SetActive(notFound);
+                }
+                else
+                {
+                    target.SetActive(loaded);
+                }
             }
         }
     }
@@ -44,34 +51,34 @@ namespace Gs2.Unity.UiKit.Gs2Inventory
     /// <summary>
     /// Dependent components
     /// </summary>
-    
+
     public partial class Gs2InventoryItemSetEnabler
     {
-        private Gs2InventoryItemSetFetcher _itemSetFetcher;
+        private Gs2InventoryItemSetFetcher _fetcher;
 
         public void Awake()
         {
-            _itemSetFetcher = GetComponentInParent<Gs2InventoryItemSetFetcher>() ?? GetComponent<Gs2InventoryItemSetFetcher>();
-            Update();
+            _fetcher = GetComponentInParent<Gs2InventoryItemSetFetcher>();
         }
     }
 
     /// <summary>
     /// Public properties
     /// </summary>
-    
+
     public partial class Gs2InventoryItemSetEnabler
     {
-        
+
     }
 
     /// <summary>
     /// Parameters for Inspector
     /// </summary>
-    
+
     public partial class Gs2InventoryItemSetEnabler
     {
         public bool loading;
+        public bool notFound;
         public bool loaded;
 
         public GameObject target;
@@ -82,6 +89,6 @@ namespace Gs2.Unity.UiKit.Gs2Inventory
     /// </summary>
     public partial class Gs2InventoryItemSetEnabler
     {
-        
+
     }
 }

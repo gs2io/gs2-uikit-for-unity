@@ -17,7 +17,8 @@
 // ReSharper disable CheckNamespace
 
 using System;
-using Gs2.Unity.Gs2Experience.Model;
+using Gs2.Core.Util;
+using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Experience.Fetcher;
 using UnityEngine;
 using UnityEngine.Events;
@@ -28,32 +29,26 @@ namespace Gs2.Unity.UiKit.Gs2Experience
     /// Main
     /// </summary>
 
-    [AddComponentMenu("GS2 UIKit/Experience/Gs2ExperienceStatusLabel")]
+	[AddComponentMenu("GS2 UIKit/Experience/Status/View/Gs2ExperienceStatusLabel")]
     public partial class Gs2ExperienceStatusLabel : MonoBehaviour
     {
         public void Update()
         {
-            if (_statusFetcher.Fetched)
+            if (_fetcher.Fetched)
             {
-                var prevRankUpExperience = _statusFetcher.Model.NextRankUpExperienceValue(_statusFetcher.Status.RankValue-1, _statusFetcher.Status.RankCapValue) ?? 0;
-                var nextRankUpExperience = _statusFetcher.Model.NextRankUpExperienceValue(_statusFetcher.Status.RankValue, _statusFetcher.Status.RankCapValue);
-                var currentStep = _statusFetcher.Status.ExperienceValue - prevRankUpExperience;
-                var nextRankStep = nextRankUpExperience == null ? 0 : nextRankUpExperience.Value - prevRankUpExperience;
-                onUpdate.Invoke(format.Replace(
-                    "{currentExperience}", _statusFetcher.Status.ExperienceValue.ToString()
-                ).Replace(
-                    "{nextRankUpExperience}", _statusFetcher.Model.NextRankUpExperienceValue(_statusFetcher.Status.RankValue, _statusFetcher.Status.RankCapValue)?.ToString() ?? "0"
-                ).Replace(
-                    "{currentStep}", currentStep.ToString()
-                ).Replace(
-                    "{nextRankStep}", nextRankStep.ToString()
-                ).Replace(
-                    "{currentRank}", _statusFetcher.Status.RankValue.ToString()
-                ).Replace(
-                    "{capRank}", _statusFetcher.Status.RankCapValue.ToString()
-                ).Replace(
-                    "{capRankMax}", _statusFetcher.Model.MaxRankCap.ToString()
-                ));
+                onUpdate.Invoke(
+                    format.Replace(
+                        "{experienceName}", _fetcher.Status.ExperienceName.ToString()
+                    ).Replace(
+                        "{propertyId}", _fetcher.Status.PropertyId.ToString()
+                    ).Replace(
+                        "{experienceValue}", _fetcher.Status.ExperienceValue.ToString()
+                    ).Replace(
+                        "{rankValue}", _fetcher.Status.RankValue.ToString()
+                    ).Replace(
+                        "{rankCapValue}", _fetcher.Status.RankCapValue.ToString()
+                    )
+                );
             }
         }
     }
@@ -61,14 +56,14 @@ namespace Gs2.Unity.UiKit.Gs2Experience
     /// <summary>
     /// Dependent components
     /// </summary>
-    
+
     public partial class Gs2ExperienceStatusLabel
     {
-        private Gs2ExperienceStatusFetcher _statusFetcher;
+        private Gs2ExperienceStatusFetcher _fetcher;
 
         public void Awake()
         {
-            _statusFetcher = GetComponentInParent<Gs2ExperienceStatusFetcher>();
+            _fetcher = GetComponentInParent<Gs2ExperienceStatusFetcher>();
             Update();
         }
     }
@@ -76,16 +71,16 @@ namespace Gs2.Unity.UiKit.Gs2Experience
     /// <summary>
     /// Public properties
     /// </summary>
-    
+
     public partial class Gs2ExperienceStatusLabel
     {
-        
+
     }
 
     /// <summary>
     /// Parameters for Inspector
     /// </summary>
-    
+
     public partial class Gs2ExperienceStatusLabel
     {
         public string format;
@@ -99,12 +94,12 @@ namespace Gs2.Unity.UiKit.Gs2Experience
         [Serializable]
         private class UpdateEvent : UnityEvent<string>
         {
-            
+
         }
-        
+
         [SerializeField]
         private UpdateEvent onUpdate = new UpdateEvent();
-        
+
         public event UnityAction<string> OnUpdate
         {
             add => onUpdate.AddListener(value);

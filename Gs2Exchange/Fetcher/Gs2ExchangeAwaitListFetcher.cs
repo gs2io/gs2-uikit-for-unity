@@ -25,6 +25,7 @@ using Gs2.Unity.Core.Exception;
 using Gs2.Unity.Gs2Exchange.Model;
 using Gs2.Unity.Gs2Exchange.ScriptableObject;
 using Gs2.Unity.Util;
+using Gs2.Unity.UiKit.Gs2Exchange.Context;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -34,7 +35,7 @@ namespace Gs2.Unity.UiKit.Gs2Exchange.Fetcher
     /// Main
     /// </summary>
 
-    [AddComponentMenu("GS2 UIKit/Exchange/Gs2ExchangeAwaitListFetcher")]
+	[AddComponentMenu("GS2 UIKit/Exchange/Await/Fetcher/Gs2ExchangeAwaitListFetcher")]
     public partial class Gs2ExchangeAwaitListFetcher : MonoBehaviour
     {
         private IEnumerator Fetch()
@@ -44,55 +45,41 @@ namespace Gs2.Unity.UiKit.Gs2Exchange.Fetcher
             {
                 if (_gameSessionHolder != null && _gameSessionHolder.Initialized && 
                     _clientHolder != null && _clientHolder.Initialized &&
-                    rate != null)
+                    _context != null)
                 {
+                    
+                    var domain = this._clientHolder.Gs2.Exchange.Namespace(
+                        this._context.User.NamespaceName
+                    ).Me(
+                        this._gameSessionHolder.GameSession
+                    );
+                    var it = domain.Awaits();
+                    var items = new List<Gs2.Unity.Gs2Exchange.Model.EzAwait>();
+                    while (it.HasNext())
                     {
-                        var future = _clientHolder.Gs2.Exchange.Namespace(
-                            rate.Namespace.namespaceName
-                        ).RateModel(
-                            rate.rateName
-                        ).Model();
-                        yield return future;
-                        if (future.Error != null)
+                        yield return it.Next();
+                        if (it.Error != null)
                         {
-                            onError.Invoke(e = future.Error, null);
+                            if (it.Error is BadRequestException || it.Error is NotFoundException)
+                            {
+                                onError.Invoke(e = it.Error, null);
+                                goto END;
+                            }
+
+                            onError.Invoke(new CanIgnoreException(it.Error), null);
                             break;
                         }
-                        Model = future.Result;
-                    }
-                    {
-                        var it = _clientHolder.Gs2.Exchange.Namespace(
-                            rate.Namespace.namespaceName
-                        ).Me(
-                            _gameSessionHolder.GameSession
-                        ).Awaits(
-                            rate.rateName
-                        );
-                        var forms = new List<EzAwait>();
-                        while (it.HasNext())
+
+                        if (it.Current != null)
                         {
-                            yield return it.Next();
-                            if (it.Error != null)
-                            {
-                                if (it.Error is BadRequestException || it.Error is NotFoundException)
-                                {
-                                    onError.Invoke(e = it.Error, null);
-                                    goto END;
-                                }
-
-                                onError.Invoke(new CanIgnoreException(it.Error), null);
-                                break;
-                            }
-
-                            if (it.Current != null)
-                            {
-                                forms.Add(it.Current);
-                            }
+                            items.Add(it.Current);
+                        } else {
+                            break;
                         }
-
-                        Awaites = forms;
-                        Fetched = true;
                     }
+
+                    Awaits = items;
+                    Fetched = true;
                 }
 
                 yield return new WaitForSeconds(1);
@@ -133,11 +120,13 @@ namespace Gs2.Unity.UiKit.Gs2Exchange.Fetcher
     {
         private Gs2ClientHolder _clientHolder;
         private Gs2GameSessionHolder _gameSessionHolder;
+        private Gs2ExchangeUserContext _context;
 
         public void Awake()
         {
             _clientHolder = Gs2ClientHolder.Instance;
             _gameSessionHolder = Gs2GameSessionHolder.Instance;
+            _context = GetComponentInParent<Gs2ExchangeUserContext>();
         }
     }
 
@@ -147,8 +136,7 @@ namespace Gs2.Unity.UiKit.Gs2Exchange.Fetcher
     
     public partial class Gs2ExchangeAwaitListFetcher
     {
-        public EzRateModel Model { get; private set; }
-        public List<EzAwait> Awaites { get; private set; }
+        public List<Gs2.Unity.Gs2Exchange.Model.EzAwait> Awaits { get; private set; }
         public bool Fetched { get; private set; }
     }
 
@@ -158,7 +146,7 @@ namespace Gs2.Unity.UiKit.Gs2Exchange.Fetcher
     
     public partial class Gs2ExchangeAwaitListFetcher
     {
-        public Rate rate;
+
     }
 
     /// <summary>

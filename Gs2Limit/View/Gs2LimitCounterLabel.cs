@@ -17,7 +17,8 @@
 // ReSharper disable CheckNamespace
 
 using System;
-using Gs2.Unity.Gs2Limit.Model;
+using Gs2.Core.Util;
+using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Limit.Fetcher;
 using UnityEngine;
 using UnityEngine.Events;
@@ -28,16 +29,66 @@ namespace Gs2.Unity.UiKit.Gs2Limit
     /// Main
     /// </summary>
 
-    [AddComponentMenu("GS2 UIKit/Limit/Gs2LimitCounterLabel")]
+	[AddComponentMenu("GS2 UIKit/Limit/Counter/View/Gs2LimitCounterLabel")]
     public partial class Gs2LimitCounterLabel : MonoBehaviour
     {
         public void Update()
         {
             if (_fetcher.Fetched)
             {
-                onUpdate.Invoke(format.Replace(
-                    "{value}", _fetcher.Counter?.Count.ToString() ?? "0"
-                ));
+                var createdAt = UnixTime.FromUnixTime(_fetcher.Counter.CreatedAt).ToLocalTime();
+                var updatedAt = UnixTime.FromUnixTime(_fetcher.Counter.UpdatedAt).ToLocalTime();
+                onUpdate.Invoke(
+                    format.Replace(
+                        "{counterId}", _fetcher.Counter.CounterId.ToString()
+                    ).Replace(
+                        "{limitName}", _fetcher.Counter.LimitName.ToString()
+                    ).Replace(
+                        "{name}", _fetcher.Counter.Name.ToString()
+                    ).Replace(
+                        "{count}", _fetcher.Counter.Count.ToString()
+                    ).Replace(
+                        "{createdAt:yyyy}", createdAt.ToString("yyyy")
+                    ).Replace(
+                        "{createdAt:yy}", createdAt.ToString("yy")
+                    ).Replace(
+                        "{createdAt:MM}", createdAt.ToString("MM")
+                    ).Replace(
+                        "{createdAt:MMM}", createdAt.ToString("MMM")
+                    ).Replace(
+                        "{createdAt:dd}", createdAt.ToString("dd")
+                    ).Replace(
+                        "{createdAt:hh}", createdAt.ToString("hh")
+                    ).Replace(
+                        "{createdAt:HH}", createdAt.ToString("HH")
+                    ).Replace(
+                        "{createdAt:tt}", createdAt.ToString("tt")
+                    ).Replace(
+                        "{createdAt:mm}", createdAt.ToString("mm")
+                    ).Replace(
+                        "{createdAt:ss}", createdAt.ToString("ss")
+                    ).Replace(
+                        "{updatedAt:yyyy}", updatedAt.ToString("yyyy")
+                    ).Replace(
+                        "{updatedAt:yy}", updatedAt.ToString("yy")
+                    ).Replace(
+                        "{updatedAt:MM}", updatedAt.ToString("MM")
+                    ).Replace(
+                        "{updatedAt:MMM}", updatedAt.ToString("MMM")
+                    ).Replace(
+                        "{updatedAt:dd}", updatedAt.ToString("dd")
+                    ).Replace(
+                        "{updatedAt:hh}", updatedAt.ToString("hh")
+                    ).Replace(
+                        "{updatedAt:HH}", updatedAt.ToString("HH")
+                    ).Replace(
+                        "{updatedAt:tt}", updatedAt.ToString("tt")
+                    ).Replace(
+                        "{updatedAt:mm}", updatedAt.ToString("mm")
+                    ).Replace(
+                        "{updatedAt:ss}", updatedAt.ToString("ss")
+                    )
+                );
             }
         }
     }
@@ -45,7 +96,7 @@ namespace Gs2.Unity.UiKit.Gs2Limit
     /// <summary>
     /// Dependent components
     /// </summary>
-    
+
     public partial class Gs2LimitCounterLabel
     {
         private Gs2LimitCounterFetcher _fetcher;
@@ -60,16 +111,16 @@ namespace Gs2.Unity.UiKit.Gs2Limit
     /// <summary>
     /// Public properties
     /// </summary>
-    
+
     public partial class Gs2LimitCounterLabel
     {
-        
+
     }
 
     /// <summary>
     /// Parameters for Inspector
     /// </summary>
-    
+
     public partial class Gs2LimitCounterLabel
     {
         public string format;
@@ -83,12 +134,12 @@ namespace Gs2.Unity.UiKit.Gs2Limit
         [Serializable]
         private class UpdateEvent : UnityEvent<string>
         {
-            
+
         }
-        
+
         [SerializeField]
         private UpdateEvent onUpdate = new UpdateEvent();
-        
+
         public event UnityAction<string> OnUpdate
         {
             add => onUpdate.AddListener(value);

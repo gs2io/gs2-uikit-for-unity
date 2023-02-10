@@ -18,6 +18,7 @@
 
 using System;
 using Gs2.Core.Util;
+using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Dictionary.Fetcher;
 using UnityEngine;
 using UnityEngine.Events;
@@ -28,50 +29,43 @@ namespace Gs2.Unity.UiKit.Gs2Dictionary
     /// Main
     /// </summary>
 
-    [AddComponentMenu("GS2 UIKit/Dictionary/Gs2DictionaryEntryLabel")]
+	[AddComponentMenu("GS2 UIKit/Dictionary/Entry/View/Gs2DictionaryEntryLabel")]
     public partial class Gs2DictionaryEntryLabel : MonoBehaviour
     {
-        private DateTime? _acquiredAt = null;
-        
         public void Update()
         {
-            if (_entryFetcher.Fetched && _acquiredAt == null)
+            if (_fetcher.Fetched)
             {
-                if (_entryFetcher.Entry != null)
-                {
-                    _acquiredAt = UnixTime.FromUnixTime(_entryFetcher.Entry.AcquiredAt).ToLocalTime();
-                }
-                else
-                {
-                    _acquiredAt = DateTime.Now;
-                }
-            }
-
-            if (_entryFetcher.Fetched)
-            {
-                onUpdate.Invoke(format.Replace(
-                    "{yyyy}", _acquiredAt.Value.ToString("yyyy") ?? ""
-                ).Replace(
-                    "{yy}", _acquiredAt.Value.ToString("yy") ?? ""
-                ).Replace(
-                    "{MM}", _acquiredAt.Value.ToString("MM") ?? ""
-                ).Replace(
-                    "{MMM}", _acquiredAt.Value.ToString("MMM") ?? ""
-                ).Replace(
-                    "{dd}", _acquiredAt.Value.ToString("dd") ?? ""
-                ).Replace(
-                    "{hh}", _acquiredAt.Value.ToString("hh") ?? ""
-                ).Replace(
-                    "{HH}", _acquiredAt.Value.ToString("HH") ?? ""
-                ).Replace(
-                    "{tt}", _acquiredAt.Value.ToString("tt") ?? ""
-                ).Replace(
-                    "{mm}", _acquiredAt.Value.ToString("mm") ?? ""
-                ).Replace(
-                    "{ss}", _acquiredAt.Value.ToString("ss") ?? ""
-                ).Replace(
-                    "{metadata}", _entryFetcher.Model.Metadata.ToString()
-                ));
+                var acquiredAt = UnixTime.FromUnixTime(_fetcher.Entry.AcquiredAt).ToLocalTime();
+                onUpdate.Invoke(
+                    format.Replace(
+                        "{entryId}", _fetcher.Entry.EntryId.ToString()
+                    ).Replace(
+                        "{userId}", _fetcher.Entry.UserId.ToString()
+                    ).Replace(
+                        "{name}", _fetcher.Entry.Name.ToString()
+                    ).Replace(
+                        "{acquiredAt:yyyy}", acquiredAt.ToString("yyyy")
+                    ).Replace(
+                        "{acquiredAt:yy}", acquiredAt.ToString("yy")
+                    ).Replace(
+                        "{acquiredAt:MM}", acquiredAt.ToString("MM")
+                    ).Replace(
+                        "{acquiredAt:MMM}", acquiredAt.ToString("MMM")
+                    ).Replace(
+                        "{acquiredAt:dd}", acquiredAt.ToString("dd")
+                    ).Replace(
+                        "{acquiredAt:hh}", acquiredAt.ToString("hh")
+                    ).Replace(
+                        "{acquiredAt:HH}", acquiredAt.ToString("HH")
+                    ).Replace(
+                        "{acquiredAt:tt}", acquiredAt.ToString("tt")
+                    ).Replace(
+                        "{acquiredAt:mm}", acquiredAt.ToString("mm")
+                    ).Replace(
+                        "{acquiredAt:ss}", acquiredAt.ToString("ss")
+                    )
+                );
             }
         }
     }
@@ -79,14 +73,14 @@ namespace Gs2.Unity.UiKit.Gs2Dictionary
     /// <summary>
     /// Dependent components
     /// </summary>
-    
+
     public partial class Gs2DictionaryEntryLabel
     {
-        private Gs2DictionaryEntryFetcher _entryFetcher;
+        private Gs2DictionaryEntryFetcher _fetcher;
 
         public void Awake()
         {
-            _entryFetcher = GetComponentInParent<Gs2DictionaryEntryFetcher>();
+            _fetcher = GetComponentInParent<Gs2DictionaryEntryFetcher>();
             Update();
         }
     }
@@ -94,16 +88,16 @@ namespace Gs2.Unity.UiKit.Gs2Dictionary
     /// <summary>
     /// Public properties
     /// </summary>
-    
+
     public partial class Gs2DictionaryEntryLabel
     {
-        
+
     }
 
     /// <summary>
     /// Parameters for Inspector
     /// </summary>
-    
+
     public partial class Gs2DictionaryEntryLabel
     {
         public string format;
@@ -117,12 +111,12 @@ namespace Gs2.Unity.UiKit.Gs2Dictionary
         [Serializable]
         private class UpdateEvent : UnityEvent<string>
         {
-            
+
         }
-        
+
         [SerializeField]
         private UpdateEvent onUpdate = new UpdateEvent();
-        
+
         public event UnityAction<string> OnUpdate
         {
             add => onUpdate.AddListener(value);

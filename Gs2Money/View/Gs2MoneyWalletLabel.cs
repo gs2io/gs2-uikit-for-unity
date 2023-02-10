@@ -17,6 +17,8 @@
 // ReSharper disable CheckNamespace
 
 using System;
+using Gs2.Core.Util;
+using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Money.Fetcher;
 using UnityEngine;
 using UnityEngine.Events;
@@ -27,20 +29,43 @@ namespace Gs2.Unity.UiKit.Gs2Money
     /// Main
     /// </summary>
 
-    [AddComponentMenu("GS2 UIKit/Money/Gs2MoneyWalletLabel")]
+	[AddComponentMenu("GS2 UIKit/Money/Wallet/View/Gs2MoneyWalletLabel")]
     public partial class Gs2MoneyWalletLabel : MonoBehaviour
     {
         public void Update()
         {
-            if (_walletFetcher.Fetched)
+            if (_fetcher.Fetched)
             {
-                onUpdate.Invoke(format.Replace(
-                    "{free}", _walletFetcher.Wallet.Free.ToString()
-                ).Replace(
-                    "{paid}", _walletFetcher.Wallet.Paid.ToString()
-                ).Replace(
-                    "{total}", (_walletFetcher.Wallet.Free + _walletFetcher.Wallet.Paid).ToString()
-                ));
+                var updatedAt = UnixTime.FromUnixTime(_fetcher.Wallet.UpdatedAt).ToLocalTime();
+                onUpdate.Invoke(
+                    format.Replace(
+                        "{slot}", _fetcher.Wallet.Slot.ToString()
+                    ).Replace(
+                        "{paid}", _fetcher.Wallet.Paid.ToString()
+                    ).Replace(
+                        "{free}", _fetcher.Wallet.Free.ToString()
+                    ).Replace(
+                        "{updatedAt:yyyy}", updatedAt.ToString("yyyy")
+                    ).Replace(
+                        "{updatedAt:yy}", updatedAt.ToString("yy")
+                    ).Replace(
+                        "{updatedAt:MM}", updatedAt.ToString("MM")
+                    ).Replace(
+                        "{updatedAt:MMM}", updatedAt.ToString("MMM")
+                    ).Replace(
+                        "{updatedAt:dd}", updatedAt.ToString("dd")
+                    ).Replace(
+                        "{updatedAt:hh}", updatedAt.ToString("hh")
+                    ).Replace(
+                        "{updatedAt:HH}", updatedAt.ToString("HH")
+                    ).Replace(
+                        "{updatedAt:tt}", updatedAt.ToString("tt")
+                    ).Replace(
+                        "{updatedAt:mm}", updatedAt.ToString("mm")
+                    ).Replace(
+                        "{updatedAt:ss}", updatedAt.ToString("ss")
+                    )
+                );
             }
         }
     }
@@ -48,14 +73,14 @@ namespace Gs2.Unity.UiKit.Gs2Money
     /// <summary>
     /// Dependent components
     /// </summary>
-    
+
     public partial class Gs2MoneyWalletLabel
     {
-        private Gs2MoneyWalletFetcher _walletFetcher;
+        private Gs2MoneyWalletFetcher _fetcher;
 
         public void Awake()
         {
-            _walletFetcher = GetComponentInParent<Gs2MoneyWalletFetcher>();
+            _fetcher = GetComponentInParent<Gs2MoneyWalletFetcher>();
             Update();
         }
     }
@@ -63,16 +88,16 @@ namespace Gs2.Unity.UiKit.Gs2Money
     /// <summary>
     /// Public properties
     /// </summary>
-    
+
     public partial class Gs2MoneyWalletLabel
     {
-        
+
     }
 
     /// <summary>
     /// Parameters for Inspector
     /// </summary>
-    
+
     public partial class Gs2MoneyWalletLabel
     {
         public string format;
@@ -86,12 +111,12 @@ namespace Gs2.Unity.UiKit.Gs2Money
         [Serializable]
         private class UpdateEvent : UnityEvent<string>
         {
-            
+
         }
-        
+
         [SerializeField]
         private UpdateEvent onUpdate = new UpdateEvent();
-        
+
         public event UnityAction<string> OnUpdate
         {
             add => onUpdate.AddListener(value);

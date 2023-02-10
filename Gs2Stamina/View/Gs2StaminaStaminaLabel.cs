@@ -18,6 +18,7 @@
 
 using System;
 using Gs2.Core.Util;
+using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Stamina.Fetcher;
 using UnityEngine;
 using UnityEngine.Events;
@@ -28,39 +29,49 @@ namespace Gs2.Unity.UiKit.Gs2Stamina
     /// Main
     /// </summary>
 
-    [AddComponentMenu("GS2 UIKit/Stamina/Gs2StaminaStaminaLabel")]
+	[AddComponentMenu("GS2 UIKit/Stamina/Stamina/View/Gs2StaminaStaminaLabel")]
     public partial class Gs2StaminaStaminaLabel : MonoBehaviour
     {
         public void Update()
         {
-            if (_staminaFetcher.Fetched)
+            if (_fetcher.Fetched)
             {
-                while (_staminaFetcher.Stamina.NextRecoverAt > 0 && _staminaFetcher.Stamina.NextRecoverAt < UnixTime.ToUnixTime(DateTime.UtcNow))
-                {
-                    _staminaFetcher.Stamina.Value += _staminaFetcher.Stamina.RecoverValue;
-                    _staminaFetcher.Stamina.Value = Math.Min(_staminaFetcher.Stamina.Value, _staminaFetcher.Stamina.MaxValue) + _staminaFetcher.Stamina.OverflowValue;
-                    _staminaFetcher.Stamina.NextRecoverAt += _staminaFetcher.Stamina.RecoverIntervalMinutes * 60 * 1000;
-                }
-                var span = (_staminaFetcher.Stamina.NextRecoverAt == 0 ? DateTime.UtcNow : UnixTime.FromUnixTime(_staminaFetcher.Stamina.NextRecoverAt)) - DateTime.UtcNow;
-                onUpdate.Invoke(format.Replace(
-                    "{current}", _staminaFetcher.Stamina.Value.ToString()
-                ).Replace(
-                    "{total}", _staminaFetcher.Stamina.Value.ToString()
-                ).Replace(
-                    "{max}", _staminaFetcher.Stamina.MaxValue.ToString()
-                ).Replace(
-                    "{overflow}", (_staminaFetcher.Stamina.Value > _staminaFetcher.Stamina.MaxValue ? _staminaFetcher.Stamina.Value - _staminaFetcher.Stamina.MaxValue : _staminaFetcher.Stamina.Value).ToString()
-                ).Replace(
-                    "{mm}", span.ToString("mm")
-                ).Replace(
-                    "{ss}", span.ToString("ss")
-                ).Replace(
-                    "{h}", span.ToString("%h")
-                ).Replace(
-                    "{m}", span.ToString("%m")
-                ).Replace(
-                    "{s}", span.ToString("%s")
-                ));
+                var nextRecoverAt = UnixTime.FromUnixTime(_fetcher.Stamina.NextRecoverAt).ToLocalTime();
+                onUpdate.Invoke(
+                    format.Replace(
+                        "{staminaName}", _fetcher.Stamina.StaminaName.ToString()
+                    ).Replace(
+                        "{value}", _fetcher.Stamina.Value.ToString()
+                    ).Replace(
+                        "{overflowValue}", _fetcher.Stamina.OverflowValue.ToString()
+                    ).Replace(
+                        "{maxValue}", _fetcher.Stamina.MaxValue.ToString()
+                    ).Replace(
+                        "{recoverIntervalMinutes}", _fetcher.Stamina.RecoverIntervalMinutes.ToString()
+                    ).Replace(
+                        "{recoverValue}", _fetcher.Stamina.RecoverValue.ToString()
+                    ).Replace(
+                        "{nextRecoverAt:yyyy}", nextRecoverAt.ToString("yyyy")
+                    ).Replace(
+                        "{nextRecoverAt:yy}", nextRecoverAt.ToString("yy")
+                    ).Replace(
+                        "{nextRecoverAt:MM}", nextRecoverAt.ToString("MM")
+                    ).Replace(
+                        "{nextRecoverAt:MMM}", nextRecoverAt.ToString("MMM")
+                    ).Replace(
+                        "{nextRecoverAt:dd}", nextRecoverAt.ToString("dd")
+                    ).Replace(
+                        "{nextRecoverAt:hh}", nextRecoverAt.ToString("hh")
+                    ).Replace(
+                        "{nextRecoverAt:HH}", nextRecoverAt.ToString("HH")
+                    ).Replace(
+                        "{nextRecoverAt:tt}", nextRecoverAt.ToString("tt")
+                    ).Replace(
+                        "{nextRecoverAt:mm}", nextRecoverAt.ToString("mm")
+                    ).Replace(
+                        "{nextRecoverAt:ss}", nextRecoverAt.ToString("ss")
+                    )
+                );
             }
         }
     }
@@ -68,14 +79,14 @@ namespace Gs2.Unity.UiKit.Gs2Stamina
     /// <summary>
     /// Dependent components
     /// </summary>
-    
+
     public partial class Gs2StaminaStaminaLabel
     {
-        private Gs2StaminaStaminaFetcher _staminaFetcher;
+        private Gs2StaminaStaminaFetcher _fetcher;
 
         public void Awake()
         {
-            _staminaFetcher = GetComponentInParent<Gs2StaminaStaminaFetcher>();
+            _fetcher = GetComponentInParent<Gs2StaminaStaminaFetcher>();
             Update();
         }
     }
@@ -83,16 +94,16 @@ namespace Gs2.Unity.UiKit.Gs2Stamina
     /// <summary>
     /// Public properties
     /// </summary>
-    
+
     public partial class Gs2StaminaStaminaLabel
     {
-        
+
     }
 
     /// <summary>
     /// Parameters for Inspector
     /// </summary>
-    
+
     public partial class Gs2StaminaStaminaLabel
     {
         public string format;
@@ -106,12 +117,12 @@ namespace Gs2.Unity.UiKit.Gs2Stamina
         [Serializable]
         private class UpdateEvent : UnityEvent<string>
         {
-            
+
         }
-        
+
         [SerializeField]
         private UpdateEvent onUpdate = new UpdateEvent();
-        
+
         public event UnityAction<string> OnUpdate
         {
             add => onUpdate.AddListener(value);

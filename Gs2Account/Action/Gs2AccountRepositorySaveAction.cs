@@ -27,7 +27,7 @@ using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2Account
 {
-    [AddComponentMenu("GS2 UIKit/Account/Gs2AccountRepositorySaveAction")]
+    [AddComponentMenu("GS2 UIKit/Account/AccountRepository/Action/Save")]
     public partial class Gs2AccountRepositorySaveAction : MonoBehaviour
     {
         private IEnumerator Process()

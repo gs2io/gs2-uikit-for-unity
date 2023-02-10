@@ -19,30 +19,41 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using Gs2.Core.Exception;
-using Gs2.Unity.Gs2Chat.ScriptableObject;
-using Gs2.Unity.UiKit.Gs2Chat.Fetcher;
+using Gs2.Unity.Gs2Chat.Model;
 using Gs2.Unity.Util;
+using Gs2.Unity.UiKit.Gs2Chat.Context;
 using UnityEngine;
 using UnityEngine.Events;
+using Room = Gs2.Unity.Gs2Chat.ScriptableObject.Room;
+
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 namespace Gs2.Unity.UiKit.Gs2Chat
 {
-	[AddComponentMenu("GS2 UIKit/Chat/Gs2ChatMessagePostAction")]
+	[AddComponentMenu("GS2 UIKit/Chat/Message/Action/Gs2ChatMessagePostAction")]
     public partial class Gs2ChatMessagePostAction : MonoBehaviour
     {
         private IEnumerator Process()
         {
-            var future = _clientHolder.Gs2.Chat.Namespace(
-                _roomFetcher.room.Namespace.namespaceName
+            yield return new WaitUntil(() => this._clientHolder.Initialized);
+            yield return new WaitUntil(() => this._gameSessionHolder.Initialized);
+            
+            var domain = this._clientHolder.Gs2.Chat.Namespace(
+                this._context.Room.NamespaceName
             ).Me(
-                _gameSessionHolder.GameSession
+                this._gameSessionHolder.GameSession
             ).Room(
-                _roomFetcher.room.roomName,
-                _roomFetcher.room.password
-            ).Post(
-                metadata,
-                category
+                this._context.Room.RoomName,
+                this._context.Room.Password
+            );
+            var future = domain.Post(
+                Metadata,
+                Category
             );
             yield return future;
             if (future.Error != null)
@@ -55,27 +66,43 @@ namespace Gs2.Unity.UiKit.Gs2Chat
                         yield return retryFuture;
                         if (retryFuture.Error != null)
                         {
-                            onError.Invoke(future.Error, Retry);
+                            this.onError.Invoke(future.Error, Retry);
                             yield break;
                         }
-                        onPostComplete.Invoke(Room, future.Result.MessageName);
+                        var future3 = future.Result.Model();
+                        yield return future3;
+                        if (future3.Error != null)
+                        {
+                            this.onError.Invoke(future3.Error, null);
+                            yield break;
+                        }
+
+                        this.onPostComplete.Invoke(future3.Result);
                     }
 
-                    onError.Invoke(future.Error, Retry);
+                    this.onError.Invoke(future.Error, Retry);
                     yield break;
                 }
 
-                onError.Invoke(future.Error, null);
+                this.onError.Invoke(future.Error, null);
                 yield break;
             }
-            onPostComplete.Invoke(Room, future.Result.MessageName);
+            var future2 = future.Result.Model();
+            yield return future2;
+            if (future2.Error != null)
+            {
+                this.onError.Invoke(future2.Error, null);
+                yield break;
+            }
+
+            this.onPostComplete.Invoke(future2.Result);
         }
-        
+
         public void OnEnable()
         {
             StartCoroutine(nameof(Process));
         }
-        
+
         public void OnDisable()
         {
             StopCoroutine(nameof(Process));
@@ -85,50 +112,44 @@ namespace Gs2.Unity.UiKit.Gs2Chat
     /// <summary>
     /// Dependent components
     /// </summary>
-    
+
     public partial class Gs2ChatMessagePostAction
     {
         private Gs2ClientHolder _clientHolder;
         private Gs2GameSessionHolder _gameSessionHolder;
-        private Gs2ChatRoomFetcher _roomFetcher;
+        private Gs2ChatRoomContext _context;
 
         public void Awake()
         {
-            _clientHolder = Gs2ClientHolder.Instance;
-            _gameSessionHolder = Gs2GameSessionHolder.Instance;
-            _roomFetcher = GetComponentInParent<Gs2ChatRoomFetcher>() ?? GetComponent<Gs2ChatRoomFetcher>();
+            this._clientHolder = Gs2ClientHolder.Instance;
+            this._gameSessionHolder = Gs2GameSessionHolder.Instance;
+            this._context = GetComponentInParent<Gs2ChatRoomContext>();
         }
     }
 
     /// <summary>
     /// Public properties
     /// </summary>
-    
+
     public partial class Gs2ChatMessagePostAction
     {
-        public Room Room
-        {
-            get => _roomFetcher.room;
-            set => _roomFetcher.room = value;
-        }
+
     }
 
     /// <summary>
     /// Parameters for Inspector
     /// </summary>
-    
     public partial class Gs2ChatMessagePostAction
     {
-        public int category;
-        public string metadata;
+        public int Category;
+        public string Metadata;
 
-        public void Category(int value)
-        {
-            category = value;
+        public void SetCategory(int value) {
+            Category = value;
         }
-        public void Metadata(string value)
-        {
-            metadata = value;
+
+        public void SetMetadata(string value) {
+            Metadata = value;
         }
     }
 
@@ -138,27 +159,48 @@ namespace Gs2.Unity.UiKit.Gs2Chat
     public partial class Gs2ChatMessagePostAction
     {
         [Serializable]
-        private class PostCompleteEvent : UnityEvent<Room, string>
+        private class PostCompleteEvent : UnityEvent<EzMessage>
         {
-            
+
         }
-        
+
         [SerializeField]
         private PostCompleteEvent onPostComplete = new PostCompleteEvent();
-        
-        public event UnityAction<Room, string> OnPostComplete
+        public event UnityAction<EzMessage> OnPostComplete
         {
-            add => onPostComplete.AddListener(value);
-            remove => onPostComplete.RemoveListener(value);
+            add => this.onPostComplete.AddListener(value);
+            remove => this.onPostComplete.RemoveListener(value);
         }
 
         [SerializeField]
         internal ErrorEvent onError = new ErrorEvent();
-        
+
         public event UnityAction<Gs2Exception, Func<IEnumerator>> OnError
         {
-            add => onError.AddListener(value);
-            remove => onError.RemoveListener(value);
+            add => this.onError.AddListener(value);
+            remove => this.onError.RemoveListener(value);
         }
     }
+
+#if UNITY_EDITOR
+
+    /// <summary>
+    /// Context Menu
+    /// </summary>
+    public partial class Gs2ChatMessagePostAction
+    {
+        [MenuItem("GameObject/Game Server Services/Chat/Message/Action/Post", priority = 0)]
+        private static void CreateButton()
+        {
+            var prefab = AssetDatabase.LoadAssetAtPath<Gs2ChatMessagePostAction>(
+                "Assets/Scripts/Runtime/Sdk/Gs2/UiKit/Gs2Chat/Prefabs/Action/Gs2ChatMessagePostAction.prefab"
+            );
+
+            var instance = PrefabUtility.InstantiatePrefab(prefab, Selection.activeTransform);
+
+            Undo.RegisterCreatedObjectUndo(instance, $"Create {instance.name}");
+            Selection.activeObject = instance;
+        }
+    }
+#endif
 }

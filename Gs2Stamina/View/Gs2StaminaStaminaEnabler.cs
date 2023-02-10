@@ -25,26 +25,25 @@ namespace Gs2.Unity.UiKit.Gs2Stamina
     /// Main
     /// </summary>
 
-    [AddComponentMenu("GS2 UIKit/Stamina/Gs2StaminaStaminaEnabler")]
+	[AddComponentMenu("GS2 UIKit/Stamina/Stamina/Gs2StaminaStaminaEnabler")]
     public partial class Gs2StaminaStaminaEnabler : MonoBehaviour
     {
         public void Update()
         {
-            if (!_staminaFetcher.Fetched)
+            if (!_fetcher.Fetched)
             {
                 target.SetActive(loading);
             }
-            else if (_staminaFetcher.Stamina.Value < _staminaFetcher.Stamina.MaxValue)
+            else
             {
-                target.SetActive(recovering);
-            }
-            else if (_staminaFetcher.Stamina.Value == _staminaFetcher.Stamina.MaxValue)
-            {
-                target.SetActive(max);
-            }
-            else if (_staminaFetcher.Stamina.Value > _staminaFetcher.Stamina.MaxValue)
-            {
-                target.SetActive(overflow);
+                if (_fetcher.Stamina == null)
+                {
+                    target.SetActive(notFound);
+                }
+                else
+                {
+                    target.SetActive(loaded);
+                }
             }
         }
     }
@@ -52,37 +51,35 @@ namespace Gs2.Unity.UiKit.Gs2Stamina
     /// <summary>
     /// Dependent components
     /// </summary>
-    
+
     public partial class Gs2StaminaStaminaEnabler
     {
-        private Gs2StaminaStaminaFetcher _staminaFetcher;
+        private Gs2StaminaStaminaFetcher _fetcher;
 
         public void Awake()
         {
-            _staminaFetcher = GetComponentInParent<Gs2StaminaStaminaFetcher>();
-            Update();
+            _fetcher = GetComponentInParent<Gs2StaminaStaminaFetcher>();
         }
     }
 
     /// <summary>
     /// Public properties
     /// </summary>
-    
+
     public partial class Gs2StaminaStaminaEnabler
     {
-        
+
     }
 
     /// <summary>
     /// Parameters for Inspector
     /// </summary>
-    
+
     public partial class Gs2StaminaStaminaEnabler
     {
         public bool loading;
-        public bool recovering;
-        public bool max;
-        public bool overflow;
+        public bool notFound;
+        public bool loaded;
 
         public GameObject target;
     }
@@ -92,6 +89,6 @@ namespace Gs2.Unity.UiKit.Gs2Stamina
     /// </summary>
     public partial class Gs2StaminaStaminaEnabler
     {
-        
+
     }
 }

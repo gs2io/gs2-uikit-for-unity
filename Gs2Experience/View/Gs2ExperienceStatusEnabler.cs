@@ -25,22 +25,25 @@ namespace Gs2.Unity.UiKit.Gs2Experience
     /// Main
     /// </summary>
 
-    [AddComponentMenu("GS2 UIKit/Experience/Gs2ExperienceStatusEnabler")]
+	[AddComponentMenu("GS2 UIKit/Experience/Status/Gs2ExperienceStatusEnabler")]
     public partial class Gs2ExperienceStatusEnabler : MonoBehaviour
     {
         public void Update()
         {
-            if (!_statusFetcher.Fetched)
+            if (!_fetcher.Fetched)
             {
                 target.SetActive(loading);
             }
-            else if (_statusFetcher.Status.RankValue < _statusFetcher.Status.RankCapValue)
+            else
             {
-                target.SetActive(active);
-            }
-            else if (_statusFetcher.Status.RankValue >= _statusFetcher.Status.RankCapValue)
-            {
-                target.SetActive(capped);
+                if (_fetcher.Status == null)
+                {
+                    target.SetActive(notFound);
+                }
+                else
+                {
+                    target.SetActive(loaded);
+                }
             }
         }
     }
@@ -48,36 +51,35 @@ namespace Gs2.Unity.UiKit.Gs2Experience
     /// <summary>
     /// Dependent components
     /// </summary>
-    
+
     public partial class Gs2ExperienceStatusEnabler
     {
-        private Gs2ExperienceStatusFetcher _statusFetcher;
+        private Gs2ExperienceStatusFetcher _fetcher;
 
         public void Awake()
         {
-            _statusFetcher = GetComponentInParent<Gs2ExperienceStatusFetcher>();
-            Update();
+            _fetcher = GetComponentInParent<Gs2ExperienceStatusFetcher>();
         }
     }
 
     /// <summary>
     /// Public properties
     /// </summary>
-    
+
     public partial class Gs2ExperienceStatusEnabler
     {
-        
+
     }
 
     /// <summary>
     /// Parameters for Inspector
     /// </summary>
-    
+
     public partial class Gs2ExperienceStatusEnabler
     {
         public bool loading;
-        public bool active;
-        public bool capped;
+        public bool notFound;
+        public bool loaded;
 
         public GameObject target;
     }
@@ -87,6 +89,6 @@ namespace Gs2.Unity.UiKit.Gs2Experience
     /// </summary>
     public partial class Gs2ExperienceStatusEnabler
     {
-        
+
     }
 }

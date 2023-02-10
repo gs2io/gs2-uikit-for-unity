@@ -25,22 +25,25 @@ namespace Gs2.Unity.UiKit.Gs2Inbox
     /// Main
     /// </summary>
 
-    [AddComponentMenu("GS2 UIKit/Inbox/Gs2InboxMessageEnabler")]
+	[AddComponentMenu("GS2 UIKit/Inbox/Message/Gs2InboxMessageEnabler")]
     public partial class Gs2InboxMessageEnabler : MonoBehaviour
     {
         public void Update()
         {
-            if (!_messageFetcher.Fetched)
+            if (!_fetcher.Fetched)
             {
                 target.SetActive(loading);
             }
-            else if (!_messageFetcher.Message.IsRead)
+            else
             {
-                target.SetActive(notOpen);
-            }
-            else 
-            {
-                target.SetActive(opened);
+                if (_fetcher.Message == null)
+                {
+                    target.SetActive(notFound);
+                }
+                else
+                {
+                    target.SetActive(loaded);
+                }
             }
         }
     }
@@ -48,35 +51,35 @@ namespace Gs2.Unity.UiKit.Gs2Inbox
     /// <summary>
     /// Dependent components
     /// </summary>
-    
+
     public partial class Gs2InboxMessageEnabler
     {
-        private Gs2InboxMessageFetcher _messageFetcher;
+        private Gs2InboxMessageFetcher _fetcher;
 
         public void Awake()
         {
-            _messageFetcher = GetComponentInParent<Gs2InboxMessageFetcher>();
+            _fetcher = GetComponentInParent<Gs2InboxMessageFetcher>();
         }
     }
 
     /// <summary>
     /// Public properties
     /// </summary>
-    
+
     public partial class Gs2InboxMessageEnabler
     {
-        
+
     }
 
     /// <summary>
     /// Parameters for Inspector
     /// </summary>
-    
+
     public partial class Gs2InboxMessageEnabler
     {
         public bool loading;
-        public bool notOpen;
-        public bool opened;
+        public bool notFound;
+        public bool loaded;
 
         public GameObject target;
     }
@@ -86,6 +89,6 @@ namespace Gs2.Unity.UiKit.Gs2Inbox
     /// </summary>
     public partial class Gs2InboxMessageEnabler
     {
-        
+
     }
 }

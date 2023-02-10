@@ -25,18 +25,25 @@ namespace Gs2.Unity.UiKit.Gs2Chat
     /// Main
     /// </summary>
 
-	[AddComponentMenu("GS2 UIKit/Chat/Gs2ChatMessageEnabler")]
+	[AddComponentMenu("GS2 UIKit/Chat/Message/Gs2ChatMessageEnabler")]
     public partial class Gs2ChatMessageEnabler : MonoBehaviour
     {
         public void Update()
         {
-            if (!_messageFetcher.Fetched)
+            if (!_fetcher.Fetched)
             {
                 target.SetActive(loading);
             }
-            else 
+            else
             {
-                target.SetActive(loaded);
+                if (_fetcher.Message == null)
+                {
+                    target.SetActive(notFound);
+                }
+                else
+                {
+                    target.SetActive(loaded);
+                }
             }
         }
     }
@@ -44,33 +51,34 @@ namespace Gs2.Unity.UiKit.Gs2Chat
     /// <summary>
     /// Dependent components
     /// </summary>
-    
+
     public partial class Gs2ChatMessageEnabler
     {
-        private Gs2ChatMessageFetcher _messageFetcher;
+        private Gs2ChatMessageFetcher _fetcher;
 
         public void Awake()
         {
-            _messageFetcher = GetComponentInParent<Gs2ChatMessageFetcher>();
+            _fetcher = GetComponentInParent<Gs2ChatMessageFetcher>();
         }
     }
 
     /// <summary>
     /// Public properties
     /// </summary>
-    
+
     public partial class Gs2ChatMessageEnabler
     {
-        
+
     }
 
     /// <summary>
     /// Parameters for Inspector
     /// </summary>
-    
+
     public partial class Gs2ChatMessageEnabler
     {
         public bool loading;
+        public bool notFound;
         public bool loaded;
 
         public GameObject target;
@@ -81,6 +89,6 @@ namespace Gs2.Unity.UiKit.Gs2Chat
     /// </summary>
     public partial class Gs2ChatMessageEnabler
     {
-        
+
     }
 }

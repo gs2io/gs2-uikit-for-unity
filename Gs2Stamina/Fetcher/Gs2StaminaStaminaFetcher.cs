@@ -18,12 +18,15 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.Text;
 using System.Text;
 using Gs2.Core.Exception;
 using Gs2.Unity.Core.Exception;
 using Gs2.Unity.Gs2Stamina.Model;
 using Gs2.Unity.Gs2Stamina.ScriptableObject;
 using Gs2.Unity.Util;
+using Gs2.Unity.UiKit.Gs2Stamina.Context;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -33,7 +36,7 @@ namespace Gs2.Unity.UiKit.Gs2Stamina.Fetcher
     /// Main
     /// </summary>
 
-    [AddComponentMenu("GS2 UIKit/Stamina/Gs2StaminaStaminaFetcher")]
+	[AddComponentMenu("GS2 UIKit/Stamina/Stamina/Fetcher/Gs2StaminaStaminaFetcher")]
     public partial class Gs2StaminaStaminaFetcher : MonoBehaviour
     {
         private IEnumerator Fetch()
@@ -41,17 +44,19 @@ namespace Gs2.Unity.UiKit.Gs2Stamina.Fetcher
             Gs2Exception e;
             while (true)
             {
-                if (_gameSessionHolder != null && _gameSessionHolder.Initialized && 
+                if (_gameSessionHolder != null && _gameSessionHolder.Initialized &&
                     _clientHolder != null && _clientHolder.Initialized &&
-                    stamina != null)
+                    _context != null)
                 {
-                    var future = _clientHolder.Gs2.Stamina.Namespace(
-                        stamina.Namespace.namespaceName
+                    
+                    var domain = this._clientHolder.Gs2.Stamina.Namespace(
+                        this._context.Stamina.NamespaceName
                     ).Me(
-                        _gameSessionHolder.GameSession
+                        this._gameSessionHolder.GameSession
                     ).Stamina(
-                        stamina.staminaName
-                    ).Model();
+                        this._context.Stamina.StaminaName
+                    );
+                    var future = domain.Model();
                     yield return future;
                     if (future.Error != null)
                     {
@@ -70,24 +75,24 @@ namespace Gs2.Unity.UiKit.Gs2Stamina.Fetcher
                     }
                 }
 
-                yield return new WaitForEndOfFrame();
+                yield return new WaitForSeconds(1);
             }
 
             var transform1 = transform;
             var builder = new StringBuilder(transform1.name);
             var current = transform1.parent;
- 
+
             while (current != null)
             {
                 builder.Insert(0, current.name + "/");
                 current = current.parent;
             }
-            
+
             Debug.LogError(e);
             Debug.LogError($"{GetType()} の自動更新が停止されました。 {builder}");
             Debug.LogError($"Automatic update of {GetType()} has been stopped. {builder}");
         }
-        
+
         public void OnEnable()
         {
             StartCoroutine(nameof(Fetch));
@@ -102,36 +107,38 @@ namespace Gs2.Unity.UiKit.Gs2Stamina.Fetcher
     /// <summary>
     /// Dependent components
     /// </summary>
-    
+
     public partial class Gs2StaminaStaminaFetcher
     {
         private Gs2ClientHolder _clientHolder;
         private Gs2GameSessionHolder _gameSessionHolder;
+        private Gs2StaminaStaminaContext _context;
 
         public void Awake()
         {
             _clientHolder = Gs2ClientHolder.Instance;
             _gameSessionHolder = Gs2GameSessionHolder.Instance;
+            _context = GetComponentInParent<Gs2StaminaStaminaContext>();
         }
     }
 
     /// <summary>
     /// Public properties
     /// </summary>
-    
+
     public partial class Gs2StaminaStaminaFetcher
     {
-        public EzStamina Stamina { get; private set; }
+        public Gs2.Unity.Gs2Stamina.Model.EzStamina Stamina { get; private set; }
         public bool Fetched { get; private set; }
     }
 
     /// <summary>
     /// Parameters for Inspector
     /// </summary>
-    
+
     public partial class Gs2StaminaStaminaFetcher
     {
-        public Stamina stamina;
+
     }
 
     /// <summary>
@@ -141,7 +148,7 @@ namespace Gs2.Unity.UiKit.Gs2Stamina.Fetcher
     {
         [SerializeField]
         internal ErrorEvent onError = new ErrorEvent();
-        
+
         public event UnityAction<Gs2Exception, Func<IEnumerator>> OnError
         {
             add => onError.AddListener(value);

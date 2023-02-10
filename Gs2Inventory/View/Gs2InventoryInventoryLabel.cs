@@ -17,6 +17,8 @@
 // ReSharper disable CheckNamespace
 
 using System;
+using Gs2.Core.Util;
+using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Inventory.Fetcher;
 using UnityEngine;
 using UnityEngine.Events;
@@ -27,18 +29,24 @@ namespace Gs2.Unity.UiKit.Gs2Inventory
     /// Main
     /// </summary>
 
-    [AddComponentMenu("GS2 UIKit/Inventory/Gs2InventoryInventoryLabel")]
+	[AddComponentMenu("GS2 UIKit/Inventory/Inventory/View/Gs2InventoryInventoryLabel")]
     public partial class Gs2InventoryInventoryLabel : MonoBehaviour
     {
         public void Update()
         {
-            if (_inventoryFetcher.Fetched)
+            if (_fetcher.Fetched)
             {
-                onUpdate.Invoke(format.Replace(
-                    "{current}", _inventoryFetcher.Inventory.CurrentInventoryCapacityUsage.ToString()
-                ).Replace(
-                    "{max}", _inventoryFetcher.Inventory.CurrentInventoryMaxCapacity.ToString()
-                ));
+                onUpdate.Invoke(
+                    format.Replace(
+                        "{inventoryId}", _fetcher.Inventory.InventoryId.ToString()
+                    ).Replace(
+                        "{inventoryName}", _fetcher.Inventory.InventoryName.ToString()
+                    ).Replace(
+                        "{currentInventoryCapacityUsage}", _fetcher.Inventory.CurrentInventoryCapacityUsage.ToString()
+                    ).Replace(
+                        "{currentInventoryMaxCapacity}", _fetcher.Inventory.CurrentInventoryMaxCapacity.ToString()
+                    )
+                );
             }
         }
     }
@@ -46,30 +54,31 @@ namespace Gs2.Unity.UiKit.Gs2Inventory
     /// <summary>
     /// Dependent components
     /// </summary>
-    
+
     public partial class Gs2InventoryInventoryLabel
     {
-        private Gs2InventoryInventoryFetcher _inventoryFetcher;
+        private Gs2InventoryInventoryFetcher _fetcher;
 
         public void Awake()
         {
-            _inventoryFetcher = GetComponentInParent<Gs2InventoryInventoryFetcher>();
+            _fetcher = GetComponentInParent<Gs2InventoryInventoryFetcher>();
+            Update();
         }
     }
 
     /// <summary>
     /// Public properties
     /// </summary>
-    
+
     public partial class Gs2InventoryInventoryLabel
     {
-        
+
     }
 
     /// <summary>
     /// Parameters for Inspector
     /// </summary>
-    
+
     public partial class Gs2InventoryInventoryLabel
     {
         public string format;
@@ -83,12 +92,12 @@ namespace Gs2.Unity.UiKit.Gs2Inventory
         [Serializable]
         private class UpdateEvent : UnityEvent<string>
         {
-            
+
         }
-        
+
         [SerializeField]
         private UpdateEvent onUpdate = new UpdateEvent();
-        
+
         public event UnityAction<string> OnUpdate
         {
             add => onUpdate.AddListener(value);

@@ -25,18 +25,25 @@ namespace Gs2.Unity.UiKit.Gs2Formation
     /// Main
     /// </summary>
 
-    [AddComponentMenu("GS2 UIKit/Formation/Gs2FormationMoldEnabler")]
+	[AddComponentMenu("GS2 UIKit/Formation/Mold/Gs2FormationMoldEnabler")]
     public partial class Gs2FormationMoldEnabler : MonoBehaviour
     {
         public void Update()
         {
-            if (!_moldFetcher.Fetched)
+            if (!_fetcher.Fetched)
             {
                 target.SetActive(loading);
             }
-            else 
+            else
             {
-                target.SetActive(loaded);
+                if (_fetcher.Mold == null)
+                {
+                    target.SetActive(notFound);
+                }
+                else
+                {
+                    target.SetActive(loaded);
+                }
             }
         }
     }
@@ -44,33 +51,34 @@ namespace Gs2.Unity.UiKit.Gs2Formation
     /// <summary>
     /// Dependent components
     /// </summary>
-    
+
     public partial class Gs2FormationMoldEnabler
     {
-        private Gs2FormationMoldFetcher _moldFetcher;
+        private Gs2FormationMoldFetcher _fetcher;
 
         public void Awake()
         {
-            _moldFetcher = GetComponentInParent<Gs2FormationMoldFetcher>();
+            _fetcher = GetComponentInParent<Gs2FormationMoldFetcher>();
         }
     }
 
     /// <summary>
     /// Public properties
     /// </summary>
-    
+
     public partial class Gs2FormationMoldEnabler
     {
-        
+
     }
 
     /// <summary>
     /// Parameters for Inspector
     /// </summary>
-    
+
     public partial class Gs2FormationMoldEnabler
     {
         public bool loading;
+        public bool notFound;
         public bool loaded;
 
         public GameObject target;
@@ -81,6 +89,6 @@ namespace Gs2.Unity.UiKit.Gs2Formation
     /// </summary>
     public partial class Gs2FormationMoldEnabler
     {
-        
+
     }
 }

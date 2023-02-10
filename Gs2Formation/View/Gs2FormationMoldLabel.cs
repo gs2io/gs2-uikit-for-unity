@@ -17,6 +17,8 @@
 // ReSharper disable CheckNamespace
 
 using System;
+using Gs2.Core.Util;
+using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Formation.Fetcher;
 using UnityEngine;
 using UnityEngine.Events;
@@ -27,20 +29,22 @@ namespace Gs2.Unity.UiKit.Gs2Formation
     /// Main
     /// </summary>
 
-    [AddComponentMenu("GS2 UIKit/Formation/Gs2FormationMoldLabel")]
+	[AddComponentMenu("GS2 UIKit/Formation/Mold/View/Gs2FormationMoldLabel")]
     public partial class Gs2FormationMoldLabel : MonoBehaviour
     {
         public void Update()
         {
-            if (_moldFetcher.Fetched)
+            if (_fetcher.Fetched)
             {
-                onUpdate.Invoke(format.Replace(
-                    "{metadata}", _moldFetcher.Model.Metadata
-                ).Replace(
-                    "{maxCapacity}", _moldFetcher.Model.MaxCapacity.ToString()
-                ).Replace(
-                    "{currentCapacity}", _moldFetcher.Mold?.Capacity.ToString() ?? _moldFetcher.Model.InitialMaxCapacity.ToString()
-                ));
+                onUpdate.Invoke(
+                    format.Replace(
+                        "{name}", _fetcher.Mold.Name.ToString()
+                    ).Replace(
+                        "{userId}", _fetcher.Mold.UserId.ToString()
+                    ).Replace(
+                        "{capacity}", _fetcher.Mold.Capacity.ToString()
+                    )
+                );
             }
         }
     }
@@ -48,14 +52,14 @@ namespace Gs2.Unity.UiKit.Gs2Formation
     /// <summary>
     /// Dependent components
     /// </summary>
-    
+
     public partial class Gs2FormationMoldLabel
     {
-        private Gs2FormationMoldFetcher _moldFetcher;
+        private Gs2FormationMoldFetcher _fetcher;
 
         public void Awake()
         {
-            _moldFetcher = GetComponentInParent<Gs2FormationMoldFetcher>() ?? GetComponent<Gs2FormationMoldFetcher>();
+            _fetcher = GetComponentInParent<Gs2FormationMoldFetcher>();
             Update();
         }
     }
@@ -63,16 +67,16 @@ namespace Gs2.Unity.UiKit.Gs2Formation
     /// <summary>
     /// Public properties
     /// </summary>
-    
+
     public partial class Gs2FormationMoldLabel
     {
-        
+
     }
 
     /// <summary>
     /// Parameters for Inspector
     /// </summary>
-    
+
     public partial class Gs2FormationMoldLabel
     {
         public string format;
@@ -86,12 +90,12 @@ namespace Gs2.Unity.UiKit.Gs2Formation
         [Serializable]
         private class UpdateEvent : UnityEvent<string>
         {
-            
+
         }
-        
+
         [SerializeField]
         private UpdateEvent onUpdate = new UpdateEvent();
-        
+
         public event UnityAction<string> OnUpdate
         {
             add => onUpdate.AddListener(value);
