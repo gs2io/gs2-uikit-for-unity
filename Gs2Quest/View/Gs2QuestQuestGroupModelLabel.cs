@@ -36,15 +36,15 @@ namespace Gs2.Unity.UiKit.Gs2Quest
         {
             if (_fetcher.Fetched)
             {
-                onUpdate.Invoke(
+                onUpdate?.Invoke(
                     format.Replace(
-                        "{name}", _fetcher.QuestGroupModel.Name.ToString()
+                        "{name}", $"{_fetcher?.QuestGroupModel?.Name}"
                     ).Replace(
-                        "{metadata}", _fetcher.QuestGroupModel.Metadata.ToString()
+                        "{metadata}", $"{_fetcher?.QuestGroupModel?.Metadata}"
                     ).Replace(
-                        "{quests}", _fetcher.QuestGroupModel.Quests.ToString()
+                        "{quests}", $"{_fetcher?.QuestGroupModel?.Quests}"
                     ).Replace(
-                        "{challengePeriodEventId}", _fetcher.QuestGroupModel.ChallengePeriodEventId.ToString()
+                        "{challengePeriodEventId}", $"{_fetcher?.QuestGroupModel?.ChallengePeriodEventId}"
                     )
                 );
             }

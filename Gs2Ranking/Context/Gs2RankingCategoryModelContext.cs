@@ -28,7 +28,11 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Context
 	[AddComponentMenu("GS2 UIKit/Ranking/CategoryModel/Gs2RankingCategoryModelContext")]
     public partial class Gs2RankingCategoryModelContext : MonoBehaviour
     {
-
+        public void Start() {
+            if (CategoryModel == null) {
+                Debug.LogError("CategoryModel is not set in Gs2RankingCategoryModelContext.");
+            }
+        }
     }
 
     /// <summary>

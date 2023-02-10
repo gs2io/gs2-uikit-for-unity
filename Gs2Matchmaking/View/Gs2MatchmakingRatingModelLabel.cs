@@ -36,13 +36,13 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking
         {
             if (_fetcher.Fetched)
             {
-                onUpdate.Invoke(
+                onUpdate?.Invoke(
                     format.Replace(
-                        "{name}", _fetcher.RatingModel.Name.ToString()
+                        "{name}", $"{_fetcher?.RatingModel?.Name}"
                     ).Replace(
-                        "{metadata}", _fetcher.RatingModel.Metadata.ToString()
+                        "{metadata}", $"{_fetcher?.RatingModel?.Metadata}"
                     ).Replace(
-                        "{volatility}", _fetcher.RatingModel.Volatility.ToString()
+                        "{volatility}", $"{_fetcher?.RatingModel?.Volatility}"
                     )
                 );
             }

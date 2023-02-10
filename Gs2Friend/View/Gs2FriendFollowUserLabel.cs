@@ -36,13 +36,13 @@ namespace Gs2.Unity.UiKit.Gs2Friend
         {
             if (_fetcher.Fetched)
             {
-                onUpdate.Invoke(
+                onUpdate?.Invoke(
                     format.Replace(
-                        "{userId}", _fetcher.FollowUser.UserId.ToString()
+                        "{userId}", $"{_fetcher?.FollowUser?.UserId}"
                     ).Replace(
-                        "{publicProfile}", _fetcher.FollowUser.PublicProfile.ToString()
+                        "{publicProfile}", $"{_fetcher?.FollowUser?.PublicProfile}"
                     ).Replace(
-                        "{followerProfile}", _fetcher.FollowUser.FollowerProfile.ToString()
+                        "{followerProfile}", $"{_fetcher?.FollowUser?.FollowerProfile}"
                     )
                 );
             }

@@ -36,11 +36,11 @@ namespace Gs2.Unity.UiKit.Gs2Quest
         {
             if (_fetcher.Fetched)
             {
-                onUpdate.Invoke(
+                onUpdate?.Invoke(
                     format.Replace(
-                        "{questGroupName}", _fetcher.CompletedQuestList.QuestGroupName.ToString()
+                        "{questGroupName}", $"{_fetcher?.CompletedQuestList?.QuestGroupName}"
                     ).Replace(
-                        "{completeQuestNames}", _fetcher.CompletedQuestList.CompleteQuestNames.ToString()
+                        "{completeQuestNames}", $"{_fetcher?.CompletedQuestList?.CompleteQuestNames}"
                     )
                 );
             }

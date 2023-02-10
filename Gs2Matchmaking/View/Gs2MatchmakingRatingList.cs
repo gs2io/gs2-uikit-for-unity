@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
@@ -37,6 +39,7 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking
             if (_fetcher.Fetched) {
                 for (var i = 0; i < this.maximumItems; i++) {
                     if (i < this._fetcher.Ratings.Count) {
+                        _children[i].RatingModel.ratingName = this._fetcher.Ratings[i].Name;
                         _children[i].Rating.ratingName = this._fetcher.Ratings[i].Name;
                         _children[i].gameObject.SetActive(true);
                     }
@@ -65,6 +68,10 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking
             _children = new List<Gs2MatchmakingRatingContext>();
             for (var i = 0; i < this.maximumItems; i++) {
                 var node = Instantiate(this.prefab, transform);
+                node.RatingModel = RatingModel.New(
+                    _context.Namespace,
+                    ""
+                );
                 node.Rating = Rating.New(
                     _context.Namespace,
                     ""

@@ -28,7 +28,11 @@ namespace Gs2.Unity.UiKit.Gs2Dictionary.Context
 	[AddComponentMenu("GS2 UIKit/Dictionary/User/Gs2DictionaryUserContext")]
     public partial class Gs2DictionaryUserContext : MonoBehaviour
     {
-
+        public void Start() {
+            if (User == null) {
+                Debug.LogError("User is not set in Gs2DictionaryUserContext.");
+            }
+        }
     }
 
     /// <summary>

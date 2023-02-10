@@ -36,20 +36,20 @@ namespace Gs2.Unity.UiKit.Gs2Inbox
         {
             if (_fetcher.Fetched)
             {
-                var receivedAt = UnixTime.FromUnixTime(_fetcher.Message.ReceivedAt).ToLocalTime();
-                var readAt = UnixTime.FromUnixTime(_fetcher.Message.ReadAt).ToLocalTime();
-                var expiresAt = UnixTime.FromUnixTime(_fetcher.Message.ExpiresAt).ToLocalTime();
-                onUpdate.Invoke(
+                var receivedAt = _fetcher.Message.ReceivedAt == null ? DateTime.Now : UnixTime.FromUnixTime(_fetcher.Message.ReceivedAt).ToLocalTime();
+                var readAt = _fetcher.Message.ReadAt == null ? DateTime.Now : UnixTime.FromUnixTime(_fetcher.Message.ReadAt).ToLocalTime();
+                var expiresAt = _fetcher.Message.ExpiresAt == null ? DateTime.Now : UnixTime.FromUnixTime(_fetcher.Message.ExpiresAt).ToLocalTime();
+                onUpdate?.Invoke(
                     format.Replace(
-                        "{messageId}", _fetcher.Message.MessageId.ToString()
+                        "{messageId}", $"{_fetcher?.Message?.MessageId}"
                     ).Replace(
-                        "{name}", _fetcher.Message.Name.ToString()
+                        "{name}", $"{_fetcher?.Message?.Name}"
                     ).Replace(
-                        "{metadata}", _fetcher.Message.Metadata.ToString()
+                        "{metadata}", $"{_fetcher?.Message?.Metadata}"
                     ).Replace(
-                        "{isRead}", _fetcher.Message.IsRead.ToString()
+                        "{isRead}", $"{_fetcher?.Message?.IsRead}"
                     ).Replace(
-                        "{readAcquireActions}", _fetcher.Message.ReadAcquireActions.ToString()
+                        "{readAcquireActions}", $"{_fetcher?.Message?.ReadAcquireActions}"
                     ).Replace(
                         "{receivedAt:yyyy}", receivedAt.ToString("yyyy")
                     ).Replace(

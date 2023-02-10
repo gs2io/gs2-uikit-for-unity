@@ -36,13 +36,13 @@ namespace Gs2.Unity.UiKit.Gs2Gateway
         {
             if (_fetcher.Fetched)
             {
-                onUpdate.Invoke(
+                onUpdate?.Invoke(
                     format.Replace(
-                        "{connectionId}", _fetcher.WebSocketSession.ConnectionId.ToString()
+                        "{connectionId}", $"{_fetcher?.WebSocketSession?.ConnectionId}"
                     ).Replace(
-                        "{namespaceName}", _fetcher.WebSocketSession.NamespaceName.ToString()
+                        "{namespaceName}", $"{_fetcher?.WebSocketSession?.NamespaceName}"
                     ).Replace(
-                        "{userId}", _fetcher.WebSocketSession.UserId.ToString()
+                        "{userId}", $"{_fetcher?.WebSocketSession?.UserId}"
                     )
                 );
             }

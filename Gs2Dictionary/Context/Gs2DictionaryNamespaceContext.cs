@@ -28,7 +28,11 @@ namespace Gs2.Unity.UiKit.Gs2Dictionary.Context
 	[AddComponentMenu("GS2 UIKit/Dictionary/Namespace/Gs2DictionaryNamespaceContext")]
     public partial class Gs2DictionaryNamespaceContext : MonoBehaviour
     {
-
+        public void Start() {
+            if (Namespace == null) {
+                Debug.LogError("Namespace is not set in Gs2DictionaryNamespaceContext.");
+            }
+        }
     }
 
     /// <summary>

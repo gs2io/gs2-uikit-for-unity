@@ -28,7 +28,11 @@ namespace Gs2.Unity.UiKit.Gs2Stamina.Context
 	[AddComponentMenu("GS2 UIKit/Stamina/RecoverValueTable/Gs2StaminaRecoverValueTableContext")]
     public partial class Gs2StaminaRecoverValueTableContext : MonoBehaviour
     {
-
+        public void Start() {
+            if (RecoverValueTable == null) {
+                Debug.LogError("RecoverValueTable is not set in Gs2StaminaRecoverValueTableContext.");
+            }
+        }
     }
 
     /// <summary>

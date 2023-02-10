@@ -28,7 +28,11 @@ namespace Gs2.Unity.UiKit.Gs2SerialKey.Context
 	[AddComponentMenu("GS2 UIKit/SerialKey/User/Gs2SerialKeyUserContext")]
     public partial class Gs2SerialKeyUserContext : MonoBehaviour
     {
-
+        public void Start() {
+            if (User == null) {
+                Debug.LogError("User is not set in Gs2SerialKeyUserContext.");
+            }
+        }
     }
 
     /// <summary>

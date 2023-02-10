@@ -28,7 +28,11 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Context
 	[AddComponentMenu("GS2 UIKit/Friend/SendBox/Gs2FriendSendBoxContext")]
     public partial class Gs2FriendSendBoxContext : MonoBehaviour
     {
-
+        public void Start() {
+            if (SendBox == null) {
+                Debug.LogError("SendBox is not set in Gs2FriendSendBoxContext.");
+            }
+        }
     }
 
     /// <summary>

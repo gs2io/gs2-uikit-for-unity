@@ -36,13 +36,13 @@ namespace Gs2.Unity.UiKit.Gs2Formation
         {
             if (_fetcher.Fetched)
             {
-                onUpdate.Invoke(
+                onUpdate?.Invoke(
                     format.Replace(
-                        "{name}", _fetcher.Form.Name.ToString()
+                        "{name}", $"{_fetcher?.Form?.Name}"
                     ).Replace(
-                        "{index}", _fetcher.Form.Index.ToString()
+                        "{index}", $"{_fetcher?.Form?.Index}"
                     ).Replace(
-                        "{slots}", _fetcher.Form.Slots.ToString()
+                        "{slots}", $"{_fetcher?.Form?.Slots}"
                     )
                 );
             }

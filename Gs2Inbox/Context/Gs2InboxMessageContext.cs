@@ -28,7 +28,11 @@ namespace Gs2.Unity.UiKit.Gs2Inbox.Context
 	[AddComponentMenu("GS2 UIKit/Inbox/Message/Gs2InboxMessageContext")]
     public partial class Gs2InboxMessageContext : MonoBehaviour
     {
-
+        public void Start() {
+            if (Message == null) {
+                Debug.LogError("Message is not set in Gs2InboxMessageContext.");
+            }
+        }
     }
 
     /// <summary>

@@ -36,11 +36,11 @@ namespace Gs2.Unity.UiKit.Gs2Mission
         {
             if (_fetcher.Fetched)
             {
-                onUpdate.Invoke(
+                onUpdate?.Invoke(
                     format.Replace(
-                        "{name}", _fetcher.Counter.Name.ToString()
+                        "{name}", $"{_fetcher?.Counter?.Name}"
                     ).Replace(
-                        "{values}", _fetcher.Counter.Values.ToString()
+                        "{values}", $"{_fetcher?.Counter?.Values}"
                     )
                 );
             }

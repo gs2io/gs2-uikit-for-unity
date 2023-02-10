@@ -28,7 +28,11 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Context
 	[AddComponentMenu("GS2 UIKit/Friend/Inbox/Gs2FriendInboxContext")]
     public partial class Gs2FriendInboxContext : MonoBehaviour
     {
-
+        public void Start() {
+            if (Inbox == null) {
+                Debug.LogError("Inbox is not set in Gs2FriendInboxContext.");
+            }
+        }
     }
 
     /// <summary>

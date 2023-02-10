@@ -28,7 +28,11 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking.Context
 	[AddComponentMenu("GS2 UIKit/Matchmaking/Namespace/Gs2MatchmakingNamespaceContext")]
     public partial class Gs2MatchmakingNamespaceContext : MonoBehaviour
     {
-
+        public void Start() {
+            if (Namespace == null) {
+                Debug.LogError("Namespace is not set in Gs2MatchmakingNamespaceContext.");
+            }
+        }
     }
 
     /// <summary>

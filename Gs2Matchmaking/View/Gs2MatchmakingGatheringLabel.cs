@@ -36,22 +36,22 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking
         {
             if (_fetcher.Fetched)
             {
-                var expiresAt = UnixTime.FromUnixTime(_fetcher.Gathering.ExpiresAt).ToLocalTime();
-                var createdAt = UnixTime.FromUnixTime(_fetcher.Gathering.CreatedAt).ToLocalTime();
-                var updatedAt = UnixTime.FromUnixTime(_fetcher.Gathering.UpdatedAt).ToLocalTime();
-                onUpdate.Invoke(
+                var expiresAt = _fetcher.Gathering.ExpiresAt == null ? DateTime.Now : UnixTime.FromUnixTime(_fetcher.Gathering.ExpiresAt).ToLocalTime();
+                var createdAt = _fetcher.Gathering.CreatedAt == null ? DateTime.Now : UnixTime.FromUnixTime(_fetcher.Gathering.CreatedAt).ToLocalTime();
+                var updatedAt = _fetcher.Gathering.UpdatedAt == null ? DateTime.Now : UnixTime.FromUnixTime(_fetcher.Gathering.UpdatedAt).ToLocalTime();
+                onUpdate?.Invoke(
                     format.Replace(
-                        "{gatheringId}", _fetcher.Gathering.GatheringId.ToString()
+                        "{gatheringId}", $"{_fetcher?.Gathering?.GatheringId}"
                     ).Replace(
-                        "{name}", _fetcher.Gathering.Name.ToString()
+                        "{name}", $"{_fetcher?.Gathering?.Name}"
                     ).Replace(
-                        "{attributeRanges}", _fetcher.Gathering.AttributeRanges.ToString()
+                        "{attributeRanges}", $"{_fetcher?.Gathering?.AttributeRanges}"
                     ).Replace(
-                        "{capacityOfRoles}", _fetcher.Gathering.CapacityOfRoles.ToString()
+                        "{capacityOfRoles}", $"{_fetcher?.Gathering?.CapacityOfRoles}"
                     ).Replace(
-                        "{allowUserIds}", _fetcher.Gathering.AllowUserIds.ToString()
+                        "{allowUserIds}", $"{_fetcher?.Gathering?.AllowUserIds}"
                     ).Replace(
-                        "{metadata}", _fetcher.Gathering.Metadata.ToString()
+                        "{metadata}", $"{_fetcher?.Gathering?.Metadata}"
                     ).Replace(
                         "{expiresAt:yyyy}", expiresAt.ToString("yyyy")
                     ).Replace(

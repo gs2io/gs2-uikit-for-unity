@@ -36,15 +36,15 @@ namespace Gs2.Unity.UiKit.Gs2Lottery
         {
             if (_fetcher.Fetched)
             {
-                onUpdate.Invoke(
+                onUpdate?.Invoke(
                     format.Replace(
-                        "{name}", _fetcher.LotteryModel.Name.ToString()
+                        "{name}", $"{_fetcher?.LotteryModel?.Name}"
                     ).Replace(
-                        "{metadata}", _fetcher.LotteryModel.Metadata.ToString()
+                        "{metadata}", $"{_fetcher?.LotteryModel?.Metadata}"
                     ).Replace(
-                        "{mode}", _fetcher.LotteryModel.Mode.ToString()
+                        "{mode}", $"{_fetcher?.LotteryModel?.Mode}"
                     ).Replace(
-                        "{prizeTableName}", _fetcher.LotteryModel.PrizeTableName.ToString()
+                        "{prizeTableName}", $"{_fetcher?.LotteryModel?.PrizeTableName}"
                     )
                 );
             }

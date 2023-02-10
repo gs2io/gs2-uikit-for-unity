@@ -28,7 +28,11 @@ namespace Gs2.Unity.UiKit.Gs2Gateway.Context
 	[AddComponentMenu("GS2 UIKit/Gateway/Namespace/Gs2GatewayNamespaceContext")]
     public partial class Gs2GatewayNamespaceContext : MonoBehaviour
     {
-
+        public void Start() {
+            if (Namespace == null) {
+                Debug.LogError("Namespace is not set in Gs2GatewayNamespaceContext.");
+            }
+        }
     }
 
     /// <summary>

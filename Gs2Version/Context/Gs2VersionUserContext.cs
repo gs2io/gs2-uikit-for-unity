@@ -28,7 +28,11 @@ namespace Gs2.Unity.UiKit.Gs2Version.Context
 	[AddComponentMenu("GS2 UIKit/Version/User/Gs2VersionUserContext")]
     public partial class Gs2VersionUserContext : MonoBehaviour
     {
-
+        public void Start() {
+            if (User == null) {
+                Debug.LogError("User is not set in Gs2VersionUserContext.");
+            }
+        }
     }
 
     /// <summary>

@@ -28,7 +28,11 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking.Context
 	[AddComponentMenu("GS2 UIKit/Matchmaking/Vote/Gs2MatchmakingVoteContext")]
     public partial class Gs2MatchmakingVoteContext : MonoBehaviour
     {
-
+        public void Start() {
+            if (Vote == null) {
+                Debug.LogError("Vote is not set in Gs2MatchmakingVoteContext.");
+            }
+        }
     }
 
     /// <summary>

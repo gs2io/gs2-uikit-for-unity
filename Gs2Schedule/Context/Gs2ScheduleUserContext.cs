@@ -28,7 +28,11 @@ namespace Gs2.Unity.UiKit.Gs2Schedule.Context
 	[AddComponentMenu("GS2 UIKit/Schedule/User/Gs2ScheduleUserContext")]
     public partial class Gs2ScheduleUserContext : MonoBehaviour
     {
-
+        public void Start() {
+            if (User == null) {
+                Debug.LogError("User is not set in Gs2ScheduleUserContext.");
+            }
+        }
     }
 
     /// <summary>

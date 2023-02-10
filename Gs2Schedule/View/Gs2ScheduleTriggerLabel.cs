@@ -36,13 +36,13 @@ namespace Gs2.Unity.UiKit.Gs2Schedule
         {
             if (_fetcher.Fetched)
             {
-                var createdAt = UnixTime.FromUnixTime(_fetcher.Trigger.CreatedAt).ToLocalTime();
-                var expiresAt = UnixTime.FromUnixTime(_fetcher.Trigger.ExpiresAt).ToLocalTime();
-                onUpdate.Invoke(
+                var createdAt = _fetcher.Trigger.CreatedAt == null ? DateTime.Now : UnixTime.FromUnixTime(_fetcher.Trigger.CreatedAt).ToLocalTime();
+                var expiresAt = _fetcher.Trigger.ExpiresAt == null ? DateTime.Now : UnixTime.FromUnixTime(_fetcher.Trigger.ExpiresAt).ToLocalTime();
+                onUpdate?.Invoke(
                     format.Replace(
-                        "{triggerId}", _fetcher.Trigger.TriggerId.ToString()
+                        "{triggerId}", $"{_fetcher?.Trigger?.TriggerId}"
                     ).Replace(
-                        "{name}", _fetcher.Trigger.Name.ToString()
+                        "{name}", $"{_fetcher?.Trigger?.Name}"
                     ).Replace(
                         "{createdAt:yyyy}", createdAt.ToString("yyyy")
                     ).Replace(

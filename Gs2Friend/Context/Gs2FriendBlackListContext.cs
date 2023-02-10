@@ -28,7 +28,11 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Context
 	[AddComponentMenu("GS2 UIKit/Friend/BlackList/Gs2FriendBlackListContext")]
     public partial class Gs2FriendBlackListContext : MonoBehaviour
     {
-
+        public void Start() {
+            if (BlackList == null) {
+                Debug.LogError("BlackList is not set in Gs2FriendBlackListContext.");
+            }
+        }
     }
 
     /// <summary>

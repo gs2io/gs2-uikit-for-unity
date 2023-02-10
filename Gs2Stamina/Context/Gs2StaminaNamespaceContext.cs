@@ -28,7 +28,11 @@ namespace Gs2.Unity.UiKit.Gs2Stamina.Context
 	[AddComponentMenu("GS2 UIKit/Stamina/Namespace/Gs2StaminaNamespaceContext")]
     public partial class Gs2StaminaNamespaceContext : MonoBehaviour
     {
-
+        public void Start() {
+            if (Namespace == null) {
+                Debug.LogError("Namespace is not set in Gs2StaminaNamespaceContext.");
+            }
+        }
     }
 
     /// <summary>

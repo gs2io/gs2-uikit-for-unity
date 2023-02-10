@@ -28,7 +28,11 @@ namespace Gs2.Unity.UiKit.Gs2JobQueue.Context
 	[AddComponentMenu("GS2 UIKit/JobQueue/User/Gs2JobQueueUserContext")]
     public partial class Gs2JobQueueUserContext : MonoBehaviour
     {
-
+        public void Start() {
+            if (User == null) {
+                Debug.LogError("User is not set in Gs2JobQueueUserContext.");
+            }
+        }
     }
 
     /// <summary>

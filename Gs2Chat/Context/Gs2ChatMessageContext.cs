@@ -28,7 +28,11 @@ namespace Gs2.Unity.UiKit.Gs2Chat.Context
 	[AddComponentMenu("GS2 UIKit/Chat/Message/Gs2ChatMessageContext")]
     public partial class Gs2ChatMessageContext : MonoBehaviour
     {
-
+        public void Start() {
+            if (Message == null) {
+                Debug.LogError("Message is not set in Gs2ChatMessageContext.");
+            }
+        }
     }
 
     /// <summary>

@@ -28,7 +28,11 @@ namespace Gs2.Unity.UiKit.Gs2Gateway.Context
 	[AddComponentMenu("GS2 UIKit/Gateway/WebSocketSession/Gs2GatewayWebSocketSessionContext")]
     public partial class Gs2GatewayWebSocketSessionContext : MonoBehaviour
     {
-
+        public void Start() {
+            if (WebSocketSession == null) {
+                Debug.LogError("WebSocketSession is not set in Gs2GatewayWebSocketSessionContext.");
+            }
+        }
     }
 
     /// <summary>

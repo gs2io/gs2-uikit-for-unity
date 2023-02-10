@@ -28,7 +28,11 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Context
 	[AddComponentMenu("GS2 UIKit/Ranking/User/Gs2RankingUserContext")]
     public partial class Gs2RankingUserContext : MonoBehaviour
     {
-
+        public void Start() {
+            if (User == null) {
+                Debug.LogError("User is not set in Gs2RankingUserContext.");
+            }
+        }
     }
 
     /// <summary>

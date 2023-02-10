@@ -28,7 +28,11 @@ namespace Gs2.Unity.UiKit.Gs2MegaField.Context
 	[AddComponentMenu("GS2 UIKit/MegaField/Spatial/Gs2MegaFieldSpatialContext")]
     public partial class Gs2MegaFieldSpatialContext : MonoBehaviour
     {
-
+        public void Start() {
+            if (Spatial == null) {
+                Debug.LogError("Spatial is not set in Gs2MegaFieldSpatialContext.");
+            }
+        }
     }
 
     /// <summary>

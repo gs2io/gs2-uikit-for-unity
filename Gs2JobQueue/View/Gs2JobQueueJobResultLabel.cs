@@ -36,11 +36,11 @@ namespace Gs2.Unity.UiKit.Gs2JobQueue
         {
             if (_fetcher.Fetched)
             {
-                onUpdate.Invoke(
+                onUpdate?.Invoke(
                     format.Replace(
-                        "{statusCode}", _fetcher.JobResult.StatusCode.ToString()
+                        "{statusCode}", $"{_fetcher?.JobResult?.StatusCode}"
                     ).Replace(
-                        "{result}", _fetcher.JobResult.Result.ToString()
+                        "{result}", $"{_fetcher?.JobResult?.Result}"
                     )
                 );
             }

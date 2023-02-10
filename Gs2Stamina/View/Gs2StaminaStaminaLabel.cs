@@ -36,20 +36,20 @@ namespace Gs2.Unity.UiKit.Gs2Stamina
         {
             if (_fetcher.Fetched)
             {
-                var nextRecoverAt = UnixTime.FromUnixTime(_fetcher.Stamina.NextRecoverAt).ToLocalTime();
-                onUpdate.Invoke(
+                var nextRecoverAt = _fetcher.Stamina.NextRecoverAt == null ? DateTime.Now : UnixTime.FromUnixTime(_fetcher.Stamina.NextRecoverAt).ToLocalTime();
+                onUpdate?.Invoke(
                     format.Replace(
-                        "{staminaName}", _fetcher.Stamina.StaminaName.ToString()
+                        "{staminaName}", $"{_fetcher?.Stamina?.StaminaName}"
                     ).Replace(
-                        "{value}", _fetcher.Stamina.Value.ToString()
+                        "{value}", $"{_fetcher?.Stamina?.Value}"
                     ).Replace(
-                        "{overflowValue}", _fetcher.Stamina.OverflowValue.ToString()
+                        "{overflowValue}", $"{_fetcher?.Stamina?.OverflowValue}"
                     ).Replace(
-                        "{maxValue}", _fetcher.Stamina.MaxValue.ToString()
+                        "{maxValue}", $"{_fetcher?.Stamina?.MaxValue}"
                     ).Replace(
-                        "{recoverIntervalMinutes}", _fetcher.Stamina.RecoverIntervalMinutes.ToString()
+                        "{recoverIntervalMinutes}", $"{_fetcher?.Stamina?.RecoverIntervalMinutes}"
                     ).Replace(
-                        "{recoverValue}", _fetcher.Stamina.RecoverValue.ToString()
+                        "{recoverValue}", $"{_fetcher?.Stamina?.RecoverValue}"
                     ).Replace(
                         "{nextRecoverAt:yyyy}", nextRecoverAt.ToString("yyyy")
                     ).Replace(

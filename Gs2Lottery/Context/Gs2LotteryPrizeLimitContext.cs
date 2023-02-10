@@ -28,7 +28,11 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.Context
 	[AddComponentMenu("GS2 UIKit/Lottery/PrizeLimit/Gs2LotteryPrizeLimitContext")]
     public partial class Gs2LotteryPrizeLimitContext : MonoBehaviour
     {
-
+        public void Start() {
+            if (PrizeLimit == null) {
+                Debug.LogError("PrizeLimit is not set in Gs2LotteryPrizeLimitContext.");
+            }
+        }
     }
 
     /// <summary>

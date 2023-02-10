@@ -28,7 +28,11 @@ namespace Gs2.Unity.UiKit.Gs2SerialKey.Context
 	[AddComponentMenu("GS2 UIKit/SerialKey/CampaignModel/Gs2SerialKeyCampaignModelContext")]
     public partial class Gs2SerialKeyCampaignModelContext : MonoBehaviour
     {
-
+        public void Start() {
+            if (CampaignModel == null) {
+                Debug.LogError("CampaignModel is not set in Gs2SerialKeyCampaignModelContext.");
+            }
+        }
     }
 
     /// <summary>

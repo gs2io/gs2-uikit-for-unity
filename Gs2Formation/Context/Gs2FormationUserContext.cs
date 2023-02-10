@@ -28,7 +28,11 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Context
 	[AddComponentMenu("GS2 UIKit/Formation/User/Gs2FormationUserContext")]
     public partial class Gs2FormationUserContext : MonoBehaviour
     {
-
+        public void Start() {
+            if (User == null) {
+                Debug.LogError("User is not set in Gs2FormationUserContext.");
+            }
+        }
     }
 
     /// <summary>

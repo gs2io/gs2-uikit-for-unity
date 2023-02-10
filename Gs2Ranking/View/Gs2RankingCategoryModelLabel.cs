@@ -36,15 +36,15 @@ namespace Gs2.Unity.UiKit.Gs2Ranking
         {
             if (_fetcher.Fetched)
             {
-                onUpdate.Invoke(
+                onUpdate?.Invoke(
                     format.Replace(
-                        "{name}", _fetcher.CategoryModel.Name.ToString()
+                        "{name}", $"{_fetcher?.CategoryModel?.Name}"
                     ).Replace(
-                        "{metadata}", _fetcher.CategoryModel.Metadata.ToString()
+                        "{metadata}", $"{_fetcher?.CategoryModel?.Metadata}"
                     ).Replace(
-                        "{entryPeriodEventId}", _fetcher.CategoryModel.EntryPeriodEventId.ToString()
+                        "{entryPeriodEventId}", $"{_fetcher?.CategoryModel?.EntryPeriodEventId}"
                     ).Replace(
-                        "{accessPeriodEventId}", _fetcher.CategoryModel.AccessPeriodEventId.ToString()
+                        "{accessPeriodEventId}", $"{_fetcher?.CategoryModel?.AccessPeriodEventId}"
                     )
                 );
             }

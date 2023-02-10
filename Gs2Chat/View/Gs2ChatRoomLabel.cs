@@ -36,11 +36,11 @@ namespace Gs2.Unity.UiKit.Gs2Chat
         {
             if (_fetcher.Fetched)
             {
-                onUpdate.Invoke(
+                onUpdate?.Invoke(
                     format.Replace(
-                        "{name}", _fetcher.Room.Name.ToString()
+                        "{name}", $"{_fetcher?.Room?.Name}"
                     ).Replace(
-                        "{metadata}", _fetcher.Room.Metadata.ToString()
+                        "{metadata}", $"{_fetcher?.Room?.Metadata}"
                     )
                 );
             }

@@ -28,7 +28,11 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Context
 	[AddComponentMenu("GS2 UIKit/Mission/MissionTaskModel/Gs2MissionMissionTaskModelContext")]
     public partial class Gs2MissionMissionTaskModelContext : MonoBehaviour
     {
-
+        public void Start() {
+            if (MissionTaskModel == null) {
+                Debug.LogError("MissionTaskModel is not set in Gs2MissionMissionTaskModelContext.");
+            }
+        }
     }
 
     /// <summary>

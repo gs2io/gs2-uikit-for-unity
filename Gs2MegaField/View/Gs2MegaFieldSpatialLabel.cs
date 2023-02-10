@@ -36,17 +36,17 @@ namespace Gs2.Unity.UiKit.Gs2MegaField
         {
             if (_fetcher.Fetched)
             {
-                onUpdate.Invoke(
+                onUpdate?.Invoke(
                     format.Replace(
-                        "{userId}", _fetcher.Spatial.UserId.ToString()
+                        "{userId}", $"{_fetcher?.Spatial?.UserId}"
                     ).Replace(
-                        "{areaModelName}", _fetcher.Spatial.AreaModelName.ToString()
+                        "{areaModelName}", $"{_fetcher?.Spatial?.AreaModelName}"
                     ).Replace(
-                        "{layerModelName}", _fetcher.Spatial.LayerModelName.ToString()
+                        "{layerModelName}", $"{_fetcher?.Spatial?.LayerModelName}"
                     ).Replace(
-                        "{position}", _fetcher.Spatial.Position.ToString()
+                        "{position}", $"{_fetcher?.Spatial?.Position}"
                     ).Replace(
-                        "{vector}", _fetcher.Spatial.Vector.ToString()
+                        "{vector}", $"{_fetcher?.Spatial?.Vector}"
                     )
                 );
             }

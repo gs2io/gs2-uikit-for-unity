@@ -36,13 +36,13 @@ namespace Gs2.Unity.UiKit.Gs2Version
         {
             if (_fetcher.Fetched)
             {
-                onUpdate.Invoke(
+                onUpdate?.Invoke(
                     format.Replace(
-                        "{versionName}", _fetcher.AcceptVersion.VersionName.ToString()
+                        "{versionName}", $"{_fetcher?.AcceptVersion?.VersionName}"
                     ).Replace(
-                        "{userId}", _fetcher.AcceptVersion.UserId.ToString()
+                        "{userId}", $"{_fetcher?.AcceptVersion?.UserId}"
                     ).Replace(
-                        "{version}", _fetcher.AcceptVersion.Version.ToString()
+                        "{version}", $"{_fetcher?.AcceptVersion?.Version}"
                     )
                 );
             }

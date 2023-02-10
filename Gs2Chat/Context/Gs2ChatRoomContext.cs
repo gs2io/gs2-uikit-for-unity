@@ -28,7 +28,11 @@ namespace Gs2.Unity.UiKit.Gs2Chat.Context
 	[AddComponentMenu("GS2 UIKit/Chat/Room/Gs2ChatRoomContext")]
     public partial class Gs2ChatRoomContext : MonoBehaviour
     {
-
+        public void Start() {
+            if (Room == null) {
+                Debug.LogError("Room is not set in Gs2ChatRoomContext.");
+            }
+        }
     }
 
     /// <summary>

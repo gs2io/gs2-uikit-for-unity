@@ -36,17 +36,17 @@ namespace Gs2.Unity.UiKit.Gs2Schedule
         {
             if (_fetcher.Fetched)
             {
-                var absoluteBegin = UnixTime.FromUnixTime(_fetcher.Event.AbsoluteBegin).ToLocalTime();
-                var absoluteEnd = UnixTime.FromUnixTime(_fetcher.Event.AbsoluteEnd).ToLocalTime();
-                onUpdate.Invoke(
+                var absoluteBegin = _fetcher.Event.AbsoluteBegin == null ? DateTime.Now : UnixTime.FromUnixTime(_fetcher.Event.AbsoluteBegin).ToLocalTime();
+                var absoluteEnd = _fetcher.Event.AbsoluteEnd == null ? DateTime.Now : UnixTime.FromUnixTime(_fetcher.Event.AbsoluteEnd).ToLocalTime();
+                onUpdate?.Invoke(
                     format.Replace(
-                        "{name}", _fetcher.Event.Name.ToString()
+                        "{name}", $"{_fetcher?.Event?.Name}"
                     ).Replace(
-                        "{metadata}", _fetcher.Event.Metadata.ToString()
+                        "{metadata}", $"{_fetcher?.Event?.Metadata}"
                     ).Replace(
-                        "{scheduleType}", _fetcher.Event.ScheduleType.ToString()
+                        "{scheduleType}", $"{_fetcher?.Event?.ScheduleType}"
                     ).Replace(
-                        "{repeatType}", _fetcher.Event.RepeatType.ToString()
+                        "{repeatType}", $"{_fetcher?.Event?.RepeatType}"
                     ).Replace(
                         "{absoluteBegin:yyyy}", absoluteBegin.ToString("yyyy")
                     ).Replace(
@@ -88,21 +88,21 @@ namespace Gs2.Unity.UiKit.Gs2Schedule
                     ).Replace(
                         "{absoluteEnd:ss}", absoluteEnd.ToString("ss")
                     ).Replace(
-                        "{repeatBeginDayOfMonth}", _fetcher.Event.RepeatBeginDayOfMonth.ToString()
+                        "{repeatBeginDayOfMonth}", $"{_fetcher?.Event?.RepeatBeginDayOfMonth}"
                     ).Replace(
-                        "{repeatEndDayOfMonth}", _fetcher.Event.RepeatEndDayOfMonth.ToString()
+                        "{repeatEndDayOfMonth}", $"{_fetcher?.Event?.RepeatEndDayOfMonth}"
                     ).Replace(
-                        "{repeatBeginDayOfWeek}", _fetcher.Event.RepeatBeginDayOfWeek.ToString()
+                        "{repeatBeginDayOfWeek}", $"{_fetcher?.Event?.RepeatBeginDayOfWeek}"
                     ).Replace(
-                        "{repeatEndDayOfWeek}", _fetcher.Event.RepeatEndDayOfWeek.ToString()
+                        "{repeatEndDayOfWeek}", $"{_fetcher?.Event?.RepeatEndDayOfWeek}"
                     ).Replace(
-                        "{repeatBeginHour}", _fetcher.Event.RepeatBeginHour.ToString()
+                        "{repeatBeginHour}", $"{_fetcher?.Event?.RepeatBeginHour}"
                     ).Replace(
-                        "{repeatEndHour}", _fetcher.Event.RepeatEndHour.ToString()
+                        "{repeatEndHour}", $"{_fetcher?.Event?.RepeatEndHour}"
                     ).Replace(
-                        "{relativeTriggerName}", _fetcher.Event.RelativeTriggerName.ToString()
+                        "{relativeTriggerName}", $"{_fetcher?.Event?.RelativeTriggerName}"
                     ).Replace(
-                        "{relativeDuration}", _fetcher.Event.RelativeDuration.ToString()
+                        "{relativeDuration}", $"{_fetcher?.Event?.RelativeDuration}"
                     )
                 );
             }

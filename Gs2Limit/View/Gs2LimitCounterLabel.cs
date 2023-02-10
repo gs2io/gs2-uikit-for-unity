@@ -36,17 +36,17 @@ namespace Gs2.Unity.UiKit.Gs2Limit
         {
             if (_fetcher.Fetched)
             {
-                var createdAt = UnixTime.FromUnixTime(_fetcher.Counter.CreatedAt).ToLocalTime();
-                var updatedAt = UnixTime.FromUnixTime(_fetcher.Counter.UpdatedAt).ToLocalTime();
-                onUpdate.Invoke(
+                var createdAt = _fetcher.Counter.CreatedAt == null ? DateTime.Now : UnixTime.FromUnixTime(_fetcher.Counter.CreatedAt).ToLocalTime();
+                var updatedAt = _fetcher.Counter.UpdatedAt == null ? DateTime.Now : UnixTime.FromUnixTime(_fetcher.Counter.UpdatedAt).ToLocalTime();
+                onUpdate?.Invoke(
                     format.Replace(
-                        "{counterId}", _fetcher.Counter.CounterId.ToString()
+                        "{counterId}", $"{_fetcher?.Counter?.CounterId}"
                     ).Replace(
-                        "{limitName}", _fetcher.Counter.LimitName.ToString()
+                        "{limitName}", $"{_fetcher?.Counter?.LimitName}"
                     ).Replace(
-                        "{name}", _fetcher.Counter.Name.ToString()
+                        "{name}", $"{_fetcher?.Counter?.Name}"
                     ).Replace(
-                        "{count}", _fetcher.Counter.Count.ToString()
+                        "{count}", $"{_fetcher?.Counter?.Count}"
                     ).Replace(
                         "{createdAt:yyyy}", createdAt.ToString("yyyy")
                     ).Replace(

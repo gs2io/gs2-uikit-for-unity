@@ -36,21 +36,21 @@ namespace Gs2.Unity.UiKit.Gs2Version
         {
             if (_fetcher.Fetched)
             {
-                onUpdate.Invoke(
+                onUpdate?.Invoke(
                     format.Replace(
-                        "{name}", _fetcher.VersionModel.Name.ToString()
+                        "{name}", $"{_fetcher?.VersionModel?.Name}"
                     ).Replace(
-                        "{metadata}", _fetcher.VersionModel.Metadata.ToString()
+                        "{metadata}", $"{_fetcher?.VersionModel?.Metadata}"
                     ).Replace(
-                        "{warningVersion}", _fetcher.VersionModel.WarningVersion.ToString()
+                        "{warningVersion}", $"{_fetcher?.VersionModel?.WarningVersion}"
                     ).Replace(
-                        "{errorVersion}", _fetcher.VersionModel.ErrorVersion.ToString()
+                        "{errorVersion}", $"{_fetcher?.VersionModel?.ErrorVersion}"
                     ).Replace(
-                        "{scope}", _fetcher.VersionModel.Scope.ToString()
+                        "{scope}", $"{_fetcher?.VersionModel?.Scope}"
                     ).Replace(
-                        "{currentVersion}", _fetcher.VersionModel.CurrentVersion.ToString()
+                        "{currentVersion}", $"{_fetcher?.VersionModel?.CurrentVersion}"
                     ).Replace(
-                        "{needSignature}", _fetcher.VersionModel.NeedSignature.ToString()
+                        "{needSignature}", $"{_fetcher?.VersionModel?.NeedSignature}"
                     )
                 );
             }

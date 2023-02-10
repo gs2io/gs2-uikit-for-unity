@@ -28,7 +28,11 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.Context
 	[AddComponentMenu("GS2 UIKit/Lottery/LotteryModel/Gs2LotteryLotteryModelContext")]
     public partial class Gs2LotteryLotteryModelContext : MonoBehaviour
     {
-
+        public void Start() {
+            if (LotteryModel == null) {
+                Debug.LogError("LotteryModel is not set in Gs2LotteryLotteryModelContext.");
+            }
+        }
     }
 
     /// <summary>

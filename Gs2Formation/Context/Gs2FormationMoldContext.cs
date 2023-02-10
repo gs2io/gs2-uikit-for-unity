@@ -26,9 +26,13 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Context
     /// </summary>
 
 	[AddComponentMenu("GS2 UIKit/Formation/Mold/Gs2FormationMoldContext")]
-    public partial class Gs2FormationMoldContext : MonoBehaviour
+    public partial class Gs2FormationMoldContext : Gs2FormationMoldModelContext
     {
-
+        public void Start() {
+            if (Mold == null) {
+                Debug.LogError("Mold is not set in Gs2FormationMoldContext.");
+            }
+        }
     }
 
     /// <summary>

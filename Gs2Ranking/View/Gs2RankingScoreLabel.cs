@@ -36,19 +36,19 @@ namespace Gs2.Unity.UiKit.Gs2Ranking
         {
             if (_fetcher.Fetched)
             {
-                onUpdate.Invoke(
+                onUpdate?.Invoke(
                     format.Replace(
-                        "{categoryName}", _fetcher.Score.CategoryName.ToString()
+                        "{categoryName}", $"{_fetcher?.Score?.CategoryName}"
                     ).Replace(
-                        "{userId}", _fetcher.Score.UserId.ToString()
+                        "{userId}", $"{_fetcher?.Score?.UserId}"
                     ).Replace(
-                        "{uniqueId}", _fetcher.Score.UniqueId.ToString()
+                        "{uniqueId}", $"{_fetcher?.Score?.UniqueId}"
                     ).Replace(
-                        "{scorerUserId}", _fetcher.Score.ScorerUserId.ToString()
+                        "{scorerUserId}", $"{_fetcher?.Score?.ScorerUserId}"
                     ).Replace(
-                        "{score}", _fetcher.Score.Score.ToString()
+                        "{score}", $"{_fetcher?.Score?.Score}"
                     ).Replace(
-                        "{metadata}", _fetcher.Score.Metadata.ToString()
+                        "{metadata}", $"{_fetcher?.Score?.Metadata}"
                     )
                 );
             }

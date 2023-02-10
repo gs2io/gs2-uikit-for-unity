@@ -36,19 +36,19 @@ namespace Gs2.Unity.UiKit.Gs2Enhance
         {
             if (_fetcher.Fetched)
             {
-                onUpdate.Invoke(
+                onUpdate?.Invoke(
                     format.Replace(
-                        "{name}", _fetcher.RateModel.Name.ToString()
+                        "{name}", $"{_fetcher?.RateModel?.Name}"
                     ).Replace(
-                        "{metadata}", _fetcher.RateModel.Metadata.ToString()
+                        "{metadata}", $"{_fetcher?.RateModel?.Metadata}"
                     ).Replace(
-                        "{targetInventoryModelId}", _fetcher.RateModel.TargetInventoryModelId.ToString()
+                        "{targetInventoryModelId}", $"{_fetcher?.RateModel?.TargetInventoryModelId}"
                     ).Replace(
-                        "{acquireExperienceSuffix}", _fetcher.RateModel.AcquireExperienceSuffix.ToString()
+                        "{acquireExperienceSuffix}", $"{_fetcher?.RateModel?.AcquireExperienceSuffix}"
                     ).Replace(
-                        "{materialInventoryModelId}", _fetcher.RateModel.MaterialInventoryModelId.ToString()
+                        "{materialInventoryModelId}", $"{_fetcher?.RateModel?.MaterialInventoryModelId}"
                     ).Replace(
-                        "{experienceModelId}", _fetcher.RateModel.ExperienceModelId.ToString()
+                        "{experienceModelId}", $"{_fetcher?.RateModel?.ExperienceModelId}"
                     )
                 );
             }

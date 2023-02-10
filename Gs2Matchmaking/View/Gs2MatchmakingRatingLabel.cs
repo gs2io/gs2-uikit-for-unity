@@ -36,17 +36,17 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking
         {
             if (_fetcher.Fetched)
             {
-                var createdAt = UnixTime.FromUnixTime(_fetcher.Rating.CreatedAt).ToLocalTime();
-                var updatedAt = UnixTime.FromUnixTime(_fetcher.Rating.UpdatedAt).ToLocalTime();
-                onUpdate.Invoke(
+                var createdAt = _fetcher.Rating.CreatedAt == null ? DateTime.Now : UnixTime.FromUnixTime(_fetcher.Rating.CreatedAt).ToLocalTime();
+                var updatedAt = _fetcher.Rating.UpdatedAt == null ? DateTime.Now : UnixTime.FromUnixTime(_fetcher.Rating.UpdatedAt).ToLocalTime();
+                onUpdate?.Invoke(
                     format.Replace(
-                        "{ratingId}", _fetcher.Rating.RatingId.ToString()
+                        "{ratingId}", $"{_fetcher?.Rating?.RatingId}"
                     ).Replace(
-                        "{name}", _fetcher.Rating.Name.ToString()
+                        "{name}", $"{_fetcher?.Rating?.Name}"
                     ).Replace(
-                        "{userId}", _fetcher.Rating.UserId.ToString()
+                        "{userId}", $"{_fetcher?.Rating?.UserId}"
                     ).Replace(
-                        "{rateValue}", _fetcher.Rating.RateValue.ToString()
+                        "{rateValue}", $"{_fetcher?.Rating?.RateValue}"
                     ).Replace(
                         "{createdAt:yyyy}", createdAt.ToString("yyyy")
                     ).Replace(

@@ -37,6 +37,7 @@ namespace Gs2.Unity.UiKit.Gs2Inventory
             if (_fetcher.Fetched) {
                 for (var i = 0; i < this.maximumItems; i++) {
                     if (i < this._fetcher.ItemSets.Count) {
+                        _children[i].ItemModel.itemName = this._fetcher.ItemSets[i].ItemName;
                         _children[i].ItemSet.itemName = this._fetcher.ItemSets[i].ItemName;
                         _children[i].ItemSet.itemSetName = this._fetcher.ItemSets[i].Name;
                         _children[i].gameObject.SetActive(true);
@@ -66,6 +67,10 @@ namespace Gs2.Unity.UiKit.Gs2Inventory
             _children = new List<Gs2InventoryItemSetContext>();
             for (var i = 0; i < this.maximumItems; i++) {
                 var node = Instantiate(this.prefab, transform);
+                node.ItemModel = ItemModel.New(
+                    _context.InventoryModel,
+                    ""
+                );
                 node.ItemSet = ItemSet.New(
                     _context.Inventory,
                     "",

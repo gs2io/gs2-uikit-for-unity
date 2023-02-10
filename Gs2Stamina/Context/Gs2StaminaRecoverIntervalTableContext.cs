@@ -28,7 +28,11 @@ namespace Gs2.Unity.UiKit.Gs2Stamina.Context
 	[AddComponentMenu("GS2 UIKit/Stamina/RecoverIntervalTable/Gs2StaminaRecoverIntervalTableContext")]
     public partial class Gs2StaminaRecoverIntervalTableContext : MonoBehaviour
     {
-
+        public void Start() {
+            if (RecoverIntervalTable == null) {
+                Debug.LogError("RecoverIntervalTable is not set in Gs2StaminaRecoverIntervalTableContext.");
+            }
+        }
     }
 
     /// <summary>

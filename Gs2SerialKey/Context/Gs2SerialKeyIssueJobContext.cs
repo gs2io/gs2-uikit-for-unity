@@ -28,7 +28,11 @@ namespace Gs2.Unity.UiKit.Gs2SerialKey.Context
 	[AddComponentMenu("GS2 UIKit/SerialKey/IssueJob/Gs2SerialKeyIssueJobContext")]
     public partial class Gs2SerialKeyIssueJobContext : MonoBehaviour
     {
-
+        public void Start() {
+            if (IssueJob == null) {
+                Debug.LogError("IssueJob is not set in Gs2SerialKeyIssueJobContext.");
+            }
+        }
     }
 
     /// <summary>

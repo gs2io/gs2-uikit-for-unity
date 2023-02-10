@@ -28,7 +28,11 @@ namespace Gs2.Unity.UiKit.Gs2Chat.Context
 	[AddComponentMenu("GS2 UIKit/Chat/User/Gs2ChatUserContext")]
     public partial class Gs2ChatUserContext : MonoBehaviour
     {
-
+        public void Start() {
+            if (User == null) {
+                Debug.LogError("User is not set in Gs2ChatUserContext.");
+            }
+        }
     }
 
     /// <summary>

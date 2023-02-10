@@ -28,7 +28,11 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Context
 	[AddComponentMenu("GS2 UIKit/Friend/PublicProfile/Gs2FriendPublicProfileContext")]
     public partial class Gs2FriendPublicProfileContext : MonoBehaviour
     {
-
+        public void Start() {
+            if (PublicProfile == null) {
+                Debug.LogError("PublicProfile is not set in Gs2FriendPublicProfileContext.");
+            }
+        }
     }
 
     /// <summary>

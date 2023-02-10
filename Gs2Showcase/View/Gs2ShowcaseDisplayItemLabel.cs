@@ -36,15 +36,15 @@ namespace Gs2.Unity.UiKit.Gs2Showcase
         {
             if (_fetcher.Fetched)
             {
-                onUpdate.Invoke(
+                onUpdate?.Invoke(
                     format.Replace(
-                        "{displayItemId}", _fetcher.DisplayItem.DisplayItemId.ToString()
+                        "{displayItemId}", $"{_fetcher?.DisplayItem?.DisplayItemId}"
                     ).Replace(
-                        "{type}", _fetcher.DisplayItem.Type.ToString()
+                        "{type}", $"{_fetcher?.DisplayItem?.Type}"
                     ).Replace(
-                        "{salesItem}", _fetcher.DisplayItem.SalesItem.ToString()
+                        "{salesItem}", $"{_fetcher?.DisplayItem?.SalesItem}"
                     ).Replace(
-                        "{salesItemGroup}", _fetcher.DisplayItem.SalesItemGroup.ToString()
+                        "{salesItemGroup}", $"{_fetcher?.DisplayItem?.SalesItemGroup}"
                     )
                 );
             }

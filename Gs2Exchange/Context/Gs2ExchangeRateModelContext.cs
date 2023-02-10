@@ -28,7 +28,11 @@ namespace Gs2.Unity.UiKit.Gs2Exchange.Context
 	[AddComponentMenu("GS2 UIKit/Exchange/RateModel/Gs2ExchangeRateModelContext")]
     public partial class Gs2ExchangeRateModelContext : MonoBehaviour
     {
-
+        public void Start() {
+            if (RateModel == null) {
+                Debug.LogError("RateModel is not set in Gs2ExchangeRateModelContext.");
+            }
+        }
     }
 
     /// <summary>

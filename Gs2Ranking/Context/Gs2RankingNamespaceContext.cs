@@ -28,7 +28,11 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Context
 	[AddComponentMenu("GS2 UIKit/Ranking/Namespace/Gs2RankingNamespaceContext")]
     public partial class Gs2RankingNamespaceContext : MonoBehaviour
     {
-
+        public void Start() {
+            if (Namespace == null) {
+                Debug.LogError("Namespace is not set in Gs2RankingNamespaceContext.");
+            }
+        }
     }
 
     /// <summary>

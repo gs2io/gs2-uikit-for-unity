@@ -28,7 +28,11 @@ namespace Gs2.Unity.UiKit.Gs2Exchange.Context
 	[AddComponentMenu("GS2 UIKit/Exchange/Await/Gs2ExchangeAwaitContext")]
     public partial class Gs2ExchangeAwaitContext : MonoBehaviour
     {
-
+        public void Start() {
+            if (Await_ == null) {
+                Debug.LogError("Await_ is not set in Gs2ExchangeAwaitContext.");
+            }
+        }
     }
 
     /// <summary>

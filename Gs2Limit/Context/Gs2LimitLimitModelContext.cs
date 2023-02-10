@@ -28,7 +28,11 @@ namespace Gs2.Unity.UiKit.Gs2Limit.Context
 	[AddComponentMenu("GS2 UIKit/Limit/LimitModel/Gs2LimitLimitModelContext")]
     public partial class Gs2LimitLimitModelContext : MonoBehaviour
     {
-
+        public void Start() {
+            if (LimitModel == null) {
+                Debug.LogError("LimitModel is not set in Gs2LimitLimitModelContext.");
+            }
+        }
     }
 
     /// <summary>

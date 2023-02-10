@@ -28,7 +28,11 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Context
 	[AddComponentMenu("GS2 UIKit/Quest/Namespace/Gs2QuestNamespaceContext")]
     public partial class Gs2QuestNamespaceContext : MonoBehaviour
     {
-
+        public void Start() {
+            if (Namespace == null) {
+                Debug.LogError("Namespace is not set in Gs2QuestNamespaceContext.");
+            }
+        }
     }
 
     /// <summary>

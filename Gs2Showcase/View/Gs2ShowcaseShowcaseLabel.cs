@@ -36,13 +36,13 @@ namespace Gs2.Unity.UiKit.Gs2Showcase
         {
             if (_fetcher.Fetched)
             {
-                onUpdate.Invoke(
+                onUpdate?.Invoke(
                     format.Replace(
-                        "{name}", _fetcher.Showcase.Name.ToString()
+                        "{name}", $"{_fetcher?.Showcase?.Name}"
                     ).Replace(
-                        "{metadata}", _fetcher.Showcase.Metadata.ToString()
+                        "{metadata}", $"{_fetcher?.Showcase?.Metadata}"
                     ).Replace(
-                        "{displayItems}", _fetcher.Showcase.DisplayItems.ToString()
+                        "{displayItems}", $"{_fetcher?.Showcase?.DisplayItems}"
                     )
                 );
             }

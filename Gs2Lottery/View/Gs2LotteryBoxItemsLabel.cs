@@ -36,13 +36,13 @@ namespace Gs2.Unity.UiKit.Gs2Lottery
         {
             if (_fetcher.Fetched)
             {
-                onUpdate.Invoke(
+                onUpdate?.Invoke(
                     format.Replace(
-                        "{boxId}", _fetcher.BoxItems.BoxId.ToString()
+                        "{boxId}", $"{_fetcher?.BoxItems?.BoxId}"
                     ).Replace(
-                        "{prizeTableName}", _fetcher.BoxItems.PrizeTableName.ToString()
+                        "{prizeTableName}", $"{_fetcher?.BoxItems?.PrizeTableName}"
                     ).Replace(
-                        "{items}", _fetcher.BoxItems.Items.ToString()
+                        "{items}", $"{_fetcher?.BoxItems?.Items}"
                     )
                 );
             }

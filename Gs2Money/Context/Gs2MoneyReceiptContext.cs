@@ -28,7 +28,11 @@ namespace Gs2.Unity.UiKit.Gs2Money.Context
 	[AddComponentMenu("GS2 UIKit/Money/Receipt/Gs2MoneyReceiptContext")]
     public partial class Gs2MoneyReceiptContext : MonoBehaviour
     {
-
+        public void Start() {
+            if (Receipt == null) {
+                Debug.LogError("Receipt is not set in Gs2MoneyReceiptContext.");
+            }
+        }
     }
 
     /// <summary>

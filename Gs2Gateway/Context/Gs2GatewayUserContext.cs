@@ -28,7 +28,11 @@ namespace Gs2.Unity.UiKit.Gs2Gateway.Context
 	[AddComponentMenu("GS2 UIKit/Gateway/User/Gs2GatewayUserContext")]
     public partial class Gs2GatewayUserContext : MonoBehaviour
     {
-
+        public void Start() {
+            if (User == null) {
+                Debug.LogError("User is not set in Gs2GatewayUserContext.");
+            }
+        }
     }
 
     /// <summary>

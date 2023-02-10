@@ -28,7 +28,11 @@ namespace Gs2.Unity.UiKit.Gs2Stamina.Context
 	[AddComponentMenu("GS2 UIKit/Stamina/MaxStaminaTable/Gs2StaminaMaxStaminaTableContext")]
     public partial class Gs2StaminaMaxStaminaTableContext : MonoBehaviour
     {
-
+        public void Start() {
+            if (MaxStaminaTable == null) {
+                Debug.LogError("MaxStaminaTable is not set in Gs2StaminaMaxStaminaTableContext.");
+            }
+        }
     }
 
     /// <summary>

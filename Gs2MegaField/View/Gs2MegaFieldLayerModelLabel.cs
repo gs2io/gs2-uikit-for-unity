@@ -36,11 +36,11 @@ namespace Gs2.Unity.UiKit.Gs2MegaField
         {
             if (_fetcher.Fetched)
             {
-                onUpdate.Invoke(
+                onUpdate?.Invoke(
                     format.Replace(
-                        "{name}", _fetcher.LayerModel.Name.ToString()
+                        "{name}", $"{_fetcher?.LayerModel?.Name}"
                     ).Replace(
-                        "{metadata}", _fetcher.LayerModel.Metadata.ToString()
+                        "{metadata}", $"{_fetcher?.LayerModel?.Metadata}"
                     )
                 );
             }

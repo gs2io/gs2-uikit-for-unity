@@ -28,7 +28,11 @@ namespace Gs2.Unity.UiKit.Gs2JobQueue.Context
 	[AddComponentMenu("GS2 UIKit/JobQueue/Namespace/Gs2JobQueueNamespaceContext")]
     public partial class Gs2JobQueueNamespaceContext : MonoBehaviour
     {
-
+        public void Start() {
+            if (Namespace == null) {
+                Debug.LogError("Namespace is not set in Gs2JobQueueNamespaceContext.");
+            }
+        }
     }
 
     /// <summary>

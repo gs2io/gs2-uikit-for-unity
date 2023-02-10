@@ -36,17 +36,17 @@ namespace Gs2.Unity.UiKit.Gs2Quest
         {
             if (_fetcher.Fetched)
             {
-                onUpdate.Invoke(
+                onUpdate?.Invoke(
                     format.Replace(
-                        "{progressId}", _fetcher.Progress.ProgressId.ToString()
+                        "{progressId}", $"{_fetcher?.Progress?.ProgressId}"
                     ).Replace(
-                        "{transactionId}", _fetcher.Progress.TransactionId.ToString()
+                        "{transactionId}", $"{_fetcher?.Progress?.TransactionId}"
                     ).Replace(
-                        "{questModelId}", _fetcher.Progress.QuestModelId.ToString()
+                        "{questModelId}", $"{_fetcher?.Progress?.QuestModelId}"
                     ).Replace(
-                        "{randomSeed}", _fetcher.Progress.RandomSeed.ToString()
+                        "{randomSeed}", $"{_fetcher?.Progress?.RandomSeed}"
                     ).Replace(
-                        "{rewards}", _fetcher.Progress.Rewards.ToString()
+                        "{rewards}", $"{_fetcher?.Progress?.Rewards}"
                     )
                 );
             }

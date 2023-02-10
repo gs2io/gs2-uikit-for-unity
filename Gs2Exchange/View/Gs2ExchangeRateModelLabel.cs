@@ -36,19 +36,19 @@ namespace Gs2.Unity.UiKit.Gs2Exchange
         {
             if (_fetcher.Fetched)
             {
-                onUpdate.Invoke(
+                onUpdate?.Invoke(
                     format.Replace(
-                        "{name}", _fetcher.RateModel.Name.ToString()
+                        "{name}", $"{_fetcher?.RateModel?.Name}"
                     ).Replace(
-                        "{metadata}", _fetcher.RateModel.Metadata.ToString()
+                        "{metadata}", $"{_fetcher?.RateModel?.Metadata}"
                     ).Replace(
-                        "{timingType}", _fetcher.RateModel.TimingType.ToString()
+                        "{timingType}", $"{_fetcher?.RateModel?.TimingType}"
                     ).Replace(
-                        "{lockTime}", _fetcher.RateModel.LockTime.ToString()
+                        "{lockTime}", $"{_fetcher?.RateModel?.LockTime}"
                     ).Replace(
-                        "{consumeActions}", _fetcher.RateModel.ConsumeActions.ToString()
+                        "{consumeActions}", $"{_fetcher?.RateModel?.ConsumeActions}"
                     ).Replace(
-                        "{acquireActions}", _fetcher.RateModel.AcquireActions.ToString()
+                        "{acquireActions}", $"{_fetcher?.RateModel?.AcquireActions}"
                     )
                 );
             }

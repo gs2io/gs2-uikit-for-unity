@@ -36,15 +36,15 @@ namespace Gs2.Unity.UiKit.Gs2Realtime
         {
             if (_fetcher.Fetched)
             {
-                onUpdate.Invoke(
+                onUpdate?.Invoke(
                     format.Replace(
-                        "{name}", _fetcher.Room.Name.ToString()
+                        "{name}", $"{_fetcher?.Room?.Name}"
                     ).Replace(
-                        "{ipAddress}", _fetcher.Room.IpAddress.ToString()
+                        "{ipAddress}", $"{_fetcher?.Room?.IpAddress}"
                     ).Replace(
-                        "{port}", _fetcher.Room.Port.ToString()
+                        "{port}", $"{_fetcher?.Room?.Port}"
                     ).Replace(
-                        "{encryptionKey}", _fetcher.Room.EncryptionKey.ToString()
+                        "{encryptionKey}", $"{_fetcher?.Room?.EncryptionKey}"
                     )
                 );
             }

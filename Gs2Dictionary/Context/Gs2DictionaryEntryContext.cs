@@ -26,9 +26,13 @@ namespace Gs2.Unity.UiKit.Gs2Dictionary.Context
     /// </summary>
 
 	[AddComponentMenu("GS2 UIKit/Dictionary/Entry/Gs2DictionaryEntryContext")]
-    public partial class Gs2DictionaryEntryContext : MonoBehaviour
+    public partial class Gs2DictionaryEntryContext : Gs2DictionaryEntryModelContext
     {
-
+        public void Start() {
+            if (Entry == null) {
+                Debug.LogError("Entry is not set in Gs2DictionaryEntryContext.");
+            }
+        }
     }
 
     /// <summary>

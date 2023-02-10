@@ -28,7 +28,11 @@ namespace Gs2.Unity.UiKit.Gs2Datastore.Context
 	[AddComponentMenu("GS2 UIKit/Datastore/User/Gs2DatastoreUserContext")]
     public partial class Gs2DatastoreUserContext : MonoBehaviour
     {
-
+        public void Start() {
+            if (User == null) {
+                Debug.LogError("User is not set in Gs2DatastoreUserContext.");
+            }
+        }
     }
 
     /// <summary>

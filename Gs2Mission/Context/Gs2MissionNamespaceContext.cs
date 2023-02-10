@@ -28,7 +28,11 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Context
 	[AddComponentMenu("GS2 UIKit/Mission/Namespace/Gs2MissionNamespaceContext")]
     public partial class Gs2MissionNamespaceContext : MonoBehaviour
     {
-
+        public void Start() {
+            if (Namespace == null) {
+                Debug.LogError("Namespace is not set in Gs2MissionNamespaceContext.");
+            }
+        }
     }
 
     /// <summary>

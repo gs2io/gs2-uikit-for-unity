@@ -28,7 +28,11 @@ namespace Gs2.Unity.UiKit.Gs2Chat.Context
 	[AddComponentMenu("GS2 UIKit/Chat/Subscribe/Gs2ChatSubscribeContext")]
     public partial class Gs2ChatSubscribeContext : MonoBehaviour
     {
-
+        public void Start() {
+            if (Subscribe == null) {
+                Debug.LogError("Subscribe is not set in Gs2ChatSubscribeContext.");
+            }
+        }
     }
 
     /// <summary>

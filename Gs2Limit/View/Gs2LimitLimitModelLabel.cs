@@ -36,21 +36,21 @@ namespace Gs2.Unity.UiKit.Gs2Limit
         {
             if (_fetcher.Fetched)
             {
-                onUpdate.Invoke(
+                onUpdate?.Invoke(
                     format.Replace(
-                        "{limitModelId}", _fetcher.LimitModel.LimitModelId.ToString()
+                        "{limitModelId}", $"{_fetcher?.LimitModel?.LimitModelId}"
                     ).Replace(
-                        "{name}", _fetcher.LimitModel.Name.ToString()
+                        "{name}", $"{_fetcher?.LimitModel?.Name}"
                     ).Replace(
-                        "{metadata}", _fetcher.LimitModel.Metadata.ToString()
+                        "{metadata}", $"{_fetcher?.LimitModel?.Metadata}"
                     ).Replace(
-                        "{resetType}", _fetcher.LimitModel.ResetType.ToString()
+                        "{resetType}", $"{_fetcher?.LimitModel?.ResetType}"
                     ).Replace(
-                        "{resetDayOfMonth}", _fetcher.LimitModel.ResetDayOfMonth.ToString()
+                        "{resetDayOfMonth}", $"{_fetcher?.LimitModel?.ResetDayOfMonth}"
                     ).Replace(
-                        "{resetDayOfWeek}", _fetcher.LimitModel.ResetDayOfWeek.ToString()
+                        "{resetDayOfWeek}", $"{_fetcher?.LimitModel?.ResetDayOfWeek}"
                     ).Replace(
-                        "{resetHour}", _fetcher.LimitModel.ResetHour.ToString()
+                        "{resetHour}", $"{_fetcher?.LimitModel?.ResetHour}"
                     )
                 );
             }

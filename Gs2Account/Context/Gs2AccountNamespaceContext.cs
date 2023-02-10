@@ -28,7 +28,11 @@ namespace Gs2.Unity.UiKit.Gs2Account.Context
 	[AddComponentMenu("GS2 UIKit/Account/Namespace/Gs2AccountNamespaceContext")]
     public partial class Gs2AccountNamespaceContext : MonoBehaviour
     {
-
+        public void Start() {
+            if (Namespace == null) {
+                Debug.LogError("Namespace is not set in Gs2AccountNamespaceContext.");
+            }
+        }
     }
 
     /// <summary>

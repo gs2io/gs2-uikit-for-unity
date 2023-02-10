@@ -28,7 +28,11 @@ namespace Gs2.Unity.UiKit.Gs2Inbox.Context
 	[AddComponentMenu("GS2 UIKit/Inbox/Received/Gs2InboxReceivedContext")]
     public partial class Gs2InboxReceivedContext : MonoBehaviour
     {
-
+        public void Start() {
+            if (Received == null) {
+                Debug.LogError("Received is not set in Gs2InboxReceivedContext.");
+            }
+        }
     }
 
     /// <summary>

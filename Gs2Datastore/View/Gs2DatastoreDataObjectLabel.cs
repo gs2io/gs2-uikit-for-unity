@@ -36,23 +36,23 @@ namespace Gs2.Unity.UiKit.Gs2Datastore
         {
             if (_fetcher.Fetched)
             {
-                var createdAt = UnixTime.FromUnixTime(_fetcher.DataObject.CreatedAt).ToLocalTime();
-                var updatedAt = UnixTime.FromUnixTime(_fetcher.DataObject.UpdatedAt).ToLocalTime();
-                onUpdate.Invoke(
+                var createdAt = _fetcher.DataObject.CreatedAt == null ? DateTime.Now : UnixTime.FromUnixTime(_fetcher.DataObject.CreatedAt).ToLocalTime();
+                var updatedAt = _fetcher.DataObject.UpdatedAt == null ? DateTime.Now : UnixTime.FromUnixTime(_fetcher.DataObject.UpdatedAt).ToLocalTime();
+                onUpdate?.Invoke(
                     format.Replace(
-                        "{dataObjectId}", _fetcher.DataObject.DataObjectId.ToString()
+                        "{dataObjectId}", $"{_fetcher?.DataObject?.DataObjectId}"
                     ).Replace(
-                        "{name}", _fetcher.DataObject.Name.ToString()
+                        "{name}", $"{_fetcher?.DataObject?.Name}"
                     ).Replace(
-                        "{userId}", _fetcher.DataObject.UserId.ToString()
+                        "{userId}", $"{_fetcher?.DataObject?.UserId}"
                     ).Replace(
-                        "{scope}", _fetcher.DataObject.Scope.ToString()
+                        "{scope}", $"{_fetcher?.DataObject?.Scope}"
                     ).Replace(
-                        "{allowUserIds}", _fetcher.DataObject.AllowUserIds.ToString()
+                        "{allowUserIds}", $"{_fetcher?.DataObject?.AllowUserIds}"
                     ).Replace(
-                        "{status}", _fetcher.DataObject.Status.ToString()
+                        "{status}", $"{_fetcher?.DataObject?.Status}"
                     ).Replace(
-                        "{generation}", _fetcher.DataObject.Generation.ToString()
+                        "{generation}", $"{_fetcher?.DataObject?.Generation}"
                     ).Replace(
                         "{createdAt:yyyy}", createdAt.ToString("yyyy")
                     ).Replace(

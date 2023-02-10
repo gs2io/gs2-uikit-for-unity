@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
@@ -37,6 +39,7 @@ namespace Gs2.Unity.UiKit.Gs2Formation
             if (_fetcher.Fetched) {
                 for (var i = 0; i < this.maximumItems; i++) {
                     if (i < this._fetcher.Forms.Count) {
+                        _children[i].FormModel.formModelName = this._fetcher.Forms[i].Name;
                         _children[i].Form.index = this._fetcher.Forms[i].Index;
                         _children[i].gameObject.SetActive(true);
                     }
@@ -65,6 +68,10 @@ namespace Gs2.Unity.UiKit.Gs2Formation
             _children = new List<Gs2FormationFormContext>();
             for (var i = 0; i < this.maximumItems; i++) {
                 var node = Instantiate(this.prefab, transform);
+                node.FormModel = FormModel.New(
+                    _context.MoldModel,
+                    ""
+                );
                 node.Form = Form.New(
                     _context.MoldModel,
                     0

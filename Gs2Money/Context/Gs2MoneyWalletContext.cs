@@ -28,7 +28,11 @@ namespace Gs2.Unity.UiKit.Gs2Money.Context
 	[AddComponentMenu("GS2 UIKit/Money/Wallet/Gs2MoneyWalletContext")]
     public partial class Gs2MoneyWalletContext : MonoBehaviour
     {
-
+        public void Start() {
+            if (Wallet == null) {
+                Debug.LogError("Wallet is not set in Gs2MoneyWalletContext.");
+            }
+        }
     }
 
     /// <summary>

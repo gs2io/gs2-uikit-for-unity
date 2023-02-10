@@ -36,17 +36,17 @@ namespace Gs2.Unity.UiKit.Gs2Formation
         {
             if (_fetcher.Fetched)
             {
-                onUpdate.Invoke(
+                onUpdate?.Invoke(
                     format.Replace(
-                        "{name}", _fetcher.MoldModel.Name.ToString()
+                        "{name}", $"{_fetcher?.MoldModel?.Name}"
                     ).Replace(
-                        "{metadata}", _fetcher.MoldModel.Metadata.ToString()
+                        "{metadata}", $"{_fetcher?.MoldModel?.Metadata}"
                     ).Replace(
-                        "{formModel}", _fetcher.MoldModel.FormModel.ToString()
+                        "{formModel}", $"{_fetcher?.MoldModel?.FormModel}"
                     ).Replace(
-                        "{initialMaxCapacity}", _fetcher.MoldModel.InitialMaxCapacity.ToString()
+                        "{initialMaxCapacity}", $"{_fetcher?.MoldModel?.InitialMaxCapacity}"
                     ).Replace(
-                        "{maxCapacity}", _fetcher.MoldModel.MaxCapacity.ToString()
+                        "{maxCapacity}", $"{_fetcher?.MoldModel?.MaxCapacity}"
                     )
                 );
             }

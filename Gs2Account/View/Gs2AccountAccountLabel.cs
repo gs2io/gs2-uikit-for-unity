@@ -36,12 +36,12 @@ namespace Gs2.Unity.UiKit.Gs2Account
         {
             if (_fetcher.Fetched)
             {
-                var createdAt = UnixTime.FromUnixTime(_fetcher.Account.CreatedAt).ToLocalTime();
-                onUpdate.Invoke(
+                var createdAt = _fetcher.Account.CreatedAt == null ? DateTime.Now : UnixTime.FromUnixTime(_fetcher.Account.CreatedAt).ToLocalTime();
+                onUpdate?.Invoke(
                     format.Replace(
-                        "{userId}", _fetcher.Account.UserId.ToString()
+                        "{userId}", $"{_fetcher?.Account?.UserId}"
                     ).Replace(
-                        "{password}", _fetcher.Account.Password.ToString()
+                        "{password}", $"{_fetcher?.Account?.Password}"
                     ).Replace(
                         "{createdAt:yyyy}", createdAt.ToString("yyyy")
                     ).Replace(

@@ -28,7 +28,11 @@ namespace Gs2.Unity.UiKit.Gs2Version.Context
 	[AddComponentMenu("GS2 UIKit/Version/VersionModel/Gs2VersionVersionModelContext")]
     public partial class Gs2VersionVersionModelContext : MonoBehaviour
     {
-
+        public void Start() {
+            if (VersionModel == null) {
+                Debug.LogError("VersionModel is not set in Gs2VersionVersionModelContext.");
+            }
+        }
     }
 
     /// <summary>

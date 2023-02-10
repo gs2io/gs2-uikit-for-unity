@@ -28,7 +28,11 @@ namespace Gs2.Unity.UiKit.Gs2Enhance.Context
 	[AddComponentMenu("GS2 UIKit/Enhance/Progress/Gs2EnhanceProgressContext")]
     public partial class Gs2EnhanceProgressContext : MonoBehaviour
     {
-
+        public void Start() {
+            if (Progress == null) {
+                Debug.LogError("Progress is not set in Gs2EnhanceProgressContext.");
+            }
+        }
     }
 
     /// <summary>

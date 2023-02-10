@@ -28,7 +28,11 @@ namespace Gs2.Unity.UiKit.Gs2Showcase.Context
 	[AddComponentMenu("GS2 UIKit/Showcase/DisplayItem/Gs2ShowcaseDisplayItemContext")]
     public partial class Gs2ShowcaseDisplayItemContext : MonoBehaviour
     {
-
+        public void Start() {
+            if (DisplayItem == null) {
+                Debug.LogError("DisplayItem is not set in Gs2ShowcaseDisplayItemContext.");
+            }
+        }
     }
 
     /// <summary>

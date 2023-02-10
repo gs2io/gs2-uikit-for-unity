@@ -28,7 +28,11 @@ namespace Gs2.Unity.UiKit.Gs2Stamina.Context
 	[AddComponentMenu("GS2 UIKit/Stamina/User/Gs2StaminaUserContext")]
     public partial class Gs2StaminaUserContext : MonoBehaviour
     {
-
+        public void Start() {
+            if (User == null) {
+                Debug.LogError("User is not set in Gs2StaminaUserContext.");
+            }
+        }
     }
 
     /// <summary>

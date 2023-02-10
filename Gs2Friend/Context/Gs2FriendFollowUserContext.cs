@@ -28,7 +28,11 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Context
 	[AddComponentMenu("GS2 UIKit/Friend/FollowUser/Gs2FriendFollowUserContext")]
     public partial class Gs2FriendFollowUserContext : MonoBehaviour
     {
-
+        public void Start() {
+            if (FollowUser == null) {
+                Debug.LogError("FollowUser is not set in Gs2FriendFollowUserContext.");
+            }
+        }
     }
 
     /// <summary>

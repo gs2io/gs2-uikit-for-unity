@@ -28,7 +28,11 @@ namespace Gs2.Unity.UiKit.Gs2Enhance.Context
 	[AddComponentMenu("GS2 UIKit/Enhance/User/Gs2EnhanceUserContext")]
     public partial class Gs2EnhanceUserContext : MonoBehaviour
     {
-
+        public void Start() {
+            if (User == null) {
+                Debug.LogError("User is not set in Gs2EnhanceUserContext.");
+            }
+        }
     }
 
     /// <summary>

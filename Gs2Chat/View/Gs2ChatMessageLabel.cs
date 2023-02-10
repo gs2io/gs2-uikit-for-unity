@@ -36,18 +36,18 @@ namespace Gs2.Unity.UiKit.Gs2Chat
         {
             if (_fetcher.Fetched)
             {
-                var createdAt = UnixTime.FromUnixTime(_fetcher.Message.CreatedAt).ToLocalTime();
-                onUpdate.Invoke(
+                var createdAt = _fetcher.Message.CreatedAt == null ? DateTime.Now : UnixTime.FromUnixTime(_fetcher.Message.CreatedAt).ToLocalTime();
+                onUpdate?.Invoke(
                     format.Replace(
-                        "{name}", _fetcher.Message.Name.ToString()
+                        "{name}", $"{_fetcher?.Message?.Name}"
                     ).Replace(
-                        "{roomName}", _fetcher.Message.RoomName.ToString()
+                        "{roomName}", $"{_fetcher?.Message?.RoomName}"
                     ).Replace(
-                        "{userId}", _fetcher.Message.UserId.ToString()
+                        "{userId}", $"{_fetcher?.Message?.UserId}"
                     ).Replace(
-                        "{category}", _fetcher.Message.Category.ToString()
+                        "{category}", $"{_fetcher?.Message?.Category}"
                     ).Replace(
-                        "{metadata}", _fetcher.Message.Metadata.ToString()
+                        "{metadata}", $"{_fetcher?.Message?.Metadata}"
                     ).Replace(
                         "{createdAt:yyyy}", createdAt.ToString("yyyy")
                     ).Replace(

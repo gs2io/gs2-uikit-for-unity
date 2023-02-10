@@ -36,14 +36,14 @@ namespace Gs2.Unity.UiKit.Gs2Exchange
         {
             if (_fetcher.Fetched)
             {
-                var exchangedAt = UnixTime.FromUnixTime(_fetcher.Await.ExchangedAt).ToLocalTime();
-                onUpdate.Invoke(
+                var exchangedAt = _fetcher.Await.ExchangedAt == null ? DateTime.Now : UnixTime.FromUnixTime(_fetcher.Await.ExchangedAt).ToLocalTime();
+                onUpdate?.Invoke(
                     format.Replace(
-                        "{userId}", _fetcher.Await.UserId.ToString()
+                        "{userId}", $"{_fetcher?.Await?.UserId}"
                     ).Replace(
-                        "{rateName}", _fetcher.Await.RateName.ToString()
+                        "{rateName}", $"{_fetcher?.Await?.RateName}"
                     ).Replace(
-                        "{name}", _fetcher.Await.Name.ToString()
+                        "{name}", $"{_fetcher?.Await?.Name}"
                     ).Replace(
                         "{exchangedAt:yyyy}", exchangedAt.ToString("yyyy")
                     ).Replace(

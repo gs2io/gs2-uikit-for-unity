@@ -28,7 +28,11 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.Context
 	[AddComponentMenu("GS2 UIKit/Lottery/PrizeTable/Gs2LotteryPrizeTableContext")]
     public partial class Gs2LotteryPrizeTableContext : MonoBehaviour
     {
-
+        public void Start() {
+            if (PrizeTable == null) {
+                Debug.LogError("PrizeTable is not set in Gs2LotteryPrizeTableContext.");
+            }
+        }
     }
 
     /// <summary>

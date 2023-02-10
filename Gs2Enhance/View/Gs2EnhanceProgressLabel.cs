@@ -36,17 +36,17 @@ namespace Gs2.Unity.UiKit.Gs2Enhance
         {
             if (_fetcher.Fetched)
             {
-                onUpdate.Invoke(
+                onUpdate?.Invoke(
                     format.Replace(
-                        "{name}", _fetcher.Progress.Name.ToString()
+                        "{name}", $"{_fetcher?.Progress?.Name}"
                     ).Replace(
-                        "{rateName}", _fetcher.Progress.RateName.ToString()
+                        "{rateName}", $"{_fetcher?.Progress?.RateName}"
                     ).Replace(
-                        "{propertyId}", _fetcher.Progress.PropertyId.ToString()
+                        "{propertyId}", $"{_fetcher?.Progress?.PropertyId}"
                     ).Replace(
-                        "{experienceValue}", _fetcher.Progress.ExperienceValue.ToString()
+                        "{experienceValue}", $"{_fetcher?.Progress?.ExperienceValue}"
                     ).Replace(
-                        "{rate}", _fetcher.Progress.Rate.ToString()
+                        "{rate}", $"{_fetcher?.Progress?.Rate}"
                     )
                 );
             }

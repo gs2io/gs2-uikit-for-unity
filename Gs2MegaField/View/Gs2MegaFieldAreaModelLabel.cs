@@ -36,13 +36,13 @@ namespace Gs2.Unity.UiKit.Gs2MegaField
         {
             if (_fetcher.Fetched)
             {
-                onUpdate.Invoke(
+                onUpdate?.Invoke(
                     format.Replace(
-                        "{name}", _fetcher.AreaModel.Name.ToString()
+                        "{name}", $"{_fetcher?.AreaModel?.Name}"
                     ).Replace(
-                        "{metadata}", _fetcher.AreaModel.Metadata.ToString()
+                        "{metadata}", $"{_fetcher?.AreaModel?.Metadata}"
                     ).Replace(
-                        "{layerModels}", _fetcher.AreaModel.LayerModels.ToString()
+                        "{layerModels}", $"{_fetcher?.AreaModel?.LayerModels}"
                     )
                 );
             }

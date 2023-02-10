@@ -28,7 +28,11 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Context
 	[AddComponentMenu("GS2 UIKit/Inventory/ReferenceOf/Gs2InventoryReferenceOfContext")]
     public partial class Gs2InventoryReferenceOfContext : MonoBehaviour
     {
-
+        public void Start() {
+            if (ReferenceOf == null) {
+                Debug.LogError("ReferenceOf is not set in Gs2InventoryReferenceOfContext.");
+            }
+        }
     }
 
     /// <summary>

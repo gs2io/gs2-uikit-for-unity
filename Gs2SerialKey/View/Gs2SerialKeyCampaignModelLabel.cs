@@ -36,13 +36,13 @@ namespace Gs2.Unity.UiKit.Gs2SerialKey
         {
             if (_fetcher.Fetched)
             {
-                onUpdate.Invoke(
+                onUpdate?.Invoke(
                     format.Replace(
-                        "{name}", _fetcher.CampaignModel.Name.ToString()
+                        "{name}", $"{_fetcher?.CampaignModel?.Name}"
                     ).Replace(
-                        "{metadata}", _fetcher.CampaignModel.Metadata.ToString()
+                        "{metadata}", $"{_fetcher?.CampaignModel?.Metadata}"
                     ).Replace(
-                        "{enableCampaignCode}", _fetcher.CampaignModel.EnableCampaignCode.ToString()
+                        "{enableCampaignCode}", $"{_fetcher?.CampaignModel?.EnableCampaignCode}"
                     )
                 );
             }

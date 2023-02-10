@@ -28,7 +28,11 @@ namespace Gs2.Unity.UiKit.Gs2Inbox.Context
 	[AddComponentMenu("GS2 UIKit/Inbox/User/Gs2InboxUserContext")]
     public partial class Gs2InboxUserContext : MonoBehaviour
     {
-
+        public void Start() {
+            if (User == null) {
+                Debug.LogError("User is not set in Gs2InboxUserContext.");
+            }
+        }
     }
 
     /// <summary>

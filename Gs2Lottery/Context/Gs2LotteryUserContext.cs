@@ -28,7 +28,11 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.Context
 	[AddComponentMenu("GS2 UIKit/Lottery/User/Gs2LotteryUserContext")]
     public partial class Gs2LotteryUserContext : MonoBehaviour
     {
-
+        public void Start() {
+            if (User == null) {
+                Debug.LogError("User is not set in Gs2LotteryUserContext.");
+            }
+        }
     }
 
     /// <summary>

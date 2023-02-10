@@ -36,19 +36,19 @@ namespace Gs2.Unity.UiKit.Gs2Experience
         {
             if (_fetcher.Fetched)
             {
-                onUpdate.Invoke(
+                onUpdate?.Invoke(
                     format.Replace(
-                        "{name}", _fetcher.ExperienceModel.Name.ToString()
+                        "{name}", $"{_fetcher?.ExperienceModel?.Name}"
                     ).Replace(
-                        "{metadata}", _fetcher.ExperienceModel.Metadata.ToString()
+                        "{metadata}", $"{_fetcher?.ExperienceModel?.Metadata}"
                     ).Replace(
-                        "{defaultExperience}", _fetcher.ExperienceModel.DefaultExperience.ToString()
+                        "{defaultExperience}", $"{_fetcher?.ExperienceModel?.DefaultExperience}"
                     ).Replace(
-                        "{defaultRankCap}", _fetcher.ExperienceModel.DefaultRankCap.ToString()
+                        "{defaultRankCap}", $"{_fetcher?.ExperienceModel?.DefaultRankCap}"
                     ).Replace(
-                        "{maxRankCap}", _fetcher.ExperienceModel.MaxRankCap.ToString()
+                        "{maxRankCap}", $"{_fetcher?.ExperienceModel?.MaxRankCap}"
                     ).Replace(
-                        "{rankThreshold}", _fetcher.ExperienceModel.RankThreshold.ToString()
+                        "{rankThreshold}", $"{_fetcher?.ExperienceModel?.RankThreshold}"
                     )
                 );
             }

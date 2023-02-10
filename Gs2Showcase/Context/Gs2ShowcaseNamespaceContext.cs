@@ -28,7 +28,11 @@ namespace Gs2.Unity.UiKit.Gs2Showcase.Context
 	[AddComponentMenu("GS2 UIKit/Showcase/Namespace/Gs2ShowcaseNamespaceContext")]
     public partial class Gs2ShowcaseNamespaceContext : MonoBehaviour
     {
-
+        public void Start() {
+            if (Namespace == null) {
+                Debug.LogError("Namespace is not set in Gs2ShowcaseNamespaceContext.");
+            }
+        }
     }
 
     /// <summary>

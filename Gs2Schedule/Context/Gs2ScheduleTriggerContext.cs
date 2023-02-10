@@ -28,7 +28,11 @@ namespace Gs2.Unity.UiKit.Gs2Schedule.Context
 	[AddComponentMenu("GS2 UIKit/Schedule/Trigger/Gs2ScheduleTriggerContext")]
     public partial class Gs2ScheduleTriggerContext : MonoBehaviour
     {
-
+        public void Start() {
+            if (Trigger == null) {
+                Debug.LogError("Trigger is not set in Gs2ScheduleTriggerContext.");
+            }
+        }
     }
 
     /// <summary>

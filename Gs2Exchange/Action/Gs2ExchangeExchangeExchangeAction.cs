@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable UnusedAutoPropertyAccessor.Local
@@ -22,6 +24,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Gs2.Core.Exception;
+using Gs2.Unity.Gs2Enhance.ScriptableObject;
 using Gs2.Unity.Gs2Exchange.Model;
 using Gs2.Unity.Util;
 using Gs2.Unity.UiKit.Gs2Exchange.Context;
@@ -44,13 +47,13 @@ namespace Gs2.Unity.UiKit.Gs2Exchange
             yield return new WaitUntil(() => this._gameSessionHolder.Initialized);
             
             var domain = this._clientHolder.Gs2.Exchange.Namespace(
-                this._context.User.NamespaceName
+                this._context.RateModel.NamespaceName
             ).Me(
                 this._gameSessionHolder.GameSession
             ).Exchange(
             );
             var future = domain.Exchange(
-                RateName,
+                this._context.RateModel.RateName,
                 Count,
                 Config.ToArray()
             );
@@ -100,13 +103,13 @@ namespace Gs2.Unity.UiKit.Gs2Exchange
     {
         private Gs2ClientHolder _clientHolder;
         private Gs2GameSessionHolder _gameSessionHolder;
-        private Gs2ExchangeUserContext _context;
+        private Gs2ExchangeRateModelContext _context;
 
         public void Awake()
         {
             this._clientHolder = Gs2ClientHolder.Instance;
             this._gameSessionHolder = Gs2GameSessionHolder.Instance;
-            this._context = GetComponentInParent<Gs2ExchangeUserContext>();
+            this._context = GetComponentInParent<Gs2ExchangeRateModelContext>();
         }
     }
 
@@ -124,13 +127,8 @@ namespace Gs2.Unity.UiKit.Gs2Exchange
     /// </summary>
     public partial class Gs2ExchangeExchangeExchangeAction
     {
-        public string RateName;
         public int Count;
         public List<Gs2.Unity.Gs2Exchange.Model.EzConfig> Config;
-
-        public void SetRateName(string value) {
-            RateName = value;
-        }
 
         public void SetCount(int value) {
             Count = value;

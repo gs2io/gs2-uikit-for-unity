@@ -28,7 +28,11 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Context
 	[AddComponentMenu("GS2 UIKit/Formation/Namespace/Gs2FormationNamespaceContext")]
     public partial class Gs2FormationNamespaceContext : MonoBehaviour
     {
-
+        public void Start() {
+            if (Namespace == null) {
+                Debug.LogError("Namespace is not set in Gs2FormationNamespaceContext.");
+            }
+        }
     }
 
     /// <summary>

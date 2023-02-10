@@ -36,17 +36,17 @@ namespace Gs2.Unity.UiKit.Gs2Inventory
         {
             if (_fetcher.Fetched)
             {
-                onUpdate.Invoke(
+                onUpdate?.Invoke(
                     format.Replace(
-                        "{name}", _fetcher.ItemModel.Name.ToString()
+                        "{name}", $"{_fetcher?.ItemModel?.Name}"
                     ).Replace(
-                        "{metadata}", _fetcher.ItemModel.Metadata.ToString()
+                        "{metadata}", $"{_fetcher?.ItemModel?.Metadata}"
                     ).Replace(
-                        "{stackingLimit}", _fetcher.ItemModel.StackingLimit.ToString()
+                        "{stackingLimit}", $"{_fetcher?.ItemModel?.StackingLimit}"
                     ).Replace(
-                        "{allowMultipleStacks}", _fetcher.ItemModel.AllowMultipleStacks.ToString()
+                        "{allowMultipleStacks}", $"{_fetcher?.ItemModel?.AllowMultipleStacks}"
                     ).Replace(
-                        "{sortValue}", _fetcher.ItemModel.SortValue.ToString()
+                        "{sortValue}", $"{_fetcher?.ItemModel?.SortValue}"
                     )
                 );
             }

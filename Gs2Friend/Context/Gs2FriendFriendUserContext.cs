@@ -28,7 +28,11 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Context
 	[AddComponentMenu("GS2 UIKit/Friend/FriendUser/Gs2FriendFriendUserContext")]
     public partial class Gs2FriendFriendUserContext : MonoBehaviour
     {
-
+        public void Start() {
+            if (FriendUser == null) {
+                Debug.LogError("FriendUser is not set in Gs2FriendFriendUserContext.");
+            }
+        }
     }
 
     /// <summary>

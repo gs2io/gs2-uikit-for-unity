@@ -28,7 +28,11 @@ namespace Gs2.Unity.UiKit.Gs2Money.Context
 	[AddComponentMenu("GS2 UIKit/Money/Namespace/Gs2MoneyNamespaceContext")]
     public partial class Gs2MoneyNamespaceContext : MonoBehaviour
     {
-
+        public void Start() {
+            if (Namespace == null) {
+                Debug.LogError("Namespace is not set in Gs2MoneyNamespaceContext.");
+            }
+        }
     }
 
     /// <summary>

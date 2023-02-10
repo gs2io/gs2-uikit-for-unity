@@ -28,7 +28,11 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Context
 	[AddComponentMenu("GS2 UIKit/Ranking/Score/Gs2RankingScoreContext")]
     public partial class Gs2RankingScoreContext : MonoBehaviour
     {
-
+        public void Start() {
+            if (Score == null) {
+                Debug.LogError("Score is not set in Gs2RankingScoreContext.");
+            }
+        }
     }
 
     /// <summary>

@@ -36,25 +36,25 @@ namespace Gs2.Unity.UiKit.Gs2Quest
         {
             if (_fetcher.Fetched)
             {
-                onUpdate.Invoke(
+                onUpdate?.Invoke(
                     format.Replace(
-                        "{questModelId}", _fetcher.QuestModel.QuestModelId.ToString()
+                        "{questModelId}", $"{_fetcher?.QuestModel?.QuestModelId}"
                     ).Replace(
-                        "{name}", _fetcher.QuestModel.Name.ToString()
+                        "{name}", $"{_fetcher?.QuestModel?.Name}"
                     ).Replace(
-                        "{metadata}", _fetcher.QuestModel.Metadata.ToString()
+                        "{metadata}", $"{_fetcher?.QuestModel?.Metadata}"
                     ).Replace(
-                        "{contents}", _fetcher.QuestModel.Contents.ToString()
+                        "{contents}", $"{_fetcher?.QuestModel?.Contents}"
                     ).Replace(
-                        "{challengePeriodEventId}", _fetcher.QuestModel.ChallengePeriodEventId.ToString()
+                        "{challengePeriodEventId}", $"{_fetcher?.QuestModel?.ChallengePeriodEventId}"
                     ).Replace(
-                        "{firstCompleteAcquireActions}", _fetcher.QuestModel.FirstCompleteAcquireActions.ToString()
+                        "{firstCompleteAcquireActions}", $"{_fetcher?.QuestModel?.FirstCompleteAcquireActions}"
                     ).Replace(
-                        "{consumeActions}", _fetcher.QuestModel.ConsumeActions.ToString()
+                        "{consumeActions}", $"{_fetcher?.QuestModel?.ConsumeActions}"
                     ).Replace(
-                        "{failedAcquireActions}", _fetcher.QuestModel.FailedAcquireActions.ToString()
+                        "{failedAcquireActions}", $"{_fetcher?.QuestModel?.FailedAcquireActions}"
                     ).Replace(
-                        "{premiseQuestNames}", _fetcher.QuestModel.PremiseQuestNames.ToString()
+                        "{premiseQuestNames}", $"{_fetcher?.QuestModel?.PremiseQuestNames}"
                     )
                 );
             }

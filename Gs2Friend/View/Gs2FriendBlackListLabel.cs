@@ -36,11 +36,11 @@ namespace Gs2.Unity.UiKit.Gs2Friend
         {
             if (_fetcher.Fetched)
             {
-                onUpdate.Invoke(
+                onUpdate?.Invoke(
                     format.Replace(
-                        "{userId}", _fetcher.BlackList.UserId.ToString()
+                        "{userId}", $"{_fetcher?.BlackList?.UserId}"
                     ).Replace(
-                        "{targetUserIds}", _fetcher.BlackList.TargetUserIds.ToString()
+                        "{targetUserIds}", $"{_fetcher?.BlackList?.TargetUserIds}"
                     )
                 );
             }

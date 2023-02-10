@@ -26,9 +26,13 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Context
     /// </summary>
 
 	[AddComponentMenu("GS2 UIKit/Mission/Counter/Gs2MissionCounterContext")]
-    public partial class Gs2MissionCounterContext : MonoBehaviour
+    public partial class Gs2MissionCounterContext : Gs2MissionCounterModelContext
     {
-
+        public void Start() {
+            if (Counter == null) {
+                Debug.LogError("Counter is not set in Gs2MissionCounterContext.");
+            }
+        }
     }
 
     /// <summary>

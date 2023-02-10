@@ -36,17 +36,17 @@ namespace Gs2.Unity.UiKit.Gs2Experience
         {
             if (_fetcher.Fetched)
             {
-                onUpdate.Invoke(
+                onUpdate?.Invoke(
                     format.Replace(
-                        "{experienceName}", _fetcher.Status.ExperienceName.ToString()
+                        "{experienceName}", $"{_fetcher?.Status?.ExperienceName}"
                     ).Replace(
-                        "{propertyId}", _fetcher.Status.PropertyId.ToString()
+                        "{propertyId}", $"{_fetcher?.Status?.PropertyId}"
                     ).Replace(
-                        "{experienceValue}", _fetcher.Status.ExperienceValue.ToString()
+                        "{experienceValue}", $"{_fetcher?.Status?.ExperienceValue}"
                     ).Replace(
-                        "{rankValue}", _fetcher.Status.RankValue.ToString()
+                        "{rankValue}", $"{_fetcher?.Status?.RankValue}"
                     ).Replace(
-                        "{rankCapValue}", _fetcher.Status.RankCapValue.ToString()
+                        "{rankCapValue}", $"{_fetcher?.Status?.RankCapValue}"
                     )
                 );
             }

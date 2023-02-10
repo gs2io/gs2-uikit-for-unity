@@ -28,7 +28,11 @@ namespace Gs2.Unity.UiKit.Gs2Account.Context
 	[AddComponentMenu("GS2 UIKit/Account/DataOwner/Gs2AccountDataOwnerContext")]
     public partial class Gs2AccountDataOwnerContext : MonoBehaviour
     {
-
+        public void Start() {
+            if (DataOwner == null) {
+                Debug.LogError("DataOwner is not set in Gs2AccountDataOwnerContext.");
+            }
+        }
     }
 
     /// <summary>

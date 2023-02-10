@@ -28,7 +28,11 @@ namespace Gs2.Unity.UiKit.Gs2Account.Context
 	[AddComponentMenu("GS2 UIKit/Account/Account/Gs2AccountAccountContext")]
     public partial class Gs2AccountAccountContext : MonoBehaviour
     {
-
+        public void Start() {
+            if (Account == null) {
+                Debug.LogError("Account is not set in Gs2AccountAccountContext.");
+            }
+        }
     }
 
     /// <summary>

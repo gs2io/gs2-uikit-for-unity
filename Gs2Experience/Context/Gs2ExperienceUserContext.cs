@@ -28,7 +28,11 @@ namespace Gs2.Unity.UiKit.Gs2Experience.Context
 	[AddComponentMenu("GS2 UIKit/Experience/User/Gs2ExperienceUserContext")]
     public partial class Gs2ExperienceUserContext : MonoBehaviour
     {
-
+        public void Start() {
+            if (User == null) {
+                Debug.LogError("User is not set in Gs2ExperienceUserContext.");
+            }
+        }
     }
 
     /// <summary>

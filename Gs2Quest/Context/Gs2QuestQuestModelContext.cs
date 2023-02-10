@@ -28,7 +28,11 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Context
 	[AddComponentMenu("GS2 UIKit/Quest/QuestModel/Gs2QuestQuestModelContext")]
     public partial class Gs2QuestQuestModelContext : MonoBehaviour
     {
-
+        public void Start() {
+            if (QuestModel == null) {
+                Debug.LogError("QuestModel is not set in Gs2QuestQuestModelContext.");
+            }
+        }
     }
 
     /// <summary>

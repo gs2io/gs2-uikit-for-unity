@@ -28,7 +28,11 @@ namespace Gs2.Unity.UiKit.Gs2MegaField.Context
 	[AddComponentMenu("GS2 UIKit/MegaField/User/Gs2MegaFieldUserContext")]
     public partial class Gs2MegaFieldUserContext : MonoBehaviour
     {
-
+        public void Start() {
+            if (User == null) {
+                Debug.LogError("User is not set in Gs2MegaFieldUserContext.");
+            }
+        }
     }
 
     /// <summary>

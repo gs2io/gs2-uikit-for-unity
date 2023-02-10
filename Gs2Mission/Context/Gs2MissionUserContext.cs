@@ -28,7 +28,11 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Context
 	[AddComponentMenu("GS2 UIKit/Mission/User/Gs2MissionUserContext")]
     public partial class Gs2MissionUserContext : MonoBehaviour
     {
-
+        public void Start() {
+            if (User == null) {
+                Debug.LogError("User is not set in Gs2MissionUserContext.");
+            }
+        }
     }
 
     /// <summary>

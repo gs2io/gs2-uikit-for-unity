@@ -36,11 +36,11 @@ namespace Gs2.Unity.UiKit.Gs2Dictionary
         {
             if (_fetcher.Fetched)
             {
-                onUpdate.Invoke(
+                onUpdate?.Invoke(
                     format.Replace(
-                        "{name}", _fetcher.EntryModel.Name.ToString()
+                        "{name}", $"{_fetcher?.EntryModel?.Name}"
                     ).Replace(
-                        "{metadata}", _fetcher.EntryModel.Metadata.ToString()
+                        "{metadata}", $"{_fetcher?.EntryModel?.Metadata}"
                     )
                 );
             }

@@ -28,7 +28,11 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.Context
 	[AddComponentMenu("GS2 UIKit/Lottery/Namespace/Gs2LotteryNamespaceContext")]
     public partial class Gs2LotteryNamespaceContext : MonoBehaviour
     {
-
+        public void Start() {
+            if (Namespace == null) {
+                Debug.LogError("Namespace is not set in Gs2LotteryNamespaceContext.");
+            }
+        }
     }
 
     /// <summary>

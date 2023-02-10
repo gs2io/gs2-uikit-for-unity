@@ -36,13 +36,13 @@ namespace Gs2.Unity.UiKit.Gs2Mission
         {
             if (_fetcher.Fetched)
             {
-                onUpdate.Invoke(
+                onUpdate?.Invoke(
                     format.Replace(
-                        "{missionGroupName}", _fetcher.Complete.MissionGroupName.ToString()
+                        "{missionGroupName}", $"{_fetcher?.Complete?.MissionGroupName}"
                     ).Replace(
-                        "{completedMissionTaskNames}", _fetcher.Complete.CompletedMissionTaskNames.ToString()
+                        "{completedMissionTaskNames}", $"{_fetcher?.Complete?.CompletedMissionTaskNames}"
                     ).Replace(
-                        "{receivedMissionTaskNames}", _fetcher.Complete.ReceivedMissionTaskNames.ToString()
+                        "{receivedMissionTaskNames}", $"{_fetcher?.Complete?.ReceivedMissionTaskNames}"
                     )
                 );
             }

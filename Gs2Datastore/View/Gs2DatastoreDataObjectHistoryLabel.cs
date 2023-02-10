@@ -36,14 +36,14 @@ namespace Gs2.Unity.UiKit.Gs2Datastore
         {
             if (_fetcher.Fetched)
             {
-                var createdAt = UnixTime.FromUnixTime(_fetcher.DataObjectHistory.CreatedAt).ToLocalTime();
-                onUpdate.Invoke(
+                var createdAt = _fetcher.DataObjectHistory.CreatedAt == null ? DateTime.Now : UnixTime.FromUnixTime(_fetcher.DataObjectHistory.CreatedAt).ToLocalTime();
+                onUpdate?.Invoke(
                     format.Replace(
-                        "{dataObjectHistoryId}", _fetcher.DataObjectHistory.DataObjectHistoryId.ToString()
+                        "{dataObjectHistoryId}", $"{_fetcher?.DataObjectHistory?.DataObjectHistoryId}"
                     ).Replace(
-                        "{generation}", _fetcher.DataObjectHistory.Generation.ToString()
+                        "{generation}", $"{_fetcher?.DataObjectHistory?.Generation}"
                     ).Replace(
-                        "{contentLength}", _fetcher.DataObjectHistory.ContentLength.ToString()
+                        "{contentLength}", $"{_fetcher?.DataObjectHistory?.ContentLength}"
                     ).Replace(
                         "{createdAt:yyyy}", createdAt.ToString("yyyy")
                     ).Replace(

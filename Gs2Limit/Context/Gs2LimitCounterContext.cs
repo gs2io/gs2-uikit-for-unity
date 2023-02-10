@@ -28,7 +28,11 @@ namespace Gs2.Unity.UiKit.Gs2Limit.Context
 	[AddComponentMenu("GS2 UIKit/Limit/Counter/Gs2LimitCounterContext")]
     public partial class Gs2LimitCounterContext : MonoBehaviour
     {
-
+        public void Start() {
+            if (Counter == null) {
+                Debug.LogError("Counter is not set in Gs2LimitCounterContext.");
+            }
+        }
     }
 
     /// <summary>

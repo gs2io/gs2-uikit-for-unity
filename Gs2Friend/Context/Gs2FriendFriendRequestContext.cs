@@ -28,7 +28,11 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Context
 	[AddComponentMenu("GS2 UIKit/Friend/FriendRequest/Gs2FriendFriendRequestContext")]
     public partial class Gs2FriendFriendRequestContext : MonoBehaviour
     {
-
+        public void Start() {
+            if (FriendRequest == null) {
+                Debug.LogError("FriendRequest is not set in Gs2FriendFriendRequestContext.");
+            }
+        }
     }
 
     /// <summary>

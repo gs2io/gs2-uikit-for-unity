@@ -36,14 +36,14 @@ namespace Gs2.Unity.UiKit.Gs2Dictionary
         {
             if (_fetcher.Fetched)
             {
-                var acquiredAt = UnixTime.FromUnixTime(_fetcher.Entry.AcquiredAt).ToLocalTime();
-                onUpdate.Invoke(
+                var acquiredAt = _fetcher.Entry.AcquiredAt == null ? DateTime.Now : UnixTime.FromUnixTime(_fetcher.Entry.AcquiredAt).ToLocalTime();
+                onUpdate?.Invoke(
                     format.Replace(
-                        "{entryId}", _fetcher.Entry.EntryId.ToString()
+                        "{entryId}", $"{_fetcher?.Entry?.EntryId}"
                     ).Replace(
-                        "{userId}", _fetcher.Entry.UserId.ToString()
+                        "{userId}", $"{_fetcher?.Entry?.UserId}"
                     ).Replace(
-                        "{name}", _fetcher.Entry.Name.ToString()
+                        "{name}", $"{_fetcher?.Entry?.Name}"
                     ).Replace(
                         "{acquiredAt:yyyy}", acquiredAt.ToString("yyyy")
                     ).Replace(

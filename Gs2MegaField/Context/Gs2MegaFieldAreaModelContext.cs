@@ -28,7 +28,11 @@ namespace Gs2.Unity.UiKit.Gs2MegaField.Context
 	[AddComponentMenu("GS2 UIKit/MegaField/AreaModel/Gs2MegaFieldAreaModelContext")]
     public partial class Gs2MegaFieldAreaModelContext : MonoBehaviour
     {
-
+        public void Start() {
+            if (AreaModel == null) {
+                Debug.LogError("AreaModel is not set in Gs2MegaFieldAreaModelContext.");
+            }
+        }
     }
 
     /// <summary>

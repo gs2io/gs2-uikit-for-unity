@@ -36,23 +36,23 @@ namespace Gs2.Unity.UiKit.Gs2Mission
         {
             if (_fetcher.Fetched)
             {
-                onUpdate.Invoke(
+                onUpdate?.Invoke(
                     format.Replace(
-                        "{name}", _fetcher.MissionGroupModel.Name.ToString()
+                        "{name}", $"{_fetcher?.MissionGroupModel?.Name}"
                     ).Replace(
-                        "{metadata}", _fetcher.MissionGroupModel.Metadata.ToString()
+                        "{metadata}", $"{_fetcher?.MissionGroupModel?.Metadata}"
                     ).Replace(
-                        "{tasks}", _fetcher.MissionGroupModel.Tasks.ToString()
+                        "{tasks}", $"{_fetcher?.MissionGroupModel?.Tasks}"
                     ).Replace(
-                        "{resetType}", _fetcher.MissionGroupModel.ResetType.ToString()
+                        "{resetType}", $"{_fetcher?.MissionGroupModel?.ResetType}"
                     ).Replace(
-                        "{resetDayOfMonth}", _fetcher.MissionGroupModel.ResetDayOfMonth.ToString()
+                        "{resetDayOfMonth}", $"{_fetcher?.MissionGroupModel?.ResetDayOfMonth}"
                     ).Replace(
-                        "{resetDayOfWeek}", _fetcher.MissionGroupModel.ResetDayOfWeek.ToString()
+                        "{resetDayOfWeek}", $"{_fetcher?.MissionGroupModel?.ResetDayOfWeek}"
                     ).Replace(
-                        "{resetHour}", _fetcher.MissionGroupModel.ResetHour.ToString()
+                        "{resetHour}", $"{_fetcher?.MissionGroupModel?.ResetHour}"
                     ).Replace(
-                        "{completeNotificationNamespaceId}", _fetcher.MissionGroupModel.CompleteNotificationNamespaceId.ToString()
+                        "{completeNotificationNamespaceId}", $"{_fetcher?.MissionGroupModel?.CompleteNotificationNamespaceId}"
                     )
                 );
             }

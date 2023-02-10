@@ -36,11 +36,11 @@ namespace Gs2.Unity.UiKit.Gs2Ranking
         {
             if (_fetcher.Fetched)
             {
-                onUpdate.Invoke(
+                onUpdate?.Invoke(
                     format.Replace(
-                        "{userId}", _fetcher.SubscribeUser.UserId.ToString()
+                        "{userId}", $"{_fetcher?.SubscribeUser?.UserId}"
                     ).Replace(
-                        "{targetUserId}", _fetcher.SubscribeUser.TargetUserId.ToString()
+                        "{targetUserId}", $"{_fetcher?.SubscribeUser?.TargetUserId}"
                     )
                 );
             }

@@ -36,13 +36,13 @@ namespace Gs2.Unity.UiKit.Gs2Chat
         {
             if (_fetcher.Fetched)
             {
-                onUpdate.Invoke(
+                onUpdate?.Invoke(
                     format.Replace(
-                        "{userId}", _fetcher.Subscribe.UserId.ToString()
+                        "{userId}", $"{_fetcher?.Subscribe?.UserId}"
                     ).Replace(
-                        "{roomName}", _fetcher.Subscribe.RoomName.ToString()
+                        "{roomName}", $"{_fetcher?.Subscribe?.RoomName}"
                     ).Replace(
-                        "{notificationTypes}", _fetcher.Subscribe.NotificationTypes.ToString()
+                        "{notificationTypes}", $"{_fetcher?.Subscribe?.NotificationTypes}"
                     )
                 );
             }

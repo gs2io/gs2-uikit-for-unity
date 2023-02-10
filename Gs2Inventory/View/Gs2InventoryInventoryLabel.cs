@@ -36,15 +36,15 @@ namespace Gs2.Unity.UiKit.Gs2Inventory
         {
             if (_fetcher.Fetched)
             {
-                onUpdate.Invoke(
+                onUpdate?.Invoke(
                     format.Replace(
-                        "{inventoryId}", _fetcher.Inventory.InventoryId.ToString()
+                        "{inventoryId}", $"{_fetcher?.Inventory?.InventoryId}"
                     ).Replace(
-                        "{inventoryName}", _fetcher.Inventory.InventoryName.ToString()
+                        "{inventoryName}", $"{_fetcher?.Inventory?.InventoryName}"
                     ).Replace(
-                        "{currentInventoryCapacityUsage}", _fetcher.Inventory.CurrentInventoryCapacityUsage.ToString()
+                        "{currentInventoryCapacityUsage}", $"{_fetcher?.Inventory?.CurrentInventoryCapacityUsage}"
                     ).Replace(
-                        "{currentInventoryMaxCapacity}", _fetcher.Inventory.CurrentInventoryMaxCapacity.ToString()
+                        "{currentInventoryMaxCapacity}", $"{_fetcher?.Inventory?.CurrentInventoryMaxCapacity}"
                     )
                 );
             }

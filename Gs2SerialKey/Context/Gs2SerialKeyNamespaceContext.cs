@@ -28,7 +28,11 @@ namespace Gs2.Unity.UiKit.Gs2SerialKey.Context
 	[AddComponentMenu("GS2 UIKit/SerialKey/Namespace/Gs2SerialKeyNamespaceContext")]
     public partial class Gs2SerialKeyNamespaceContext : MonoBehaviour
     {
-
+        public void Start() {
+            if (Namespace == null) {
+                Debug.LogError("Namespace is not set in Gs2SerialKeyNamespaceContext.");
+            }
+        }
     }
 
     /// <summary>

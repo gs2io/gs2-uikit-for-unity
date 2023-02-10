@@ -28,7 +28,11 @@ namespace Gs2.Unity.UiKit.Gs2MegaField.Context
 	[AddComponentMenu("GS2 UIKit/MegaField/Layer/Gs2MegaFieldLayerContext")]
     public partial class Gs2MegaFieldLayerContext : MonoBehaviour
     {
-
+        public void Start() {
+            if (Layer == null) {
+                Debug.LogError("Layer is not set in Gs2MegaFieldLayerContext.");
+            }
+        }
     }
 
     /// <summary>

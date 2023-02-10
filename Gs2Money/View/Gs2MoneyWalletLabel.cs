@@ -36,14 +36,14 @@ namespace Gs2.Unity.UiKit.Gs2Money
         {
             if (_fetcher.Fetched)
             {
-                var updatedAt = UnixTime.FromUnixTime(_fetcher.Wallet.UpdatedAt).ToLocalTime();
-                onUpdate.Invoke(
+                var updatedAt = _fetcher.Wallet.UpdatedAt == null ? DateTime.Now : UnixTime.FromUnixTime(_fetcher.Wallet.UpdatedAt).ToLocalTime();
+                onUpdate?.Invoke(
                     format.Replace(
-                        "{slot}", _fetcher.Wallet.Slot.ToString()
+                        "{slot}", $"{_fetcher?.Wallet?.Slot}"
                     ).Replace(
-                        "{paid}", _fetcher.Wallet.Paid.ToString()
+                        "{paid}", $"{_fetcher?.Wallet?.Paid}"
                     ).Replace(
-                        "{free}", _fetcher.Wallet.Free.ToString()
+                        "{free}", $"{_fetcher?.Wallet?.Free}"
                     ).Replace(
                         "{updatedAt:yyyy}", updatedAt.ToString("yyyy")
                     ).Replace(

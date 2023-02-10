@@ -36,15 +36,15 @@ namespace Gs2.Unity.UiKit.Gs2Mission
         {
             if (_fetcher.Fetched)
             {
-                onUpdate.Invoke(
+                onUpdate?.Invoke(
                     format.Replace(
-                        "{name}", _fetcher.CounterModel.Name.ToString()
+                        "{name}", $"{_fetcher?.CounterModel?.Name}"
                     ).Replace(
-                        "{metadata}", _fetcher.CounterModel.Metadata.ToString()
+                        "{metadata}", $"{_fetcher?.CounterModel?.Metadata}"
                     ).Replace(
-                        "{scopes}", _fetcher.CounterModel.Scopes.ToString()
+                        "{scopes}", $"{_fetcher?.CounterModel?.Scopes}"
                     ).Replace(
-                        "{challengePeriodEventId}", _fetcher.CounterModel.ChallengePeriodEventId.ToString()
+                        "{challengePeriodEventId}", $"{_fetcher?.CounterModel?.ChallengePeriodEventId}"
                     )
                 );
             }

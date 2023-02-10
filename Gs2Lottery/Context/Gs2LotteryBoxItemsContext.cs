@@ -28,7 +28,11 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.Context
 	[AddComponentMenu("GS2 UIKit/Lottery/BoxItems/Gs2LotteryBoxItemsContext")]
     public partial class Gs2LotteryBoxItemsContext : MonoBehaviour
     {
-
+        public void Start() {
+            if (BoxItems == null) {
+                Debug.LogError("BoxItems is not set in Gs2LotteryBoxItemsContext.");
+            }
+        }
     }
 
     /// <summary>

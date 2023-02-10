@@ -19,7 +19,9 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using Gs2.Core.Exception;
+using Gs2.Unity.Gs2Version.Model;
 using Gs2.Unity.Util;
 using UnityEngine;
 using UnityEngine.Events;
@@ -39,7 +41,7 @@ namespace Gs2.Unity.UiKit.Gs2Account
             yield return new WaitUntil(() => this._clientHolder.Initialized);
 
             var createAccountFuture = this._clientHolder.Gs2.Account.Namespace(
-                this.Namespace.namespaceName
+                this.AccountNamespace.namespaceName
             ).Create();
             yield return createAccountFuture;
             if (createAccountFuture.Error != null) {
@@ -57,11 +59,20 @@ namespace Gs2.Unity.UiKit.Gs2Account
 
             var loginFuture = this._clientHolder.Profile.LoginFuture(
                 new Gs2AccountAuthenticator(
+                    this._clientHolder.Profile.Gs2Session,
                     this._clientHolder.Profile.Gs2RestSession,
-                    this.Namespace.namespaceName,
+                    this.AccountNamespace.namespaceName,
                     this.Key.Grn,
                     account.UserId,
-                    account.Password
+                    account.Password,
+                    this.GatewayNamespace == null ? null : new GatewaySetting {
+                        gatewayNamespaceName = this.GatewayNamespace.NamespaceName,
+                        allowConcurrentAccess = this.allowConcurrentAccess
+                    },
+                    this.VersionNamespace == null ? null : new VersionSetting {
+                        versionNamespaceName = this.VersionNamespace.NamespaceName,
+                        targetVersions = this.targetVersions.ToArray()
+                    }
                 )
             );
             yield return loginFuture;
@@ -118,8 +129,12 @@ namespace Gs2.Unity.UiKit.Gs2Account
 
     public partial class Gs2CoreAutoLoginAction
     {
-        public Gs2.Unity.Gs2Account.ScriptableObject.Namespace Namespace;
+        public Gs2.Unity.Gs2Account.ScriptableObject.Namespace AccountNamespace;
         public Gs2.Unity.Gs2Key.ScriptableObject.Key Key;
+        public Gs2.Unity.Gs2Gateway.ScriptableObject.Namespace GatewayNamespace;
+        public bool allowConcurrentAccess;
+        public Gs2.Unity.Gs2Version.ScriptableObject.Namespace VersionNamespace;
+        public List<EzTargetVersion> targetVersions;
     }
 
     /// <summary>

@@ -36,17 +36,17 @@ namespace Gs2.Unity.UiKit.Gs2JobQueue
         {
             if (_fetcher.Fetched)
             {
-                onUpdate.Invoke(
+                onUpdate?.Invoke(
                     format.Replace(
-                        "{jobId}", _fetcher.Job.JobId.ToString()
+                        "{jobId}", $"{_fetcher?.Job?.JobId}"
                     ).Replace(
-                        "{scriptId}", _fetcher.Job.ScriptId.ToString()
+                        "{scriptId}", $"{_fetcher?.Job?.ScriptId}"
                     ).Replace(
-                        "{args}", _fetcher.Job.Args.ToString()
+                        "{args}", $"{_fetcher?.Job?.Args}"
                     ).Replace(
-                        "{currentRetryCount}", _fetcher.Job.CurrentRetryCount.ToString()
+                        "{currentRetryCount}", $"{_fetcher?.Job?.CurrentRetryCount}"
                     ).Replace(
-                        "{maxTryCount}", _fetcher.Job.MaxTryCount.ToString()
+                        "{maxTryCount}", $"{_fetcher?.Job?.MaxTryCount}"
                     )
                 );
             }

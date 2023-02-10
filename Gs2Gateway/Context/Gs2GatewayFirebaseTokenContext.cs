@@ -28,7 +28,11 @@ namespace Gs2.Unity.UiKit.Gs2Gateway.Context
 	[AddComponentMenu("GS2 UIKit/Gateway/FirebaseToken/Gs2GatewayFirebaseTokenContext")]
     public partial class Gs2GatewayFirebaseTokenContext : MonoBehaviour
     {
-
+        public void Start() {
+            if (FirebaseToken == null) {
+                Debug.LogError("FirebaseToken is not set in Gs2GatewayFirebaseTokenContext.");
+            }
+        }
     }
 
     /// <summary>

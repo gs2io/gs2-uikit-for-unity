@@ -28,7 +28,11 @@ namespace Gs2.Unity.UiKit.Gs2Datastore.Context
 	[AddComponentMenu("GS2 UIKit/Datastore/DataObject/Gs2DatastoreDataObjectContext")]
     public partial class Gs2DatastoreDataObjectContext : MonoBehaviour
     {
-
+        public void Start() {
+            if (DataObject == null) {
+                Debug.LogError("DataObject is not set in Gs2DatastoreDataObjectContext.");
+            }
+        }
     }
 
     /// <summary>

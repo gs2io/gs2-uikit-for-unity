@@ -28,7 +28,11 @@ namespace Gs2.Unity.UiKit.Gs2Enhance.Context
 	[AddComponentMenu("GS2 UIKit/Enhance/RateModel/Gs2EnhanceRateModelContext")]
     public partial class Gs2EnhanceRateModelContext : MonoBehaviour
     {
-
+        public void Start() {
+            if (RateModel == null) {
+                Debug.LogError("RateModel is not set in Gs2EnhanceRateModelContext.");
+            }
+        }
     }
 
     /// <summary>

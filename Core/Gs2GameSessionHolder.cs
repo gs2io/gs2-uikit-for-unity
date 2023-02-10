@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 
 namespace Gs2.Unity.UiKit.Core
@@ -22,6 +23,28 @@ namespace Gs2.Unity.UiKit.Core
                 }
                 return _instance as Gs2GameSessionHolder;
             }
+        }
+
+        public void Start() {
+            IEnumerator Impl() {
+                while (true) {
+                    if (_instance != null && _instance.Initialized) {
+#if GS2_ENABLE_UNITASK
+                        yield return Util.Gs2ClientHolder.Instance.Gs2.DispatchAsync(
+                            _instance.GameSession
+                        );
+#else
+                        yield return Util.Gs2ClientHolder.Instance.Gs2.Dispatch(
+                            _instance.GameSession
+                        );
+#endif
+                    }
+                
+                    yield return new WaitForSeconds(1);
+                }
+            }
+
+            StartCoroutine(nameof(Impl));
         }
     }
 }

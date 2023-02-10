@@ -29,6 +29,7 @@ namespace Gs2.Unity.UiKit.Gs2MegaField.Editor
 
             if (original == null) return;
 
+            serializedObject.Update();
             original.format = EditorGUILayout.TextField("Format", original.format);
 
             GUILayout.Label("Add Format Parameter");
@@ -47,6 +48,8 @@ namespace Gs2.Unity.UiKit.Gs2MegaField.Editor
                 GUI.FocusControl("");
                 EditorUtility.SetDirty(original);
             }
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("onUpdate"), true);
+            serializedObject.ApplyModifiedProperties();
         }
     }
 }

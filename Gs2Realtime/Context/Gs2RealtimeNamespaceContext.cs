@@ -28,7 +28,11 @@ namespace Gs2.Unity.UiKit.Gs2Realtime.Context
 	[AddComponentMenu("GS2 UIKit/Realtime/Namespace/Gs2RealtimeNamespaceContext")]
     public partial class Gs2RealtimeNamespaceContext : MonoBehaviour
     {
-
+        public void Start() {
+            if (Namespace == null) {
+                Debug.LogError("Namespace is not set in Gs2RealtimeNamespaceContext.");
+            }
+        }
     }
 
     /// <summary>

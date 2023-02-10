@@ -28,7 +28,11 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Context
 	[AddComponentMenu("GS2 UIKit/Formation/FormModel/Gs2FormationFormModelContext")]
     public partial class Gs2FormationFormModelContext : MonoBehaviour
     {
-
+        public void Start() {
+            if (FormModel == null) {
+                Debug.LogError("FormModel is not set in Gs2FormationFormModelContext.");
+            }
+        }
     }
 
     /// <summary>

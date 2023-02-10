@@ -36,21 +36,21 @@ namespace Gs2.Unity.UiKit.Gs2Mission
         {
             if (_fetcher.Fetched)
             {
-                onUpdate.Invoke(
+                onUpdate?.Invoke(
                     format.Replace(
-                        "{name}", _fetcher.MissionTaskModel.Name.ToString()
+                        "{name}", $"{_fetcher?.MissionTaskModel?.Name}"
                     ).Replace(
-                        "{metadata}", _fetcher.MissionTaskModel.Metadata.ToString()
+                        "{metadata}", $"{_fetcher?.MissionTaskModel?.Metadata}"
                     ).Replace(
-                        "{counterName}", _fetcher.MissionTaskModel.CounterName.ToString()
+                        "{counterName}", $"{_fetcher?.MissionTaskModel?.CounterName}"
                     ).Replace(
-                        "{targetValue}", _fetcher.MissionTaskModel.TargetValue.ToString()
+                        "{targetValue}", $"{_fetcher?.MissionTaskModel?.TargetValue}"
                     ).Replace(
-                        "{completeAcquireActions}", _fetcher.MissionTaskModel.CompleteAcquireActions.ToString()
+                        "{completeAcquireActions}", $"{_fetcher?.MissionTaskModel?.CompleteAcquireActions}"
                     ).Replace(
-                        "{challengePeriodEventId}", _fetcher.MissionTaskModel.ChallengePeriodEventId.ToString()
+                        "{challengePeriodEventId}", $"{_fetcher?.MissionTaskModel?.ChallengePeriodEventId}"
                     ).Replace(
-                        "{premiseMissionTaskName}", _fetcher.MissionTaskModel.PremiseMissionTaskName.ToString()
+                        "{premiseMissionTaskName}", $"{_fetcher?.MissionTaskModel?.PremiseMissionTaskName}"
                     )
                 );
             }

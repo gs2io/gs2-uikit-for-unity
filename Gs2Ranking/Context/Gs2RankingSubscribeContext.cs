@@ -28,7 +28,11 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Context
 	[AddComponentMenu("GS2 UIKit/Ranking/Subscribe/Gs2RankingSubscribeContext")]
     public partial class Gs2RankingSubscribeContext : MonoBehaviour
     {
-
+        public void Start() {
+            if (Subscribe == null) {
+                Debug.LogError("Subscribe is not set in Gs2RankingSubscribeContext.");
+            }
+        }
     }
 
     /// <summary>

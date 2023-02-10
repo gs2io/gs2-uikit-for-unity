@@ -28,7 +28,11 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking.Context
 	[AddComponentMenu("GS2 UIKit/Matchmaking/Gathering/Gs2MatchmakingGatheringContext")]
     public partial class Gs2MatchmakingGatheringContext : MonoBehaviour
     {
-
+        public void Start() {
+            if (Gathering == null) {
+                Debug.LogError("Gathering is not set in Gs2MatchmakingGatheringContext.");
+            }
+        }
     }
 
     /// <summary>

@@ -36,27 +36,27 @@ namespace Gs2.Unity.UiKit.Gs2Stamina
         {
             if (_fetcher.Fetched)
             {
-                onUpdate.Invoke(
+                onUpdate?.Invoke(
                     format.Replace(
-                        "{name}", _fetcher.StaminaModel.Name.ToString()
+                        "{name}", $"{_fetcher?.StaminaModel?.Name}"
                     ).Replace(
-                        "{metadata}", _fetcher.StaminaModel.Metadata.ToString()
+                        "{metadata}", $"{_fetcher?.StaminaModel?.Metadata}"
                     ).Replace(
-                        "{recoverIntervalMinutes}", _fetcher.StaminaModel.RecoverIntervalMinutes.ToString()
+                        "{recoverIntervalMinutes}", $"{_fetcher?.StaminaModel?.RecoverIntervalMinutes}"
                     ).Replace(
-                        "{recoverValue}", _fetcher.StaminaModel.RecoverValue.ToString()
+                        "{recoverValue}", $"{_fetcher?.StaminaModel?.RecoverValue}"
                     ).Replace(
-                        "{initialCapacity}", _fetcher.StaminaModel.InitialCapacity.ToString()
+                        "{initialCapacity}", $"{_fetcher?.StaminaModel?.InitialCapacity}"
                     ).Replace(
-                        "{isOverflow}", _fetcher.StaminaModel.IsOverflow.ToString()
+                        "{isOverflow}", $"{_fetcher?.StaminaModel?.IsOverflow}"
                     ).Replace(
-                        "{maxCapacity}", _fetcher.StaminaModel.MaxCapacity.ToString()
+                        "{maxCapacity}", $"{_fetcher?.StaminaModel?.MaxCapacity}"
                     ).Replace(
-                        "{maxStaminaTable}", _fetcher.StaminaModel.MaxStaminaTable.ToString()
+                        "{maxStaminaTable}", $"{_fetcher?.StaminaModel?.MaxStaminaTable}"
                     ).Replace(
-                        "{recoverIntervalTable}", _fetcher.StaminaModel.RecoverIntervalTable.ToString()
+                        "{recoverIntervalTable}", $"{_fetcher?.StaminaModel?.RecoverIntervalTable}"
                     ).Replace(
-                        "{recoverValueTable}", _fetcher.StaminaModel.RecoverValueTable.ToString()
+                        "{recoverValueTable}", $"{_fetcher?.StaminaModel?.RecoverValueTable}"
                     )
                 );
             }

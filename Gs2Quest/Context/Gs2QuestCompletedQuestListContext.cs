@@ -28,7 +28,11 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Context
 	[AddComponentMenu("GS2 UIKit/Quest/CompletedQuestList/Gs2QuestCompletedQuestListContext")]
     public partial class Gs2QuestCompletedQuestListContext : MonoBehaviour
     {
-
+        public void Start() {
+            if (CompletedQuestList == null) {
+                Debug.LogError("CompletedQuestList is not set in Gs2QuestCompletedQuestListContext.");
+            }
+        }
     }
 
     /// <summary>

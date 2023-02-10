@@ -28,7 +28,11 @@ namespace Gs2.Unity.UiKit.Gs2Chat.Context
 	[AddComponentMenu("GS2 UIKit/Chat/Namespace/Gs2ChatNamespaceContext")]
     public partial class Gs2ChatNamespaceContext : MonoBehaviour
     {
-
+        public void Start() {
+            if (Namespace == null) {
+                Debug.LogError("Namespace is not set in Gs2ChatNamespaceContext.");
+            }
+        }
     }
 
     /// <summary>

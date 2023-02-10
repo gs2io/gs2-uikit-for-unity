@@ -28,7 +28,11 @@ namespace Gs2.Unity.UiKit.Gs2Inbox.Context
 	[AddComponentMenu("GS2 UIKit/Inbox/Namespace/Gs2InboxNamespaceContext")]
     public partial class Gs2InboxNamespaceContext : MonoBehaviour
     {
-
+        public void Start() {
+            if (Namespace == null) {
+                Debug.LogError("Namespace is not set in Gs2InboxNamespaceContext.");
+            }
+        }
     }
 
     /// <summary>

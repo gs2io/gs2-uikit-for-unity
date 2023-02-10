@@ -28,7 +28,11 @@ namespace Gs2.Unity.UiKit.Gs2JobQueue.Context
 	[AddComponentMenu("GS2 UIKit/JobQueue/DeadLetterJob/Gs2JobQueueDeadLetterJobContext")]
     public partial class Gs2JobQueueDeadLetterJobContext : MonoBehaviour
     {
-
+        public void Start() {
+            if (DeadLetterJob == null) {
+                Debug.LogError("DeadLetterJob is not set in Gs2JobQueueDeadLetterJobContext.");
+            }
+        }
     }
 
     /// <summary>

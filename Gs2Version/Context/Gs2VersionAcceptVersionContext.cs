@@ -28,7 +28,11 @@ namespace Gs2.Unity.UiKit.Gs2Version.Context
 	[AddComponentMenu("GS2 UIKit/Version/AcceptVersion/Gs2VersionAcceptVersionContext")]
     public partial class Gs2VersionAcceptVersionContext : MonoBehaviour
     {
-
+        public void Start() {
+            if (AcceptVersion == null) {
+                Debug.LogError("AcceptVersion is not set in Gs2VersionAcceptVersionContext.");
+            }
+        }
     }
 
     /// <summary>

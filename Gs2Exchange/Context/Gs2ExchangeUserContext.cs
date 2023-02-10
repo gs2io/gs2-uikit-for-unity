@@ -28,7 +28,11 @@ namespace Gs2.Unity.UiKit.Gs2Exchange.Context
 	[AddComponentMenu("GS2 UIKit/Exchange/User/Gs2ExchangeUserContext")]
     public partial class Gs2ExchangeUserContext : MonoBehaviour
     {
-
+        public void Start() {
+            if (User == null) {
+                Debug.LogError("User is not set in Gs2ExchangeUserContext.");
+            }
+        }
     }
 
     /// <summary>

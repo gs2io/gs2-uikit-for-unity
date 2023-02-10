@@ -28,7 +28,11 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Context
 	[AddComponentMenu("GS2 UIKit/Formation/PropertyForm/Gs2FormationPropertyFormContext")]
     public partial class Gs2FormationPropertyFormContext : MonoBehaviour
     {
-
+        public void Start() {
+            if (PropertyForm == null) {
+                Debug.LogError("PropertyForm is not set in Gs2FormationPropertyFormContext.");
+            }
+        }
     }
 
     /// <summary>

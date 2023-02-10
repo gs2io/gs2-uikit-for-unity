@@ -28,7 +28,11 @@ namespace Gs2.Unity.UiKit.Gs2Stamina.Context
 	[AddComponentMenu("GS2 UIKit/Stamina/StaminaModel/Gs2StaminaStaminaModelContext")]
     public partial class Gs2StaminaStaminaModelContext : MonoBehaviour
     {
-
+        public void Start() {
+            if (StaminaModel == null) {
+                Debug.LogError("StaminaModel is not set in Gs2StaminaStaminaModelContext.");
+            }
+        }
     }
 
     /// <summary>

@@ -28,7 +28,11 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Context
 	[AddComponentMenu("GS2 UIKit/Inventory/User/Gs2InventoryUserContext")]
     public partial class Gs2InventoryUserContext : MonoBehaviour
     {
-
+        public void Start() {
+            if (User == null) {
+                Debug.LogError("User is not set in Gs2InventoryUserContext.");
+            }
+        }
     }
 
     /// <summary>
