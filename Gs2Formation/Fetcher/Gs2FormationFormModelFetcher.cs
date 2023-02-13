@@ -12,8 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
- * deny overwrite
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
@@ -53,8 +51,8 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Fetcher
                     
                     var domain = this._clientHolder.Gs2.Formation.Namespace(
                         this._context.FormModel.NamespaceName
-                    ).MoldModel(
-                        this._context.FormModel.MoldName
+                    ).FormModel(
+                        this._context.FormModel.FormModelName
                     );
                     var future = domain.Model();
                     yield return future;
@@ -70,7 +68,7 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Fetcher
                     }
                     else
                     {
-                        FormModel = future.Result.FormModel;
+                        FormModel = future.Result;
                         Fetched = true;
                     }
                 }
