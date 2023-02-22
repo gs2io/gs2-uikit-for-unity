@@ -12,8 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
- * deny overwrite
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable UnusedAutoPropertyAccessor.Local
@@ -26,10 +24,11 @@ using System.Linq;
 using Gs2.Core.Exception;
 using Gs2.Unity.Gs2Friend.Model;
 using Gs2.Unity.Util;
+using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Friend.Context;
 using UnityEngine;
 using UnityEngine.Events;
-using FollowUser = Gs2.Unity.Gs2Friend.ScriptableObject.FollowUser;
+using FollowUser = Gs2.Unity.Gs2Friend.ScriptableObject.OwnFollowUser;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -51,7 +50,7 @@ namespace Gs2.Unity.UiKit.Gs2Friend
                 this._gameSessionHolder.GameSession
             ).FollowUser(
                 this._context.FollowUser.TargetUserId,
-                withProfile
+                this._context.FollowUser.WithProfile
             );
             var future = domain.Follow(
             );
@@ -117,13 +116,18 @@ namespace Gs2.Unity.UiKit.Gs2Friend
     {
         private Gs2ClientHolder _clientHolder;
         private Gs2GameSessionHolder _gameSessionHolder;
-        private Gs2FriendFollowUserContext _context;
+        private Gs2FriendOwnFollowUserContext _context;
 
         public void Awake()
         {
             this._clientHolder = Gs2ClientHolder.Instance;
             this._gameSessionHolder = Gs2GameSessionHolder.Instance;
-            this._context = GetComponentInParent<Gs2FriendFollowUserContext>();
+            this._context = GetComponentInParent<Gs2FriendOwnFollowUserContext>();
+
+            if (_context == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2FriendOwnFollowUserContext.");
+                enabled = false;
+            }
         }
     }
 
@@ -141,7 +145,6 @@ namespace Gs2.Unity.UiKit.Gs2Friend
     /// </summary>
     public partial class Gs2FriendFollowUserFollowAction
     {
-        public bool withProfile;
     }
 
     /// <summary>
@@ -149,6 +152,7 @@ namespace Gs2.Unity.UiKit.Gs2Friend
     /// </summary>
     public partial class Gs2FriendFollowUserFollowAction
     {
+
         [Serializable]
         private class FollowCompleteEvent : UnityEvent<EzFollowUser>
         {

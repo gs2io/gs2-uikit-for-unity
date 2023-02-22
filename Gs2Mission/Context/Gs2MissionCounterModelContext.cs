@@ -60,6 +60,10 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Context
     public partial class Gs2MissionCounterModelContext
     {
         public CounterModel CounterModel;
+
+        public void SetCounterModel(CounterModel CounterModel) {
+            this.CounterModel = CounterModel;
+        }
     }
 
     /// <summary>

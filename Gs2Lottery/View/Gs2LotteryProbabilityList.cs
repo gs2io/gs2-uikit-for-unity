@@ -30,15 +30,16 @@ namespace Gs2.Unity.UiKit.Gs2Lottery
     /// Main
     /// </summary>
 
-    [AddComponentMenu("GS2 UIKit/Lottery/PrizeTable/View/Gs2LotteryPrizeTableList")]
-    public partial class Gs2LotteryPrizeTableList : MonoBehaviour
+    [AddComponentMenu("GS2 UIKit/Lottery/Probability/View/Gs2LotteryProbabilityList")]
+    public partial class Gs2LotteryProbabilityList : MonoBehaviour
     {
-        private List<Gs2LotteryPrizeTableContext> _children;
+        private List<Gs2LotteryProbabilityContext> _children;
 
         public void Update() {
-            if (_fetcher.Fetched) {
+            if (_fetcher.Fetched && this._fetcher.Probabilities != null) {
                 for (var i = 0; i < this.maximumItems; i++) {
                     if (i < this._fetcher.Probabilities.Count) {
+                        _children[i].Probability.prizeId = this._fetcher.Probabilities[i].Prize.PrizeId;
                         _children[i].gameObject.SetActive(true);
                     }
                     else {
@@ -48,25 +49,28 @@ namespace Gs2.Unity.UiKit.Gs2Lottery
             }
         }
     }
-    
+
     /// <summary>
     /// Dependent components
     /// </summary>
-    
-    public partial class Gs2LotteryPrizeTableList
+
+    public partial class Gs2LotteryProbabilityList
     {
-        private Gs2LotteryPrizeTableContext _context;
+        private Gs2LotteryLotteryModelContext _context;
         private Gs2LotteryProbabilityListFetcher _fetcher;
 
         public void Awake()
         {
-            _context = GetComponentInParent<Gs2LotteryPrizeTableContext>();
+            _context = GetComponentInParent<Gs2LotteryLotteryModelContext>();
             _fetcher = GetComponentInParent<Gs2LotteryProbabilityListFetcher>();
 
-            _children = new List<Gs2LotteryPrizeTableContext>();
+            _children = new List<Gs2LotteryProbabilityContext>();
             for (var i = 0; i < this.maximumItems; i++) {
                 var node = Instantiate(this.prefab, transform);
-                node.PrizeTable = _context.PrizeTable;
+                node.Probability = Probability.New(
+                    _context.LotteryModel,
+                    ""
+                );
                 node.gameObject.SetActive(false);
                 _children.Add(node);
             }
@@ -78,26 +82,26 @@ namespace Gs2.Unity.UiKit.Gs2Lottery
     /// Public properties
     /// </summary>
 
-    public partial class Gs2LotteryPrizeTableList
+    public partial class Gs2LotteryProbabilityList
     {
-        
+
     }
-    
+
     /// <summary>
     /// Parameters for Inspector
     /// </summary>
-    
-    public partial class Gs2LotteryPrizeTableList
+
+    public partial class Gs2LotteryProbabilityList
     {
-        public Gs2LotteryPrizeTableContext prefab;
+        public Gs2LotteryProbabilityContext prefab;
         public int maximumItems;
     }
 
     /// <summary>
     /// Event handlers
     /// </summary>
-    public partial class Gs2LotteryPrizeTableList
+    public partial class Gs2LotteryProbabilityList
     {
-        
+
     }
 }

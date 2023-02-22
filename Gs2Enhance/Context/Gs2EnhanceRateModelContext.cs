@@ -60,6 +60,10 @@ namespace Gs2.Unity.UiKit.Gs2Enhance.Context
     public partial class Gs2EnhanceRateModelContext
     {
         public RateModel RateModel;
+
+        public void SetRateModel(RateModel RateModel) {
+            this.RateModel = RateModel;
+        }
     }
 
     /// <summary>

@@ -24,9 +24,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Gs2.Core.Exception;
-using Gs2.Unity.Gs2Enhance.ScriptableObject;
 using Gs2.Unity.Gs2Exchange.Model;
 using Gs2.Unity.Util;
+using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Exchange.Context;
 using UnityEngine;
 using UnityEngine.Events;
@@ -110,6 +110,11 @@ namespace Gs2.Unity.UiKit.Gs2Exchange
             this._clientHolder = Gs2ClientHolder.Instance;
             this._gameSessionHolder = Gs2GameSessionHolder.Instance;
             this._context = GetComponentInParent<Gs2ExchangeRateModelContext>();
+
+            if (_context == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ExchangeRateModelContext.");
+                enabled = false;
+            }
         }
     }
 
@@ -132,10 +137,22 @@ namespace Gs2.Unity.UiKit.Gs2Exchange
 
         public void SetCount(int value) {
             Count = value;
+            this.onChangeCount.Invoke(Count);
+        }
+
+        public void DecreaseCount() {
+            Count -= 1;
+            this.onChangeCount.Invoke(Count);
+        }
+
+        public void IncreaseCount() {
+            Count += 1;
+            this.onChangeCount.Invoke(Count);
         }
 
         public void SetConfig(List<Gs2.Unity.Gs2Exchange.Model.EzConfig> value) {
             Config = value;
+            this.onChangeConfig.Invoke(Config);
         }
     }
 
@@ -144,6 +161,49 @@ namespace Gs2.Unity.UiKit.Gs2Exchange
     /// </summary>
     public partial class Gs2ExchangeExchangeExchangeAction
     {
+
+        [Serializable]
+        private class ChangeRateNameEvent : UnityEvent<string>
+        {
+
+        }
+
+        [SerializeField]
+        private ChangeRateNameEvent onChangeRateName = new ChangeRateNameEvent();
+        public event UnityAction<string> OnChangeRateName
+        {
+            add => this.onChangeRateName.AddListener(value);
+            remove => this.onChangeRateName.RemoveListener(value);
+        }
+
+        [Serializable]
+        private class ChangeCountEvent : UnityEvent<int>
+        {
+
+        }
+
+        [SerializeField]
+        private ChangeCountEvent onChangeCount = new ChangeCountEvent();
+        public event UnityAction<int> OnChangeCount
+        {
+            add => this.onChangeCount.AddListener(value);
+            remove => this.onChangeCount.RemoveListener(value);
+        }
+
+        [Serializable]
+        private class ChangeConfigEvent : UnityEvent<List<Gs2.Unity.Gs2Exchange.Model.EzConfig>>
+        {
+
+        }
+
+        [SerializeField]
+        private ChangeConfigEvent onChangeConfig = new ChangeConfigEvent();
+        public event UnityAction<List<Gs2.Unity.Gs2Exchange.Model.EzConfig>> OnChangeConfig
+        {
+            add => this.onChangeConfig.AddListener(value);
+            remove => this.onChangeConfig.RemoveListener(value);
+        }
+
         [Serializable]
         private class ExchangeCompleteEvent : UnityEvent<string>
         {

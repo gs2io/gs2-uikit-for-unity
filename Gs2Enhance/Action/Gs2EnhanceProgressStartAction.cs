@@ -24,10 +24,11 @@ using System.Linq;
 using Gs2.Core.Exception;
 using Gs2.Unity.Gs2Enhance.Model;
 using Gs2.Unity.Util;
+using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Enhance.Context;
 using UnityEngine;
 using UnityEngine.Events;
-using Progress = Gs2.Unity.Gs2Enhance.ScriptableObject.Progress;
+using Progress = Gs2.Unity.Gs2Enhance.ScriptableObject.OwnProgress;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -102,13 +103,18 @@ namespace Gs2.Unity.UiKit.Gs2Enhance
     {
         private Gs2ClientHolder _clientHolder;
         private Gs2GameSessionHolder _gameSessionHolder;
-        private Gs2EnhanceProgressContext _context;
+        private Gs2EnhanceOwnProgressContext _context;
 
         public void Awake()
         {
             this._clientHolder = Gs2ClientHolder.Instance;
             this._gameSessionHolder = Gs2GameSessionHolder.Instance;
-            this._context = GetComponentInParent<Gs2EnhanceProgressContext>();
+            this._context = GetComponentInParent<Gs2EnhanceOwnProgressContext>();
+
+            if (_context == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2EnhanceOwnProgressContext.");
+                enabled = false;
+            }
         }
     }
 
@@ -134,22 +140,27 @@ namespace Gs2.Unity.UiKit.Gs2Enhance
 
         public void SetRateName(string value) {
             RateName = value;
+            this.onChangeRateName.Invoke(RateName);
         }
 
         public void SetTargetItemSetId(string value) {
             TargetItemSetId = value;
+            this.onChangeTargetItemSetId.Invoke(TargetItemSetId);
         }
 
         public void SetMaterials(List<Gs2.Unity.Gs2Enhance.Model.EzMaterial> value) {
             Materials = value;
+            this.onChangeMaterials.Invoke(Materials);
         }
 
         public void SetForce(bool value) {
             Force = value;
+            this.onChangeForce.Invoke(Force);
         }
 
         public void SetConfig(List<Gs2.Unity.Gs2Enhance.Model.EzConfig> value) {
             Config = value;
+            this.onChangeConfig.Invoke(Config);
         }
     }
 
@@ -158,6 +169,77 @@ namespace Gs2.Unity.UiKit.Gs2Enhance
     /// </summary>
     public partial class Gs2EnhanceProgressStartAction
     {
+
+        [Serializable]
+        private class ChangeRateNameEvent : UnityEvent<string>
+        {
+
+        }
+
+        [SerializeField]
+        private ChangeRateNameEvent onChangeRateName = new ChangeRateNameEvent();
+        public event UnityAction<string> OnChangeRateName
+        {
+            add => this.onChangeRateName.AddListener(value);
+            remove => this.onChangeRateName.RemoveListener(value);
+        }
+
+        [Serializable]
+        private class ChangeTargetItemSetIdEvent : UnityEvent<string>
+        {
+
+        }
+
+        [SerializeField]
+        private ChangeTargetItemSetIdEvent onChangeTargetItemSetId = new ChangeTargetItemSetIdEvent();
+        public event UnityAction<string> OnChangeTargetItemSetId
+        {
+            add => this.onChangeTargetItemSetId.AddListener(value);
+            remove => this.onChangeTargetItemSetId.RemoveListener(value);
+        }
+
+        [Serializable]
+        private class ChangeMaterialsEvent : UnityEvent<List<Gs2.Unity.Gs2Enhance.Model.EzMaterial>>
+        {
+
+        }
+
+        [SerializeField]
+        private ChangeMaterialsEvent onChangeMaterials = new ChangeMaterialsEvent();
+        public event UnityAction<List<Gs2.Unity.Gs2Enhance.Model.EzMaterial>> OnChangeMaterials
+        {
+            add => this.onChangeMaterials.AddListener(value);
+            remove => this.onChangeMaterials.RemoveListener(value);
+        }
+
+        [Serializable]
+        private class ChangeForceEvent : UnityEvent<bool>
+        {
+
+        }
+
+        [SerializeField]
+        private ChangeForceEvent onChangeForce = new ChangeForceEvent();
+        public event UnityAction<bool> OnChangeForce
+        {
+            add => this.onChangeForce.AddListener(value);
+            remove => this.onChangeForce.RemoveListener(value);
+        }
+
+        [Serializable]
+        private class ChangeConfigEvent : UnityEvent<List<Gs2.Unity.Gs2Enhance.Model.EzConfig>>
+        {
+
+        }
+
+        [SerializeField]
+        private ChangeConfigEvent onChangeConfig = new ChangeConfigEvent();
+        public event UnityAction<List<Gs2.Unity.Gs2Enhance.Model.EzConfig>> OnChangeConfig
+        {
+            add => this.onChangeConfig.AddListener(value);
+            remove => this.onChangeConfig.RemoveListener(value);
+        }
+
         [Serializable]
         private class StartCompleteEvent : UnityEvent<string>
         {

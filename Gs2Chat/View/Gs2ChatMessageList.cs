@@ -18,6 +18,7 @@
 
 using System.Collections.Generic;
 using Gs2.Unity.Gs2Chat.ScriptableObject;
+using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Chat.Context;
 using Gs2.Unity.UiKit.Gs2Chat.Fetcher;
 using UnityEngine;
@@ -34,7 +35,7 @@ namespace Gs2.Unity.UiKit.Gs2Chat
         private List<Gs2ChatMessageContext> _children;
 
         public void Update() {
-            if (_fetcher.Fetched) {
+            if (_fetcher.Fetched && this._fetcher.Messages != null) {
                 for (var i = 0; i < this.maximumItems; i++) {
                     if (i < this._fetcher.Messages.Count) {
                         _children[i].Message.messageName = this._fetcher.Messages[i].Name;
@@ -61,6 +62,11 @@ namespace Gs2.Unity.UiKit.Gs2Chat
         {
             _context = GetComponentInParent<Gs2ChatRoomContext>();
             _fetcher = GetComponentInParent<Gs2ChatMessageListFetcher>();
+
+            if (_fetcher == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ChatMessageListFetcher.");
+                enabled = false;
+            }
 
             _children = new List<Gs2ChatMessageContext>();
             for (var i = 0; i < this.maximumItems; i++) {

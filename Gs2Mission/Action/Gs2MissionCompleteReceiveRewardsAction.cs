@@ -24,10 +24,11 @@ using System.Linq;
 using Gs2.Core.Exception;
 using Gs2.Unity.Gs2Mission.Model;
 using Gs2.Unity.Util;
+using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Mission.Context;
 using UnityEngine;
 using UnityEngine.Events;
-using Complete = Gs2.Unity.Gs2Mission.ScriptableObject.Complete;
+using Complete = Gs2.Unity.Gs2Mission.ScriptableObject.OwnComplete;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -99,13 +100,18 @@ namespace Gs2.Unity.UiKit.Gs2Mission
     {
         private Gs2ClientHolder _clientHolder;
         private Gs2GameSessionHolder _gameSessionHolder;
-        private Gs2MissionCompleteContext _context;
+        private Gs2MissionOwnCompleteContext _context;
 
         public void Awake()
         {
             this._clientHolder = Gs2ClientHolder.Instance;
             this._gameSessionHolder = Gs2GameSessionHolder.Instance;
-            this._context = GetComponentInParent<Gs2MissionCompleteContext>();
+            this._context = GetComponentInParent<Gs2MissionOwnCompleteContext>();
+
+            if (_context == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MissionOwnCompleteContext.");
+                enabled = false;
+            }
         }
     }
 
@@ -127,6 +133,7 @@ namespace Gs2.Unity.UiKit.Gs2Mission
 
         public void SetMissionTaskName(string value) {
             MissionTaskName = value;
+            this.onChangeMissionTaskName.Invoke(MissionTaskName);
         }
     }
 
@@ -135,6 +142,21 @@ namespace Gs2.Unity.UiKit.Gs2Mission
     /// </summary>
     public partial class Gs2MissionCompleteReceiveRewardsAction
     {
+
+        [Serializable]
+        private class ChangeMissionTaskNameEvent : UnityEvent<string>
+        {
+
+        }
+
+        [SerializeField]
+        private ChangeMissionTaskNameEvent onChangeMissionTaskName = new ChangeMissionTaskNameEvent();
+        public event UnityAction<string> OnChangeMissionTaskName
+        {
+            add => this.onChangeMissionTaskName.AddListener(value);
+            remove => this.onChangeMissionTaskName.RemoveListener(value);
+        }
+
         [Serializable]
         private class ReceiveRewardsCompleteEvent : UnityEvent<string>
         {

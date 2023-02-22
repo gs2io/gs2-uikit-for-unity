@@ -16,6 +16,8 @@
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
 
+using Gs2.Unity.Gs2Realtime.ScriptableObject;
+using Gs2.Unity.UiKit.Gs2Realtime.Context;
 using UnityEditor;
 using UnityEngine;
 
@@ -28,6 +30,26 @@ namespace Gs2.Unity.UiKit.Gs2Realtime.Editor
             var original = target as Gs2RealtimeRoomLabel;
 
             if (original == null) return;
+
+            var context = original.GetComponentInParent<Gs2RealtimeRoomContext>();
+            if (context == null) {
+                EditorGUILayout.HelpBox("Gs2RealtimeRoomContext not found.", MessageType.Error);
+                if (GUILayout.Button("Add Context")) {
+                    original.gameObject.AddComponent<Gs2RealtimeRoomContext>();
+                }
+            }
+            else {
+                EditorGUI.BeginDisabledGroup(true);
+                EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2RealtimeRoomContext), false);
+                EditorGUI.indentLevel++;
+                EditorGUILayout.ObjectField("Room", context.Room, typeof(Room), false);
+                EditorGUI.indentLevel++;
+                EditorGUILayout.TextField("NamespaceName", context.Room?.NamespaceName.ToString());
+                EditorGUILayout.TextField("RoomName", context.Room?.RoomName.ToString());
+                EditorGUI.indentLevel--;
+                EditorGUI.indentLevel--;
+                EditorGUI.EndDisabledGroup();
+            }
 
             serializedObject.Update();
             original.format = EditorGUILayout.TextField("Format", original.format);

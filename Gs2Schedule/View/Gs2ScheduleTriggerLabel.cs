@@ -34,7 +34,7 @@ namespace Gs2.Unity.UiKit.Gs2Schedule
     {
         public void Update()
         {
-            if (_fetcher.Fetched)
+            if (_fetcher.Fetched && _fetcher.Trigger != null)
             {
                 var createdAt = _fetcher.Trigger.CreatedAt == null ? DateTime.Now : UnixTime.FromUnixTime(_fetcher.Trigger.CreatedAt).ToLocalTime();
                 var expiresAt = _fetcher.Trigger.ExpiresAt == null ? DateTime.Now : UnixTime.FromUnixTime(_fetcher.Trigger.ExpiresAt).ToLocalTime();
@@ -95,11 +95,17 @@ namespace Gs2.Unity.UiKit.Gs2Schedule
 
     public partial class Gs2ScheduleTriggerLabel
     {
-        private Gs2ScheduleTriggerFetcher _fetcher;
+        private Gs2ScheduleOwnTriggerFetcher _fetcher;
 
         public void Awake()
         {
-            _fetcher = GetComponentInParent<Gs2ScheduleTriggerFetcher>();
+            _fetcher = GetComponentInParent<Gs2ScheduleOwnTriggerFetcher>();
+
+            if (_fetcher == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ScheduleOwnTriggerFetcher.");
+                enabled = false;
+            }
+
             Update();
         }
     }

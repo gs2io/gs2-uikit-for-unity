@@ -17,6 +17,7 @@
 // ReSharper disable CheckNamespace
 
 using System.Collections.Generic;
+using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Inventory.Fetcher;
 using UnityEngine;
 
@@ -31,31 +32,31 @@ namespace Gs2.Unity.UiKit.Gs2Inventory
     {
         public void Update()
         {
-            if (_fetcher.Fetched)
+            if (_fetcher.Fetched && _fetcher.ItemSet != null)
             {
                 switch(expression)
                 {
                     case Expression.In:
-                        target.SetActive(enableCounts.Contains(_fetcher.ItemSet.Count));
+                        target.SetActive(enableCounts.Contains(_fetcher.ItemSet[index].Count));
                         break;
                     case Expression.NotIn:
-                        target.SetActive(!enableCounts.Contains(_fetcher.ItemSet.Count));
+                        target.SetActive(!enableCounts.Contains(_fetcher.ItemSet[index].Count));
                         break;
                     case Expression.Less:
-                        target.SetActive(enableCount < _fetcher.ItemSet.Count);
+                        target.SetActive(enableCount > _fetcher.ItemSet[index].Count);
                         break;
                     case Expression.LessEqual:
-                        target.SetActive(enableCount <= _fetcher.ItemSet.Count);
+                        target.SetActive(enableCount >= _fetcher.ItemSet[index].Count);
                         break;
                     case Expression.Greater:
-                        target.SetActive(enableCount > _fetcher.ItemSet.Count);
+                        target.SetActive(enableCount < _fetcher.ItemSet[index].Count);
                         break;
                     case Expression.GreaterEqual:
-                        target.SetActive(enableCount >= _fetcher.ItemSet.Count);
+                        target.SetActive(enableCount <= _fetcher.ItemSet[index].Count);
                         break;
                 }
             }
-            else 
+            else
             {
                 target.SetActive(false);
             }
@@ -65,30 +66,35 @@ namespace Gs2.Unity.UiKit.Gs2Inventory
     /// <summary>
     /// Dependent components
     /// </summary>
-    
+
     public partial class Gs2InventoryItemSetCountEnabler
     {
-        private Gs2InventoryItemSetFetcher _fetcher;
+        private Gs2InventoryOwnItemSetFetcher _fetcher;
 
         public void Awake()
         {
-            _fetcher = GetComponentInParent<Gs2InventoryItemSetFetcher>();
+            _fetcher = GetComponentInParent<Gs2InventoryOwnItemSetFetcher>();
+
+            if (_fetcher == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2InventoryOwnItemSetFetcher.");
+                enabled = false;
+            }
         }
     }
 
     /// <summary>
     /// Public properties
     /// </summary>
-    
+
     public partial class Gs2InventoryItemSetCountEnabler
     {
-        
+
     }
 
     /// <summary>
     /// Parameters for Inspector
     /// </summary>
-    
+
     public partial class Gs2InventoryItemSetCountEnabler
     {
         public enum Expression {
@@ -105,6 +111,8 @@ namespace Gs2.Unity.UiKit.Gs2Inventory
         public List<long> enableCounts;
 
         public long enableCount;
+
+        public int index;
 
         public GameObject target;
     }

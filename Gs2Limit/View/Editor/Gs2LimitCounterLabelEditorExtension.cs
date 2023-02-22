@@ -16,6 +16,8 @@
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
 
+using Gs2.Unity.Gs2Limit.ScriptableObject;
+using Gs2.Unity.UiKit.Gs2Limit.Context;
 using UnityEditor;
 using UnityEngine;
 
@@ -28,6 +30,35 @@ namespace Gs2.Unity.UiKit.Gs2Limit.Editor
             var original = target as Gs2LimitCounterLabel;
 
             if (original == null) return;
+
+            var context = original.GetComponentInParent<Gs2LimitOwnCounterContext>();
+            if (context == null) {
+                EditorGUILayout.HelpBox("Gs2LimitOwnCounterContext not found.", MessageType.Error);
+                if (GUILayout.Button("Add Context")) {
+                    original.gameObject.AddComponent<Gs2LimitOwnCounterContext>();
+                }
+            }
+            else {
+                if (context.transform.parent.GetComponent<Gs2LimitOwnCounterList>() != null) {
+                    EditorGUI.BeginDisabledGroup(true);
+                    EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2LimitOwnCounterContext), false);
+                    EditorGUI.EndDisabledGroup();
+                    EditorGUILayout.HelpBox("Counter is auto assign from Gs2LimitOwnCounterList.", MessageType.Info);
+                }
+                else {
+                    EditorGUI.BeginDisabledGroup(true);
+                    EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2LimitOwnCounterContext), false);
+                    EditorGUI.indentLevel++;
+                    EditorGUILayout.ObjectField("Counter", context.Counter, typeof(OwnCounter), false);
+                    EditorGUI.indentLevel++;
+                    EditorGUILayout.TextField("NamespaceName", context.Counter?.NamespaceName.ToString());
+                    EditorGUILayout.TextField("LimitName", context.Counter?.LimitName.ToString());
+                    EditorGUILayout.TextField("CounterName", context.Counter?.CounterName.ToString());
+                    EditorGUI.indentLevel--;
+                    EditorGUI.indentLevel--;
+                    EditorGUI.EndDisabledGroup();
+                }
+            }
 
             serializedObject.Update();
             original.format = EditorGUILayout.TextField("Format", original.format);

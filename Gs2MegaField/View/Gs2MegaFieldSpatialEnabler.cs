@@ -16,6 +16,7 @@
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
 
+using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2MegaField.Fetcher;
 using UnityEngine;
 
@@ -59,6 +60,11 @@ namespace Gs2.Unity.UiKit.Gs2MegaField
         public void Awake()
         {
             _fetcher = GetComponentInParent<Gs2MegaFieldSpatialFetcher>();
+
+            if (_fetcher == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MegaFieldSpatialFetcher.");
+                enabled = false;
+            }
         }
     }
 

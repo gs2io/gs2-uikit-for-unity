@@ -34,7 +34,7 @@ namespace Gs2.Unity.UiKit.Gs2Limit
     {
         public void Update()
         {
-            if (_fetcher.Fetched)
+            if (_fetcher.Fetched && _fetcher.LimitModel != null)
             {
                 onUpdate?.Invoke(
                     format.Replace(
@@ -68,6 +68,12 @@ namespace Gs2.Unity.UiKit.Gs2Limit
         public void Awake()
         {
             _fetcher = GetComponentInParent<Gs2LimitLimitModelFetcher>();
+
+            if (_fetcher == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2LimitLimitModelFetcher.");
+                enabled = false;
+            }
+
             Update();
         }
     }

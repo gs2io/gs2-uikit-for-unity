@@ -34,7 +34,7 @@ namespace Gs2.Unity.UiKit.Gs2Quest
     {
         public void Update()
         {
-            if (_fetcher.Fetched)
+            if (_fetcher.Fetched && _fetcher.CompletedQuestList != null)
             {
                 onUpdate?.Invoke(
                     format.Replace(
@@ -53,11 +53,17 @@ namespace Gs2.Unity.UiKit.Gs2Quest
 
     public partial class Gs2QuestCompletedQuestListLabel
     {
-        private Gs2QuestCompletedQuestListFetcher _fetcher;
+        private Gs2QuestOwnCompletedQuestListFetcher _fetcher;
 
         public void Awake()
         {
-            _fetcher = GetComponentInParent<Gs2QuestCompletedQuestListFetcher>();
+            _fetcher = GetComponentInParent<Gs2QuestOwnCompletedQuestListFetcher>();
+
+            if (_fetcher == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2QuestOwnCompletedQuestListFetcher.");
+                enabled = false;
+            }
+
             Update();
         }
     }

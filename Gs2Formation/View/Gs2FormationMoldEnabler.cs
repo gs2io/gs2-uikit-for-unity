@@ -16,6 +16,7 @@
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
 
+using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Formation.Fetcher;
 using UnityEngine;
 
@@ -54,11 +55,16 @@ namespace Gs2.Unity.UiKit.Gs2Formation
 
     public partial class Gs2FormationMoldEnabler
     {
-        private Gs2FormationMoldFetcher _fetcher;
+        private Gs2FormationOwnMoldFetcher _fetcher;
 
         public void Awake()
         {
-            _fetcher = GetComponentInParent<Gs2FormationMoldFetcher>();
+            _fetcher = GetComponentInParent<Gs2FormationOwnMoldFetcher>();
+
+            if (_fetcher == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2FormationOwnMoldFetcher.");
+                enabled = false;
+            }
         }
     }
 

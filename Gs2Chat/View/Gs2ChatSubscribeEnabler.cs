@@ -16,6 +16,7 @@
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
 
+using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Chat.Fetcher;
 using UnityEngine;
 
@@ -54,11 +55,16 @@ namespace Gs2.Unity.UiKit.Gs2Chat
 
     public partial class Gs2ChatSubscribeEnabler
     {
-        private Gs2ChatSubscribeFetcher _fetcher;
+        private Gs2ChatOwnSubscribeFetcher _fetcher;
 
         public void Awake()
         {
-            _fetcher = GetComponentInParent<Gs2ChatSubscribeFetcher>();
+            _fetcher = GetComponentInParent<Gs2ChatOwnSubscribeFetcher>();
+
+            if (_fetcher == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ChatOwnSubscribeFetcher.");
+                enabled = false;
+            }
         }
     }
 

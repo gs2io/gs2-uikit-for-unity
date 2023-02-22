@@ -18,6 +18,7 @@
 
 using System.Collections.Generic;
 using Gs2.Unity.Gs2Limit.ScriptableObject;
+using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Limit.Context;
 using Gs2.Unity.UiKit.Gs2Limit.Fetcher;
 using UnityEngine;
@@ -34,7 +35,7 @@ namespace Gs2.Unity.UiKit.Gs2Limit
         private List<Gs2LimitLimitModelContext> _children;
 
         public void Update() {
-            if (_fetcher.Fetched) {
+            if (_fetcher.Fetched && this._fetcher.LimitModels != null) {
                 for (var i = 0; i < this.maximumItems; i++) {
                     if (i < this._fetcher.LimitModels.Count) {
                         _children[i].LimitModel.limitName = this._fetcher.LimitModels[i].Name;
@@ -61,6 +62,11 @@ namespace Gs2.Unity.UiKit.Gs2Limit
         {
             _context = GetComponentInParent<Gs2LimitNamespaceContext>();
             _fetcher = GetComponentInParent<Gs2LimitLimitModelListFetcher>();
+
+            if (_fetcher == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2LimitLimitModelListFetcher.");
+                enabled = false;
+            }
 
             _children = new List<Gs2LimitLimitModelContext>();
             for (var i = 0; i < this.maximumItems; i++) {

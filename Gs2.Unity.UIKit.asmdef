@@ -6,6 +6,8 @@
         "Gs2.Unity",
         "UniTask",
         "UniTask.Linq",
+        "UnityEngine.Purchasing",
+        "UnityEngine.Purchasing.Stores",
         "AppleAuth"
     ],
     "includePlatforms": [],
@@ -16,6 +18,11 @@
     "autoReferenced": true,
     "defineConstraints": [],
     "versionDefines": [
+        {
+            "name": "com.unity.purchasing",
+            "expression": "",
+            "define": "GS2_ENABLE_PURCHASING"
+        },
         {
             "name": "com.lupidan.apple-signin-unity",
             "expression": "",

@@ -34,7 +34,7 @@ namespace Gs2.Unity.UiKit.Gs2Datastore
     {
         public void Update()
         {
-            if (_fetcher.Fetched)
+            if (_fetcher.Fetched && _fetcher.DataObject != null)
             {
                 var createdAt = _fetcher.DataObject.CreatedAt == null ? DateTime.Now : UnixTime.FromUnixTime(_fetcher.DataObject.CreatedAt).ToLocalTime();
                 var updatedAt = _fetcher.DataObject.UpdatedAt == null ? DateTime.Now : UnixTime.FromUnixTime(_fetcher.DataObject.UpdatedAt).ToLocalTime();
@@ -105,11 +105,17 @@ namespace Gs2.Unity.UiKit.Gs2Datastore
 
     public partial class Gs2DatastoreDataObjectLabel
     {
-        private Gs2DatastoreDataObjectFetcher _fetcher;
+        private Gs2DatastoreOwnDataObjectFetcher _fetcher;
 
         public void Awake()
         {
-            _fetcher = GetComponentInParent<Gs2DatastoreDataObjectFetcher>();
+            _fetcher = GetComponentInParent<Gs2DatastoreOwnDataObjectFetcher>();
+
+            if (_fetcher == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2DatastoreOwnDataObjectFetcher.");
+                enabled = false;
+            }
+
             Update();
         }
     }

@@ -34,7 +34,7 @@ namespace Gs2.Unity.UiKit.Gs2Dictionary
     {
         public void Update()
         {
-            if (_fetcher.Fetched)
+            if (_fetcher.Fetched && _fetcher.Entry != null)
             {
                 var acquiredAt = _fetcher.Entry.AcquiredAt == null ? DateTime.Now : UnixTime.FromUnixTime(_fetcher.Entry.AcquiredAt).ToLocalTime();
                 onUpdate?.Invoke(
@@ -76,11 +76,17 @@ namespace Gs2.Unity.UiKit.Gs2Dictionary
 
     public partial class Gs2DictionaryEntryLabel
     {
-        private Gs2DictionaryEntryFetcher _fetcher;
+        private Gs2DictionaryOwnEntryFetcher _fetcher;
 
         public void Awake()
         {
-            _fetcher = GetComponentInParent<Gs2DictionaryEntryFetcher>();
+            _fetcher = GetComponentInParent<Gs2DictionaryOwnEntryFetcher>();
+
+            if (_fetcher == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2DictionaryOwnEntryFetcher.");
+                enabled = false;
+            }
+
             Update();
         }
     }

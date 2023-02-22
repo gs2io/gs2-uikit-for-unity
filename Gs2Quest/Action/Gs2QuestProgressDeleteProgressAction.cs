@@ -24,10 +24,11 @@ using System.Linq;
 using Gs2.Core.Exception;
 using Gs2.Unity.Gs2Quest.Model;
 using Gs2.Unity.Util;
+using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Quest.Context;
 using UnityEngine;
 using UnityEngine.Events;
-using Progress = Gs2.Unity.Gs2Quest.ScriptableObject.Progress;
+using Progress = Gs2.Unity.Gs2Quest.ScriptableObject.OwnProgress;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -112,13 +113,18 @@ namespace Gs2.Unity.UiKit.Gs2Quest
     {
         private Gs2ClientHolder _clientHolder;
         private Gs2GameSessionHolder _gameSessionHolder;
-        private Gs2QuestProgressContext _context;
+        private Gs2QuestOwnProgressContext _context;
 
         public void Awake()
         {
             this._clientHolder = Gs2ClientHolder.Instance;
             this._gameSessionHolder = Gs2GameSessionHolder.Instance;
-            this._context = GetComponentInParent<Gs2QuestProgressContext>();
+            this._context = GetComponentInParent<Gs2QuestOwnProgressContext>();
+
+            if (_context == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2QuestOwnProgressContext.");
+                enabled = false;
+            }
         }
     }
 
@@ -143,6 +149,7 @@ namespace Gs2.Unity.UiKit.Gs2Quest
     /// </summary>
     public partial class Gs2QuestProgressDeleteProgressAction
     {
+
         [Serializable]
         private class DeleteProgressCompleteEvent : UnityEvent<EzProgress>
         {

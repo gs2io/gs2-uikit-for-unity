@@ -26,6 +26,7 @@ using Gs2.Core.Exception;
 using Gs2.Unity.Core.Exception;
 using Gs2.Unity.Gs2Showcase.Model;
 using Gs2.Unity.Gs2Showcase.ScriptableObject;
+using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.Util;
 using Gs2.Unity.UiKit.Gs2Showcase.Context;
 using UnityEngine;
@@ -47,7 +48,7 @@ namespace Gs2.Unity.UiKit.Gs2Showcase.Fetcher
             {
                 if (_gameSessionHolder != null && _gameSessionHolder.Initialized &&
                     _clientHolder != null && _clientHolder.Initialized &&
-                    _context != null)
+                    _context != null && this._context.DisplayItem != null)
                 {
                     
                     var domain = this._clientHolder.Gs2.Showcase.Namespace(
@@ -72,28 +73,15 @@ namespace Gs2.Unity.UiKit.Gs2Showcase.Fetcher
                     else
                     {
                         DisplayItem = future.Result.DisplayItems.FirstOrDefault(
-                            v => v.DisplayItemId == this.DisplayItem.DisplayItemId
+                            v => v.DisplayItemId == _context.DisplayItem.DisplayItemId
                         );
                         Fetched = true;
                     }
                 }
-
-                yield return new WaitForSeconds(1);
+                else {
+                    yield return new WaitForSeconds(1);
+                }
             }
-
-            var transform1 = transform;
-            var builder = new StringBuilder(transform1.name);
-            var current = transform1.parent;
-
-            while (current != null)
-            {
-                builder.Insert(0, current.name + "/");
-                current = current.parent;
-            }
-
-            Debug.LogError(e);
-            Debug.LogError($"{GetType()} の自動更新が停止されました。 {builder}");
-            Debug.LogError($"Automatic update of {GetType()} has been stopped. {builder}");
         }
 
         public void OnEnable()
@@ -113,8 +101,8 @@ namespace Gs2.Unity.UiKit.Gs2Showcase.Fetcher
 
     public partial class Gs2ShowcaseDisplayItemFetcher
     {
-        private Gs2ClientHolder _clientHolder;
-        private Gs2GameSessionHolder _gameSessionHolder;
+        protected Gs2ClientHolder _clientHolder;
+        protected Gs2GameSessionHolder _gameSessionHolder;
         private Gs2ShowcaseDisplayItemContext _context;
 
         public void Awake()
@@ -122,6 +110,11 @@ namespace Gs2.Unity.UiKit.Gs2Showcase.Fetcher
             _clientHolder = Gs2ClientHolder.Instance;
             _gameSessionHolder = Gs2GameSessionHolder.Instance;
             _context = GetComponentInParent<Gs2ShowcaseDisplayItemContext>();
+            
+            if (_context == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ShowcaseDisplayItemContext.");
+                enabled = false;
+            }
         }
     }
 
@@ -131,8 +124,8 @@ namespace Gs2.Unity.UiKit.Gs2Showcase.Fetcher
 
     public partial class Gs2ShowcaseDisplayItemFetcher
     {
-        public EzDisplayItem DisplayItem { get; private set; }
-        public bool Fetched { get; private set; }
+        public EzDisplayItem DisplayItem { get; protected set; }
+        public bool Fetched { get; protected set; }
     }
 
     /// <summary>

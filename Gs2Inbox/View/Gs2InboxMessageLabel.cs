@@ -34,7 +34,7 @@ namespace Gs2.Unity.UiKit.Gs2Inbox
     {
         public void Update()
         {
-            if (_fetcher.Fetched)
+            if (_fetcher.Fetched && _fetcher.Message != null)
             {
                 var receivedAt = _fetcher.Message.ReceivedAt == null ? DateTime.Now : UnixTime.FromUnixTime(_fetcher.Message.ReceivedAt).ToLocalTime();
                 var readAt = _fetcher.Message.ReadAt == null ? DateTime.Now : UnixTime.FromUnixTime(_fetcher.Message.ReadAt).ToLocalTime();
@@ -122,11 +122,17 @@ namespace Gs2.Unity.UiKit.Gs2Inbox
 
     public partial class Gs2InboxMessageLabel
     {
-        private Gs2InboxMessageFetcher _fetcher;
+        private Gs2InboxOwnMessageFetcher _fetcher;
 
         public void Awake()
         {
-            _fetcher = GetComponentInParent<Gs2InboxMessageFetcher>();
+            _fetcher = GetComponentInParent<Gs2InboxOwnMessageFetcher>();
+
+            if (_fetcher == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2InboxOwnMessageFetcher.");
+                enabled = false;
+            }
+
             Update();
         }
     }

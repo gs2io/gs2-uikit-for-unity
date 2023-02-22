@@ -24,6 +24,7 @@ using System.Linq;
 using Gs2.Core.Exception;
 using Gs2.Unity.Gs2Version.Model;
 using Gs2.Unity.Util;
+using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Version.Context;
 using UnityEngine;
 using UnityEngine.Events;
@@ -44,7 +45,7 @@ namespace Gs2.Unity.UiKit.Gs2Version
             yield return new WaitUntil(() => this._gameSessionHolder.Initialized);
             
             var domain = this._clientHolder.Gs2.Version.Namespace(
-                this._context.User.NamespaceName
+                this._context.Namespace.NamespaceName
             ).Me(
                 this._gameSessionHolder.GameSession
             ).Checker(
@@ -104,13 +105,18 @@ namespace Gs2.Unity.UiKit.Gs2Version
     {
         private Gs2ClientHolder _clientHolder;
         private Gs2GameSessionHolder _gameSessionHolder;
-        private Gs2VersionUserContext _context;
+        private Gs2VersionNamespaceContext _context;
 
         public void Awake()
         {
             this._clientHolder = Gs2ClientHolder.Instance;
             this._gameSessionHolder = Gs2GameSessionHolder.Instance;
-            this._context = GetComponentInParent<Gs2VersionUserContext>();
+            this._context = GetComponentInParent<Gs2VersionNamespaceContext>();
+
+            if (_context == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2VersionNamespaceContext.");
+                enabled = false;
+            }
         }
     }
 
@@ -132,6 +138,7 @@ namespace Gs2.Unity.UiKit.Gs2Version
 
         public void SetTargetVersions(List<Gs2.Unity.Gs2Version.Model.EzTargetVersion> value) {
             TargetVersions = value;
+            this.onChangeTargetVersions.Invoke(TargetVersions);
         }
     }
 
@@ -140,6 +147,21 @@ namespace Gs2.Unity.UiKit.Gs2Version
     /// </summary>
     public partial class Gs2VersionCheckerCheckVersionAction
     {
+
+        [Serializable]
+        private class ChangeTargetVersionsEvent : UnityEvent<List<Gs2.Unity.Gs2Version.Model.EzTargetVersion>>
+        {
+
+        }
+
+        [SerializeField]
+        private ChangeTargetVersionsEvent onChangeTargetVersions = new ChangeTargetVersionsEvent();
+        public event UnityAction<List<Gs2.Unity.Gs2Version.Model.EzTargetVersion>> OnChangeTargetVersions
+        {
+            add => this.onChangeTargetVersions.AddListener(value);
+            remove => this.onChangeTargetVersions.RemoveListener(value);
+        }
+
         [Serializable]
         private class CheckVersionCompleteEvent : UnityEvent<string, List<Gs2.Unity.Gs2Version.Model.EzStatus>, List<Gs2.Unity.Gs2Version.Model.EzStatus>>
         {

@@ -16,6 +16,8 @@
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
 
+using Gs2.Unity.Gs2Showcase.ScriptableObject;
+using Gs2.Unity.UiKit.Gs2Showcase.Context;
 using UnityEditor;
 using UnityEngine;
 
@@ -28,6 +30,26 @@ namespace Gs2.Unity.UiKit.Gs2Showcase.Editor
             var original = target as Gs2ShowcaseShowcaseLabel;
 
             if (original == null) return;
+
+            var context = original.GetComponentInParent<Gs2ShowcaseShowcaseContext>();
+            if (context == null) {
+                EditorGUILayout.HelpBox("Gs2ShowcaseShowcaseContext not found.", MessageType.Error);
+                if (GUILayout.Button("Add Context")) {
+                    original.gameObject.AddComponent<Gs2ShowcaseShowcaseContext>();
+                }
+            }
+            else {
+                EditorGUI.BeginDisabledGroup(true);
+                EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2ShowcaseShowcaseContext), false);
+                EditorGUI.indentLevel++;
+                EditorGUILayout.ObjectField("Showcase", context.Showcase, typeof(Showcase), false);
+                EditorGUI.indentLevel++;
+                EditorGUILayout.TextField("NamespaceName", context.Showcase?.NamespaceName.ToString());
+                EditorGUILayout.TextField("ShowcaseName", context.Showcase?.ShowcaseName.ToString());
+                EditorGUI.indentLevel--;
+                EditorGUI.indentLevel--;
+                EditorGUI.EndDisabledGroup();
+            }
 
             serializedObject.Update();
             original.format = EditorGUILayout.TextField("Format", original.format);

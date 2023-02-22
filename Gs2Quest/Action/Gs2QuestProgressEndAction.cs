@@ -24,10 +24,11 @@ using System.Linq;
 using Gs2.Core.Exception;
 using Gs2.Unity.Gs2Quest.Model;
 using Gs2.Unity.Util;
+using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Quest.Context;
 using UnityEngine;
 using UnityEngine.Events;
-using Progress = Gs2.Unity.Gs2Quest.ScriptableObject.Progress;
+using Progress = Gs2.Unity.Gs2Quest.ScriptableObject.OwnProgress;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -100,13 +101,18 @@ namespace Gs2.Unity.UiKit.Gs2Quest
     {
         private Gs2ClientHolder _clientHolder;
         private Gs2GameSessionHolder _gameSessionHolder;
-        private Gs2QuestProgressContext _context;
+        private Gs2QuestOwnProgressContext _context;
 
         public void Awake()
         {
             this._clientHolder = Gs2ClientHolder.Instance;
             this._gameSessionHolder = Gs2GameSessionHolder.Instance;
-            this._context = GetComponentInParent<Gs2QuestProgressContext>();
+            this._context = GetComponentInParent<Gs2QuestOwnProgressContext>();
+
+            if (_context == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2QuestOwnProgressContext.");
+                enabled = false;
+            }
         }
     }
 
@@ -130,14 +136,17 @@ namespace Gs2.Unity.UiKit.Gs2Quest
 
         public void SetRewards(List<Gs2.Unity.Gs2Quest.Model.EzReward> value) {
             Rewards = value;
+            this.onChangeRewards.Invoke(Rewards);
         }
 
         public void SetIsComplete(bool value) {
             IsComplete = value;
+            this.onChangeIsComplete.Invoke(IsComplete);
         }
 
         public void SetConfig(List<Gs2.Unity.Gs2Quest.Model.EzConfig> value) {
             Config = value;
+            this.onChangeConfig.Invoke(Config);
         }
     }
 
@@ -146,6 +155,49 @@ namespace Gs2.Unity.UiKit.Gs2Quest
     /// </summary>
     public partial class Gs2QuestProgressEndAction
     {
+
+        [Serializable]
+        private class ChangeRewardsEvent : UnityEvent<List<Gs2.Unity.Gs2Quest.Model.EzReward>>
+        {
+
+        }
+
+        [SerializeField]
+        private ChangeRewardsEvent onChangeRewards = new ChangeRewardsEvent();
+        public event UnityAction<List<Gs2.Unity.Gs2Quest.Model.EzReward>> OnChangeRewards
+        {
+            add => this.onChangeRewards.AddListener(value);
+            remove => this.onChangeRewards.RemoveListener(value);
+        }
+
+        [Serializable]
+        private class ChangeIsCompleteEvent : UnityEvent<bool>
+        {
+
+        }
+
+        [SerializeField]
+        private ChangeIsCompleteEvent onChangeIsComplete = new ChangeIsCompleteEvent();
+        public event UnityAction<bool> OnChangeIsComplete
+        {
+            add => this.onChangeIsComplete.AddListener(value);
+            remove => this.onChangeIsComplete.RemoveListener(value);
+        }
+
+        [Serializable]
+        private class ChangeConfigEvent : UnityEvent<List<Gs2.Unity.Gs2Quest.Model.EzConfig>>
+        {
+
+        }
+
+        [SerializeField]
+        private ChangeConfigEvent onChangeConfig = new ChangeConfigEvent();
+        public event UnityAction<List<Gs2.Unity.Gs2Quest.Model.EzConfig>> OnChangeConfig
+        {
+            add => this.onChangeConfig.AddListener(value);
+            remove => this.onChangeConfig.RemoveListener(value);
+        }
+
         [Serializable]
         private class EndCompleteEvent : UnityEvent<string>
         {

@@ -17,6 +17,7 @@
 // ReSharper disable CheckNamespace
 
 using System.Collections.Generic;
+using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Ranking.Fetcher;
 using UnityEngine;
 
@@ -31,7 +32,7 @@ namespace Gs2.Unity.UiKit.Gs2Ranking
     {
         public void Update()
         {
-            if (_fetcher.Fetched)
+            if (_fetcher.Fetched && _fetcher.Score != null)
             {
                 switch(expression)
                 {
@@ -42,20 +43,20 @@ namespace Gs2.Unity.UiKit.Gs2Ranking
                         target.SetActive(!enableScores.Contains(_fetcher.Score.Score));
                         break;
                     case Expression.Less:
-                        target.SetActive(enableScore < _fetcher.Score.Score);
-                        break;
-                    case Expression.LessEqual:
-                        target.SetActive(enableScore <= _fetcher.Score.Score);
-                        break;
-                    case Expression.Greater:
                         target.SetActive(enableScore > _fetcher.Score.Score);
                         break;
-                    case Expression.GreaterEqual:
+                    case Expression.LessEqual:
                         target.SetActive(enableScore >= _fetcher.Score.Score);
+                        break;
+                    case Expression.Greater:
+                        target.SetActive(enableScore < _fetcher.Score.Score);
+                        break;
+                    case Expression.GreaterEqual:
+                        target.SetActive(enableScore <= _fetcher.Score.Score);
                         break;
                 }
             }
-            else 
+            else
             {
                 target.SetActive(false);
             }
@@ -65,30 +66,35 @@ namespace Gs2.Unity.UiKit.Gs2Ranking
     /// <summary>
     /// Dependent components
     /// </summary>
-    
+
     public partial class Gs2RankingScoreScoreEnabler
     {
-        private Gs2RankingScoreFetcher _fetcher;
+        private Gs2RankingOwnScoreFetcher _fetcher;
 
         public void Awake()
         {
-            _fetcher = GetComponentInParent<Gs2RankingScoreFetcher>();
+            _fetcher = GetComponentInParent<Gs2RankingOwnScoreFetcher>();
+
+            if (_fetcher == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2RankingOwnScoreFetcher.");
+                enabled = false;
+            }
         }
     }
 
     /// <summary>
     /// Public properties
     /// </summary>
-    
+
     public partial class Gs2RankingScoreScoreEnabler
     {
-        
+
     }
 
     /// <summary>
     /// Parameters for Inspector
     /// </summary>
-    
+
     public partial class Gs2RankingScoreScoreEnabler
     {
         public enum Expression {

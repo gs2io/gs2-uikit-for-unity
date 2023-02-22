@@ -34,7 +34,7 @@ namespace Gs2.Unity.UiKit.Gs2Version
     {
         public void Update()
         {
-            if (_fetcher.Fetched)
+            if (_fetcher.Fetched && _fetcher.VersionModel != null)
             {
                 onUpdate?.Invoke(
                     format.Replace(
@@ -68,6 +68,12 @@ namespace Gs2.Unity.UiKit.Gs2Version
         public void Awake()
         {
             _fetcher = GetComponentInParent<Gs2VersionVersionModelFetcher>();
+
+            if (_fetcher == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2VersionVersionModelFetcher.");
+                enabled = false;
+            }
+
             Update();
         }
     }

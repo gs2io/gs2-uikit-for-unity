@@ -24,6 +24,7 @@ using System.Linq;
 using Gs2.Core.Exception;
 using Gs2.Unity.Gs2Matchmaking.Model;
 using Gs2.Unity.Util;
+using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Matchmaking.Context;
 using UnityEngine;
 using UnityEngine.Events;
@@ -119,6 +120,11 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking
             this._clientHolder = Gs2ClientHolder.Instance;
             this._gameSessionHolder = Gs2GameSessionHolder.Instance;
             this._context = GetComponentInParent<Gs2MatchmakingVoteContext>();
+
+            if (_context == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MatchmakingVoteContext.");
+                enabled = false;
+            }
         }
     }
 
@@ -142,14 +148,17 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking
 
         public void SetBallotBody(string value) {
             BallotBody = value;
+            this.onChangeBallotBody.Invoke(BallotBody);
         }
 
         public void SetBallotSignature(string value) {
             BallotSignature = value;
+            this.onChangeBallotSignature.Invoke(BallotSignature);
         }
 
         public void SetGameResults(List<Gs2.Unity.Gs2Matchmaking.Model.EzGameResult> value) {
             GameResults = value;
+            this.onChangeGameResults.Invoke(GameResults);
         }
     }
 
@@ -158,6 +167,49 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking
     /// </summary>
     public partial class Gs2MatchmakingVoteVoteAction
     {
+
+        [Serializable]
+        private class ChangeBallotBodyEvent : UnityEvent<string>
+        {
+
+        }
+
+        [SerializeField]
+        private ChangeBallotBodyEvent onChangeBallotBody = new ChangeBallotBodyEvent();
+        public event UnityAction<string> OnChangeBallotBody
+        {
+            add => this.onChangeBallotBody.AddListener(value);
+            remove => this.onChangeBallotBody.RemoveListener(value);
+        }
+
+        [Serializable]
+        private class ChangeBallotSignatureEvent : UnityEvent<string>
+        {
+
+        }
+
+        [SerializeField]
+        private ChangeBallotSignatureEvent onChangeBallotSignature = new ChangeBallotSignatureEvent();
+        public event UnityAction<string> OnChangeBallotSignature
+        {
+            add => this.onChangeBallotSignature.AddListener(value);
+            remove => this.onChangeBallotSignature.RemoveListener(value);
+        }
+
+        [Serializable]
+        private class ChangeGameResultsEvent : UnityEvent<List<Gs2.Unity.Gs2Matchmaking.Model.EzGameResult>>
+        {
+
+        }
+
+        [SerializeField]
+        private ChangeGameResultsEvent onChangeGameResults = new ChangeGameResultsEvent();
+        public event UnityAction<List<Gs2.Unity.Gs2Matchmaking.Model.EzGameResult>> OnChangeGameResults
+        {
+            add => this.onChangeGameResults.AddListener(value);
+            remove => this.onChangeGameResults.RemoveListener(value);
+        }
+
         [Serializable]
         private class VoteCompleteEvent : UnityEvent<EzBallot>
         {

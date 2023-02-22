@@ -29,7 +29,7 @@ using Gs2.Unity.Util;
 using Gs2.Unity.UiKit.Gs2Inbox.Context;
 using UnityEngine;
 using UnityEngine.Events;
-using Message = Gs2.Unity.Gs2Inbox.ScriptableObject.Message;
+using Message = Gs2.Unity.Gs2Inbox.ScriptableObject.OwnMessage;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -122,13 +122,13 @@ namespace Gs2.Unity.UiKit.Gs2Inbox
     {
         private Gs2ClientHolder _clientHolder;
         private Gs2GameSessionHolder _gameSessionHolder;
-        private Gs2InboxMessageContext _context;
+        private Gs2InboxOwnMessageContext _context;
 
         public void Awake()
         {
             this._clientHolder = Gs2ClientHolder.Instance;
             this._gameSessionHolder = Gs2GameSessionHolder.Instance;
-            this._context = GetComponentInParent<Gs2InboxMessageContext>();
+            this._context = GetComponentInParent<Gs2InboxOwnMessageContext>();
         }
     }
 

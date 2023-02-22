@@ -60,6 +60,10 @@ namespace Gs2.Unity.UiKit.Gs2MegaField.Context
     public partial class Gs2MegaFieldAreaModelContext
     {
         public AreaModel AreaModel;
+
+        public void SetAreaModel(AreaModel AreaModel) {
+            this.AreaModel = AreaModel;
+        }
     }
 
     /// <summary>

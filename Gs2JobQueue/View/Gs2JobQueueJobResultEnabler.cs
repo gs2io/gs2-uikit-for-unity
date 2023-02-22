@@ -16,6 +16,7 @@
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
 
+using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2JobQueue.Fetcher;
 using UnityEngine;
 
@@ -54,11 +55,16 @@ namespace Gs2.Unity.UiKit.Gs2JobQueue
 
     public partial class Gs2JobQueueJobResultEnabler
     {
-        private Gs2JobQueueJobResultFetcher _fetcher;
+        private Gs2JobQueueOwnJobResultFetcher _fetcher;
 
         public void Awake()
         {
-            _fetcher = GetComponentInParent<Gs2JobQueueJobResultFetcher>();
+            _fetcher = GetComponentInParent<Gs2JobQueueOwnJobResultFetcher>();
+
+            if (_fetcher == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2JobQueueOwnJobResultFetcher.");
+                enabled = false;
+            }
         }
     }
 

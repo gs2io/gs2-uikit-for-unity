@@ -60,6 +60,10 @@ namespace Gs2.Unity.UiKit.Gs2JobQueue.Context
     public partial class Gs2JobQueueUserContext
     {
         public User User;
+
+        public void SetUser(User User) {
+            this.User = User;
+        }
     }
 
     /// <summary>

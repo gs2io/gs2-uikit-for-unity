@@ -60,6 +60,10 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Context
     public partial class Gs2InventoryInventoryModelContext
     {
         public InventoryModel InventoryModel;
+
+        public void SetInventoryModel(InventoryModel InventoryModel) {
+            this.InventoryModel = InventoryModel;
+        }
     }
 
     /// <summary>

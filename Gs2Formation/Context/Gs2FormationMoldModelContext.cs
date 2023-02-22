@@ -60,6 +60,10 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Context
     public partial class Gs2FormationMoldModelContext
     {
         public MoldModel MoldModel;
+
+        public void SetMoldModel(MoldModel MoldModel) {
+            this.MoldModel = MoldModel;
+        }
     }
 
     /// <summary>

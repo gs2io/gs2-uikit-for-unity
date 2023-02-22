@@ -18,6 +18,7 @@
 
 using System.Collections.Generic;
 using Gs2.Unity.Gs2Matchmaking.ScriptableObject;
+using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Matchmaking.Context;
 using Gs2.Unity.UiKit.Gs2Matchmaking.Fetcher;
 using UnityEngine;
@@ -34,7 +35,7 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking
         private List<Gs2MatchmakingRatingModelContext> _children;
 
         public void Update() {
-            if (_fetcher.Fetched) {
+            if (_fetcher.Fetched && this._fetcher.RatingModels != null) {
                 for (var i = 0; i < this.maximumItems; i++) {
                     if (i < this._fetcher.RatingModels.Count) {
                         _children[i].RatingModel.ratingName = this._fetcher.RatingModels[i].Name;
@@ -61,6 +62,11 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking
         {
             _context = GetComponentInParent<Gs2MatchmakingNamespaceContext>();
             _fetcher = GetComponentInParent<Gs2MatchmakingRatingModelListFetcher>();
+
+            if (_fetcher == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MatchmakingRatingModelListFetcher.");
+                enabled = false;
+            }
 
             _children = new List<Gs2MatchmakingRatingModelContext>();
             for (var i = 0; i < this.maximumItems; i++) {

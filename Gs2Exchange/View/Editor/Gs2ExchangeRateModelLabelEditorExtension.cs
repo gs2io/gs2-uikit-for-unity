@@ -16,6 +16,8 @@
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
 
+using Gs2.Unity.Gs2Exchange.ScriptableObject;
+using Gs2.Unity.UiKit.Gs2Exchange.Context;
 using UnityEditor;
 using UnityEngine;
 
@@ -28,6 +30,34 @@ namespace Gs2.Unity.UiKit.Gs2Exchange.Editor
             var original = target as Gs2ExchangeRateModelLabel;
 
             if (original == null) return;
+
+            var context = original.GetComponentInParent<Gs2ExchangeRateModelContext>();
+            if (context == null) {
+                EditorGUILayout.HelpBox("Gs2ExchangeRateModelContext not found.", MessageType.Error);
+                if (GUILayout.Button("Add Context")) {
+                    original.gameObject.AddComponent<Gs2ExchangeRateModelContext>();
+                }
+            }
+            else {
+                if (context.transform.parent.GetComponent<Gs2ExchangeRateModelList>() != null) {
+                    EditorGUI.BeginDisabledGroup(true);
+                    EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2ExchangeRateModelContext), false);
+                    EditorGUI.EndDisabledGroup();
+                    EditorGUILayout.HelpBox("RateModel is auto assign from Gs2ExchangeRateModelList.", MessageType.Info);
+                }
+                else {
+                    EditorGUI.BeginDisabledGroup(true);
+                    EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2ExchangeRateModelContext), false);
+                    EditorGUI.indentLevel++;
+                    EditorGUILayout.ObjectField("RateModel", context.RateModel, typeof(RateModel), false);
+                    EditorGUI.indentLevel++;
+                    EditorGUILayout.TextField("NamespaceName", context.RateModel?.NamespaceName.ToString());
+                    EditorGUILayout.TextField("RateName", context.RateModel?.RateName.ToString());
+                    EditorGUI.indentLevel--;
+                    EditorGUI.indentLevel--;
+                    EditorGUI.EndDisabledGroup();
+                }
+            }
 
             serializedObject.Update();
             original.format = EditorGUILayout.TextField("Format", original.format);

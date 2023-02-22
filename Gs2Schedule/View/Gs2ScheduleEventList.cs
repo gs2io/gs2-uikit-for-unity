@@ -50,11 +50,11 @@ namespace Gs2.Unity.UiKit.Gs2Schedule
             }
         }
     }
-    
+
     /// <summary>
     /// Dependent components
     /// </summary>
-    
+
     public partial class Gs2ScheduleEventList
     {
         private Gs2ScheduleUserContext _context;
@@ -85,13 +85,13 @@ namespace Gs2.Unity.UiKit.Gs2Schedule
 
     public partial class Gs2ScheduleEventList
     {
-        
+
     }
-    
+
     /// <summary>
     /// Parameters for Inspector
     /// </summary>
-    
+
     public partial class Gs2ScheduleEventList
     {
         public Gs2ScheduleEventContext prefab;
@@ -103,6 +103,6 @@ namespace Gs2.Unity.UiKit.Gs2Schedule
     /// </summary>
     public partial class Gs2ScheduleEventList
     {
-        
+
     }
 }

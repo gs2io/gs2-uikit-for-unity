@@ -24,6 +24,8 @@ using Gs2.Unity.Core.Exception;
 using Gs2.Unity.Gs2Datastore.Model;
 using Gs2.Unity.Gs2Datastore.ScriptableObject;
 using Gs2.Unity.Util;
+using Gs2.Unity.UiKit.Core;
+using Gs2.Unity.UiKit.Gs2Datastore.Context;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -33,7 +35,7 @@ namespace Gs2.Unity.UiKit.Gs2Datastore.Fetcher
     /// Main
     /// </summary>
 
-    [AddComponentMenu("GS2 UIKit/Datastore/Gs2DatastoreOwnDataObjectFetcher")]
+	[AddComponentMenu("GS2 UIKit/Datastore/DataObject/Fetcher/Gs2DatastoreOwnDataObjectFetcher")]
     public partial class Gs2DatastoreOwnDataObjectFetcher : MonoBehaviour
     {
         private IEnumerator Fetch()
@@ -41,17 +43,19 @@ namespace Gs2.Unity.UiKit.Gs2Datastore.Fetcher
             Gs2Exception e;
             while (true)
             {
-                if (_gameSessionHolder != null && _gameSessionHolder.Initialized && 
+                if (_gameSessionHolder != null && _gameSessionHolder.Initialized &&
                     _clientHolder != null && _clientHolder.Initialized &&
-                    dataObject != null)
+                    _context != null)
                 {
-                    var future = _clientHolder.Gs2.Datastore.Namespace(
-                        dataObject.Namespace.namespaceName
+                    
+                    var domain = this._clientHolder.Gs2.Datastore.Namespace(
+                        this._context.DataObject.NamespaceName
                     ).Me(
-                        _gameSessionHolder.GameSession
+                        this._gameSessionHolder.GameSession
                     ).DataObject(
-                        dataObject.dataObjectName
-                    ).Model();
+                        this._context.DataObject.DataObjectName
+                    );
+                    var future = domain.Model();
                     yield return future;
                     if (future.Error != null)
                     {
@@ -72,7 +76,7 @@ namespace Gs2.Unity.UiKit.Gs2Datastore.Fetcher
 
                 yield return new WaitForSeconds(1);
             }
-            
+
             var transform1 = transform;
             var builder = new StringBuilder(transform1.name);
             var current = transform1.parent;
@@ -82,7 +86,7 @@ namespace Gs2.Unity.UiKit.Gs2Datastore.Fetcher
                 builder.Insert(0, current.name + "/");
                 current = current.parent;
             }
-            
+
             Debug.LogError(e);
             Debug.LogError($"{GetType()} の自動更新が停止されました。 {builder}");
             Debug.LogError($"Automatic update of {GetType()} has been stopped. {builder}");
@@ -102,36 +106,43 @@ namespace Gs2.Unity.UiKit.Gs2Datastore.Fetcher
     /// <summary>
     /// Dependent components
     /// </summary>
-    
+
     public partial class Gs2DatastoreOwnDataObjectFetcher
     {
-        private Gs2ClientHolder _clientHolder;
-        private Gs2GameSessionHolder _gameSessionHolder;
+        protected Gs2ClientHolder _clientHolder;
+        protected Gs2GameSessionHolder _gameSessionHolder;
+        private Gs2DatastoreOwnDataObjectContext _context;
 
         public void Awake()
         {
             _clientHolder = Gs2ClientHolder.Instance;
             _gameSessionHolder = Gs2GameSessionHolder.Instance;
+            _context = GetComponentInParent<Gs2DatastoreOwnDataObjectContext>();
+
+            if (_context == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2DatastoreOwnDataObjectContext.");
+                enabled = false;
+            }
         }
     }
 
     /// <summary>
     /// Public properties
     /// </summary>
-    
+
     public partial class Gs2DatastoreOwnDataObjectFetcher
     {
-        public EzDataObject DataObject { get; private set; }
-        public bool Fetched { get; private set; }
+        public EzDataObject DataObject { get; protected set; }
+        public bool Fetched { get; protected set; }
     }
 
     /// <summary>
     /// Parameters for Inspector
     /// </summary>
-    
+
     public partial class Gs2DatastoreOwnDataObjectFetcher
     {
-        public OwnDataObject dataObject;
+
     }
 
     /// <summary>
@@ -141,7 +152,7 @@ namespace Gs2.Unity.UiKit.Gs2Datastore.Fetcher
     {
         [SerializeField]
         internal ErrorEvent onError = new ErrorEvent();
-        
+
         public event UnityAction<Gs2Exception, Func<IEnumerator>> OnError
         {
             add => onError.AddListener(value);

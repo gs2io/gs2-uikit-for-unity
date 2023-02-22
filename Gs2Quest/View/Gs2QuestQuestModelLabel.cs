@@ -34,7 +34,7 @@ namespace Gs2.Unity.UiKit.Gs2Quest
     {
         public void Update()
         {
-            if (_fetcher.Fetched)
+            if (_fetcher.Fetched && _fetcher.QuestModel != null)
             {
                 onUpdate?.Invoke(
                     format.Replace(
@@ -72,6 +72,12 @@ namespace Gs2.Unity.UiKit.Gs2Quest
         public void Awake()
         {
             _fetcher = GetComponentInParent<Gs2QuestQuestModelFetcher>();
+
+            if (_fetcher == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2QuestQuestModelFetcher.");
+                enabled = false;
+            }
+
             Update();
         }
     }

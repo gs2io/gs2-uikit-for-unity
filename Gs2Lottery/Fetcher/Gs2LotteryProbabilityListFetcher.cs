@@ -42,6 +42,7 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.Fetcher
     {
         private IEnumerator Fetch()
         {
+            var retryWaitSecond = 1;
             Gs2Exception e;
             while (true)
             {
@@ -51,12 +52,12 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.Fetcher
                 {
                     
                     var domain = this._clientHolder.Gs2.Lottery.Namespace(
-                        this._context.PrizeTable.NamespaceName
+                        this._context.LotteryModel.NamespaceName
                     ).Me(
                         this._gameSessionHolder.GameSession
                     );
                     var it = domain.Probabilities(
-                        this._context.PrizeTable.PrizeTableName
+                        this._context.LotteryModel.LotteryName
                     );
                     var items = new List<Gs2.Unity.Gs2Lottery.Model.EzProbability>();
                     while (it.HasNext())
@@ -67,42 +68,32 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.Fetcher
                             if (it.Error is BadRequestException || it.Error is NotFoundException)
                             {
                                 onError.Invoke(e = it.Error, null);
-                                goto END;
                             }
-
-                            onError.Invoke(new CanIgnoreException(it.Error), null);
-                            break;
+                            else {
+                                onError.Invoke(new CanIgnoreException(it.Error), null);
+                            }
+                            yield return new WaitForSeconds(retryWaitSecond);
+                            retryWaitSecond *= 2;
                         }
-
-                        if (it.Current != null)
-                        {
-                            items.Add(it.Current);
-                        } else {
-                            break;
+                        else {
+                            if (it.Current != null)
+                            {
+                                items.Add(it.Current);
+                            } else {
+                                break;
+                            }
                         }
                     }
 
+                    retryWaitSecond = 1;
                     Probabilities = items;
                     Fetched = true;
                 }
-
-                yield return new WaitForSeconds(1);
+                else {
+                    yield return new WaitForSeconds(1);
+                }
             }
-            END:
-            
-            var transform1 = transform;
-            var builder = new StringBuilder(transform1.name);
-            var current = transform1.parent;
-
-            while (current != null)
-            {
-                builder.Insert(0, current.name + "/");
-                current = current.parent;
-            }
-            
-            Debug.LogError(e);
-            Debug.LogError($"{GetType()} の自動更新が停止されました。 {builder}");
-            Debug.LogError($"Automatic update of {GetType()} has been stopped. {builder}");
+            // ReSharper disable once IteratorNeverReturns
         }
 
         public void OnEnable()
@@ -124,13 +115,13 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.Fetcher
     {
         private Gs2ClientHolder _clientHolder;
         private Gs2GameSessionHolder _gameSessionHolder;
-        private Gs2LotteryPrizeTableContext _context;
+        private Gs2LotteryLotteryModelContext _context;
 
         public void Awake()
         {
             _clientHolder = Gs2ClientHolder.Instance;
             _gameSessionHolder = Gs2GameSessionHolder.Instance;
-            _context = GetComponentInParent<Gs2LotteryPrizeTableContext>();
+            _context = GetComponentInParent<Gs2LotteryLotteryModelContext>();
         }
     }
 

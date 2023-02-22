@@ -40,7 +40,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1000000000000000000}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 61660803e5d04bf8bf0e415bb042195d, type: 3}
+  m_Script: {fileID: 11500000, guid: 4a17ddf2f40e4ccbb21d2d78eef831af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   onRegisterBlackListComplete:

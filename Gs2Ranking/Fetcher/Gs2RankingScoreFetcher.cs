@@ -12,14 +12,14 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
 
 using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Text;
 using System.Text;
 using Gs2.Core.Exception;
 using Gs2.Unity.Core.Exception;
@@ -55,7 +55,7 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Fetcher
                         this._gameSessionHolder.GameSession
                     ).Score(
                         this._context.Score.CategoryName,
-                        this._context.Score.ScorerUserId,
+                        this._context.Score.UserId,
                         this._context.Score.UniqueId
                     );
                     var future = domain.Model();
@@ -76,8 +76,9 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Fetcher
                         Fetched = true;
                     }
                 }
-
-                yield return new WaitForSeconds(1);
+                else {
+                    yield return new WaitForSeconds(1);
+                }
             }
 
             var transform1 = transform;
@@ -112,8 +113,8 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Fetcher
 
     public partial class Gs2RankingScoreFetcher
     {
-        private Gs2ClientHolder _clientHolder;
-        private Gs2GameSessionHolder _gameSessionHolder;
+        protected Gs2ClientHolder _clientHolder;
+        protected Gs2GameSessionHolder _gameSessionHolder;
         private Gs2RankingScoreContext _context;
 
         public void Awake()
@@ -130,8 +131,8 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Fetcher
 
     public partial class Gs2RankingScoreFetcher
     {
-        public Gs2.Unity.Gs2Ranking.Model.EzScore Score { get; private set; }
-        public bool Fetched { get; private set; }
+        public EzScore Score { get; protected set; }
+        public bool Fetched { get; protected set; }
     }
 
     /// <summary>

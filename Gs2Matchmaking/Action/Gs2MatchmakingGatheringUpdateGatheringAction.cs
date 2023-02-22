@@ -24,6 +24,7 @@ using System.Linq;
 using Gs2.Core.Exception;
 using Gs2.Unity.Gs2Matchmaking.Model;
 using Gs2.Unity.Util;
+using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Matchmaking.Context;
 using UnityEngine;
 using UnityEngine.Events;
@@ -122,6 +123,11 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking
             this._clientHolder = Gs2ClientHolder.Instance;
             this._gameSessionHolder = Gs2GameSessionHolder.Instance;
             this._context = GetComponentInParent<Gs2MatchmakingGatheringContext>();
+
+            if (_context == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MatchmakingGatheringContext.");
+                enabled = false;
+            }
         }
     }
 
@@ -143,6 +149,7 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking
 
         public void SetAttributeRanges(List<Gs2.Unity.Gs2Matchmaking.Model.EzAttributeRange> value) {
             AttributeRanges = value;
+            this.onChangeAttributeRanges.Invoke(AttributeRanges);
         }
     }
 
@@ -151,6 +158,21 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking
     /// </summary>
     public partial class Gs2MatchmakingGatheringUpdateGatheringAction
     {
+
+        [Serializable]
+        private class ChangeAttributeRangesEvent : UnityEvent<List<Gs2.Unity.Gs2Matchmaking.Model.EzAttributeRange>>
+        {
+
+        }
+
+        [SerializeField]
+        private ChangeAttributeRangesEvent onChangeAttributeRanges = new ChangeAttributeRangesEvent();
+        public event UnityAction<List<Gs2.Unity.Gs2Matchmaking.Model.EzAttributeRange>> OnChangeAttributeRanges
+        {
+            add => this.onChangeAttributeRanges.AddListener(value);
+            remove => this.onChangeAttributeRanges.RemoveListener(value);
+        }
+
         [Serializable]
         private class UpdateGatheringCompleteEvent : UnityEvent<EzGathering>
         {

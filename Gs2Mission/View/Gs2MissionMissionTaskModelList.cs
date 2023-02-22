@@ -18,6 +18,7 @@
 
 using System.Collections.Generic;
 using Gs2.Unity.Gs2Mission.ScriptableObject;
+using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Mission.Context;
 using Gs2.Unity.UiKit.Gs2Mission.Fetcher;
 using UnityEngine;
@@ -34,7 +35,7 @@ namespace Gs2.Unity.UiKit.Gs2Mission
         private List<Gs2MissionMissionTaskModelContext> _children;
 
         public void Update() {
-            if (_fetcher.Fetched) {
+            if (_fetcher.Fetched && this._fetcher.MissionTaskModels != null) {
                 for (var i = 0; i < this.maximumItems; i++) {
                     if (i < this._fetcher.MissionTaskModels.Count) {
                         _children[i].MissionTaskModel.missionTaskName = this._fetcher.MissionTaskModels[i].Name;
@@ -61,6 +62,11 @@ namespace Gs2.Unity.UiKit.Gs2Mission
         {
             _context = GetComponentInParent<Gs2MissionMissionGroupModelContext>();
             _fetcher = GetComponentInParent<Gs2MissionMissionTaskModelListFetcher>();
+
+            if (_fetcher == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MissionMissionTaskModelListFetcher.");
+                enabled = false;
+            }
 
             _children = new List<Gs2MissionMissionTaskModelContext>();
             for (var i = 0; i < this.maximumItems; i++) {

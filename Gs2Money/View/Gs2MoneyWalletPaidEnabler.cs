@@ -17,6 +17,7 @@
 // ReSharper disable CheckNamespace
 
 using System.Collections.Generic;
+using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Money.Fetcher;
 using UnityEngine;
 
@@ -31,7 +32,7 @@ namespace Gs2.Unity.UiKit.Gs2Money
     {
         public void Update()
         {
-            if (_fetcher.Fetched)
+            if (_fetcher.Fetched && _fetcher.Wallet != null)
             {
                 switch(expression)
                 {
@@ -42,20 +43,20 @@ namespace Gs2.Unity.UiKit.Gs2Money
                         target.SetActive(!enablePaids.Contains(_fetcher.Wallet.Paid));
                         break;
                     case Expression.Less:
-                        target.SetActive(enablePaid < _fetcher.Wallet.Paid);
-                        break;
-                    case Expression.LessEqual:
-                        target.SetActive(enablePaid <= _fetcher.Wallet.Paid);
-                        break;
-                    case Expression.Greater:
                         target.SetActive(enablePaid > _fetcher.Wallet.Paid);
                         break;
-                    case Expression.GreaterEqual:
+                    case Expression.LessEqual:
                         target.SetActive(enablePaid >= _fetcher.Wallet.Paid);
+                        break;
+                    case Expression.Greater:
+                        target.SetActive(enablePaid < _fetcher.Wallet.Paid);
+                        break;
+                    case Expression.GreaterEqual:
+                        target.SetActive(enablePaid <= _fetcher.Wallet.Paid);
                         break;
                 }
             }
-            else 
+            else
             {
                 target.SetActive(false);
             }
@@ -65,30 +66,35 @@ namespace Gs2.Unity.UiKit.Gs2Money
     /// <summary>
     /// Dependent components
     /// </summary>
-    
+
     public partial class Gs2MoneyWalletPaidEnabler
     {
-        private Gs2MoneyWalletFetcher _fetcher;
+        private Gs2MoneyOwnWalletFetcher _fetcher;
 
         public void Awake()
         {
-            _fetcher = GetComponentInParent<Gs2MoneyWalletFetcher>();
+            _fetcher = GetComponentInParent<Gs2MoneyOwnWalletFetcher>();
+
+            if (_fetcher == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MoneyOwnWalletFetcher.");
+                enabled = false;
+            }
         }
     }
 
     /// <summary>
     /// Public properties
     /// </summary>
-    
+
     public partial class Gs2MoneyWalletPaidEnabler
     {
-        
+
     }
 
     /// <summary>
     /// Parameters for Inspector
     /// </summary>
-    
+
     public partial class Gs2MoneyWalletPaidEnabler
     {
         public enum Expression {

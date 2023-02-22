@@ -40,7 +40,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1000000000000000000}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9b87f7d7f580478ea0f26a7c289d5a97, type: 3}
+  m_Script: {fileID: 11500000, guid: b89fd9dcff0e4ff5a42fa54215cf7e04, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   onCreateRoomComplete:

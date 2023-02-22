@@ -16,6 +16,7 @@
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
 
+using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Schedule.Fetcher;
 using UnityEngine;
 
@@ -54,11 +55,16 @@ namespace Gs2.Unity.UiKit.Gs2Schedule
 
     public partial class Gs2ScheduleTriggerEnabler
     {
-        private Gs2ScheduleTriggerFetcher _fetcher;
+        private Gs2ScheduleOwnTriggerFetcher _fetcher;
 
         public void Awake()
         {
-            _fetcher = GetComponentInParent<Gs2ScheduleTriggerFetcher>();
+            _fetcher = GetComponentInParent<Gs2ScheduleOwnTriggerFetcher>();
+
+            if (_fetcher == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ScheduleOwnTriggerFetcher.");
+                enabled = false;
+            }
         }
     }
 

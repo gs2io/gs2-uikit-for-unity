@@ -16,6 +16,8 @@
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
 
+using Gs2.Unity.Gs2JobQueue.ScriptableObject;
+using Gs2.Unity.UiKit.Gs2JobQueue.Context;
 using UnityEditor;
 using UnityEngine;
 
@@ -28,6 +30,27 @@ namespace Gs2.Unity.UiKit.Gs2JobQueue.Editor
             var original = target as Gs2JobQueueJobResultLabel;
 
             if (original == null) return;
+
+            var context = original.GetComponentInParent<Gs2JobQueueOwnJobResultContext>();
+            if (context == null) {
+                EditorGUILayout.HelpBox("Gs2JobQueueOwnJobResultContext not found.", MessageType.Error);
+                if (GUILayout.Button("Add Context")) {
+                    original.gameObject.AddComponent<Gs2JobQueueOwnJobResultContext>();
+                }
+            }
+            else {
+                EditorGUI.BeginDisabledGroup(true);
+                EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2JobQueueOwnJobResultContext), false);
+                EditorGUI.indentLevel++;
+                EditorGUILayout.ObjectField("JobResult", context.JobResult, typeof(OwnJobResult), false);
+                EditorGUI.indentLevel++;
+                EditorGUILayout.TextField("NamespaceName", context.JobResult?.NamespaceName.ToString());
+                EditorGUILayout.TextField("JobName", context.JobResult?.JobName.ToString());
+                EditorGUILayout.TextField("TryNumber", context.JobResult?.TryNumber.ToString());
+                EditorGUI.indentLevel--;
+                EditorGUI.indentLevel--;
+                EditorGUI.EndDisabledGroup();
+            }
 
             serializedObject.Update();
             original.format = EditorGUILayout.TextField("Format", original.format);

@@ -34,7 +34,7 @@ namespace Gs2.Unity.UiKit.Gs2Account
     {
         public void Update()
         {
-            if (_fetcher.Fetched)
+            if (_fetcher.Fetched && _fetcher.TakeOver != null)
             {
                 var createdAt = _fetcher.TakeOver.CreatedAt == null ? DateTime.Now : UnixTime.FromUnixTime(_fetcher.TakeOver.CreatedAt).ToLocalTime();
                 onUpdate?.Invoke(
@@ -76,11 +76,17 @@ namespace Gs2.Unity.UiKit.Gs2Account
 
     public partial class Gs2AccountTakeOverLabel
     {
-        private Gs2AccountTakeOverFetcher _fetcher;
+        private Gs2AccountOwnTakeOverFetcher _fetcher;
 
         public void Awake()
         {
-            _fetcher = GetComponentInParent<Gs2AccountTakeOverFetcher>();
+            _fetcher = GetComponentInParent<Gs2AccountOwnTakeOverFetcher>();
+
+            if (_fetcher == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2AccountOwnTakeOverFetcher.");
+                enabled = false;
+            }
+
             Update();
         }
     }

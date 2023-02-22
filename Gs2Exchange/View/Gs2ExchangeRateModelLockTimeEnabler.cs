@@ -17,6 +17,7 @@
 // ReSharper disable CheckNamespace
 
 using System.Collections.Generic;
+using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Exchange.Fetcher;
 using UnityEngine;
 
@@ -31,7 +32,7 @@ namespace Gs2.Unity.UiKit.Gs2Exchange
     {
         public void Update()
         {
-            if (_fetcher.Fetched)
+            if (_fetcher.Fetched && _fetcher.RateModel != null)
             {
                 switch(expression)
                 {
@@ -42,20 +43,20 @@ namespace Gs2.Unity.UiKit.Gs2Exchange
                         target.SetActive(!enableLockTimes.Contains(_fetcher.RateModel.LockTime));
                         break;
                     case Expression.Less:
-                        target.SetActive(enableLockTime < _fetcher.RateModel.LockTime);
-                        break;
-                    case Expression.LessEqual:
-                        target.SetActive(enableLockTime <= _fetcher.RateModel.LockTime);
-                        break;
-                    case Expression.Greater:
                         target.SetActive(enableLockTime > _fetcher.RateModel.LockTime);
                         break;
-                    case Expression.GreaterEqual:
+                    case Expression.LessEqual:
                         target.SetActive(enableLockTime >= _fetcher.RateModel.LockTime);
+                        break;
+                    case Expression.Greater:
+                        target.SetActive(enableLockTime < _fetcher.RateModel.LockTime);
+                        break;
+                    case Expression.GreaterEqual:
+                        target.SetActive(enableLockTime <= _fetcher.RateModel.LockTime);
                         break;
                 }
             }
-            else 
+            else
             {
                 target.SetActive(false);
             }
@@ -65,7 +66,7 @@ namespace Gs2.Unity.UiKit.Gs2Exchange
     /// <summary>
     /// Dependent components
     /// </summary>
-    
+
     public partial class Gs2ExchangeRateModelLockTimeEnabler
     {
         private Gs2ExchangeRateModelFetcher _fetcher;
@@ -73,22 +74,27 @@ namespace Gs2.Unity.UiKit.Gs2Exchange
         public void Awake()
         {
             _fetcher = GetComponentInParent<Gs2ExchangeRateModelFetcher>();
+
+            if (_fetcher == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ExchangeRateModelFetcher.");
+                enabled = false;
+            }
         }
     }
 
     /// <summary>
     /// Public properties
     /// </summary>
-    
+
     public partial class Gs2ExchangeRateModelLockTimeEnabler
     {
-        
+
     }
 
     /// <summary>
     /// Parameters for Inspector
     /// </summary>
-    
+
     public partial class Gs2ExchangeRateModelLockTimeEnabler
     {
         public enum Expression {

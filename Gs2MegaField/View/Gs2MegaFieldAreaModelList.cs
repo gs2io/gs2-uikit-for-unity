@@ -18,6 +18,7 @@
 
 using System.Collections.Generic;
 using Gs2.Unity.Gs2MegaField.ScriptableObject;
+using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2MegaField.Context;
 using Gs2.Unity.UiKit.Gs2MegaField.Fetcher;
 using UnityEngine;
@@ -34,7 +35,7 @@ namespace Gs2.Unity.UiKit.Gs2MegaField
         private List<Gs2MegaFieldAreaModelContext> _children;
 
         public void Update() {
-            if (_fetcher.Fetched) {
+            if (_fetcher.Fetched && this._fetcher.AreaModels != null) {
                 for (var i = 0; i < this.maximumItems; i++) {
                     if (i < this._fetcher.AreaModels.Count) {
                         _children[i].AreaModel.areaModelName = this._fetcher.AreaModels[i].Name;
@@ -61,6 +62,11 @@ namespace Gs2.Unity.UiKit.Gs2MegaField
         {
             _context = GetComponentInParent<Gs2MegaFieldNamespaceContext>();
             _fetcher = GetComponentInParent<Gs2MegaFieldAreaModelListFetcher>();
+
+            if (_fetcher == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MegaFieldAreaModelListFetcher.");
+                enabled = false;
+            }
 
             _children = new List<Gs2MegaFieldAreaModelContext>();
             for (var i = 0; i < this.maximumItems; i++) {

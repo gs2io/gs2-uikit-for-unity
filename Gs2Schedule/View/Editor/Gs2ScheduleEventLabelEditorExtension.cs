@@ -16,8 +16,11 @@
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
 
+using Gs2.Unity.Gs2Schedule.ScriptableObject;
+using Gs2.Unity.UiKit.Gs2Schedule.Context;
 using UnityEditor;
 using UnityEngine;
+using Event = Gs2.Unity.Gs2Schedule.ScriptableObject.Event;
 
 namespace Gs2.Unity.UiKit.Gs2Schedule.Editor
 {
@@ -28,6 +31,26 @@ namespace Gs2.Unity.UiKit.Gs2Schedule.Editor
             var original = target as Gs2ScheduleEventLabel;
 
             if (original == null) return;
+
+            var context = original.GetComponentInParent<Gs2ScheduleEventContext>();
+            if (context == null) {
+                EditorGUILayout.HelpBox("Gs2ScheduleEventContext not found.", MessageType.Error);
+                if (GUILayout.Button("Add Context")) {
+                    original.gameObject.AddComponent<Gs2ScheduleEventContext>();
+                }
+            }
+            else {
+                EditorGUI.BeginDisabledGroup(true);
+                EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2ScheduleEventContext), false);
+                EditorGUI.indentLevel++;
+                EditorGUILayout.ObjectField("Event", context.Event_, typeof(Event), false);
+                EditorGUI.indentLevel++;
+                EditorGUILayout.TextField("NamespaceName", context.Event_?.NamespaceName.ToString());
+                EditorGUILayout.TextField("EventName", context.Event_?.EventName.ToString());
+                EditorGUI.indentLevel--;
+                EditorGUI.indentLevel--;
+                EditorGUI.EndDisabledGroup();
+            }
 
             serializedObject.Update();
             original.format = EditorGUILayout.TextField("Format", original.format);

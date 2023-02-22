@@ -60,6 +60,10 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Context
     public partial class Gs2MissionUserContext
     {
         public User User;
+
+        public void SetUser(User User) {
+            this.User = User;
+        }
     }
 
     /// <summary>

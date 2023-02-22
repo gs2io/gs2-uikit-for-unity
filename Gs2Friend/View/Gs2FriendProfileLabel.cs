@@ -34,7 +34,7 @@ namespace Gs2.Unity.UiKit.Gs2Friend
     {
         public void Update()
         {
-            if (_fetcher.Fetched)
+            if (_fetcher.Fetched && _fetcher.Profile != null)
             {
                 onUpdate?.Invoke(
                     format.Replace(
@@ -57,11 +57,17 @@ namespace Gs2.Unity.UiKit.Gs2Friend
 
     public partial class Gs2FriendProfileLabel
     {
-        private Gs2FriendProfileFetcher _fetcher;
+        private Gs2FriendOwnProfileFetcher _fetcher;
 
         public void Awake()
         {
-            _fetcher = GetComponentInParent<Gs2FriendProfileFetcher>();
+            _fetcher = GetComponentInParent<Gs2FriendOwnProfileFetcher>();
+
+            if (_fetcher == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2FriendOwnProfileFetcher.");
+                enabled = false;
+            }
+
             Update();
         }
     }

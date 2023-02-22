@@ -39,6 +39,7 @@ namespace Gs2.Unity.UiKit.Gs2Ranking
             if (_fetcher.Fetched) {
                 for (var i = 0; i < this.maximumItems; i++) {
                     if (i < this._fetcher.Rankings.Count) {
+                        _children[i].Ranking.index = this._fetcher.Rankings[i].Index;
                         _children[i].gameObject.SetActive(true);
                     }
                     else {
@@ -48,11 +49,11 @@ namespace Gs2.Unity.UiKit.Gs2Ranking
             }
         }
     }
-    
+
     /// <summary>
     /// Dependent components
     /// </summary>
-    
+
     public partial class Gs2RankingRankingList
     {
         private Gs2RankingCategoryModelContext _context;
@@ -68,11 +69,10 @@ namespace Gs2.Unity.UiKit.Gs2Ranking
             _children = new List<Gs2RankingRankingContext>();
             for (var i = 0; i < this.maximumItems; i++) {
                 var node = Instantiate(this.prefab, transform);
-                node.Ranking = Score.New(
+                node.Ranking = Ranking.New(
                     this._userContext.User,
-                    _context.CategoryModel.categoryName,
-                    this._userContext.User.UserId,
-                    ""
+                    this._context.CategoryModel,
+                    0
                 );
                 node.gameObject.SetActive(false);
                 _children.Add(node);
@@ -87,13 +87,13 @@ namespace Gs2.Unity.UiKit.Gs2Ranking
 
     public partial class Gs2RankingRankingList
     {
-        
+
     }
-    
+
     /// <summary>
     /// Parameters for Inspector
     /// </summary>
-    
+
     public partial class Gs2RankingRankingList
     {
         public Gs2RankingRankingContext prefab;
@@ -105,6 +105,6 @@ namespace Gs2.Unity.UiKit.Gs2Ranking
     /// </summary>
     public partial class Gs2RankingRankingList
     {
-        
+
     }
 }

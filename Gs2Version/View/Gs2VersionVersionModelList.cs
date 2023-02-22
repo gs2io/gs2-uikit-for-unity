@@ -18,6 +18,7 @@
 
 using System.Collections.Generic;
 using Gs2.Unity.Gs2Version.ScriptableObject;
+using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Version.Context;
 using Gs2.Unity.UiKit.Gs2Version.Fetcher;
 using UnityEngine;
@@ -34,7 +35,7 @@ namespace Gs2.Unity.UiKit.Gs2Version
         private List<Gs2VersionVersionModelContext> _children;
 
         public void Update() {
-            if (_fetcher.Fetched) {
+            if (_fetcher.Fetched && this._fetcher.VersionModels != null) {
                 for (var i = 0; i < this.maximumItems; i++) {
                     if (i < this._fetcher.VersionModels.Count) {
                         _children[i].VersionModel.versionName = this._fetcher.VersionModels[i].Name;
@@ -61,6 +62,11 @@ namespace Gs2.Unity.UiKit.Gs2Version
         {
             _context = GetComponentInParent<Gs2VersionNamespaceContext>();
             _fetcher = GetComponentInParent<Gs2VersionVersionModelListFetcher>();
+
+            if (_fetcher == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2VersionVersionModelListFetcher.");
+                enabled = false;
+            }
 
             _children = new List<Gs2VersionVersionModelContext>();
             for (var i = 0; i < this.maximumItems; i++) {

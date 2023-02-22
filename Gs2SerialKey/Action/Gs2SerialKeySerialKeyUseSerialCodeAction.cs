@@ -24,6 +24,7 @@ using System.Linq;
 using Gs2.Core.Exception;
 using Gs2.Unity.Gs2SerialKey.Model;
 using Gs2.Unity.Util;
+using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2SerialKey.Context;
 using UnityEngine;
 using UnityEngine.Events;
@@ -121,6 +122,11 @@ namespace Gs2.Unity.UiKit.Gs2SerialKey
             this._clientHolder = Gs2ClientHolder.Instance;
             this._gameSessionHolder = Gs2GameSessionHolder.Instance;
             this._context = GetComponentInParent<Gs2SerialKeySerialKeyContext>();
+
+            if (_context == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2SerialKeySerialKeyContext.");
+                enabled = false;
+            }
         }
     }
 
@@ -145,6 +151,7 @@ namespace Gs2.Unity.UiKit.Gs2SerialKey
     /// </summary>
     public partial class Gs2SerialKeySerialKeyUseSerialCodeAction
     {
+
         [Serializable]
         private class UseSerialCodeCompleteEvent : UnityEvent<EzSerialKey>
         {

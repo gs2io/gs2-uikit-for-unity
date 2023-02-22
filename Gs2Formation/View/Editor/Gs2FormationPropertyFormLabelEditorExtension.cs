@@ -16,6 +16,8 @@
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
 
+using Gs2.Unity.Gs2Formation.ScriptableObject;
+using Gs2.Unity.UiKit.Gs2Formation.Context;
 using UnityEditor;
 using UnityEngine;
 
@@ -28,6 +30,35 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Editor
             var original = target as Gs2FormationPropertyFormLabel;
 
             if (original == null) return;
+
+            var context = original.GetComponentInParent<Gs2FormationOwnPropertyFormContext>();
+            if (context == null) {
+                EditorGUILayout.HelpBox("Gs2FormationOwnPropertyFormContext not found.", MessageType.Error);
+                if (GUILayout.Button("Add Context")) {
+                    original.gameObject.AddComponent<Gs2FormationOwnPropertyFormContext>();
+                }
+            }
+            else {
+                if (context.transform.parent.GetComponent<Gs2FormationOwnPropertyFormList>() != null) {
+                    EditorGUI.BeginDisabledGroup(true);
+                    EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2FormationOwnPropertyFormContext), false);
+                    EditorGUI.EndDisabledGroup();
+                    EditorGUILayout.HelpBox("PropertyForm is auto assign from Gs2FormationOwnPropertyFormList.", MessageType.Info);
+                }
+                else {
+                    EditorGUI.BeginDisabledGroup(true);
+                    EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2FormationOwnPropertyFormContext), false);
+                    EditorGUI.indentLevel++;
+                    EditorGUILayout.ObjectField("PropertyForm", context.PropertyForm, typeof(OwnPropertyForm), false);
+                    EditorGUI.indentLevel++;
+                    EditorGUILayout.TextField("NamespaceName", context.PropertyForm?.NamespaceName.ToString());
+                    EditorGUILayout.TextField("FormModelName", context.PropertyForm?.FormModelName.ToString());
+                    EditorGUILayout.TextField("PropertyId", context.PropertyForm?.PropertyId.ToString());
+                    EditorGUI.indentLevel--;
+                    EditorGUI.indentLevel--;
+                    EditorGUI.EndDisabledGroup();
+                }
+            }
 
             serializedObject.Update();
             original.format = EditorGUILayout.TextField("Format", original.format);

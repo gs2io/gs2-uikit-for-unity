@@ -60,6 +60,10 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.Context
     public partial class Gs2LotteryUserContext
     {
         public User User;
+
+        public void SetUser(User User) {
+            this.User = User;
+        }
     }
 
     /// <summary>

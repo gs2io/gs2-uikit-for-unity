@@ -60,6 +60,10 @@ namespace Gs2.Unity.UiKit.Gs2Chat.Context
     public partial class Gs2ChatMessageContext
     {
         public Message Message;
+
+        public void SetMessage(Message Message) {
+            this.Message = Message;
+        }
     }
 
     /// <summary>

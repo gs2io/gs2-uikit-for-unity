@@ -16,18 +16,8 @@
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
 
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Text;
-using System.Text;
-using Gs2.Core.Exception;
-using Gs2.Unity.Core.Exception;
-using Gs2.Unity.Gs2Ranking.Model;
 using Gs2.Unity.Gs2Ranking.ScriptableObject;
-using Gs2.Unity.Util;
 using UnityEngine;
-using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2Ranking.Context
 {
@@ -35,10 +25,14 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Context
     /// Main
     /// </summary>
 
-	[AddComponentMenu("GS2 UIKit/Ranking/Ranking/Context")]
+	[AddComponentMenu("GS2 UIKit/Ranking/Ranking/Gs2RankingRankingContext")]
     public partial class Gs2RankingRankingContext : MonoBehaviour
     {
-
+        public void Start() {
+            if (Ranking == null) {
+                Debug.LogError("Ranking is not set in Gs2RankingRankingContext.");
+            }
+        }
     }
 
     /// <summary>
@@ -65,7 +59,11 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Context
 
     public partial class Gs2RankingRankingContext
     {
-        public Score Ranking;
+        public Ranking Ranking;
+
+        public void SetRanking(Ranking Ranking) {
+            this.Ranking = Ranking;
+        }
     }
 
     /// <summary>

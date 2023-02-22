@@ -60,6 +60,10 @@ namespace Gs2.Unity.UiKit.Gs2Dictionary.Context
     public partial class Gs2DictionaryEntryModelContext
     {
         public EntryModel EntryModel;
+
+        public void SetEntryModel(EntryModel EntryModel) {
+            this.EntryModel = EntryModel;
+        }
     }
 
     /// <summary>

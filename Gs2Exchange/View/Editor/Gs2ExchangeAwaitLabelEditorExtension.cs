@@ -16,6 +16,8 @@
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
 
+using Gs2.Unity.Gs2Exchange.ScriptableObject;
+using Gs2.Unity.UiKit.Gs2Exchange.Context;
 using UnityEditor;
 using UnityEngine;
 
@@ -28,6 +30,34 @@ namespace Gs2.Unity.UiKit.Gs2Exchange.Editor
             var original = target as Gs2ExchangeAwaitLabel;
 
             if (original == null) return;
+
+            var context = original.GetComponentInParent<Gs2ExchangeOwnAwaitContext>();
+            if (context == null) {
+                EditorGUILayout.HelpBox("Gs2ExchangeOwnAwaitContext not found.", MessageType.Error);
+                if (GUILayout.Button("Add Context")) {
+                    original.gameObject.AddComponent<Gs2ExchangeOwnAwaitContext>();
+                }
+            }
+            else {
+                if (context.transform.parent.GetComponent<Gs2ExchangeOwnAwaitList>() != null) {
+                    EditorGUI.BeginDisabledGroup(true);
+                    EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2ExchangeOwnAwaitContext), false);
+                    EditorGUI.EndDisabledGroup();
+                    EditorGUILayout.HelpBox("Await is auto assign from Gs2ExchangeOwnAwaitList.", MessageType.Info);
+                }
+                else {
+                    EditorGUI.BeginDisabledGroup(true);
+                    EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2ExchangeOwnAwaitContext), false);
+                    EditorGUI.indentLevel++;
+                    EditorGUILayout.ObjectField("Await", context.Await_, typeof(OwnAwait), false);
+                    EditorGUI.indentLevel++;
+                    EditorGUILayout.TextField("NamespaceName", context.Await_?.NamespaceName.ToString());
+                    EditorGUILayout.TextField("AwaitName", context.Await_?.AwaitName.ToString());
+                    EditorGUI.indentLevel--;
+                    EditorGUI.indentLevel--;
+                    EditorGUI.EndDisabledGroup();
+                }
+            }
 
             serializedObject.Update();
             original.format = EditorGUILayout.TextField("Format", original.format);

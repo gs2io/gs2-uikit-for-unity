@@ -40,7 +40,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1000000000000000000}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 92e11ed126bb4145b7071d27ce8a45e5, type: 3}
+  m_Script: {fileID: 11500000, guid: aae246eecc954c27a77088b731d90c1c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   onDoMatchmakingComplete:

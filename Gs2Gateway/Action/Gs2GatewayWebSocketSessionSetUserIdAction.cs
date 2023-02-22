@@ -24,10 +24,11 @@ using System.Linq;
 using Gs2.Core.Exception;
 using Gs2.Unity.Gs2Gateway.Model;
 using Gs2.Unity.Util;
+using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Gateway.Context;
 using UnityEngine;
 using UnityEngine.Events;
-using WebSocketSession = Gs2.Unity.Gs2Gateway.ScriptableObject.WebSocketSession;
+using WebSocketSession = Gs2.Unity.Gs2Gateway.ScriptableObject.OwnWebSocketSession;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -114,13 +115,18 @@ namespace Gs2.Unity.UiKit.Gs2Gateway
     {
         private Gs2ClientHolder _clientHolder;
         private Gs2GameSessionHolder _gameSessionHolder;
-        private Gs2GatewayWebSocketSessionContext _context;
+        private Gs2GatewayOwnWebSocketSessionContext _context;
 
         public void Awake()
         {
             this._clientHolder = Gs2ClientHolder.Instance;
             this._gameSessionHolder = Gs2GameSessionHolder.Instance;
-            this._context = GetComponentInParent<Gs2GatewayWebSocketSessionContext>();
+            this._context = GetComponentInParent<Gs2GatewayOwnWebSocketSessionContext>();
+
+            if (_context == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2GatewayOwnWebSocketSessionContext.");
+                enabled = false;
+            }
         }
     }
 
@@ -142,6 +148,7 @@ namespace Gs2.Unity.UiKit.Gs2Gateway
 
         public void SetAllowConcurrentAccess(bool value) {
             AllowConcurrentAccess = value;
+            this.onChangeAllowConcurrentAccess.Invoke(AllowConcurrentAccess);
         }
     }
 
@@ -150,6 +157,21 @@ namespace Gs2.Unity.UiKit.Gs2Gateway
     /// </summary>
     public partial class Gs2GatewayWebSocketSessionSetUserIdAction
     {
+
+        [Serializable]
+        private class ChangeAllowConcurrentAccessEvent : UnityEvent<bool>
+        {
+
+        }
+
+        [SerializeField]
+        private ChangeAllowConcurrentAccessEvent onChangeAllowConcurrentAccess = new ChangeAllowConcurrentAccessEvent();
+        public event UnityAction<bool> OnChangeAllowConcurrentAccess
+        {
+            add => this.onChangeAllowConcurrentAccess.AddListener(value);
+            remove => this.onChangeAllowConcurrentAccess.RemoveListener(value);
+        }
+
         [Serializable]
         private class SetUserIdCompleteEvent : UnityEvent<EzWebSocketSession>
         {

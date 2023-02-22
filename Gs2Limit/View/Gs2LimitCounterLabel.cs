@@ -34,7 +34,7 @@ namespace Gs2.Unity.UiKit.Gs2Limit
     {
         public void Update()
         {
-            if (_fetcher.Fetched)
+            if (_fetcher.Fetched && _fetcher.Counter != null)
             {
                 var createdAt = _fetcher.Counter.CreatedAt == null ? DateTime.Now : UnixTime.FromUnixTime(_fetcher.Counter.CreatedAt).ToLocalTime();
                 var updatedAt = _fetcher.Counter.UpdatedAt == null ? DateTime.Now : UnixTime.FromUnixTime(_fetcher.Counter.UpdatedAt).ToLocalTime();
@@ -99,11 +99,17 @@ namespace Gs2.Unity.UiKit.Gs2Limit
 
     public partial class Gs2LimitCounterLabel
     {
-        private Gs2LimitCounterFetcher _fetcher;
+        private Gs2LimitOwnCounterFetcher _fetcher;
 
         public void Awake()
         {
-            _fetcher = GetComponentInParent<Gs2LimitCounterFetcher>();
+            _fetcher = GetComponentInParent<Gs2LimitOwnCounterFetcher>();
+
+            if (_fetcher == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2LimitOwnCounterFetcher.");
+                enabled = false;
+            }
+
             Update();
         }
     }

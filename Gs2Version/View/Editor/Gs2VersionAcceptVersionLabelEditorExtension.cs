@@ -16,6 +16,8 @@
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
 
+using Gs2.Unity.Gs2Version.ScriptableObject;
+using Gs2.Unity.UiKit.Gs2Version.Context;
 using UnityEditor;
 using UnityEngine;
 
@@ -28,6 +30,34 @@ namespace Gs2.Unity.UiKit.Gs2Version.Editor
             var original = target as Gs2VersionAcceptVersionLabel;
 
             if (original == null) return;
+
+            var context = original.GetComponentInParent<Gs2VersionOwnAcceptVersionContext>();
+            if (context == null) {
+                EditorGUILayout.HelpBox("Gs2VersionOwnAcceptVersionContext not found.", MessageType.Error);
+                if (GUILayout.Button("Add Context")) {
+                    original.gameObject.AddComponent<Gs2VersionOwnAcceptVersionContext>();
+                }
+            }
+            else {
+                if (context.transform.parent.GetComponent<Gs2VersionOwnAcceptVersionList>() != null) {
+                    EditorGUI.BeginDisabledGroup(true);
+                    EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2VersionOwnAcceptVersionContext), false);
+                    EditorGUI.EndDisabledGroup();
+                    EditorGUILayout.HelpBox("AcceptVersion is auto assign from Gs2VersionOwnAcceptVersionList.", MessageType.Info);
+                }
+                else {
+                    EditorGUI.BeginDisabledGroup(true);
+                    EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2VersionOwnAcceptVersionContext), false);
+                    EditorGUI.indentLevel++;
+                    EditorGUILayout.ObjectField("AcceptVersion", context.AcceptVersion, typeof(OwnAcceptVersion), false);
+                    EditorGUI.indentLevel++;
+                    EditorGUILayout.TextField("NamespaceName", context.AcceptVersion?.NamespaceName.ToString());
+                    EditorGUILayout.TextField("VersionName", context.AcceptVersion?.VersionName.ToString());
+                    EditorGUI.indentLevel--;
+                    EditorGUI.indentLevel--;
+                    EditorGUI.EndDisabledGroup();
+                }
+            }
 
             serializedObject.Update();
             original.format = EditorGUILayout.TextField("Format", original.format);

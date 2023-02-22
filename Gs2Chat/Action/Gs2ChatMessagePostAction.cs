@@ -24,6 +24,7 @@ using System.Linq;
 using Gs2.Core.Exception;
 using Gs2.Unity.Gs2Chat.Model;
 using Gs2.Unity.Util;
+using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Chat.Context;
 using UnityEngine;
 using UnityEngine.Events;
@@ -124,6 +125,11 @@ namespace Gs2.Unity.UiKit.Gs2Chat
             this._clientHolder = Gs2ClientHolder.Instance;
             this._gameSessionHolder = Gs2GameSessionHolder.Instance;
             this._context = GetComponentInParent<Gs2ChatRoomContext>();
+
+            if (_context == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ChatRoomContext.");
+                enabled = false;
+            }
         }
     }
 
@@ -146,10 +152,22 @@ namespace Gs2.Unity.UiKit.Gs2Chat
 
         public void SetCategory(int value) {
             Category = value;
+            this.onChangeCategory.Invoke(Category);
+        }
+
+        public void DecreaseCategory() {
+            Category -= 1;
+            this.onChangeCategory.Invoke(Category);
+        }
+
+        public void IncreaseCategory() {
+            Category += 1;
+            this.onChangeCategory.Invoke(Category);
         }
 
         public void SetMetadata(string value) {
             Metadata = value;
+            this.onChangeMetadata.Invoke(Metadata);
         }
     }
 
@@ -158,6 +176,35 @@ namespace Gs2.Unity.UiKit.Gs2Chat
     /// </summary>
     public partial class Gs2ChatMessagePostAction
     {
+
+        [Serializable]
+        private class ChangeCategoryEvent : UnityEvent<int>
+        {
+
+        }
+
+        [SerializeField]
+        private ChangeCategoryEvent onChangeCategory = new ChangeCategoryEvent();
+        public event UnityAction<int> OnChangeCategory
+        {
+            add => this.onChangeCategory.AddListener(value);
+            remove => this.onChangeCategory.RemoveListener(value);
+        }
+
+        [Serializable]
+        private class ChangeMetadataEvent : UnityEvent<string>
+        {
+
+        }
+
+        [SerializeField]
+        private ChangeMetadataEvent onChangeMetadata = new ChangeMetadataEvent();
+        public event UnityAction<string> OnChangeMetadata
+        {
+            add => this.onChangeMetadata.AddListener(value);
+            remove => this.onChangeMetadata.RemoveListener(value);
+        }
+
         [Serializable]
         private class PostCompleteEvent : UnityEvent<EzMessage>
         {

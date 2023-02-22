@@ -16,6 +16,8 @@
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
 
+using Gs2.Unity.Gs2SerialKey.ScriptableObject;
+using Gs2.Unity.UiKit.Gs2SerialKey.Context;
 using UnityEditor;
 using UnityEngine;
 
@@ -28,6 +30,26 @@ namespace Gs2.Unity.UiKit.Gs2SerialKey.Editor
             var original = target as Gs2SerialKeySerialKeyLabel;
 
             if (original == null) return;
+
+            var context = original.GetComponentInParent<Gs2SerialKeySerialKeyContext>();
+            if (context == null) {
+                EditorGUILayout.HelpBox("Gs2SerialKeySerialKeyContext not found.", MessageType.Error);
+                if (GUILayout.Button("Add Context")) {
+                    original.gameObject.AddComponent<Gs2SerialKeySerialKeyContext>();
+                }
+            }
+            else {
+                EditorGUI.BeginDisabledGroup(true);
+                EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2SerialKeySerialKeyContext), false);
+                EditorGUI.indentLevel++;
+                EditorGUILayout.ObjectField("SerialKey", context.SerialKey, typeof(SerialKey), false);
+                EditorGUI.indentLevel++;
+                EditorGUILayout.TextField("NamespaceName", context.SerialKey?.NamespaceName.ToString());
+                EditorGUILayout.TextField("Code", context.SerialKey?.Code.ToString());
+                EditorGUI.indentLevel--;
+                EditorGUI.indentLevel--;
+                EditorGUI.EndDisabledGroup();
+            }
 
             serializedObject.Update();
             original.format = EditorGUILayout.TextField("Format", original.format);

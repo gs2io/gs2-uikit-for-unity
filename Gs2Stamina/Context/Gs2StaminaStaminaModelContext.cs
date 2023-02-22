@@ -60,6 +60,10 @@ namespace Gs2.Unity.UiKit.Gs2Stamina.Context
     public partial class Gs2StaminaStaminaModelContext
     {
         public StaminaModel StaminaModel;
+
+        public void SetStaminaModel(StaminaModel StaminaModel) {
+            this.StaminaModel = StaminaModel;
+        }
     }
 
     /// <summary>

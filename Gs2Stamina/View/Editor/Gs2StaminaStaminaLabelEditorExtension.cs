@@ -16,6 +16,8 @@
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
 
+using Gs2.Unity.Gs2Stamina.ScriptableObject;
+using Gs2.Unity.UiKit.Gs2Stamina.Context;
 using UnityEditor;
 using UnityEngine;
 
@@ -28,6 +30,26 @@ namespace Gs2.Unity.UiKit.Gs2Stamina.Editor
             var original = target as Gs2StaminaStaminaLabel;
 
             if (original == null) return;
+
+            var context = original.GetComponentInParent<Gs2StaminaOwnStaminaContext>();
+            if (context == null) {
+                EditorGUILayout.HelpBox("Gs2StaminaOwnStaminaContext not found.", MessageType.Error);
+                if (GUILayout.Button("Add Context")) {
+                    original.gameObject.AddComponent<Gs2StaminaOwnStaminaContext>();
+                }
+            }
+            else {
+                EditorGUI.BeginDisabledGroup(true);
+                EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2StaminaOwnStaminaContext), false);
+                EditorGUI.indentLevel++;
+                EditorGUILayout.ObjectField("Stamina", context.Stamina, typeof(OwnStamina), false);
+                EditorGUI.indentLevel++;
+                EditorGUILayout.TextField("NamespaceName", context.Stamina?.NamespaceName.ToString());
+                EditorGUILayout.TextField("StaminaName", context.Stamina?.StaminaName.ToString());
+                EditorGUI.indentLevel--;
+                EditorGUI.indentLevel--;
+                EditorGUI.EndDisabledGroup();
+            }
 
             serializedObject.Update();
             original.format = EditorGUILayout.TextField("Format", original.format);

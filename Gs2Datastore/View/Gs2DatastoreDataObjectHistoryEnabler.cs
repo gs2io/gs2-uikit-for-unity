@@ -16,6 +16,7 @@
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
 
+using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Datastore.Fetcher;
 using UnityEngine;
 
@@ -54,11 +55,16 @@ namespace Gs2.Unity.UiKit.Gs2Datastore
 
     public partial class Gs2DatastoreDataObjectHistoryEnabler
     {
-        private Gs2DatastoreDataObjectHistoryFetcher _fetcher;
+        private Gs2DatastoreOwnDataObjectHistoryFetcher _fetcher;
 
         public void Awake()
         {
-            _fetcher = GetComponentInParent<Gs2DatastoreDataObjectHistoryFetcher>();
+            _fetcher = GetComponentInParent<Gs2DatastoreOwnDataObjectHistoryFetcher>();
+
+            if (_fetcher == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2DatastoreOwnDataObjectHistoryFetcher.");
+                enabled = false;
+            }
         }
     }
 

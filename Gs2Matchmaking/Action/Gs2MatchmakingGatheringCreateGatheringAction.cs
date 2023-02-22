@@ -24,6 +24,7 @@ using System.Linq;
 using Gs2.Core.Exception;
 using Gs2.Unity.Gs2Matchmaking.Model;
 using Gs2.Unity.Util;
+using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Matchmaking.Context;
 using UnityEngine;
 using UnityEngine.Events;
@@ -44,7 +45,7 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking
             yield return new WaitUntil(() => this._gameSessionHolder.Initialized);
             
             var domain = this._clientHolder.Gs2.Matchmaking.Namespace(
-                this._context.User.NamespaceName
+                this._context.Namespace.NamespaceName
             ).Me(
                 this._gameSessionHolder.GameSession
             );
@@ -118,13 +119,18 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking
     {
         private Gs2ClientHolder _clientHolder;
         private Gs2GameSessionHolder _gameSessionHolder;
-        private Gs2MatchmakingUserContext _context;
+        private Gs2MatchmakingNamespaceContext _context;
 
         public void Awake()
         {
             this._clientHolder = Gs2ClientHolder.Instance;
             this._gameSessionHolder = Gs2GameSessionHolder.Instance;
-            this._context = GetComponentInParent<Gs2MatchmakingUserContext>();
+            this._context = GetComponentInParent<Gs2MatchmakingNamespaceContext>();
+
+            if (_context == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MatchmakingNamespaceContext.");
+                enabled = false;
+            }
         }
     }
 
@@ -151,26 +157,42 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking
 
         public void SetPlayer(Gs2.Unity.Gs2Matchmaking.Model.EzPlayer value) {
             Player = value;
+            this.onChangePlayer.Invoke(Player);
         }
 
         public void SetAttributeRanges(List<Gs2.Unity.Gs2Matchmaking.Model.EzAttributeRange> value) {
             AttributeRanges = value;
+            this.onChangeAttributeRanges.Invoke(AttributeRanges);
         }
 
         public void SetCapacityOfRoles(List<Gs2.Unity.Gs2Matchmaking.Model.EzCapacityOfRole> value) {
             CapacityOfRoles = value;
+            this.onChangeCapacityOfRoles.Invoke(CapacityOfRoles);
         }
 
         public void SetAllowUserIds(List<string> value) {
             AllowUserIds = value;
+            this.onChangeAllowUserIds.Invoke(AllowUserIds);
         }
 
         public void SetExpiresAt(long value) {
             ExpiresAt = value;
+            this.onChangeExpiresAt.Invoke(ExpiresAt);
+        }
+
+        public void DecreaseExpiresAt() {
+            ExpiresAt -= 1;
+            this.onChangeExpiresAt.Invoke(ExpiresAt);
+        }
+
+        public void IncreaseExpiresAt() {
+            ExpiresAt += 1;
+            this.onChangeExpiresAt.Invoke(ExpiresAt);
         }
 
         public void SetExpiresAtTimeSpan(Gs2.Unity.Gs2Matchmaking.Model.EzTimeSpan value) {
             ExpiresAtTimeSpan = value;
+            this.onChangeExpiresAtTimeSpan.Invoke(ExpiresAtTimeSpan);
         }
     }
 
@@ -179,6 +201,91 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking
     /// </summary>
     public partial class Gs2MatchmakingGatheringCreateGatheringAction
     {
+
+        [Serializable]
+        private class ChangePlayerEvent : UnityEvent<Gs2.Unity.Gs2Matchmaking.Model.EzPlayer>
+        {
+
+        }
+
+        [SerializeField]
+        private ChangePlayerEvent onChangePlayer = new ChangePlayerEvent();
+        public event UnityAction<Gs2.Unity.Gs2Matchmaking.Model.EzPlayer> OnChangePlayer
+        {
+            add => this.onChangePlayer.AddListener(value);
+            remove => this.onChangePlayer.RemoveListener(value);
+        }
+
+        [Serializable]
+        private class ChangeAttributeRangesEvent : UnityEvent<List<Gs2.Unity.Gs2Matchmaking.Model.EzAttributeRange>>
+        {
+
+        }
+
+        [SerializeField]
+        private ChangeAttributeRangesEvent onChangeAttributeRanges = new ChangeAttributeRangesEvent();
+        public event UnityAction<List<Gs2.Unity.Gs2Matchmaking.Model.EzAttributeRange>> OnChangeAttributeRanges
+        {
+            add => this.onChangeAttributeRanges.AddListener(value);
+            remove => this.onChangeAttributeRanges.RemoveListener(value);
+        }
+
+        [Serializable]
+        private class ChangeCapacityOfRolesEvent : UnityEvent<List<Gs2.Unity.Gs2Matchmaking.Model.EzCapacityOfRole>>
+        {
+
+        }
+
+        [SerializeField]
+        private ChangeCapacityOfRolesEvent onChangeCapacityOfRoles = new ChangeCapacityOfRolesEvent();
+        public event UnityAction<List<Gs2.Unity.Gs2Matchmaking.Model.EzCapacityOfRole>> OnChangeCapacityOfRoles
+        {
+            add => this.onChangeCapacityOfRoles.AddListener(value);
+            remove => this.onChangeCapacityOfRoles.RemoveListener(value);
+        }
+
+        [Serializable]
+        private class ChangeAllowUserIdsEvent : UnityEvent<List<string>>
+        {
+
+        }
+
+        [SerializeField]
+        private ChangeAllowUserIdsEvent onChangeAllowUserIds = new ChangeAllowUserIdsEvent();
+        public event UnityAction<List<string>> OnChangeAllowUserIds
+        {
+            add => this.onChangeAllowUserIds.AddListener(value);
+            remove => this.onChangeAllowUserIds.RemoveListener(value);
+        }
+
+        [Serializable]
+        private class ChangeExpiresAtEvent : UnityEvent<long>
+        {
+
+        }
+
+        [SerializeField]
+        private ChangeExpiresAtEvent onChangeExpiresAt = new ChangeExpiresAtEvent();
+        public event UnityAction<long> OnChangeExpiresAt
+        {
+            add => this.onChangeExpiresAt.AddListener(value);
+            remove => this.onChangeExpiresAt.RemoveListener(value);
+        }
+
+        [Serializable]
+        private class ChangeExpiresAtTimeSpanEvent : UnityEvent<Gs2.Unity.Gs2Matchmaking.Model.EzTimeSpan>
+        {
+
+        }
+
+        [SerializeField]
+        private ChangeExpiresAtTimeSpanEvent onChangeExpiresAtTimeSpan = new ChangeExpiresAtTimeSpanEvent();
+        public event UnityAction<Gs2.Unity.Gs2Matchmaking.Model.EzTimeSpan> OnChangeExpiresAtTimeSpan
+        {
+            add => this.onChangeExpiresAtTimeSpan.AddListener(value);
+            remove => this.onChangeExpiresAtTimeSpan.RemoveListener(value);
+        }
+
         [Serializable]
         private class CreateGatheringCompleteEvent : UnityEvent<EzGathering>
         {

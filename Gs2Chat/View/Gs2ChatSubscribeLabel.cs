@@ -34,7 +34,7 @@ namespace Gs2.Unity.UiKit.Gs2Chat
     {
         public void Update()
         {
-            if (_fetcher.Fetched)
+            if (_fetcher.Fetched && _fetcher.Subscribe != null)
             {
                 onUpdate?.Invoke(
                     format.Replace(
@@ -55,11 +55,17 @@ namespace Gs2.Unity.UiKit.Gs2Chat
 
     public partial class Gs2ChatSubscribeLabel
     {
-        private Gs2ChatSubscribeFetcher _fetcher;
+        private Gs2ChatOwnSubscribeFetcher _fetcher;
 
         public void Awake()
         {
-            _fetcher = GetComponentInParent<Gs2ChatSubscribeFetcher>();
+            _fetcher = GetComponentInParent<Gs2ChatOwnSubscribeFetcher>();
+
+            if (_fetcher == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ChatOwnSubscribeFetcher.");
+                enabled = false;
+            }
+
             Update();
         }
     }

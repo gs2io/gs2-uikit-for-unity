@@ -16,6 +16,8 @@
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
 
+using Gs2.Unity.Gs2MegaField.ScriptableObject;
+using Gs2.Unity.UiKit.Gs2MegaField.Context;
 using UnityEditor;
 using UnityEngine;
 
@@ -28,6 +30,33 @@ namespace Gs2.Unity.UiKit.Gs2MegaField.Editor
             var original = target as Gs2MegaFieldLayerModelLabel;
 
             if (original == null) return;
+
+            var context = original.GetComponentInParent<Gs2MegaFieldLayerModelContext>();
+            if (context == null) {
+                EditorGUILayout.HelpBox("Gs2MegaFieldLayerModelContext not found.", MessageType.Error);
+                if (GUILayout.Button("Add Context")) {
+                    original.gameObject.AddComponent<Gs2MegaFieldLayerModelContext>();
+                }
+            }
+            else {
+                if (context.transform.parent.GetComponent<Gs2MegaFieldLayerModelList>() != null) {
+                    EditorGUI.BeginDisabledGroup(true);
+                    EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2MegaFieldLayerModelContext), false);
+                    EditorGUI.EndDisabledGroup();
+                    EditorGUILayout.HelpBox("LayerModel is auto assign from Gs2MegaFieldLayerModelList.", MessageType.Info);
+                }
+                else {
+                    EditorGUI.BeginDisabledGroup(true);
+                    EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2MegaFieldLayerModelContext), false);
+                    EditorGUI.indentLevel++;
+                    EditorGUILayout.ObjectField("LayerModel", context.LayerModel, typeof(LayerModel), false);
+                    EditorGUI.indentLevel++;
+                    EditorGUILayout.TextField("LayerModelName", context.LayerModel?.LayerModelName.ToString());
+                    EditorGUI.indentLevel--;
+                    EditorGUI.indentLevel--;
+                    EditorGUI.EndDisabledGroup();
+                }
+            }
 
             serializedObject.Update();
             original.format = EditorGUILayout.TextField("Format", original.format);

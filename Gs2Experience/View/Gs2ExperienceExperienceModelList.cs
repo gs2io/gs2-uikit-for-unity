@@ -18,6 +18,7 @@
 
 using System.Collections.Generic;
 using Gs2.Unity.Gs2Experience.ScriptableObject;
+using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Experience.Context;
 using Gs2.Unity.UiKit.Gs2Experience.Fetcher;
 using UnityEngine;
@@ -34,7 +35,7 @@ namespace Gs2.Unity.UiKit.Gs2Experience
         private List<Gs2ExperienceExperienceModelContext> _children;
 
         public void Update() {
-            if (_fetcher.Fetched) {
+            if (_fetcher.Fetched && this._fetcher.ExperienceModels != null) {
                 for (var i = 0; i < this.maximumItems; i++) {
                     if (i < this._fetcher.ExperienceModels.Count) {
                         _children[i].ExperienceModel.experienceName = this._fetcher.ExperienceModels[i].Name;
@@ -61,6 +62,11 @@ namespace Gs2.Unity.UiKit.Gs2Experience
         {
             _context = GetComponentInParent<Gs2ExperienceNamespaceContext>();
             _fetcher = GetComponentInParent<Gs2ExperienceExperienceModelListFetcher>();
+
+            if (_fetcher == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ExperienceExperienceModelListFetcher.");
+                enabled = false;
+            }
 
             _children = new List<Gs2ExperienceExperienceModelContext>();
             for (var i = 0; i < this.maximumItems; i++) {

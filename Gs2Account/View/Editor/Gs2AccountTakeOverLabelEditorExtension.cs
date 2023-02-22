@@ -12,10 +12,14 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
 
+using Gs2.Unity.Gs2Account.ScriptableObject;
+using Gs2.Unity.UiKit.Gs2Account.Context;
 using UnityEditor;
 using UnityEngine;
 
@@ -28,6 +32,26 @@ namespace Gs2.Unity.UiKit.Gs2Account.Editor
             var original = target as Gs2AccountTakeOverLabel;
 
             if (original == null) return;
+
+            var context = original.GetComponentInParent<Gs2AccountOwnTakeOverContext>();
+            if (context == null) {
+                EditorGUILayout.HelpBox("Gs2AccountOwnTakeOverContext not found.", MessageType.Error);
+                if (GUILayout.Button("Add Context")) {
+                    original.gameObject.AddComponent<Gs2AccountOwnTakeOverContext>();
+                }
+            }
+            else {
+                EditorGUI.BeginDisabledGroup(true);
+                EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2AccountOwnTakeOverContext), false);
+                EditorGUI.indentLevel++;
+                EditorGUILayout.ObjectField("TakeOver", context.TakeOver, typeof(OwnTakeOver), false);
+                EditorGUI.indentLevel++;
+                EditorGUILayout.TextField("NamespaceName", context.TakeOver?.NamespaceName.ToString());
+                EditorGUILayout.TextField("Type", context.TakeOver?.Type.ToString());
+                EditorGUI.indentLevel--;
+                EditorGUI.indentLevel--;
+                EditorGUI.EndDisabledGroup();
+            }
 
             serializedObject.Update();
             original.format = EditorGUILayout.TextField("Format", original.format);

@@ -16,6 +16,7 @@
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
 
+using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Inventory.Fetcher;
 using UnityEngine;
 
@@ -54,11 +55,16 @@ namespace Gs2.Unity.UiKit.Gs2Inventory
 
     public partial class Gs2InventoryItemSetEnabler
     {
-        private Gs2InventoryItemSetFetcher _fetcher;
+        private Gs2InventoryOwnItemSetFetcher _fetcher;
 
         public void Awake()
         {
-            _fetcher = GetComponentInParent<Gs2InventoryItemSetFetcher>();
+            _fetcher = GetComponentInParent<Gs2InventoryOwnItemSetFetcher>();
+
+            if (_fetcher == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2InventoryOwnItemSetFetcher.");
+                enabled = false;
+            }
         }
     }
 

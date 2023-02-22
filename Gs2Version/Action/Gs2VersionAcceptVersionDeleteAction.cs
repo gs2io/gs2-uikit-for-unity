@@ -24,10 +24,11 @@ using System.Linq;
 using Gs2.Core.Exception;
 using Gs2.Unity.Gs2Version.Model;
 using Gs2.Unity.Util;
+using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Version.Context;
 using UnityEngine;
 using UnityEngine.Events;
-using AcceptVersion = Gs2.Unity.Gs2Version.ScriptableObject.AcceptVersion;
+using AcceptVersion = Gs2.Unity.Gs2Version.ScriptableObject.OwnAcceptVersion;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -114,13 +115,18 @@ namespace Gs2.Unity.UiKit.Gs2Version
     {
         private Gs2ClientHolder _clientHolder;
         private Gs2GameSessionHolder _gameSessionHolder;
-        private Gs2VersionAcceptVersionContext _context;
+        private Gs2VersionOwnAcceptVersionContext _context;
 
         public void Awake()
         {
             this._clientHolder = Gs2ClientHolder.Instance;
             this._gameSessionHolder = Gs2GameSessionHolder.Instance;
-            this._context = GetComponentInParent<Gs2VersionAcceptVersionContext>();
+            this._context = GetComponentInParent<Gs2VersionOwnAcceptVersionContext>();
+
+            if (_context == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2VersionOwnAcceptVersionContext.");
+                enabled = false;
+            }
         }
     }
 
@@ -145,6 +151,7 @@ namespace Gs2.Unity.UiKit.Gs2Version
     /// </summary>
     public partial class Gs2VersionAcceptVersionDeleteAction
     {
+
         [Serializable]
         private class DeleteCompleteEvent : UnityEvent<EzAcceptVersion>
         {

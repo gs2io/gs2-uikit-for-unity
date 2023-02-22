@@ -34,7 +34,7 @@ namespace Gs2.Unity.UiKit.Gs2JobQueue
     {
         public void Update()
         {
-            if (_fetcher.Fetched)
+            if (_fetcher.Fetched && _fetcher.JobResult != null)
             {
                 onUpdate?.Invoke(
                     format.Replace(
@@ -53,11 +53,17 @@ namespace Gs2.Unity.UiKit.Gs2JobQueue
 
     public partial class Gs2JobQueueJobResultLabel
     {
-        private Gs2JobQueueJobResultFetcher _fetcher;
+        private Gs2JobQueueOwnJobResultFetcher _fetcher;
 
         public void Awake()
         {
-            _fetcher = GetComponentInParent<Gs2JobQueueJobResultFetcher>();
+            _fetcher = GetComponentInParent<Gs2JobQueueOwnJobResultFetcher>();
+
+            if (_fetcher == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2JobQueueOwnJobResultFetcher.");
+                enabled = false;
+            }
+
             Update();
         }
     }

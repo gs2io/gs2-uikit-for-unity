@@ -24,10 +24,11 @@ using System.Linq;
 using Gs2.Core.Exception;
 using Gs2.Unity.Gs2Ranking.Model;
 using Gs2.Unity.Util;
+using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Ranking.Context;
 using UnityEngine;
 using UnityEngine.Events;
-using Subscribe = Gs2.Unity.Gs2Ranking.ScriptableObject.Subscribe;
+using Subscribe = Gs2.Unity.Gs2Ranking.ScriptableObject.OwnSubscribe;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -114,13 +115,18 @@ namespace Gs2.Unity.UiKit.Gs2Ranking
     {
         private Gs2ClientHolder _clientHolder;
         private Gs2GameSessionHolder _gameSessionHolder;
-        private Gs2RankingSubscribeContext _context;
+        private Gs2RankingOwnSubscribeContext _context;
 
         public void Awake()
         {
             this._clientHolder = Gs2ClientHolder.Instance;
             this._gameSessionHolder = Gs2GameSessionHolder.Instance;
-            this._context = GetComponentInParent<Gs2RankingSubscribeContext>();
+            this._context = GetComponentInParent<Gs2RankingOwnSubscribeContext>();
+
+            if (_context == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2RankingOwnSubscribeContext.");
+                enabled = false;
+            }
         }
     }
 
@@ -142,6 +148,7 @@ namespace Gs2.Unity.UiKit.Gs2Ranking
 
         public void SetTargetUserId(string value) {
             TargetUserId = value;
+            this.onChangeTargetUserId.Invoke(TargetUserId);
         }
     }
 
@@ -150,6 +157,21 @@ namespace Gs2.Unity.UiKit.Gs2Ranking
     /// </summary>
     public partial class Gs2RankingSubscribeSubscribeAction
     {
+
+        [Serializable]
+        private class ChangeTargetUserIdEvent : UnityEvent<string>
+        {
+
+        }
+
+        [SerializeField]
+        private ChangeTargetUserIdEvent onChangeTargetUserId = new ChangeTargetUserIdEvent();
+        public event UnityAction<string> OnChangeTargetUserId
+        {
+            add => this.onChangeTargetUserId.AddListener(value);
+            remove => this.onChangeTargetUserId.RemoveListener(value);
+        }
+
         [Serializable]
         private class SubscribeCompleteEvent : UnityEvent<EzSubscribeUser>
         {

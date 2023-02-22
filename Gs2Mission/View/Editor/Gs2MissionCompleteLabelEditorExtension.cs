@@ -16,6 +16,8 @@
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
 
+using Gs2.Unity.Gs2Mission.ScriptableObject;
+using Gs2.Unity.UiKit.Gs2Mission.Context;
 using UnityEditor;
 using UnityEngine;
 
@@ -28,6 +30,34 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Editor
             var original = target as Gs2MissionCompleteLabel;
 
             if (original == null) return;
+
+            var context = original.GetComponentInParent<Gs2MissionOwnCompleteContext>();
+            if (context == null) {
+                EditorGUILayout.HelpBox("Gs2MissionOwnCompleteContext not found.", MessageType.Error);
+                if (GUILayout.Button("Add Context")) {
+                    original.gameObject.AddComponent<Gs2MissionOwnCompleteContext>();
+                }
+            }
+            else {
+                if (context.transform.parent.GetComponent<Gs2MissionOwnCompleteList>() != null) {
+                    EditorGUI.BeginDisabledGroup(true);
+                    EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2MissionOwnCompleteContext), false);
+                    EditorGUI.EndDisabledGroup();
+                    EditorGUILayout.HelpBox("Complete is auto assign from Gs2MissionOwnCompleteList.", MessageType.Info);
+                }
+                else {
+                    EditorGUI.BeginDisabledGroup(true);
+                    EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2MissionOwnCompleteContext), false);
+                    EditorGUI.indentLevel++;
+                    EditorGUILayout.ObjectField("Complete", context.Complete, typeof(OwnComplete), false);
+                    EditorGUI.indentLevel++;
+                    EditorGUILayout.TextField("NamespaceName", context.Complete?.NamespaceName.ToString());
+                    EditorGUILayout.TextField("MissionGroupName", context.Complete?.MissionGroupName.ToString());
+                    EditorGUI.indentLevel--;
+                    EditorGUI.indentLevel--;
+                    EditorGUI.EndDisabledGroup();
+                }
+            }
 
             serializedObject.Update();
             original.format = EditorGUILayout.TextField("Format", original.format);

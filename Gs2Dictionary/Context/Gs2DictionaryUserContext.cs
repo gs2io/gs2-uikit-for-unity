@@ -60,6 +60,10 @@ namespace Gs2.Unity.UiKit.Gs2Dictionary.Context
     public partial class Gs2DictionaryUserContext
     {
         public User User;
+
+        public void SetUser(User User) {
+            this.User = User;
+        }
     }
 
     /// <summary>

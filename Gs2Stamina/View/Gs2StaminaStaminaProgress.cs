@@ -17,6 +17,8 @@
 // ReSharper disable CheckNamespace
 
 using System;
+using Gs2.Core.Util;
+using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Stamina.Fetcher;
 using UnityEngine;
 using UnityEngine.Events;
@@ -27,15 +29,16 @@ namespace Gs2.Unity.UiKit.Gs2Stamina
     /// Main
     /// </summary>
 
-    [AddComponentMenu("GS2 UIKit/Stamina/Gs2StaminaStaminaProgress")]
+	[AddComponentMenu("GS2 UIKit/Stamina/Stamina/View/Gs2StaminaStaminaProgress")]
     public partial class Gs2StaminaStaminaProgress : MonoBehaviour
     {
         public void Update()
         {
-            if (_staminaFetcher.Fetched)
+            if (_fetcher.Fetched && _fetcher.Stamina != null)
             {
-                onUpdate.Invoke(Math.Min(1.0f, (float) _staminaFetcher.Stamina.Value / _staminaFetcher.Stamina.MaxValue));
-                onUpdateInverse.Invoke(1.0f - Math.Min(1.0f, (float) _staminaFetcher.Stamina.Value / _staminaFetcher.Stamina.MaxValue));
+                onUpdate?.Invoke(
+                    Math.Min((float)_fetcher.Stamina.Value / this._fetcher.Stamina.MaxValue, 1)
+                );
             }
         }
     }
@@ -43,30 +46,31 @@ namespace Gs2.Unity.UiKit.Gs2Stamina
     /// <summary>
     /// Dependent components
     /// </summary>
-    
+
     public partial class Gs2StaminaStaminaProgress
     {
-        private Gs2StaminaStaminaFetcher _staminaFetcher;
+        private Gs2StaminaOwnStaminaFetcher _fetcher;
 
         public void Awake()
         {
-            _staminaFetcher = GetComponentInParent<Gs2StaminaStaminaFetcher>();
+            _fetcher = GetComponentInParent<Gs2StaminaOwnStaminaFetcher>();
+            Update();
         }
     }
 
     /// <summary>
     /// Public properties
     /// </summary>
-    
+
     public partial class Gs2StaminaStaminaProgress
     {
-        
+
     }
 
     /// <summary>
     /// Parameters for Inspector
     /// </summary>
-    
+
     public partial class Gs2StaminaStaminaProgress
     {
         
@@ -80,31 +84,16 @@ namespace Gs2.Unity.UiKit.Gs2Stamina
         [Serializable]
         private class UpdateEvent : UnityEvent<float>
         {
-            
+
         }
-        
+
         [SerializeField]
         private UpdateEvent onUpdate = new UpdateEvent();
-        
+
         public event UnityAction<float> OnUpdate
         {
             add => onUpdate.AddListener(value);
             remove => onUpdate.RemoveListener(value);
-        }
-        
-        [Serializable]
-        private class UpdateInverseEvent : UnityEvent<float>
-        {
-            
-        }
-        
-        [SerializeField]
-        private UpdateInverseEvent onUpdateInverse = new UpdateInverseEvent();
-        
-        public event UnityAction<float> OnUpdateInverse
-        {
-            add => onUpdateInverse.AddListener(value);
-            remove => onUpdateInverse.RemoveListener(value);
         }
     }
 }

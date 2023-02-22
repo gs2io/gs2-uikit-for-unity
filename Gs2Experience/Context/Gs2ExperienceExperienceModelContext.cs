@@ -60,6 +60,10 @@ namespace Gs2.Unity.UiKit.Gs2Experience.Context
     public partial class Gs2ExperienceExperienceModelContext
     {
         public ExperienceModel ExperienceModel;
+
+        public void SetExperienceModel(ExperienceModel ExperienceModel) {
+            this.ExperienceModel = ExperienceModel;
+        }
     }
 
     /// <summary>

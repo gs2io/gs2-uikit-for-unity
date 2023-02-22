@@ -18,6 +18,7 @@
 
 using System.Collections.Generic;
 using Gs2.Unity.Gs2MegaField.ScriptableObject;
+using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2MegaField.Context;
 using Gs2.Unity.UiKit.Gs2MegaField.Fetcher;
 using UnityEngine;
@@ -34,7 +35,7 @@ namespace Gs2.Unity.UiKit.Gs2MegaField
         private List<Gs2MegaFieldLayerModelContext> _children;
 
         public void Update() {
-            if (_fetcher.Fetched) {
+            if (_fetcher.Fetched && this._fetcher.LayerModels != null) {
                 for (var i = 0; i < this.maximumItems; i++) {
                     if (i < this._fetcher.LayerModels.Count) {
                         _children[i].LayerModel.layerModelName = this._fetcher.LayerModels[i].Name;
@@ -61,6 +62,11 @@ namespace Gs2.Unity.UiKit.Gs2MegaField
         {
             _context = GetComponentInParent<Gs2MegaFieldAreaModelContext>();
             _fetcher = GetComponentInParent<Gs2MegaFieldLayerModelListFetcher>();
+
+            if (_fetcher == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MegaFieldLayerModelListFetcher.");
+                enabled = false;
+            }
 
             _children = new List<Gs2MegaFieldLayerModelContext>();
             for (var i = 0; i < this.maximumItems; i++) {

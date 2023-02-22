@@ -17,6 +17,7 @@
 // ReSharper disable CheckNamespace
 
 using System.Collections.Generic;
+using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Inventory.Fetcher;
 using UnityEngine;
 
@@ -31,7 +32,7 @@ namespace Gs2.Unity.UiKit.Gs2Inventory
     {
         public void Update()
         {
-            if (_fetcher.Fetched)
+            if (_fetcher.Fetched && _fetcher.ItemModel != null)
             {
                 switch(expression)
                 {
@@ -42,20 +43,20 @@ namespace Gs2.Unity.UiKit.Gs2Inventory
                         target.SetActive(!enableSortValues.Contains(_fetcher.ItemModel.SortValue));
                         break;
                     case Expression.Less:
-                        target.SetActive(enableSortValue < _fetcher.ItemModel.SortValue);
-                        break;
-                    case Expression.LessEqual:
-                        target.SetActive(enableSortValue <= _fetcher.ItemModel.SortValue);
-                        break;
-                    case Expression.Greater:
                         target.SetActive(enableSortValue > _fetcher.ItemModel.SortValue);
                         break;
-                    case Expression.GreaterEqual:
+                    case Expression.LessEqual:
                         target.SetActive(enableSortValue >= _fetcher.ItemModel.SortValue);
+                        break;
+                    case Expression.Greater:
+                        target.SetActive(enableSortValue < _fetcher.ItemModel.SortValue);
+                        break;
+                    case Expression.GreaterEqual:
+                        target.SetActive(enableSortValue <= _fetcher.ItemModel.SortValue);
                         break;
                 }
             }
-            else 
+            else
             {
                 target.SetActive(false);
             }
@@ -65,7 +66,7 @@ namespace Gs2.Unity.UiKit.Gs2Inventory
     /// <summary>
     /// Dependent components
     /// </summary>
-    
+
     public partial class Gs2InventoryItemModelSortValueEnabler
     {
         private Gs2InventoryItemModelFetcher _fetcher;
@@ -73,22 +74,27 @@ namespace Gs2.Unity.UiKit.Gs2Inventory
         public void Awake()
         {
             _fetcher = GetComponentInParent<Gs2InventoryItemModelFetcher>();
+
+            if (_fetcher == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2InventoryItemModelFetcher.");
+                enabled = false;
+            }
         }
     }
 
     /// <summary>
     /// Public properties
     /// </summary>
-    
+
     public partial class Gs2InventoryItemModelSortValueEnabler
     {
-        
+
     }
 
     /// <summary>
     /// Parameters for Inspector
     /// </summary>
-    
+
     public partial class Gs2InventoryItemModelSortValueEnabler
     {
         public enum Expression {

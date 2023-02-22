@@ -16,6 +16,8 @@
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
 
+using Gs2.Unity.Gs2Matchmaking.ScriptableObject;
+using Gs2.Unity.UiKit.Gs2Matchmaking.Context;
 using UnityEditor;
 using UnityEngine;
 
@@ -28,6 +30,26 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking.Editor
             var original = target as Gs2MatchmakingGatheringLabel;
 
             if (original == null) return;
+
+            var context = original.GetComponentInParent<Gs2MatchmakingGatheringContext>();
+            if (context == null) {
+                EditorGUILayout.HelpBox("Gs2MatchmakingGatheringContext not found.", MessageType.Error);
+                if (GUILayout.Button("Add Context")) {
+                    original.gameObject.AddComponent<Gs2MatchmakingGatheringContext>();
+                }
+            }
+            else {
+                EditorGUI.BeginDisabledGroup(true);
+                EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2MatchmakingGatheringContext), false);
+                EditorGUI.indentLevel++;
+                EditorGUILayout.ObjectField("Gathering", context.Gathering, typeof(Gathering), false);
+                EditorGUI.indentLevel++;
+                EditorGUILayout.TextField("NamespaceName", context.Gathering?.NamespaceName.ToString());
+                EditorGUILayout.TextField("GatheringName", context.Gathering?.GatheringName.ToString());
+                EditorGUI.indentLevel--;
+                EditorGUI.indentLevel--;
+                EditorGUI.EndDisabledGroup();
+            }
 
             serializedObject.Update();
             original.format = EditorGUILayout.TextField("Format", original.format);

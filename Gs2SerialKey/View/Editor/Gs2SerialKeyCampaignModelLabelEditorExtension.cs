@@ -16,6 +16,8 @@
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
 
+using Gs2.Unity.Gs2SerialKey.ScriptableObject;
+using Gs2.Unity.UiKit.Gs2SerialKey.Context;
 using UnityEditor;
 using UnityEngine;
 
@@ -28,6 +30,26 @@ namespace Gs2.Unity.UiKit.Gs2SerialKey.Editor
             var original = target as Gs2SerialKeyCampaignModelLabel;
 
             if (original == null) return;
+
+            var context = original.GetComponentInParent<Gs2SerialKeyCampaignModelContext>();
+            if (context == null) {
+                EditorGUILayout.HelpBox("Gs2SerialKeyCampaignModelContext not found.", MessageType.Error);
+                if (GUILayout.Button("Add Context")) {
+                    original.gameObject.AddComponent<Gs2SerialKeyCampaignModelContext>();
+                }
+            }
+            else {
+                EditorGUI.BeginDisabledGroup(true);
+                EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2SerialKeyCampaignModelContext), false);
+                EditorGUI.indentLevel++;
+                EditorGUILayout.ObjectField("CampaignModel", context.CampaignModel, typeof(CampaignModel), false);
+                EditorGUI.indentLevel++;
+                EditorGUILayout.TextField("NamespaceName", context.CampaignModel?.NamespaceName.ToString());
+                EditorGUILayout.TextField("CampaignModelName", context.CampaignModel?.CampaignModelName.ToString());
+                EditorGUI.indentLevel--;
+                EditorGUI.indentLevel--;
+                EditorGUI.EndDisabledGroup();
+            }
 
             serializedObject.Update();
             original.format = EditorGUILayout.TextField("Format", original.format);

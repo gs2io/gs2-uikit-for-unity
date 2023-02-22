@@ -60,6 +60,10 @@ namespace Gs2.Unity.UiKit.Gs2Showcase.Context
     public partial class Gs2ShowcaseUserContext
     {
         public User User;
+
+        public void SetUser(User User) {
+            this.User = User;
+        }
     }
 
     /// <summary>

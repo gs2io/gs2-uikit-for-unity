@@ -60,6 +60,10 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Context
     public partial class Gs2QuestNamespaceContext
     {
         public Namespace Namespace;
+
+        public void SetNamespace(Namespace Namespace) {
+            this.Namespace = Namespace;
+        }
     }
 
     /// <summary>

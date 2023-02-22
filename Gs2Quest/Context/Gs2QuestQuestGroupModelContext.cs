@@ -60,6 +60,10 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Context
     public partial class Gs2QuestQuestGroupModelContext
     {
         public QuestGroupModel QuestGroupModel;
+
+        public void SetQuestGroupModel(QuestGroupModel QuestGroupModel) {
+            this.QuestGroupModel = QuestGroupModel;
+        }
     }
 
     /// <summary>

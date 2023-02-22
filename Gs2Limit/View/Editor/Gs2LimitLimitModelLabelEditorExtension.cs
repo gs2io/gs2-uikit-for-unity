@@ -16,6 +16,8 @@
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
 
+using Gs2.Unity.Gs2Limit.ScriptableObject;
+using Gs2.Unity.UiKit.Gs2Limit.Context;
 using UnityEditor;
 using UnityEngine;
 
@@ -28,6 +30,34 @@ namespace Gs2.Unity.UiKit.Gs2Limit.Editor
             var original = target as Gs2LimitLimitModelLabel;
 
             if (original == null) return;
+
+            var context = original.GetComponentInParent<Gs2LimitLimitModelContext>();
+            if (context == null) {
+                EditorGUILayout.HelpBox("Gs2LimitLimitModelContext not found.", MessageType.Error);
+                if (GUILayout.Button("Add Context")) {
+                    original.gameObject.AddComponent<Gs2LimitLimitModelContext>();
+                }
+            }
+            else {
+                if (context.transform.parent.GetComponent<Gs2LimitLimitModelList>() != null) {
+                    EditorGUI.BeginDisabledGroup(true);
+                    EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2LimitLimitModelContext), false);
+                    EditorGUI.EndDisabledGroup();
+                    EditorGUILayout.HelpBox("LimitModel is auto assign from Gs2LimitLimitModelList.", MessageType.Info);
+                }
+                else {
+                    EditorGUI.BeginDisabledGroup(true);
+                    EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2LimitLimitModelContext), false);
+                    EditorGUI.indentLevel++;
+                    EditorGUILayout.ObjectField("LimitModel", context.LimitModel, typeof(LimitModel), false);
+                    EditorGUI.indentLevel++;
+                    EditorGUILayout.TextField("NamespaceName", context.LimitModel?.NamespaceName.ToString());
+                    EditorGUILayout.TextField("LimitName", context.LimitModel?.LimitName.ToString());
+                    EditorGUI.indentLevel--;
+                    EditorGUI.indentLevel--;
+                    EditorGUI.EndDisabledGroup();
+                }
+            }
 
             serializedObject.Update();
             original.format = EditorGUILayout.TextField("Format", original.format);

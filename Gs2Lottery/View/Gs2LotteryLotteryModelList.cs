@@ -18,6 +18,7 @@
 
 using System.Collections.Generic;
 using Gs2.Unity.Gs2Lottery.ScriptableObject;
+using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Lottery.Context;
 using Gs2.Unity.UiKit.Gs2Lottery.Fetcher;
 using UnityEngine;
@@ -34,7 +35,7 @@ namespace Gs2.Unity.UiKit.Gs2Lottery
         private List<Gs2LotteryLotteryModelContext> _children;
 
         public void Update() {
-            if (_fetcher.Fetched) {
+            if (_fetcher.Fetched && this._fetcher.LotteryModels != null) {
                 for (var i = 0; i < this.maximumItems; i++) {
                     if (i < this._fetcher.LotteryModels.Count) {
                         _children[i].LotteryModel.lotteryName = this._fetcher.LotteryModels[i].Name;
@@ -61,6 +62,11 @@ namespace Gs2.Unity.UiKit.Gs2Lottery
         {
             _context = GetComponentInParent<Gs2LotteryNamespaceContext>();
             _fetcher = GetComponentInParent<Gs2LotteryLotteryModelListFetcher>();
+
+            if (_fetcher == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2LotteryLotteryModelListFetcher.");
+                enabled = false;
+            }
 
             _children = new List<Gs2LotteryLotteryModelContext>();
             for (var i = 0; i < this.maximumItems; i++) {

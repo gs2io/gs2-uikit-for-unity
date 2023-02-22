@@ -60,6 +60,10 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.Context
     public partial class Gs2LotteryPrizeTableContext
     {
         public PrizeTable PrizeTable;
+
+        public void SetPrizeTable(PrizeTable PrizeTable) {
+            this.PrizeTable = PrizeTable;
+        }
     }
 
     /// <summary>

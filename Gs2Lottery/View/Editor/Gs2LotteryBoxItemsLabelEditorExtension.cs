@@ -16,6 +16,8 @@
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
 
+using Gs2.Unity.Gs2Lottery.ScriptableObject;
+using Gs2.Unity.UiKit.Gs2Lottery.Context;
 using UnityEditor;
 using UnityEngine;
 
@@ -28,6 +30,34 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.Editor
             var original = target as Gs2LotteryBoxItemsLabel;
 
             if (original == null) return;
+
+            var context = original.GetComponentInParent<Gs2LotteryOwnBoxItemsContext>();
+            if (context == null) {
+                EditorGUILayout.HelpBox("Gs2LotteryOwnBoxItemsContext not found.", MessageType.Error);
+                if (GUILayout.Button("Add Context")) {
+                    original.gameObject.AddComponent<Gs2LotteryOwnBoxItemsContext>();
+                }
+            }
+            else {
+                if (context.transform.parent.GetComponent<Gs2LotteryOwnBoxItemsList>() != null) {
+                    EditorGUI.BeginDisabledGroup(true);
+                    EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2LotteryOwnBoxItemsContext), false);
+                    EditorGUI.EndDisabledGroup();
+                    EditorGUILayout.HelpBox("BoxItems is auto assign from Gs2LotteryOwnBoxItemsList.", MessageType.Info);
+                }
+                else {
+                    EditorGUI.BeginDisabledGroup(true);
+                    EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2LotteryOwnBoxItemsContext), false);
+                    EditorGUI.indentLevel++;
+                    EditorGUILayout.ObjectField("BoxItems", context.BoxItems, typeof(OwnBoxItems), false);
+                    EditorGUI.indentLevel++;
+                    EditorGUILayout.TextField("NamespaceName", context.BoxItems?.NamespaceName.ToString());
+                    EditorGUILayout.TextField("PrizeTableName", context.BoxItems?.PrizeTableName.ToString());
+                    EditorGUI.indentLevel--;
+                    EditorGUI.indentLevel--;
+                    EditorGUI.EndDisabledGroup();
+                }
+            }
 
             serializedObject.Update();
             original.format = EditorGUILayout.TextField("Format", original.format);

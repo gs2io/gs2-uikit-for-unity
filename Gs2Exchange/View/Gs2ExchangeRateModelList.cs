@@ -18,6 +18,7 @@
 
 using System.Collections.Generic;
 using Gs2.Unity.Gs2Exchange.ScriptableObject;
+using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Exchange.Context;
 using Gs2.Unity.UiKit.Gs2Exchange.Fetcher;
 using UnityEngine;
@@ -34,7 +35,7 @@ namespace Gs2.Unity.UiKit.Gs2Exchange
         private List<Gs2ExchangeRateModelContext> _children;
 
         public void Update() {
-            if (_fetcher.Fetched) {
+            if (_fetcher.Fetched && this._fetcher.RateModels != null) {
                 for (var i = 0; i < this.maximumItems; i++) {
                     if (i < this._fetcher.RateModels.Count) {
                         _children[i].RateModel.rateName = this._fetcher.RateModels[i].Name;
@@ -61,6 +62,11 @@ namespace Gs2.Unity.UiKit.Gs2Exchange
         {
             _context = GetComponentInParent<Gs2ExchangeNamespaceContext>();
             _fetcher = GetComponentInParent<Gs2ExchangeRateModelListFetcher>();
+
+            if (_fetcher == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ExchangeRateModelListFetcher.");
+                enabled = false;
+            }
 
             _children = new List<Gs2ExchangeRateModelContext>();
             for (var i = 0; i < this.maximumItems; i++) {

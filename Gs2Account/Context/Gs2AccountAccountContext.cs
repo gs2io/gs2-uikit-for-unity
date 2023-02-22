@@ -60,6 +60,10 @@ namespace Gs2.Unity.UiKit.Gs2Account.Context
     public partial class Gs2AccountAccountContext
     {
         public Account Account;
+
+        public void SetAccount(Account Account) {
+            this.Account = Account;
+        }
     }
 
     /// <summary>

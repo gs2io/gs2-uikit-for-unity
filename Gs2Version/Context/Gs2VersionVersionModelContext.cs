@@ -60,6 +60,10 @@ namespace Gs2.Unity.UiKit.Gs2Version.Context
     public partial class Gs2VersionVersionModelContext
     {
         public VersionModel VersionModel;
+
+        public void SetVersionModel(VersionModel VersionModel) {
+            this.VersionModel = VersionModel;
+        }
     }
 
     /// <summary>

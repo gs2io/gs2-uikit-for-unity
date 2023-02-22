@@ -60,6 +60,10 @@ namespace Gs2.Unity.UiKit.Gs2Limit.Context
     public partial class Gs2LimitLimitModelContext
     {
         public LimitModel LimitModel;
+
+        public void SetLimitModel(LimitModel LimitModel) {
+            this.LimitModel = LimitModel;
+        }
     }
 
     /// <summary>

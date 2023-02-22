@@ -49,11 +49,11 @@ namespace Gs2.Unity.UiKit.Gs2Ranking
             }
         }
     }
-    
+
     /// <summary>
     /// Dependent components
     /// </summary>
-    
+
     public partial class Gs2RankingSubscribeUserList
     {
         private Gs2RankingCategoryModelContext _context;
@@ -70,8 +70,8 @@ namespace Gs2.Unity.UiKit.Gs2Ranking
             for (var i = 0; i < this.maximumItems; i++) {
                 var node = Instantiate(this.prefab, transform);
                 node.SubscribeUser = SubscribeUser.New(
-                    _userContext.User,
-                    this._context.CategoryModel.categoryName,
+                    this._userContext.User,
+                    this._context.CategoryModel,
                     ""
                 );
                 node.gameObject.SetActive(false);
@@ -87,13 +87,13 @@ namespace Gs2.Unity.UiKit.Gs2Ranking
 
     public partial class Gs2RankingSubscribeUserList
     {
-        
+
     }
-    
+
     /// <summary>
     /// Parameters for Inspector
     /// </summary>
-    
+
     public partial class Gs2RankingSubscribeUserList
     {
         public Gs2RankingSubscribeUserContext prefab;
@@ -105,6 +105,6 @@ namespace Gs2.Unity.UiKit.Gs2Ranking
     /// </summary>
     public partial class Gs2RankingSubscribeUserList
     {
-        
+
     }
 }

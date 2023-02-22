@@ -16,6 +16,8 @@
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
 
+using Gs2.Unity.Gs2Friend.ScriptableObject;
+using Gs2.Unity.UiKit.Gs2Friend.Context;
 using UnityEditor;
 using UnityEngine;
 
@@ -28,6 +30,33 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Editor
             var original = target as Gs2FriendBlackListLabel;
 
             if (original == null) return;
+
+            var context = original.GetComponentInParent<Gs2FriendOwnBlackListContext>();
+            if (context == null) {
+                EditorGUILayout.HelpBox("Gs2FriendOwnBlackListContext not found.", MessageType.Error);
+                if (GUILayout.Button("Add Context")) {
+                    original.gameObject.AddComponent<Gs2FriendOwnBlackListContext>();
+                }
+            }
+            else {
+                if (context.transform.parent.GetComponent<Gs2FriendOwnBlackListList>() != null) {
+                    EditorGUI.BeginDisabledGroup(true);
+                    EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2FriendOwnBlackListContext), false);
+                    EditorGUI.EndDisabledGroup();
+                    EditorGUILayout.HelpBox("BlackList is auto assign from Gs2FriendOwnBlackListList.", MessageType.Info);
+                }
+                else {
+                    EditorGUI.BeginDisabledGroup(true);
+                    EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2FriendOwnBlackListContext), false);
+                    EditorGUI.indentLevel++;
+                    EditorGUILayout.ObjectField("BlackList", context.BlackList, typeof(OwnBlackList), false);
+                    EditorGUI.indentLevel++;
+                    EditorGUILayout.TextField("NamespaceName", context.BlackList?.NamespaceName.ToString());
+                    EditorGUI.indentLevel--;
+                    EditorGUI.indentLevel--;
+                    EditorGUI.EndDisabledGroup();
+                }
+            }
 
             serializedObject.Update();
             original.format = EditorGUILayout.TextField("Format", original.format);

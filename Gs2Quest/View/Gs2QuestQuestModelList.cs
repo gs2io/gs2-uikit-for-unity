@@ -18,6 +18,7 @@
 
 using System.Collections.Generic;
 using Gs2.Unity.Gs2Quest.ScriptableObject;
+using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Quest.Context;
 using Gs2.Unity.UiKit.Gs2Quest.Fetcher;
 using UnityEngine;
@@ -34,7 +35,7 @@ namespace Gs2.Unity.UiKit.Gs2Quest
         private List<Gs2QuestQuestModelContext> _children;
 
         public void Update() {
-            if (_fetcher.Fetched) {
+            if (_fetcher.Fetched && this._fetcher.QuestModels != null) {
                 for (var i = 0; i < this.maximumItems; i++) {
                     if (i < this._fetcher.QuestModels.Count) {
                         _children[i].QuestModel.questName = this._fetcher.QuestModels[i].Name;
@@ -61,6 +62,11 @@ namespace Gs2.Unity.UiKit.Gs2Quest
         {
             _context = GetComponentInParent<Gs2QuestQuestGroupModelContext>();
             _fetcher = GetComponentInParent<Gs2QuestQuestModelListFetcher>();
+
+            if (_fetcher == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2QuestQuestModelListFetcher.");
+                enabled = false;
+            }
 
             _children = new List<Gs2QuestQuestModelContext>();
             for (var i = 0; i < this.maximumItems; i++) {

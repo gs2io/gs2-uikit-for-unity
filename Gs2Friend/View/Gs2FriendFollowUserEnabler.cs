@@ -16,6 +16,7 @@
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
 
+using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Friend.Fetcher;
 using UnityEngine;
 
@@ -54,11 +55,16 @@ namespace Gs2.Unity.UiKit.Gs2Friend
 
     public partial class Gs2FriendFollowUserEnabler
     {
-        private Gs2FriendFollowUserFetcher _fetcher;
+        private Gs2FriendOwnFollowUserFetcher _fetcher;
 
         public void Awake()
         {
-            _fetcher = GetComponentInParent<Gs2FriendFollowUserFetcher>();
+            _fetcher = GetComponentInParent<Gs2FriendOwnFollowUserFetcher>();
+
+            if (_fetcher == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2FriendOwnFollowUserFetcher.");
+                enabled = false;
+            }
         }
     }
 

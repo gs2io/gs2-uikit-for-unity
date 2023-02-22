@@ -29,7 +29,7 @@ using Gs2.Unity.Util;
 using Gs2.Unity.UiKit.Gs2Friend.Context;
 using UnityEngine;
 using UnityEngine.Events;
-using ReceiveFriendRequest = Gs2.Unity.Gs2Friend.ScriptableObject.ReceiveFriendRequest;
+using ReceiveFriendRequest = Gs2.Unity.Gs2Friend.ScriptableObject.OwnReceiveFriendRequest;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -116,13 +116,13 @@ namespace Gs2.Unity.UiKit.Gs2Friend
     {
         private Gs2ClientHolder _clientHolder;
         private Gs2GameSessionHolder _gameSessionHolder;
-        private Gs2FriendReceiveFriendRequestContext _context;
+        private Gs2FriendOwnReceiveFriendRequestContext _context;
 
         public void Awake()
         {
             this._clientHolder = Gs2ClientHolder.Instance;
             this._gameSessionHolder = Gs2GameSessionHolder.Instance;
-            this._context = GetComponentInParent<Gs2FriendReceiveFriendRequestContext>();
+            this._context = GetComponentInParent<Gs2FriendOwnReceiveFriendRequestContext>();
         }
     }
 

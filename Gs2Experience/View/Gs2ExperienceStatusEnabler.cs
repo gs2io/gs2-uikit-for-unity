@@ -16,6 +16,7 @@
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
 
+using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Experience.Fetcher;
 using UnityEngine;
 
@@ -54,11 +55,16 @@ namespace Gs2.Unity.UiKit.Gs2Experience
 
     public partial class Gs2ExperienceStatusEnabler
     {
-        private Gs2ExperienceStatusFetcher _fetcher;
+        private Gs2ExperienceOwnStatusFetcher _fetcher;
 
         public void Awake()
         {
-            _fetcher = GetComponentInParent<Gs2ExperienceStatusFetcher>();
+            _fetcher = GetComponentInParent<Gs2ExperienceOwnStatusFetcher>();
+
+            if (_fetcher == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ExperienceOwnStatusFetcher.");
+                enabled = false;
+            }
         }
     }
 

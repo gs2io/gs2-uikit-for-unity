@@ -24,10 +24,11 @@ using System.Linq;
 using Gs2.Core.Exception;
 using Gs2.Unity.Gs2Enhance.Model;
 using Gs2.Unity.Util;
+using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Enhance.Context;
 using UnityEngine;
 using UnityEngine.Events;
-using Progress = Gs2.Unity.Gs2Enhance.ScriptableObject.Progress;
+using Progress = Gs2.Unity.Gs2Enhance.ScriptableObject.OwnProgress;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -98,13 +99,18 @@ namespace Gs2.Unity.UiKit.Gs2Enhance
     {
         private Gs2ClientHolder _clientHolder;
         private Gs2GameSessionHolder _gameSessionHolder;
-        private Gs2EnhanceProgressContext _context;
+        private Gs2EnhanceOwnProgressContext _context;
 
         public void Awake()
         {
             this._clientHolder = Gs2ClientHolder.Instance;
             this._gameSessionHolder = Gs2GameSessionHolder.Instance;
-            this._context = GetComponentInParent<Gs2EnhanceProgressContext>();
+            this._context = GetComponentInParent<Gs2EnhanceOwnProgressContext>();
+
+            if (_context == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2EnhanceOwnProgressContext.");
+                enabled = false;
+            }
         }
     }
 
@@ -126,6 +132,7 @@ namespace Gs2.Unity.UiKit.Gs2Enhance
 
         public void SetConfig(List<Gs2.Unity.Gs2Enhance.Model.EzConfig> value) {
             Config = value;
+            this.onChangeConfig.Invoke(Config);
         }
     }
 
@@ -134,6 +141,21 @@ namespace Gs2.Unity.UiKit.Gs2Enhance
     /// </summary>
     public partial class Gs2EnhanceProgressEndAction
     {
+
+        [Serializable]
+        private class ChangeConfigEvent : UnityEvent<List<Gs2.Unity.Gs2Enhance.Model.EzConfig>>
+        {
+
+        }
+
+        [SerializeField]
+        private ChangeConfigEvent onChangeConfig = new ChangeConfigEvent();
+        public event UnityAction<List<Gs2.Unity.Gs2Enhance.Model.EzConfig>> OnChangeConfig
+        {
+            add => this.onChangeConfig.AddListener(value);
+            remove => this.onChangeConfig.RemoveListener(value);
+        }
+
         [Serializable]
         private class EndCompleteEvent : UnityEvent<string>
         {

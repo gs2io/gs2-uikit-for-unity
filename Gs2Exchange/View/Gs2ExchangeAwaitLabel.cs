@@ -34,7 +34,7 @@ namespace Gs2.Unity.UiKit.Gs2Exchange
     {
         public void Update()
         {
-            if (_fetcher.Fetched)
+            if (_fetcher.Fetched && _fetcher.Await != null)
             {
                 var exchangedAt = _fetcher.Await.ExchangedAt == null ? DateTime.Now : UnixTime.FromUnixTime(_fetcher.Await.ExchangedAt).ToLocalTime();
                 onUpdate?.Invoke(
@@ -76,11 +76,17 @@ namespace Gs2.Unity.UiKit.Gs2Exchange
 
     public partial class Gs2ExchangeAwaitLabel
     {
-        private Gs2ExchangeAwaitFetcher _fetcher;
+        private Gs2ExchangeOwnAwaitFetcher _fetcher;
 
         public void Awake()
         {
-            _fetcher = GetComponentInParent<Gs2ExchangeAwaitFetcher>();
+            _fetcher = GetComponentInParent<Gs2ExchangeOwnAwaitFetcher>();
+
+            if (_fetcher == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ExchangeOwnAwaitFetcher.");
+                enabled = false;
+            }
+
             Update();
         }
     }

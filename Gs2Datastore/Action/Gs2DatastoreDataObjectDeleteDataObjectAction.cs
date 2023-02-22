@@ -24,10 +24,11 @@ using System.Linq;
 using Gs2.Core.Exception;
 using Gs2.Unity.Gs2Datastore.Model;
 using Gs2.Unity.Util;
+using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Datastore.Context;
 using UnityEngine;
 using UnityEngine.Events;
-using DataObject = Gs2.Unity.Gs2Datastore.ScriptableObject.DataObject;
+using DataObject = Gs2.Unity.Gs2Datastore.ScriptableObject.OwnDataObject;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -114,13 +115,18 @@ namespace Gs2.Unity.UiKit.Gs2Datastore
     {
         private Gs2ClientHolder _clientHolder;
         private Gs2GameSessionHolder _gameSessionHolder;
-        private Gs2DatastoreDataObjectContext _context;
+        private Gs2DatastoreOwnDataObjectContext _context;
 
         public void Awake()
         {
             this._clientHolder = Gs2ClientHolder.Instance;
             this._gameSessionHolder = Gs2GameSessionHolder.Instance;
-            this._context = GetComponentInParent<Gs2DatastoreDataObjectContext>();
+            this._context = GetComponentInParent<Gs2DatastoreOwnDataObjectContext>();
+
+            if (_context == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2DatastoreOwnDataObjectContext.");
+                enabled = false;
+            }
         }
     }
 
@@ -145,6 +151,7 @@ namespace Gs2.Unity.UiKit.Gs2Datastore
     /// </summary>
     public partial class Gs2DatastoreDataObjectDeleteDataObjectAction
     {
+
         [Serializable]
         private class DeleteDataObjectCompleteEvent : UnityEvent<EzDataObject>
         {

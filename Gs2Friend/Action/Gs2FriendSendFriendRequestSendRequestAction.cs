@@ -24,10 +24,11 @@ using System.Linq;
 using Gs2.Core.Exception;
 using Gs2.Unity.Gs2Friend.Model;
 using Gs2.Unity.Util;
+using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Friend.Context;
 using UnityEngine;
 using UnityEngine.Events;
-using SendFriendRequest = Gs2.Unity.Gs2Friend.ScriptableObject.SendFriendRequest;
+using SendFriendRequest = Gs2.Unity.Gs2Friend.ScriptableObject.OwnSendFriendRequest;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -113,13 +114,18 @@ namespace Gs2.Unity.UiKit.Gs2Friend
     {
         private Gs2ClientHolder _clientHolder;
         private Gs2GameSessionHolder _gameSessionHolder;
-        private Gs2FriendSendFriendRequestContext _context;
+        private Gs2FriendOwnSendFriendRequestContext _context;
 
         public void Awake()
         {
             this._clientHolder = Gs2ClientHolder.Instance;
             this._gameSessionHolder = Gs2GameSessionHolder.Instance;
-            this._context = GetComponentInParent<Gs2FriendSendFriendRequestContext>();
+            this._context = GetComponentInParent<Gs2FriendOwnSendFriendRequestContext>();
+
+            if (_context == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2FriendOwnSendFriendRequestContext.");
+                enabled = false;
+            }
         }
     }
 
@@ -144,6 +150,7 @@ namespace Gs2.Unity.UiKit.Gs2Friend
     /// </summary>
     public partial class Gs2FriendSendFriendRequestSendRequestAction
     {
+
         [Serializable]
         private class SendRequestCompleteEvent : UnityEvent<EzFriendRequest>
         {

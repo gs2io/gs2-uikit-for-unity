@@ -18,6 +18,7 @@
 
 using Gs2.Unity.Gs2Schedule.ScriptableObject;
 using UnityEngine;
+using Event = Gs2.Unity.Gs2Schedule.ScriptableObject.Event;
 
 namespace Gs2.Unity.UiKit.Gs2Schedule.Context
 {
@@ -60,6 +61,10 @@ namespace Gs2.Unity.UiKit.Gs2Schedule.Context
     public partial class Gs2ScheduleUserContext
     {
         public User User;
+
+        public void SetUser(User User) {
+            this.User = User;
+        }
     }
 
     /// <summary>

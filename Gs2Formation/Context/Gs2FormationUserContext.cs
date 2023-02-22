@@ -60,6 +60,10 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Context
     public partial class Gs2FormationUserContext
     {
         public User User;
+
+        public void SetUser(User User) {
+            this.User = User;
+        }
     }
 
     /// <summary>

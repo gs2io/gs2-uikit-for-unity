@@ -60,6 +60,10 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking.Context
     public partial class Gs2MatchmakingRatingModelContext
     {
         public RatingModel RatingModel;
+
+        public void SetRatingModel(RatingModel RatingModel) {
+            this.RatingModel = RatingModel;
+        }
     }
 
     /// <summary>

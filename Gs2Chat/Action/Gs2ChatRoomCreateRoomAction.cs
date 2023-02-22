@@ -24,6 +24,7 @@ using System.Linq;
 using Gs2.Core.Exception;
 using Gs2.Unity.Gs2Chat.Model;
 using Gs2.Unity.Util;
+using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Chat.Context;
 using UnityEngine;
 using UnityEngine.Events;
@@ -44,7 +45,7 @@ namespace Gs2.Unity.UiKit.Gs2Chat
             yield return new WaitUntil(() => this._gameSessionHolder.Initialized);
             
             var domain = this._clientHolder.Gs2.Chat.Namespace(
-                this._context.User.NamespaceName
+                this._context.Namespace.NamespaceName
             ).Me(
                 this._gameSessionHolder.GameSession
             );
@@ -116,13 +117,18 @@ namespace Gs2.Unity.UiKit.Gs2Chat
     {
         private Gs2ClientHolder _clientHolder;
         private Gs2GameSessionHolder _gameSessionHolder;
-        private Gs2ChatUserContext _context;
+        private Gs2ChatNamespaceContext _context;
 
         public void Awake()
         {
             this._clientHolder = Gs2ClientHolder.Instance;
             this._gameSessionHolder = Gs2GameSessionHolder.Instance;
-            this._context = GetComponentInParent<Gs2ChatUserContext>();
+            this._context = GetComponentInParent<Gs2ChatNamespaceContext>();
+
+            if (_context == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ChatNamespaceContext.");
+                enabled = false;
+            }
         }
     }
 
@@ -147,18 +153,22 @@ namespace Gs2.Unity.UiKit.Gs2Chat
 
         public void SetName(string value) {
             Name = value;
+            this.onChangeName.Invoke(Name);
         }
 
         public void SetMetadata(string value) {
             Metadata = value;
+            this.onChangeMetadata.Invoke(Metadata);
         }
 
         public void SetPassword(string value) {
             Password = value;
+            this.onChangePassword.Invoke(Password);
         }
 
         public void SetWhiteListUserIds(List<string> value) {
             WhiteListUserIds = value;
+            this.onChangeWhiteListUserIds.Invoke(WhiteListUserIds);
         }
     }
 
@@ -167,6 +177,63 @@ namespace Gs2.Unity.UiKit.Gs2Chat
     /// </summary>
     public partial class Gs2ChatRoomCreateRoomAction
     {
+
+        [Serializable]
+        private class ChangeNameEvent : UnityEvent<string>
+        {
+
+        }
+
+        [SerializeField]
+        private ChangeNameEvent onChangeName = new ChangeNameEvent();
+        public event UnityAction<string> OnChangeName
+        {
+            add => this.onChangeName.AddListener(value);
+            remove => this.onChangeName.RemoveListener(value);
+        }
+
+        [Serializable]
+        private class ChangeMetadataEvent : UnityEvent<string>
+        {
+
+        }
+
+        [SerializeField]
+        private ChangeMetadataEvent onChangeMetadata = new ChangeMetadataEvent();
+        public event UnityAction<string> OnChangeMetadata
+        {
+            add => this.onChangeMetadata.AddListener(value);
+            remove => this.onChangeMetadata.RemoveListener(value);
+        }
+
+        [Serializable]
+        private class ChangePasswordEvent : UnityEvent<string>
+        {
+
+        }
+
+        [SerializeField]
+        private ChangePasswordEvent onChangePassword = new ChangePasswordEvent();
+        public event UnityAction<string> OnChangePassword
+        {
+            add => this.onChangePassword.AddListener(value);
+            remove => this.onChangePassword.RemoveListener(value);
+        }
+
+        [Serializable]
+        private class ChangeWhiteListUserIdsEvent : UnityEvent<List<string>>
+        {
+
+        }
+
+        [SerializeField]
+        private ChangeWhiteListUserIdsEvent onChangeWhiteListUserIds = new ChangeWhiteListUserIdsEvent();
+        public event UnityAction<List<string>> OnChangeWhiteListUserIds
+        {
+            add => this.onChangeWhiteListUserIds.AddListener(value);
+            remove => this.onChangeWhiteListUserIds.RemoveListener(value);
+        }
+
         [Serializable]
         private class CreateRoomCompleteEvent : UnityEvent<EzRoom>
         {

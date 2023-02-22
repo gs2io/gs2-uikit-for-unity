@@ -16,6 +16,8 @@
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
 
+using Gs2.Unity.Gs2Account.ScriptableObject;
+using Gs2.Unity.UiKit.Gs2Account.Context;
 using UnityEditor;
 using UnityEngine;
 
@@ -28,6 +30,25 @@ namespace Gs2.Unity.UiKit.Gs2Account.Editor
             var original = target as Gs2AccountAccountLabel;
 
             if (original == null) return;
+
+            var context = original.GetComponentInParent<Gs2AccountOwnAccountContext>();
+            if (context == null) {
+                EditorGUILayout.HelpBox("Gs2AccountOwnAccountContext not found.", MessageType.Error);
+                if (GUILayout.Button("Add Context")) {
+                    original.gameObject.AddComponent<Gs2AccountOwnAccountContext>();
+                }
+            }
+            else {
+                EditorGUI.BeginDisabledGroup(true);
+                EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2AccountOwnAccountContext), false);
+                EditorGUI.indentLevel++;
+                EditorGUILayout.ObjectField("Account", context.Account, typeof(OwnAccount), false);
+                EditorGUI.indentLevel++;
+                EditorGUILayout.TextField("NamespaceName", context.Account?.NamespaceName.ToString());
+                EditorGUI.indentLevel--;
+                EditorGUI.indentLevel--;
+                EditorGUI.EndDisabledGroup();
+            }
 
             serializedObject.Update();
             original.format = EditorGUILayout.TextField("Format", original.format);

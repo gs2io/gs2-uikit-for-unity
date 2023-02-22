@@ -17,6 +17,7 @@
 // ReSharper disable CheckNamespace
 
 using System.Collections.Generic;
+using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Account.Fetcher;
 using UnityEngine;
 
@@ -31,7 +32,7 @@ namespace Gs2.Unity.UiKit.Gs2Account
     {
         public void Update()
         {
-            if (_fetcher.Fetched)
+            if (_fetcher.Fetched && _fetcher.TakeOver != null)
             {
                 switch(expression)
                 {
@@ -42,20 +43,20 @@ namespace Gs2.Unity.UiKit.Gs2Account
                         target.SetActive(!enableTypes.Contains(_fetcher.TakeOver.Type));
                         break;
                     case Expression.Less:
-                        target.SetActive(enableType < _fetcher.TakeOver.Type);
-                        break;
-                    case Expression.LessEqual:
-                        target.SetActive(enableType <= _fetcher.TakeOver.Type);
-                        break;
-                    case Expression.Greater:
                         target.SetActive(enableType > _fetcher.TakeOver.Type);
                         break;
-                    case Expression.GreaterEqual:
+                    case Expression.LessEqual:
                         target.SetActive(enableType >= _fetcher.TakeOver.Type);
+                        break;
+                    case Expression.Greater:
+                        target.SetActive(enableType < _fetcher.TakeOver.Type);
+                        break;
+                    case Expression.GreaterEqual:
+                        target.SetActive(enableType <= _fetcher.TakeOver.Type);
                         break;
                 }
             }
-            else 
+            else
             {
                 target.SetActive(false);
             }
@@ -65,30 +66,35 @@ namespace Gs2.Unity.UiKit.Gs2Account
     /// <summary>
     /// Dependent components
     /// </summary>
-    
+
     public partial class Gs2AccountTakeOverTypeEnabler
     {
-        private Gs2AccountTakeOverFetcher _fetcher;
+        private Gs2AccountOwnTakeOverFetcher _fetcher;
 
         public void Awake()
         {
-            _fetcher = GetComponentInParent<Gs2AccountTakeOverFetcher>();
+            _fetcher = GetComponentInParent<Gs2AccountOwnTakeOverFetcher>();
+
+            if (_fetcher == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2AccountOwnTakeOverFetcher.");
+                enabled = false;
+            }
         }
     }
 
     /// <summary>
     /// Public properties
     /// </summary>
-    
+
     public partial class Gs2AccountTakeOverTypeEnabler
     {
-        
+
     }
 
     /// <summary>
     /// Parameters for Inspector
     /// </summary>
-    
+
     public partial class Gs2AccountTakeOverTypeEnabler
     {
         public enum Expression {

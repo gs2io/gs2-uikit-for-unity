@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
@@ -29,8 +31,8 @@ namespace Gs2.Unity.UiKit.Gs2Version.Context
     public partial class Gs2VersionUserContext : MonoBehaviour
     {
         public void Start() {
-            if (User == null) {
-                Debug.LogError("User is not set in Gs2VersionUserContext.");
+            if (Namespace == null) {
+                Debug.LogError("Namespace is not set in Gs2VersionUserContext.");
             }
         }
     }
@@ -59,7 +61,11 @@ namespace Gs2.Unity.UiKit.Gs2Version.Context
 
     public partial class Gs2VersionUserContext
     {
-        public User User;
+        public Namespace Namespace;
+
+        public void SetNamespace(Namespace Namespace) {
+            this.Namespace = Namespace;
+        }
     }
 
     /// <summary>

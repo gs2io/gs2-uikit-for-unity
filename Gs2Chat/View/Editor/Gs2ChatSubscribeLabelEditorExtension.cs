@@ -16,6 +16,8 @@
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
 
+using Gs2.Unity.Gs2Chat.ScriptableObject;
+using Gs2.Unity.UiKit.Gs2Chat.Context;
 using UnityEditor;
 using UnityEngine;
 
@@ -28,6 +30,34 @@ namespace Gs2.Unity.UiKit.Gs2Chat.Editor
             var original = target as Gs2ChatSubscribeLabel;
 
             if (original == null) return;
+
+            var context = original.GetComponentInParent<Gs2ChatOwnSubscribeContext>();
+            if (context == null) {
+                EditorGUILayout.HelpBox("Gs2ChatOwnSubscribeContext not found.", MessageType.Error);
+                if (GUILayout.Button("Add Context")) {
+                    original.gameObject.AddComponent<Gs2ChatOwnSubscribeContext>();
+                }
+            }
+            else {
+                if (context.transform.parent.GetComponent<Gs2ChatOwnSubscribeList>() != null) {
+                    EditorGUI.BeginDisabledGroup(true);
+                    EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2ChatOwnSubscribeContext), false);
+                    EditorGUI.EndDisabledGroup();
+                    EditorGUILayout.HelpBox("Subscribe is auto assign from Gs2ChatOwnSubscribeList.", MessageType.Info);
+                }
+                else {
+                    EditorGUI.BeginDisabledGroup(true);
+                    EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2ChatOwnSubscribeContext), false);
+                    EditorGUI.indentLevel++;
+                    EditorGUILayout.ObjectField("Subscribe", context.Subscribe, typeof(OwnSubscribe), false);
+                    EditorGUI.indentLevel++;
+                    EditorGUILayout.TextField("NamespaceName", context.Subscribe?.NamespaceName.ToString());
+                    EditorGUILayout.TextField("RoomName", context.Subscribe?.RoomName.ToString());
+                    EditorGUI.indentLevel--;
+                    EditorGUI.indentLevel--;
+                    EditorGUI.EndDisabledGroup();
+                }
+            }
 
             serializedObject.Update();
             original.format = EditorGUILayout.TextField("Format", original.format);

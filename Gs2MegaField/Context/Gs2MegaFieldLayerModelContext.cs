@@ -60,6 +60,10 @@ namespace Gs2.Unity.UiKit.Gs2MegaField.Context
     public partial class Gs2MegaFieldLayerModelContext
     {
         public LayerModel LayerModel;
+
+        public void SetLayerModel(LayerModel LayerModel) {
+            this.LayerModel = LayerModel;
+        }
     }
 
     /// <summary>

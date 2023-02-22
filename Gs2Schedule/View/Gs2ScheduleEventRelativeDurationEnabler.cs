@@ -17,6 +17,7 @@
 // ReSharper disable CheckNamespace
 
 using System.Collections.Generic;
+using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Schedule.Fetcher;
 using UnityEngine;
 
@@ -31,7 +32,7 @@ namespace Gs2.Unity.UiKit.Gs2Schedule
     {
         public void Update()
         {
-            if (_fetcher.Fetched)
+            if (_fetcher.Fetched && _fetcher.Event != null)
             {
                 switch(expression)
                 {
@@ -42,20 +43,20 @@ namespace Gs2.Unity.UiKit.Gs2Schedule
                         target.SetActive(!enableRelativeDurations.Contains(_fetcher.Event.RelativeDuration));
                         break;
                     case Expression.Less:
-                        target.SetActive(enableRelativeDuration < _fetcher.Event.RelativeDuration);
-                        break;
-                    case Expression.LessEqual:
-                        target.SetActive(enableRelativeDuration <= _fetcher.Event.RelativeDuration);
-                        break;
-                    case Expression.Greater:
                         target.SetActive(enableRelativeDuration > _fetcher.Event.RelativeDuration);
                         break;
-                    case Expression.GreaterEqual:
+                    case Expression.LessEqual:
                         target.SetActive(enableRelativeDuration >= _fetcher.Event.RelativeDuration);
+                        break;
+                    case Expression.Greater:
+                        target.SetActive(enableRelativeDuration < _fetcher.Event.RelativeDuration);
+                        break;
+                    case Expression.GreaterEqual:
+                        target.SetActive(enableRelativeDuration <= _fetcher.Event.RelativeDuration);
                         break;
                 }
             }
-            else 
+            else
             {
                 target.SetActive(false);
             }
@@ -65,7 +66,7 @@ namespace Gs2.Unity.UiKit.Gs2Schedule
     /// <summary>
     /// Dependent components
     /// </summary>
-    
+
     public partial class Gs2ScheduleEventRelativeDurationEnabler
     {
         private Gs2ScheduleEventFetcher _fetcher;
@@ -73,22 +74,27 @@ namespace Gs2.Unity.UiKit.Gs2Schedule
         public void Awake()
         {
             _fetcher = GetComponentInParent<Gs2ScheduleEventFetcher>();
+
+            if (_fetcher == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ScheduleEventFetcher.");
+                enabled = false;
+            }
         }
     }
 
     /// <summary>
     /// Public properties
     /// </summary>
-    
+
     public partial class Gs2ScheduleEventRelativeDurationEnabler
     {
-        
+
     }
 
     /// <summary>
     /// Parameters for Inspector
     /// </summary>
-    
+
     public partial class Gs2ScheduleEventRelativeDurationEnabler
     {
         public enum Expression {

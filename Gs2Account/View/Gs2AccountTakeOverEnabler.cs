@@ -16,6 +16,7 @@
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
 
+using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Account.Fetcher;
 using UnityEngine;
 
@@ -54,11 +55,16 @@ namespace Gs2.Unity.UiKit.Gs2Account
 
     public partial class Gs2AccountTakeOverEnabler
     {
-        private Gs2AccountTakeOverFetcher _fetcher;
+        private Gs2AccountOwnTakeOverFetcher _fetcher;
 
         public void Awake()
         {
-            _fetcher = GetComponentInParent<Gs2AccountTakeOverFetcher>();
+            _fetcher = GetComponentInParent<Gs2AccountOwnTakeOverFetcher>();
+
+            if (_fetcher == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2AccountOwnTakeOverFetcher.");
+                enabled = false;
+            }
         }
     }
 

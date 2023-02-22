@@ -60,6 +60,10 @@ namespace Gs2.Unity.UiKit.Gs2SerialKey.Context
     public partial class Gs2SerialKeyCampaignModelContext
     {
         public CampaignModel CampaignModel;
+
+        public void SetCampaignModel(CampaignModel CampaignModel) {
+            this.CampaignModel = CampaignModel;
+        }
     }
 
     /// <summary>

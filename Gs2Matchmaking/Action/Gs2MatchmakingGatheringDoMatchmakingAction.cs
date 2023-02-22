@@ -46,7 +46,7 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking
             yield return new WaitUntil(() => this._gameSessionHolder.Initialized);
             
             var domain = this._clientHolder.Gs2.Matchmaking.Namespace(
-                this._context.Gathering.NamespaceName
+                this._context.Namespace.NamespaceName
             ).Me(
                 this._gameSessionHolder.GameSession
             );
@@ -76,13 +76,13 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking
     {
         private Gs2ClientHolder _clientHolder;
         private Gs2GameSessionHolder _gameSessionHolder;
-        private Gs2MatchmakingGatheringContext _context;
+        private Gs2MatchmakingNamespaceContext _context;
 
         public void Awake()
         {
             this._clientHolder = Gs2ClientHolder.Instance;
             this._gameSessionHolder = Gs2GameSessionHolder.Instance;
-            this._context = GetComponentInParent<Gs2MatchmakingGatheringContext>();
+            this._context = GetComponentInParent<Gs2MatchmakingNamespaceContext>();
         }
     }
 
@@ -101,9 +101,14 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking
     public partial class Gs2MatchmakingGatheringDoMatchmakingAction
     {
         public Gs2.Unity.Gs2Matchmaking.Model.EzPlayer Player;
+        public string MatchmakingContextToken;
 
         public void SetPlayer(Gs2.Unity.Gs2Matchmaking.Model.EzPlayer value) {
             Player = value;
+        }
+
+        public void SetMatchmakingContextToken(string value) {
+            MatchmakingContextToken = value;
         }
     }
 

@@ -60,6 +60,10 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Context
     public partial class Gs2RankingSubscribeUserContext
     {
         public SubscribeUser SubscribeUser;
+
+        public void SetSubscribeUser(SubscribeUser SubscribeUser) {
+            this.SubscribeUser = SubscribeUser;
+        }
     }
 
     /// <summary>

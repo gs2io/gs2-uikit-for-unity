@@ -24,10 +24,11 @@ using System.Linq;
 using Gs2.Core.Exception;
 using Gs2.Unity.Gs2Formation.Model;
 using Gs2.Unity.Util;
+using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Formation.Context;
 using UnityEngine;
 using UnityEngine.Events;
-using PropertyForm = Gs2.Unity.Gs2Formation.ScriptableObject.PropertyForm;
+using PropertyForm = Gs2.Unity.Gs2Formation.ScriptableObject.OwnPropertyForm;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -117,13 +118,18 @@ namespace Gs2.Unity.UiKit.Gs2Formation
     {
         private Gs2ClientHolder _clientHolder;
         private Gs2GameSessionHolder _gameSessionHolder;
-        private Gs2FormationPropertyFormContext _context;
+        private Gs2FormationOwnPropertyFormContext _context;
 
         public void Awake()
         {
             this._clientHolder = Gs2ClientHolder.Instance;
             this._gameSessionHolder = Gs2GameSessionHolder.Instance;
-            this._context = GetComponentInParent<Gs2FormationPropertyFormContext>();
+            this._context = GetComponentInParent<Gs2FormationOwnPropertyFormContext>();
+
+            if (_context == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2FormationOwnPropertyFormContext.");
+                enabled = false;
+            }
         }
     }
 
@@ -146,10 +152,12 @@ namespace Gs2.Unity.UiKit.Gs2Formation
 
         public void SetSlots(List<Gs2.Unity.Gs2Formation.Model.EzSlotWithSignature> value) {
             Slots = value;
+            this.onChangeSlots.Invoke(Slots);
         }
 
         public void SetKeyId(string value) {
             KeyId = value;
+            this.onChangeKeyId.Invoke(KeyId);
         }
     }
 
@@ -158,6 +166,35 @@ namespace Gs2.Unity.UiKit.Gs2Formation
     /// </summary>
     public partial class Gs2FormationPropertyFormSetPropertyFormAction
     {
+
+        [Serializable]
+        private class ChangeSlotsEvent : UnityEvent<List<Gs2.Unity.Gs2Formation.Model.EzSlotWithSignature>>
+        {
+
+        }
+
+        [SerializeField]
+        private ChangeSlotsEvent onChangeSlots = new ChangeSlotsEvent();
+        public event UnityAction<List<Gs2.Unity.Gs2Formation.Model.EzSlotWithSignature>> OnChangeSlots
+        {
+            add => this.onChangeSlots.AddListener(value);
+            remove => this.onChangeSlots.RemoveListener(value);
+        }
+
+        [Serializable]
+        private class ChangeKeyIdEvent : UnityEvent<string>
+        {
+
+        }
+
+        [SerializeField]
+        private ChangeKeyIdEvent onChangeKeyId = new ChangeKeyIdEvent();
+        public event UnityAction<string> OnChangeKeyId
+        {
+            add => this.onChangeKeyId.AddListener(value);
+            remove => this.onChangeKeyId.RemoveListener(value);
+        }
+
         [Serializable]
         private class SetPropertyFormCompleteEvent : UnityEvent<EzPropertyForm>
         {

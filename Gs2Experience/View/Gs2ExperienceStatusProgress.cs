@@ -17,7 +17,8 @@
 // ReSharper disable CheckNamespace
 
 using System;
-using Gs2.Unity.Gs2Experience.Model;
+using Gs2.Core.Util;
+using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Experience.Fetcher;
 using UnityEngine;
 using UnityEngine.Events;
@@ -28,26 +29,30 @@ namespace Gs2.Unity.UiKit.Gs2Experience
     /// Main
     /// </summary>
 
-    [AddComponentMenu("GS2 UIKit/Experience/Gs2ExperienceStatusProgress")]
+	[AddComponentMenu("GS2 UIKit/Experience/Status/View/Gs2ExperienceStatusProgress")]
     public partial class Gs2ExperienceStatusProgress : MonoBehaviour
     {
         public void Update()
         {
-            if (_statusFetcher.Fetched)
-            {
-                var prevRankUpExperience = _statusFetcher.Model.NextRankUpExperienceValue(_statusFetcher.Status.RankValue-1, _statusFetcher.Status.RankCapValue) ?? 0;
-                var nextRankUpExperience = _statusFetcher.Model.NextRankUpExperienceValue(_statusFetcher.Status.RankValue, _statusFetcher.Status.RankCapValue);
-                if (nextRankUpExperience == null)
-                {
-                    onUpdate.Invoke(1);
-                    onUpdateInverse.Invoke(0);
+            if (_fetcher.Fetched && _fetcher.Status != null && _modelFetcher.Fetched && _modelFetcher.ExperienceModel != null) {
+                if (this._fetcher.Status.RankValue == this._fetcher.Status.RankCapValue) {
+                    onUpdate?.Invoke(1);
                 }
-                else
-                {
-                    var currentStep = _statusFetcher.Status.ExperienceValue - prevRankUpExperience;
-                    var nextStep = nextRankUpExperience.Value - prevRankUpExperience;
-                    onUpdate.Invoke(Math.Min(1.0f, (float) currentStep / nextStep));
-                    onUpdateInverse.Invoke(1.0f - Math.Min(1.0f, (float) currentStep / nextStep));
+                else {
+                    var before = 0L;
+                    if (this._fetcher.Status.RankValue > 1) {
+                        before = _modelFetcher.ExperienceModel.RankThreshold.Values[
+                            (int) (this._fetcher.Status.RankValue - 2)
+                        ];
+                    }
+                    var next = _modelFetcher.ExperienceModel.RankThreshold.Values[
+                        (int)this._fetcher.Status.RankValue - 1
+                    ];
+                    var value = _fetcher.Status.ExperienceValue - before;
+                    var span = next - before;
+                    onUpdate?.Invoke(
+                        Math.Min((float)value / span, 1)
+                    );
                 }
             }
         }
@@ -56,30 +61,33 @@ namespace Gs2.Unity.UiKit.Gs2Experience
     /// <summary>
     /// Dependent components
     /// </summary>
-    
+
     public partial class Gs2ExperienceStatusProgress
     {
-        private Gs2ExperienceStatusFetcher _statusFetcher;
+        private Gs2ExperienceExperienceModelFetcher _modelFetcher;
+        private Gs2ExperienceOwnStatusFetcher _fetcher;
 
         public void Awake()
         {
-            _statusFetcher = GetComponentInParent<Gs2ExperienceStatusFetcher>();
+            _modelFetcher = GetComponentInParent<Gs2ExperienceExperienceModelFetcher>();
+            _fetcher = GetComponentInParent<Gs2ExperienceOwnStatusFetcher>();
+            Update();
         }
     }
 
     /// <summary>
     /// Public properties
     /// </summary>
-    
+
     public partial class Gs2ExperienceStatusProgress
     {
-        
+
     }
 
     /// <summary>
     /// Parameters for Inspector
     /// </summary>
-    
+
     public partial class Gs2ExperienceStatusProgress
     {
         
@@ -93,31 +101,16 @@ namespace Gs2.Unity.UiKit.Gs2Experience
         [Serializable]
         private class UpdateEvent : UnityEvent<float>
         {
-            
+
         }
-        
+
         [SerializeField]
         private UpdateEvent onUpdate = new UpdateEvent();
-        
+
         public event UnityAction<float> OnUpdate
         {
             add => onUpdate.AddListener(value);
             remove => onUpdate.RemoveListener(value);
-        }
-        
-        [Serializable]
-        private class UpdateInverseEvent : UnityEvent<float>
-        {
-            
-        }
-        
-        [SerializeField]
-        private UpdateInverseEvent onUpdateInverse = new UpdateInverseEvent();
-        
-        public event UnityAction<float> OnUpdateInverse
-        {
-            add => onUpdateInverse.AddListener(value);
-            remove => onUpdateInverse.RemoveListener(value);
         }
     }
 }

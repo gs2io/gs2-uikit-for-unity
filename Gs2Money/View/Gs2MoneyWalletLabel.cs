@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
@@ -34,7 +36,7 @@ namespace Gs2.Unity.UiKit.Gs2Money
     {
         public void Update()
         {
-            if (_fetcher.Fetched)
+            if (_fetcher.Fetched && _fetcher.Wallet != null)
             {
                 var updatedAt = _fetcher.Wallet.UpdatedAt == null ? DateTime.Now : UnixTime.FromUnixTime(_fetcher.Wallet.UpdatedAt).ToLocalTime();
                 onUpdate?.Invoke(
@@ -44,6 +46,8 @@ namespace Gs2.Unity.UiKit.Gs2Money
                         "{paid}", $"{_fetcher?.Wallet?.Paid}"
                     ).Replace(
                         "{free}", $"{_fetcher?.Wallet?.Free}"
+                    ).Replace(
+                        "{total}", $"{_fetcher?.Wallet?.Free + _fetcher?.Wallet?.Paid}"
                     ).Replace(
                         "{updatedAt:yyyy}", updatedAt.ToString("yyyy")
                     ).Replace(
@@ -76,11 +80,11 @@ namespace Gs2.Unity.UiKit.Gs2Money
 
     public partial class Gs2MoneyWalletLabel
     {
-        private Gs2MoneyWalletFetcher _fetcher;
+        private Gs2MoneyOwnWalletFetcher _fetcher;
 
         public void Awake()
         {
-            _fetcher = GetComponentInParent<Gs2MoneyWalletFetcher>();
+            _fetcher = GetComponentInParent<Gs2MoneyOwnWalletFetcher>();
             Update();
         }
     }

@@ -16,6 +16,7 @@
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
 
+using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Exchange.Fetcher;
 using UnityEngine;
 
@@ -54,11 +55,16 @@ namespace Gs2.Unity.UiKit.Gs2Exchange
 
     public partial class Gs2ExchangeAwaitEnabler
     {
-        private Gs2ExchangeAwaitFetcher _fetcher;
+        private Gs2ExchangeOwnAwaitFetcher _fetcher;
 
         public void Awake()
         {
-            _fetcher = GetComponentInParent<Gs2ExchangeAwaitFetcher>();
+            _fetcher = GetComponentInParent<Gs2ExchangeOwnAwaitFetcher>();
+
+            if (_fetcher == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ExchangeOwnAwaitFetcher.");
+                enabled = false;
+            }
         }
     }
 

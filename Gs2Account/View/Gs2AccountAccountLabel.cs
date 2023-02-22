@@ -34,7 +34,7 @@ namespace Gs2.Unity.UiKit.Gs2Account
     {
         public void Update()
         {
-            if (_fetcher.Fetched)
+            if (_fetcher.Fetched && _fetcher.Account != null)
             {
                 var createdAt = _fetcher.Account.CreatedAt == null ? DateTime.Now : UnixTime.FromUnixTime(_fetcher.Account.CreatedAt).ToLocalTime();
                 onUpdate?.Invoke(
@@ -74,11 +74,17 @@ namespace Gs2.Unity.UiKit.Gs2Account
 
     public partial class Gs2AccountAccountLabel
     {
-        private Gs2AccountAccountFetcher _fetcher;
+        private Gs2AccountOwnAccountFetcher _fetcher;
 
         public void Awake()
         {
-            _fetcher = GetComponentInParent<Gs2AccountAccountFetcher>();
+            _fetcher = GetComponentInParent<Gs2AccountOwnAccountFetcher>();
+
+            if (_fetcher == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2AccountOwnAccountFetcher.");
+                enabled = false;
+            }
+
             Update();
         }
     }

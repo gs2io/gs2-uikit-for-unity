@@ -12,8 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
- * deny overwrite
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
@@ -36,22 +34,22 @@ namespace Gs2.Unity.UiKit.Gs2Inventory
     {
         public void Update()
         {
-            if (_fetcher.Fetched)
+            if (_fetcher.Fetched && _fetcher.ItemSet != null)
             {
-                var expiresAt = UnixTime.FromUnixTime(_fetcher.ItemSet[index].ExpiresAt).ToLocalTime();
-                onUpdate.Invoke(
+                var expiresAt = _fetcher.ItemSet[index].ExpiresAt == null ? DateTime.Now : UnixTime.FromUnixTime(_fetcher.ItemSet[index].ExpiresAt).ToLocalTime();
+                onUpdate?.Invoke(
                     format.Replace(
-                        "{itemSetId}", _fetcher.ItemSet[index].ItemSetId.ToString()
+                        "{itemSetId}", $"{_fetcher?.ItemSet?[index].ItemSetId}"
                     ).Replace(
-                        "{name}", _fetcher.ItemSet[index].Name.ToString()
+                        "{name}", $"{_fetcher?.ItemSet?[index].Name}"
                     ).Replace(
-                        "{inventoryName}", _fetcher.ItemSet[index].InventoryName.ToString()
+                        "{inventoryName}", $"{_fetcher?.ItemSet?[index].InventoryName}"
                     ).Replace(
-                        "{itemName}", _fetcher.ItemSet[index].ItemName.ToString()
+                        "{itemName}", $"{_fetcher?.ItemSet?[index].ItemName}"
                     ).Replace(
-                        "{count}", _fetcher.ItemSet[index].Count.ToString()
+                        "{count}", $"{_fetcher?.ItemSet?[index].Count}"
                     ).Replace(
-                        "{sortValue}", _fetcher.ItemSet[index].SortValue.ToString()
+                        "{sortValue}", $"{_fetcher?.ItemSet?[index].SortValue}"
                     ).Replace(
                         "{expiresAt:yyyy}", expiresAt.ToString("yyyy")
                     ).Replace(
@@ -84,11 +82,17 @@ namespace Gs2.Unity.UiKit.Gs2Inventory
 
     public partial class Gs2InventoryItemSetLabel
     {
-        private Gs2InventoryItemSetFetcher _fetcher;
+        private Gs2InventoryOwnItemSetFetcher _fetcher;
 
         public void Awake()
         {
-            _fetcher = GetComponentInParent<Gs2InventoryItemSetFetcher>();
+            _fetcher = GetComponentInParent<Gs2InventoryOwnItemSetFetcher>();
+
+            if (_fetcher == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2InventoryOwnItemSetFetcher.");
+                enabled = false;
+            }
+
             Update();
         }
     }
@@ -108,8 +112,9 @@ namespace Gs2.Unity.UiKit.Gs2Inventory
 
     public partial class Gs2InventoryItemSetLabel
     {
-        public int index;
         public string format;
+
+        public int index;
     }
 
     /// <summary>

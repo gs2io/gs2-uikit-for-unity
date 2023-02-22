@@ -24,10 +24,11 @@ using System.Linq;
 using Gs2.Core.Exception;
 using Gs2.Unity.Gs2Lottery.Model;
 using Gs2.Unity.Util;
+using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Lottery.Context;
 using UnityEngine;
 using UnityEngine.Events;
-using BoxItems = Gs2.Unity.Gs2Lottery.ScriptableObject.BoxItems;
+using BoxItems = Gs2.Unity.Gs2Lottery.ScriptableObject.OwnBoxItems;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -98,13 +99,18 @@ namespace Gs2.Unity.UiKit.Gs2Lottery
     {
         private Gs2ClientHolder _clientHolder;
         private Gs2GameSessionHolder _gameSessionHolder;
-        private Gs2LotteryBoxItemsContext _context;
+        private Gs2LotteryOwnBoxItemsContext _context;
 
         public void Awake()
         {
             this._clientHolder = Gs2ClientHolder.Instance;
             this._gameSessionHolder = Gs2GameSessionHolder.Instance;
-            this._context = GetComponentInParent<Gs2LotteryBoxItemsContext>();
+            this._context = GetComponentInParent<Gs2LotteryOwnBoxItemsContext>();
+
+            if (_context == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2LotteryOwnBoxItemsContext.");
+                enabled = false;
+            }
         }
     }
 
@@ -129,6 +135,7 @@ namespace Gs2.Unity.UiKit.Gs2Lottery
     /// </summary>
     public partial class Gs2LotteryBoxItemsResetBoxAction
     {
+
         [Serializable]
         private class ResetBoxCompleteEvent : UnityEvent
         {

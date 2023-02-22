@@ -16,6 +16,8 @@
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
 
+using Gs2.Unity.Gs2Datastore.ScriptableObject;
+using Gs2.Unity.UiKit.Gs2Datastore.Context;
 using UnityEditor;
 using UnityEngine;
 
@@ -28,6 +30,35 @@ namespace Gs2.Unity.UiKit.Gs2Datastore.Editor
             var original = target as Gs2DatastoreDataObjectHistoryLabel;
 
             if (original == null) return;
+
+            var context = original.GetComponentInParent<Gs2DatastoreOwnDataObjectHistoryContext>();
+            if (context == null) {
+                EditorGUILayout.HelpBox("Gs2DatastoreOwnDataObjectHistoryContext not found.", MessageType.Error);
+                if (GUILayout.Button("Add Context")) {
+                    original.gameObject.AddComponent<Gs2DatastoreOwnDataObjectHistoryContext>();
+                }
+            }
+            else {
+                if (context.transform.parent.GetComponent<Gs2DatastoreOwnDataObjectHistoryList>() != null) {
+                    EditorGUI.BeginDisabledGroup(true);
+                    EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2DatastoreOwnDataObjectHistoryContext), false);
+                    EditorGUI.EndDisabledGroup();
+                    EditorGUILayout.HelpBox("DataObjectHistory is auto assign from Gs2DatastoreOwnDataObjectHistoryList.", MessageType.Info);
+                }
+                else {
+                    EditorGUI.BeginDisabledGroup(true);
+                    EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2DatastoreOwnDataObjectHistoryContext), false);
+                    EditorGUI.indentLevel++;
+                    EditorGUILayout.ObjectField("DataObjectHistory", context.DataObjectHistory, typeof(OwnDataObjectHistory), false);
+                    EditorGUI.indentLevel++;
+                    EditorGUILayout.TextField("NamespaceName", context.DataObjectHistory?.NamespaceName.ToString());
+                    EditorGUILayout.TextField("DataObjectName", context.DataObjectHistory?.DataObjectName.ToString());
+                    EditorGUILayout.TextField("Generation", context.DataObjectHistory?.Generation.ToString());
+                    EditorGUI.indentLevel--;
+                    EditorGUI.indentLevel--;
+                    EditorGUI.EndDisabledGroup();
+                }
+            }
 
             serializedObject.Update();
             original.format = EditorGUILayout.TextField("Format", original.format);

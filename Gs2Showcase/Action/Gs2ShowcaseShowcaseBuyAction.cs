@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable UnusedAutoPropertyAccessor.Local
@@ -22,9 +24,13 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Gs2.Core.Exception;
+using Gs2.Gs2Money.Request;
 using Gs2.Unity.Gs2Showcase.Model;
 using Gs2.Unity.Util;
+using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Showcase.Context;
+using Gs2.Unity.UiKit.Gs2Showcase.Fetcher;
+using Gs2.Util.LitJson;
 using UnityEngine;
 using UnityEngine.Events;
 using Showcase = Gs2.Unity.Gs2Showcase.ScriptableObject.Showcase;
@@ -42,18 +48,43 @@ namespace Gs2.Unity.UiKit.Gs2Showcase
         {
             yield return new WaitUntil(() => this._clientHolder.Initialized);
             yield return new WaitUntil(() => this._gameSessionHolder.Initialized);
+
+            var config = new List<Gs2.Unity.Gs2Showcase.Model.EzConfig>(Config);
+            
+#if GS2_ENABLE_PURCHASING
+
+            PurchaseParameters purchaseParameters = null;
+            var needReceipt = this._fetcher.DisplayItem.SalesItem.ConsumeActions.FirstOrDefault(
+                v => v.Action == "Gs2Money:RecordReceipt"
+            );
+            if (needReceipt != null) {
+                var request = RecordReceiptRequest.FromJson(JsonMapper.ToObject(needReceipt.Request));
+                var iapFuture = new IAPUtil().BuyFuture(request.ContentsId);
+                yield return iapFuture;
+                if (iapFuture.Error != null) {
+                    this.onError.Invoke(iapFuture.Error, Process);
+                    yield break;
+                }
+                purchaseParameters = iapFuture.Result;
+                config.Add(new EzConfig {
+                    Key = "receipt",
+                    Value = purchaseParameters.receipt,
+                });
+            }
+
+#endif
             
             var domain = this._clientHolder.Gs2.Showcase.Namespace(
-                this._context.Showcase.NamespaceName
+                this._context.DisplayItem.NamespaceName
             ).Me(
                 this._gameSessionHolder.GameSession
             ).Showcase(
-                this._context.Showcase.ShowcaseName
+                this._context.DisplayItem.ShowcaseName
             );
             var future = domain.Buy(
-                DisplayItemId,
+                this._context.DisplayItem.DisplayItemId,
                 Quantity,
-                Config.ToArray()
+                config.ToArray()
             );
             yield return future;
             if (future.Error != null)
@@ -69,6 +100,13 @@ namespace Gs2.Unity.UiKit.Gs2Showcase
                             this.onError.Invoke(future.Error, Retry);
                             yield break;
                         }
+                        
+#if GS2_ENABLE_PURCHASING
+                        if (purchaseParameters != null) {
+                            purchaseParameters.controller.ConfirmPendingPurchase(purchaseParameters.product);
+                        }
+#endif
+
                         this.onBuyComplete.Invoke(future.Result.TransactionId);
                     }
 
@@ -79,6 +117,13 @@ namespace Gs2.Unity.UiKit.Gs2Showcase
                 this.onError.Invoke(future.Error, null);
                 yield break;
             }
+            
+#if GS2_ENABLE_PURCHASING
+            if (purchaseParameters != null) {
+                purchaseParameters.controller.ConfirmPendingPurchase(purchaseParameters.product);
+            }
+#endif
+
             this.onBuyComplete.Invoke(future.Result.TransactionId);
         }
 
@@ -101,13 +146,26 @@ namespace Gs2.Unity.UiKit.Gs2Showcase
     {
         private Gs2ClientHolder _clientHolder;
         private Gs2GameSessionHolder _gameSessionHolder;
-        private Gs2ShowcaseShowcaseContext _context;
+        private Gs2ShowcaseDisplayItemContext _context;
+        private Gs2ShowcaseDisplayItemFetcher _fetcher;
 
         public void Awake()
         {
             this._clientHolder = Gs2ClientHolder.Instance;
             this._gameSessionHolder = Gs2GameSessionHolder.Instance;
-            this._context = GetComponentInParent<Gs2ShowcaseShowcaseContext>();
+            this._context = GetComponentInParent<Gs2ShowcaseDisplayItemContext>();
+            this._fetcher = GetComponentInParent<Gs2ShowcaseDisplayItemFetcher>();
+
+            if (_context == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ShowcaseShowcaseContext.");
+                enabled = false;
+            }
+            if (_fetcher == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ShowcaseDisplayItemFetcher.");
+                enabled = false;
+            }
+            
+            this.onChangeQuantity.Invoke(Quantity);
         }
     }
 
@@ -125,20 +183,27 @@ namespace Gs2.Unity.UiKit.Gs2Showcase
     /// </summary>
     public partial class Gs2ShowcaseShowcaseBuyAction
     {
-        public string DisplayItemId;
         public int Quantity;
         public List<Gs2.Unity.Gs2Showcase.Model.EzConfig> Config;
 
-        public void SetDisplayItemId(string value) {
-            DisplayItemId = value;
-        }
-
         public void SetQuantity(int value) {
             Quantity = value;
+            this.onChangeQuantity.Invoke(Quantity);
+        }
+
+        public void DecreaseQuantity() {
+            Quantity -= 1;
+            this.onChangeQuantity.Invoke(Quantity);
+        }
+
+        public void IncreaseQuantity() {
+            Quantity += 1;
+            this.onChangeQuantity.Invoke(Quantity);
         }
 
         public void SetConfig(List<Gs2.Unity.Gs2Showcase.Model.EzConfig> value) {
             Config = value;
+            this.onChangeConfig.Invoke(Config);
         }
     }
 
@@ -147,6 +212,34 @@ namespace Gs2.Unity.UiKit.Gs2Showcase
     /// </summary>
     public partial class Gs2ShowcaseShowcaseBuyAction
     {
+        [Serializable]
+        private class ChangeQuantityEvent : UnityEvent<int>
+        {
+
+        }
+
+        [SerializeField]
+        private ChangeQuantityEvent onChangeQuantity = new ChangeQuantityEvent();
+        public event UnityAction<int> OnChangeQuantity
+        {
+            add => this.onChangeQuantity.AddListener(value);
+            remove => this.onChangeQuantity.RemoveListener(value);
+        }
+
+        [Serializable]
+        private class ChangeConfigEvent : UnityEvent<List<Gs2.Unity.Gs2Showcase.Model.EzConfig>>
+        {
+
+        }
+
+        [SerializeField]
+        private ChangeConfigEvent onChangeConfig = new ChangeConfigEvent();
+        public event UnityAction<List<Gs2.Unity.Gs2Showcase.Model.EzConfig>> OnChangeConfig
+        {
+            add => this.onChangeConfig.AddListener(value);
+            remove => this.onChangeConfig.RemoveListener(value);
+        }
+
         [Serializable]
         private class BuyCompleteEvent : UnityEvent<string>
         {

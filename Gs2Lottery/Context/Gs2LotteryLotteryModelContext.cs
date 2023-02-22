@@ -60,6 +60,10 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.Context
     public partial class Gs2LotteryLotteryModelContext
     {
         public LotteryModel LotteryModel;
+
+        public void SetLotteryModel(LotteryModel LotteryModel) {
+            this.LotteryModel = LotteryModel;
+        }
     }
 
     /// <summary>

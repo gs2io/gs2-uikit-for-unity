@@ -60,6 +60,10 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking.Context
     public partial class Gs2MatchmakingGatheringContext
     {
         public Gathering Gathering;
+
+        public void SetGathering(Gathering Gathering) {
+            this.Gathering = Gathering;
+        }
     }
 
     /// <summary>

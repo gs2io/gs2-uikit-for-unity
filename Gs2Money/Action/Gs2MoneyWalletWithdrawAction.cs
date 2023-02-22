@@ -24,10 +24,11 @@ using System.Linq;
 using Gs2.Core.Exception;
 using Gs2.Unity.Gs2Money.Model;
 using Gs2.Unity.Util;
+using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Money.Context;
 using UnityEngine;
 using UnityEngine.Events;
-using Wallet = Gs2.Unity.Gs2Money.ScriptableObject.Wallet;
+using Wallet = Gs2.Unity.Gs2Money.ScriptableObject.OwnWallet;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -116,13 +117,18 @@ namespace Gs2.Unity.UiKit.Gs2Money
     {
         private Gs2ClientHolder _clientHolder;
         private Gs2GameSessionHolder _gameSessionHolder;
-        private Gs2MoneyWalletContext _context;
+        private Gs2MoneyOwnWalletContext _context;
 
         public void Awake()
         {
             this._clientHolder = Gs2ClientHolder.Instance;
             this._gameSessionHolder = Gs2GameSessionHolder.Instance;
-            this._context = GetComponentInParent<Gs2MoneyWalletContext>();
+            this._context = GetComponentInParent<Gs2MoneyOwnWalletContext>();
+
+            if (_context == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MoneyOwnWalletContext.");
+                enabled = false;
+            }
         }
     }
 
@@ -145,10 +151,22 @@ namespace Gs2.Unity.UiKit.Gs2Money
 
         public void SetCount(int value) {
             Count = value;
+            this.onChangeCount.Invoke(Count);
+        }
+
+        public void DecreaseCount() {
+            Count -= 1;
+            this.onChangeCount.Invoke(Count);
+        }
+
+        public void IncreaseCount() {
+            Count += 1;
+            this.onChangeCount.Invoke(Count);
         }
 
         public void SetPaidOnly(bool value) {
             PaidOnly = value;
+            this.onChangePaidOnly.Invoke(PaidOnly);
         }
     }
 
@@ -157,6 +175,35 @@ namespace Gs2.Unity.UiKit.Gs2Money
     /// </summary>
     public partial class Gs2MoneyWalletWithdrawAction
     {
+
+        [Serializable]
+        private class ChangeCountEvent : UnityEvent<int>
+        {
+
+        }
+
+        [SerializeField]
+        private ChangeCountEvent onChangeCount = new ChangeCountEvent();
+        public event UnityAction<int> OnChangeCount
+        {
+            add => this.onChangeCount.AddListener(value);
+            remove => this.onChangeCount.RemoveListener(value);
+        }
+
+        [Serializable]
+        private class ChangePaidOnlyEvent : UnityEvent<bool>
+        {
+
+        }
+
+        [SerializeField]
+        private ChangePaidOnlyEvent onChangePaidOnly = new ChangePaidOnlyEvent();
+        public event UnityAction<bool> OnChangePaidOnly
+        {
+            add => this.onChangePaidOnly.AddListener(value);
+            remove => this.onChangePaidOnly.RemoveListener(value);
+        }
+
         [Serializable]
         private class WithdrawCompleteEvent : UnityEvent<EzWallet>
         {

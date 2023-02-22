@@ -17,6 +17,7 @@
 // ReSharper disable CheckNamespace
 
 using System.Collections.Generic;
+using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Stamina.Fetcher;
 using UnityEngine;
 
@@ -31,7 +32,7 @@ namespace Gs2.Unity.UiKit.Gs2Stamina
     {
         public void Update()
         {
-            if (_fetcher.Fetched)
+            if (_fetcher.Fetched && _fetcher.StaminaModel != null)
             {
                 switch(expression)
                 {
@@ -42,20 +43,20 @@ namespace Gs2.Unity.UiKit.Gs2Stamina
                         target.SetActive(!enableRecoverValues.Contains(_fetcher.StaminaModel.RecoverValue));
                         break;
                     case Expression.Less:
-                        target.SetActive(enableRecoverValue < _fetcher.StaminaModel.RecoverValue);
-                        break;
-                    case Expression.LessEqual:
-                        target.SetActive(enableRecoverValue <= _fetcher.StaminaModel.RecoverValue);
-                        break;
-                    case Expression.Greater:
                         target.SetActive(enableRecoverValue > _fetcher.StaminaModel.RecoverValue);
                         break;
-                    case Expression.GreaterEqual:
+                    case Expression.LessEqual:
                         target.SetActive(enableRecoverValue >= _fetcher.StaminaModel.RecoverValue);
+                        break;
+                    case Expression.Greater:
+                        target.SetActive(enableRecoverValue < _fetcher.StaminaModel.RecoverValue);
+                        break;
+                    case Expression.GreaterEqual:
+                        target.SetActive(enableRecoverValue <= _fetcher.StaminaModel.RecoverValue);
                         break;
                 }
             }
-            else 
+            else
             {
                 target.SetActive(false);
             }
@@ -65,7 +66,7 @@ namespace Gs2.Unity.UiKit.Gs2Stamina
     /// <summary>
     /// Dependent components
     /// </summary>
-    
+
     public partial class Gs2StaminaStaminaModelRecoverValueEnabler
     {
         private Gs2StaminaStaminaModelFetcher _fetcher;
@@ -73,22 +74,27 @@ namespace Gs2.Unity.UiKit.Gs2Stamina
         public void Awake()
         {
             _fetcher = GetComponentInParent<Gs2StaminaStaminaModelFetcher>();
+
+            if (_fetcher == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2StaminaStaminaModelFetcher.");
+                enabled = false;
+            }
         }
     }
 
     /// <summary>
     /// Public properties
     /// </summary>
-    
+
     public partial class Gs2StaminaStaminaModelRecoverValueEnabler
     {
-        
+
     }
 
     /// <summary>
     /// Parameters for Inspector
     /// </summary>
-    
+
     public partial class Gs2StaminaStaminaModelRecoverValueEnabler
     {
         public enum Expression {

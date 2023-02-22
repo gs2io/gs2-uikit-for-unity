@@ -18,6 +18,7 @@
 
 using System.Collections.Generic;
 using Gs2.Unity.Gs2Inventory.ScriptableObject;
+using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Inventory.Context;
 using Gs2.Unity.UiKit.Gs2Inventory.Fetcher;
 using UnityEngine;
@@ -34,7 +35,7 @@ namespace Gs2.Unity.UiKit.Gs2Inventory
         private List<Gs2InventoryInventoryModelContext> _children;
 
         public void Update() {
-            if (_fetcher.Fetched) {
+            if (_fetcher.Fetched && this._fetcher.InventoryModels != null) {
                 for (var i = 0; i < this.maximumItems; i++) {
                     if (i < this._fetcher.InventoryModels.Count) {
                         _children[i].InventoryModel.inventoryName = this._fetcher.InventoryModels[i].Name;
@@ -61,6 +62,11 @@ namespace Gs2.Unity.UiKit.Gs2Inventory
         {
             _context = GetComponentInParent<Gs2InventoryNamespaceContext>();
             _fetcher = GetComponentInParent<Gs2InventoryInventoryModelListFetcher>();
+
+            if (_fetcher == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2InventoryInventoryModelListFetcher.");
+                enabled = false;
+            }
 
             _children = new List<Gs2InventoryInventoryModelContext>();
             for (var i = 0; i < this.maximumItems; i++) {

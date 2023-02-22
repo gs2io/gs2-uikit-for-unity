@@ -16,6 +16,8 @@
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
 
+using Gs2.Unity.Gs2Friend.ScriptableObject;
+using Gs2.Unity.UiKit.Gs2Friend.Context;
 using UnityEditor;
 using UnityEngine;
 
@@ -28,6 +30,33 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Editor
             var original = target as Gs2FriendFollowUserLabel;
 
             if (original == null) return;
+
+            var context = original.GetComponentInParent<Gs2FriendOwnFollowUserContext>();
+            if (context == null) {
+                EditorGUILayout.HelpBox("Gs2FriendOwnFollowUserContext not found.", MessageType.Error);
+                if (GUILayout.Button("Add Context")) {
+                    original.gameObject.AddComponent<Gs2FriendOwnFollowUserContext>();
+                }
+            }
+            else {
+                if (context.transform.parent.GetComponent<Gs2FriendOwnFollowUserList>() != null) {
+                    EditorGUI.BeginDisabledGroup(true);
+                    EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2FriendOwnFollowUserContext), false);
+                    EditorGUI.EndDisabledGroup();
+                    EditorGUILayout.HelpBox("FollowUser is auto assign from Gs2FriendOwnFollowUserList.", MessageType.Info);
+                }
+                else {
+                    EditorGUI.BeginDisabledGroup(true);
+                    EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2FriendOwnFollowUserContext), false);
+                    EditorGUI.indentLevel++;
+                    EditorGUILayout.ObjectField("FollowUser", context.FollowUser, typeof(OwnFollowUser), false);
+                    EditorGUI.indentLevel++;
+                    EditorGUILayout.TextField("NamespaceName", context.FollowUser?.NamespaceName.ToString());
+                    EditorGUI.indentLevel--;
+                    EditorGUI.indentLevel--;
+                    EditorGUI.EndDisabledGroup();
+                }
+            }
 
             serializedObject.Update();
             original.format = EditorGUILayout.TextField("Format", original.format);

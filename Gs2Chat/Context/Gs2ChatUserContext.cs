@@ -60,6 +60,10 @@ namespace Gs2.Unity.UiKit.Gs2Chat.Context
     public partial class Gs2ChatUserContext
     {
         public User User;
+
+        public void SetUser(User User) {
+            this.User = User;
+        }
     }
 
     /// <summary>

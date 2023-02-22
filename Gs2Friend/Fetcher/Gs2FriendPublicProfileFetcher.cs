@@ -26,6 +26,7 @@ using Gs2.Unity.Core.Exception;
 using Gs2.Unity.Gs2Friend.Model;
 using Gs2.Unity.Gs2Friend.ScriptableObject;
 using Gs2.Unity.Util;
+using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Friend.Context;
 using UnityEngine;
 using UnityEngine.Events;
@@ -41,12 +42,13 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Fetcher
     {
         private IEnumerator Fetch()
         {
+            var retryWaitSecond = 1;
             Gs2Exception e;
             while (true)
             {
                 if (_gameSessionHolder != null && _gameSessionHolder.Initialized &&
                     _clientHolder != null && _clientHolder.Initialized &&
-                    _context != null)
+                    _context != null && this._context.PublicProfile != null)
                 {
                     
                     var domain = this._clientHolder.Gs2.Friend.Namespace(
@@ -62,34 +64,25 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Fetcher
                         if (future.Error is BadRequestException || future.Error is NotFoundException)
                         {
                             onError.Invoke(e = future.Error, null);
-                            break;
                         }
-
-                        onError.Invoke(new CanIgnoreException(future.Error), null);
+                        else {
+                            onError.Invoke(new CanIgnoreException(future.Error), null);
+                        }
+                        yield return new WaitForSeconds(retryWaitSecond);
+                        retryWaitSecond *= 2;
                     }
                     else
                     {
+                        retryWaitSecond = 1;
                         PublicProfile = future.Result;
                         Fetched = true;
                     }
                 }
-
-                yield return new WaitForSeconds(1);
+                else {
+                    yield return new WaitForSeconds(1);
+                }
             }
-
-            var transform1 = transform;
-            var builder = new StringBuilder(transform1.name);
-            var current = transform1.parent;
-
-            while (current != null)
-            {
-                builder.Insert(0, current.name + "/");
-                current = current.parent;
-            }
-
-            Debug.LogError(e);
-            Debug.LogError($"{GetType()} の自動更新が停止されました。 {builder}");
-            Debug.LogError($"Automatic update of {GetType()} has been stopped. {builder}");
+            // ReSharper disable once IteratorNeverReturns
         }
 
         public void OnEnable()
@@ -109,8 +102,8 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Fetcher
 
     public partial class Gs2FriendPublicProfileFetcher
     {
-        private Gs2ClientHolder _clientHolder;
-        private Gs2GameSessionHolder _gameSessionHolder;
+        protected Gs2ClientHolder _clientHolder;
+        protected Gs2GameSessionHolder _gameSessionHolder;
         private Gs2FriendPublicProfileContext _context;
 
         public void Awake()
@@ -118,6 +111,11 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Fetcher
             _clientHolder = Gs2ClientHolder.Instance;
             _gameSessionHolder = Gs2GameSessionHolder.Instance;
             _context = GetComponentInParent<Gs2FriendPublicProfileContext>();
+
+            if (_context == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2FriendPublicProfileContext.");
+                enabled = false;
+            }
         }
     }
 
@@ -127,8 +125,8 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Fetcher
 
     public partial class Gs2FriendPublicProfileFetcher
     {
-        public Gs2.Unity.Gs2Friend.Model.EzPublicProfile PublicProfile { get; private set; }
-        public bool Fetched { get; private set; }
+        public Gs2.Unity.Gs2Friend.Model.EzPublicProfile PublicProfile { get; protected set; }
+        public bool Fetched { get; protected set; }
     }
 
     /// <summary>

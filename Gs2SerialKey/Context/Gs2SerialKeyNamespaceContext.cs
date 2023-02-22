@@ -60,6 +60,10 @@ namespace Gs2.Unity.UiKit.Gs2SerialKey.Context
     public partial class Gs2SerialKeyNamespaceContext
     {
         public Namespace Namespace;
+
+        public void SetNamespace(Namespace Namespace) {
+            this.Namespace = Namespace;
+        }
     }
 
     /// <summary>

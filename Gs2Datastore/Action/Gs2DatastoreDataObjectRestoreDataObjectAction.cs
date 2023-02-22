@@ -24,6 +24,7 @@ using System.Linq;
 using Gs2.Core.Exception;
 using Gs2.Unity.Gs2Datastore.Model;
 using Gs2.Unity.Util;
+using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Datastore.Context;
 using UnityEngine;
 using UnityEngine.Events;
@@ -117,6 +118,11 @@ namespace Gs2.Unity.UiKit.Gs2Datastore
             this._clientHolder = Gs2ClientHolder.Instance;
             this._gameSessionHolder = Gs2GameSessionHolder.Instance;
             this._context = GetComponentInParent<Gs2DatastoreDataObjectContext>();
+
+            if (_context == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2DatastoreDataObjectContext.");
+                enabled = false;
+            }
         }
     }
 
@@ -138,6 +144,7 @@ namespace Gs2.Unity.UiKit.Gs2Datastore
 
         public void SetDataObjectId(string value) {
             DataObjectId = value;
+            this.onChangeDataObjectId.Invoke(DataObjectId);
         }
     }
 
@@ -146,6 +153,21 @@ namespace Gs2.Unity.UiKit.Gs2Datastore
     /// </summary>
     public partial class Gs2DatastoreDataObjectRestoreDataObjectAction
     {
+
+        [Serializable]
+        private class ChangeDataObjectIdEvent : UnityEvent<string>
+        {
+
+        }
+
+        [SerializeField]
+        private ChangeDataObjectIdEvent onChangeDataObjectId = new ChangeDataObjectIdEvent();
+        public event UnityAction<string> OnChangeDataObjectId
+        {
+            add => this.onChangeDataObjectId.AddListener(value);
+            remove => this.onChangeDataObjectId.RemoveListener(value);
+        }
+
         [Serializable]
         private class RestoreDataObjectCompleteEvent : UnityEvent<EzDataObject>
         {

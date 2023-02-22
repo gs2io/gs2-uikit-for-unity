@@ -18,6 +18,7 @@
 
 using System.Collections.Generic;
 using Gs2.Unity.Gs2Mission.ScriptableObject;
+using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Mission.Context;
 using Gs2.Unity.UiKit.Gs2Mission.Fetcher;
 using UnityEngine;
@@ -34,7 +35,7 @@ namespace Gs2.Unity.UiKit.Gs2Mission
         private List<Gs2MissionCounterModelContext> _children;
 
         public void Update() {
-            if (_fetcher.Fetched) {
+            if (_fetcher.Fetched && this._fetcher.CounterModels != null) {
                 for (var i = 0; i < this.maximumItems; i++) {
                     if (i < this._fetcher.CounterModels.Count) {
                         _children[i].CounterModel.counterName = this._fetcher.CounterModels[i].Name;
@@ -61,6 +62,11 @@ namespace Gs2.Unity.UiKit.Gs2Mission
         {
             _context = GetComponentInParent<Gs2MissionNamespaceContext>();
             _fetcher = GetComponentInParent<Gs2MissionCounterModelListFetcher>();
+
+            if (_fetcher == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MissionCounterModelListFetcher.");
+                enabled = false;
+            }
 
             _children = new List<Gs2MissionCounterModelContext>();
             for (var i = 0; i < this.maximumItems; i++) {

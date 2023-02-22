@@ -16,6 +16,8 @@
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
 
+using Gs2.Unity.Gs2Inventory.ScriptableObject;
+using Gs2.Unity.UiKit.Gs2Inventory.Context;
 using UnityEditor;
 using UnityEngine;
 
@@ -28,6 +30,33 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Editor
             var original = target as Gs2InventoryItemModelLabel;
 
             if (original == null) return;
+
+            var context = original.GetComponentInParent<Gs2InventoryItemModelContext>();
+            if (context == null) {
+                EditorGUILayout.HelpBox("Gs2InventoryItemModelContext not found.", MessageType.Error);
+                if (GUILayout.Button("Add Context")) {
+                    original.gameObject.AddComponent<Gs2InventoryItemModelContext>();
+                }
+            }
+            else {
+                if (context.transform.parent.GetComponent<Gs2InventoryItemModelList>() != null) {
+                    EditorGUI.BeginDisabledGroup(true);
+                    EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2InventoryItemModelContext), false);
+                    EditorGUI.EndDisabledGroup();
+                    EditorGUILayout.HelpBox("ItemModel is auto assign from Gs2InventoryItemModelList.", MessageType.Info);
+                }
+                else {
+                    EditorGUI.BeginDisabledGroup(true);
+                    EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2InventoryItemModelContext), false);
+                    EditorGUI.indentLevel++;
+                    EditorGUILayout.ObjectField("ItemModel", context.ItemModel, typeof(ItemModel), false);
+                    EditorGUI.indentLevel++;
+                    EditorGUILayout.TextField("ItemName", context.ItemModel?.ItemName.ToString());
+                    EditorGUI.indentLevel--;
+                    EditorGUI.indentLevel--;
+                    EditorGUI.EndDisabledGroup();
+                }
+            }
 
             serializedObject.Update();
             original.format = EditorGUILayout.TextField("Format", original.format);

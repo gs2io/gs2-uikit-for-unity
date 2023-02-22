@@ -24,10 +24,11 @@ using System.Linq;
 using Gs2.Core.Exception;
 using Gs2.Unity.Gs2Exchange.Model;
 using Gs2.Unity.Util;
+using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Exchange.Context;
 using UnityEngine;
 using UnityEngine.Events;
-using Await = Gs2.Unity.Gs2Exchange.ScriptableObject.Await;
+using Await = Gs2.Unity.Gs2Exchange.ScriptableObject.OwnAwait;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -114,13 +115,18 @@ namespace Gs2.Unity.UiKit.Gs2Exchange
     {
         private Gs2ClientHolder _clientHolder;
         private Gs2GameSessionHolder _gameSessionHolder;
-        private Gs2ExchangeAwaitContext _context;
+        private Gs2ExchangeOwnAwaitContext _context;
 
         public void Awake()
         {
             this._clientHolder = Gs2ClientHolder.Instance;
             this._gameSessionHolder = Gs2GameSessionHolder.Instance;
-            this._context = GetComponentInParent<Gs2ExchangeAwaitContext>();
+            this._context = GetComponentInParent<Gs2ExchangeOwnAwaitContext>();
+
+            if (_context == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ExchangeOwnAwaitContext.");
+                enabled = false;
+            }
         }
     }
 
@@ -145,6 +151,7 @@ namespace Gs2.Unity.UiKit.Gs2Exchange
     /// </summary>
     public partial class Gs2ExchangeAwaitDeleteAwaitAction
     {
+
         [Serializable]
         private class DeleteAwaitCompleteEvent : UnityEvent<EzAwait>
         {

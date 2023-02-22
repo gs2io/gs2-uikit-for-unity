@@ -60,6 +60,10 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Context
     public partial class Gs2FriendPublicProfileContext
     {
         public PublicProfile PublicProfile;
+
+        public void SetPublicProfile(PublicProfile PublicProfile) {
+            this.PublicProfile = PublicProfile;
+        }
     }
 
     /// <summary>

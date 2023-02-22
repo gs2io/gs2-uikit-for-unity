@@ -34,7 +34,7 @@ namespace Gs2.Unity.UiKit.Gs2Ranking
     {
         public void Update()
         {
-            if (_fetcher.Fetched)
+            if (_fetcher.Fetched && _fetcher.Score != null)
             {
                 onUpdate?.Invoke(
                     format.Replace(
@@ -61,11 +61,17 @@ namespace Gs2.Unity.UiKit.Gs2Ranking
 
     public partial class Gs2RankingScoreLabel
     {
-        private Gs2RankingScoreFetcher _fetcher;
+        private Gs2RankingOwnScoreFetcher _fetcher;
 
         public void Awake()
         {
-            _fetcher = GetComponentInParent<Gs2RankingScoreFetcher>();
+            _fetcher = GetComponentInParent<Gs2RankingOwnScoreFetcher>();
+
+            if (_fetcher == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2RankingOwnScoreFetcher.");
+                enabled = false;
+            }
+
             Update();
         }
     }

@@ -24,10 +24,11 @@ using System.Linq;
 using Gs2.Core.Exception;
 using Gs2.Unity.Gs2Quest.Model;
 using Gs2.Unity.Util;
+using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Quest.Context;
 using UnityEngine;
 using UnityEngine.Events;
-using Progress = Gs2.Unity.Gs2Quest.ScriptableObject.Progress;
+using Progress = Gs2.Unity.Gs2Quest.ScriptableObject.OwnProgress;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -100,13 +101,18 @@ namespace Gs2.Unity.UiKit.Gs2Quest
     {
         private Gs2ClientHolder _clientHolder;
         private Gs2GameSessionHolder _gameSessionHolder;
-        private Gs2QuestProgressContext _context;
+        private Gs2QuestOwnProgressContext _context;
 
         public void Awake()
         {
             this._clientHolder = Gs2ClientHolder.Instance;
             this._gameSessionHolder = Gs2GameSessionHolder.Instance;
-            this._context = GetComponentInParent<Gs2QuestProgressContext>();
+            this._context = GetComponentInParent<Gs2QuestOwnProgressContext>();
+
+            if (_context == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2QuestOwnProgressContext.");
+                enabled = false;
+            }
         }
     }
 
@@ -131,18 +137,22 @@ namespace Gs2.Unity.UiKit.Gs2Quest
 
         public void SetQuestGroupName(string value) {
             QuestGroupName = value;
+            this.onChangeQuestGroupName.Invoke(QuestGroupName);
         }
 
         public void SetQuestName(string value) {
             QuestName = value;
+            this.onChangeQuestName.Invoke(QuestName);
         }
 
         public void SetForce(bool value) {
             Force = value;
+            this.onChangeForce.Invoke(Force);
         }
 
         public void SetConfig(List<Gs2.Unity.Gs2Quest.Model.EzConfig> value) {
             Config = value;
+            this.onChangeConfig.Invoke(Config);
         }
     }
 
@@ -151,6 +161,63 @@ namespace Gs2.Unity.UiKit.Gs2Quest
     /// </summary>
     public partial class Gs2QuestProgressStartAction
     {
+
+        [Serializable]
+        private class ChangeQuestGroupNameEvent : UnityEvent<string>
+        {
+
+        }
+
+        [SerializeField]
+        private ChangeQuestGroupNameEvent onChangeQuestGroupName = new ChangeQuestGroupNameEvent();
+        public event UnityAction<string> OnChangeQuestGroupName
+        {
+            add => this.onChangeQuestGroupName.AddListener(value);
+            remove => this.onChangeQuestGroupName.RemoveListener(value);
+        }
+
+        [Serializable]
+        private class ChangeQuestNameEvent : UnityEvent<string>
+        {
+
+        }
+
+        [SerializeField]
+        private ChangeQuestNameEvent onChangeQuestName = new ChangeQuestNameEvent();
+        public event UnityAction<string> OnChangeQuestName
+        {
+            add => this.onChangeQuestName.AddListener(value);
+            remove => this.onChangeQuestName.RemoveListener(value);
+        }
+
+        [Serializable]
+        private class ChangeForceEvent : UnityEvent<bool>
+        {
+
+        }
+
+        [SerializeField]
+        private ChangeForceEvent onChangeForce = new ChangeForceEvent();
+        public event UnityAction<bool> OnChangeForce
+        {
+            add => this.onChangeForce.AddListener(value);
+            remove => this.onChangeForce.RemoveListener(value);
+        }
+
+        [Serializable]
+        private class ChangeConfigEvent : UnityEvent<List<Gs2.Unity.Gs2Quest.Model.EzConfig>>
+        {
+
+        }
+
+        [SerializeField]
+        private ChangeConfigEvent onChangeConfig = new ChangeConfigEvent();
+        public event UnityAction<List<Gs2.Unity.Gs2Quest.Model.EzConfig>> OnChangeConfig
+        {
+            add => this.onChangeConfig.AddListener(value);
+            remove => this.onChangeConfig.RemoveListener(value);
+        }
+
         [Serializable]
         private class StartCompleteEvent : UnityEvent<string>
         {

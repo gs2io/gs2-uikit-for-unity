@@ -17,6 +17,7 @@
 // ReSharper disable CheckNamespace
 
 using System.Collections.Generic;
+using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Inventory.Fetcher;
 using UnityEngine;
 
@@ -31,7 +32,7 @@ namespace Gs2.Unity.UiKit.Gs2Inventory
     {
         public void Update()
         {
-            if (_fetcher.Fetched)
+            if (_fetcher.Fetched && _fetcher.Inventory != null)
             {
                 switch(expression)
                 {
@@ -42,20 +43,20 @@ namespace Gs2.Unity.UiKit.Gs2Inventory
                         target.SetActive(!enableCurrentInventoryCapacityUsages.Contains(_fetcher.Inventory.CurrentInventoryCapacityUsage));
                         break;
                     case Expression.Less:
-                        target.SetActive(enableCurrentInventoryCapacityUsage < _fetcher.Inventory.CurrentInventoryCapacityUsage);
-                        break;
-                    case Expression.LessEqual:
-                        target.SetActive(enableCurrentInventoryCapacityUsage <= _fetcher.Inventory.CurrentInventoryCapacityUsage);
-                        break;
-                    case Expression.Greater:
                         target.SetActive(enableCurrentInventoryCapacityUsage > _fetcher.Inventory.CurrentInventoryCapacityUsage);
                         break;
-                    case Expression.GreaterEqual:
+                    case Expression.LessEqual:
                         target.SetActive(enableCurrentInventoryCapacityUsage >= _fetcher.Inventory.CurrentInventoryCapacityUsage);
+                        break;
+                    case Expression.Greater:
+                        target.SetActive(enableCurrentInventoryCapacityUsage < _fetcher.Inventory.CurrentInventoryCapacityUsage);
+                        break;
+                    case Expression.GreaterEqual:
+                        target.SetActive(enableCurrentInventoryCapacityUsage <= _fetcher.Inventory.CurrentInventoryCapacityUsage);
                         break;
                 }
             }
-            else 
+            else
             {
                 target.SetActive(false);
             }
@@ -65,30 +66,35 @@ namespace Gs2.Unity.UiKit.Gs2Inventory
     /// <summary>
     /// Dependent components
     /// </summary>
-    
+
     public partial class Gs2InventoryInventoryCurrentInventoryCapacityUsageEnabler
     {
-        private Gs2InventoryInventoryFetcher _fetcher;
+        private Gs2InventoryOwnInventoryFetcher _fetcher;
 
         public void Awake()
         {
-            _fetcher = GetComponentInParent<Gs2InventoryInventoryFetcher>();
+            _fetcher = GetComponentInParent<Gs2InventoryOwnInventoryFetcher>();
+
+            if (_fetcher == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2InventoryOwnInventoryFetcher.");
+                enabled = false;
+            }
         }
     }
 
     /// <summary>
     /// Public properties
     /// </summary>
-    
+
     public partial class Gs2InventoryInventoryCurrentInventoryCapacityUsageEnabler
     {
-        
+
     }
 
     /// <summary>
     /// Parameters for Inspector
     /// </summary>
-    
+
     public partial class Gs2InventoryInventoryCurrentInventoryCapacityUsageEnabler
     {
         public enum Expression {

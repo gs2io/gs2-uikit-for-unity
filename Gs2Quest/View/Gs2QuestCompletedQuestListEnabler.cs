@@ -16,6 +16,7 @@
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
 
+using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Quest.Fetcher;
 using UnityEngine;
 
@@ -54,11 +55,16 @@ namespace Gs2.Unity.UiKit.Gs2Quest
 
     public partial class Gs2QuestCompletedQuestListEnabler
     {
-        private Gs2QuestCompletedQuestListFetcher _fetcher;
+        private Gs2QuestOwnCompletedQuestListFetcher _fetcher;
 
         public void Awake()
         {
-            _fetcher = GetComponentInParent<Gs2QuestCompletedQuestListFetcher>();
+            _fetcher = GetComponentInParent<Gs2QuestOwnCompletedQuestListFetcher>();
+
+            if (_fetcher == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2QuestOwnCompletedQuestListFetcher.");
+                enabled = false;
+            }
         }
     }
 

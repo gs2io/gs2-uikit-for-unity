@@ -16,6 +16,7 @@
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
 
+using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Enhance.Fetcher;
 using UnityEngine;
 
@@ -54,11 +55,16 @@ namespace Gs2.Unity.UiKit.Gs2Enhance
 
     public partial class Gs2EnhanceProgressEnabler
     {
-        private Gs2EnhanceProgressFetcher _fetcher;
+        private Gs2EnhanceOwnProgressFetcher _fetcher;
 
         public void Awake()
         {
-            _fetcher = GetComponentInParent<Gs2EnhanceProgressFetcher>();
+            _fetcher = GetComponentInParent<Gs2EnhanceOwnProgressFetcher>();
+
+            if (_fetcher == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2EnhanceOwnProgressFetcher.");
+                enabled = false;
+            }
         }
     }
 

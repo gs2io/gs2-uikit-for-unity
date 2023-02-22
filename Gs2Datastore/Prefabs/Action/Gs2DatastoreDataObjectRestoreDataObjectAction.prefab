@@ -40,7 +40,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1000000000000000000}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5c926bbbb3c7422688e9bd8c55c3daea, type: 3}
+  m_Script: {fileID: 11500000, guid: 380b475ddbe6472e807677a0b0bcc5f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   onRestoreDataObjectComplete:

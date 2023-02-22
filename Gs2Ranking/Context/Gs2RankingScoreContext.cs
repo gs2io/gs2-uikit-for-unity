@@ -60,6 +60,10 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Context
     public partial class Gs2RankingScoreContext
     {
         public Score Score;
+
+        public void SetScore(Score Score) {
+            this.Score = Score;
+        }
     }
 
     /// <summary>

@@ -16,6 +16,8 @@
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
 
+using Gs2.Unity.Gs2Chat.ScriptableObject;
+using Gs2.Unity.UiKit.Gs2Chat.Context;
 using UnityEditor;
 using UnityEngine;
 
@@ -28,6 +30,27 @@ namespace Gs2.Unity.UiKit.Gs2Chat.Editor
             var original = target as Gs2ChatMessageLabel;
 
             if (original == null) return;
+
+            var context = original.GetComponentInParent<Gs2ChatMessageContext>();
+            if (context == null) {
+                EditorGUILayout.HelpBox("Gs2ChatMessageContext not found.", MessageType.Error);
+                if (GUILayout.Button("Add Context")) {
+                    original.gameObject.AddComponent<Gs2ChatMessageContext>();
+                }
+            }
+            else {
+                EditorGUI.BeginDisabledGroup(true);
+                EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2ChatMessageContext), false);
+                EditorGUI.indentLevel++;
+                EditorGUILayout.ObjectField("Message", context.Message, typeof(Message), false);
+                EditorGUI.indentLevel++;
+                EditorGUILayout.TextField("NamespaceName", context.Message?.NamespaceName.ToString());
+                EditorGUILayout.TextField("RoomName", context.Message?.RoomName.ToString());
+                EditorGUILayout.TextField("MessageName", context.Message?.MessageName.ToString());
+                EditorGUI.indentLevel--;
+                EditorGUI.indentLevel--;
+                EditorGUI.EndDisabledGroup();
+            }
 
             serializedObject.Update();
             original.format = EditorGUILayout.TextField("Format", original.format);

@@ -24,10 +24,11 @@ using System.Linq;
 using Gs2.Core.Exception;
 using Gs2.Unity.Gs2Chat.Model;
 using Gs2.Unity.Util;
+using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Chat.Context;
 using UnityEngine;
 using UnityEngine.Events;
-using Subscribe = Gs2.Unity.Gs2Chat.ScriptableObject.Subscribe;
+using Subscribe = Gs2.Unity.Gs2Chat.ScriptableObject.OwnSubscribe;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -115,13 +116,18 @@ namespace Gs2.Unity.UiKit.Gs2Chat
     {
         private Gs2ClientHolder _clientHolder;
         private Gs2GameSessionHolder _gameSessionHolder;
-        private Gs2ChatSubscribeContext _context;
+        private Gs2ChatOwnSubscribeContext _context;
 
         public void Awake()
         {
             this._clientHolder = Gs2ClientHolder.Instance;
             this._gameSessionHolder = Gs2GameSessionHolder.Instance;
-            this._context = GetComponentInParent<Gs2ChatSubscribeContext>();
+            this._context = GetComponentInParent<Gs2ChatOwnSubscribeContext>();
+
+            if (_context == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ChatOwnSubscribeContext.");
+                enabled = false;
+            }
         }
     }
 
@@ -143,6 +149,7 @@ namespace Gs2.Unity.UiKit.Gs2Chat
 
         public void SetNotificationTypes(List<Gs2.Unity.Gs2Chat.Model.EzNotificationType> value) {
             NotificationTypes = value;
+            this.onChangeNotificationTypes.Invoke(NotificationTypes);
         }
     }
 
@@ -151,6 +158,21 @@ namespace Gs2.Unity.UiKit.Gs2Chat
     /// </summary>
     public partial class Gs2ChatSubscribeUpdateSubscribeSettingAction
     {
+
+        [Serializable]
+        private class ChangeNotificationTypesEvent : UnityEvent<List<Gs2.Unity.Gs2Chat.Model.EzNotificationType>>
+        {
+
+        }
+
+        [SerializeField]
+        private ChangeNotificationTypesEvent onChangeNotificationTypes = new ChangeNotificationTypesEvent();
+        public event UnityAction<List<Gs2.Unity.Gs2Chat.Model.EzNotificationType>> OnChangeNotificationTypes
+        {
+            add => this.onChangeNotificationTypes.AddListener(value);
+            remove => this.onChangeNotificationTypes.RemoveListener(value);
+        }
+
         [Serializable]
         private class UpdateSubscribeSettingCompleteEvent : UnityEvent<EzSubscribe>
         {

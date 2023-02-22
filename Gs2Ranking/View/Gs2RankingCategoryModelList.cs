@@ -18,6 +18,7 @@
 
 using System.Collections.Generic;
 using Gs2.Unity.Gs2Ranking.ScriptableObject;
+using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Ranking.Context;
 using Gs2.Unity.UiKit.Gs2Ranking.Fetcher;
 using UnityEngine;
@@ -34,7 +35,7 @@ namespace Gs2.Unity.UiKit.Gs2Ranking
         private List<Gs2RankingCategoryModelContext> _children;
 
         public void Update() {
-            if (_fetcher.Fetched) {
+            if (_fetcher.Fetched && this._fetcher.CategoryModels != null) {
                 for (var i = 0; i < this.maximumItems; i++) {
                     if (i < this._fetcher.CategoryModels.Count) {
                         _children[i].CategoryModel.categoryName = this._fetcher.CategoryModels[i].Name;
@@ -61,6 +62,11 @@ namespace Gs2.Unity.UiKit.Gs2Ranking
         {
             _context = GetComponentInParent<Gs2RankingNamespaceContext>();
             _fetcher = GetComponentInParent<Gs2RankingCategoryModelListFetcher>();
+
+            if (_fetcher == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2RankingCategoryModelListFetcher.");
+                enabled = false;
+            }
 
             _children = new List<Gs2RankingCategoryModelContext>();
             for (var i = 0; i < this.maximumItems; i++) {

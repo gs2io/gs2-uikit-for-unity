@@ -34,7 +34,7 @@ namespace Gs2.Unity.UiKit.Gs2Ranking
     {
         public void Update()
         {
-            if (_fetcher.Fetched)
+            if (_fetcher.Fetched && _fetcher.CategoryModel != null)
             {
                 onUpdate?.Invoke(
                     format.Replace(
@@ -62,6 +62,12 @@ namespace Gs2.Unity.UiKit.Gs2Ranking
         public void Awake()
         {
             _fetcher = GetComponentInParent<Gs2RankingCategoryModelFetcher>();
+
+            if (_fetcher == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2RankingCategoryModelFetcher.");
+                enabled = false;
+            }
+
             Update();
         }
     }

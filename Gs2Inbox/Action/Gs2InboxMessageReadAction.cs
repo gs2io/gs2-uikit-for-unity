@@ -24,10 +24,11 @@ using System.Linq;
 using Gs2.Core.Exception;
 using Gs2.Unity.Gs2Inbox.Model;
 using Gs2.Unity.Util;
+using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Inbox.Context;
 using UnityEngine;
 using UnityEngine.Events;
-using Message = Gs2.Unity.Gs2Inbox.ScriptableObject.Message;
+using Message = Gs2.Unity.Gs2Inbox.ScriptableObject.OwnMessage;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -98,13 +99,18 @@ namespace Gs2.Unity.UiKit.Gs2Inbox
     {
         private Gs2ClientHolder _clientHolder;
         private Gs2GameSessionHolder _gameSessionHolder;
-        private Gs2InboxMessageContext _context;
+        private Gs2InboxOwnMessageContext _context;
 
         public void Awake()
         {
             this._clientHolder = Gs2ClientHolder.Instance;
             this._gameSessionHolder = Gs2GameSessionHolder.Instance;
-            this._context = GetComponentInParent<Gs2InboxMessageContext>();
+            this._context = GetComponentInParent<Gs2InboxOwnMessageContext>();
+
+            if (_context == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2InboxOwnMessageContext.");
+                enabled = false;
+            }
         }
     }
 
@@ -129,6 +135,7 @@ namespace Gs2.Unity.UiKit.Gs2Inbox
     /// </summary>
     public partial class Gs2InboxMessageReadAction
     {
+
         [Serializable]
         private class ReadCompleteEvent : UnityEvent<string>
         {

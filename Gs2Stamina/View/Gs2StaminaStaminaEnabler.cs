@@ -16,6 +16,7 @@
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
 
+using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Stamina.Fetcher;
 using UnityEngine;
 
@@ -54,11 +55,16 @@ namespace Gs2.Unity.UiKit.Gs2Stamina
 
     public partial class Gs2StaminaStaminaEnabler
     {
-        private Gs2StaminaStaminaFetcher _fetcher;
+        private Gs2StaminaOwnStaminaFetcher _fetcher;
 
         public void Awake()
         {
-            _fetcher = GetComponentInParent<Gs2StaminaStaminaFetcher>();
+            _fetcher = GetComponentInParent<Gs2StaminaOwnStaminaFetcher>();
+
+            if (_fetcher == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2StaminaOwnStaminaFetcher.");
+                enabled = false;
+            }
         }
     }
 

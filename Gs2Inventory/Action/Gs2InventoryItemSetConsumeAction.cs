@@ -29,7 +29,7 @@ using Gs2.Unity.Util;
 using Gs2.Unity.UiKit.Gs2Inventory.Context;
 using UnityEngine;
 using UnityEngine.Events;
-using ItemSet = Gs2.Unity.Gs2Inventory.ScriptableObject.ItemSet;
+using ItemSet = Gs2.Unity.Gs2Inventory.ScriptableObject.OwnItemSet;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -120,13 +120,13 @@ namespace Gs2.Unity.UiKit.Gs2Inventory
     {
         private Gs2ClientHolder _clientHolder;
         private Gs2GameSessionHolder _gameSessionHolder;
-        private Gs2InventoryItemSetContext _context;
+        private Gs2InventoryOwnItemSetContext _context;
 
         public void Awake()
         {
             this._clientHolder = Gs2ClientHolder.Instance;
             this._gameSessionHolder = Gs2GameSessionHolder.Instance;
-            this._context = GetComponentInParent<Gs2InventoryItemSetContext>();
+            this._context = GetComponentInParent<Gs2InventoryOwnItemSetContext>();
         }
     }
 

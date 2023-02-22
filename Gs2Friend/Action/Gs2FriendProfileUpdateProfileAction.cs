@@ -24,10 +24,11 @@ using System.Linq;
 using Gs2.Core.Exception;
 using Gs2.Unity.Gs2Friend.Model;
 using Gs2.Unity.Util;
+using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Friend.Context;
 using UnityEngine;
 using UnityEngine.Events;
-using Profile = Gs2.Unity.Gs2Friend.ScriptableObject.Profile;
+using Profile = Gs2.Unity.Gs2Friend.ScriptableObject.OwnProfile;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -116,13 +117,18 @@ namespace Gs2.Unity.UiKit.Gs2Friend
     {
         private Gs2ClientHolder _clientHolder;
         private Gs2GameSessionHolder _gameSessionHolder;
-        private Gs2FriendProfileContext _context;
+        private Gs2FriendOwnProfileContext _context;
 
         public void Awake()
         {
             this._clientHolder = Gs2ClientHolder.Instance;
             this._gameSessionHolder = Gs2GameSessionHolder.Instance;
-            this._context = GetComponentInParent<Gs2FriendProfileContext>();
+            this._context = GetComponentInParent<Gs2FriendOwnProfileContext>();
+
+            if (_context == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2FriendOwnProfileContext.");
+                enabled = false;
+            }
         }
     }
 
@@ -146,14 +152,17 @@ namespace Gs2.Unity.UiKit.Gs2Friend
 
         public void SetPublicProfile(string value) {
             PublicProfile = value;
+            this.onChangePublicProfile.Invoke(PublicProfile);
         }
 
         public void SetFollowerProfile(string value) {
             FollowerProfile = value;
+            this.onChangeFollowerProfile.Invoke(FollowerProfile);
         }
 
         public void SetFriendProfile(string value) {
             FriendProfile = value;
+            this.onChangeFriendProfile.Invoke(FriendProfile);
         }
     }
 
@@ -162,6 +171,49 @@ namespace Gs2.Unity.UiKit.Gs2Friend
     /// </summary>
     public partial class Gs2FriendProfileUpdateProfileAction
     {
+
+        [Serializable]
+        private class ChangePublicProfileEvent : UnityEvent<string>
+        {
+
+        }
+
+        [SerializeField]
+        private ChangePublicProfileEvent onChangePublicProfile = new ChangePublicProfileEvent();
+        public event UnityAction<string> OnChangePublicProfile
+        {
+            add => this.onChangePublicProfile.AddListener(value);
+            remove => this.onChangePublicProfile.RemoveListener(value);
+        }
+
+        [Serializable]
+        private class ChangeFollowerProfileEvent : UnityEvent<string>
+        {
+
+        }
+
+        [SerializeField]
+        private ChangeFollowerProfileEvent onChangeFollowerProfile = new ChangeFollowerProfileEvent();
+        public event UnityAction<string> OnChangeFollowerProfile
+        {
+            add => this.onChangeFollowerProfile.AddListener(value);
+            remove => this.onChangeFollowerProfile.RemoveListener(value);
+        }
+
+        [Serializable]
+        private class ChangeFriendProfileEvent : UnityEvent<string>
+        {
+
+        }
+
+        [SerializeField]
+        private ChangeFriendProfileEvent onChangeFriendProfile = new ChangeFriendProfileEvent();
+        public event UnityAction<string> OnChangeFriendProfile
+        {
+            add => this.onChangeFriendProfile.AddListener(value);
+            remove => this.onChangeFriendProfile.RemoveListener(value);
+        }
+
         [Serializable]
         private class UpdateProfileCompleteEvent : UnityEvent<EzProfile>
         {

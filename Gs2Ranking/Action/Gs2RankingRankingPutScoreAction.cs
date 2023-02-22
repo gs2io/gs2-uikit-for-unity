@@ -12,8 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
- * deny overwrite
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable UnusedAutoPropertyAccessor.Local
@@ -26,10 +24,11 @@ using System.Linq;
 using Gs2.Core.Exception;
 using Gs2.Unity.Gs2Ranking.Model;
 using Gs2.Unity.Util;
+using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Ranking.Context;
 using UnityEngine;
 using UnityEngine.Events;
-using CategoryModel = Gs2.Unity.Gs2Ranking.ScriptableObject.CategoryModel;
+using Ranking = Gs2.Unity.Gs2Ranking.ScriptableObject.Ranking;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -125,6 +124,11 @@ namespace Gs2.Unity.UiKit.Gs2Ranking
             this._clientHolder = Gs2ClientHolder.Instance;
             this._gameSessionHolder = Gs2GameSessionHolder.Instance;
             this._context = GetComponentInParent<Gs2RankingCategoryModelContext>();
+
+            if (_context == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2RankingCategoryModelContext.");
+                enabled = false;
+            }
         }
     }
 
@@ -147,10 +151,22 @@ namespace Gs2.Unity.UiKit.Gs2Ranking
 
         public void SetScore(long value) {
             Score = value;
+            this.onChangeScore.Invoke(Score);
+        }
+
+        public void DecreaseScore() {
+            Score -= 1;
+            this.onChangeScore.Invoke(Score);
+        }
+
+        public void IncreaseScore() {
+            Score += 1;
+            this.onChangeScore.Invoke(Score);
         }
 
         public void SetMetadata(string value) {
             Metadata = value;
+            this.onChangeMetadata.Invoke(Metadata);
         }
     }
 
@@ -159,6 +175,35 @@ namespace Gs2.Unity.UiKit.Gs2Ranking
     /// </summary>
     public partial class Gs2RankingRankingPutScoreAction
     {
+
+        [Serializable]
+        private class ChangeScoreEvent : UnityEvent<long>
+        {
+
+        }
+
+        [SerializeField]
+        private ChangeScoreEvent onChangeScore = new ChangeScoreEvent();
+        public event UnityAction<long> OnChangeScore
+        {
+            add => this.onChangeScore.AddListener(value);
+            remove => this.onChangeScore.RemoveListener(value);
+        }
+
+        [Serializable]
+        private class ChangeMetadataEvent : UnityEvent<string>
+        {
+
+        }
+
+        [SerializeField]
+        private ChangeMetadataEvent onChangeMetadata = new ChangeMetadataEvent();
+        public event UnityAction<string> OnChangeMetadata
+        {
+            add => this.onChangeMetadata.AddListener(value);
+            remove => this.onChangeMetadata.RemoveListener(value);
+        }
+
         [Serializable]
         private class PutScoreCompleteEvent : UnityEvent<EzScore>
         {

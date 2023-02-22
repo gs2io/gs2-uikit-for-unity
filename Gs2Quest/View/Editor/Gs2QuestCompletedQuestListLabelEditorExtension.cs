@@ -16,6 +16,8 @@
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
 
+using Gs2.Unity.Gs2Quest.ScriptableObject;
+using Gs2.Unity.UiKit.Gs2Quest.Context;
 using UnityEditor;
 using UnityEngine;
 
@@ -28,6 +30,34 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Editor
             var original = target as Gs2QuestCompletedQuestListLabel;
 
             if (original == null) return;
+
+            var context = original.GetComponentInParent<Gs2QuestOwnCompletedQuestListContext>();
+            if (context == null) {
+                EditorGUILayout.HelpBox("Gs2QuestOwnCompletedQuestListContext not found.", MessageType.Error);
+                if (GUILayout.Button("Add Context")) {
+                    original.gameObject.AddComponent<Gs2QuestOwnCompletedQuestListContext>();
+                }
+            }
+            else {
+                if (context.transform.parent.GetComponent<Gs2QuestOwnCompletedQuestListList>() != null) {
+                    EditorGUI.BeginDisabledGroup(true);
+                    EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2QuestOwnCompletedQuestListContext), false);
+                    EditorGUI.EndDisabledGroup();
+                    EditorGUILayout.HelpBox("CompletedQuestList is auto assign from Gs2QuestOwnCompletedQuestListList.", MessageType.Info);
+                }
+                else {
+                    EditorGUI.BeginDisabledGroup(true);
+                    EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2QuestOwnCompletedQuestListContext), false);
+                    EditorGUI.indentLevel++;
+                    EditorGUILayout.ObjectField("CompletedQuestList", context.CompletedQuestList, typeof(OwnCompletedQuestList), false);
+                    EditorGUI.indentLevel++;
+                    EditorGUILayout.TextField("NamespaceName", context.CompletedQuestList?.NamespaceName.ToString());
+                    EditorGUILayout.TextField("QuestGroupName", context.CompletedQuestList?.QuestGroupName.ToString());
+                    EditorGUI.indentLevel--;
+                    EditorGUI.indentLevel--;
+                    EditorGUI.EndDisabledGroup();
+                }
+            }
 
             serializedObject.Update();
             original.format = EditorGUILayout.TextField("Format", original.format);

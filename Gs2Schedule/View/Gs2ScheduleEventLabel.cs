@@ -34,7 +34,7 @@ namespace Gs2.Unity.UiKit.Gs2Schedule
     {
         public void Update()
         {
-            if (_fetcher.Fetched)
+            if (_fetcher.Fetched && _fetcher.Event != null)
             {
                 var absoluteBegin = _fetcher.Event.AbsoluteBegin == null ? DateTime.Now : UnixTime.FromUnixTime(_fetcher.Event.AbsoluteBegin).ToLocalTime();
                 var absoluteEnd = _fetcher.Event.AbsoluteEnd == null ? DateTime.Now : UnixTime.FromUnixTime(_fetcher.Event.AbsoluteEnd).ToLocalTime();
@@ -120,6 +120,12 @@ namespace Gs2.Unity.UiKit.Gs2Schedule
         public void Awake()
         {
             _fetcher = GetComponentInParent<Gs2ScheduleEventFetcher>();
+
+            if (_fetcher == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ScheduleEventFetcher.");
+                enabled = false;
+            }
+
             Update();
         }
     }

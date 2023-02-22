@@ -24,10 +24,11 @@ using System.Linq;
 using Gs2.Core.Exception;
 using Gs2.Unity.Gs2JobQueue.Model;
 using Gs2.Unity.Util;
+using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2JobQueue.Context;
 using UnityEngine;
 using UnityEngine.Events;
-using Job = Gs2.Unity.Gs2JobQueue.ScriptableObject.Job;
+using Job = Gs2.Unity.Gs2JobQueue.ScriptableObject.OwnJob;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -112,13 +113,18 @@ namespace Gs2.Unity.UiKit.Gs2JobQueue
     {
         private Gs2ClientHolder _clientHolder;
         private Gs2GameSessionHolder _gameSessionHolder;
-        private Gs2JobQueueJobContext _context;
+        private Gs2JobQueueOwnJobContext _context;
 
         public void Awake()
         {
             this._clientHolder = Gs2ClientHolder.Instance;
             this._gameSessionHolder = Gs2GameSessionHolder.Instance;
-            this._context = GetComponentInParent<Gs2JobQueueJobContext>();
+            this._context = GetComponentInParent<Gs2JobQueueOwnJobContext>();
+
+            if (_context == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2JobQueueOwnJobContext.");
+                enabled = false;
+            }
         }
     }
 
@@ -143,6 +149,7 @@ namespace Gs2.Unity.UiKit.Gs2JobQueue
     /// </summary>
     public partial class Gs2JobQueueJobRunAction
     {
+
         [Serializable]
         private class RunCompleteEvent : UnityEvent<EzJob>
         {

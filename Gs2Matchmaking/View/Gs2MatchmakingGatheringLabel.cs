@@ -34,7 +34,7 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking
     {
         public void Update()
         {
-            if (_fetcher.Fetched)
+            if (_fetcher.Fetched && _fetcher.Gathering != null)
             {
                 var expiresAt = _fetcher.Gathering.ExpiresAt == null ? DateTime.Now : UnixTime.FromUnixTime(_fetcher.Gathering.ExpiresAt).ToLocalTime();
                 var createdAt = _fetcher.Gathering.CreatedAt == null ? DateTime.Now : UnixTime.FromUnixTime(_fetcher.Gathering.CreatedAt).ToLocalTime();
@@ -129,6 +129,12 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking
         public void Awake()
         {
             _fetcher = GetComponentInParent<Gs2MatchmakingGatheringFetcher>();
+
+            if (_fetcher == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MatchmakingGatheringFetcher.");
+                enabled = false;
+            }
+
             Update();
         }
     }

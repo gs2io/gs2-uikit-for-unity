@@ -24,10 +24,11 @@ using System.Linq;
 using Gs2.Core.Exception;
 using Gs2.Unity.Gs2Stamina.Model;
 using Gs2.Unity.Util;
+using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Stamina.Context;
 using UnityEngine;
 using UnityEngine.Events;
-using Stamina = Gs2.Unity.Gs2Stamina.ScriptableObject.Stamina;
+using Stamina = Gs2.Unity.Gs2Stamina.ScriptableObject.OwnStamina;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -115,13 +116,18 @@ namespace Gs2.Unity.UiKit.Gs2Stamina
     {
         private Gs2ClientHolder _clientHolder;
         private Gs2GameSessionHolder _gameSessionHolder;
-        private Gs2StaminaStaminaContext _context;
+        private Gs2StaminaOwnStaminaContext _context;
 
         public void Awake()
         {
             this._clientHolder = Gs2ClientHolder.Instance;
             this._gameSessionHolder = Gs2GameSessionHolder.Instance;
-            this._context = GetComponentInParent<Gs2StaminaStaminaContext>();
+            this._context = GetComponentInParent<Gs2StaminaOwnStaminaContext>();
+
+            if (_context == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2StaminaOwnStaminaContext.");
+                enabled = false;
+            }
         }
     }
 
@@ -143,6 +149,17 @@ namespace Gs2.Unity.UiKit.Gs2Stamina
 
         public void SetConsumeValue(int value) {
             ConsumeValue = value;
+            this.onChangeConsumeValue.Invoke(ConsumeValue);
+        }
+
+        public void DecreaseConsumeValue() {
+            ConsumeValue -= 1;
+            this.onChangeConsumeValue.Invoke(ConsumeValue);
+        }
+
+        public void IncreaseConsumeValue() {
+            ConsumeValue += 1;
+            this.onChangeConsumeValue.Invoke(ConsumeValue);
         }
     }
 
@@ -151,6 +168,21 @@ namespace Gs2.Unity.UiKit.Gs2Stamina
     /// </summary>
     public partial class Gs2StaminaStaminaConsumeAction
     {
+
+        [Serializable]
+        private class ChangeConsumeValueEvent : UnityEvent<int>
+        {
+
+        }
+
+        [SerializeField]
+        private ChangeConsumeValueEvent onChangeConsumeValue = new ChangeConsumeValueEvent();
+        public event UnityAction<int> OnChangeConsumeValue
+        {
+            add => this.onChangeConsumeValue.AddListener(value);
+            remove => this.onChangeConsumeValue.RemoveListener(value);
+        }
+
         [Serializable]
         private class ConsumeCompleteEvent : UnityEvent<EzStamina>
         {

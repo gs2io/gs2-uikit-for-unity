@@ -34,7 +34,7 @@ namespace Gs2.Unity.UiKit.Gs2Friend
     {
         public void Update()
         {
-            if (_fetcher.Fetched)
+            if (_fetcher.Fetched && _fetcher.FollowUser != null)
             {
                 onUpdate?.Invoke(
                     format.Replace(
@@ -55,11 +55,17 @@ namespace Gs2.Unity.UiKit.Gs2Friend
 
     public partial class Gs2FriendFollowUserLabel
     {
-        private Gs2FriendFollowUserFetcher _fetcher;
+        private Gs2FriendOwnFollowUserFetcher _fetcher;
 
         public void Awake()
         {
-            _fetcher = GetComponentInParent<Gs2FriendFollowUserFetcher>();
+            _fetcher = GetComponentInParent<Gs2FriendOwnFollowUserFetcher>();
+
+            if (_fetcher == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2FriendOwnFollowUserFetcher.");
+                enabled = false;
+            }
+
             Update();
         }
     }

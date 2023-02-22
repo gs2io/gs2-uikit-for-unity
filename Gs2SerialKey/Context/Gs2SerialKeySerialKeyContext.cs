@@ -60,6 +60,10 @@ namespace Gs2.Unity.UiKit.Gs2SerialKey.Context
     public partial class Gs2SerialKeySerialKeyContext
     {
         public SerialKey SerialKey;
+
+        public void SetSerialKey(SerialKey SerialKey) {
+            this.SerialKey = SerialKey;
+        }
     }
 
     /// <summary>

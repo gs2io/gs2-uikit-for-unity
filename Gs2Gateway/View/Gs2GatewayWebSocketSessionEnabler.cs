@@ -16,6 +16,7 @@
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
 
+using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Gateway.Fetcher;
 using UnityEngine;
 
@@ -54,11 +55,16 @@ namespace Gs2.Unity.UiKit.Gs2Gateway
 
     public partial class Gs2GatewayWebSocketSessionEnabler
     {
-        private Gs2GatewayWebSocketSessionFetcher _fetcher;
+        private Gs2GatewayOwnWebSocketSessionFetcher _fetcher;
 
         public void Awake()
         {
-            _fetcher = GetComponentInParent<Gs2GatewayWebSocketSessionFetcher>();
+            _fetcher = GetComponentInParent<Gs2GatewayOwnWebSocketSessionFetcher>();
+
+            if (_fetcher == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2GatewayOwnWebSocketSessionFetcher.");
+                enabled = false;
+            }
         }
     }
 

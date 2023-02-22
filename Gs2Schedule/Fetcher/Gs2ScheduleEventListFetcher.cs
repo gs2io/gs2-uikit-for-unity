@@ -25,6 +25,7 @@ using Gs2.Unity.Core.Exception;
 using Gs2.Unity.Gs2Schedule.Model;
 using Gs2.Unity.Gs2Schedule.ScriptableObject;
 using Gs2.Unity.Util;
+using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Schedule.Context;
 using UnityEngine;
 using UnityEngine.Events;
@@ -40,6 +41,7 @@ namespace Gs2.Unity.UiKit.Gs2Schedule.Fetcher
     {
         private IEnumerator Fetch()
         {
+            var retryWaitSecond = 1;
             Gs2Exception e;
             while (true)
             {
@@ -49,7 +51,7 @@ namespace Gs2.Unity.UiKit.Gs2Schedule.Fetcher
                 {
                     
                     var domain = this._clientHolder.Gs2.Schedule.Namespace(
-                        this._context.User.NamespaceName
+                        this._context.Namespace.NamespaceName
                     ).Me(
                         this._gameSessionHolder.GameSession
                     );
@@ -63,42 +65,32 @@ namespace Gs2.Unity.UiKit.Gs2Schedule.Fetcher
                             if (it.Error is BadRequestException || it.Error is NotFoundException)
                             {
                                 onError.Invoke(e = it.Error, null);
-                                goto END;
                             }
-
-                            onError.Invoke(new CanIgnoreException(it.Error), null);
-                            break;
+                            else {
+                                onError.Invoke(new CanIgnoreException(it.Error), null);
+                            }
+                            yield return new WaitForSeconds(retryWaitSecond);
+                            retryWaitSecond *= 2;
                         }
-
-                        if (it.Current != null)
-                        {
-                            items.Add(it.Current);
-                        } else {
-                            break;
+                        else {
+                            if (it.Current != null)
+                            {
+                                items.Add(it.Current);
+                            } else {
+                                break;
+                            }
                         }
                     }
 
+                    retryWaitSecond = 1;
                     Events = items;
                     Fetched = true;
                 }
-
-                yield return new WaitForSeconds(1);
+                else {
+                    yield return new WaitForSeconds(1);
+                }
             }
-            END:
-            
-            var transform1 = transform;
-            var builder = new StringBuilder(transform1.name);
-            var current = transform1.parent;
-
-            while (current != null)
-            {
-                builder.Insert(0, current.name + "/");
-                current = current.parent;
-            }
-            
-            Debug.LogError(e);
-            Debug.LogError($"{GetType()} の自動更新が停止されました。 {builder}");
-            Debug.LogError($"Automatic update of {GetType()} has been stopped. {builder}");
+            // ReSharper disable once IteratorNeverReturns
         }
 
         public void OnEnable()
@@ -120,13 +112,18 @@ namespace Gs2.Unity.UiKit.Gs2Schedule.Fetcher
     {
         private Gs2ClientHolder _clientHolder;
         private Gs2GameSessionHolder _gameSessionHolder;
-        private Gs2ScheduleUserContext _context;
+        private Gs2ScheduleNamespaceContext _context;
 
         public void Awake()
         {
             _clientHolder = Gs2ClientHolder.Instance;
             _gameSessionHolder = Gs2GameSessionHolder.Instance;
-            _context = GetComponentInParent<Gs2ScheduleUserContext>();
+            _context = GetComponentInParent<Gs2ScheduleNamespaceContext>();
+
+            if (_context == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ScheduleNamespaceContext.");
+                enabled = false;
+            }
         }
     }
 

@@ -34,7 +34,7 @@ namespace Gs2.Unity.UiKit.Gs2Formation
     {
         public void Update()
         {
-            if (_fetcher.Fetched)
+            if (_fetcher.Fetched && _fetcher.Mold != null)
             {
                 onUpdate?.Invoke(
                     format.Replace(
@@ -55,11 +55,17 @@ namespace Gs2.Unity.UiKit.Gs2Formation
 
     public partial class Gs2FormationMoldLabel
     {
-        private Gs2FormationMoldFetcher _fetcher;
+        private Gs2FormationOwnMoldFetcher _fetcher;
 
         public void Awake()
         {
-            _fetcher = GetComponentInParent<Gs2FormationMoldFetcher>();
+            _fetcher = GetComponentInParent<Gs2FormationOwnMoldFetcher>();
+
+            if (_fetcher == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2FormationOwnMoldFetcher.");
+                enabled = false;
+            }
+
             Update();
         }
     }

@@ -34,7 +34,7 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking
     {
         public void Update()
         {
-            if (_fetcher.Fetched)
+            if (_fetcher.Fetched && _fetcher.Rating != null)
             {
                 var createdAt = _fetcher.Rating.CreatedAt == null ? DateTime.Now : UnixTime.FromUnixTime(_fetcher.Rating.CreatedAt).ToLocalTime();
                 var updatedAt = _fetcher.Rating.UpdatedAt == null ? DateTime.Now : UnixTime.FromUnixTime(_fetcher.Rating.UpdatedAt).ToLocalTime();
@@ -99,11 +99,17 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking
 
     public partial class Gs2MatchmakingRatingLabel
     {
-        private Gs2MatchmakingRatingFetcher _fetcher;
+        private Gs2MatchmakingOwnRatingFetcher _fetcher;
 
         public void Awake()
         {
-            _fetcher = GetComponentInParent<Gs2MatchmakingRatingFetcher>();
+            _fetcher = GetComponentInParent<Gs2MatchmakingOwnRatingFetcher>();
+
+            if (_fetcher == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MatchmakingOwnRatingFetcher.");
+                enabled = false;
+            }
+
             Update();
         }
     }

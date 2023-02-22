@@ -18,6 +18,7 @@
 
 using Gs2.Unity.Gs2Schedule.ScriptableObject;
 using UnityEngine;
+using Event = Gs2.Unity.Gs2Schedule.ScriptableObject.Event;
 
 namespace Gs2.Unity.UiKit.Gs2Schedule.Context
 {
@@ -60,6 +61,10 @@ namespace Gs2.Unity.UiKit.Gs2Schedule.Context
     public partial class Gs2ScheduleNamespaceContext
     {
         public Namespace Namespace;
+
+        public void SetNamespace(Namespace Namespace) {
+            this.Namespace = Namespace;
+        }
     }
 
     /// <summary>

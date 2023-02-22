@@ -60,6 +60,10 @@ namespace Gs2.Unity.UiKit.Gs2Account.Context
     public partial class Gs2AccountTakeOverContext
     {
         public TakeOver TakeOver;
+
+        public void SetTakeOver(TakeOver TakeOver) {
+            this.TakeOver = TakeOver;
+        }
     }
 
     /// <summary>

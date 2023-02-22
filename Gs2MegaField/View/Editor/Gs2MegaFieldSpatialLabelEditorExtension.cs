@@ -16,6 +16,8 @@
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
 
+using Gs2.Unity.Gs2MegaField.ScriptableObject;
+using Gs2.Unity.UiKit.Gs2MegaField.Context;
 using UnityEditor;
 using UnityEngine;
 
@@ -28,6 +30,28 @@ namespace Gs2.Unity.UiKit.Gs2MegaField.Editor
             var original = target as Gs2MegaFieldSpatialLabel;
 
             if (original == null) return;
+
+            var context = original.GetComponentInParent<Gs2MegaFieldSpatialContext>();
+            if (context == null) {
+                EditorGUILayout.HelpBox("Gs2MegaFieldSpatialContext not found.", MessageType.Error);
+                if (GUILayout.Button("Add Context")) {
+                    original.gameObject.AddComponent<Gs2MegaFieldSpatialContext>();
+                }
+            }
+            else {
+                EditorGUI.BeginDisabledGroup(true);
+                EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2MegaFieldSpatialContext), false);
+                EditorGUI.indentLevel++;
+                EditorGUILayout.ObjectField("Spatial", context.Spatial, typeof(Spatial), false);
+                EditorGUI.indentLevel++;
+                EditorGUILayout.TextField("NamespaceName", context.Spatial?.NamespaceName.ToString());
+                EditorGUILayout.TextField("UserId", context.Spatial?.UserId.ToString());
+                EditorGUILayout.TextField("AreaModelName", context.Spatial?.AreaModelName.ToString());
+                EditorGUILayout.TextField("LayerModelName", context.Spatial?.LayerModelName.ToString());
+                EditorGUI.indentLevel--;
+                EditorGUI.indentLevel--;
+                EditorGUI.EndDisabledGroup();
+            }
 
             serializedObject.Update();
             original.format = EditorGUILayout.TextField("Format", original.format);

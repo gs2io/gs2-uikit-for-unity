@@ -16,6 +16,7 @@
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
 
+using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Version.Fetcher;
 using UnityEngine;
 
@@ -54,11 +55,16 @@ namespace Gs2.Unity.UiKit.Gs2Version
 
     public partial class Gs2VersionAcceptVersionEnabler
     {
-        private Gs2VersionAcceptVersionFetcher _fetcher;
+        private Gs2VersionOwnAcceptVersionFetcher _fetcher;
 
         public void Awake()
         {
-            _fetcher = GetComponentInParent<Gs2VersionAcceptVersionFetcher>();
+            _fetcher = GetComponentInParent<Gs2VersionOwnAcceptVersionFetcher>();
+
+            if (_fetcher == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2VersionOwnAcceptVersionFetcher.");
+                enabled = false;
+            }
         }
     }
 

@@ -25,6 +25,8 @@ using Gs2.Unity.Core.Exception;
 using Gs2.Unity.Gs2Datastore.Model;
 using Gs2.Unity.Gs2Datastore.ScriptableObject;
 using Gs2.Unity.Util;
+using Gs2.Unity.UiKit.Core;
+using Gs2.Unity.UiKit.Gs2Datastore.Context;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -34,25 +36,27 @@ namespace Gs2.Unity.UiKit.Gs2Datastore.Fetcher
     /// Main
     /// </summary>
 
-    [AddComponentMenu("GS2 UIKit/Datastore/Gs2DatastoreOwnDataObjectListFetcher")]
+	[AddComponentMenu("GS2 UIKit/Datastore/DataObject/Fetcher/Gs2DatastoreOwnDataObjectListFetcher")]
     public partial class Gs2DatastoreOwnDataObjectListFetcher : MonoBehaviour
     {
         private IEnumerator Fetch()
         {
+            var retryWaitSecond = 1;
             Gs2Exception e;
             while (true)
             {
                 if (_gameSessionHolder != null && _gameSessionHolder.Initialized && 
                     _clientHolder != null && _clientHolder.Initialized &&
-                    Namespace != null)
+                    _context != null)
                 {
-                    var it = _clientHolder.Gs2.Datastore.Namespace(
-                        Namespace.namespaceName
+                    
+                    var domain = this._clientHolder.Gs2.Datastore.Namespace(
+                        this._context.Namespace.NamespaceName
                     ).Me(
-                        _gameSessionHolder.GameSession
-                    ).DataObjects(
+                        this._gameSessionHolder.GameSession
                     );
-                    var forms = new List<EzDataObject>();
+                    var it = domain.DataObjects();
+                    var items = new List<Gs2.Unity.Gs2Datastore.Model.EzDataObject>();
                     while (it.HasNext())
                     {
                         yield return it.Next();
@@ -61,40 +65,32 @@ namespace Gs2.Unity.UiKit.Gs2Datastore.Fetcher
                             if (it.Error is BadRequestException || it.Error is NotFoundException)
                             {
                                 onError.Invoke(e = it.Error, null);
-                                goto END;
                             }
-
-                            onError.Invoke(new CanIgnoreException(it.Error), null);
-                            break;
+                            else {
+                                onError.Invoke(new CanIgnoreException(it.Error), null);
+                            }
+                            yield return new WaitForSeconds(retryWaitSecond);
+                            retryWaitSecond *= 2;
                         }
-
-                        if (it.Current != null)
-                        {
-                            forms.Add(it.Current);
+                        else {
+                            if (it.Current != null)
+                            {
+                                items.Add(it.Current);
+                            } else {
+                                break;
+                            }
                         }
                     }
 
-                    DataObjects = forms;
+                    retryWaitSecond = 1;
+                    DataObjects = items;
                     Fetched = true;
                 }
-
-                yield return new WaitForSeconds(1);
+                else {
+                    yield return new WaitForSeconds(1);
+                }
             }
-            END:
-            
-            var transform1 = transform;
-            var builder = new StringBuilder(transform1.name);
-            var current = transform1.parent;
-
-            while (current != null)
-            {
-                builder.Insert(0, current.name + "/");
-                current = current.parent;
-            }
-            
-            Debug.LogError(e);
-            Debug.LogError($"{GetType()} の自動更新が停止されました。 {builder}");
-            Debug.LogError($"Automatic update of {GetType()} has been stopped. {builder}");
+            // ReSharper disable once IteratorNeverReturns
         }
 
         public void OnEnable()
@@ -116,11 +112,18 @@ namespace Gs2.Unity.UiKit.Gs2Datastore.Fetcher
     {
         private Gs2ClientHolder _clientHolder;
         private Gs2GameSessionHolder _gameSessionHolder;
+        private Gs2DatastoreNamespaceContext _context;
 
         public void Awake()
         {
             _clientHolder = Gs2ClientHolder.Instance;
             _gameSessionHolder = Gs2GameSessionHolder.Instance;
+            _context = GetComponentInParent<Gs2DatastoreNamespaceContext>();
+
+            if (_context == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2DatastoreNamespaceContext.");
+                enabled = false;
+            }
         }
     }
 
@@ -130,7 +133,7 @@ namespace Gs2.Unity.UiKit.Gs2Datastore.Fetcher
     
     public partial class Gs2DatastoreOwnDataObjectListFetcher
     {
-        public List<EzDataObject> DataObjects { get; private set; }
+        public List<Gs2.Unity.Gs2Datastore.Model.EzDataObject> DataObjects { get; private set; }
         public bool Fetched { get; private set; }
     }
 
@@ -140,7 +143,7 @@ namespace Gs2.Unity.UiKit.Gs2Datastore.Fetcher
     
     public partial class Gs2DatastoreOwnDataObjectListFetcher
     {
-        public Namespace Namespace;
+
     }
 
     /// <summary>

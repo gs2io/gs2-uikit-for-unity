@@ -60,6 +60,10 @@ namespace Gs2.Unity.UiKit.Gs2Datastore.Context
     public partial class Gs2DatastoreDataObjectContext
     {
         public DataObject DataObject;
+
+        public void SetDataObject(DataObject DataObject) {
+            this.DataObject = DataObject;
+        }
     }
 
     /// <summary>

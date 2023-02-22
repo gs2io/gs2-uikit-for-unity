@@ -60,6 +60,10 @@ namespace Gs2.Unity.UiKit.Gs2SerialKey.Context
     public partial class Gs2SerialKeyUserContext
     {
         public User User;
+
+        public void SetUser(User User) {
+            this.User = User;
+        }
     }
 
     /// <summary>

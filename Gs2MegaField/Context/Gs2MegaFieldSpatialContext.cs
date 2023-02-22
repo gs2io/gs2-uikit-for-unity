@@ -60,6 +60,10 @@ namespace Gs2.Unity.UiKit.Gs2MegaField.Context
     public partial class Gs2MegaFieldSpatialContext
     {
         public Spatial Spatial;
+
+        public void SetSpatial(Spatial Spatial) {
+            this.Spatial = Spatial;
+        }
     }
 
     /// <summary>

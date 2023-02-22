@@ -34,7 +34,7 @@ namespace Gs2.Unity.UiKit.Gs2Chat
     {
         public void Update()
         {
-            if (_fetcher.Fetched)
+            if (_fetcher.Fetched && _fetcher.Message != null)
             {
                 var createdAt = _fetcher.Message.CreatedAt == null ? DateTime.Now : UnixTime.FromUnixTime(_fetcher.Message.CreatedAt).ToLocalTime();
                 onUpdate?.Invoke(
@@ -85,6 +85,12 @@ namespace Gs2.Unity.UiKit.Gs2Chat
         public void Awake()
         {
             _fetcher = GetComponentInParent<Gs2ChatMessageFetcher>();
+
+            if (_fetcher == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ChatMessageFetcher.");
+                enabled = false;
+            }
+
             Update();
         }
     }

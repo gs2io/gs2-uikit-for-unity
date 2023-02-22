@@ -17,6 +17,7 @@
 // ReSharper disable CheckNamespace
 
 using System.Collections.Generic;
+using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Experience.Fetcher;
 using UnityEngine;
 
@@ -31,7 +32,7 @@ namespace Gs2.Unity.UiKit.Gs2Experience
     {
         public void Update()
         {
-            if (_fetcher.Fetched)
+            if (_fetcher.Fetched && _fetcher.Status != null)
             {
                 switch(expression)
                 {
@@ -42,20 +43,20 @@ namespace Gs2.Unity.UiKit.Gs2Experience
                         target.SetActive(!enableRankCapValues.Contains(_fetcher.Status.RankCapValue));
                         break;
                     case Expression.Less:
-                        target.SetActive(enableRankCapValue < _fetcher.Status.RankCapValue);
-                        break;
-                    case Expression.LessEqual:
-                        target.SetActive(enableRankCapValue <= _fetcher.Status.RankCapValue);
-                        break;
-                    case Expression.Greater:
                         target.SetActive(enableRankCapValue > _fetcher.Status.RankCapValue);
                         break;
-                    case Expression.GreaterEqual:
+                    case Expression.LessEqual:
                         target.SetActive(enableRankCapValue >= _fetcher.Status.RankCapValue);
+                        break;
+                    case Expression.Greater:
+                        target.SetActive(enableRankCapValue < _fetcher.Status.RankCapValue);
+                        break;
+                    case Expression.GreaterEqual:
+                        target.SetActive(enableRankCapValue <= _fetcher.Status.RankCapValue);
                         break;
                 }
             }
-            else 
+            else
             {
                 target.SetActive(false);
             }
@@ -65,30 +66,35 @@ namespace Gs2.Unity.UiKit.Gs2Experience
     /// <summary>
     /// Dependent components
     /// </summary>
-    
+
     public partial class Gs2ExperienceStatusRankCapValueEnabler
     {
-        private Gs2ExperienceStatusFetcher _fetcher;
+        private Gs2ExperienceOwnStatusFetcher _fetcher;
 
         public void Awake()
         {
-            _fetcher = GetComponentInParent<Gs2ExperienceStatusFetcher>();
+            _fetcher = GetComponentInParent<Gs2ExperienceOwnStatusFetcher>();
+
+            if (_fetcher == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ExperienceOwnStatusFetcher.");
+                enabled = false;
+            }
         }
     }
 
     /// <summary>
     /// Public properties
     /// </summary>
-    
+
     public partial class Gs2ExperienceStatusRankCapValueEnabler
     {
-        
+
     }
 
     /// <summary>
     /// Parameters for Inspector
     /// </summary>
-    
+
     public partial class Gs2ExperienceStatusRankCapValueEnabler
     {
         public enum Expression {

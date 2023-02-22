@@ -60,6 +60,10 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Context
     public partial class Gs2RankingCategoryModelContext
     {
         public CategoryModel CategoryModel;
+
+        public void SetCategoryModel(CategoryModel CategoryModel) {
+            this.CategoryModel = CategoryModel;
+        }
     }
 
     /// <summary>

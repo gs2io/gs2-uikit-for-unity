@@ -60,6 +60,10 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Context
     public partial class Gs2MissionMissionTaskModelContext
     {
         public MissionTaskModel MissionTaskModel;
+
+        public void SetMissionTaskModel(MissionTaskModel MissionTaskModel) {
+            this.MissionTaskModel = MissionTaskModel;
+        }
     }
 
     /// <summary>

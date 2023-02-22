@@ -24,6 +24,7 @@ using System.Linq;
 using Gs2.Core.Exception;
 using Gs2.Unity.Gs2Account.Model;
 using Gs2.Unity.Util;
+using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Account.Context;
 using UnityEngine;
 using UnityEngine.Events;
@@ -119,6 +120,11 @@ namespace Gs2.Unity.UiKit.Gs2Account
             this._clientHolder = Gs2ClientHolder.Instance;
             this._gameSessionHolder = Gs2GameSessionHolder.Instance;
             this._context = GetComponentInParent<Gs2AccountTakeOverContext>();
+
+            if (_context == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2AccountTakeOverContext.");
+                enabled = false;
+            }
         }
     }
 
@@ -140,6 +146,7 @@ namespace Gs2.Unity.UiKit.Gs2Account
 
         public void SetPassword(string value) {
             Password = value;
+            this.onChangePassword.Invoke(Password);
         }
     }
 
@@ -148,6 +155,21 @@ namespace Gs2.Unity.UiKit.Gs2Account
     /// </summary>
     public partial class Gs2AccountTakeOverDoTakeOverAction
     {
+
+        [Serializable]
+        private class ChangePasswordEvent : UnityEvent<string>
+        {
+
+        }
+
+        [SerializeField]
+        private ChangePasswordEvent onChangePassword = new ChangePasswordEvent();
+        public event UnityAction<string> OnChangePassword
+        {
+            add => this.onChangePassword.AddListener(value);
+            remove => this.onChangePassword.RemoveListener(value);
+        }
+
         [Serializable]
         private class DoTakeOverCompleteEvent : UnityEvent<EzAccount>
         {

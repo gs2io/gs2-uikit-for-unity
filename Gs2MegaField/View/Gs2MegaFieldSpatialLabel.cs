@@ -34,7 +34,7 @@ namespace Gs2.Unity.UiKit.Gs2MegaField
     {
         public void Update()
         {
-            if (_fetcher.Fetched)
+            if (_fetcher.Fetched && _fetcher.Spatial != null)
             {
                 onUpdate?.Invoke(
                     format.Replace(
@@ -64,6 +64,12 @@ namespace Gs2.Unity.UiKit.Gs2MegaField
         public void Awake()
         {
             _fetcher = GetComponentInParent<Gs2MegaFieldSpatialFetcher>();
+
+            if (_fetcher == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MegaFieldSpatialFetcher.");
+                enabled = false;
+            }
+
             Update();
         }
     }

@@ -17,6 +17,7 @@
 // ReSharper disable CheckNamespace
 
 using System.Collections.Generic;
+using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Formation.Fetcher;
 using UnityEngine;
 
@@ -31,7 +32,7 @@ namespace Gs2.Unity.UiKit.Gs2Formation
     {
         public void Update()
         {
-            if (_fetcher.Fetched)
+            if (_fetcher.Fetched && _fetcher.Mold != null)
             {
                 switch(expression)
                 {
@@ -42,20 +43,20 @@ namespace Gs2.Unity.UiKit.Gs2Formation
                         target.SetActive(!enableCapacities.Contains(_fetcher.Mold.Capacity));
                         break;
                     case Expression.Less:
-                        target.SetActive(enableCapacity < _fetcher.Mold.Capacity);
-                        break;
-                    case Expression.LessEqual:
-                        target.SetActive(enableCapacity <= _fetcher.Mold.Capacity);
-                        break;
-                    case Expression.Greater:
                         target.SetActive(enableCapacity > _fetcher.Mold.Capacity);
                         break;
-                    case Expression.GreaterEqual:
+                    case Expression.LessEqual:
                         target.SetActive(enableCapacity >= _fetcher.Mold.Capacity);
+                        break;
+                    case Expression.Greater:
+                        target.SetActive(enableCapacity < _fetcher.Mold.Capacity);
+                        break;
+                    case Expression.GreaterEqual:
+                        target.SetActive(enableCapacity <= _fetcher.Mold.Capacity);
                         break;
                 }
             }
-            else 
+            else
             {
                 target.SetActive(false);
             }
@@ -65,30 +66,35 @@ namespace Gs2.Unity.UiKit.Gs2Formation
     /// <summary>
     /// Dependent components
     /// </summary>
-    
+
     public partial class Gs2FormationMoldCapacityEnabler
     {
-        private Gs2FormationMoldFetcher _fetcher;
+        private Gs2FormationOwnMoldFetcher _fetcher;
 
         public void Awake()
         {
-            _fetcher = GetComponentInParent<Gs2FormationMoldFetcher>();
+            _fetcher = GetComponentInParent<Gs2FormationOwnMoldFetcher>();
+
+            if (_fetcher == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2FormationOwnMoldFetcher.");
+                enabled = false;
+            }
         }
     }
 
     /// <summary>
     /// Public properties
     /// </summary>
-    
+
     public partial class Gs2FormationMoldCapacityEnabler
     {
-        
+
     }
 
     /// <summary>
     /// Parameters for Inspector
     /// </summary>
-    
+
     public partial class Gs2FormationMoldCapacityEnabler
     {
         public enum Expression {

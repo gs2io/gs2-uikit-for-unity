@@ -16,6 +16,8 @@
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
 
+using Gs2.Unity.Gs2Mission.ScriptableObject;
+using Gs2.Unity.UiKit.Gs2Mission.Context;
 using UnityEditor;
 using UnityEngine;
 
@@ -28,6 +30,34 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Editor
             var original = target as Gs2MissionCounterLabel;
 
             if (original == null) return;
+
+            var context = original.GetComponentInParent<Gs2MissionOwnCounterContext>();
+            if (context == null) {
+                EditorGUILayout.HelpBox("Gs2MissionOwnCounterContext not found.", MessageType.Error);
+                if (GUILayout.Button("Add Context")) {
+                    original.gameObject.AddComponent<Gs2MissionOwnCounterContext>();
+                }
+            }
+            else {
+                if (context.transform.parent.GetComponent<Gs2MissionOwnCounterList>() != null) {
+                    EditorGUI.BeginDisabledGroup(true);
+                    EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2MissionOwnCounterContext), false);
+                    EditorGUI.EndDisabledGroup();
+                    EditorGUILayout.HelpBox("Counter is auto assign from Gs2MissionOwnCounterList.", MessageType.Info);
+                }
+                else {
+                    EditorGUI.BeginDisabledGroup(true);
+                    EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2MissionOwnCounterContext), false);
+                    EditorGUI.indentLevel++;
+                    EditorGUILayout.ObjectField("Counter", context.Counter, typeof(OwnCounter), false);
+                    EditorGUI.indentLevel++;
+                    EditorGUILayout.TextField("NamespaceName", context.Counter?.NamespaceName.ToString());
+                    EditorGUILayout.TextField("CounterName", context.Counter?.CounterName.ToString());
+                    EditorGUI.indentLevel--;
+                    EditorGUI.indentLevel--;
+                    EditorGUI.EndDisabledGroup();
+                }
+            }
 
             serializedObject.Update();
             original.format = EditorGUILayout.TextField("Format", original.format);

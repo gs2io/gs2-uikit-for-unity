@@ -18,6 +18,7 @@
 
 using System.Collections.Generic;
 using Gs2.Unity.Gs2Stamina.ScriptableObject;
+using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Stamina.Context;
 using Gs2.Unity.UiKit.Gs2Stamina.Fetcher;
 using UnityEngine;
@@ -34,7 +35,7 @@ namespace Gs2.Unity.UiKit.Gs2Stamina
         private List<Gs2StaminaStaminaModelContext> _children;
 
         public void Update() {
-            if (_fetcher.Fetched) {
+            if (_fetcher.Fetched && this._fetcher.StaminaModels != null) {
                 for (var i = 0; i < this.maximumItems; i++) {
                     if (i < this._fetcher.StaminaModels.Count) {
                         _children[i].StaminaModel.staminaName = this._fetcher.StaminaModels[i].Name;
@@ -61,6 +62,11 @@ namespace Gs2.Unity.UiKit.Gs2Stamina
         {
             _context = GetComponentInParent<Gs2StaminaNamespaceContext>();
             _fetcher = GetComponentInParent<Gs2StaminaStaminaModelListFetcher>();
+
+            if (_fetcher == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2StaminaStaminaModelListFetcher.");
+                enabled = false;
+            }
 
             _children = new List<Gs2StaminaStaminaModelContext>();
             for (var i = 0; i < this.maximumItems; i++) {

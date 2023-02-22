@@ -34,7 +34,7 @@ namespace Gs2.Unity.UiKit.Gs2Friend
     {
         public void Update()
         {
-            if (_fetcher.Fetched)
+            if (_fetcher.Fetched && _fetcher.BlackList != null)
             {
                 onUpdate?.Invoke(
                     format.Replace(
@@ -53,11 +53,17 @@ namespace Gs2.Unity.UiKit.Gs2Friend
 
     public partial class Gs2FriendBlackListLabel
     {
-        private Gs2FriendBlackListFetcher _fetcher;
+        private Gs2FriendOwnBlackListFetcher _fetcher;
 
         public void Awake()
         {
-            _fetcher = GetComponentInParent<Gs2FriendBlackListFetcher>();
+            _fetcher = GetComponentInParent<Gs2FriendOwnBlackListFetcher>();
+
+            if (_fetcher == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2FriendOwnBlackListFetcher.");
+                enabled = false;
+            }
+
             Update();
         }
     }

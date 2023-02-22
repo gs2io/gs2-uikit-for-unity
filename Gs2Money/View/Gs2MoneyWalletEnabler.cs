@@ -16,6 +16,7 @@
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
 
+using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Money.Fetcher;
 using UnityEngine;
 
@@ -54,11 +55,16 @@ namespace Gs2.Unity.UiKit.Gs2Money
 
     public partial class Gs2MoneyWalletEnabler
     {
-        private Gs2MoneyWalletFetcher _fetcher;
+        private Gs2MoneyOwnWalletFetcher _fetcher;
 
         public void Awake()
         {
-            _fetcher = GetComponentInParent<Gs2MoneyWalletFetcher>();
+            _fetcher = GetComponentInParent<Gs2MoneyOwnWalletFetcher>();
+
+            if (_fetcher == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MoneyOwnWalletFetcher.");
+                enabled = false;
+            }
         }
     }
 

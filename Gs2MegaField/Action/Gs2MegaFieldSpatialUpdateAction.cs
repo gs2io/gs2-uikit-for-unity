@@ -29,7 +29,7 @@ using Gs2.Unity.Util;
 using Gs2.Unity.UiKit.Gs2MegaField.Context;
 using UnityEngine;
 using UnityEngine.Events;
-using Spatial = Gs2.Unity.Gs2MegaField.ScriptableObject.Spatial;
+using Spatial = Gs2.Unity.Gs2MegaField.ScriptableObject.OwnSpatial;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -46,12 +46,12 @@ namespace Gs2.Unity.UiKit.Gs2MegaField
             yield return new WaitUntil(() => this._gameSessionHolder.Initialized);
             
             var domain = this._clientHolder.Gs2.MegaField.Namespace(
-                this._context.Spatial.NamespaceName
+                this._context.LayerModel.NamespaceName
             ).Me(
                 this._gameSessionHolder.GameSession
             ).Spatial(
-                this._context.Spatial.AreaModelName,
-                this._context.Spatial.LayerModelName
+                this._context.LayerModel.AreaModelName,
+                this._context.LayerModel.LayerModelName
             );
             var future = domain.Update(
                 Position,
@@ -71,7 +71,7 @@ namespace Gs2.Unity.UiKit.Gs2MegaField
                             this.onError.Invoke(future.Error, Retry);
                             yield break;
                         }
-                        var items2 = new List<EzSpatial>();
+                        var items = new List<EzSpatial>();
                         foreach (var domain_ in future.Result) {
                             var future3 = domain_.Model();
                             yield return future3;
@@ -80,10 +80,10 @@ namespace Gs2.Unity.UiKit.Gs2MegaField
                                 this.onError.Invoke(future3.Error, null);
                                 yield break;
                             }
-                            items2.Add(future3.Result);
+                            items.Add(future3.Result);
                         }
 
-                        this.onUpdateComplete.Invoke(items2);
+                        this.onUpdateComplete.Invoke(items);
                     }
 
                     this.onError.Invoke(future.Error, Retry);
@@ -127,13 +127,13 @@ namespace Gs2.Unity.UiKit.Gs2MegaField
     {
         private Gs2ClientHolder _clientHolder;
         private Gs2GameSessionHolder _gameSessionHolder;
-        private Gs2MegaFieldSpatialContext _context;
+        private Gs2MegaFieldLayerModelContext _context;
 
         public void Awake()
         {
             this._clientHolder = Gs2ClientHolder.Instance;
             this._gameSessionHolder = Gs2GameSessionHolder.Instance;
-            this._context = GetComponentInParent<Gs2MegaFieldSpatialContext>();
+            this._context = GetComponentInParent<Gs2MegaFieldLayerModelContext>();
         }
     }
 

@@ -24,6 +24,7 @@ using System.Linq;
 using Gs2.Core.Exception;
 using Gs2.Unity.Gs2Matchmaking.Model;
 using Gs2.Unity.Util;
+using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Matchmaking.Context;
 using UnityEngine;
 using UnityEngine.Events;
@@ -118,6 +119,11 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking
             this._clientHolder = Gs2ClientHolder.Instance;
             this._gameSessionHolder = Gs2GameSessionHolder.Instance;
             this._context = GetComponentInParent<Gs2MatchmakingVoteContext>();
+
+            if (_context == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MatchmakingVoteContext.");
+                enabled = false;
+            }
         }
     }
 
@@ -140,10 +146,12 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking
 
         public void SetSignedBallots(List<Gs2.Unity.Gs2Matchmaking.Model.EzSignedBallot> value) {
             SignedBallots = value;
+            this.onChangeSignedBallots.Invoke(SignedBallots);
         }
 
         public void SetGameResults(List<Gs2.Unity.Gs2Matchmaking.Model.EzGameResult> value) {
             GameResults = value;
+            this.onChangeGameResults.Invoke(GameResults);
         }
     }
 
@@ -152,6 +160,35 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking
     /// </summary>
     public partial class Gs2MatchmakingVoteVoteMultipleAction
     {
+
+        [Serializable]
+        private class ChangeSignedBallotsEvent : UnityEvent<List<Gs2.Unity.Gs2Matchmaking.Model.EzSignedBallot>>
+        {
+
+        }
+
+        [SerializeField]
+        private ChangeSignedBallotsEvent onChangeSignedBallots = new ChangeSignedBallotsEvent();
+        public event UnityAction<List<Gs2.Unity.Gs2Matchmaking.Model.EzSignedBallot>> OnChangeSignedBallots
+        {
+            add => this.onChangeSignedBallots.AddListener(value);
+            remove => this.onChangeSignedBallots.RemoveListener(value);
+        }
+
+        [Serializable]
+        private class ChangeGameResultsEvent : UnityEvent<List<Gs2.Unity.Gs2Matchmaking.Model.EzGameResult>>
+        {
+
+        }
+
+        [SerializeField]
+        private ChangeGameResultsEvent onChangeGameResults = new ChangeGameResultsEvent();
+        public event UnityAction<List<Gs2.Unity.Gs2Matchmaking.Model.EzGameResult>> OnChangeGameResults
+        {
+            add => this.onChangeGameResults.AddListener(value);
+            remove => this.onChangeGameResults.RemoveListener(value);
+        }
+
         [Serializable]
         private class VoteMultipleCompleteEvent : UnityEvent<EzBallot>
         {

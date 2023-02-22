@@ -60,6 +60,10 @@ namespace Gs2.Unity.UiKit.Gs2Showcase.Context
     public partial class Gs2ShowcaseDisplayItemContext
     {
         public DisplayItem DisplayItem;
+
+        public void SetDisplayItem(DisplayItem DisplayItem) {
+            this.DisplayItem = DisplayItem;
+        }
     }
 
     /// <summary>

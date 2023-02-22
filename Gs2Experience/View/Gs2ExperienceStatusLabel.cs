@@ -34,7 +34,7 @@ namespace Gs2.Unity.UiKit.Gs2Experience
     {
         public void Update()
         {
-            if (_fetcher.Fetched)
+            if (_fetcher.Fetched && _fetcher.Status != null)
             {
                 onUpdate?.Invoke(
                     format.Replace(
@@ -59,11 +59,17 @@ namespace Gs2.Unity.UiKit.Gs2Experience
 
     public partial class Gs2ExperienceStatusLabel
     {
-        private Gs2ExperienceStatusFetcher _fetcher;
+        private Gs2ExperienceOwnStatusFetcher _fetcher;
 
         public void Awake()
         {
-            _fetcher = GetComponentInParent<Gs2ExperienceStatusFetcher>();
+            _fetcher = GetComponentInParent<Gs2ExperienceOwnStatusFetcher>();
+
+            if (_fetcher == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ExperienceOwnStatusFetcher.");
+                enabled = false;
+            }
+
             Update();
         }
     }

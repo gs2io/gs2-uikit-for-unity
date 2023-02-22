@@ -60,6 +60,10 @@ namespace Gs2.Unity.UiKit.Gs2Chat.Context
     public partial class Gs2ChatRoomContext
     {
         public Room Room;
+
+        public void SetRoom(Room Room) {
+            this.Room = Room;
+        }
     }
 
     /// <summary>

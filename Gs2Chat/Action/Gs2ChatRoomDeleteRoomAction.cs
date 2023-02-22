@@ -24,6 +24,7 @@ using System.Linq;
 using Gs2.Core.Exception;
 using Gs2.Unity.Gs2Chat.Model;
 using Gs2.Unity.Util;
+using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Chat.Context;
 using UnityEngine;
 using UnityEngine.Events;
@@ -122,6 +123,11 @@ namespace Gs2.Unity.UiKit.Gs2Chat
             this._clientHolder = Gs2ClientHolder.Instance;
             this._gameSessionHolder = Gs2GameSessionHolder.Instance;
             this._context = GetComponentInParent<Gs2ChatRoomContext>();
+
+            if (_context == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ChatRoomContext.");
+                enabled = false;
+            }
         }
     }
 
@@ -146,6 +152,7 @@ namespace Gs2.Unity.UiKit.Gs2Chat
     /// </summary>
     public partial class Gs2ChatRoomDeleteRoomAction
     {
+
         [Serializable]
         private class DeleteRoomCompleteEvent : UnityEvent<EzRoom>
         {

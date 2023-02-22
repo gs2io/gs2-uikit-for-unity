@@ -24,10 +24,11 @@ using System.Linq;
 using Gs2.Core.Exception;
 using Gs2.Unity.Gs2Datastore.Model;
 using Gs2.Unity.Util;
+using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Datastore.Context;
 using UnityEngine;
 using UnityEngine.Events;
-using DataObject = Gs2.Unity.Gs2Datastore.ScriptableObject.DataObject;
+using DataObject = Gs2.Unity.Gs2Datastore.ScriptableObject.OwnDataObject;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -117,13 +118,18 @@ namespace Gs2.Unity.UiKit.Gs2Datastore
     {
         private Gs2ClientHolder _clientHolder;
         private Gs2GameSessionHolder _gameSessionHolder;
-        private Gs2DatastoreDataObjectContext _context;
+        private Gs2DatastoreOwnDataObjectContext _context;
 
         public void Awake()
         {
             this._clientHolder = Gs2ClientHolder.Instance;
             this._gameSessionHolder = Gs2GameSessionHolder.Instance;
-            this._context = GetComponentInParent<Gs2DatastoreDataObjectContext>();
+            this._context = GetComponentInParent<Gs2DatastoreOwnDataObjectContext>();
+
+            if (_context == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2DatastoreOwnDataObjectContext.");
+                enabled = false;
+            }
         }
     }
 
@@ -149,22 +155,27 @@ namespace Gs2.Unity.UiKit.Gs2Datastore
 
         public void SetName(string value) {
             Name = value;
+            this.onChangeName.Invoke(Name);
         }
 
         public void SetScope(string value) {
             Scope = value;
+            this.onChangeScope.Invoke(Scope);
         }
 
         public void SetContentType(string value) {
             ContentType = value;
+            this.onChangeContentType.Invoke(ContentType);
         }
 
         public void SetAllowUserIds(List<string> value) {
             AllowUserIds = value;
+            this.onChangeAllowUserIds.Invoke(AllowUserIds);
         }
 
         public void SetUpdateIfExists(bool value) {
             UpdateIfExists = value;
+            this.onChangeUpdateIfExists.Invoke(UpdateIfExists);
         }
     }
 
@@ -173,6 +184,77 @@ namespace Gs2.Unity.UiKit.Gs2Datastore
     /// </summary>
     public partial class Gs2DatastoreDataObjectPrepareUploadAction
     {
+
+        [Serializable]
+        private class ChangeNameEvent : UnityEvent<string>
+        {
+
+        }
+
+        [SerializeField]
+        private ChangeNameEvent onChangeName = new ChangeNameEvent();
+        public event UnityAction<string> OnChangeName
+        {
+            add => this.onChangeName.AddListener(value);
+            remove => this.onChangeName.RemoveListener(value);
+        }
+
+        [Serializable]
+        private class ChangeScopeEvent : UnityEvent<string>
+        {
+
+        }
+
+        [SerializeField]
+        private ChangeScopeEvent onChangeScope = new ChangeScopeEvent();
+        public event UnityAction<string> OnChangeScope
+        {
+            add => this.onChangeScope.AddListener(value);
+            remove => this.onChangeScope.RemoveListener(value);
+        }
+
+        [Serializable]
+        private class ChangeContentTypeEvent : UnityEvent<string>
+        {
+
+        }
+
+        [SerializeField]
+        private ChangeContentTypeEvent onChangeContentType = new ChangeContentTypeEvent();
+        public event UnityAction<string> OnChangeContentType
+        {
+            add => this.onChangeContentType.AddListener(value);
+            remove => this.onChangeContentType.RemoveListener(value);
+        }
+
+        [Serializable]
+        private class ChangeAllowUserIdsEvent : UnityEvent<List<string>>
+        {
+
+        }
+
+        [SerializeField]
+        private ChangeAllowUserIdsEvent onChangeAllowUserIds = new ChangeAllowUserIdsEvent();
+        public event UnityAction<List<string>> OnChangeAllowUserIds
+        {
+            add => this.onChangeAllowUserIds.AddListener(value);
+            remove => this.onChangeAllowUserIds.RemoveListener(value);
+        }
+
+        [Serializable]
+        private class ChangeUpdateIfExistsEvent : UnityEvent<bool>
+        {
+
+        }
+
+        [SerializeField]
+        private ChangeUpdateIfExistsEvent onChangeUpdateIfExists = new ChangeUpdateIfExistsEvent();
+        public event UnityAction<bool> OnChangeUpdateIfExists
+        {
+            add => this.onChangeUpdateIfExists.AddListener(value);
+            remove => this.onChangeUpdateIfExists.RemoveListener(value);
+        }
+
         [Serializable]
         private class PrepareUploadCompleteEvent : UnityEvent<EzDataObject>
         {

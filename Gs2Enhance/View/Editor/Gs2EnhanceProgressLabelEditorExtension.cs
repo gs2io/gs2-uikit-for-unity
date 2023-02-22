@@ -16,6 +16,8 @@
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
 
+using Gs2.Unity.Gs2Enhance.ScriptableObject;
+using Gs2.Unity.UiKit.Gs2Enhance.Context;
 using UnityEditor;
 using UnityEngine;
 
@@ -28,6 +30,25 @@ namespace Gs2.Unity.UiKit.Gs2Enhance.Editor
             var original = target as Gs2EnhanceProgressLabel;
 
             if (original == null) return;
+
+            var context = original.GetComponentInParent<Gs2EnhanceOwnProgressContext>();
+            if (context == null) {
+                EditorGUILayout.HelpBox("Gs2EnhanceOwnProgressContext not found.", MessageType.Error);
+                if (GUILayout.Button("Add Context")) {
+                    original.gameObject.AddComponent<Gs2EnhanceOwnProgressContext>();
+                }
+            }
+            else {
+                EditorGUI.BeginDisabledGroup(true);
+                EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2EnhanceOwnProgressContext), false);
+                EditorGUI.indentLevel++;
+                EditorGUILayout.ObjectField("Progress", context.Progress, typeof(OwnProgress), false);
+                EditorGUI.indentLevel++;
+                EditorGUILayout.TextField("NamespaceName", context.Progress?.NamespaceName.ToString());
+                EditorGUI.indentLevel--;
+                EditorGUI.indentLevel--;
+                EditorGUI.EndDisabledGroup();
+            }
 
             serializedObject.Update();
             original.format = EditorGUILayout.TextField("Format", original.format);

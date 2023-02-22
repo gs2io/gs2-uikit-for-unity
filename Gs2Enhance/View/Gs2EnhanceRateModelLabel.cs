@@ -34,7 +34,7 @@ namespace Gs2.Unity.UiKit.Gs2Enhance
     {
         public void Update()
         {
-            if (_fetcher.Fetched)
+            if (_fetcher.Fetched && _fetcher.RateModel != null)
             {
                 onUpdate?.Invoke(
                     format.Replace(
@@ -66,6 +66,12 @@ namespace Gs2.Unity.UiKit.Gs2Enhance
         public void Awake()
         {
             _fetcher = GetComponentInParent<Gs2EnhanceRateModelFetcher>();
+
+            if (_fetcher == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2EnhanceRateModelFetcher.");
+                enabled = false;
+            }
+
             Update();
         }
     }

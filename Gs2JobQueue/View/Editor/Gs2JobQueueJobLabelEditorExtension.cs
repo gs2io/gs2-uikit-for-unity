@@ -16,6 +16,8 @@
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
 
+using Gs2.Unity.Gs2JobQueue.ScriptableObject;
+using Gs2.Unity.UiKit.Gs2JobQueue.Context;
 using UnityEditor;
 using UnityEngine;
 
@@ -28,6 +30,26 @@ namespace Gs2.Unity.UiKit.Gs2JobQueue.Editor
             var original = target as Gs2JobQueueJobLabel;
 
             if (original == null) return;
+
+            var context = original.GetComponentInParent<Gs2JobQueueOwnJobContext>();
+            if (context == null) {
+                EditorGUILayout.HelpBox("Gs2JobQueueOwnJobContext not found.", MessageType.Error);
+                if (GUILayout.Button("Add Context")) {
+                    original.gameObject.AddComponent<Gs2JobQueueOwnJobContext>();
+                }
+            }
+            else {
+                EditorGUI.BeginDisabledGroup(true);
+                EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2JobQueueOwnJobContext), false);
+                EditorGUI.indentLevel++;
+                EditorGUILayout.ObjectField("Job", context.Job, typeof(OwnJob), false);
+                EditorGUI.indentLevel++;
+                EditorGUILayout.TextField("NamespaceName", context.Job?.NamespaceName.ToString());
+                EditorGUILayout.TextField("JobName", context.Job?.JobName.ToString());
+                EditorGUI.indentLevel--;
+                EditorGUI.indentLevel--;
+                EditorGUI.EndDisabledGroup();
+            }
 
             serializedObject.Update();
             original.format = EditorGUILayout.TextField("Format", original.format);

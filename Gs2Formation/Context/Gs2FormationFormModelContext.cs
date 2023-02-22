@@ -60,6 +60,10 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Context
     public partial class Gs2FormationFormModelContext
     {
         public FormModel FormModel;
+
+        public void SetFormModel(FormModel FormModel) {
+            this.FormModel = FormModel;
+        }
     }
 
     /// <summary>

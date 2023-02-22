@@ -60,6 +60,10 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking.Context
     public partial class Gs2MatchmakingVoteContext
     {
         public Vote Vote;
+
+        public void SetVote(Vote Vote) {
+            this.Vote = Vote;
+        }
     }
 
     /// <summary>

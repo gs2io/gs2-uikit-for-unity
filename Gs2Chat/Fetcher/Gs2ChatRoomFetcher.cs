@@ -77,8 +77,9 @@ namespace Gs2.Unity.UiKit.Gs2Chat.Fetcher
                         Fetched = true;
                     }
                 }
-
-                yield return new WaitForSeconds(1);
+                else {
+                    yield return new WaitForSeconds(1);
+                }
             }
 
             var transform1 = transform;
@@ -113,8 +114,8 @@ namespace Gs2.Unity.UiKit.Gs2Chat.Fetcher
 
     public partial class Gs2ChatRoomFetcher
     {
-        private Gs2ClientHolder _clientHolder;
-        private Gs2GameSessionHolder _gameSessionHolder;
+        protected Gs2ClientHolder _clientHolder;
+        protected Gs2GameSessionHolder _gameSessionHolder;
         private Gs2ChatRoomContext _context;
 
         public void Awake()
@@ -131,8 +132,8 @@ namespace Gs2.Unity.UiKit.Gs2Chat.Fetcher
 
     public partial class Gs2ChatRoomFetcher
     {
-        public Gs2.Unity.Gs2Chat.Model.EzRoom Room { get; private set; }
-        public bool Fetched { get; private set; }
+        public Gs2.Unity.Gs2Chat.Model.EzRoom Room { get; protected set; }
+        public bool Fetched { get; protected set; }
     }
 
     /// <summary>

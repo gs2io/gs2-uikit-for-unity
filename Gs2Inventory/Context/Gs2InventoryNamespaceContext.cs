@@ -60,6 +60,10 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Context
     public partial class Gs2InventoryNamespaceContext
     {
         public Namespace Namespace;
+
+        public void SetNamespace(Namespace Namespace) {
+            this.Namespace = Namespace;
+        }
     }
 
     /// <summary>

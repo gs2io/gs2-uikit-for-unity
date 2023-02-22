@@ -48,17 +48,19 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Fetcher
             {
                 if (_gameSessionHolder != null && _gameSessionHolder.Initialized &&
                     _clientHolder != null && _clientHolder.Initialized &&
-                    _context != null && this._userContext != null)
+                    _context != null)
                 {
                     
                     var domain = this._clientHolder.Gs2.Ranking.Namespace(
-                        this._context.CategoryModel.NamespaceName
+                        this._context.Ranking.NamespaceName
                     ).Me(
                         this._gameSessionHolder.GameSession
                     ).Ranking(
-                        this._context.CategoryModel.CategoryName
+                        this._context.Ranking.CategoryName
                     );
-                    var future = domain.Model(this._userContext.User.UserId);
+                    var future = domain.Model(
+                        this._context.Ranking.UserId
+                    );
                     yield return future;
                     if (future.Error != null)
                     {
@@ -76,8 +78,9 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Fetcher
                         Fetched = true;
                     }
                 }
-
-                yield return new WaitForSeconds(1);
+                else {
+                    yield return new WaitForSeconds(1);
+                }
             }
 
             var transform1 = transform;
@@ -112,17 +115,15 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Fetcher
 
     public partial class Gs2RankingRankingFetcher
     {
-        private Gs2ClientHolder _clientHolder;
-        private Gs2GameSessionHolder _gameSessionHolder;
-        private Gs2RankingCategoryModelContext _context;
-        private Gs2RankingUserContext _userContext;
+        protected Gs2ClientHolder _clientHolder;
+        protected Gs2GameSessionHolder _gameSessionHolder;
+        private Gs2RankingRankingContext _context;
 
         public void Awake()
         {
             _clientHolder = Gs2ClientHolder.Instance;
             _gameSessionHolder = Gs2GameSessionHolder.Instance;
-            _context = GetComponentInParent<Gs2RankingCategoryModelContext>();
-            _userContext = GetComponentInParent<Gs2RankingUserContext>();
+            _context = GetComponentInParent<Gs2RankingRankingContext>();
         }
     }
 
@@ -132,8 +133,8 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Fetcher
 
     public partial class Gs2RankingRankingFetcher
     {
-        public Gs2.Unity.Gs2Ranking.Model.EzRanking Ranking { get; private set; }
-        public bool Fetched { get; private set; }
+        public Gs2.Unity.Gs2Ranking.Model.EzRanking Ranking { get; protected set; }
+        public bool Fetched { get; protected set; }
     }
 
     /// <summary>

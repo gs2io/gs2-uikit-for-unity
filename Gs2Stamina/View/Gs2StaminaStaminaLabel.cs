@@ -34,7 +34,7 @@ namespace Gs2.Unity.UiKit.Gs2Stamina
     {
         public void Update()
         {
-            if (_fetcher.Fetched)
+            if (_fetcher.Fetched && _fetcher.Stamina != null)
             {
                 var nextRecoverAt = _fetcher.Stamina.NextRecoverAt == null ? DateTime.Now : UnixTime.FromUnixTime(_fetcher.Stamina.NextRecoverAt).ToLocalTime();
                 onUpdate?.Invoke(
@@ -82,11 +82,17 @@ namespace Gs2.Unity.UiKit.Gs2Stamina
 
     public partial class Gs2StaminaStaminaLabel
     {
-        private Gs2StaminaStaminaFetcher _fetcher;
+        private Gs2StaminaOwnStaminaFetcher _fetcher;
 
         public void Awake()
         {
-            _fetcher = GetComponentInParent<Gs2StaminaStaminaFetcher>();
+            _fetcher = GetComponentInParent<Gs2StaminaOwnStaminaFetcher>();
+
+            if (_fetcher == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2StaminaOwnStaminaFetcher.");
+                enabled = false;
+            }
+
             Update();
         }
     }

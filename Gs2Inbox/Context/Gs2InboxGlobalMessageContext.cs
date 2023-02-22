@@ -60,6 +60,10 @@ namespace Gs2.Unity.UiKit.Gs2Inbox.Context
     public partial class Gs2InboxGlobalMessageContext
     {
         public GlobalMessage GlobalMessage;
+
+        public void SetGlobalMessage(GlobalMessage GlobalMessage) {
+            this.GlobalMessage = GlobalMessage;
+        }
     }
 
     /// <summary>
