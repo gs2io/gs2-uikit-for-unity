@@ -32,13 +32,15 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Editor
 
             if (original == null) return;
 
+            serializedObject.Update();
+
             if (original.QuestGroupModel == null) {
                 if (original.transform.parent.GetComponent<Gs2QuestQuestGroupModelList>() != null) {
                     EditorGUILayout.HelpBox("QuestGroupModel is auto assign from Gs2QuestQuestGroupModelList.", MessageType.Info);
                 }
                 else {
                     EditorGUILayout.HelpBox("QuestGroupModel not assigned.", MessageType.Error);
-                    EditorGUILayout.ObjectField("QuestGroupModel", original.QuestGroupModel, typeof(QuestGroupModel), false);
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("QuestGroupModel"), true);
                 }
             }
             else {
@@ -50,8 +52,7 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Editor
                 EditorGUI.indentLevel--;
                 EditorGUI.EndDisabledGroup();
             }
-            
-            serializedObject.Update();
+
             serializedObject.ApplyModifiedProperties();
         }
     }

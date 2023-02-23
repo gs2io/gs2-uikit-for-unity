@@ -32,9 +32,11 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking.Editor
 
             if (original == null) return;
 
+            serializedObject.Update();
+
             if (original.User == null) {
                 EditorGUILayout.HelpBox("User not assigned.", MessageType.Error);
-                EditorGUILayout.ObjectField("User", original.User, typeof(User), false);
+                EditorGUILayout.PropertyField(serializedObject.FindProperty("User"), true);
             }
             else {
                 EditorGUILayout.ObjectField("User", original.User, typeof(User), false);
@@ -45,8 +47,7 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking.Editor
                 EditorGUI.indentLevel--;
                 EditorGUI.EndDisabledGroup();
             }
-            
-            serializedObject.Update();
+
             serializedObject.ApplyModifiedProperties();
         }
     }

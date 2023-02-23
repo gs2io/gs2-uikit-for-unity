@@ -32,9 +32,11 @@ namespace Gs2.Unity.UiKit.Gs2Chat.Editor
 
             if (original == null) return;
 
+            serializedObject.Update();
+
             if (original.Message == null) {
                 EditorGUILayout.HelpBox("Message not assigned.", MessageType.Error);
-                EditorGUILayout.ObjectField("Message", original.Message, typeof(Message), false);
+                EditorGUILayout.PropertyField(serializedObject.FindProperty("Message"), true);
             }
             else {
                 EditorGUILayout.ObjectField("Message", original.Message, typeof(Message), false);
@@ -46,8 +48,7 @@ namespace Gs2.Unity.UiKit.Gs2Chat.Editor
                 EditorGUI.indentLevel--;
                 EditorGUI.EndDisabledGroup();
             }
-            
-            serializedObject.Update();
+
             serializedObject.ApplyModifiedProperties();
         }
     }

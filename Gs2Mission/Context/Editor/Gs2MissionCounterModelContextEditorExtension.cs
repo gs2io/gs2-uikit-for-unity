@@ -32,13 +32,15 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Editor
 
             if (original == null) return;
 
+            serializedObject.Update();
+
             if (original.CounterModel == null) {
                 if (original.transform.parent.GetComponent<Gs2MissionCounterModelList>() != null) {
                     EditorGUILayout.HelpBox("CounterModel is auto assign from Gs2MissionCounterModelList.", MessageType.Info);
                 }
                 else {
                     EditorGUILayout.HelpBox("CounterModel not assigned.", MessageType.Error);
-                    EditorGUILayout.ObjectField("CounterModel", original.CounterModel, typeof(CounterModel), false);
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("CounterModel"), true);
                 }
             }
             else {
@@ -50,8 +52,7 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Editor
                 EditorGUI.indentLevel--;
                 EditorGUI.EndDisabledGroup();
             }
-            
-            serializedObject.Update();
+
             serializedObject.ApplyModifiedProperties();
         }
     }

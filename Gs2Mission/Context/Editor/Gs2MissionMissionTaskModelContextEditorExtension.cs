@@ -32,13 +32,15 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Editor
 
             if (original == null) return;
 
+            serializedObject.Update();
+
             if (original.MissionTaskModel == null) {
                 if (original.transform.parent.GetComponent<Gs2MissionMissionTaskModelList>() != null) {
                     EditorGUILayout.HelpBox("MissionTaskModel is auto assign from Gs2MissionMissionTaskModelList.", MessageType.Info);
                 }
                 else {
                     EditorGUILayout.HelpBox("MissionTaskModel not assigned.", MessageType.Error);
-                    EditorGUILayout.ObjectField("MissionTaskModel", original.MissionTaskModel, typeof(MissionTaskModel), false);
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("MissionTaskModel"), true);
                 }
             }
             else {
@@ -49,8 +51,7 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Editor
                 EditorGUI.indentLevel--;
                 EditorGUI.EndDisabledGroup();
             }
-            
-            serializedObject.Update();
+
             serializedObject.ApplyModifiedProperties();
         }
     }

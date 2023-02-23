@@ -32,13 +32,15 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Editor
 
             if (original == null) return;
 
+            serializedObject.Update();
+
             if (original.Mold == null) {
                 if (original.transform.parent.GetComponent<Gs2FormationOwnMoldList>() != null) {
                     EditorGUILayout.HelpBox("OwnMold is auto assign from Gs2FormationOwnMoldList.", MessageType.Info);
                 }
                 else {
                     EditorGUILayout.HelpBox("OwnMold not assigned.", MessageType.Error);
-                    EditorGUILayout.ObjectField("OwnMold", original.Mold, typeof(OwnMold), false);
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("Mold"), true);
                 }
             }
             else {
@@ -50,8 +52,7 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Editor
                 EditorGUI.indentLevel--;
                 EditorGUI.EndDisabledGroup();
             }
-            
-            serializedObject.Update();
+
             serializedObject.ApplyModifiedProperties();
         }
     }

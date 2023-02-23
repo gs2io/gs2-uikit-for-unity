@@ -18,6 +18,7 @@
 
 using Gs2.Unity.Gs2Datastore.ScriptableObject;
 using Gs2.Unity.UiKit.Gs2Datastore.Context;
+using Gs2.Unity.UiKit.Gs2Datastore.Fetcher;
 using UnityEditor;
 using UnityEngine;
 
@@ -31,23 +32,24 @@ namespace Gs2.Unity.UiKit.Gs2Datastore.Editor
 
             if (original == null) return;
 
-            var context = original.GetComponentInParent<Gs2DatastoreOwnDataObjectContext>();
-            if (context == null) {
-                EditorGUILayout.HelpBox("Gs2DatastoreOwnDataObjectContext not found.", MessageType.Error);
-                if (GUILayout.Button("Add Context")) {
-                    original.gameObject.AddComponent<Gs2DatastoreOwnDataObjectContext>();
+            var fetcher = original.GetComponentInParent<Gs2DatastoreOwnDataObjectFetcher>();
+            if (fetcher == null) {
+                EditorGUILayout.HelpBox("Gs2DatastoreOwnDataObjectFetcher not found.", MessageType.Error);
+                if (GUILayout.Button("Add Fetcher")) {
+                    original.gameObject.AddComponent<Gs2DatastoreOwnDataObjectFetcher>();
                 }
             }
             else {
-                if (context.transform.parent.GetComponent<Gs2DatastoreOwnDataObjectList>() != null) {
+                if (fetcher.transform.parent.GetComponent<Gs2DatastoreOwnDataObjectList>() != null) {
                     EditorGUI.BeginDisabledGroup(true);
-                    EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2DatastoreOwnDataObjectContext), false);
+                    EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2DatastoreOwnDataObjectFetcher), false);
                     EditorGUI.EndDisabledGroup();
                     EditorGUILayout.HelpBox("DataObject is auto assign from Gs2DatastoreOwnDataObjectList.", MessageType.Info);
                 }
                 else {
+                    var context = original.GetComponentInParent<Gs2DatastoreOwnDataObjectContext>();
                     EditorGUI.BeginDisabledGroup(true);
-                    EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2DatastoreOwnDataObjectContext), false);
+                    EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2DatastoreOwnDataObjectFetcher), false);
                     EditorGUI.indentLevel++;
                     EditorGUILayout.ObjectField("DataObject", context.DataObject, typeof(OwnDataObject), false);
                     EditorGUI.indentLevel++;

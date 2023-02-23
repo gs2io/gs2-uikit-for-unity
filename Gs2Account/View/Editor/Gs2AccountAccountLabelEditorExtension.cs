@@ -18,6 +18,7 @@
 
 using Gs2.Unity.Gs2Account.ScriptableObject;
 using Gs2.Unity.UiKit.Gs2Account.Context;
+using Gs2.Unity.UiKit.Gs2Account.Fetcher;
 using UnityEditor;
 using UnityEngine;
 
@@ -31,16 +32,17 @@ namespace Gs2.Unity.UiKit.Gs2Account.Editor
 
             if (original == null) return;
 
-            var context = original.GetComponentInParent<Gs2AccountOwnAccountContext>();
-            if (context == null) {
-                EditorGUILayout.HelpBox("Gs2AccountOwnAccountContext not found.", MessageType.Error);
-                if (GUILayout.Button("Add Context")) {
-                    original.gameObject.AddComponent<Gs2AccountOwnAccountContext>();
+            var fetcher = original.GetComponentInParent<Gs2AccountOwnAccountFetcher>();
+            if (fetcher == null) {
+                EditorGUILayout.HelpBox("Gs2AccountOwnAccountFetcher not found.", MessageType.Error);
+                if (GUILayout.Button("Add Fetcher")) {
+                    original.gameObject.AddComponent<Gs2AccountOwnAccountFetcher>();
                 }
             }
             else {
+                var context = original.GetComponentInParent<Gs2AccountOwnAccountContext>();
                 EditorGUI.BeginDisabledGroup(true);
-                EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2AccountOwnAccountContext), false);
+                EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2AccountOwnAccountFetcher), false);
                 EditorGUI.indentLevel++;
                 EditorGUILayout.ObjectField("Account", context.Account, typeof(OwnAccount), false);
                 EditorGUI.indentLevel++;

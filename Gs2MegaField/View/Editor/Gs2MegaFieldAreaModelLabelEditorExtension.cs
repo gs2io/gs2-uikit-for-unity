@@ -18,6 +18,7 @@
 
 using Gs2.Unity.Gs2MegaField.ScriptableObject;
 using Gs2.Unity.UiKit.Gs2MegaField.Context;
+using Gs2.Unity.UiKit.Gs2MegaField.Fetcher;
 using UnityEditor;
 using UnityEngine;
 
@@ -31,23 +32,24 @@ namespace Gs2.Unity.UiKit.Gs2MegaField.Editor
 
             if (original == null) return;
 
-            var context = original.GetComponentInParent<Gs2MegaFieldAreaModelContext>();
-            if (context == null) {
-                EditorGUILayout.HelpBox("Gs2MegaFieldAreaModelContext not found.", MessageType.Error);
-                if (GUILayout.Button("Add Context")) {
-                    original.gameObject.AddComponent<Gs2MegaFieldAreaModelContext>();
+            var fetcher = original.GetComponentInParent<Gs2MegaFieldAreaModelFetcher>();
+            if (fetcher == null) {
+                EditorGUILayout.HelpBox("Gs2MegaFieldAreaModelFetcher not found.", MessageType.Error);
+                if (GUILayout.Button("Add Fetcher")) {
+                    original.gameObject.AddComponent<Gs2MegaFieldAreaModelFetcher>();
                 }
             }
             else {
-                if (context.transform.parent.GetComponent<Gs2MegaFieldAreaModelList>() != null) {
+                if (fetcher.transform.parent.GetComponent<Gs2MegaFieldAreaModelList>() != null) {
                     EditorGUI.BeginDisabledGroup(true);
-                    EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2MegaFieldAreaModelContext), false);
+                    EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2MegaFieldAreaModelFetcher), false);
                     EditorGUI.EndDisabledGroup();
                     EditorGUILayout.HelpBox("AreaModel is auto assign from Gs2MegaFieldAreaModelList.", MessageType.Info);
                 }
                 else {
+                    var context = original.GetComponentInParent<Gs2MegaFieldAreaModelContext>();
                     EditorGUI.BeginDisabledGroup(true);
-                    EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2MegaFieldAreaModelContext), false);
+                    EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2MegaFieldAreaModelFetcher), false);
                     EditorGUI.indentLevel++;
                     EditorGUILayout.ObjectField("AreaModel", context.AreaModel, typeof(AreaModel), false);
                     EditorGUI.indentLevel++;

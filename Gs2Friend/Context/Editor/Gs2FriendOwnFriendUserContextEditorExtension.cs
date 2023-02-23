@@ -32,9 +32,11 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Editor
 
             if (original == null) return;
 
+            serializedObject.Update();
+
             if (original.FriendUser == null) {
                 EditorGUILayout.HelpBox("OwnFriendUser not assigned.", MessageType.Error);
-                EditorGUILayout.ObjectField("OwnFriendUser", original.FriendUser, typeof(OwnFriendUser), false);
+                EditorGUILayout.PropertyField(serializedObject.FindProperty("FriendUser"), true);
             }
             else {
                 EditorGUILayout.ObjectField("OwnFriendUser", original.FriendUser, typeof(OwnFriendUser), false);
@@ -43,8 +45,7 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Editor
                 EditorGUI.indentLevel--;
                 EditorGUI.EndDisabledGroup();
             }
-            
-            serializedObject.Update();
+
             serializedObject.ApplyModifiedProperties();
         }
     }

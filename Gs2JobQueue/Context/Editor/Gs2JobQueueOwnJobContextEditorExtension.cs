@@ -32,9 +32,11 @@ namespace Gs2.Unity.UiKit.Gs2JobQueue.Editor
 
             if (original == null) return;
 
+            serializedObject.Update();
+
             if (original.Job == null) {
                 EditorGUILayout.HelpBox("OwnJob not assigned.", MessageType.Error);
-                EditorGUILayout.ObjectField("OwnJob", original.Job, typeof(OwnJob), false);
+                EditorGUILayout.PropertyField(serializedObject.FindProperty("Job"), true);
             }
             else {
                 EditorGUILayout.ObjectField("OwnJob", original.Job, typeof(OwnJob), false);
@@ -45,8 +47,7 @@ namespace Gs2.Unity.UiKit.Gs2JobQueue.Editor
                 EditorGUI.indentLevel--;
                 EditorGUI.EndDisabledGroup();
             }
-            
-            serializedObject.Update();
+
             serializedObject.ApplyModifiedProperties();
         }
     }

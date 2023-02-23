@@ -32,9 +32,11 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking.Editor
 
             if (original == null) return;
 
+            serializedObject.Update();
+
             if (original.Vote == null) {
                 EditorGUILayout.HelpBox("Vote not assigned.", MessageType.Error);
-                EditorGUILayout.ObjectField("Vote", original.Vote, typeof(Vote), false);
+                EditorGUILayout.PropertyField(serializedObject.FindProperty("Vote"), true);
             }
             else {
                 EditorGUILayout.ObjectField("Vote", original.Vote, typeof(Vote), false);
@@ -46,8 +48,7 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking.Editor
                 EditorGUI.indentLevel--;
                 EditorGUI.EndDisabledGroup();
             }
-            
-            serializedObject.Update();
+
             serializedObject.ApplyModifiedProperties();
         }
     }

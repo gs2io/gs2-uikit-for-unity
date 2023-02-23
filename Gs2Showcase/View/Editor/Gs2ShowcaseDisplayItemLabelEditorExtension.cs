@@ -18,6 +18,7 @@
 
 using Gs2.Unity.Gs2Showcase.ScriptableObject;
 using Gs2.Unity.UiKit.Gs2Showcase.Context;
+using Gs2.Unity.UiKit.Gs2Showcase.Fetcher;
 using UnityEditor;
 using UnityEngine;
 
@@ -31,16 +32,17 @@ namespace Gs2.Unity.UiKit.Gs2Showcase.Editor
 
             if (original == null) return;
 
-            var context = original.GetComponentInParent<Gs2ShowcaseDisplayItemContext>();
-            if (context == null) {
-                EditorGUILayout.HelpBox("Gs2ShowcaseDisplayItemContext not found.", MessageType.Error);
-                if (GUILayout.Button("Add Context")) {
-                    original.gameObject.AddComponent<Gs2ShowcaseDisplayItemContext>();
+            var fetcher = original.GetComponentInParent<Gs2ShowcaseDisplayItemFetcher>();
+            if (fetcher == null) {
+                EditorGUILayout.HelpBox("Gs2ShowcaseDisplayItemFetcher not found.", MessageType.Error);
+                if (GUILayout.Button("Add Fetcher")) {
+                    original.gameObject.AddComponent<Gs2ShowcaseDisplayItemFetcher>();
                 }
             }
             else {
+                var context = original.GetComponentInParent<Gs2ShowcaseDisplayItemContext>();
                 EditorGUI.BeginDisabledGroup(true);
-                EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2ShowcaseDisplayItemContext), false);
+                EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2ShowcaseDisplayItemFetcher), false);
                 EditorGUI.indentLevel++;
                 EditorGUILayout.ObjectField("DisplayItem", context.DisplayItem, typeof(DisplayItem), false);
                 EditorGUI.indentLevel++;

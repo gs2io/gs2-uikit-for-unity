@@ -18,6 +18,7 @@
 
 using Gs2.Unity.Gs2Showcase.ScriptableObject;
 using Gs2.Unity.UiKit.Gs2Showcase.Context;
+using Gs2.Unity.UiKit.Gs2Showcase.Fetcher;
 using UnityEditor;
 using UnityEngine;
 
@@ -31,16 +32,17 @@ namespace Gs2.Unity.UiKit.Gs2Showcase.Editor
 
             if (original == null) return;
 
-            var context = original.GetComponentInParent<Gs2ShowcaseShowcaseContext>();
-            if (context == null) {
-                EditorGUILayout.HelpBox("Gs2ShowcaseShowcaseContext not found.", MessageType.Error);
-                if (GUILayout.Button("Add Context")) {
-                    original.gameObject.AddComponent<Gs2ShowcaseShowcaseContext>();
+            var fetcher = original.GetComponentInParent<Gs2ShowcaseShowcaseFetcher>();
+            if (fetcher == null) {
+                EditorGUILayout.HelpBox("Gs2ShowcaseShowcaseFetcher not found.", MessageType.Error);
+                if (GUILayout.Button("Add Fetcher")) {
+                    original.gameObject.AddComponent<Gs2ShowcaseShowcaseFetcher>();
                 }
             }
             else {
+                var context = original.GetComponentInParent<Gs2ShowcaseShowcaseContext>();
                 EditorGUI.BeginDisabledGroup(true);
-                EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2ShowcaseShowcaseContext), false);
+                EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2ShowcaseShowcaseFetcher), false);
                 EditorGUI.indentLevel++;
                 EditorGUILayout.ObjectField("Showcase", context.Showcase, typeof(Showcase), false);
                 EditorGUI.indentLevel++;

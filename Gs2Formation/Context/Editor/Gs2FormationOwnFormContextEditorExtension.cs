@@ -32,13 +32,15 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Editor
 
             if (original == null) return;
 
+            serializedObject.Update();
+
             if (original.Form == null) {
                 if (original.transform.parent.GetComponent<Gs2FormationOwnFormList>() != null) {
                     EditorGUILayout.HelpBox("OwnForm is auto assign from Gs2FormationOwnFormList.", MessageType.Info);
                 }
                 else {
                     EditorGUILayout.HelpBox("OwnForm not assigned.", MessageType.Error);
-                    EditorGUILayout.ObjectField("OwnForm", original.Form, typeof(OwnForm), false);
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("Form"), true);
                 }
             }
             else {
@@ -51,8 +53,7 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Editor
                 EditorGUI.indentLevel--;
                 EditorGUI.EndDisabledGroup();
             }
-            
-            serializedObject.Update();
+
             serializedObject.ApplyModifiedProperties();
         }
     }

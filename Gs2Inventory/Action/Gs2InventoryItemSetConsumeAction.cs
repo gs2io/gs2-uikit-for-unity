@@ -26,6 +26,7 @@ using System.Linq;
 using Gs2.Core.Exception;
 using Gs2.Unity.Gs2Inventory.Model;
 using Gs2.Unity.Util;
+using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Inventory.Context;
 using UnityEngine;
 using UnityEngine.Events;
@@ -127,6 +128,11 @@ namespace Gs2.Unity.UiKit.Gs2Inventory
             this._clientHolder = Gs2ClientHolder.Instance;
             this._gameSessionHolder = Gs2GameSessionHolder.Instance;
             this._context = GetComponentInParent<Gs2InventoryOwnItemSetContext>();
+
+            if (_context == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2InventoryOwnItemSetContext.");
+                enabled = false;
+            }
         }
     }
 
@@ -148,6 +154,17 @@ namespace Gs2.Unity.UiKit.Gs2Inventory
 
         public void SetConsumeCount(long value) {
             ConsumeCount = value;
+            this.onChangeConsumeCount.Invoke(ConsumeCount);
+        }
+
+        public void DecreaseConsumeCount() {
+            ConsumeCount -= 1;
+            this.onChangeConsumeCount.Invoke(ConsumeCount);
+        }
+
+        public void IncreaseConsumeCount() {
+            ConsumeCount += 1;
+            this.onChangeConsumeCount.Invoke(ConsumeCount);
         }
     }
 
@@ -156,6 +173,21 @@ namespace Gs2.Unity.UiKit.Gs2Inventory
     /// </summary>
     public partial class Gs2InventoryItemSetConsumeAction
     {
+
+        [Serializable]
+        private class ChangeConsumeCountEvent : UnityEvent<long>
+        {
+
+        }
+
+        [SerializeField]
+        private ChangeConsumeCountEvent onChangeConsumeCount = new ChangeConsumeCountEvent();
+        public event UnityAction<long> OnChangeConsumeCount
+        {
+            add => this.onChangeConsumeCount.AddListener(value);
+            remove => this.onChangeConsumeCount.RemoveListener(value);
+        }
+
         [Serializable]
         private class ConsumeCompleteEvent : UnityEvent<List<EzItemSet>>
         {

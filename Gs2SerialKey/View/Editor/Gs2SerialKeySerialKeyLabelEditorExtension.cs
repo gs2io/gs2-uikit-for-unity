@@ -18,6 +18,7 @@
 
 using Gs2.Unity.Gs2SerialKey.ScriptableObject;
 using Gs2.Unity.UiKit.Gs2SerialKey.Context;
+using Gs2.Unity.UiKit.Gs2SerialKey.Fetcher;
 using UnityEditor;
 using UnityEngine;
 
@@ -31,16 +32,17 @@ namespace Gs2.Unity.UiKit.Gs2SerialKey.Editor
 
             if (original == null) return;
 
-            var context = original.GetComponentInParent<Gs2SerialKeySerialKeyContext>();
-            if (context == null) {
-                EditorGUILayout.HelpBox("Gs2SerialKeySerialKeyContext not found.", MessageType.Error);
-                if (GUILayout.Button("Add Context")) {
-                    original.gameObject.AddComponent<Gs2SerialKeySerialKeyContext>();
+            var fetcher = original.GetComponentInParent<Gs2SerialKeySerialKeyFetcher>();
+            if (fetcher == null) {
+                EditorGUILayout.HelpBox("Gs2SerialKeySerialKeyFetcher not found.", MessageType.Error);
+                if (GUILayout.Button("Add Fetcher")) {
+                    original.gameObject.AddComponent<Gs2SerialKeySerialKeyFetcher>();
                 }
             }
             else {
+                var context = original.GetComponentInParent<Gs2SerialKeySerialKeyContext>();
                 EditorGUI.BeginDisabledGroup(true);
-                EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2SerialKeySerialKeyContext), false);
+                EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2SerialKeySerialKeyFetcher), false);
                 EditorGUI.indentLevel++;
                 EditorGUILayout.ObjectField("SerialKey", context.SerialKey, typeof(SerialKey), false);
                 EditorGUI.indentLevel++;

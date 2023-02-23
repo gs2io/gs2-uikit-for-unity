@@ -32,13 +32,15 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Editor
 
             if (original == null) return;
 
+            serializedObject.Update();
+
             if (original.BlackList == null) {
                 if (original.transform.parent.GetComponent<Gs2FriendOwnBlackListList>() != null) {
                     EditorGUILayout.HelpBox("OwnBlackList is auto assign from Gs2FriendOwnBlackListList.", MessageType.Info);
                 }
                 else {
                     EditorGUILayout.HelpBox("OwnBlackList not assigned.", MessageType.Error);
-                    EditorGUILayout.ObjectField("OwnBlackList", original.BlackList, typeof(OwnBlackList), false);
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("BlackList"), true);
                 }
             }
             else {
@@ -49,8 +51,7 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Editor
                 EditorGUI.indentLevel--;
                 EditorGUI.EndDisabledGroup();
             }
-            
-            serializedObject.Update();
+
             serializedObject.ApplyModifiedProperties();
         }
     }

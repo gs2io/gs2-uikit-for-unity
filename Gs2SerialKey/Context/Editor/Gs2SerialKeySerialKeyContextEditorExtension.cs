@@ -32,9 +32,11 @@ namespace Gs2.Unity.UiKit.Gs2SerialKey.Editor
 
             if (original == null) return;
 
+            serializedObject.Update();
+
             if (original.SerialKey == null) {
                 EditorGUILayout.HelpBox("SerialKey not assigned.", MessageType.Error);
-                EditorGUILayout.ObjectField("SerialKey", original.SerialKey, typeof(SerialKey), false);
+                EditorGUILayout.PropertyField(serializedObject.FindProperty("SerialKey"), true);
             }
             else {
                 EditorGUILayout.ObjectField("SerialKey", original.SerialKey, typeof(SerialKey), false);
@@ -45,8 +47,7 @@ namespace Gs2.Unity.UiKit.Gs2SerialKey.Editor
                 EditorGUI.indentLevel--;
                 EditorGUI.EndDisabledGroup();
             }
-            
-            serializedObject.Update();
+
             serializedObject.ApplyModifiedProperties();
         }
     }

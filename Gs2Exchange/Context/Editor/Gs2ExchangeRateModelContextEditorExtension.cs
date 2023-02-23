@@ -32,13 +32,15 @@ namespace Gs2.Unity.UiKit.Gs2Exchange.Editor
 
             if (original == null) return;
 
+            serializedObject.Update();
+
             if (original.RateModel == null) {
                 if (original.transform.parent.GetComponent<Gs2ExchangeRateModelList>() != null) {
                     EditorGUILayout.HelpBox("RateModel is auto assign from Gs2ExchangeRateModelList.", MessageType.Info);
                 }
                 else {
                     EditorGUILayout.HelpBox("RateModel not assigned.", MessageType.Error);
-                    EditorGUILayout.ObjectField("RateModel", original.RateModel, typeof(RateModel), false);
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("RateModel"), true);
                 }
             }
             else {
@@ -50,8 +52,7 @@ namespace Gs2.Unity.UiKit.Gs2Exchange.Editor
                 EditorGUI.indentLevel--;
                 EditorGUI.EndDisabledGroup();
             }
-            
-            serializedObject.Update();
+
             serializedObject.ApplyModifiedProperties();
         }
     }

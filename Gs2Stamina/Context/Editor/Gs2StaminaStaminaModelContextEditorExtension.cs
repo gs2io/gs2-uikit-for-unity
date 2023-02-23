@@ -32,13 +32,15 @@ namespace Gs2.Unity.UiKit.Gs2Stamina.Editor
 
             if (original == null) return;
 
+            serializedObject.Update();
+
             if (original.StaminaModel == null) {
                 if (original.transform.parent.GetComponent<Gs2StaminaStaminaModelList>() != null) {
                     EditorGUILayout.HelpBox("StaminaModel is auto assign from Gs2StaminaStaminaModelList.", MessageType.Info);
                 }
                 else {
                     EditorGUILayout.HelpBox("StaminaModel not assigned.", MessageType.Error);
-                    EditorGUILayout.ObjectField("StaminaModel", original.StaminaModel, typeof(StaminaModel), false);
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("StaminaModel"), true);
                 }
             }
             else {
@@ -50,8 +52,7 @@ namespace Gs2.Unity.UiKit.Gs2Stamina.Editor
                 EditorGUI.indentLevel--;
                 EditorGUI.EndDisabledGroup();
             }
-            
-            serializedObject.Update();
+
             serializedObject.ApplyModifiedProperties();
         }
     }

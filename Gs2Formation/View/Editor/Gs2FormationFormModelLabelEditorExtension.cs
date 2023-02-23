@@ -18,6 +18,7 @@
 
 using Gs2.Unity.Gs2Formation.ScriptableObject;
 using Gs2.Unity.UiKit.Gs2Formation.Context;
+using Gs2.Unity.UiKit.Gs2Formation.Fetcher;
 using UnityEditor;
 using UnityEngine;
 
@@ -31,23 +32,30 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Editor
 
             if (original == null) return;
 
-            var context = original.GetComponentInParent<Gs2FormationFormModelContext>();
-            if (context == null) {
-                EditorGUILayout.HelpBox("Gs2FormationFormModelContext not found.", MessageType.Error);
-                if (GUILayout.Button("Add Context")) {
-                    original.gameObject.AddComponent<Gs2FormationFormModelContext>();
+            var fetcher = original.GetComponentInParent<Gs2FormationFormModelFetcher>();
+            if (fetcher == null) {
+                EditorGUILayout.HelpBox("Gs2FormationFormModelFetcher not found.", MessageType.Error);
+                if (GUILayout.Button("Add Fetcher")) {
+                    original.gameObject.AddComponent<Gs2FormationFormModelFetcher>();
                 }
             }
             else {
-                if (context.transform.parent.GetComponent<Gs2FormationFormModelList>() != null) {
+                if (fetcher.transform.parent.GetComponent<Gs2FormationFormModelList>() != null) {
                     EditorGUI.BeginDisabledGroup(true);
-                    EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2FormationFormModelContext), false);
+                    EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2FormationFormModelFetcher), false);
                     EditorGUI.EndDisabledGroup();
                     EditorGUILayout.HelpBox("FormModel is auto assign from Gs2FormationFormModelList.", MessageType.Info);
                 }
-                else {
+                else if (fetcher.transform.parent.GetComponent<Gs2FormationOwnFormList>() != null) {
                     EditorGUI.BeginDisabledGroup(true);
-                    EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2FormationFormModelContext), false);
+                    EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2FormationOwnFormFetcher), false);
+                    EditorGUI.EndDisabledGroup();
+                    EditorGUILayout.HelpBox("FormModel is auto assign from Gs2FormationOwnFormList.", MessageType.Info);
+                }
+                else {
+                    var context = original.GetComponentInParent<Gs2FormationFormModelContext>();
+                    EditorGUI.BeginDisabledGroup(true);
+                    EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2FormationFormModelFetcher), false);
                     EditorGUI.indentLevel++;
                     EditorGUILayout.ObjectField("FormModel", context.FormModel, typeof(FormModel), false);
                     EditorGUI.indentLevel++;

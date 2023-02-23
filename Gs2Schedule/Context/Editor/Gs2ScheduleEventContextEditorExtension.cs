@@ -33,9 +33,11 @@ namespace Gs2.Unity.UiKit.Gs2Schedule.Editor
 
             if (original == null) return;
 
+            serializedObject.Update();
+
             if (original.Event_ == null) {
                 EditorGUILayout.HelpBox("Event not assigned.", MessageType.Error);
-                EditorGUILayout.ObjectField("Event", original.Event_, typeof(Event), false);
+                EditorGUILayout.PropertyField(serializedObject.FindProperty("Event"), true);
             }
             else {
                 EditorGUILayout.ObjectField("Event", original.Event_, typeof(Event), false);
@@ -46,8 +48,7 @@ namespace Gs2.Unity.UiKit.Gs2Schedule.Editor
                 EditorGUI.indentLevel--;
                 EditorGUI.EndDisabledGroup();
             }
-            
-            serializedObject.Update();
+
             serializedObject.ApplyModifiedProperties();
         }
     }

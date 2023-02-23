@@ -18,6 +18,7 @@
 
 using Gs2.Unity.Gs2Friend.ScriptableObject;
 using Gs2.Unity.UiKit.Gs2Friend.Context;
+using Gs2.Unity.UiKit.Gs2Friend.Fetcher;
 using UnityEditor;
 using UnityEngine;
 
@@ -31,23 +32,24 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Editor
 
             if (original == null) return;
 
-            var context = original.GetComponentInParent<Gs2FriendOwnBlackListContext>();
-            if (context == null) {
-                EditorGUILayout.HelpBox("Gs2FriendOwnBlackListContext not found.", MessageType.Error);
-                if (GUILayout.Button("Add Context")) {
-                    original.gameObject.AddComponent<Gs2FriendOwnBlackListContext>();
+            var fetcher = original.GetComponentInParent<Gs2FriendOwnBlackListFetcher>();
+            if (fetcher == null) {
+                EditorGUILayout.HelpBox("Gs2FriendOwnBlackListFetcher not found.", MessageType.Error);
+                if (GUILayout.Button("Add Fetcher")) {
+                    original.gameObject.AddComponent<Gs2FriendOwnBlackListFetcher>();
                 }
             }
             else {
-                if (context.transform.parent.GetComponent<Gs2FriendOwnBlackListList>() != null) {
+                if (fetcher.transform.parent.GetComponent<Gs2FriendOwnBlackListList>() != null) {
                     EditorGUI.BeginDisabledGroup(true);
-                    EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2FriendOwnBlackListContext), false);
+                    EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2FriendOwnBlackListFetcher), false);
                     EditorGUI.EndDisabledGroup();
                     EditorGUILayout.HelpBox("BlackList is auto assign from Gs2FriendOwnBlackListList.", MessageType.Info);
                 }
                 else {
+                    var context = original.GetComponentInParent<Gs2FriendOwnBlackListContext>();
                     EditorGUI.BeginDisabledGroup(true);
-                    EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2FriendOwnBlackListContext), false);
+                    EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2FriendOwnBlackListFetcher), false);
                     EditorGUI.indentLevel++;
                     EditorGUILayout.ObjectField("BlackList", context.BlackList, typeof(OwnBlackList), false);
                     EditorGUI.indentLevel++;

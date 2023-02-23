@@ -32,9 +32,11 @@ namespace Gs2.Unity.UiKit.Gs2Showcase.Editor
 
             if (original == null) return;
 
+            serializedObject.Update();
+
             if (original.DisplayItem == null) {
                 EditorGUILayout.HelpBox("DisplayItem not assigned.", MessageType.Error);
-                EditorGUILayout.ObjectField("DisplayItem", original.DisplayItem, typeof(DisplayItem), false);
+                EditorGUILayout.PropertyField(serializedObject.FindProperty("DisplayItem"), true);
             }
             else {
                 EditorGUILayout.ObjectField("DisplayItem", original.DisplayItem, typeof(DisplayItem), false);
@@ -46,8 +48,7 @@ namespace Gs2.Unity.UiKit.Gs2Showcase.Editor
                 EditorGUI.indentLevel--;
                 EditorGUI.EndDisabledGroup();
             }
-            
-            serializedObject.Update();
+
             serializedObject.ApplyModifiedProperties();
         }
     }

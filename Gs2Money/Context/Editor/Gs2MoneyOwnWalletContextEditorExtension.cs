@@ -32,9 +32,11 @@ namespace Gs2.Unity.UiKit.Gs2Money.Editor
 
             if (original == null) return;
 
+            serializedObject.Update();
+
             if (original.Wallet == null) {
                 EditorGUILayout.HelpBox("OwnWallet not assigned.", MessageType.Error);
-                EditorGUILayout.ObjectField("OwnWallet", original.Wallet, typeof(OwnWallet), false);
+                EditorGUILayout.PropertyField(serializedObject.FindProperty("Wallet"), true);
             }
             else {
                 EditorGUILayout.ObjectField("OwnWallet", original.Wallet, typeof(OwnWallet), false);
@@ -45,8 +47,7 @@ namespace Gs2.Unity.UiKit.Gs2Money.Editor
                 EditorGUI.indentLevel--;
                 EditorGUI.EndDisabledGroup();
             }
-            
-            serializedObject.Update();
+
             serializedObject.ApplyModifiedProperties();
         }
     }

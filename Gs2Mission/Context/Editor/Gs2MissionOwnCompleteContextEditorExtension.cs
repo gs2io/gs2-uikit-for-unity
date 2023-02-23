@@ -32,13 +32,15 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Editor
 
             if (original == null) return;
 
+            serializedObject.Update();
+
             if (original.Complete == null) {
                 if (original.transform.parent.GetComponent<Gs2MissionOwnCompleteList>() != null) {
                     EditorGUILayout.HelpBox("OwnComplete is auto assign from Gs2MissionOwnCompleteList.", MessageType.Info);
                 }
                 else {
                     EditorGUILayout.HelpBox("OwnComplete not assigned.", MessageType.Error);
-                    EditorGUILayout.ObjectField("OwnComplete", original.Complete, typeof(OwnComplete), false);
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("Complete"), true);
                 }
             }
             else {
@@ -50,8 +52,7 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Editor
                 EditorGUI.indentLevel--;
                 EditorGUI.EndDisabledGroup();
             }
-            
-            serializedObject.Update();
+
             serializedObject.ApplyModifiedProperties();
         }
     }

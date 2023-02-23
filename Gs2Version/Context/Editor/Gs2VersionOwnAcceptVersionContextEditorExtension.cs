@@ -32,13 +32,15 @@ namespace Gs2.Unity.UiKit.Gs2Version.Editor
 
             if (original == null) return;
 
+            serializedObject.Update();
+
             if (original.AcceptVersion == null) {
                 if (original.transform.parent.GetComponent<Gs2VersionOwnAcceptVersionList>() != null) {
                     EditorGUILayout.HelpBox("OwnAcceptVersion is auto assign from Gs2VersionOwnAcceptVersionList.", MessageType.Info);
                 }
                 else {
                     EditorGUILayout.HelpBox("OwnAcceptVersion not assigned.", MessageType.Error);
-                    EditorGUILayout.ObjectField("OwnAcceptVersion", original.AcceptVersion, typeof(OwnAcceptVersion), false);
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("AcceptVersion"), true);
                 }
             }
             else {
@@ -50,8 +52,7 @@ namespace Gs2.Unity.UiKit.Gs2Version.Editor
                 EditorGUI.indentLevel--;
                 EditorGUI.EndDisabledGroup();
             }
-            
-            serializedObject.Update();
+
             serializedObject.ApplyModifiedProperties();
         }
     }

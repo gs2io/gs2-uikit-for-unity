@@ -32,13 +32,15 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Editor
 
             if (original == null) return;
 
+            serializedObject.Update();
+
             if (original.Ranking == null) {
                 if (original.transform.parent.GetComponent<Gs2RankingRankingList>() != null) {
                     EditorGUILayout.HelpBox("Ranking is auto assign from Gs2RankingRankingList.", MessageType.Info);
                 }
                 else {
                     EditorGUILayout.HelpBox("Ranking not assigned.", MessageType.Error);
-                    EditorGUILayout.ObjectField("Ranking", original.Ranking, typeof(Ranking), false);
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("Ranking"), true);
                 }
             }
             else {
@@ -49,8 +51,7 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Editor
                 EditorGUI.indentLevel--;
                 EditorGUI.EndDisabledGroup();
             }
-            
-            serializedObject.Update();
+
             serializedObject.ApplyModifiedProperties();
         }
     }

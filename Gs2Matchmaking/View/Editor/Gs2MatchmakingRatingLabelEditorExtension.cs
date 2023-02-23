@@ -18,6 +18,7 @@
 
 using Gs2.Unity.Gs2Matchmaking.ScriptableObject;
 using Gs2.Unity.UiKit.Gs2Matchmaking.Context;
+using Gs2.Unity.UiKit.Gs2Matchmaking.Fetcher;
 using UnityEditor;
 using UnityEngine;
 
@@ -31,23 +32,24 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking.Editor
 
             if (original == null) return;
 
-            var context = original.GetComponentInParent<Gs2MatchmakingOwnRatingContext>();
-            if (context == null) {
-                EditorGUILayout.HelpBox("Gs2MatchmakingOwnRatingContext not found.", MessageType.Error);
-                if (GUILayout.Button("Add Context")) {
-                    original.gameObject.AddComponent<Gs2MatchmakingOwnRatingContext>();
+            var fetcher = original.GetComponentInParent<Gs2MatchmakingOwnRatingFetcher>();
+            if (fetcher == null) {
+                EditorGUILayout.HelpBox("Gs2MatchmakingOwnRatingFetcher not found.", MessageType.Error);
+                if (GUILayout.Button("Add Fetcher")) {
+                    original.gameObject.AddComponent<Gs2MatchmakingOwnRatingFetcher>();
                 }
             }
             else {
-                if (context.transform.parent.GetComponent<Gs2MatchmakingOwnRatingList>() != null) {
+                if (fetcher.transform.parent.GetComponent<Gs2MatchmakingOwnRatingList>() != null) {
                     EditorGUI.BeginDisabledGroup(true);
-                    EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2MatchmakingOwnRatingContext), false);
+                    EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2MatchmakingOwnRatingFetcher), false);
                     EditorGUI.EndDisabledGroup();
                     EditorGUILayout.HelpBox("Rating is auto assign from Gs2MatchmakingOwnRatingList.", MessageType.Info);
                 }
                 else {
+                    var context = original.GetComponentInParent<Gs2MatchmakingOwnRatingContext>();
                     EditorGUI.BeginDisabledGroup(true);
-                    EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2MatchmakingOwnRatingContext), false);
+                    EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2MatchmakingOwnRatingFetcher), false);
                     EditorGUI.indentLevel++;
                     EditorGUILayout.ObjectField("Rating", context.Rating, typeof(OwnRating), false);
                     EditorGUI.indentLevel++;

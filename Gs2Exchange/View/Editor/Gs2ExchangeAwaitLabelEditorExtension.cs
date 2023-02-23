@@ -18,6 +18,7 @@
 
 using Gs2.Unity.Gs2Exchange.ScriptableObject;
 using Gs2.Unity.UiKit.Gs2Exchange.Context;
+using Gs2.Unity.UiKit.Gs2Exchange.Fetcher;
 using UnityEditor;
 using UnityEngine;
 
@@ -31,23 +32,24 @@ namespace Gs2.Unity.UiKit.Gs2Exchange.Editor
 
             if (original == null) return;
 
-            var context = original.GetComponentInParent<Gs2ExchangeOwnAwaitContext>();
-            if (context == null) {
-                EditorGUILayout.HelpBox("Gs2ExchangeOwnAwaitContext not found.", MessageType.Error);
-                if (GUILayout.Button("Add Context")) {
-                    original.gameObject.AddComponent<Gs2ExchangeOwnAwaitContext>();
+            var fetcher = original.GetComponentInParent<Gs2ExchangeOwnAwaitFetcher>();
+            if (fetcher == null) {
+                EditorGUILayout.HelpBox("Gs2ExchangeOwnAwaitFetcher not found.", MessageType.Error);
+                if (GUILayout.Button("Add Fetcher")) {
+                    original.gameObject.AddComponent<Gs2ExchangeOwnAwaitFetcher>();
                 }
             }
             else {
-                if (context.transform.parent.GetComponent<Gs2ExchangeOwnAwaitList>() != null) {
+                if (fetcher.transform.parent.GetComponent<Gs2ExchangeOwnAwaitList>() != null) {
                     EditorGUI.BeginDisabledGroup(true);
-                    EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2ExchangeOwnAwaitContext), false);
+                    EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2ExchangeOwnAwaitFetcher), false);
                     EditorGUI.EndDisabledGroup();
                     EditorGUILayout.HelpBox("Await is auto assign from Gs2ExchangeOwnAwaitList.", MessageType.Info);
                 }
                 else {
+                    var context = original.GetComponentInParent<Gs2ExchangeOwnAwaitContext>();
                     EditorGUI.BeginDisabledGroup(true);
-                    EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2ExchangeOwnAwaitContext), false);
+                    EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2ExchangeOwnAwaitFetcher), false);
                     EditorGUI.indentLevel++;
                     EditorGUILayout.ObjectField("Await", context.Await_, typeof(OwnAwait), false);
                     EditorGUI.indentLevel++;

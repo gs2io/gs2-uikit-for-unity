@@ -66,6 +66,8 @@ namespace Gs2.Unity.UiKit.Gs2Experience.Fetcher
                         if (future.Error is BadRequestException || future.Error is NotFoundException)
                         {
                             onError.Invoke(e = future.Error, null);
+                            Debug.LogError($"{gameObject.GetFullPath()}: {future.Error.Message}");
+                            break;
                         }
                         else {
                             onError.Invoke(new CanIgnoreException(future.Error), null);

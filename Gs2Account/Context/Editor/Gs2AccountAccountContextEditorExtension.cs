@@ -32,9 +32,11 @@ namespace Gs2.Unity.UiKit.Gs2Account.Editor
 
             if (original == null) return;
 
+            serializedObject.Update();
+
             if (original.Account == null) {
                 EditorGUILayout.HelpBox("Account not assigned.", MessageType.Error);
-                EditorGUILayout.ObjectField("Account", original.Account, typeof(Account), false);
+                EditorGUILayout.PropertyField(serializedObject.FindProperty("Account"), true);
             }
             else {
                 EditorGUILayout.ObjectField("Account", original.Account, typeof(Account), false);
@@ -45,8 +47,7 @@ namespace Gs2.Unity.UiKit.Gs2Account.Editor
                 EditorGUI.indentLevel--;
                 EditorGUI.EndDisabledGroup();
             }
-            
-            serializedObject.Update();
+
             serializedObject.ApplyModifiedProperties();
         }
     }

@@ -32,9 +32,11 @@ namespace Gs2.Unity.UiKit.Gs2Account.Editor
 
             if (original == null) return;
 
+            serializedObject.Update();
+
             if (original.TakeOver == null) {
                 EditorGUILayout.HelpBox("TakeOver not assigned.", MessageType.Error);
-                EditorGUILayout.ObjectField("TakeOver", original.TakeOver, typeof(TakeOver), false);
+                EditorGUILayout.PropertyField(serializedObject.FindProperty("TakeOver"), true);
             }
             else {
                 EditorGUILayout.ObjectField("TakeOver", original.TakeOver, typeof(TakeOver), false);
@@ -46,8 +48,7 @@ namespace Gs2.Unity.UiKit.Gs2Account.Editor
                 EditorGUI.indentLevel--;
                 EditorGUI.EndDisabledGroup();
             }
-            
-            serializedObject.Update();
+
             serializedObject.ApplyModifiedProperties();
         }
     }

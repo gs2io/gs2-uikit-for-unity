@@ -32,13 +32,15 @@ namespace Gs2.Unity.UiKit.Gs2Chat.Editor
 
             if (original == null) return;
 
+            serializedObject.Update();
+
             if (original.Subscribe == null) {
                 if (original.transform.parent.GetComponent<Gs2ChatOwnSubscribeList>() != null) {
                     EditorGUILayout.HelpBox("OwnSubscribe is auto assign from Gs2ChatOwnSubscribeList.", MessageType.Info);
                 }
                 else {
                     EditorGUILayout.HelpBox("OwnSubscribe not assigned.", MessageType.Error);
-                    EditorGUILayout.ObjectField("OwnSubscribe", original.Subscribe, typeof(OwnSubscribe), false);
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("Subscribe"), true);
                 }
             }
             else {
@@ -50,8 +52,7 @@ namespace Gs2.Unity.UiKit.Gs2Chat.Editor
                 EditorGUI.indentLevel--;
                 EditorGUI.EndDisabledGroup();
             }
-            
-            serializedObject.Update();
+
             serializedObject.ApplyModifiedProperties();
         }
     }

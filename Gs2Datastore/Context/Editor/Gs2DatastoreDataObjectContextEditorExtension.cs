@@ -32,9 +32,11 @@ namespace Gs2.Unity.UiKit.Gs2Datastore.Editor
 
             if (original == null) return;
 
+            serializedObject.Update();
+
             if (original.DataObject == null) {
                 EditorGUILayout.HelpBox("DataObject not assigned.", MessageType.Error);
-                EditorGUILayout.ObjectField("DataObject", original.DataObject, typeof(DataObject), false);
+                EditorGUILayout.PropertyField(serializedObject.FindProperty("DataObject"), true);
             }
             else {
                 EditorGUILayout.ObjectField("DataObject", original.DataObject, typeof(DataObject), false);
@@ -46,8 +48,7 @@ namespace Gs2.Unity.UiKit.Gs2Datastore.Editor
                 EditorGUI.indentLevel--;
                 EditorGUI.EndDisabledGroup();
             }
-            
-            serializedObject.Update();
+
             serializedObject.ApplyModifiedProperties();
         }
     }

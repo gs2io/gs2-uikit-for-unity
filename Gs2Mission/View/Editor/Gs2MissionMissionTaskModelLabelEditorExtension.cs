@@ -18,6 +18,7 @@
 
 using Gs2.Unity.Gs2Mission.ScriptableObject;
 using Gs2.Unity.UiKit.Gs2Mission.Context;
+using Gs2.Unity.UiKit.Gs2Mission.Fetcher;
 using UnityEditor;
 using UnityEngine;
 
@@ -31,23 +32,24 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Editor
 
             if (original == null) return;
 
-            var context = original.GetComponentInParent<Gs2MissionMissionTaskModelContext>();
-            if (context == null) {
-                EditorGUILayout.HelpBox("Gs2MissionMissionTaskModelContext not found.", MessageType.Error);
-                if (GUILayout.Button("Add Context")) {
-                    original.gameObject.AddComponent<Gs2MissionMissionTaskModelContext>();
+            var fetcher = original.GetComponentInParent<Gs2MissionMissionTaskModelFetcher>();
+            if (fetcher == null) {
+                EditorGUILayout.HelpBox("Gs2MissionMissionTaskModelFetcher not found.", MessageType.Error);
+                if (GUILayout.Button("Add Fetcher")) {
+                    original.gameObject.AddComponent<Gs2MissionMissionTaskModelFetcher>();
                 }
             }
             else {
-                if (context.transform.parent.GetComponent<Gs2MissionMissionTaskModelList>() != null) {
+                if (fetcher.transform.parent.GetComponent<Gs2MissionMissionTaskModelList>() != null) {
                     EditorGUI.BeginDisabledGroup(true);
-                    EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2MissionMissionTaskModelContext), false);
+                    EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2MissionMissionTaskModelFetcher), false);
                     EditorGUI.EndDisabledGroup();
                     EditorGUILayout.HelpBox("MissionTaskModel is auto assign from Gs2MissionMissionTaskModelList.", MessageType.Info);
                 }
                 else {
+                    var context = original.GetComponentInParent<Gs2MissionMissionTaskModelContext>();
                     EditorGUI.BeginDisabledGroup(true);
-                    EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2MissionMissionTaskModelContext), false);
+                    EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2MissionMissionTaskModelFetcher), false);
                     EditorGUI.indentLevel++;
                     EditorGUILayout.ObjectField("MissionTaskModel", context.MissionTaskModel, typeof(MissionTaskModel), false);
                     EditorGUI.indentLevel++;

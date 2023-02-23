@@ -18,6 +18,7 @@
 
 using Gs2.Unity.Gs2Experience.ScriptableObject;
 using Gs2.Unity.UiKit.Gs2Experience.Context;
+using Gs2.Unity.UiKit.Gs2Experience.Fetcher;
 using UnityEditor;
 using UnityEngine;
 
@@ -31,23 +32,24 @@ namespace Gs2.Unity.UiKit.Gs2Experience.Editor
 
             if (original == null) return;
 
-            var context = original.GetComponentInParent<Gs2ExperienceOwnStatusContext>();
-            if (context == null) {
-                EditorGUILayout.HelpBox("Gs2ExperienceOwnStatusContext not found.", MessageType.Error);
-                if (GUILayout.Button("Add Context")) {
-                    original.gameObject.AddComponent<Gs2ExperienceOwnStatusContext>();
+            var fetcher = original.GetComponentInParent<Gs2ExperienceOwnStatusFetcher>();
+            if (fetcher == null) {
+                EditorGUILayout.HelpBox("Gs2ExperienceOwnStatusFetcher not found.", MessageType.Error);
+                if (GUILayout.Button("Add Fetcher")) {
+                    original.gameObject.AddComponent<Gs2ExperienceOwnStatusFetcher>();
                 }
             }
             else {
-                if (context.transform.parent.GetComponent<Gs2ExperienceOwnStatusList>() != null) {
+                if (fetcher.transform.parent.GetComponent<Gs2ExperienceOwnStatusList>() != null) {
                     EditorGUI.BeginDisabledGroup(true);
-                    EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2ExperienceOwnStatusContext), false);
+                    EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2ExperienceOwnStatusFetcher), false);
                     EditorGUI.EndDisabledGroup();
                     EditorGUILayout.HelpBox("Status is auto assign from Gs2ExperienceOwnStatusList.", MessageType.Info);
                 }
                 else {
+                    var context = original.GetComponentInParent<Gs2ExperienceOwnStatusContext>();
                     EditorGUI.BeginDisabledGroup(true);
-                    EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2ExperienceOwnStatusContext), false);
+                    EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2ExperienceOwnStatusFetcher), false);
                     EditorGUI.indentLevel++;
                     EditorGUILayout.ObjectField("Status", context.Status, typeof(OwnStatus), false);
                     EditorGUI.indentLevel++;

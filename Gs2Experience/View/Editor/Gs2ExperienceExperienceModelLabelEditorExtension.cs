@@ -18,6 +18,7 @@
 
 using Gs2.Unity.Gs2Experience.ScriptableObject;
 using Gs2.Unity.UiKit.Gs2Experience.Context;
+using Gs2.Unity.UiKit.Gs2Experience.Fetcher;
 using UnityEditor;
 using UnityEngine;
 
@@ -31,23 +32,24 @@ namespace Gs2.Unity.UiKit.Gs2Experience.Editor
 
             if (original == null) return;
 
-            var context = original.GetComponentInParent<Gs2ExperienceExperienceModelContext>();
-            if (context == null) {
-                EditorGUILayout.HelpBox("Gs2ExperienceExperienceModelContext not found.", MessageType.Error);
-                if (GUILayout.Button("Add Context")) {
-                    original.gameObject.AddComponent<Gs2ExperienceExperienceModelContext>();
+            var fetcher = original.GetComponentInParent<Gs2ExperienceExperienceModelFetcher>();
+            if (fetcher == null) {
+                EditorGUILayout.HelpBox("Gs2ExperienceExperienceModelFetcher not found.", MessageType.Error);
+                if (GUILayout.Button("Add Fetcher")) {
+                    original.gameObject.AddComponent<Gs2ExperienceExperienceModelFetcher>();
                 }
             }
             else {
-                if (context.transform.parent.GetComponent<Gs2ExperienceExperienceModelList>() != null) {
+                if (fetcher.transform.parent.GetComponent<Gs2ExperienceExperienceModelList>() != null) {
                     EditorGUI.BeginDisabledGroup(true);
-                    EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2ExperienceExperienceModelContext), false);
+                    EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2ExperienceExperienceModelFetcher), false);
                     EditorGUI.EndDisabledGroup();
                     EditorGUILayout.HelpBox("ExperienceModel is auto assign from Gs2ExperienceExperienceModelList.", MessageType.Info);
                 }
                 else {
+                    var context = original.GetComponentInParent<Gs2ExperienceExperienceModelContext>();
                     EditorGUI.BeginDisabledGroup(true);
-                    EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2ExperienceExperienceModelContext), false);
+                    EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2ExperienceExperienceModelFetcher), false);
                     EditorGUI.indentLevel++;
                     EditorGUILayout.ObjectField("ExperienceModel", context.ExperienceModel, typeof(ExperienceModel), false);
                     EditorGUI.indentLevel++;

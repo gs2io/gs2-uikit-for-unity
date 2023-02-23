@@ -32,9 +32,11 @@ namespace Gs2.Unity.UiKit.Gs2Stamina.Editor
 
             if (original == null) return;
 
+            serializedObject.Update();
+
             if (original.Stamina == null) {
                 EditorGUILayout.HelpBox("OwnStamina not assigned.", MessageType.Error);
-                EditorGUILayout.ObjectField("OwnStamina", original.Stamina, typeof(OwnStamina), false);
+                EditorGUILayout.PropertyField(serializedObject.FindProperty("Stamina"), true);
             }
             else {
                 EditorGUILayout.ObjectField("OwnStamina", original.Stamina, typeof(OwnStamina), false);
@@ -45,8 +47,7 @@ namespace Gs2.Unity.UiKit.Gs2Stamina.Editor
                 EditorGUI.indentLevel--;
                 EditorGUI.EndDisabledGroup();
             }
-            
-            serializedObject.Update();
+
             serializedObject.ApplyModifiedProperties();
         }
     }

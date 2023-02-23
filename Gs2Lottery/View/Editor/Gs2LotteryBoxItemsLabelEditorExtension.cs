@@ -18,6 +18,7 @@
 
 using Gs2.Unity.Gs2Lottery.ScriptableObject;
 using Gs2.Unity.UiKit.Gs2Lottery.Context;
+using Gs2.Unity.UiKit.Gs2Lottery.Fetcher;
 using UnityEditor;
 using UnityEngine;
 
@@ -31,23 +32,24 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.Editor
 
             if (original == null) return;
 
-            var context = original.GetComponentInParent<Gs2LotteryOwnBoxItemsContext>();
-            if (context == null) {
-                EditorGUILayout.HelpBox("Gs2LotteryOwnBoxItemsContext not found.", MessageType.Error);
-                if (GUILayout.Button("Add Context")) {
-                    original.gameObject.AddComponent<Gs2LotteryOwnBoxItemsContext>();
+            var fetcher = original.GetComponentInParent<Gs2LotteryOwnBoxItemsFetcher>();
+            if (fetcher == null) {
+                EditorGUILayout.HelpBox("Gs2LotteryOwnBoxItemsFetcher not found.", MessageType.Error);
+                if (GUILayout.Button("Add Fetcher")) {
+                    original.gameObject.AddComponent<Gs2LotteryOwnBoxItemsFetcher>();
                 }
             }
             else {
-                if (context.transform.parent.GetComponent<Gs2LotteryOwnBoxItemsList>() != null) {
+                if (fetcher.transform.parent.GetComponent<Gs2LotteryOwnBoxItemsList>() != null) {
                     EditorGUI.BeginDisabledGroup(true);
-                    EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2LotteryOwnBoxItemsContext), false);
+                    EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2LotteryOwnBoxItemsFetcher), false);
                     EditorGUI.EndDisabledGroup();
                     EditorGUILayout.HelpBox("BoxItems is auto assign from Gs2LotteryOwnBoxItemsList.", MessageType.Info);
                 }
                 else {
+                    var context = original.GetComponentInParent<Gs2LotteryOwnBoxItemsContext>();
                     EditorGUI.BeginDisabledGroup(true);
-                    EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2LotteryOwnBoxItemsContext), false);
+                    EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2LotteryOwnBoxItemsFetcher), false);
                     EditorGUI.indentLevel++;
                     EditorGUILayout.ObjectField("BoxItems", context.BoxItems, typeof(OwnBoxItems), false);
                     EditorGUI.indentLevel++;

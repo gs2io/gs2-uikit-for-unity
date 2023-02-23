@@ -18,6 +18,7 @@
 
 using Gs2.Unity.Gs2Limit.ScriptableObject;
 using Gs2.Unity.UiKit.Gs2Limit.Context;
+using Gs2.Unity.UiKit.Gs2Limit.Fetcher;
 using UnityEditor;
 using UnityEngine;
 
@@ -31,23 +32,24 @@ namespace Gs2.Unity.UiKit.Gs2Limit.Editor
 
             if (original == null) return;
 
-            var context = original.GetComponentInParent<Gs2LimitLimitModelContext>();
-            if (context == null) {
-                EditorGUILayout.HelpBox("Gs2LimitLimitModelContext not found.", MessageType.Error);
-                if (GUILayout.Button("Add Context")) {
-                    original.gameObject.AddComponent<Gs2LimitLimitModelContext>();
+            var fetcher = original.GetComponentInParent<Gs2LimitLimitModelFetcher>();
+            if (fetcher == null) {
+                EditorGUILayout.HelpBox("Gs2LimitLimitModelFetcher not found.", MessageType.Error);
+                if (GUILayout.Button("Add Fetcher")) {
+                    original.gameObject.AddComponent<Gs2LimitLimitModelFetcher>();
                 }
             }
             else {
-                if (context.transform.parent.GetComponent<Gs2LimitLimitModelList>() != null) {
+                if (fetcher.transform.parent.GetComponent<Gs2LimitLimitModelList>() != null) {
                     EditorGUI.BeginDisabledGroup(true);
-                    EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2LimitLimitModelContext), false);
+                    EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2LimitLimitModelFetcher), false);
                     EditorGUI.EndDisabledGroup();
                     EditorGUILayout.HelpBox("LimitModel is auto assign from Gs2LimitLimitModelList.", MessageType.Info);
                 }
                 else {
+                    var context = original.GetComponentInParent<Gs2LimitLimitModelContext>();
                     EditorGUI.BeginDisabledGroup(true);
-                    EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2LimitLimitModelContext), false);
+                    EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2LimitLimitModelFetcher), false);
                     EditorGUI.indentLevel++;
                     EditorGUILayout.ObjectField("LimitModel", context.LimitModel, typeof(LimitModel), false);
                     EditorGUI.indentLevel++;

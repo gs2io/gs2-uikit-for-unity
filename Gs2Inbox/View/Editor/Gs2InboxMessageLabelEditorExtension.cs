@@ -18,6 +18,7 @@
 
 using Gs2.Unity.Gs2Inbox.ScriptableObject;
 using Gs2.Unity.UiKit.Gs2Inbox.Context;
+using Gs2.Unity.UiKit.Gs2Inbox.Fetcher;
 using UnityEditor;
 using UnityEngine;
 
@@ -31,23 +32,24 @@ namespace Gs2.Unity.UiKit.Gs2Inbox.Editor
 
             if (original == null) return;
 
-            var context = original.GetComponentInParent<Gs2InboxOwnMessageContext>();
-            if (context == null) {
-                EditorGUILayout.HelpBox("Gs2InboxOwnMessageContext not found.", MessageType.Error);
-                if (GUILayout.Button("Add Context")) {
-                    original.gameObject.AddComponent<Gs2InboxOwnMessageContext>();
+            var fetcher = original.GetComponentInParent<Gs2InboxOwnMessageFetcher>();
+            if (fetcher == null) {
+                EditorGUILayout.HelpBox("Gs2InboxOwnMessageFetcher not found.", MessageType.Error);
+                if (GUILayout.Button("Add Fetcher")) {
+                    original.gameObject.AddComponent<Gs2InboxOwnMessageFetcher>();
                 }
             }
             else {
-                if (context.transform.parent.GetComponent<Gs2InboxOwnMessageList>() != null) {
+                if (fetcher.transform.parent.GetComponent<Gs2InboxOwnMessageList>() != null) {
                     EditorGUI.BeginDisabledGroup(true);
-                    EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2InboxOwnMessageContext), false);
+                    EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2InboxOwnMessageFetcher), false);
                     EditorGUI.EndDisabledGroup();
                     EditorGUILayout.HelpBox("Message is auto assign from Gs2InboxOwnMessageList.", MessageType.Info);
                 }
                 else {
+                    var context = original.GetComponentInParent<Gs2InboxOwnMessageContext>();
                     EditorGUI.BeginDisabledGroup(true);
-                    EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2InboxOwnMessageContext), false);
+                    EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2InboxOwnMessageFetcher), false);
                     EditorGUI.indentLevel++;
                     EditorGUILayout.ObjectField("Message", context.Message, typeof(OwnMessage), false);
                     EditorGUI.indentLevel++;

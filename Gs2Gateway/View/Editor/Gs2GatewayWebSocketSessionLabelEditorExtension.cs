@@ -18,6 +18,7 @@
 
 using Gs2.Unity.Gs2Gateway.ScriptableObject;
 using Gs2.Unity.UiKit.Gs2Gateway.Context;
+using Gs2.Unity.UiKit.Gs2Gateway.Fetcher;
 using UnityEditor;
 using UnityEngine;
 
@@ -31,16 +32,17 @@ namespace Gs2.Unity.UiKit.Gs2Gateway.Editor
 
             if (original == null) return;
 
-            var context = original.GetComponentInParent<Gs2GatewayOwnWebSocketSessionContext>();
-            if (context == null) {
-                EditorGUILayout.HelpBox("Gs2GatewayOwnWebSocketSessionContext not found.", MessageType.Error);
-                if (GUILayout.Button("Add Context")) {
-                    original.gameObject.AddComponent<Gs2GatewayOwnWebSocketSessionContext>();
+            var fetcher = original.GetComponentInParent<Gs2GatewayOwnWebSocketSessionFetcher>();
+            if (fetcher == null) {
+                EditorGUILayout.HelpBox("Gs2GatewayOwnWebSocketSessionFetcher not found.", MessageType.Error);
+                if (GUILayout.Button("Add Fetcher")) {
+                    original.gameObject.AddComponent<Gs2GatewayOwnWebSocketSessionFetcher>();
                 }
             }
             else {
+                var context = original.GetComponentInParent<Gs2GatewayOwnWebSocketSessionContext>();
                 EditorGUI.BeginDisabledGroup(true);
-                EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2GatewayOwnWebSocketSessionContext), false);
+                EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2GatewayOwnWebSocketSessionFetcher), false);
                 EditorGUI.indentLevel++;
                 EditorGUILayout.ObjectField("WebSocketSession", context.WebSocketSession, typeof(OwnWebSocketSession), false);
                 EditorGUI.indentLevel++;

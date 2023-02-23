@@ -18,6 +18,7 @@
 
 using Gs2.Unity.Gs2Schedule.ScriptableObject;
 using Gs2.Unity.UiKit.Gs2Schedule.Context;
+using Gs2.Unity.UiKit.Gs2Schedule.Fetcher;
 using UnityEditor;
 using UnityEngine;
 using Event = Gs2.Unity.Gs2Schedule.ScriptableObject.Event;
@@ -32,23 +33,24 @@ namespace Gs2.Unity.UiKit.Gs2Schedule.Editor
 
             if (original == null) return;
 
-            var context = original.GetComponentInParent<Gs2ScheduleOwnTriggerContext>();
-            if (context == null) {
-                EditorGUILayout.HelpBox("Gs2ScheduleOwnTriggerContext not found.", MessageType.Error);
-                if (GUILayout.Button("Add Context")) {
-                    original.gameObject.AddComponent<Gs2ScheduleOwnTriggerContext>();
+            var fetcher = original.GetComponentInParent<Gs2ScheduleOwnTriggerFetcher>();
+            if (fetcher == null) {
+                EditorGUILayout.HelpBox("Gs2ScheduleOwnTriggerFetcher not found.", MessageType.Error);
+                if (GUILayout.Button("Add Fetcher")) {
+                    original.gameObject.AddComponent<Gs2ScheduleOwnTriggerFetcher>();
                 }
             }
             else {
-                if (context.transform.parent.GetComponent<Gs2ScheduleOwnTriggerList>() != null) {
+                if (fetcher.transform.parent.GetComponent<Gs2ScheduleOwnTriggerList>() != null) {
                     EditorGUI.BeginDisabledGroup(true);
-                    EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2ScheduleOwnTriggerContext), false);
+                    EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2ScheduleOwnTriggerFetcher), false);
                     EditorGUI.EndDisabledGroup();
                     EditorGUILayout.HelpBox("Trigger is auto assign from Gs2ScheduleOwnTriggerList.", MessageType.Info);
                 }
                 else {
+                    var context = original.GetComponentInParent<Gs2ScheduleOwnTriggerContext>();
                     EditorGUI.BeginDisabledGroup(true);
-                    EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2ScheduleOwnTriggerContext), false);
+                    EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2ScheduleOwnTriggerFetcher), false);
                     EditorGUI.indentLevel++;
                     EditorGUILayout.ObjectField("Trigger", context.Trigger, typeof(OwnTrigger), false);
                     EditorGUI.indentLevel++;

@@ -18,6 +18,7 @@
 
 using Gs2.Unity.Gs2Chat.ScriptableObject;
 using Gs2.Unity.UiKit.Gs2Chat.Context;
+using Gs2.Unity.UiKit.Gs2Chat.Fetcher;
 using UnityEditor;
 using UnityEngine;
 
@@ -31,16 +32,17 @@ namespace Gs2.Unity.UiKit.Gs2Chat.Editor
 
             if (original == null) return;
 
-            var context = original.GetComponentInParent<Gs2ChatMessageContext>();
-            if (context == null) {
-                EditorGUILayout.HelpBox("Gs2ChatMessageContext not found.", MessageType.Error);
-                if (GUILayout.Button("Add Context")) {
-                    original.gameObject.AddComponent<Gs2ChatMessageContext>();
+            var fetcher = original.GetComponentInParent<Gs2ChatMessageFetcher>();
+            if (fetcher == null) {
+                EditorGUILayout.HelpBox("Gs2ChatMessageFetcher not found.", MessageType.Error);
+                if (GUILayout.Button("Add Fetcher")) {
+                    original.gameObject.AddComponent<Gs2ChatMessageFetcher>();
                 }
             }
             else {
+                var context = original.GetComponentInParent<Gs2ChatMessageContext>();
                 EditorGUI.BeginDisabledGroup(true);
-                EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2ChatMessageContext), false);
+                EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2ChatMessageFetcher), false);
                 EditorGUI.indentLevel++;
                 EditorGUILayout.ObjectField("Message", context.Message, typeof(Message), false);
                 EditorGUI.indentLevel++;

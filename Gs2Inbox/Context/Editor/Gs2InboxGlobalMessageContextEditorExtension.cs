@@ -32,9 +32,11 @@ namespace Gs2.Unity.UiKit.Gs2Inbox.Editor
 
             if (original == null) return;
 
+            serializedObject.Update();
+
             if (original.GlobalMessage == null) {
                 EditorGUILayout.HelpBox("GlobalMessage not assigned.", MessageType.Error);
-                EditorGUILayout.ObjectField("GlobalMessage", original.GlobalMessage, typeof(GlobalMessage), false);
+                EditorGUILayout.PropertyField(serializedObject.FindProperty("GlobalMessage"), true);
             }
             else {
                 EditorGUILayout.ObjectField("GlobalMessage", original.GlobalMessage, typeof(GlobalMessage), false);
@@ -45,8 +47,7 @@ namespace Gs2.Unity.UiKit.Gs2Inbox.Editor
                 EditorGUI.indentLevel--;
                 EditorGUI.EndDisabledGroup();
             }
-            
-            serializedObject.Update();
+
             serializedObject.ApplyModifiedProperties();
         }
     }

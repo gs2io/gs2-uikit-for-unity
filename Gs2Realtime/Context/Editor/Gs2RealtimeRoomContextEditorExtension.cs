@@ -32,9 +32,11 @@ namespace Gs2.Unity.UiKit.Gs2Realtime.Editor
 
             if (original == null) return;
 
+            serializedObject.Update();
+
             if (original.Room == null) {
                 EditorGUILayout.HelpBox("Room not assigned.", MessageType.Error);
-                EditorGUILayout.ObjectField("Room", original.Room, typeof(Room), false);
+                EditorGUILayout.PropertyField(serializedObject.FindProperty("Room"), true);
             }
             else {
                 EditorGUILayout.ObjectField("Room", original.Room, typeof(Room), false);
@@ -45,8 +47,7 @@ namespace Gs2.Unity.UiKit.Gs2Realtime.Editor
                 EditorGUI.indentLevel--;
                 EditorGUI.EndDisabledGroup();
             }
-            
-            serializedObject.Update();
+
             serializedObject.ApplyModifiedProperties();
         }
     }

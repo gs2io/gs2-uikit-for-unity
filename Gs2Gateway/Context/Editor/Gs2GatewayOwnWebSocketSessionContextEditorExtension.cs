@@ -32,9 +32,11 @@ namespace Gs2.Unity.UiKit.Gs2Gateway.Editor
 
             if (original == null) return;
 
+            serializedObject.Update();
+
             if (original.WebSocketSession == null) {
                 EditorGUILayout.HelpBox("OwnWebSocketSession not assigned.", MessageType.Error);
-                EditorGUILayout.ObjectField("OwnWebSocketSession", original.WebSocketSession, typeof(OwnWebSocketSession), false);
+                EditorGUILayout.PropertyField(serializedObject.FindProperty("WebSocketSession"), true);
             }
             else {
                 EditorGUILayout.ObjectField("OwnWebSocketSession", original.WebSocketSession, typeof(OwnWebSocketSession), false);
@@ -45,8 +47,7 @@ namespace Gs2.Unity.UiKit.Gs2Gateway.Editor
                 EditorGUI.indentLevel--;
                 EditorGUI.EndDisabledGroup();
             }
-            
-            serializedObject.Update();
+
             serializedObject.ApplyModifiedProperties();
         }
     }

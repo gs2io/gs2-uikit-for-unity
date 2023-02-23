@@ -32,9 +32,11 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.Editor
 
             if (original == null) return;
 
+            serializedObject.Update();
+
             if (original.PrizeTable == null) {
                 EditorGUILayout.HelpBox("PrizeTable not assigned.", MessageType.Error);
-                EditorGUILayout.ObjectField("PrizeTable", original.PrizeTable, typeof(PrizeTable), false);
+                EditorGUILayout.PropertyField(serializedObject.FindProperty("PrizeTable"), true);
             }
             else {
                 EditorGUILayout.ObjectField("PrizeTable", original.PrizeTable, typeof(PrizeTable), false);
@@ -45,8 +47,7 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.Editor
                 EditorGUI.indentLevel--;
                 EditorGUI.EndDisabledGroup();
             }
-            
-            serializedObject.Update();
+
             serializedObject.ApplyModifiedProperties();
         }
     }

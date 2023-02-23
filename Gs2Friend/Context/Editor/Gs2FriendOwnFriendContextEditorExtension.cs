@@ -32,13 +32,15 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Editor
 
             if (original == null) return;
 
+            serializedObject.Update();
+
             if (original.Friend == null) {
                 if (original.transform.parent.GetComponent<Gs2FriendOwnFriendList>() != null) {
                     EditorGUILayout.HelpBox("OwnFriend is auto assign from Gs2FriendOwnFriendList.", MessageType.Info);
                 }
                 else {
                     EditorGUILayout.HelpBox("OwnFriend not assigned.", MessageType.Error);
-                    EditorGUILayout.ObjectField("OwnFriend", original.Friend, typeof(OwnFriend), false);
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("Friend"), true);
                 }
             }
             else {
@@ -49,8 +51,7 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Editor
                 EditorGUI.indentLevel--;
                 EditorGUI.EndDisabledGroup();
             }
-            
-            serializedObject.Update();
+
             serializedObject.ApplyModifiedProperties();
         }
     }

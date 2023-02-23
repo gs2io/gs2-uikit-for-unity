@@ -32,13 +32,15 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Editor
 
             if (original == null) return;
 
+            serializedObject.Update();
+
             if (original.Inventory == null) {
                 if (original.transform.parent.GetComponent<Gs2InventoryOwnInventoryList>() != null) {
                     EditorGUILayout.HelpBox("OwnInventory is auto assign from Gs2InventoryOwnInventoryList.", MessageType.Info);
                 }
                 else {
                     EditorGUILayout.HelpBox("OwnInventory not assigned.", MessageType.Error);
-                    EditorGUILayout.ObjectField("OwnInventory", original.Inventory, typeof(OwnInventory), false);
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("Inventory"), true);
                 }
             }
             else {
@@ -50,8 +52,7 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Editor
                 EditorGUI.indentLevel--;
                 EditorGUI.EndDisabledGroup();
             }
-            
-            serializedObject.Update();
+
             serializedObject.ApplyModifiedProperties();
         }
     }

@@ -32,13 +32,15 @@ namespace Gs2.Unity.UiKit.Gs2Limit.Editor
 
             if (original == null) return;
 
+            serializedObject.Update();
+
             if (original.LimitModel == null) {
                 if (original.transform.parent.GetComponent<Gs2LimitLimitModelList>() != null) {
                     EditorGUILayout.HelpBox("LimitModel is auto assign from Gs2LimitLimitModelList.", MessageType.Info);
                 }
                 else {
                     EditorGUILayout.HelpBox("LimitModel not assigned.", MessageType.Error);
-                    EditorGUILayout.ObjectField("LimitModel", original.LimitModel, typeof(LimitModel), false);
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("LimitModel"), true);
                 }
             }
             else {
@@ -50,8 +52,7 @@ namespace Gs2.Unity.UiKit.Gs2Limit.Editor
                 EditorGUI.indentLevel--;
                 EditorGUI.EndDisabledGroup();
             }
-            
-            serializedObject.Update();
+
             serializedObject.ApplyModifiedProperties();
         }
     }

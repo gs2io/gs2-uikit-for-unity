@@ -18,6 +18,7 @@
 
 using Gs2.Unity.Gs2Enhance.ScriptableObject;
 using Gs2.Unity.UiKit.Gs2Enhance.Context;
+using Gs2.Unity.UiKit.Gs2Enhance.Fetcher;
 using UnityEditor;
 using UnityEngine;
 
@@ -31,23 +32,24 @@ namespace Gs2.Unity.UiKit.Gs2Enhance.Editor
 
             if (original == null) return;
 
-            var context = original.GetComponentInParent<Gs2EnhanceRateModelContext>();
-            if (context == null) {
-                EditorGUILayout.HelpBox("Gs2EnhanceRateModelContext not found.", MessageType.Error);
-                if (GUILayout.Button("Add Context")) {
-                    original.gameObject.AddComponent<Gs2EnhanceRateModelContext>();
+            var fetcher = original.GetComponentInParent<Gs2EnhanceRateModelFetcher>();
+            if (fetcher == null) {
+                EditorGUILayout.HelpBox("Gs2EnhanceRateModelFetcher not found.", MessageType.Error);
+                if (GUILayout.Button("Add Fetcher")) {
+                    original.gameObject.AddComponent<Gs2EnhanceRateModelFetcher>();
                 }
             }
             else {
-                if (context.transform.parent.GetComponent<Gs2EnhanceRateModelList>() != null) {
+                if (fetcher.transform.parent.GetComponent<Gs2EnhanceRateModelList>() != null) {
                     EditorGUI.BeginDisabledGroup(true);
-                    EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2EnhanceRateModelContext), false);
+                    EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2EnhanceRateModelFetcher), false);
                     EditorGUI.EndDisabledGroup();
                     EditorGUILayout.HelpBox("RateModel is auto assign from Gs2EnhanceRateModelList.", MessageType.Info);
                 }
                 else {
+                    var context = original.GetComponentInParent<Gs2EnhanceRateModelContext>();
                     EditorGUI.BeginDisabledGroup(true);
-                    EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2EnhanceRateModelContext), false);
+                    EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2EnhanceRateModelFetcher), false);
                     EditorGUI.indentLevel++;
                     EditorGUILayout.ObjectField("RateModel", context.RateModel, typeof(RateModel), false);
                     EditorGUI.indentLevel++;

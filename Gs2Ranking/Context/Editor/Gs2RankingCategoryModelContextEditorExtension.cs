@@ -32,13 +32,15 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Editor
 
             if (original == null) return;
 
+            serializedObject.Update();
+
             if (original.CategoryModel == null) {
                 if (original.transform.parent.GetComponent<Gs2RankingCategoryModelList>() != null) {
                     EditorGUILayout.HelpBox("CategoryModel is auto assign from Gs2RankingCategoryModelList.", MessageType.Info);
                 }
                 else {
                     EditorGUILayout.HelpBox("CategoryModel not assigned.", MessageType.Error);
-                    EditorGUILayout.ObjectField("CategoryModel", original.CategoryModel, typeof(CategoryModel), false);
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("CategoryModel"), true);
                 }
             }
             else {
@@ -50,8 +52,7 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Editor
                 EditorGUI.indentLevel--;
                 EditorGUI.EndDisabledGroup();
             }
-            
-            serializedObject.Update();
+
             serializedObject.ApplyModifiedProperties();
         }
     }

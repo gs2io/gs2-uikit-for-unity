@@ -32,9 +32,11 @@ namespace Gs2.Unity.UiKit.Gs2Showcase.Editor
 
             if (original == null) return;
 
+            serializedObject.Update();
+
             if (original.Showcase == null) {
                 EditorGUILayout.HelpBox("Showcase not assigned.", MessageType.Error);
-                EditorGUILayout.ObjectField("Showcase", original.Showcase, typeof(Showcase), false);
+                EditorGUILayout.PropertyField(serializedObject.FindProperty("Showcase"), true);
             }
             else {
                 EditorGUILayout.ObjectField("Showcase", original.Showcase, typeof(Showcase), false);
@@ -45,8 +47,7 @@ namespace Gs2.Unity.UiKit.Gs2Showcase.Editor
                 EditorGUI.indentLevel--;
                 EditorGUI.EndDisabledGroup();
             }
-            
-            serializedObject.Update();
+
             serializedObject.ApplyModifiedProperties();
         }
     }

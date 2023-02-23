@@ -32,9 +32,11 @@ namespace Gs2.Unity.UiKit.Gs2Realtime.Editor
 
             if (original == null) return;
 
+            serializedObject.Update();
+
             if (original.Namespace == null) {
                 EditorGUILayout.HelpBox("Namespace not assigned.", MessageType.Error);
-                EditorGUILayout.ObjectField("Namespace", original.Namespace, typeof(Namespace), false);
+                EditorGUILayout.PropertyField(serializedObject.FindProperty("Namespace"), true);
             }
             else {
                 EditorGUILayout.ObjectField("Namespace", original.Namespace, typeof(Namespace), false);
@@ -44,8 +46,7 @@ namespace Gs2.Unity.UiKit.Gs2Realtime.Editor
                 EditorGUI.indentLevel--;
                 EditorGUI.EndDisabledGroup();
             }
-            
-            serializedObject.Update();
+
             serializedObject.ApplyModifiedProperties();
         }
     }

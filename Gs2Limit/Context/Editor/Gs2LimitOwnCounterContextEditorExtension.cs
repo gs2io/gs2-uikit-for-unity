@@ -32,13 +32,15 @@ namespace Gs2.Unity.UiKit.Gs2Limit.Editor
 
             if (original == null) return;
 
+            serializedObject.Update();
+
             if (original.Counter == null) {
                 if (original.transform.parent.GetComponent<Gs2LimitOwnCounterList>() != null) {
                     EditorGUILayout.HelpBox("OwnCounter is auto assign from Gs2LimitOwnCounterList.", MessageType.Info);
                 }
                 else {
                     EditorGUILayout.HelpBox("OwnCounter not assigned.", MessageType.Error);
-                    EditorGUILayout.ObjectField("OwnCounter", original.Counter, typeof(OwnCounter), false);
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("Counter"), true);
                 }
             }
             else {
@@ -51,8 +53,7 @@ namespace Gs2.Unity.UiKit.Gs2Limit.Editor
                 EditorGUI.indentLevel--;
                 EditorGUI.EndDisabledGroup();
             }
-            
-            serializedObject.Update();
+
             serializedObject.ApplyModifiedProperties();
         }
     }

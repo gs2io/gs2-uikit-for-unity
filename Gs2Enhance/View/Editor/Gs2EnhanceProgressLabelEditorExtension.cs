@@ -18,6 +18,7 @@
 
 using Gs2.Unity.Gs2Enhance.ScriptableObject;
 using Gs2.Unity.UiKit.Gs2Enhance.Context;
+using Gs2.Unity.UiKit.Gs2Enhance.Fetcher;
 using UnityEditor;
 using UnityEngine;
 
@@ -31,16 +32,17 @@ namespace Gs2.Unity.UiKit.Gs2Enhance.Editor
 
             if (original == null) return;
 
-            var context = original.GetComponentInParent<Gs2EnhanceOwnProgressContext>();
-            if (context == null) {
-                EditorGUILayout.HelpBox("Gs2EnhanceOwnProgressContext not found.", MessageType.Error);
-                if (GUILayout.Button("Add Context")) {
-                    original.gameObject.AddComponent<Gs2EnhanceOwnProgressContext>();
+            var fetcher = original.GetComponentInParent<Gs2EnhanceOwnProgressFetcher>();
+            if (fetcher == null) {
+                EditorGUILayout.HelpBox("Gs2EnhanceOwnProgressFetcher not found.", MessageType.Error);
+                if (GUILayout.Button("Add Fetcher")) {
+                    original.gameObject.AddComponent<Gs2EnhanceOwnProgressFetcher>();
                 }
             }
             else {
+                var context = original.GetComponentInParent<Gs2EnhanceOwnProgressContext>();
                 EditorGUI.BeginDisabledGroup(true);
-                EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2EnhanceOwnProgressContext), false);
+                EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2EnhanceOwnProgressFetcher), false);
                 EditorGUI.indentLevel++;
                 EditorGUILayout.ObjectField("Progress", context.Progress, typeof(OwnProgress), false);
                 EditorGUI.indentLevel++;

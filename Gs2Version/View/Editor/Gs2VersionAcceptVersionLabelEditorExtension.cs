@@ -18,6 +18,7 @@
 
 using Gs2.Unity.Gs2Version.ScriptableObject;
 using Gs2.Unity.UiKit.Gs2Version.Context;
+using Gs2.Unity.UiKit.Gs2Version.Fetcher;
 using UnityEditor;
 using UnityEngine;
 
@@ -31,23 +32,24 @@ namespace Gs2.Unity.UiKit.Gs2Version.Editor
 
             if (original == null) return;
 
-            var context = original.GetComponentInParent<Gs2VersionOwnAcceptVersionContext>();
-            if (context == null) {
-                EditorGUILayout.HelpBox("Gs2VersionOwnAcceptVersionContext not found.", MessageType.Error);
-                if (GUILayout.Button("Add Context")) {
-                    original.gameObject.AddComponent<Gs2VersionOwnAcceptVersionContext>();
+            var fetcher = original.GetComponentInParent<Gs2VersionOwnAcceptVersionFetcher>();
+            if (fetcher == null) {
+                EditorGUILayout.HelpBox("Gs2VersionOwnAcceptVersionFetcher not found.", MessageType.Error);
+                if (GUILayout.Button("Add Fetcher")) {
+                    original.gameObject.AddComponent<Gs2VersionOwnAcceptVersionFetcher>();
                 }
             }
             else {
-                if (context.transform.parent.GetComponent<Gs2VersionOwnAcceptVersionList>() != null) {
+                if (fetcher.transform.parent.GetComponent<Gs2VersionOwnAcceptVersionList>() != null) {
                     EditorGUI.BeginDisabledGroup(true);
-                    EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2VersionOwnAcceptVersionContext), false);
+                    EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2VersionOwnAcceptVersionFetcher), false);
                     EditorGUI.EndDisabledGroup();
                     EditorGUILayout.HelpBox("AcceptVersion is auto assign from Gs2VersionOwnAcceptVersionList.", MessageType.Info);
                 }
                 else {
+                    var context = original.GetComponentInParent<Gs2VersionOwnAcceptVersionContext>();
                     EditorGUI.BeginDisabledGroup(true);
-                    EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2VersionOwnAcceptVersionContext), false);
+                    EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2VersionOwnAcceptVersionFetcher), false);
                     EditorGUI.indentLevel++;
                     EditorGUILayout.ObjectField("AcceptVersion", context.AcceptVersion, typeof(OwnAcceptVersion), false);
                     EditorGUI.indentLevel++;

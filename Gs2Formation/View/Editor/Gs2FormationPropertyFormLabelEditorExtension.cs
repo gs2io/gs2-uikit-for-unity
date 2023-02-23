@@ -18,6 +18,7 @@
 
 using Gs2.Unity.Gs2Formation.ScriptableObject;
 using Gs2.Unity.UiKit.Gs2Formation.Context;
+using Gs2.Unity.UiKit.Gs2Formation.Fetcher;
 using UnityEditor;
 using UnityEngine;
 
@@ -31,23 +32,24 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Editor
 
             if (original == null) return;
 
-            var context = original.GetComponentInParent<Gs2FormationOwnPropertyFormContext>();
-            if (context == null) {
-                EditorGUILayout.HelpBox("Gs2FormationOwnPropertyFormContext not found.", MessageType.Error);
-                if (GUILayout.Button("Add Context")) {
-                    original.gameObject.AddComponent<Gs2FormationOwnPropertyFormContext>();
+            var fetcher = original.GetComponentInParent<Gs2FormationOwnPropertyFormFetcher>();
+            if (fetcher == null) {
+                EditorGUILayout.HelpBox("Gs2FormationOwnPropertyFormFetcher not found.", MessageType.Error);
+                if (GUILayout.Button("Add Fetcher")) {
+                    original.gameObject.AddComponent<Gs2FormationOwnPropertyFormFetcher>();
                 }
             }
             else {
-                if (context.transform.parent.GetComponent<Gs2FormationOwnPropertyFormList>() != null) {
+                if (fetcher.transform.parent.GetComponent<Gs2FormationOwnPropertyFormList>() != null) {
                     EditorGUI.BeginDisabledGroup(true);
-                    EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2FormationOwnPropertyFormContext), false);
+                    EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2FormationOwnPropertyFormFetcher), false);
                     EditorGUI.EndDisabledGroup();
                     EditorGUILayout.HelpBox("PropertyForm is auto assign from Gs2FormationOwnPropertyFormList.", MessageType.Info);
                 }
                 else {
+                    var context = original.GetComponentInParent<Gs2FormationOwnPropertyFormContext>();
                     EditorGUI.BeginDisabledGroup(true);
-                    EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2FormationOwnPropertyFormContext), false);
+                    EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2FormationOwnPropertyFormFetcher), false);
                     EditorGUI.indentLevel++;
                     EditorGUILayout.ObjectField("PropertyForm", context.PropertyForm, typeof(OwnPropertyForm), false);
                     EditorGUI.indentLevel++;

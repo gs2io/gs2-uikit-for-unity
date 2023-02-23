@@ -32,9 +32,11 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Editor
 
             if (original == null) return;
 
+            serializedObject.Update();
+
             if (original.SubscribeUser == null) {
                 EditorGUILayout.HelpBox("SubscribeUser not assigned.", MessageType.Error);
-                EditorGUILayout.ObjectField("SubscribeUser", original.SubscribeUser, typeof(SubscribeUser), false);
+                EditorGUILayout.PropertyField(serializedObject.FindProperty("SubscribeUser"), true);
             }
             else {
                 EditorGUILayout.ObjectField("SubscribeUser", original.SubscribeUser, typeof(SubscribeUser), false);
@@ -45,8 +47,7 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Editor
                 EditorGUI.indentLevel--;
                 EditorGUI.EndDisabledGroup();
             }
-            
-            serializedObject.Update();
+
             serializedObject.ApplyModifiedProperties();
         }
     }

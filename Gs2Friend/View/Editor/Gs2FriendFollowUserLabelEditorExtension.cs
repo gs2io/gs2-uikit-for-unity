@@ -18,6 +18,7 @@
 
 using Gs2.Unity.Gs2Friend.ScriptableObject;
 using Gs2.Unity.UiKit.Gs2Friend.Context;
+using Gs2.Unity.UiKit.Gs2Friend.Fetcher;
 using UnityEditor;
 using UnityEngine;
 
@@ -31,23 +32,24 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Editor
 
             if (original == null) return;
 
-            var context = original.GetComponentInParent<Gs2FriendOwnFollowUserContext>();
-            if (context == null) {
-                EditorGUILayout.HelpBox("Gs2FriendOwnFollowUserContext not found.", MessageType.Error);
-                if (GUILayout.Button("Add Context")) {
-                    original.gameObject.AddComponent<Gs2FriendOwnFollowUserContext>();
+            var fetcher = original.GetComponentInParent<Gs2FriendOwnFollowUserFetcher>();
+            if (fetcher == null) {
+                EditorGUILayout.HelpBox("Gs2FriendOwnFollowUserFetcher not found.", MessageType.Error);
+                if (GUILayout.Button("Add Fetcher")) {
+                    original.gameObject.AddComponent<Gs2FriendOwnFollowUserFetcher>();
                 }
             }
             else {
-                if (context.transform.parent.GetComponent<Gs2FriendOwnFollowUserList>() != null) {
+                if (fetcher.transform.parent.GetComponent<Gs2FriendOwnFollowUserList>() != null) {
                     EditorGUI.BeginDisabledGroup(true);
-                    EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2FriendOwnFollowUserContext), false);
+                    EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2FriendOwnFollowUserFetcher), false);
                     EditorGUI.EndDisabledGroup();
                     EditorGUILayout.HelpBox("FollowUser is auto assign from Gs2FriendOwnFollowUserList.", MessageType.Info);
                 }
                 else {
+                    var context = original.GetComponentInParent<Gs2FriendOwnFollowUserContext>();
                     EditorGUI.BeginDisabledGroup(true);
-                    EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2FriendOwnFollowUserContext), false);
+                    EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2FriendOwnFollowUserFetcher), false);
                     EditorGUI.indentLevel++;
                     EditorGUILayout.ObjectField("FollowUser", context.FollowUser, typeof(OwnFollowUser), false);
                     EditorGUI.indentLevel++;

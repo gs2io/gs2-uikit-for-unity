@@ -32,13 +32,15 @@ namespace Gs2.Unity.UiKit.Gs2MegaField.Editor
 
             if (original == null) return;
 
+            serializedObject.Update();
+
             if (original.AreaModel == null) {
                 if (original.transform.parent.GetComponent<Gs2MegaFieldAreaModelList>() != null) {
                     EditorGUILayout.HelpBox("AreaModel is auto assign from Gs2MegaFieldAreaModelList.", MessageType.Info);
                 }
                 else {
                     EditorGUILayout.HelpBox("AreaModel not assigned.", MessageType.Error);
-                    EditorGUILayout.ObjectField("AreaModel", original.AreaModel, typeof(AreaModel), false);
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("AreaModel"), true);
                 }
             }
             else {
@@ -50,8 +52,7 @@ namespace Gs2.Unity.UiKit.Gs2MegaField.Editor
                 EditorGUI.indentLevel--;
                 EditorGUI.EndDisabledGroup();
             }
-            
-            serializedObject.Update();
+
             serializedObject.ApplyModifiedProperties();
         }
     }

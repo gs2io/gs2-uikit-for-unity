@@ -32,13 +32,15 @@ namespace Gs2.Unity.UiKit.Gs2MegaField.Editor
 
             if (original == null) return;
 
+            serializedObject.Update();
+
             if (original.LayerModel == null) {
                 if (original.transform.parent.GetComponent<Gs2MegaFieldLayerModelList>() != null) {
                     EditorGUILayout.HelpBox("LayerModel is auto assign from Gs2MegaFieldLayerModelList.", MessageType.Info);
                 }
                 else {
                     EditorGUILayout.HelpBox("LayerModel not assigned.", MessageType.Error);
-                    EditorGUILayout.ObjectField("LayerModel", original.LayerModel, typeof(LayerModel), false);
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("LayerModel"), true);
                 }
             }
             else {
@@ -49,8 +51,7 @@ namespace Gs2.Unity.UiKit.Gs2MegaField.Editor
                 EditorGUI.indentLevel--;
                 EditorGUI.EndDisabledGroup();
             }
-            
-            serializedObject.Update();
+
             serializedObject.ApplyModifiedProperties();
         }
     }

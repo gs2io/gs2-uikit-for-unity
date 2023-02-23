@@ -18,6 +18,7 @@
 
 using Gs2.Unity.Gs2SerialKey.ScriptableObject;
 using Gs2.Unity.UiKit.Gs2SerialKey.Context;
+using Gs2.Unity.UiKit.Gs2SerialKey.Fetcher;
 using UnityEditor;
 using UnityEngine;
 
@@ -31,16 +32,17 @@ namespace Gs2.Unity.UiKit.Gs2SerialKey.Editor
 
             if (original == null) return;
 
-            var context = original.GetComponentInParent<Gs2SerialKeyCampaignModelContext>();
-            if (context == null) {
-                EditorGUILayout.HelpBox("Gs2SerialKeyCampaignModelContext not found.", MessageType.Error);
-                if (GUILayout.Button("Add Context")) {
-                    original.gameObject.AddComponent<Gs2SerialKeyCampaignModelContext>();
+            var fetcher = original.GetComponentInParent<Gs2SerialKeyCampaignModelFetcher>();
+            if (fetcher == null) {
+                EditorGUILayout.HelpBox("Gs2SerialKeyCampaignModelFetcher not found.", MessageType.Error);
+                if (GUILayout.Button("Add Fetcher")) {
+                    original.gameObject.AddComponent<Gs2SerialKeyCampaignModelFetcher>();
                 }
             }
             else {
+                var context = original.GetComponentInParent<Gs2SerialKeyCampaignModelContext>();
                 EditorGUI.BeginDisabledGroup(true);
-                EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2SerialKeyCampaignModelContext), false);
+                EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2SerialKeyCampaignModelFetcher), false);
                 EditorGUI.indentLevel++;
                 EditorGUILayout.ObjectField("CampaignModel", context.CampaignModel, typeof(CampaignModel), false);
                 EditorGUI.indentLevel++;

@@ -32,9 +32,11 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Editor
 
             if (original == null) return;
 
+            serializedObject.Update();
+
             if (original.Profile == null) {
                 EditorGUILayout.HelpBox("OwnProfile not assigned.", MessageType.Error);
-                EditorGUILayout.ObjectField("OwnProfile", original.Profile, typeof(OwnProfile), false);
+                EditorGUILayout.PropertyField(serializedObject.FindProperty("Profile"), true);
             }
             else {
                 EditorGUILayout.ObjectField("OwnProfile", original.Profile, typeof(OwnProfile), false);
@@ -44,8 +46,7 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Editor
                 EditorGUI.indentLevel--;
                 EditorGUI.EndDisabledGroup();
             }
-            
-            serializedObject.Update();
+
             serializedObject.ApplyModifiedProperties();
         }
     }

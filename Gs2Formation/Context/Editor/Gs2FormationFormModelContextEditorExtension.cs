@@ -32,13 +32,15 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Editor
 
             if (original == null) return;
 
+            serializedObject.Update();
+
             if (original.FormModel == null) {
                 if (original.transform.parent.GetComponent<Gs2FormationFormModelList>() != null) {
                     EditorGUILayout.HelpBox("FormModel is auto assign from Gs2FormationFormModelList.", MessageType.Info);
                 }
                 else {
                     EditorGUILayout.HelpBox("FormModel not assigned.", MessageType.Error);
-                    EditorGUILayout.ObjectField("FormModel", original.FormModel, typeof(FormModel), false);
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("FormModel"), true);
                 }
             }
             else {
@@ -50,8 +52,7 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Editor
                 EditorGUI.indentLevel--;
                 EditorGUI.EndDisabledGroup();
             }
-            
-            serializedObject.Update();
+
             serializedObject.ApplyModifiedProperties();
         }
     }

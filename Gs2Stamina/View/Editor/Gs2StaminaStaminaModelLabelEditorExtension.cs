@@ -18,6 +18,7 @@
 
 using Gs2.Unity.Gs2Stamina.ScriptableObject;
 using Gs2.Unity.UiKit.Gs2Stamina.Context;
+using Gs2.Unity.UiKit.Gs2Stamina.Fetcher;
 using UnityEditor;
 using UnityEngine;
 
@@ -31,23 +32,24 @@ namespace Gs2.Unity.UiKit.Gs2Stamina.Editor
 
             if (original == null) return;
 
-            var context = original.GetComponentInParent<Gs2StaminaStaminaModelContext>();
-            if (context == null) {
-                EditorGUILayout.HelpBox("Gs2StaminaStaminaModelContext not found.", MessageType.Error);
-                if (GUILayout.Button("Add Context")) {
-                    original.gameObject.AddComponent<Gs2StaminaStaminaModelContext>();
+            var fetcher = original.GetComponentInParent<Gs2StaminaStaminaModelFetcher>();
+            if (fetcher == null) {
+                EditorGUILayout.HelpBox("Gs2StaminaStaminaModelFetcher not found.", MessageType.Error);
+                if (GUILayout.Button("Add Fetcher")) {
+                    original.gameObject.AddComponent<Gs2StaminaStaminaModelFetcher>();
                 }
             }
             else {
-                if (context.transform.parent.GetComponent<Gs2StaminaStaminaModelList>() != null) {
+                if (fetcher.transform.parent.GetComponent<Gs2StaminaStaminaModelList>() != null) {
                     EditorGUI.BeginDisabledGroup(true);
-                    EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2StaminaStaminaModelContext), false);
+                    EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2StaminaStaminaModelFetcher), false);
                     EditorGUI.EndDisabledGroup();
                     EditorGUILayout.HelpBox("StaminaModel is auto assign from Gs2StaminaStaminaModelList.", MessageType.Info);
                 }
                 else {
+                    var context = original.GetComponentInParent<Gs2StaminaStaminaModelContext>();
                     EditorGUI.BeginDisabledGroup(true);
-                    EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2StaminaStaminaModelContext), false);
+                    EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2StaminaStaminaModelFetcher), false);
                     EditorGUI.indentLevel++;
                     EditorGUILayout.ObjectField("StaminaModel", context.StaminaModel, typeof(StaminaModel), false);
                     EditorGUI.indentLevel++;

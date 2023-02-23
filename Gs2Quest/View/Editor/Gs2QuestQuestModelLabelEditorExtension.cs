@@ -18,6 +18,7 @@
 
 using Gs2.Unity.Gs2Quest.ScriptableObject;
 using Gs2.Unity.UiKit.Gs2Quest.Context;
+using Gs2.Unity.UiKit.Gs2Quest.Fetcher;
 using UnityEditor;
 using UnityEngine;
 
@@ -31,23 +32,24 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Editor
 
             if (original == null) return;
 
-            var context = original.GetComponentInParent<Gs2QuestQuestModelContext>();
-            if (context == null) {
-                EditorGUILayout.HelpBox("Gs2QuestQuestModelContext not found.", MessageType.Error);
-                if (GUILayout.Button("Add Context")) {
-                    original.gameObject.AddComponent<Gs2QuestQuestModelContext>();
+            var fetcher = original.GetComponentInParent<Gs2QuestQuestModelFetcher>();
+            if (fetcher == null) {
+                EditorGUILayout.HelpBox("Gs2QuestQuestModelFetcher not found.", MessageType.Error);
+                if (GUILayout.Button("Add Fetcher")) {
+                    original.gameObject.AddComponent<Gs2QuestQuestModelFetcher>();
                 }
             }
             else {
-                if (context.transform.parent.GetComponent<Gs2QuestQuestModelList>() != null) {
+                if (fetcher.transform.parent.GetComponent<Gs2QuestQuestModelList>() != null) {
                     EditorGUI.BeginDisabledGroup(true);
-                    EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2QuestQuestModelContext), false);
+                    EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2QuestQuestModelFetcher), false);
                     EditorGUI.EndDisabledGroup();
                     EditorGUILayout.HelpBox("QuestModel is auto assign from Gs2QuestQuestModelList.", MessageType.Info);
                 }
                 else {
+                    var context = original.GetComponentInParent<Gs2QuestQuestModelContext>();
                     EditorGUI.BeginDisabledGroup(true);
-                    EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2QuestQuestModelContext), false);
+                    EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2QuestQuestModelFetcher), false);
                     EditorGUI.indentLevel++;
                     EditorGUILayout.ObjectField("QuestModel", context.QuestModel, typeof(QuestModel), false);
                     EditorGUI.indentLevel++;

@@ -18,6 +18,7 @@
 
 using Gs2.Unity.Gs2Limit.ScriptableObject;
 using Gs2.Unity.UiKit.Gs2Limit.Context;
+using Gs2.Unity.UiKit.Gs2Limit.Fetcher;
 using UnityEditor;
 using UnityEngine;
 
@@ -31,23 +32,24 @@ namespace Gs2.Unity.UiKit.Gs2Limit.Editor
 
             if (original == null) return;
 
-            var context = original.GetComponentInParent<Gs2LimitOwnCounterContext>();
-            if (context == null) {
-                EditorGUILayout.HelpBox("Gs2LimitOwnCounterContext not found.", MessageType.Error);
-                if (GUILayout.Button("Add Context")) {
-                    original.gameObject.AddComponent<Gs2LimitOwnCounterContext>();
+            var fetcher = original.GetComponentInParent<Gs2LimitOwnCounterFetcher>();
+            if (fetcher == null) {
+                EditorGUILayout.HelpBox("Gs2LimitOwnCounterFetcher not found.", MessageType.Error);
+                if (GUILayout.Button("Add Fetcher")) {
+                    original.gameObject.AddComponent<Gs2LimitOwnCounterFetcher>();
                 }
             }
             else {
-                if (context.transform.parent.GetComponent<Gs2LimitOwnCounterList>() != null) {
+                if (fetcher.transform.parent.GetComponent<Gs2LimitOwnCounterList>() != null) {
                     EditorGUI.BeginDisabledGroup(true);
-                    EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2LimitOwnCounterContext), false);
+                    EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2LimitOwnCounterFetcher), false);
                     EditorGUI.EndDisabledGroup();
                     EditorGUILayout.HelpBox("Counter is auto assign from Gs2LimitOwnCounterList.", MessageType.Info);
                 }
                 else {
+                    var context = original.GetComponentInParent<Gs2LimitOwnCounterContext>();
                     EditorGUI.BeginDisabledGroup(true);
-                    EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2LimitOwnCounterContext), false);
+                    EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2LimitOwnCounterFetcher), false);
                     EditorGUI.indentLevel++;
                     EditorGUILayout.ObjectField("Counter", context.Counter, typeof(OwnCounter), false);
                     EditorGUI.indentLevel++;

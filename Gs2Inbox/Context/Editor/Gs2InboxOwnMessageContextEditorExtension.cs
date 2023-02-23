@@ -32,13 +32,15 @@ namespace Gs2.Unity.UiKit.Gs2Inbox.Editor
 
             if (original == null) return;
 
+            serializedObject.Update();
+
             if (original.Message == null) {
                 if (original.transform.parent.GetComponent<Gs2InboxOwnMessageList>() != null) {
                     EditorGUILayout.HelpBox("OwnMessage is auto assign from Gs2InboxOwnMessageList.", MessageType.Info);
                 }
                 else {
                     EditorGUILayout.HelpBox("OwnMessage not assigned.", MessageType.Error);
-                    EditorGUILayout.ObjectField("OwnMessage", original.Message, typeof(OwnMessage), false);
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("Message"), true);
                 }
             }
             else {
@@ -50,8 +52,7 @@ namespace Gs2.Unity.UiKit.Gs2Inbox.Editor
                 EditorGUI.indentLevel--;
                 EditorGUI.EndDisabledGroup();
             }
-            
-            serializedObject.Update();
+
             serializedObject.ApplyModifiedProperties();
         }
     }

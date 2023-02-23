@@ -32,13 +32,15 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Editor
 
             if (original == null) return;
 
+            serializedObject.Update();
+
             if (original.Score == null) {
                 if (original.transform.parent.GetComponent<Gs2RankingOwnScoreList>() != null) {
                     EditorGUILayout.HelpBox("OwnScore is auto assign from Gs2RankingOwnScoreList.", MessageType.Info);
                 }
                 else {
                     EditorGUILayout.HelpBox("OwnScore not assigned.", MessageType.Error);
-                    EditorGUILayout.ObjectField("OwnScore", original.Score, typeof(OwnScore), false);
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("Score"), true);
                 }
             }
             else {
@@ -52,8 +54,7 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Editor
                 EditorGUI.indentLevel--;
                 EditorGUI.EndDisabledGroup();
             }
-            
-            serializedObject.Update();
+
             serializedObject.ApplyModifiedProperties();
         }
     }

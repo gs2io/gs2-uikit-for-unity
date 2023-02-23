@@ -32,9 +32,11 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking.Editor
 
             if (original == null) return;
 
+            serializedObject.Update();
+
             if (original.Gathering == null) {
                 EditorGUILayout.HelpBox("Gathering not assigned.", MessageType.Error);
-                EditorGUILayout.ObjectField("Gathering", original.Gathering, typeof(Gathering), false);
+                EditorGUILayout.PropertyField(serializedObject.FindProperty("Gathering"), true);
             }
             else {
                 EditorGUILayout.ObjectField("Gathering", original.Gathering, typeof(Gathering), false);
@@ -45,8 +47,7 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking.Editor
                 EditorGUI.indentLevel--;
                 EditorGUI.EndDisabledGroup();
             }
-            
-            serializedObject.Update();
+
             serializedObject.ApplyModifiedProperties();
         }
     }

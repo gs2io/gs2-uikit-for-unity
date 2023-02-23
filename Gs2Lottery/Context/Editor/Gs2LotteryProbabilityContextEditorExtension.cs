@@ -32,9 +32,11 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.Editor
 
             if (original == null) return;
 
+            serializedObject.Update();
+
             if (original.Probability == null) {
                 EditorGUILayout.HelpBox("Probability not assigned.", MessageType.Error);
-                EditorGUILayout.ObjectField("Probability", original.Probability, typeof(Probability), false);
+                EditorGUILayout.PropertyField(serializedObject.FindProperty("Probability"), true);
             }
             else {
                 EditorGUILayout.ObjectField("Probability", original.Probability, typeof(Probability), false);
@@ -44,8 +46,7 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.Editor
                 EditorGUI.indentLevel--;
                 EditorGUI.EndDisabledGroup();
             }
-            
-            serializedObject.Update();
+
             serializedObject.ApplyModifiedProperties();
         }
     }

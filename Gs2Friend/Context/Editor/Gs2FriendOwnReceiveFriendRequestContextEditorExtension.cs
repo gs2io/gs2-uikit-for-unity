@@ -32,13 +32,15 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Editor
 
             if (original == null) return;
 
+            serializedObject.Update();
+
             if (original.ReceiveFriendRequest == null) {
                 if (original.transform.parent.GetComponent<Gs2FriendOwnReceiveFriendRequestList>() != null) {
                     EditorGUILayout.HelpBox("OwnReceiveFriendRequest is auto assign from Gs2FriendOwnReceiveFriendRequestList.", MessageType.Info);
                 }
                 else {
                     EditorGUILayout.HelpBox("OwnReceiveFriendRequest not assigned.", MessageType.Error);
-                    EditorGUILayout.ObjectField("OwnReceiveFriendRequest", original.ReceiveFriendRequest, typeof(OwnReceiveFriendRequest), false);
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("ReceiveFriendRequest"), true);
                 }
             }
             else {
@@ -48,8 +50,7 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Editor
                 EditorGUI.indentLevel--;
                 EditorGUI.EndDisabledGroup();
             }
-            
-            serializedObject.Update();
+
             serializedObject.ApplyModifiedProperties();
         }
     }

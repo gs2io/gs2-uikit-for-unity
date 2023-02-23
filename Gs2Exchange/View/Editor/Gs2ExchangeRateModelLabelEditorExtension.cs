@@ -18,6 +18,7 @@
 
 using Gs2.Unity.Gs2Exchange.ScriptableObject;
 using Gs2.Unity.UiKit.Gs2Exchange.Context;
+using Gs2.Unity.UiKit.Gs2Exchange.Fetcher;
 using UnityEditor;
 using UnityEngine;
 
@@ -31,23 +32,24 @@ namespace Gs2.Unity.UiKit.Gs2Exchange.Editor
 
             if (original == null) return;
 
-            var context = original.GetComponentInParent<Gs2ExchangeRateModelContext>();
-            if (context == null) {
-                EditorGUILayout.HelpBox("Gs2ExchangeRateModelContext not found.", MessageType.Error);
-                if (GUILayout.Button("Add Context")) {
-                    original.gameObject.AddComponent<Gs2ExchangeRateModelContext>();
+            var fetcher = original.GetComponentInParent<Gs2ExchangeRateModelFetcher>();
+            if (fetcher == null) {
+                EditorGUILayout.HelpBox("Gs2ExchangeRateModelFetcher not found.", MessageType.Error);
+                if (GUILayout.Button("Add Fetcher")) {
+                    original.gameObject.AddComponent<Gs2ExchangeRateModelFetcher>();
                 }
             }
             else {
-                if (context.transform.parent.GetComponent<Gs2ExchangeRateModelList>() != null) {
+                if (fetcher.transform.parent.GetComponent<Gs2ExchangeRateModelList>() != null) {
                     EditorGUI.BeginDisabledGroup(true);
-                    EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2ExchangeRateModelContext), false);
+                    EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2ExchangeRateModelFetcher), false);
                     EditorGUI.EndDisabledGroup();
                     EditorGUILayout.HelpBox("RateModel is auto assign from Gs2ExchangeRateModelList.", MessageType.Info);
                 }
                 else {
+                    var context = original.GetComponentInParent<Gs2ExchangeRateModelContext>();
                     EditorGUI.BeginDisabledGroup(true);
-                    EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2ExchangeRateModelContext), false);
+                    EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2ExchangeRateModelFetcher), false);
                     EditorGUI.indentLevel++;
                     EditorGUILayout.ObjectField("RateModel", context.RateModel, typeof(RateModel), false);
                     EditorGUI.indentLevel++;

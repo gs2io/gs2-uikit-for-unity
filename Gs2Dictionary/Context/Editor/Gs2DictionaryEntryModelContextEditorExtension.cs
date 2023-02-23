@@ -32,13 +32,15 @@ namespace Gs2.Unity.UiKit.Gs2Dictionary.Editor
 
             if (original == null) return;
 
+            serializedObject.Update();
+
             if (original.EntryModel == null) {
                 if (original.transform.parent.GetComponent<Gs2DictionaryEntryModelList>() != null) {
                     EditorGUILayout.HelpBox("EntryModel is auto assign from Gs2DictionaryEntryModelList.", MessageType.Info);
                 }
                 else {
                     EditorGUILayout.HelpBox("EntryModel not assigned.", MessageType.Error);
-                    EditorGUILayout.ObjectField("EntryModel", original.EntryModel, typeof(EntryModel), false);
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("EntryModel"), true);
                 }
             }
             else {
@@ -50,8 +52,7 @@ namespace Gs2.Unity.UiKit.Gs2Dictionary.Editor
                 EditorGUI.indentLevel--;
                 EditorGUI.EndDisabledGroup();
             }
-            
-            serializedObject.Update();
+
             serializedObject.ApplyModifiedProperties();
         }
     }

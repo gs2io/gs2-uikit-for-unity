@@ -33,13 +33,15 @@ namespace Gs2.Unity.UiKit.Gs2Schedule.Editor
 
             if (original == null) return;
 
+            serializedObject.Update();
+
             if (original.Trigger == null) {
                 if (original.transform.parent.GetComponent<Gs2ScheduleOwnTriggerList>() != null) {
                     EditorGUILayout.HelpBox("OwnTrigger is auto assign from Gs2ScheduleOwnTriggerList.", MessageType.Info);
                 }
                 else {
                     EditorGUILayout.HelpBox("OwnTrigger not assigned.", MessageType.Error);
-                    EditorGUILayout.ObjectField("OwnTrigger", original.Trigger, typeof(OwnTrigger), false);
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("Trigger"), true);
                 }
             }
             else {
@@ -51,8 +53,7 @@ namespace Gs2.Unity.UiKit.Gs2Schedule.Editor
                 EditorGUI.indentLevel--;
                 EditorGUI.EndDisabledGroup();
             }
-            
-            serializedObject.Update();
+
             serializedObject.ApplyModifiedProperties();
         }
     }

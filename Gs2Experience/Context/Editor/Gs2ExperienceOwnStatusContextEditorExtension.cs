@@ -32,13 +32,15 @@ namespace Gs2.Unity.UiKit.Gs2Experience.Editor
 
             if (original == null) return;
 
+            serializedObject.Update();
+
             if (original.Status == null) {
                 if (original.transform.parent.GetComponent<Gs2ExperienceOwnStatusList>() != null) {
                     EditorGUILayout.HelpBox("OwnStatus is auto assign from Gs2ExperienceOwnStatusList.", MessageType.Info);
                 }
                 else {
                     EditorGUILayout.HelpBox("OwnStatus not assigned.", MessageType.Error);
-                    EditorGUILayout.ObjectField("OwnStatus", original.Status, typeof(OwnStatus), false);
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("Status"), true);
                 }
             }
             else {
@@ -51,8 +53,7 @@ namespace Gs2.Unity.UiKit.Gs2Experience.Editor
                 EditorGUI.indentLevel--;
                 EditorGUI.EndDisabledGroup();
             }
-            
-            serializedObject.Update();
+
             serializedObject.ApplyModifiedProperties();
         }
     }

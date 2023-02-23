@@ -18,6 +18,7 @@
 
 using Gs2.Unity.Gs2Version.ScriptableObject;
 using Gs2.Unity.UiKit.Gs2Version.Context;
+using Gs2.Unity.UiKit.Gs2Version.Fetcher;
 using UnityEditor;
 using UnityEngine;
 
@@ -31,23 +32,24 @@ namespace Gs2.Unity.UiKit.Gs2Version.Editor
 
             if (original == null) return;
 
-            var context = original.GetComponentInParent<Gs2VersionVersionModelContext>();
-            if (context == null) {
-                EditorGUILayout.HelpBox("Gs2VersionVersionModelContext not found.", MessageType.Error);
-                if (GUILayout.Button("Add Context")) {
-                    original.gameObject.AddComponent<Gs2VersionVersionModelContext>();
+            var fetcher = original.GetComponentInParent<Gs2VersionVersionModelFetcher>();
+            if (fetcher == null) {
+                EditorGUILayout.HelpBox("Gs2VersionVersionModelFetcher not found.", MessageType.Error);
+                if (GUILayout.Button("Add Fetcher")) {
+                    original.gameObject.AddComponent<Gs2VersionVersionModelFetcher>();
                 }
             }
             else {
-                if (context.transform.parent.GetComponent<Gs2VersionVersionModelList>() != null) {
+                if (fetcher.transform.parent.GetComponent<Gs2VersionVersionModelList>() != null) {
                     EditorGUI.BeginDisabledGroup(true);
-                    EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2VersionVersionModelContext), false);
+                    EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2VersionVersionModelFetcher), false);
                     EditorGUI.EndDisabledGroup();
                     EditorGUILayout.HelpBox("VersionModel is auto assign from Gs2VersionVersionModelList.", MessageType.Info);
                 }
                 else {
+                    var context = original.GetComponentInParent<Gs2VersionVersionModelContext>();
                     EditorGUI.BeginDisabledGroup(true);
-                    EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2VersionVersionModelContext), false);
+                    EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2VersionVersionModelFetcher), false);
                     EditorGUI.indentLevel++;
                     EditorGUILayout.ObjectField("VersionModel", context.VersionModel, typeof(VersionModel), false);
                     EditorGUI.indentLevel++;

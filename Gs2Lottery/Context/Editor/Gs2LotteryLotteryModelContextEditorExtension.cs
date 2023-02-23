@@ -32,13 +32,15 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.Editor
 
             if (original == null) return;
 
+            serializedObject.Update();
+
             if (original.LotteryModel == null) {
                 if (original.transform.parent.GetComponent<Gs2LotteryLotteryModelList>() != null) {
                     EditorGUILayout.HelpBox("LotteryModel is auto assign from Gs2LotteryLotteryModelList.", MessageType.Info);
                 }
                 else {
                     EditorGUILayout.HelpBox("LotteryModel not assigned.", MessageType.Error);
-                    EditorGUILayout.ObjectField("LotteryModel", original.LotteryModel, typeof(LotteryModel), false);
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("LotteryModel"), true);
                 }
             }
             else {
@@ -50,8 +52,7 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.Editor
                 EditorGUI.indentLevel--;
                 EditorGUI.EndDisabledGroup();
             }
-            
-            serializedObject.Update();
+
             serializedObject.ApplyModifiedProperties();
         }
     }

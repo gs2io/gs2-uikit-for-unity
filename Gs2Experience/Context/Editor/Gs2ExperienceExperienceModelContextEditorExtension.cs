@@ -32,13 +32,15 @@ namespace Gs2.Unity.UiKit.Gs2Experience.Editor
 
             if (original == null) return;
 
+            serializedObject.Update();
+
             if (original.ExperienceModel == null) {
                 if (original.transform.parent.GetComponent<Gs2ExperienceExperienceModelList>() != null) {
                     EditorGUILayout.HelpBox("ExperienceModel is auto assign from Gs2ExperienceExperienceModelList.", MessageType.Info);
                 }
                 else {
                     EditorGUILayout.HelpBox("ExperienceModel not assigned.", MessageType.Error);
-                    EditorGUILayout.ObjectField("ExperienceModel", original.ExperienceModel, typeof(ExperienceModel), false);
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("ExperienceModel"), true);
                 }
             }
             else {
@@ -50,8 +52,7 @@ namespace Gs2.Unity.UiKit.Gs2Experience.Editor
                 EditorGUI.indentLevel--;
                 EditorGUI.EndDisabledGroup();
             }
-            
-            serializedObject.Update();
+
             serializedObject.ApplyModifiedProperties();
         }
     }

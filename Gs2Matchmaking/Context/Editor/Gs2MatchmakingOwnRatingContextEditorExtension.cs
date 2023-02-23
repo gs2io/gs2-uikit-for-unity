@@ -32,13 +32,15 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking.Editor
 
             if (original == null) return;
 
+            serializedObject.Update();
+
             if (original.Rating == null) {
                 if (original.transform.parent.GetComponent<Gs2MatchmakingOwnRatingList>() != null) {
                     EditorGUILayout.HelpBox("OwnRating is auto assign from Gs2MatchmakingOwnRatingList.", MessageType.Info);
                 }
                 else {
                     EditorGUILayout.HelpBox("OwnRating not assigned.", MessageType.Error);
-                    EditorGUILayout.ObjectField("OwnRating", original.Rating, typeof(OwnRating), false);
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("Rating"), true);
                 }
             }
             else {
@@ -50,8 +52,7 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking.Editor
                 EditorGUI.indentLevel--;
                 EditorGUI.EndDisabledGroup();
             }
-            
-            serializedObject.Update();
+
             serializedObject.ApplyModifiedProperties();
         }
     }

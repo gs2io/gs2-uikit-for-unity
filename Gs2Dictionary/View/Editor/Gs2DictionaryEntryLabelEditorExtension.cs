@@ -18,6 +18,7 @@
 
 using Gs2.Unity.Gs2Dictionary.ScriptableObject;
 using Gs2.Unity.UiKit.Gs2Dictionary.Context;
+using Gs2.Unity.UiKit.Gs2Dictionary.Fetcher;
 using UnityEditor;
 using UnityEngine;
 
@@ -31,23 +32,24 @@ namespace Gs2.Unity.UiKit.Gs2Dictionary.Editor
 
             if (original == null) return;
 
-            var context = original.GetComponentInParent<Gs2DictionaryOwnEntryContext>();
-            if (context == null) {
-                EditorGUILayout.HelpBox("Gs2DictionaryOwnEntryContext not found.", MessageType.Error);
-                if (GUILayout.Button("Add Context")) {
-                    original.gameObject.AddComponent<Gs2DictionaryOwnEntryContext>();
+            var fetcher = original.GetComponentInParent<Gs2DictionaryOwnEntryFetcher>();
+            if (fetcher == null) {
+                EditorGUILayout.HelpBox("Gs2DictionaryOwnEntryFetcher not found.", MessageType.Error);
+                if (GUILayout.Button("Add Fetcher")) {
+                    original.gameObject.AddComponent<Gs2DictionaryOwnEntryFetcher>();
                 }
             }
             else {
-                if (context.transform.parent.GetComponent<Gs2DictionaryOwnEntryList>() != null) {
+                if (fetcher.transform.parent.GetComponent<Gs2DictionaryOwnEntryList>() != null) {
                     EditorGUI.BeginDisabledGroup(true);
-                    EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2DictionaryOwnEntryContext), false);
+                    EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2DictionaryOwnEntryFetcher), false);
                     EditorGUI.EndDisabledGroup();
                     EditorGUILayout.HelpBox("Entry is auto assign from Gs2DictionaryOwnEntryList.", MessageType.Info);
                 }
                 else {
+                    var context = original.GetComponentInParent<Gs2DictionaryOwnEntryContext>();
                     EditorGUI.BeginDisabledGroup(true);
-                    EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2DictionaryOwnEntryContext), false);
+                    EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2DictionaryOwnEntryFetcher), false);
                     EditorGUI.indentLevel++;
                     EditorGUILayout.ObjectField("Entry", context.Entry, typeof(OwnEntry), false);
                     EditorGUI.indentLevel++;

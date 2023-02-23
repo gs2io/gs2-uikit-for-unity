@@ -18,6 +18,7 @@
 
 using Gs2.Unity.Gs2Matchmaking.ScriptableObject;
 using Gs2.Unity.UiKit.Gs2Matchmaking.Context;
+using Gs2.Unity.UiKit.Gs2Matchmaking.Fetcher;
 using UnityEditor;
 using UnityEngine;
 
@@ -31,16 +32,17 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking.Editor
 
             if (original == null) return;
 
-            var context = original.GetComponentInParent<Gs2MatchmakingGatheringContext>();
-            if (context == null) {
-                EditorGUILayout.HelpBox("Gs2MatchmakingGatheringContext not found.", MessageType.Error);
-                if (GUILayout.Button("Add Context")) {
-                    original.gameObject.AddComponent<Gs2MatchmakingGatheringContext>();
+            var fetcher = original.GetComponentInParent<Gs2MatchmakingGatheringFetcher>();
+            if (fetcher == null) {
+                EditorGUILayout.HelpBox("Gs2MatchmakingGatheringFetcher not found.", MessageType.Error);
+                if (GUILayout.Button("Add Fetcher")) {
+                    original.gameObject.AddComponent<Gs2MatchmakingGatheringFetcher>();
                 }
             }
             else {
+                var context = original.GetComponentInParent<Gs2MatchmakingGatheringContext>();
                 EditorGUI.BeginDisabledGroup(true);
-                EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2MatchmakingGatheringContext), false);
+                EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2MatchmakingGatheringFetcher), false);
                 EditorGUI.indentLevel++;
                 EditorGUILayout.ObjectField("Gathering", context.Gathering, typeof(Gathering), false);
                 EditorGUI.indentLevel++;

@@ -32,13 +32,15 @@ namespace Gs2.Unity.UiKit.Gs2Datastore.Editor
 
             if (original == null) return;
 
+            serializedObject.Update();
+
             if (original.DataObjectHistory == null) {
                 if (original.transform.parent.GetComponent<Gs2DatastoreOwnDataObjectHistoryList>() != null) {
                     EditorGUILayout.HelpBox("OwnDataObjectHistory is auto assign from Gs2DatastoreOwnDataObjectHistoryList.", MessageType.Info);
                 }
                 else {
                     EditorGUILayout.HelpBox("OwnDataObjectHistory not assigned.", MessageType.Error);
-                    EditorGUILayout.ObjectField("OwnDataObjectHistory", original.DataObjectHistory, typeof(OwnDataObjectHistory), false);
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("DataObjectHistory"), true);
                 }
             }
             else {
@@ -51,8 +53,7 @@ namespace Gs2.Unity.UiKit.Gs2Datastore.Editor
                 EditorGUI.indentLevel--;
                 EditorGUI.EndDisabledGroup();
             }
-            
-            serializedObject.Update();
+
             serializedObject.ApplyModifiedProperties();
         }
     }

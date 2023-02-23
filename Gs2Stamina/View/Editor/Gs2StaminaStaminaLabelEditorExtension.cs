@@ -18,6 +18,7 @@
 
 using Gs2.Unity.Gs2Stamina.ScriptableObject;
 using Gs2.Unity.UiKit.Gs2Stamina.Context;
+using Gs2.Unity.UiKit.Gs2Stamina.Fetcher;
 using UnityEditor;
 using UnityEngine;
 
@@ -31,16 +32,17 @@ namespace Gs2.Unity.UiKit.Gs2Stamina.Editor
 
             if (original == null) return;
 
-            var context = original.GetComponentInParent<Gs2StaminaOwnStaminaContext>();
-            if (context == null) {
-                EditorGUILayout.HelpBox("Gs2StaminaOwnStaminaContext not found.", MessageType.Error);
-                if (GUILayout.Button("Add Context")) {
-                    original.gameObject.AddComponent<Gs2StaminaOwnStaminaContext>();
+            var fetcher = original.GetComponentInParent<Gs2StaminaOwnStaminaFetcher>();
+            if (fetcher == null) {
+                EditorGUILayout.HelpBox("Gs2StaminaOwnStaminaFetcher not found.", MessageType.Error);
+                if (GUILayout.Button("Add Fetcher")) {
+                    original.gameObject.AddComponent<Gs2StaminaOwnStaminaFetcher>();
                 }
             }
             else {
+                var context = original.GetComponentInParent<Gs2StaminaOwnStaminaContext>();
                 EditorGUI.BeginDisabledGroup(true);
-                EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2StaminaOwnStaminaContext), false);
+                EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2StaminaOwnStaminaFetcher), false);
                 EditorGUI.indentLevel++;
                 EditorGUILayout.ObjectField("Stamina", context.Stamina, typeof(OwnStamina), false);
                 EditorGUI.indentLevel++;

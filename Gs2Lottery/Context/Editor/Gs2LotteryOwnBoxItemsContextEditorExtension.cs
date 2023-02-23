@@ -32,13 +32,15 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.Editor
 
             if (original == null) return;
 
+            serializedObject.Update();
+
             if (original.BoxItems == null) {
                 if (original.transform.parent.GetComponent<Gs2LotteryOwnBoxItemsList>() != null) {
                     EditorGUILayout.HelpBox("OwnBoxItems is auto assign from Gs2LotteryOwnBoxItemsList.", MessageType.Info);
                 }
                 else {
                     EditorGUILayout.HelpBox("OwnBoxItems not assigned.", MessageType.Error);
-                    EditorGUILayout.ObjectField("OwnBoxItems", original.BoxItems, typeof(OwnBoxItems), false);
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("BoxItems"), true);
                 }
             }
             else {
@@ -50,8 +52,7 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.Editor
                 EditorGUI.indentLevel--;
                 EditorGUI.EndDisabledGroup();
             }
-            
-            serializedObject.Update();
+
             serializedObject.ApplyModifiedProperties();
         }
     }

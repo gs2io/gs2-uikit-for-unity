@@ -18,6 +18,7 @@
 
 using Gs2.Unity.Gs2Chat.ScriptableObject;
 using Gs2.Unity.UiKit.Gs2Chat.Context;
+using Gs2.Unity.UiKit.Gs2Chat.Fetcher;
 using UnityEditor;
 using UnityEngine;
 
@@ -31,23 +32,24 @@ namespace Gs2.Unity.UiKit.Gs2Chat.Editor
 
             if (original == null) return;
 
-            var context = original.GetComponentInParent<Gs2ChatOwnSubscribeContext>();
-            if (context == null) {
-                EditorGUILayout.HelpBox("Gs2ChatOwnSubscribeContext not found.", MessageType.Error);
-                if (GUILayout.Button("Add Context")) {
-                    original.gameObject.AddComponent<Gs2ChatOwnSubscribeContext>();
+            var fetcher = original.GetComponentInParent<Gs2ChatOwnSubscribeFetcher>();
+            if (fetcher == null) {
+                EditorGUILayout.HelpBox("Gs2ChatOwnSubscribeFetcher not found.", MessageType.Error);
+                if (GUILayout.Button("Add Fetcher")) {
+                    original.gameObject.AddComponent<Gs2ChatOwnSubscribeFetcher>();
                 }
             }
             else {
-                if (context.transform.parent.GetComponent<Gs2ChatOwnSubscribeList>() != null) {
+                if (fetcher.transform.parent.GetComponent<Gs2ChatOwnSubscribeList>() != null) {
                     EditorGUI.BeginDisabledGroup(true);
-                    EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2ChatOwnSubscribeContext), false);
+                    EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2ChatOwnSubscribeFetcher), false);
                     EditorGUI.EndDisabledGroup();
                     EditorGUILayout.HelpBox("Subscribe is auto assign from Gs2ChatOwnSubscribeList.", MessageType.Info);
                 }
                 else {
+                    var context = original.GetComponentInParent<Gs2ChatOwnSubscribeContext>();
                     EditorGUI.BeginDisabledGroup(true);
-                    EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2ChatOwnSubscribeContext), false);
+                    EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2ChatOwnSubscribeFetcher), false);
                     EditorGUI.indentLevel++;
                     EditorGUILayout.ObjectField("Subscribe", context.Subscribe, typeof(OwnSubscribe), false);
                     EditorGUI.indentLevel++;

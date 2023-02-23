@@ -18,6 +18,7 @@
 
 using Gs2.Unity.Gs2Formation.ScriptableObject;
 using Gs2.Unity.UiKit.Gs2Formation.Context;
+using Gs2.Unity.UiKit.Gs2Formation.Fetcher;
 using UnityEditor;
 using UnityEngine;
 
@@ -31,23 +32,24 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Editor
 
             if (original == null) return;
 
-            var context = original.GetComponentInParent<Gs2FormationOwnMoldContext>();
-            if (context == null) {
-                EditorGUILayout.HelpBox("Gs2FormationOwnMoldContext not found.", MessageType.Error);
-                if (GUILayout.Button("Add Context")) {
-                    original.gameObject.AddComponent<Gs2FormationOwnMoldContext>();
+            var fetcher = original.GetComponentInParent<Gs2FormationOwnMoldFetcher>();
+            if (fetcher == null) {
+                EditorGUILayout.HelpBox("Gs2FormationOwnMoldFetcher not found.", MessageType.Error);
+                if (GUILayout.Button("Add Fetcher")) {
+                    original.gameObject.AddComponent<Gs2FormationOwnMoldFetcher>();
                 }
             }
             else {
-                if (context.transform.parent.GetComponent<Gs2FormationOwnMoldList>() != null) {
+                if (fetcher.transform.parent.GetComponent<Gs2FormationOwnMoldList>() != null) {
                     EditorGUI.BeginDisabledGroup(true);
-                    EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2FormationOwnMoldContext), false);
+                    EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2FormationOwnMoldFetcher), false);
                     EditorGUI.EndDisabledGroup();
                     EditorGUILayout.HelpBox("Mold is auto assign from Gs2FormationOwnMoldList.", MessageType.Info);
                 }
                 else {
+                    var context = original.GetComponentInParent<Gs2FormationOwnMoldContext>();
                     EditorGUI.BeginDisabledGroup(true);
-                    EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2FormationOwnMoldContext), false);
+                    EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2FormationOwnMoldFetcher), false);
                     EditorGUI.indentLevel++;
                     EditorGUILayout.ObjectField("Mold", context.Mold, typeof(OwnMold), false);
                     EditorGUI.indentLevel++;

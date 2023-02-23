@@ -18,6 +18,7 @@
 
 using Gs2.Unity.Gs2Inventory.ScriptableObject;
 using Gs2.Unity.UiKit.Gs2Inventory.Context;
+using Gs2.Unity.UiKit.Gs2Inventory.Fetcher;
 using UnityEditor;
 using UnityEngine;
 
@@ -31,23 +32,30 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Editor
 
             if (original == null) return;
 
-            var context = original.GetComponentInParent<Gs2InventoryItemModelContext>();
-            if (context == null) {
-                EditorGUILayout.HelpBox("Gs2InventoryItemModelContext not found.", MessageType.Error);
-                if (GUILayout.Button("Add Context")) {
-                    original.gameObject.AddComponent<Gs2InventoryItemModelContext>();
+            var fetcher = original.GetComponentInParent<Gs2InventoryItemModelFetcher>();
+            if (fetcher == null) {
+                EditorGUILayout.HelpBox("Gs2InventoryItemModelFetcher not found.", MessageType.Error);
+                if (GUILayout.Button("Add Fetcher")) {
+                    original.gameObject.AddComponent<Gs2InventoryItemModelFetcher>();
                 }
             }
             else {
-                if (context.transform.parent.GetComponent<Gs2InventoryItemModelList>() != null) {
+                if (fetcher.transform.parent.GetComponent<Gs2InventoryItemModelList>() != null) {
                     EditorGUI.BeginDisabledGroup(true);
-                    EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2InventoryItemModelContext), false);
+                    EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2InventoryItemModelFetcher), false);
                     EditorGUI.EndDisabledGroup();
                     EditorGUILayout.HelpBox("ItemModel is auto assign from Gs2InventoryItemModelList.", MessageType.Info);
                 }
-                else {
+                else if (fetcher.transform.parent.GetComponent<Gs2InventoryOwnItemSetList>() != null) {
                     EditorGUI.BeginDisabledGroup(true);
-                    EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2InventoryItemModelContext), false);
+                    EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2InventoryOwnItemSetFetcher), false);
+                    EditorGUI.EndDisabledGroup();
+                    EditorGUILayout.HelpBox("ItemModel is auto assign from Gs2InventoryOwnItemSetList.", MessageType.Info);
+                }
+                else {
+                    var context = original.GetComponentInParent<Gs2InventoryItemModelContext>();
+                    EditorGUI.BeginDisabledGroup(true);
+                    EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2InventoryItemModelFetcher), false);
                     EditorGUI.indentLevel++;
                     EditorGUILayout.ObjectField("ItemModel", context.ItemModel, typeof(ItemModel), false);
                     EditorGUI.indentLevel++;

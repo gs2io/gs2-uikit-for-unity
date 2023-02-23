@@ -32,13 +32,15 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Editor
 
             if (original == null) return;
 
+            serializedObject.Update();
+
             if (original.MoldModel == null) {
                 if (original.transform.parent.GetComponent<Gs2FormationMoldModelList>() != null) {
                     EditorGUILayout.HelpBox("MoldModel is auto assign from Gs2FormationMoldModelList.", MessageType.Info);
                 }
                 else {
                     EditorGUILayout.HelpBox("MoldModel not assigned.", MessageType.Error);
-                    EditorGUILayout.ObjectField("MoldModel", original.MoldModel, typeof(MoldModel), false);
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("MoldModel"), true);
                 }
             }
             else {
@@ -50,8 +52,7 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Editor
                 EditorGUI.indentLevel--;
                 EditorGUI.EndDisabledGroup();
             }
-            
-            serializedObject.Update();
+
             serializedObject.ApplyModifiedProperties();
         }
     }

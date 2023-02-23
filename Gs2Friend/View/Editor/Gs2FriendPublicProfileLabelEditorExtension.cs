@@ -18,6 +18,7 @@
 
 using Gs2.Unity.Gs2Friend.ScriptableObject;
 using Gs2.Unity.UiKit.Gs2Friend.Context;
+using Gs2.Unity.UiKit.Gs2Friend.Fetcher;
 using UnityEditor;
 using UnityEngine;
 
@@ -31,16 +32,17 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Editor
 
             if (original == null) return;
 
-            var context = original.GetComponentInParent<Gs2FriendPublicProfileContext>();
-            if (context == null) {
-                EditorGUILayout.HelpBox("Gs2FriendPublicProfileContext not found.", MessageType.Error);
-                if (GUILayout.Button("Add Context")) {
-                    original.gameObject.AddComponent<Gs2FriendPublicProfileContext>();
+            var fetcher = original.GetComponentInParent<Gs2FriendPublicProfileFetcher>();
+            if (fetcher == null) {
+                EditorGUILayout.HelpBox("Gs2FriendPublicProfileFetcher not found.", MessageType.Error);
+                if (GUILayout.Button("Add Fetcher")) {
+                    original.gameObject.AddComponent<Gs2FriendPublicProfileFetcher>();
                 }
             }
             else {
+                var context = original.GetComponentInParent<Gs2FriendPublicProfileContext>();
                 EditorGUI.BeginDisabledGroup(true);
-                EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2FriendPublicProfileContext), false);
+                EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2FriendPublicProfileFetcher), false);
                 EditorGUI.indentLevel++;
                 EditorGUILayout.ObjectField("PublicProfile", context.PublicProfile, typeof(PublicProfile), false);
                 EditorGUI.indentLevel++;

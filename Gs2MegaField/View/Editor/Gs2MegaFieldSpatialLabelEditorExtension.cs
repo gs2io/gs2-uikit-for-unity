@@ -18,6 +18,7 @@
 
 using Gs2.Unity.Gs2MegaField.ScriptableObject;
 using Gs2.Unity.UiKit.Gs2MegaField.Context;
+using Gs2.Unity.UiKit.Gs2MegaField.Fetcher;
 using UnityEditor;
 using UnityEngine;
 
@@ -31,16 +32,17 @@ namespace Gs2.Unity.UiKit.Gs2MegaField.Editor
 
             if (original == null) return;
 
-            var context = original.GetComponentInParent<Gs2MegaFieldSpatialContext>();
-            if (context == null) {
-                EditorGUILayout.HelpBox("Gs2MegaFieldSpatialContext not found.", MessageType.Error);
-                if (GUILayout.Button("Add Context")) {
-                    original.gameObject.AddComponent<Gs2MegaFieldSpatialContext>();
+            var fetcher = original.GetComponentInParent<Gs2MegaFieldSpatialFetcher>();
+            if (fetcher == null) {
+                EditorGUILayout.HelpBox("Gs2MegaFieldSpatialFetcher not found.", MessageType.Error);
+                if (GUILayout.Button("Add Fetcher")) {
+                    original.gameObject.AddComponent<Gs2MegaFieldSpatialFetcher>();
                 }
             }
             else {
+                var context = original.GetComponentInParent<Gs2MegaFieldSpatialContext>();
                 EditorGUI.BeginDisabledGroup(true);
-                EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2MegaFieldSpatialContext), false);
+                EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2MegaFieldSpatialFetcher), false);
                 EditorGUI.indentLevel++;
                 EditorGUILayout.ObjectField("Spatial", context.Spatial, typeof(Spatial), false);
                 EditorGUI.indentLevel++;

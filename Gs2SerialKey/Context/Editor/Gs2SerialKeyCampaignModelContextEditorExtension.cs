@@ -32,9 +32,11 @@ namespace Gs2.Unity.UiKit.Gs2SerialKey.Editor
 
             if (original == null) return;
 
+            serializedObject.Update();
+
             if (original.CampaignModel == null) {
                 EditorGUILayout.HelpBox("CampaignModel not assigned.", MessageType.Error);
-                EditorGUILayout.ObjectField("CampaignModel", original.CampaignModel, typeof(CampaignModel), false);
+                EditorGUILayout.PropertyField(serializedObject.FindProperty("CampaignModel"), true);
             }
             else {
                 EditorGUILayout.ObjectField("CampaignModel", original.CampaignModel, typeof(CampaignModel), false);
@@ -45,8 +47,7 @@ namespace Gs2.Unity.UiKit.Gs2SerialKey.Editor
                 EditorGUI.indentLevel--;
                 EditorGUI.EndDisabledGroup();
             }
-            
-            serializedObject.Update();
+
             serializedObject.ApplyModifiedProperties();
         }
     }

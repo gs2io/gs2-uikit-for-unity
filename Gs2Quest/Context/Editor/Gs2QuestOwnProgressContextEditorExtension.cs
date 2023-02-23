@@ -32,9 +32,11 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Editor
 
             if (original == null) return;
 
+            serializedObject.Update();
+
             if (original.Progress == null) {
                 EditorGUILayout.HelpBox("OwnProgress not assigned.", MessageType.Error);
-                EditorGUILayout.ObjectField("OwnProgress", original.Progress, typeof(OwnProgress), false);
+                EditorGUILayout.PropertyField(serializedObject.FindProperty("Progress"), true);
             }
             else {
                 EditorGUILayout.ObjectField("OwnProgress", original.Progress, typeof(OwnProgress), false);
@@ -44,8 +46,7 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Editor
                 EditorGUI.indentLevel--;
                 EditorGUI.EndDisabledGroup();
             }
-            
-            serializedObject.Update();
+
             serializedObject.ApplyModifiedProperties();
         }
     }

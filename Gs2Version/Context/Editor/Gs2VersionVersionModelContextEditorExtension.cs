@@ -32,13 +32,15 @@ namespace Gs2.Unity.UiKit.Gs2Version.Editor
 
             if (original == null) return;
 
+            serializedObject.Update();
+
             if (original.VersionModel == null) {
                 if (original.transform.parent.GetComponent<Gs2VersionVersionModelList>() != null) {
                     EditorGUILayout.HelpBox("VersionModel is auto assign from Gs2VersionVersionModelList.", MessageType.Info);
                 }
                 else {
                     EditorGUILayout.HelpBox("VersionModel not assigned.", MessageType.Error);
-                    EditorGUILayout.ObjectField("VersionModel", original.VersionModel, typeof(VersionModel), false);
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("VersionModel"), true);
                 }
             }
             else {
@@ -50,8 +52,7 @@ namespace Gs2.Unity.UiKit.Gs2Version.Editor
                 EditorGUI.indentLevel--;
                 EditorGUI.EndDisabledGroup();
             }
-            
-            serializedObject.Update();
+
             serializedObject.ApplyModifiedProperties();
         }
     }

@@ -32,9 +32,11 @@ namespace Gs2.Unity.UiKit.Gs2MegaField.Editor
 
             if (original == null) return;
 
+            serializedObject.Update();
+
             if (original.Spatial == null) {
                 EditorGUILayout.HelpBox("Spatial not assigned.", MessageType.Error);
-                EditorGUILayout.ObjectField("Spatial", original.Spatial, typeof(Spatial), false);
+                EditorGUILayout.PropertyField(serializedObject.FindProperty("Spatial"), true);
             }
             else {
                 EditorGUILayout.ObjectField("Spatial", original.Spatial, typeof(Spatial), false);
@@ -47,8 +49,7 @@ namespace Gs2.Unity.UiKit.Gs2MegaField.Editor
                 EditorGUI.indentLevel--;
                 EditorGUI.EndDisabledGroup();
             }
-            
-            serializedObject.Update();
+
             serializedObject.ApplyModifiedProperties();
         }
     }

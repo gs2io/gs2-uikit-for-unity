@@ -32,13 +32,15 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Editor
 
             if (original == null) return;
 
+            serializedObject.Update();
+
             if (original.Counter == null) {
                 if (original.transform.parent.GetComponent<Gs2MissionOwnCounterList>() != null) {
                     EditorGUILayout.HelpBox("OwnCounter is auto assign from Gs2MissionOwnCounterList.", MessageType.Info);
                 }
                 else {
                     EditorGUILayout.HelpBox("OwnCounter not assigned.", MessageType.Error);
-                    EditorGUILayout.ObjectField("OwnCounter", original.Counter, typeof(OwnCounter), false);
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("Counter"), true);
                 }
             }
             else {
@@ -50,8 +52,7 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Editor
                 EditorGUI.indentLevel--;
                 EditorGUI.EndDisabledGroup();
             }
-            
-            serializedObject.Update();
+
             serializedObject.ApplyModifiedProperties();
         }
     }

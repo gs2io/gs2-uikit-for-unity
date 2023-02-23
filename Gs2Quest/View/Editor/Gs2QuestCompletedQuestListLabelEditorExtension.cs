@@ -18,6 +18,7 @@
 
 using Gs2.Unity.Gs2Quest.ScriptableObject;
 using Gs2.Unity.UiKit.Gs2Quest.Context;
+using Gs2.Unity.UiKit.Gs2Quest.Fetcher;
 using UnityEditor;
 using UnityEngine;
 
@@ -31,23 +32,24 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Editor
 
             if (original == null) return;
 
-            var context = original.GetComponentInParent<Gs2QuestOwnCompletedQuestListContext>();
-            if (context == null) {
-                EditorGUILayout.HelpBox("Gs2QuestOwnCompletedQuestListContext not found.", MessageType.Error);
-                if (GUILayout.Button("Add Context")) {
-                    original.gameObject.AddComponent<Gs2QuestOwnCompletedQuestListContext>();
+            var fetcher = original.GetComponentInParent<Gs2QuestOwnCompletedQuestListFetcher>();
+            if (fetcher == null) {
+                EditorGUILayout.HelpBox("Gs2QuestOwnCompletedQuestListFetcher not found.", MessageType.Error);
+                if (GUILayout.Button("Add Fetcher")) {
+                    original.gameObject.AddComponent<Gs2QuestOwnCompletedQuestListFetcher>();
                 }
             }
             else {
-                if (context.transform.parent.GetComponent<Gs2QuestOwnCompletedQuestListList>() != null) {
+                if (fetcher.transform.parent.GetComponent<Gs2QuestOwnCompletedQuestListList>() != null) {
                     EditorGUI.BeginDisabledGroup(true);
-                    EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2QuestOwnCompletedQuestListContext), false);
+                    EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2QuestOwnCompletedQuestListFetcher), false);
                     EditorGUI.EndDisabledGroup();
                     EditorGUILayout.HelpBox("CompletedQuestList is auto assign from Gs2QuestOwnCompletedQuestListList.", MessageType.Info);
                 }
                 else {
+                    var context = original.GetComponentInParent<Gs2QuestOwnCompletedQuestListContext>();
                     EditorGUI.BeginDisabledGroup(true);
-                    EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2QuestOwnCompletedQuestListContext), false);
+                    EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2QuestOwnCompletedQuestListFetcher), false);
                     EditorGUI.indentLevel++;
                     EditorGUILayout.ObjectField("CompletedQuestList", context.CompletedQuestList, typeof(OwnCompletedQuestList), false);
                     EditorGUI.indentLevel++;
