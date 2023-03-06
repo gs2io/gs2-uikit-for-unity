@@ -99,13 +99,15 @@ namespace Gs2.Unity.UiKit.Gs2Showcase.Context
                             }
                         }
                         var mergedAcquireActions = new Dictionary<string, AcquireAction>();
-                        foreach (var (index, count) in purchaseByStepsCount) {
+                        foreach (var index in purchaseByStepsCount.Keys)
+                        {
+                            var _count = purchaseByStepsCount[index];
                             var acquireActions = _fetcher.DisplayItem.SalesItemGroup.SalesItems[index]
                                 .AcquireActions
                                 .Select(v => AcquireAction.New(
                                     v.Action,
                                     v.Request
-                                ) * count);
+                                ) * _count);
                             foreach (var acquireAction in acquireActions) {
                                 if (mergedAcquireActions.ContainsKey(acquireAction.Id)) {
                                     mergedAcquireActions[acquireAction.Id] += acquireAction;

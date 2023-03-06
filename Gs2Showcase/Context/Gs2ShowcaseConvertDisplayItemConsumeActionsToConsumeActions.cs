@@ -105,13 +105,15 @@ namespace Gs2.Unity.UiKit.Gs2Showcase.Context
                             }
                         }
                         var mergedConsumeActions = new Dictionary<string, ConsumeAction>();
-                        foreach (var (index, count) in purchaseByStepsCount) {
+                        foreach (var index in purchaseByStepsCount.Keys)
+                        {
+                            var _count = purchaseByStepsCount[index];
                             var consumeActions = _fetcher.DisplayItem.SalesItemGroup.SalesItems[index]
                                 .ConsumeActions
                                 .Select(v => ConsumeAction.New(
                                     v.Action,
                                     v.Request
-                                ) * count);
+                                ) * _count);
                             foreach (var consumeAction in consumeActions) {
                                 if (consumeAction.Action == "Gs2Limit:CountUpByUserId") {
                                     var request = CountUpByUserIdRequest.FromJson(JsonMapper.ToObject(consumeAction.Request));
