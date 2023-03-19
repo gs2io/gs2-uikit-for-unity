@@ -245,7 +245,7 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking
         private static void CreateButton()
         {
             var prefab = AssetDatabase.LoadAssetAtPath<Gs2MatchmakingVoteVoteAction>(
-                "Assets/Scripts/Runtime/Sdk/Gs2/UiKit/Gs2Matchmaking/Prefabs/Action/Gs2MatchmakingVoteVoteAction.prefab"
+                "Packages/io.gs2.unity.sdk.uikit/Gs2Matchmaking/Prefabs/Action/Gs2MatchmakingVoteVoteAction.prefab"
             );
 
             var instance = PrefabUtility.InstantiatePrefab(prefab, Selection.activeTransform);

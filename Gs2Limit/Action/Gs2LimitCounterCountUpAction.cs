@@ -250,7 +250,7 @@ namespace Gs2.Unity.UiKit.Gs2Limit
         private static void CreateButton()
         {
             var prefab = AssetDatabase.LoadAssetAtPath<Gs2LimitCounterCountUpAction>(
-                "Assets/Scripts/Runtime/Sdk/Gs2/UiKit/Gs2Limit/Prefabs/Action/Gs2LimitCounterCountUpAction.prefab"
+                "Packages/io.gs2.unity.sdk.uikit/Gs2Limit/Prefabs/Action/Gs2LimitCounterCountUpAction.prefab"
             );
 
             var instance = PrefabUtility.InstantiatePrefab(prefab, Selection.activeTransform);

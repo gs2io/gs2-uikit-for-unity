@@ -171,7 +171,7 @@ namespace Gs2.Unity.UiKit.Gs2Lottery
         private static void CreateButton()
         {
             var prefab = AssetDatabase.LoadAssetAtPath<Gs2LotteryBoxItemsResetBoxAction>(
-                "Assets/Scripts/Runtime/Sdk/Gs2/UiKit/Gs2Lottery/Prefabs/Action/Gs2LotteryBoxItemsResetBoxAction.prefab"
+                "Packages/io.gs2.unity.sdk.uikit/Gs2Lottery/Prefabs/Action/Gs2LotteryBoxItemsResetBoxAction.prefab"
             );
 
             var instance = PrefabUtility.InstantiatePrefab(prefab, Selection.activeTransform);

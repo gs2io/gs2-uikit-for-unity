@@ -177,7 +177,7 @@ namespace Gs2.Unity.UiKit.Gs2Account
         private static void CreateButton()
         {
             var prefab = AssetDatabase.LoadAssetAtPath<Gs2CoreAutoLoginAction>(
-                "Assets/Scripts/Runtime/Sdk/Gs2/UiKit/Core/Prefabs/Action/Gs2CoreAutoLoginAction.prefab"
+                "Packages/io.gs2.unity.sdk.uikit/Core/Prefabs/Gs2AutoLogin.prefab"
             );
 
             var instance = PrefabUtility.InstantiatePrefab(prefab, Selection.activeTransform);

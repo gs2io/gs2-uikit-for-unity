@@ -231,7 +231,7 @@ namespace Gs2.Unity.UiKit.Gs2Formation
         private static void CreateButton()
         {
             var prefab = AssetDatabase.LoadAssetAtPath<Gs2FormationFormSetFormAction>(
-                "Assets/Scripts/Runtime/Sdk/Gs2/UiKit/Gs2Formation/Prefabs/Action/Gs2FormationFormSetFormAction.prefab"
+                "Packages/io.gs2.unity.sdk.uikit/Gs2Formation/Prefabs/Action/Gs2FormationFormSetFormAction.prefab"
             );
 
             var instance = PrefabUtility.InstantiatePrefab(prefab, Selection.activeTransform);

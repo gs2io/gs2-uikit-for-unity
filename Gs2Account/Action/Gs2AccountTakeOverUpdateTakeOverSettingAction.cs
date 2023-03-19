@@ -229,7 +229,7 @@ namespace Gs2.Unity.UiKit.Gs2Account
         private static void CreateButton()
         {
             var prefab = AssetDatabase.LoadAssetAtPath<Gs2AccountTakeOverUpdateTakeOverSettingAction>(
-                "Assets/Scripts/Runtime/Sdk/Gs2/UiKit/Gs2Account/Prefabs/Action/Gs2AccountTakeOverUpdateTakeOverSettingAction.prefab"
+                "Packages/io.gs2.unity.sdk.uikit/Gs2Account/Prefabs/Action/Gs2AccountTakeOverUpdateTakeOverSettingAction.prefab"
             );
 
             var instance = PrefabUtility.InstantiatePrefab(prefab, Selection.activeTransform);

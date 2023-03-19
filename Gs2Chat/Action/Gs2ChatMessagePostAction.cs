@@ -240,7 +240,7 @@ namespace Gs2.Unity.UiKit.Gs2Chat
         private static void CreateButton()
         {
             var prefab = AssetDatabase.LoadAssetAtPath<Gs2ChatMessagePostAction>(
-                "Assets/Scripts/Runtime/Sdk/Gs2/UiKit/Gs2Chat/Prefabs/Action/Gs2ChatMessagePostAction.prefab"
+                "Packages/io.gs2.unity.sdk.uikit/Gs2Chat/Prefabs/Action/Gs2ChatMessagePostAction.prefab"
             );
 
             var instance = PrefabUtility.InstantiatePrefab(prefab, Selection.activeTransform);

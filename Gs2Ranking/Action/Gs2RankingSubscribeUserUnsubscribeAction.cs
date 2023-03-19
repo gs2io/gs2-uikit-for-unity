@@ -188,7 +188,7 @@ namespace Gs2.Unity.UiKit.Gs2Ranking
         private static void CreateButton()
         {
             var prefab = AssetDatabase.LoadAssetAtPath<Gs2RankingSubscribeUserUnsubscribeAction>(
-                "Assets/Scripts/Runtime/Sdk/Gs2/UiKit/Gs2Ranking/Prefabs/Action/Gs2RankingSubscribeUserUnsubscribeAction.prefab"
+                "Packages/io.gs2.unity.sdk.uikit/Gs2Ranking/Prefabs/Action/Gs2RankingSubscribeUserUnsubscribeAction.prefab"
             );
 
             var instance = PrefabUtility.InstantiatePrefab(prefab, Selection.activeTransform);

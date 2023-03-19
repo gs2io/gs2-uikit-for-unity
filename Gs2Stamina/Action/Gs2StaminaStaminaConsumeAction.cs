@@ -218,7 +218,7 @@ namespace Gs2.Unity.UiKit.Gs2Stamina
         private static void CreateButton()
         {
             var prefab = AssetDatabase.LoadAssetAtPath<Gs2StaminaStaminaConsumeAction>(
-                "Assets/Scripts/Runtime/Sdk/Gs2/UiKit/Gs2Stamina/Prefabs/Action/Gs2StaminaStaminaConsumeAction.prefab"
+                "Packages/io.gs2.unity.sdk.uikit/Gs2Stamina/Prefabs/Action/Gs2StaminaStaminaConsumeAction.prefab"
             );
 
             var instance = PrefabUtility.InstantiatePrefab(prefab, Selection.activeTransform);

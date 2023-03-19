@@ -233,7 +233,7 @@ namespace Gs2.Unity.UiKit.Gs2Quest
         private static void CreateButton()
         {
             var prefab = AssetDatabase.LoadAssetAtPath<Gs2QuestProgressEndAction>(
-                "Assets/Scripts/Runtime/Sdk/Gs2/UiKit/Gs2Quest/Prefabs/Action/Gs2QuestProgressEndAction.prefab"
+                "Packages/io.gs2.unity.sdk.uikit/Gs2Quest/Prefabs/Action/Gs2QuestProgressEndAction.prefab"
             );
 
             var instance = PrefabUtility.InstantiatePrefab(prefab, Selection.activeTransform);

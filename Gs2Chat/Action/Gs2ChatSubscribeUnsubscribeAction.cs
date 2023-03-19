@@ -187,7 +187,7 @@ namespace Gs2.Unity.UiKit.Gs2Chat
         private static void CreateButton()
         {
             var prefab = AssetDatabase.LoadAssetAtPath<Gs2ChatSubscribeUnsubscribeAction>(
-                "Assets/Scripts/Runtime/Sdk/Gs2/UiKit/Gs2Chat/Prefabs/Action/Gs2ChatSubscribeUnsubscribeAction.prefab"
+                "Packages/io.gs2.unity.sdk.uikit/Gs2Chat/Prefabs/Action/Gs2ChatSubscribeUnsubscribeAction.prefab"
             );
 
             var instance = PrefabUtility.InstantiatePrefab(prefab, Selection.activeTransform);

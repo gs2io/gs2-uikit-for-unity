@@ -192,7 +192,7 @@ namespace Gs2.Unity.UiKit.Gs2Mission
         private static void CreateButton()
         {
             var prefab = AssetDatabase.LoadAssetAtPath<Gs2MissionCompleteReceiveRewardsAction>(
-                "Assets/Scripts/Runtime/Sdk/Gs2/UiKit/Gs2Mission/Prefabs/Action/Gs2MissionCompleteReceiveRewardsAction.prefab"
+                "Packages/io.gs2.unity.sdk.uikit/Gs2Mission/Prefabs/Action/Gs2MissionCompleteReceiveRewardsAction.prefab"
             );
 
             var instance = PrefabUtility.InstantiatePrefab(prefab, Selection.activeTransform);

@@ -189,7 +189,7 @@ namespace Gs2.Unity.UiKit.Gs2Friend
         private static void CreateButton()
         {
             var prefab = AssetDatabase.LoadAssetAtPath<Gs2FriendFriendUserDeleteFriendAction>(
-                "Assets/Scripts/Runtime/Sdk/Gs2/UiKit/Gs2Friend/Prefabs/Action/Gs2FriendFriendUserDeleteFriendAction.prefab"
+                "Packages/io.gs2.unity.sdk.uikit/Gs2Friend/Prefabs/Action/Gs2FriendFriendUserDeleteFriendAction.prefab"
             );
 
             var instance = PrefabUtility.InstantiatePrefab(prefab, Selection.activeTransform);

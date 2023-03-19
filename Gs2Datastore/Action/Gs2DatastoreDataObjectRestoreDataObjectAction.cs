@@ -203,7 +203,7 @@ namespace Gs2.Unity.UiKit.Gs2Datastore
         private static void CreateButton()
         {
             var prefab = AssetDatabase.LoadAssetAtPath<Gs2DatastoreDataObjectRestoreDataObjectAction>(
-                "Assets/Scripts/Runtime/Sdk/Gs2/UiKit/Gs2Datastore/Prefabs/Action/Gs2DatastoreDataObjectRestoreDataObjectAction.prefab"
+                "Packages/io.gs2.unity.sdk.uikit/Gs2Datastore/Prefabs/Action/Gs2DatastoreDataObjectRestoreDataObjectAction.prefab"
             );
 
             var instance = PrefabUtility.InstantiatePrefab(prefab, Selection.activeTransform);

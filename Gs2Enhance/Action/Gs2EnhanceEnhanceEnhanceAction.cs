@@ -254,7 +254,7 @@ namespace Gs2.Unity.UiKit.Gs2Enhance
         private static void CreateButton()
         {
             var prefab = AssetDatabase.LoadAssetAtPath<Gs2EnhanceEnhanceEnhanceAction>(
-                "Assets/Scripts/Runtime/Sdk/Gs2/UiKit/Gs2Enhance/Prefabs/Action/Gs2EnhanceEnhanceEnhanceAction.prefab"
+                "Packages/io.gs2.unity.sdk.uikit/Gs2Enhance/Prefabs/Action/Gs2EnhanceEnhanceEnhanceAction.prefab"
             );
 
             var instance = PrefabUtility.InstantiatePrefab(prefab, Selection.activeTransform);

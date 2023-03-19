@@ -207,7 +207,7 @@ namespace Gs2.Unity.UiKit.Gs2Gateway
         private static void CreateButton()
         {
             var prefab = AssetDatabase.LoadAssetAtPath<Gs2GatewayWebSocketSessionSetUserIdAction>(
-                "Assets/Scripts/Runtime/Sdk/Gs2/UiKit/Gs2Gateway/Prefabs/Action/Gs2GatewayWebSocketSessionSetUserIdAction.prefab"
+                "Packages/io.gs2.unity.sdk.uikit/Gs2Gateway/Prefabs/Action/Gs2GatewayWebSocketSessionSetUserIdAction.prefab"
             );
 
             var instance = PrefabUtility.InstantiatePrefab(prefab, Selection.activeTransform);

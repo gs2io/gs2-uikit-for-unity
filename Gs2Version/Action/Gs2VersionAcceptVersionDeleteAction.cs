@@ -187,7 +187,7 @@ namespace Gs2.Unity.UiKit.Gs2Version
         private static void CreateButton()
         {
             var prefab = AssetDatabase.LoadAssetAtPath<Gs2VersionAcceptVersionDeleteAction>(
-                "Assets/Scripts/Runtime/Sdk/Gs2/UiKit/Gs2Version/Prefabs/Action/Gs2VersionAcceptVersionDeleteAction.prefab"
+                "Packages/io.gs2.unity.sdk.uikit/Gs2Version/Prefabs/Action/Gs2VersionAcceptVersionDeleteAction.prefab"
             );
 
             var instance = PrefabUtility.InstantiatePrefab(prefab, Selection.activeTransform);

@@ -171,7 +171,7 @@ namespace Gs2.Unity.UiKit.Gs2Exchange
         private static void CreateButton()
         {
             var prefab = AssetDatabase.LoadAssetAtPath<Gs2ExchangeAwaitSkipAction>(
-                "Assets/Scripts/Runtime/Sdk/Gs2/UiKit/Gs2Exchange/Prefabs/Action/Gs2ExchangeAwaitSkipAction.prefab"
+                "Packages/io.gs2.unity.sdk.uikit/Gs2Exchange/Prefabs/Action/Gs2ExchangeAwaitSkipAction.prefab"
             );
 
             var instance = PrefabUtility.InstantiatePrefab(prefab, Selection.activeTransform);

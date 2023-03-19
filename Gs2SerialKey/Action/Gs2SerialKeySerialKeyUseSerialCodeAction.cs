@@ -187,7 +187,7 @@ namespace Gs2.Unity.UiKit.Gs2SerialKey
         private static void CreateButton()
         {
             var prefab = AssetDatabase.LoadAssetAtPath<Gs2SerialKeySerialKeyUseSerialCodeAction>(
-                "Assets/Scripts/Runtime/Sdk/Gs2/UiKit/Gs2SerialKey/Prefabs/Action/Gs2SerialKeySerialKeyUseSerialCodeAction.prefab"
+                "Packages/io.gs2.unity.sdk.uikit/Gs2SerialKey/Prefabs/Action/Gs2SerialKeySerialKeyUseSerialCodeAction.prefab"
             );
 
             var instance = PrefabUtility.InstantiatePrefab(prefab, Selection.activeTransform);

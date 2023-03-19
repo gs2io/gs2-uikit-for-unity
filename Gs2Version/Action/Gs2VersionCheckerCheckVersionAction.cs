@@ -197,7 +197,7 @@ namespace Gs2.Unity.UiKit.Gs2Version
         private static void CreateButton()
         {
             var prefab = AssetDatabase.LoadAssetAtPath<Gs2VersionCheckerCheckVersionAction>(
-                "Assets/Scripts/Runtime/Sdk/Gs2/UiKit/Gs2Version/Prefabs/Action/Gs2VersionCheckerCheckVersionAction.prefab"
+                "Packages/io.gs2.unity.sdk.uikit/Gs2Version/Prefabs/Action/Gs2VersionCheckerCheckVersionAction.prefab"
             );
 
             var instance = PrefabUtility.InstantiatePrefab(prefab, Selection.activeTransform);

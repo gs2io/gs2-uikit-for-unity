@@ -239,7 +239,7 @@ namespace Gs2.Unity.UiKit.Gs2Money
         private static void CreateButton()
         {
             var prefab = AssetDatabase.LoadAssetAtPath<Gs2MoneyWalletWithdrawAction>(
-                "Assets/Scripts/Runtime/Sdk/Gs2/UiKit/Gs2Money/Prefabs/Action/Gs2MoneyWalletWithdrawAction.prefab"
+                "Packages/io.gs2.unity.sdk.uikit/Gs2Money/Prefabs/Action/Gs2MoneyWalletWithdrawAction.prefab"
             );
 
             var instance = PrefabUtility.InstantiatePrefab(prefab, Selection.activeTransform);
