@@ -48,6 +48,7 @@ namespace Gs2.Unity.UiKit.Gs2Quest
                 this._context.Progress.NamespaceName
             ).Me(
                 this._gameSessionHolder.GameSession
+            ).Progress(
             );
             var future = domain.DeleteProgress(
             );

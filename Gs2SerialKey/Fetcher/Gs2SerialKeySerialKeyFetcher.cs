@@ -56,7 +56,7 @@ namespace Gs2.Unity.UiKit.Gs2SerialKey.Fetcher
                     ).User(
                         this._context.SerialKey.UserId
                     ).SerialKey(
-                        this._context.SerialKey.Code
+                        this._context.SerialKey.SerialKeyCode
                     );
                     var future = domain.Model();
                     yield return future;

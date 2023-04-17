@@ -46,13 +46,15 @@ namespace Gs2.Unity.UiKit.Gs2SerialKey.Editor
                 EditorGUILayout.ObjectField("SerialKey", context.SerialKey, typeof(SerialKey), false);
                 EditorGUI.indentLevel++;
                 EditorGUILayout.TextField("NamespaceName", context.SerialKey?.NamespaceName.ToString());
-                EditorGUILayout.TextField("Code", context.SerialKey?.Code.ToString());
+                EditorGUILayout.TextField("SerialKeyCode", context.SerialKey?.SerialKeyCode.ToString());
                 EditorGUI.indentLevel--;
                 EditorGUI.indentLevel--;
                 EditorGUI.EndDisabledGroup();
             }
 
             serializedObject.Update();
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("Code"), true);
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("onChangeCode"), true);
             EditorGUILayout.PropertyField(serializedObject.FindProperty("onUseSerialCodeComplete"), true);
             EditorGUILayout.PropertyField(serializedObject.FindProperty("onError"), true);
             serializedObject.ApplyModifiedProperties();

@@ -49,6 +49,11 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking.Editor
                 GUI.FocusControl("");
                 EditorUtility.SetDirty(original);
             }
+            if (GUILayout.Button("KeyId")) {
+                original.format += "{keyId}";
+                GUI.FocusControl("");
+                EditorUtility.SetDirty(original);
+            }
             EditorGUILayout.PropertyField(serializedObject.FindProperty("onUpdate"), true);
             serializedObject.ApplyModifiedProperties();
         }

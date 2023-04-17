@@ -108,7 +108,7 @@ namespace Gs2.Unity.UiKit.Gs2Enhance
 
         public Expression expression;
 
-        public List<int> enableExperienceValues;
+        public List<long> enableExperienceValues;
 
         public int enableExperienceValue;
 

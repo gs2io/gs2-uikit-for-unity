@@ -34,6 +34,11 @@ namespace Gs2.Unity.UiKit.Gs2SerialKey.Editor
             original.format = EditorGUILayout.TextField("Format", original.format);
 
             GUILayout.Label("Add Format Parameter");
+            if (GUILayout.Button("Code")) {
+                original.format += "{code}";
+                GUI.FocusControl("");
+                EditorUtility.SetDirty(original);
+            }
             EditorGUILayout.PropertyField(serializedObject.FindProperty("onUpdate"), true);
             serializedObject.ApplyModifiedProperties();
         }

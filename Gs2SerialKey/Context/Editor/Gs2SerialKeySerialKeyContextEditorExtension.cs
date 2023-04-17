@@ -43,7 +43,7 @@ namespace Gs2.Unity.UiKit.Gs2SerialKey.Editor
                 EditorGUI.BeginDisabledGroup(true);
                 EditorGUI.indentLevel++;
                 EditorGUILayout.TextField("NamespaceName", original.SerialKey?.NamespaceName.ToString());
-                EditorGUILayout.TextField("Code", original.SerialKey?.Code.ToString());
+                EditorGUILayout.TextField("SerialKeyCode", original.SerialKey?.SerialKeyCode.ToString());
                 EditorGUI.indentLevel--;
                 EditorGUI.EndDisabledGroup();
             }

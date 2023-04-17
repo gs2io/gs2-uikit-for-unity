@@ -49,9 +49,10 @@ namespace Gs2.Unity.UiKit.Gs2SerialKey
             ).Me(
                 this._gameSessionHolder.GameSession
             ).SerialKey(
-                this._context.SerialKey.Code
+                this._context.SerialKey.SerialKeyCode
             );
             var future = domain.UseSerialCode(
+                Code
             );
             yield return future;
             if (future.Error != null)
@@ -144,6 +145,12 @@ namespace Gs2.Unity.UiKit.Gs2SerialKey
     /// </summary>
     public partial class Gs2SerialKeySerialKeyUseSerialCodeAction
     {
+        public string Code;
+
+        public void SetCode(string value) {
+            Code = value;
+            this.onChangeCode.Invoke(Code);
+        }
     }
 
     /// <summary>
@@ -151,6 +158,20 @@ namespace Gs2.Unity.UiKit.Gs2SerialKey
     /// </summary>
     public partial class Gs2SerialKeySerialKeyUseSerialCodeAction
     {
+
+        [Serializable]
+        private class ChangeCodeEvent : UnityEvent<string>
+        {
+
+        }
+
+        [SerializeField]
+        private ChangeCodeEvent onChangeCode = new ChangeCodeEvent();
+        public event UnityAction<string> OnChangeCode
+        {
+            add => this.onChangeCode.AddListener(value);
+            remove => this.onChangeCode.RemoveListener(value);
+        }
 
         [Serializable]
         private class UseSerialCodeCompleteEvent : UnityEvent<EzSerialKey>

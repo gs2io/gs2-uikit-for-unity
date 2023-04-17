@@ -39,6 +39,8 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking
                     "{signedBallots}", $"{action?.SignedBallots}"
                 ).Replace(
                     "{gameResults}", $"{action?.GameResults}"
+                ).Replace(
+                    "{keyId}", $"{action?.KeyId}"
                 )
             );
         }

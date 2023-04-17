@@ -35,7 +35,9 @@ namespace Gs2.Unity.UiKit.Gs2SerialKey
         public void Update()
         {
             onUpdate?.Invoke(
-                format
+                format.Replace(
+                    "{code}", $"{action?.Code}"
+                )
             );
         }
     }

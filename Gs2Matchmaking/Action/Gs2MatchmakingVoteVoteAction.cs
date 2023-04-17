@@ -49,6 +49,7 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking
             var future = domain.Vote(
                 BallotBody,
                 BallotSignature,
+                KeyId,
                 GameResults.ToArray()
             );
             yield return future;
@@ -145,6 +146,7 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking
         public string BallotBody;
         public string BallotSignature;
         public List<Gs2.Unity.Gs2Matchmaking.Model.EzGameResult> GameResults;
+        public string KeyId;
 
         public void SetBallotBody(string value) {
             BallotBody = value;
@@ -159,6 +161,11 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking
         public void SetGameResults(List<Gs2.Unity.Gs2Matchmaking.Model.EzGameResult> value) {
             GameResults = value;
             this.onChangeGameResults.Invoke(GameResults);
+        }
+
+        public void SetKeyId(string value) {
+            KeyId = value;
+            this.onChangeKeyId.Invoke(KeyId);
         }
     }
 
@@ -208,6 +215,20 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking
         {
             add => this.onChangeGameResults.AddListener(value);
             remove => this.onChangeGameResults.RemoveListener(value);
+        }
+
+        [Serializable]
+        private class ChangeKeyIdEvent : UnityEvent<string>
+        {
+
+        }
+
+        [SerializeField]
+        private ChangeKeyIdEvent onChangeKeyId = new ChangeKeyIdEvent();
+        public event UnityAction<string> OnChangeKeyId
+        {
+            add => this.onChangeKeyId.AddListener(value);
+            remove => this.onChangeKeyId.RemoveListener(value);
         }
 
         [Serializable]
