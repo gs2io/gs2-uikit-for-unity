@@ -203,7 +203,7 @@ namespace Gs2.Unity.UiKit.Gs2MegaField
         private static void CreateButton()
         {
             var prefab = AssetDatabase.LoadAssetAtPath<Gs2MegaFieldSpatialUpdateAction>(
-                "Assets/Scripts/Runtime/Sdk/Gs2/UiKit/Gs2MegaField/Prefabs/Action/Gs2MegaFieldSpatialUpdateAction.prefab"
+                "Packages/io.gs2.unity.sdk.uikit/Gs2MegaField/Prefabs/Action/Gs2MegaFieldSpatialUpdateAction.prefab"
             );
 
             var instance = PrefabUtility.InstantiatePrefab(prefab, Selection.activeTransform);

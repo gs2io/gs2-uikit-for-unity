@@ -81,6 +81,9 @@ namespace Gs2.Unity.UiKit.Core
 
     public partial class Gs2CoreTimeSpanLabel
     {
+        public void SetFormat(string format) {
+            this.format = format;
+        }
         public void SetTime(long time) {
             this.time = time;
         }

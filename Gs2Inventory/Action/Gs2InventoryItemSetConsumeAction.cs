@@ -223,7 +223,7 @@ namespace Gs2.Unity.UiKit.Gs2Inventory
         private static void CreateButton()
         {
             var prefab = AssetDatabase.LoadAssetAtPath<Gs2InventoryItemSetConsumeAction>(
-                "Assets/Scripts/Runtime/Sdk/Gs2/UiKit/Gs2Inventory/Prefabs/Action/Gs2InventoryItemSetConsumeAction.prefab"
+                "Packages/io.gs2.unity.sdk.uikit/Gs2Inventory/Prefabs/Action/Gs2InventoryItemSetConsumeAction.prefab"
             );
 
             var instance = PrefabUtility.InstantiatePrefab(prefab, Selection.activeTransform);
