@@ -43,7 +43,7 @@ namespace Gs2.Unity.UiKit.Gs2Gateway.Editor
                 EditorGUI.BeginDisabledGroup(true);
                 EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2GatewayOwnWebSocketSessionContext), false);
                 EditorGUI.indentLevel++;
-                EditorGUILayout.ObjectField("OwnWebSocketSession", context.WebSocketSession, typeof(OwnWebSocketSession), false);
+                context.WebSocketSession = EditorGUILayout.ObjectField("OwnWebSocketSession", context.WebSocketSession, typeof(OwnWebSocketSession), false) as OwnWebSocketSession;
                 EditorGUI.indentLevel++;
                 EditorGUILayout.TextField("NamespaceName", context.WebSocketSession?.NamespaceName.ToString());
                 EditorGUILayout.TextField("ConnectionId", context.WebSocketSession?.ConnectionId.ToString());

@@ -39,7 +39,7 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Editor
                 EditorGUILayout.PropertyField(serializedObject.FindProperty("SubscribeUser"), true);
             }
             else {
-                EditorGUILayout.ObjectField("SubscribeUser", original.SubscribeUser, typeof(SubscribeUser), false);
+                original.SubscribeUser = EditorGUILayout.ObjectField("SubscribeUser", original.SubscribeUser, typeof(SubscribeUser), false) as SubscribeUser;
                 EditorGUI.BeginDisabledGroup(true);
                 EditorGUI.indentLevel++;
                 EditorGUILayout.TextField("CategoryName", original.SubscribeUser?.CategoryName.ToString());

@@ -44,7 +44,7 @@ namespace Gs2.Unity.UiKit.Gs2Version.Editor
                 }
             }
             else {
-                EditorGUILayout.ObjectField("VersionModel", original.VersionModel, typeof(VersionModel), false);
+                original.VersionModel = EditorGUILayout.ObjectField("VersionModel", original.VersionModel, typeof(VersionModel), false) as VersionModel;
                 EditorGUI.BeginDisabledGroup(true);
                 EditorGUI.indentLevel++;
                 EditorGUILayout.TextField("NamespaceName", original.VersionModel?.NamespaceName.ToString());

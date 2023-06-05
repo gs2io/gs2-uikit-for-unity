@@ -94,7 +94,7 @@ namespace Gs2.Unity.UiKit.Gs2Core
             }
         }
 
-        public void Start() {
+        public void OnEnable() {
             StartCoroutine(nameof(Process));
         }
     }

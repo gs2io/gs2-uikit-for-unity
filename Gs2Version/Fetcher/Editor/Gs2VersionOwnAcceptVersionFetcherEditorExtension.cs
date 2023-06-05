@@ -50,7 +50,7 @@ namespace Gs2.Unity.UiKit.Gs2Version.Editor
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2VersionOwnAcceptVersionContext), false);
                     EditorGUI.indentLevel++;
-                    EditorGUILayout.ObjectField("AcceptVersion", context.AcceptVersion, typeof(OwnAcceptVersion), false);
+                    context.AcceptVersion = EditorGUILayout.ObjectField("AcceptVersion", context.AcceptVersion, typeof(OwnAcceptVersion), false) as OwnAcceptVersion;
                     EditorGUI.indentLevel++;
                     EditorGUILayout.TextField("NamespaceName", context.AcceptVersion?.NamespaceName.ToString());
                     EditorGUILayout.TextField("VersionName", context.AcceptVersion?.VersionName.ToString());

@@ -44,7 +44,7 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Editor
                 }
             }
             else {
-                EditorGUILayout.ObjectField("OwnScore", original.Score, typeof(OwnScore), false);
+                original.Score = EditorGUILayout.ObjectField("OwnScore", original.Score, typeof(OwnScore), false) as OwnScore;
                 EditorGUI.BeginDisabledGroup(true);
                 EditorGUI.indentLevel++;
                 EditorGUILayout.TextField("NamespaceName", original.Score?.NamespaceName.ToString());

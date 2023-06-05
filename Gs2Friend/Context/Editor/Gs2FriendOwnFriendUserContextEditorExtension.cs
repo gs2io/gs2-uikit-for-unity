@@ -39,7 +39,7 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Editor
                 EditorGUILayout.PropertyField(serializedObject.FindProperty("FriendUser"), true);
             }
             else {
-                EditorGUILayout.ObjectField("OwnFriendUser", original.FriendUser, typeof(OwnFriendUser), false);
+                original.FriendUser = EditorGUILayout.ObjectField("OwnFriendUser", original.FriendUser, typeof(OwnFriendUser), false) as OwnFriendUser;
                 EditorGUI.BeginDisabledGroup(true);
                 EditorGUI.indentLevel++;
                 EditorGUI.indentLevel--;

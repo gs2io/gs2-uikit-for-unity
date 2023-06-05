@@ -51,7 +51,7 @@ namespace Gs2.Unity.UiKit.Gs2Exchange.Editor
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2ExchangeOwnAwaitFetcher), false);
                     EditorGUI.indentLevel++;
-                    EditorGUILayout.ObjectField("Await", context.Await_, typeof(OwnAwait), false);
+                    context.Await_ = EditorGUILayout.ObjectField("Await", context.Await_, typeof(OwnAwait), false) as OwnAwait;
                     EditorGUI.indentLevel++;
                     EditorGUILayout.TextField("NamespaceName", context.Await_?.NamespaceName.ToString());
                     EditorGUILayout.TextField("AwaitName", context.Await_?.AwaitName.ToString());

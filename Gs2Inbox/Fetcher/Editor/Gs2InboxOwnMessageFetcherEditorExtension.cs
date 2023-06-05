@@ -50,7 +50,7 @@ namespace Gs2.Unity.UiKit.Gs2Inbox.Editor
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2InboxOwnMessageContext), false);
                     EditorGUI.indentLevel++;
-                    EditorGUILayout.ObjectField("Message", context.Message, typeof(OwnMessage), false);
+                    context.Message = EditorGUILayout.ObjectField("Message", context.Message, typeof(OwnMessage), false) as OwnMessage;
                     EditorGUI.indentLevel++;
                     EditorGUILayout.TextField("NamespaceName", context.Message?.NamespaceName.ToString());
                     EditorGUILayout.TextField("MessageName", context.Message?.MessageName.ToString());

@@ -110,7 +110,7 @@ namespace Gs2.Unity.UiKit.Gs2Enhance
 
         public List<long> enableExperienceValues;
 
-        public int enableExperienceValue;
+        public long enableExperienceValue;
 
         public GameObject target;
     }

@@ -49,7 +49,7 @@ namespace Gs2.Unity.UiKit.Gs2Exchange.Editor
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2ExchangeRateModelContext), false);
                     EditorGUI.indentLevel++;
-                    EditorGUILayout.ObjectField("RateModel", context.RateModel, typeof(RateModel), false);
+                    context.RateModel = EditorGUILayout.ObjectField("RateModel", context.RateModel, typeof(RateModel), false) as RateModel;
                     EditorGUI.indentLevel++;
                     EditorGUILayout.TextField("NamespaceName", context.RateModel?.NamespaceName.ToString());
                     EditorGUILayout.TextField("RateName", context.RateModel?.RateName.ToString());

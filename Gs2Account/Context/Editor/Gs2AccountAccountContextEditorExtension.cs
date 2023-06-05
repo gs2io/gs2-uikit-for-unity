@@ -39,7 +39,7 @@ namespace Gs2.Unity.UiKit.Gs2Account.Editor
                 EditorGUILayout.PropertyField(serializedObject.FindProperty("Account"), true);
             }
             else {
-                EditorGUILayout.ObjectField("Account", original.Account, typeof(Account), false);
+                original.Account = EditorGUILayout.ObjectField("Account", original.Account, typeof(Account), false) as Account;
                 EditorGUI.BeginDisabledGroup(true);
                 EditorGUI.indentLevel++;
                 EditorGUILayout.TextField("NamespaceName", original.Account?.NamespaceName.ToString());

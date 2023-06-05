@@ -44,7 +44,7 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Editor
                 }
             }
             else {
-                EditorGUILayout.ObjectField("OwnSendFriendRequest", original.SendFriendRequest, typeof(OwnSendFriendRequest), false);
+                original.SendFriendRequest = EditorGUILayout.ObjectField("OwnSendFriendRequest", original.SendFriendRequest, typeof(OwnSendFriendRequest), false) as OwnSendFriendRequest;
                 EditorGUI.BeginDisabledGroup(true);
                 EditorGUI.indentLevel++;
                 EditorGUI.indentLevel--;

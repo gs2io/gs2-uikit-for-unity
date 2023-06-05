@@ -50,7 +50,7 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Editor
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2MissionMissionGroupModelContext), false);
                     EditorGUI.indentLevel++;
-                    EditorGUILayout.ObjectField("MissionGroupModel", context.MissionGroupModel, typeof(MissionGroupModel), false);
+                    context.MissionGroupModel = EditorGUILayout.ObjectField("MissionGroupModel", context.MissionGroupModel, typeof(MissionGroupModel), false) as MissionGroupModel;
                     EditorGUI.indentLevel++;
                     EditorGUILayout.TextField("NamespaceName", context.MissionGroupModel?.NamespaceName.ToString());
                     EditorGUILayout.TextField("MissionGroupName", context.MissionGroupModel?.MissionGroupName.ToString());

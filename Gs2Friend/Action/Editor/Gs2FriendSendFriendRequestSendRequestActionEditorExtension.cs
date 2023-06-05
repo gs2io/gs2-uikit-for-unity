@@ -50,7 +50,7 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Editor
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2FriendOwnSendFriendRequestContext), false);
                     EditorGUI.indentLevel++;
-                    EditorGUILayout.ObjectField("OwnSendFriendRequest", context.SendFriendRequest, typeof(OwnSendFriendRequest), false);
+                    context.SendFriendRequest = EditorGUILayout.ObjectField("OwnSendFriendRequest", context.SendFriendRequest, typeof(OwnSendFriendRequest), false) as OwnSendFriendRequest;
                     EditorGUI.indentLevel++;
                     EditorGUILayout.TextField("NamespaceName", context.SendFriendRequest?.NamespaceName.ToString());
                     EditorGUI.indentLevel--;

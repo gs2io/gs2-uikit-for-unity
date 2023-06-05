@@ -45,7 +45,7 @@ namespace Gs2.Unity.UiKit.Gs2Schedule.Editor
                 }
             }
             else {
-                EditorGUILayout.ObjectField("OwnTrigger", original.Trigger, typeof(OwnTrigger), false);
+                original.Trigger = EditorGUILayout.ObjectField("OwnTrigger", original.Trigger, typeof(OwnTrigger), false) as OwnTrigger;
                 EditorGUI.BeginDisabledGroup(true);
                 EditorGUI.indentLevel++;
                 EditorGUILayout.TextField("NamespaceName", original.Trigger?.NamespaceName.ToString());

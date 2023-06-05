@@ -43,7 +43,7 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking.Editor
                 EditorGUI.BeginDisabledGroup(true);
                 EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2MatchmakingVoteContext), false);
                 EditorGUI.indentLevel++;
-                EditorGUILayout.ObjectField("Vote", context.Vote, typeof(Vote), false);
+                context.Vote = EditorGUILayout.ObjectField("Vote", context.Vote, typeof(Vote), false) as Vote;
                 EditorGUI.indentLevel++;
                 EditorGUILayout.TextField("NamespaceName", context.Vote?.NamespaceName.ToString());
                 EditorGUILayout.TextField("RatingName", context.Vote?.RatingName.ToString());

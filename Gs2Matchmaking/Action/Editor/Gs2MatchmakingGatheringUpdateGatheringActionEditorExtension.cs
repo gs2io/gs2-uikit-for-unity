@@ -43,7 +43,7 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking.Editor
                 EditorGUI.BeginDisabledGroup(true);
                 EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2MatchmakingGatheringContext), false);
                 EditorGUI.indentLevel++;
-                EditorGUILayout.ObjectField("Gathering", context.Gathering, typeof(Gathering), false);
+                context.Gathering = EditorGUILayout.ObjectField("Gathering", context.Gathering, typeof(Gathering), false) as Gathering;
                 EditorGUI.indentLevel++;
                 EditorGUILayout.TextField("NamespaceName", context.Gathering?.NamespaceName.ToString());
                 EditorGUILayout.TextField("GatheringName", context.Gathering?.GatheringName.ToString());

@@ -50,7 +50,7 @@ namespace Gs2.Unity.UiKit.Gs2Account.Editor
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2AccountTakeOverContext), false);
                     EditorGUI.indentLevel++;
-                    EditorGUILayout.ObjectField("TakeOver", context.TakeOver, typeof(OwnTakeOver), false);
+                    context.TakeOver = EditorGUILayout.ObjectField("TakeOver", context.TakeOver, typeof(TakeOver), false) as TakeOver;
                     EditorGUI.indentLevel++;
                     EditorGUILayout.TextField("NamespaceName", context.TakeOver?.NamespaceName.ToString());
                     EditorGUILayout.TextField("Type", context.TakeOver?.Type.ToString());

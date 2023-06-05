@@ -39,7 +39,7 @@ namespace Gs2.Unity.UiKit.Gs2Datastore.Editor
                 EditorGUILayout.PropertyField(serializedObject.FindProperty("DataObject"), true);
             }
             else {
-                EditorGUILayout.ObjectField("DataObject", original.DataObject, typeof(DataObject), false);
+                original.DataObject = EditorGUILayout.ObjectField("DataObject", original.DataObject, typeof(DataObject), false) as DataObject;
                 EditorGUI.BeginDisabledGroup(true);
                 EditorGUI.indentLevel++;
                 EditorGUILayout.TextField("NamespaceName", original.DataObject?.NamespaceName.ToString());

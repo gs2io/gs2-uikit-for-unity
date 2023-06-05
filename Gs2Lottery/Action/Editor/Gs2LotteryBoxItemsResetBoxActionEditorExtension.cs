@@ -50,7 +50,7 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.Editor
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2LotteryOwnBoxItemsContext), false);
                     EditorGUI.indentLevel++;
-                    EditorGUILayout.ObjectField("OwnBoxItems", context.BoxItems, typeof(OwnBoxItems), false);
+                    context.BoxItems = EditorGUILayout.ObjectField("OwnBoxItems", context.BoxItems, typeof(OwnBoxItems), false) as OwnBoxItems;
                     EditorGUI.indentLevel++;
                     EditorGUILayout.TextField("NamespaceName", context.BoxItems?.NamespaceName.ToString());
                     EditorGUILayout.TextField("PrizeTableName", context.BoxItems?.PrizeTableName.ToString());

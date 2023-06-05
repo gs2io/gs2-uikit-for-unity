@@ -43,7 +43,7 @@ namespace Gs2.Unity.UiKit.Gs2JobQueue.Editor
                 EditorGUI.BeginDisabledGroup(true);
                 EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2JobQueueOwnJobResultContext), false);
                 EditorGUI.indentLevel++;
-                EditorGUILayout.ObjectField("JobResult", context.JobResult, typeof(OwnJobResult), false);
+                context.JobResult = EditorGUILayout.ObjectField("JobResult", context.JobResult, typeof(OwnJobResult), false) as OwnJobResult;
                 EditorGUI.indentLevel++;
                 EditorGUILayout.TextField("NamespaceName", context.JobResult?.NamespaceName.ToString());
                 EditorGUILayout.TextField("JobName", context.JobResult?.JobName.ToString());

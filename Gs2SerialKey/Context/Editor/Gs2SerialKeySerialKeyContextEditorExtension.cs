@@ -39,7 +39,7 @@ namespace Gs2.Unity.UiKit.Gs2SerialKey.Editor
                 EditorGUILayout.PropertyField(serializedObject.FindProperty("SerialKey"), true);
             }
             else {
-                EditorGUILayout.ObjectField("SerialKey", original.SerialKey, typeof(SerialKey), false);
+                original.SerialKey = EditorGUILayout.ObjectField("SerialKey", original.SerialKey, typeof(SerialKey), false) as SerialKey;
                 EditorGUI.BeginDisabledGroup(true);
                 EditorGUI.indentLevel++;
                 EditorGUILayout.TextField("NamespaceName", original.SerialKey?.NamespaceName.ToString());

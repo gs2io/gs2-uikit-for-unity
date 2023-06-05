@@ -44,7 +44,7 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Editor
                 }
             }
             else {
-                EditorGUILayout.ObjectField("OwnBlackList", original.BlackList, typeof(OwnBlackList), false);
+                original.BlackList = EditorGUILayout.ObjectField("OwnBlackList", original.BlackList, typeof(OwnBlackList), false) as OwnBlackList;
                 EditorGUI.BeginDisabledGroup(true);
                 EditorGUI.indentLevel++;
                 EditorGUILayout.TextField("NamespaceName", original.BlackList?.NamespaceName.ToString());

@@ -39,7 +39,7 @@ namespace Gs2.Unity.UiKit.Gs2Account.Editor
                 EditorGUILayout.PropertyField(serializedObject.FindProperty("TakeOver"), true);
             }
             else {
-                EditorGUILayout.ObjectField("TakeOver", original.TakeOver, typeof(TakeOver), false);
+                original.TakeOver = EditorGUILayout.ObjectField("TakeOver", original.TakeOver, typeof(TakeOver), false) as TakeOver;
                 EditorGUI.BeginDisabledGroup(true);
                 EditorGUI.indentLevel++;
                 EditorGUILayout.TextField("NamespaceName", original.TakeOver?.NamespaceName.ToString());

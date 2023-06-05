@@ -139,7 +139,7 @@ namespace Gs2.Unity.UiKit.Gs2Showcase.Context
             }
         }
         
-        public void Start() {
+        public void OnEnable() {
             StartCoroutine(nameof(Process));
         }
         

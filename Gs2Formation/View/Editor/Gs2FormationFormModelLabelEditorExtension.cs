@@ -57,7 +57,7 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Editor
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2FormationFormModelFetcher), false);
                     EditorGUI.indentLevel++;
-                    EditorGUILayout.ObjectField("FormModel", context.FormModel, typeof(FormModel), false);
+                    context.FormModel = EditorGUILayout.ObjectField("FormModel", context.FormModel, typeof(FormModel), false) as FormModel;
                     EditorGUI.indentLevel++;
                     EditorGUILayout.TextField("NamespaceName", context.FormModel?.NamespaceName.ToString());
                     EditorGUILayout.TextField("FormModelName", context.FormModel?.FormModelName.ToString());

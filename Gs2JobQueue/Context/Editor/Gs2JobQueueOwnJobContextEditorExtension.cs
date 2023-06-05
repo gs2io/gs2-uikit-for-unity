@@ -39,7 +39,7 @@ namespace Gs2.Unity.UiKit.Gs2JobQueue.Editor
                 EditorGUILayout.PropertyField(serializedObject.FindProperty("Job"), true);
             }
             else {
-                EditorGUILayout.ObjectField("OwnJob", original.Job, typeof(OwnJob), false);
+                original.Job = EditorGUILayout.ObjectField("OwnJob", original.Job, typeof(OwnJob), false) as OwnJob;
                 EditorGUI.BeginDisabledGroup(true);
                 EditorGUI.indentLevel++;
                 EditorGUILayout.TextField("NamespaceName", original.Job?.NamespaceName.ToString());

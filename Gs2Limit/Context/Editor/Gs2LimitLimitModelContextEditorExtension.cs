@@ -44,7 +44,7 @@ namespace Gs2.Unity.UiKit.Gs2Limit.Editor
                 }
             }
             else {
-                EditorGUILayout.ObjectField("LimitModel", original.LimitModel, typeof(LimitModel), false);
+                original.LimitModel = EditorGUILayout.ObjectField("LimitModel", original.LimitModel, typeof(LimitModel), false) as LimitModel;
                 EditorGUI.BeginDisabledGroup(true);
                 EditorGUI.indentLevel++;
                 EditorGUILayout.TextField("NamespaceName", original.LimitModel?.NamespaceName.ToString());

@@ -44,7 +44,7 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Editor
                 }
             }
             else {
-                EditorGUILayout.ObjectField("QuestGroupModel", original.QuestGroupModel, typeof(QuestGroupModel), false);
+                original.QuestGroupModel = EditorGUILayout.ObjectField("QuestGroupModel", original.QuestGroupModel, typeof(QuestGroupModel), false) as QuestGroupModel;
                 EditorGUI.BeginDisabledGroup(true);
                 EditorGUI.indentLevel++;
                 EditorGUILayout.TextField("NamespaceName", original.QuestGroupModel?.NamespaceName.ToString());

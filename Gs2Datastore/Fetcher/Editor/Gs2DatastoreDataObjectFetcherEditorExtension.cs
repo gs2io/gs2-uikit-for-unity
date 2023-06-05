@@ -43,7 +43,7 @@ namespace Gs2.Unity.UiKit.Gs2Datastore.Editor
                 EditorGUI.BeginDisabledGroup(true);
                 EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2DatastoreDataObjectContext), false);
                 EditorGUI.indentLevel++;
-                EditorGUILayout.ObjectField("DataObject", context.DataObject, typeof(DataObject), false);
+                context.DataObject = EditorGUILayout.ObjectField("DataObject", context.DataObject, typeof(DataObject), false) as DataObject;
                 EditorGUI.indentLevel++;
                 EditorGUILayout.TextField("NamespaceName", context.DataObject?.NamespaceName.ToString());
                 EditorGUILayout.TextField("UserId", context.DataObject?.UserId.ToString());

@@ -43,7 +43,7 @@ namespace Gs2.Unity.UiKit.Gs2Money.Editor
                 EditorGUI.BeginDisabledGroup(true);
                 EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2MoneyOwnWalletContext), false);
                 EditorGUI.indentLevel++;
-                EditorGUILayout.ObjectField("OwnWallet", context.Wallet, typeof(OwnWallet), false);
+                context.Wallet = EditorGUILayout.ObjectField("OwnWallet", context.Wallet, typeof(OwnWallet), false) as OwnWallet;
                 EditorGUI.indentLevel++;
                 EditorGUILayout.TextField("NamespaceName", context.Wallet?.NamespaceName.ToString());
                 EditorGUILayout.TextField("Slot", context.Wallet?.Slot.ToString());

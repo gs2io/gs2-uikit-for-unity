@@ -40,7 +40,7 @@ namespace Gs2.Unity.UiKit.Gs2Schedule.Editor
                 EditorGUILayout.PropertyField(serializedObject.FindProperty("Event"), true);
             }
             else {
-                EditorGUILayout.ObjectField("Event", original.Event_, typeof(Event), false);
+                original.Event_ = EditorGUILayout.ObjectField("Event", original.Event_, typeof(Event), false) as Event;
                 EditorGUI.BeginDisabledGroup(true);
                 EditorGUI.indentLevel++;
                 EditorGUILayout.TextField("NamespaceName", original.Event_?.NamespaceName.ToString());

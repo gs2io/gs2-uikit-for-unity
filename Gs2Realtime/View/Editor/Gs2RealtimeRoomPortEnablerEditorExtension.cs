@@ -42,7 +42,7 @@ namespace Gs2.Unity.UiKit.Gs2Realtime.Editor
                 EditorGUI.BeginDisabledGroup(true);
                 EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2RealtimeRoomContext), false);
                 EditorGUI.indentLevel++;
-                EditorGUILayout.ObjectField("Room", context.Room, typeof(Room), false);
+                context.Room = EditorGUILayout.ObjectField("Room", context.Room, typeof(Room), false) as Room;
                 EditorGUI.indentLevel++;
                 EditorGUILayout.TextField("NamespaceName", context.Room?.NamespaceName.ToString());
                 EditorGUILayout.TextField("RoomName", context.Room?.RoomName.ToString());

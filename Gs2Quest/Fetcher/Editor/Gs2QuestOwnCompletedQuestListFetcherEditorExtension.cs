@@ -50,7 +50,7 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Editor
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2QuestOwnCompletedQuestListContext), false);
                     EditorGUI.indentLevel++;
-                    EditorGUILayout.ObjectField("CompletedQuestList", context.CompletedQuestList, typeof(OwnCompletedQuestList), false);
+                    context.CompletedQuestList = EditorGUILayout.ObjectField("CompletedQuestList", context.CompletedQuestList, typeof(OwnCompletedQuestList), false) as OwnCompletedQuestList;
                     EditorGUI.indentLevel++;
                     EditorGUILayout.TextField("NamespaceName", context.CompletedQuestList?.NamespaceName.ToString());
                     EditorGUILayout.TextField("QuestGroupName", context.CompletedQuestList?.QuestGroupName.ToString());

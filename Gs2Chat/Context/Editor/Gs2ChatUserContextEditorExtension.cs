@@ -39,7 +39,7 @@ namespace Gs2.Unity.UiKit.Gs2Chat.Editor
                 EditorGUILayout.PropertyField(serializedObject.FindProperty("User"), true);
             }
             else {
-                EditorGUILayout.ObjectField("User", original.User, typeof(User), false);
+                original.User = EditorGUILayout.ObjectField("User", original.User, typeof(User), false) as User;
                 EditorGUI.BeginDisabledGroup(true);
                 EditorGUI.indentLevel++;
                 EditorGUILayout.TextField("NamespaceName", original.User?.NamespaceName.ToString());

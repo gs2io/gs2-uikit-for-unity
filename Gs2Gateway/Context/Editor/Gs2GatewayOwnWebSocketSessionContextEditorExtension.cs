@@ -39,7 +39,7 @@ namespace Gs2.Unity.UiKit.Gs2Gateway.Editor
                 EditorGUILayout.PropertyField(serializedObject.FindProperty("WebSocketSession"), true);
             }
             else {
-                EditorGUILayout.ObjectField("OwnWebSocketSession", original.WebSocketSession, typeof(OwnWebSocketSession), false);
+                original.WebSocketSession = EditorGUILayout.ObjectField("OwnWebSocketSession", original.WebSocketSession, typeof(OwnWebSocketSession), false) as OwnWebSocketSession;
                 EditorGUI.BeginDisabledGroup(true);
                 EditorGUI.indentLevel++;
                 EditorGUILayout.TextField("NamespaceName", original.WebSocketSession?.NamespaceName.ToString());

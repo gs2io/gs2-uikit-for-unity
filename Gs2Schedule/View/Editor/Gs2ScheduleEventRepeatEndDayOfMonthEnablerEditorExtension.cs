@@ -43,7 +43,7 @@ namespace Gs2.Unity.UiKit.Gs2Schedule.Editor
                 EditorGUI.BeginDisabledGroup(true);
                 EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2ScheduleEventContext), false);
                 EditorGUI.indentLevel++;
-                EditorGUILayout.ObjectField("Event", context.Event_, typeof(Event), false);
+                context.Event_ = EditorGUILayout.ObjectField("Event", context.Event_, typeof(Event), false) as Event;
                 EditorGUI.indentLevel++;
                 EditorGUILayout.TextField("NamespaceName", context.Event_?.NamespaceName.ToString());
                 EditorGUILayout.TextField("EventName", context.Event_?.EventName.ToString());

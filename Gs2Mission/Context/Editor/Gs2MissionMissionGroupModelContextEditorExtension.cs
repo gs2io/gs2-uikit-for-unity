@@ -44,7 +44,7 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Editor
                 }
             }
             else {
-                EditorGUILayout.ObjectField("MissionGroupModel", original.MissionGroupModel, typeof(MissionGroupModel), false);
+                original.MissionGroupModel = EditorGUILayout.ObjectField("MissionGroupModel", original.MissionGroupModel, typeof(MissionGroupModel), false) as MissionGroupModel;
                 EditorGUI.BeginDisabledGroup(true);
                 EditorGUI.indentLevel++;
                 EditorGUILayout.TextField("NamespaceName", original.MissionGroupModel?.NamespaceName.ToString());

@@ -50,7 +50,7 @@ namespace Gs2.Unity.UiKit.Gs2Experience.Editor
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2ExperienceOwnStatusContext), false);
                     EditorGUI.indentLevel++;
-                    EditorGUILayout.ObjectField("Status", context.Status, typeof(OwnStatus), false);
+                    context.Status = EditorGUILayout.ObjectField("Status", context.Status, typeof(OwnStatus), false) as OwnStatus;
                     EditorGUI.indentLevel++;
                     EditorGUILayout.TextField("NamespaceName", context.Status?.NamespaceName.ToString());
                     EditorGUILayout.TextField("ExperienceName", context.Status?.ExperienceName.ToString());

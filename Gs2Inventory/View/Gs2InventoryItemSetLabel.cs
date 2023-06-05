@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
@@ -36,42 +38,115 @@ namespace Gs2.Unity.UiKit.Gs2Inventory
         {
             if (_fetcher.Fetched && _fetcher.ItemSet != null)
             {
-                var expiresAt = _fetcher.ItemSet[index].ExpiresAt == null ? DateTime.Now : UnixTime.FromUnixTime(_fetcher.ItemSet[index].ExpiresAt).ToLocalTime();
-                onUpdate?.Invoke(
-                    format.Replace(
-                        "{itemSetId}", $"{_fetcher?.ItemSet?[index].ItemSetId}"
-                    ).Replace(
-                        "{name}", $"{_fetcher?.ItemSet?[index].Name}"
-                    ).Replace(
-                        "{inventoryName}", $"{_fetcher?.ItemSet?[index].InventoryName}"
-                    ).Replace(
-                        "{itemName}", $"{_fetcher?.ItemSet?[index].ItemName}"
-                    ).Replace(
-                        "{count}", $"{_fetcher?.ItemSet?[index].Count}"
-                    ).Replace(
-                        "{sortValue}", $"{_fetcher?.ItemSet?[index].SortValue}"
-                    ).Replace(
-                        "{expiresAt:yyyy}", expiresAt.ToString("yyyy")
-                    ).Replace(
-                        "{expiresAt:yy}", expiresAt.ToString("yy")
-                    ).Replace(
-                        "{expiresAt:MM}", expiresAt.ToString("MM")
-                    ).Replace(
-                        "{expiresAt:MMM}", expiresAt.ToString("MMM")
-                    ).Replace(
-                        "{expiresAt:dd}", expiresAt.ToString("dd")
-                    ).Replace(
-                        "{expiresAt:hh}", expiresAt.ToString("hh")
-                    ).Replace(
-                        "{expiresAt:HH}", expiresAt.ToString("HH")
-                    ).Replace(
-                        "{expiresAt:tt}", expiresAt.ToString("tt")
-                    ).Replace(
-                        "{expiresAt:mm}", expiresAt.ToString("mm")
-                    ).Replace(
-                        "{expiresAt:ss}", expiresAt.ToString("ss")
-                    )
-                );
+                if (index < _fetcher.ItemSet.Count) {
+                    var expiresAt = _fetcher.ItemSet[index].ExpiresAt == null
+                        ? DateTime.Now
+                        : UnixTime.FromUnixTime(_fetcher.ItemSet[index].ExpiresAt).ToLocalTime();
+                    onUpdate?.Invoke(
+                        format.Replace(
+                            "{itemSetId}",
+                            $"{_fetcher?.ItemSet?[index].ItemSetId}"
+                        ).Replace(
+                            "{name}",
+                            $"{_fetcher?.ItemSet?[index].Name}"
+                        ).Replace(
+                            "{inventoryName}",
+                            $"{_fetcher?.ItemSet?[index].InventoryName}"
+                        ).Replace(
+                            "{itemName}",
+                            $"{_fetcher?.ItemSet?[index].ItemName}"
+                        ).Replace(
+                            "{count}",
+                            $"{_fetcher?.ItemSet?[index].Count}"
+                        ).Replace(
+                            "{sortValue}",
+                            $"{_fetcher?.ItemSet?[index].SortValue}"
+                        ).Replace(
+                            "{expiresAt:yyyy}",
+                            expiresAt.ToString("yyyy")
+                        ).Replace(
+                            "{expiresAt:yy}",
+                            expiresAt.ToString("yy")
+                        ).Replace(
+                            "{expiresAt:MM}",
+                            expiresAt.ToString("MM")
+                        ).Replace(
+                            "{expiresAt:MMM}",
+                            expiresAt.ToString("MMM")
+                        ).Replace(
+                            "{expiresAt:dd}",
+                            expiresAt.ToString("dd")
+                        ).Replace(
+                            "{expiresAt:hh}",
+                            expiresAt.ToString("hh")
+                        ).Replace(
+                            "{expiresAt:HH}",
+                            expiresAt.ToString("HH")
+                        ).Replace(
+                            "{expiresAt:tt}",
+                            expiresAt.ToString("tt")
+                        ).Replace(
+                            "{expiresAt:mm}",
+                            expiresAt.ToString("mm")
+                        ).Replace(
+                            "{expiresAt:ss}",
+                            expiresAt.ToString("ss")
+                        )
+                    );
+                }
+                else {
+                    onUpdate?.Invoke(
+                        format.Replace(
+                            "{itemSetId}",
+                            ""
+                        ).Replace(
+                            "{name}",
+                            ""
+                        ).Replace(
+                            "{inventoryName}",
+                            ""
+                        ).Replace(
+                            "{itemName}",
+                            ""
+                        ).Replace(
+                            "{count}",
+                            "0"
+                        ).Replace(
+                            "{sortValue}",
+                            "0"
+                        ).Replace(
+                            "{expiresAt:yyyy}",
+                            "0000"
+                        ).Replace(
+                            "{expiresAt:yy}",
+                            "00"
+                        ).Replace(
+                            "{expiresAt:MM}",
+                            "00"
+                        ).Replace(
+                            "{expiresAt:MMM}",
+                            "NaN"
+                        ).Replace(
+                            "{expiresAt:dd}",
+                            "00"
+                        ).Replace(
+                            "{expiresAt:hh}",
+                            "00"
+                        ).Replace(
+                            "{expiresAt:HH}",
+                            "00"
+                        ).Replace(
+                            "{expiresAt:tt}",
+                            "00"
+                        ).Replace(
+                            "{expiresAt:mm}",
+                            "00"
+                        ).Replace(
+                            "{expiresAt:ss}",
+                            "00"
+                        )
+                    );
+                }
             }
         }
     }

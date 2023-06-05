@@ -51,7 +51,7 @@ namespace Gs2.Unity.UiKit.Gs2Version.Editor
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2VersionVersionModelFetcher), false);
                     EditorGUI.indentLevel++;
-                    EditorGUILayout.ObjectField("VersionModel", context.VersionModel, typeof(VersionModel), false);
+                    context.VersionModel = EditorGUILayout.ObjectField("VersionModel", context.VersionModel, typeof(VersionModel), false) as VersionModel;
                     EditorGUI.indentLevel++;
                     EditorGUILayout.TextField("NamespaceName", context.VersionModel?.NamespaceName.ToString());
                     EditorGUILayout.TextField("VersionName", context.VersionModel?.VersionName.ToString());

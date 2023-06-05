@@ -44,7 +44,7 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Editor
                 }
             }
             else {
-                EditorGUILayout.ObjectField("CategoryModel", original.CategoryModel, typeof(CategoryModel), false);
+                original.CategoryModel = EditorGUILayout.ObjectField("CategoryModel", original.CategoryModel, typeof(CategoryModel), false) as CategoryModel;
                 EditorGUI.BeginDisabledGroup(true);
                 EditorGUI.indentLevel++;
                 EditorGUILayout.TextField("NamespaceName", original.CategoryModel?.NamespaceName.ToString());

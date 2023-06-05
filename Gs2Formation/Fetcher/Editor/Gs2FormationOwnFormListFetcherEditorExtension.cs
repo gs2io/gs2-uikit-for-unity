@@ -43,7 +43,7 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Editor
                 EditorGUI.BeginDisabledGroup(true);
                 EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2FormationOwnMoldContext), false);
                 EditorGUI.indentLevel++;
-                EditorGUILayout.ObjectField("OwnMold", context.Mold, typeof(OwnMold), false);
+                context.Mold = EditorGUILayout.ObjectField("OwnMold", context.Mold, typeof(OwnMold), false) as OwnMold;
                 EditorGUI.indentLevel++;
                 EditorGUILayout.TextField("NamespaceName", context.Mold?.NamespaceName.ToString());
                 EditorGUILayout.TextField("MoldName", context.Mold?.MoldName.ToString());

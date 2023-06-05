@@ -44,7 +44,7 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Editor
                 }
             }
             else {
-                EditorGUILayout.ObjectField("OwnPropertyForm", original.PropertyForm, typeof(OwnPropertyForm), false);
+                original.PropertyForm = EditorGUILayout.ObjectField("OwnPropertyForm", original.PropertyForm, typeof(OwnPropertyForm), false) as OwnPropertyForm;
                 EditorGUI.BeginDisabledGroup(true);
                 EditorGUI.indentLevel++;
                 EditorGUILayout.TextField("NamespaceName", original.PropertyForm?.NamespaceName.ToString());

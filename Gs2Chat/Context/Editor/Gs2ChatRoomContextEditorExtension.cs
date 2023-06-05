@@ -39,7 +39,7 @@ namespace Gs2.Unity.UiKit.Gs2Chat.Editor
                 EditorGUILayout.PropertyField(serializedObject.FindProperty("Room"), true);
             }
             else {
-                EditorGUILayout.ObjectField("Room", original.Room, typeof(Room), false);
+                original.Room = EditorGUILayout.ObjectField("Room", original.Room, typeof(Room), false) as Room;
                 EditorGUI.BeginDisabledGroup(true);
                 EditorGUI.indentLevel++;
                 EditorGUILayout.TextField("NamespaceName", original.Room?.NamespaceName.ToString());

@@ -44,7 +44,7 @@ namespace Gs2.Unity.UiKit.Gs2Enhance.Editor
                 }
             }
             else {
-                EditorGUILayout.ObjectField("RateModel", original.RateModel, typeof(RateModel), false);
+                original.RateModel = EditorGUILayout.ObjectField("RateModel", original.RateModel, typeof(RateModel), false) as RateModel;
                 EditorGUI.BeginDisabledGroup(true);
                 EditorGUI.indentLevel++;
                 EditorGUILayout.TextField("NamespaceName", original.RateModel?.NamespaceName.ToString());

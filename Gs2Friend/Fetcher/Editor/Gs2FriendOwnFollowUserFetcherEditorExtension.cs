@@ -50,7 +50,7 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Editor
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2FriendOwnFollowUserContext), false);
                     EditorGUI.indentLevel++;
-                    EditorGUILayout.ObjectField("FollowUser", context.FollowUser, typeof(OwnFollowUser), false);
+                    context.FollowUser = EditorGUILayout.ObjectField("FollowUser", context.FollowUser, typeof(OwnFollowUser), false) as OwnFollowUser;
                     EditorGUI.indentLevel++;
                     EditorGUILayout.TextField("NamespaceName", context.FollowUser?.NamespaceName.ToString());
                     EditorGUI.indentLevel--;

@@ -51,7 +51,7 @@ namespace Gs2.Unity.UiKit.Gs2Experience.Editor
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2ExperienceExperienceModelFetcher), false);
                     EditorGUI.indentLevel++;
-                    EditorGUILayout.ObjectField("ExperienceModel", context.ExperienceModel, typeof(ExperienceModel), false);
+                    context.ExperienceModel = EditorGUILayout.ObjectField("ExperienceModel", context.ExperienceModel, typeof(ExperienceModel), false) as ExperienceModel;
                     EditorGUI.indentLevel++;
                     EditorGUILayout.TextField("NamespaceName", context.ExperienceModel?.NamespaceName.ToString());
                     EditorGUILayout.TextField("ExperienceName", context.ExperienceModel?.ExperienceName.ToString());

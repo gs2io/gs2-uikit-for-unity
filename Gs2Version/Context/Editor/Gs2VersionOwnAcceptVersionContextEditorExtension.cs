@@ -44,7 +44,7 @@ namespace Gs2.Unity.UiKit.Gs2Version.Editor
                 }
             }
             else {
-                EditorGUILayout.ObjectField("OwnAcceptVersion", original.AcceptVersion, typeof(OwnAcceptVersion), false);
+                original.AcceptVersion = EditorGUILayout.ObjectField("OwnAcceptVersion", original.AcceptVersion, typeof(OwnAcceptVersion), false) as OwnAcceptVersion;
                 EditorGUI.BeginDisabledGroup(true);
                 EditorGUI.indentLevel++;
                 EditorGUILayout.TextField("NamespaceName", original.AcceptVersion?.NamespaceName.ToString());

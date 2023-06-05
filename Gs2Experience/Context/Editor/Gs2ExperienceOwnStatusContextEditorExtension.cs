@@ -44,7 +44,7 @@ namespace Gs2.Unity.UiKit.Gs2Experience.Editor
                 }
             }
             else {
-                EditorGUILayout.ObjectField("OwnStatus", original.Status, typeof(OwnStatus), false);
+                original.Status = EditorGUILayout.ObjectField("OwnStatus", original.Status, typeof(OwnStatus), false) as OwnStatus;
                 EditorGUI.BeginDisabledGroup(true);
                 EditorGUI.indentLevel++;
                 EditorGUILayout.TextField("NamespaceName", original.Status?.NamespaceName.ToString());

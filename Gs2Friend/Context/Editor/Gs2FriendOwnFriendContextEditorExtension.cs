@@ -44,7 +44,7 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Editor
                 }
             }
             else {
-                EditorGUILayout.ObjectField("OwnFriend", original.Friend, typeof(OwnFriend), false);
+                original.Friend = EditorGUILayout.ObjectField("OwnFriend", original.Friend, typeof(OwnFriend), false) as OwnFriend;
                 EditorGUI.BeginDisabledGroup(true);
                 EditorGUI.indentLevel++;
                 EditorGUILayout.TextField("NamespaceName", original.Friend?.NamespaceName.ToString());

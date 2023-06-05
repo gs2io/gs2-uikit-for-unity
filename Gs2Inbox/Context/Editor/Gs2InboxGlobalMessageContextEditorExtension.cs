@@ -39,7 +39,7 @@ namespace Gs2.Unity.UiKit.Gs2Inbox.Editor
                 EditorGUILayout.PropertyField(serializedObject.FindProperty("GlobalMessage"), true);
             }
             else {
-                EditorGUILayout.ObjectField("GlobalMessage", original.GlobalMessage, typeof(GlobalMessage), false);
+                original.GlobalMessage = EditorGUILayout.ObjectField("GlobalMessage", original.GlobalMessage, typeof(GlobalMessage), false) as GlobalMessage;
                 EditorGUI.BeginDisabledGroup(true);
                 EditorGUI.indentLevel++;
                 EditorGUILayout.TextField("NamespaceName", original.GlobalMessage?.NamespaceName.ToString());

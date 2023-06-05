@@ -44,7 +44,7 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.Editor
                 }
             }
             else {
-                EditorGUILayout.ObjectField("LotteryModel", original.LotteryModel, typeof(LotteryModel), false);
+                original.LotteryModel = EditorGUILayout.ObjectField("LotteryModel", original.LotteryModel, typeof(LotteryModel), false) as LotteryModel;
                 EditorGUI.BeginDisabledGroup(true);
                 EditorGUI.indentLevel++;
                 EditorGUILayout.TextField("NamespaceName", original.LotteryModel?.NamespaceName.ToString());

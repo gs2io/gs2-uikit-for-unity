@@ -39,7 +39,7 @@ namespace Gs2.Unity.UiKit.Gs2Limit.Editor
                 EditorGUILayout.PropertyField(serializedObject.FindProperty("Namespace"), true);
             }
             else {
-                EditorGUILayout.ObjectField("Namespace", original.Namespace, typeof(Namespace), false);
+                original.Namespace = EditorGUILayout.ObjectField("Namespace", original.Namespace, typeof(Namespace), false) as Namespace;
                 EditorGUI.BeginDisabledGroup(true);
                 EditorGUI.indentLevel++;
                 EditorGUILayout.TextField("NamespaceName", original.Namespace?.NamespaceName.ToString());

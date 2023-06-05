@@ -44,7 +44,7 @@ namespace Gs2.Unity.UiKit.Gs2Experience.Editor
                 }
             }
             else {
-                EditorGUILayout.ObjectField("ExperienceModel", original.ExperienceModel, typeof(ExperienceModel), false);
+                original.ExperienceModel = EditorGUILayout.ObjectField("ExperienceModel", original.ExperienceModel, typeof(ExperienceModel), false) as ExperienceModel;
                 EditorGUI.BeginDisabledGroup(true);
                 EditorGUI.indentLevel++;
                 EditorGUILayout.TextField("NamespaceName", original.ExperienceModel?.NamespaceName.ToString());

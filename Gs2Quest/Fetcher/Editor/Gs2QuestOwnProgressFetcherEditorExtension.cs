@@ -43,7 +43,7 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Editor
                 EditorGUI.BeginDisabledGroup(true);
                 EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2QuestOwnProgressContext), false);
                 EditorGUI.indentLevel++;
-                EditorGUILayout.ObjectField("Progress", context.Progress, typeof(OwnProgress), false);
+                context.Progress = EditorGUILayout.ObjectField("Progress", context.Progress, typeof(OwnProgress), false) as OwnProgress;
                 EditorGUI.indentLevel++;
                 EditorGUILayout.TextField("NamespaceName", context.Progress?.NamespaceName.ToString());
                 EditorGUI.indentLevel--;

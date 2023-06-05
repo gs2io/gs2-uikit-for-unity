@@ -39,7 +39,7 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Editor
                 EditorGUILayout.PropertyField(serializedObject.FindProperty("Progress"), true);
             }
             else {
-                EditorGUILayout.ObjectField("OwnProgress", original.Progress, typeof(OwnProgress), false);
+                original.Progress = EditorGUILayout.ObjectField("OwnProgress", original.Progress, typeof(OwnProgress), false) as OwnProgress;
                 EditorGUI.BeginDisabledGroup(true);
                 EditorGUI.indentLevel++;
                 EditorGUILayout.TextField("NamespaceName", original.Progress?.NamespaceName.ToString());

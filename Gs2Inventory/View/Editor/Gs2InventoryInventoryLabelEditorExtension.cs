@@ -51,7 +51,7 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Editor
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2InventoryOwnInventoryFetcher), false);
                     EditorGUI.indentLevel++;
-                    EditorGUILayout.ObjectField("Inventory", context.Inventory, typeof(OwnInventory), false);
+                    context.Inventory = EditorGUILayout.ObjectField("Inventory", context.Inventory, typeof(OwnInventory), false) as OwnInventory;
                     EditorGUI.indentLevel++;
                     EditorGUILayout.TextField("NamespaceName", context.Inventory?.NamespaceName.ToString());
                     EditorGUILayout.TextField("InventoryName", context.Inventory?.InventoryName.ToString());

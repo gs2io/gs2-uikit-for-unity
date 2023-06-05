@@ -39,7 +39,7 @@ namespace Gs2.Unity.UiKit.Gs2SerialKey.Editor
                 EditorGUILayout.PropertyField(serializedObject.FindProperty("CampaignModel"), true);
             }
             else {
-                EditorGUILayout.ObjectField("CampaignModel", original.CampaignModel, typeof(CampaignModel), false);
+                original.CampaignModel = EditorGUILayout.ObjectField("CampaignModel", original.CampaignModel, typeof(CampaignModel), false) as CampaignModel;
                 EditorGUI.BeginDisabledGroup(true);
                 EditorGUI.indentLevel++;
                 EditorGUILayout.TextField("NamespaceName", original.CampaignModel?.NamespaceName.ToString());

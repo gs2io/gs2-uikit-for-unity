@@ -51,7 +51,7 @@ namespace Gs2.Unity.UiKit.Gs2Schedule.Editor
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2ScheduleOwnTriggerContext), false);
                     EditorGUI.indentLevel++;
-                    EditorGUILayout.ObjectField("Trigger", context.Trigger, typeof(OwnTrigger), false);
+                    context.Trigger = EditorGUILayout.ObjectField("Trigger", context.Trigger, typeof(OwnTrigger), false) as OwnTrigger;
                     EditorGUI.indentLevel++;
                     EditorGUILayout.TextField("NamespaceName", context.Trigger?.NamespaceName.ToString());
                     EditorGUILayout.TextField("TriggerName", context.Trigger?.TriggerName.ToString());

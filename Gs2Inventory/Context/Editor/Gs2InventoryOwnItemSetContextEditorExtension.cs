@@ -44,7 +44,7 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Editor
                 }
             }
             else {
-                EditorGUILayout.ObjectField("OwnItemSet", original.ItemSet, typeof(OwnItemSet), false);
+                original.ItemSet = EditorGUILayout.ObjectField("OwnItemSet", original.ItemSet, typeof(OwnItemSet), false) as OwnItemSet;
                 EditorGUI.BeginDisabledGroup(true);
                 EditorGUI.indentLevel++;
                 EditorGUILayout.TextField("NamespaceName", original.ItemSet?.NamespaceName.ToString());

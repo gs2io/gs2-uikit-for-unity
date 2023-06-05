@@ -39,7 +39,7 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking.Editor
                 EditorGUILayout.PropertyField(serializedObject.FindProperty("Gathering"), true);
             }
             else {
-                EditorGUILayout.ObjectField("Gathering", original.Gathering, typeof(Gathering), false);
+                original.Gathering = EditorGUILayout.ObjectField("Gathering", original.Gathering, typeof(Gathering), false) as Gathering;
                 EditorGUI.BeginDisabledGroup(true);
                 EditorGUI.indentLevel++;
                 EditorGUILayout.TextField("NamespaceName", original.Gathering?.NamespaceName.ToString());

@@ -44,7 +44,7 @@ namespace Gs2.Unity.UiKit.Gs2SerialKey.Editor
                 EditorGUI.BeginDisabledGroup(true);
                 EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2SerialKeySerialKeyFetcher), false);
                 EditorGUI.indentLevel++;
-                EditorGUILayout.ObjectField("SerialKey", context.SerialKey, typeof(SerialKey), false);
+                context.SerialKey = EditorGUILayout.ObjectField("SerialKey", context.SerialKey, typeof(SerialKey), false) as SerialKey;
                 EditorGUI.indentLevel++;
                 EditorGUILayout.TextField("NamespaceName", context.SerialKey?.NamespaceName.ToString());
                 EditorGUILayout.TextField("SerialKeyCode", context.SerialKey?.SerialKeyCode.ToString());

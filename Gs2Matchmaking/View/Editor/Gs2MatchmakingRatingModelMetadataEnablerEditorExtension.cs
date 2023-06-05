@@ -55,7 +55,7 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking.Editor
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2MatchmakingRatingModelContext), false);
                     EditorGUI.indentLevel++;
-                    EditorGUILayout.ObjectField("RatingModel", context.RatingModel, typeof(RatingModel), false);
+                    context.RatingModel = EditorGUILayout.ObjectField("RatingModel", context.RatingModel, typeof(RatingModel), false) as RatingModel;
                     EditorGUI.indentLevel++;
                     EditorGUILayout.TextField("NamespaceName", context.RatingModel?.NamespaceName.ToString());
                     EditorGUILayout.TextField("RatingName", context.RatingModel?.RatingName.ToString());

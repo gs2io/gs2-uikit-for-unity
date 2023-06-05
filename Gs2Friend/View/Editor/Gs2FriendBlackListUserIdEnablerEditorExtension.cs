@@ -49,7 +49,7 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Editor
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2FriendOwnBlackListContext), false);
                     EditorGUI.indentLevel++;
-                    EditorGUILayout.ObjectField("BlackList", context.BlackList, typeof(OwnBlackList), false);
+                    context.BlackList = EditorGUILayout.ObjectField("BlackList", context.BlackList, typeof(OwnBlackList), false) as OwnBlackList;
                     EditorGUI.indentLevel++;
                     EditorGUILayout.TextField("NamespaceName", context.BlackList?.NamespaceName.ToString());
                     EditorGUI.indentLevel--;

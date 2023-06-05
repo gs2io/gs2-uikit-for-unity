@@ -44,7 +44,7 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Editor
                 }
             }
             else {
-                EditorGUILayout.ObjectField("FormModel", original.FormModel, typeof(FormModel), false);
+                original.FormModel = EditorGUILayout.ObjectField("FormModel", original.FormModel, typeof(FormModel), false) as FormModel;
                 EditorGUI.BeginDisabledGroup(true);
                 EditorGUI.indentLevel++;
                 EditorGUILayout.TextField("NamespaceName", original.FormModel?.NamespaceName.ToString());

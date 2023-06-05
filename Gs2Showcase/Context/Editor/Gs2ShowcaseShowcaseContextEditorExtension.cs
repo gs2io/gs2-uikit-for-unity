@@ -39,7 +39,7 @@ namespace Gs2.Unity.UiKit.Gs2Showcase.Editor
                 EditorGUILayout.PropertyField(serializedObject.FindProperty("Showcase"), true);
             }
             else {
-                EditorGUILayout.ObjectField("Showcase", original.Showcase, typeof(Showcase), false);
+                original.Showcase = EditorGUILayout.ObjectField("Showcase", original.Showcase, typeof(Showcase), false) as Showcase;
                 EditorGUI.BeginDisabledGroup(true);
                 EditorGUI.indentLevel++;
                 EditorGUILayout.TextField("NamespaceName", original.Showcase?.NamespaceName.ToString());

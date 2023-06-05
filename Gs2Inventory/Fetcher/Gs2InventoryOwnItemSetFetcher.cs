@@ -83,7 +83,7 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Fetcher
                     else
                     {
                         retryWaitSecond = 1;
-                        ItemSet = future.Result.ToList();
+                        ItemSet = future.Result == null ? new List<EzItemSet>() : future.Result.ToList();
                         Fetched = true;
                     }
                 }

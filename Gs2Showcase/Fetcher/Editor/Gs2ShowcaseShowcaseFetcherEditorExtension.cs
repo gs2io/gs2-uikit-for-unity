@@ -43,7 +43,7 @@ namespace Gs2.Unity.UiKit.Gs2Showcase.Editor
                 EditorGUI.BeginDisabledGroup(true);
                 EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2ShowcaseShowcaseContext), false);
                 EditorGUI.indentLevel++;
-                EditorGUILayout.ObjectField("Showcase", context.Showcase, typeof(Showcase), false);
+                context.Showcase = EditorGUILayout.ObjectField("Showcase", context.Showcase, typeof(Showcase), false) as Showcase;
                 EditorGUI.indentLevel++;
                 EditorGUILayout.TextField("NamespaceName", context.Showcase?.NamespaceName.ToString());
                 EditorGUILayout.TextField("ShowcaseName", context.Showcase?.ShowcaseName.ToString());

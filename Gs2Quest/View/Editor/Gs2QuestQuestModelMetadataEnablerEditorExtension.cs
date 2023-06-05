@@ -49,7 +49,7 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Editor
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2QuestQuestModelContext), false);
                     EditorGUI.indentLevel++;
-                    EditorGUILayout.ObjectField("QuestModel", context.QuestModel, typeof(QuestModel), false);
+                    context.QuestModel = EditorGUILayout.ObjectField("QuestModel", context.QuestModel, typeof(QuestModel), false) as QuestModel;
                     EditorGUI.indentLevel++;
                     EditorGUILayout.TextField("QuestName", context.QuestModel?.QuestName.ToString());
                     EditorGUI.indentLevel--;

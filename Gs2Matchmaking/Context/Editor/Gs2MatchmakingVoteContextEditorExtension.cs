@@ -39,7 +39,7 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking.Editor
                 EditorGUILayout.PropertyField(serializedObject.FindProperty("Vote"), true);
             }
             else {
-                EditorGUILayout.ObjectField("Vote", original.Vote, typeof(Vote), false);
+                original.Vote = EditorGUILayout.ObjectField("Vote", original.Vote, typeof(Vote), false) as Vote;
                 EditorGUI.BeginDisabledGroup(true);
                 EditorGUI.indentLevel++;
                 EditorGUILayout.TextField("NamespaceName", original.Vote?.NamespaceName.ToString());

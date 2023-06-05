@@ -39,7 +39,7 @@ namespace Gs2.Unity.UiKit.Gs2Stamina.Editor
                 EditorGUILayout.PropertyField(serializedObject.FindProperty("Stamina"), true);
             }
             else {
-                EditorGUILayout.ObjectField("OwnStamina", original.Stamina, typeof(OwnStamina), false);
+                original.Stamina = EditorGUILayout.ObjectField("OwnStamina", original.Stamina, typeof(OwnStamina), false) as OwnStamina;
                 EditorGUI.BeginDisabledGroup(true);
                 EditorGUI.indentLevel++;
                 EditorGUILayout.TextField("NamespaceName", original.Stamina?.NamespaceName.ToString());

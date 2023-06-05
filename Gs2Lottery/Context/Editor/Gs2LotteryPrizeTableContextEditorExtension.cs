@@ -39,7 +39,7 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.Editor
                 EditorGUILayout.PropertyField(serializedObject.FindProperty("PrizeTable"), true);
             }
             else {
-                EditorGUILayout.ObjectField("PrizeTable", original.PrizeTable, typeof(PrizeTable), false);
+                original.PrizeTable = EditorGUILayout.ObjectField("PrizeTable", original.PrizeTable, typeof(PrizeTable), false) as PrizeTable;
                 EditorGUI.BeginDisabledGroup(true);
                 EditorGUI.indentLevel++;
                 EditorGUILayout.TextField("NamespaceName", original.PrizeTable?.NamespaceName.ToString());

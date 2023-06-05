@@ -43,7 +43,7 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Editor
                 EditorGUI.BeginDisabledGroup(true);
                 EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2FriendPublicProfileContext), false);
                 EditorGUI.indentLevel++;
-                EditorGUILayout.ObjectField("PublicProfile", context.PublicProfile, typeof(PublicProfile), false);
+                context.PublicProfile = EditorGUILayout.ObjectField("PublicProfile", context.PublicProfile, typeof(PublicProfile), false) as PublicProfile;
                 EditorGUI.indentLevel++;
                 EditorGUILayout.TextField("NamespaceName", context.PublicProfile?.NamespaceName.ToString());
                 EditorGUILayout.TextField("UserId", context.PublicProfile?.UserId.ToString());

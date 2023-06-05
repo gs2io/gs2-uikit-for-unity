@@ -44,7 +44,7 @@ namespace Gs2.Unity.UiKit.Gs2Datastore.Editor
                 }
             }
             else {
-                EditorGUILayout.ObjectField("OwnDataObject", original.DataObject, typeof(OwnDataObject), false);
+                original.DataObject = EditorGUILayout.ObjectField("OwnDataObject", original.DataObject, typeof(OwnDataObject), false) as OwnDataObject;
                 EditorGUI.BeginDisabledGroup(true);
                 EditorGUI.indentLevel++;
                 EditorGUILayout.TextField("NamespaceName", original.DataObject?.NamespaceName.ToString());

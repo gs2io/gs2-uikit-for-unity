@@ -56,7 +56,7 @@ namespace Gs2.Unity.UiKit.Gs2Dictionary.Editor
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2DictionaryEntryModelContext), false);
                     EditorGUI.indentLevel++;
-                    EditorGUILayout.ObjectField("EntryModel", context.EntryModel, typeof(EntryModel), false);
+                    context.EntryModel = EditorGUILayout.ObjectField("EntryModel", context.EntryModel, typeof(EntryModel), false) as EntryModel;
                     EditorGUI.indentLevel++;
                     EditorGUILayout.TextField("NamespaceName", context.EntryModel?.NamespaceName.ToString());
                     EditorGUILayout.TextField("EntryName", context.EntryModel?.EntryName.ToString());

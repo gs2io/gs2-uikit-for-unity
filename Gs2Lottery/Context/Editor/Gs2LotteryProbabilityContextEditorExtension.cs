@@ -39,7 +39,7 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.Editor
                 EditorGUILayout.PropertyField(serializedObject.FindProperty("Probability"), true);
             }
             else {
-                EditorGUILayout.ObjectField("Probability", original.Probability, typeof(Probability), false);
+                original.Probability = EditorGUILayout.ObjectField("Probability", original.Probability, typeof(Probability), false) as Probability;
                 EditorGUI.BeginDisabledGroup(true);
                 EditorGUI.indentLevel++;
                 EditorGUILayout.TextField("NamespaceName", original.Probability?.NamespaceName.ToString());

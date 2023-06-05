@@ -49,7 +49,7 @@ namespace Gs2.Unity.UiKit.Gs2Stamina.Editor
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2StaminaStaminaModelContext), false);
                     EditorGUI.indentLevel++;
-                    EditorGUILayout.ObjectField("StaminaModel", context.StaminaModel, typeof(StaminaModel), false);
+                    context.StaminaModel = EditorGUILayout.ObjectField("StaminaModel", context.StaminaModel, typeof(StaminaModel), false) as StaminaModel;
                     EditorGUI.indentLevel++;
                     EditorGUILayout.TextField("NamespaceName", context.StaminaModel?.NamespaceName.ToString());
                     EditorGUILayout.TextField("StaminaName", context.StaminaModel?.StaminaName.ToString());

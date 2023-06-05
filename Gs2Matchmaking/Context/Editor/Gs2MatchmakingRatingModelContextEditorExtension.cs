@@ -44,7 +44,7 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking.Editor
                 }
             }
             else {
-                EditorGUILayout.ObjectField("RatingModel", original.RatingModel, typeof(RatingModel), false);
+                original.RatingModel = EditorGUILayout.ObjectField("RatingModel", original.RatingModel, typeof(RatingModel), false) as RatingModel;
                 EditorGUI.BeginDisabledGroup(true);
                 EditorGUI.indentLevel++;
                 EditorGUILayout.TextField("NamespaceName", original.RatingModel?.NamespaceName.ToString());
