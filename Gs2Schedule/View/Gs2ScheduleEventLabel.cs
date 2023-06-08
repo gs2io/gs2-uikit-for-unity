@@ -101,8 +101,6 @@ namespace Gs2.Unity.UiKit.Gs2Schedule
                         "{repeatEndHour}", $"{_fetcher?.Event?.RepeatEndHour}"
                     ).Replace(
                         "{relativeTriggerName}", $"{_fetcher?.Event?.RelativeTriggerName}"
-                    ).Replace(
-                        "{relativeDuration}", $"{_fetcher?.Event?.RelativeDuration}"
                     )
                 );
             }
