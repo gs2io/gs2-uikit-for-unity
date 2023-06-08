@@ -24,36 +24,34 @@ using UnityEngine;
 
 namespace Gs2.Unity.UiKit.Gs2Ranking.Editor
 {
-    [CustomEditor(typeof(Gs2RankingCategoryModelFetcher))]
-    public class Gs2RankingCategoryModelFetcherEditorExtension : UnityEditor.Editor
+    [CustomEditor(typeof(Gs2RankingRankingFetcher))]
+    public class Gs2RankingRankingFetcherEditorExtension : UnityEditor.Editor
     {
         public override void OnInspectorGUI() {
-            var original = target as Gs2RankingCategoryModelFetcher;
+            var original = target as Gs2RankingRankingFetcher;
 
             if (original == null) return;
 
-            var context = original.GetComponentInParent<Gs2RankingCategoryModelContext>();
+            var context = original.GetComponentInParent<Gs2RankingRankingContext>();
             if (context == null) {
-                EditorGUILayout.HelpBox("Gs2RankingCategoryModelContext not found.", MessageType.Error);
+                EditorGUILayout.HelpBox("Gs2RankingRankingContext not found.", MessageType.Error);
                 if (GUILayout.Button("Add Context")) {
-                    original.gameObject.AddComponent<Gs2RankingCategoryModelContext>();
+                    original.gameObject.AddComponent<Gs2RankingRankingContext>();
                 }
             }
             else {
-                if (context.transform.parent.GetComponent<Gs2RankingCategoryModelList>() != null) {
+                if (context.transform.parent.GetComponent<Gs2RankingRankingList>() != null) {
                     EditorGUI.BeginDisabledGroup(true);
-                    EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2RankingCategoryModelContext), false);
+                    EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2RankingRankingContext), false);
                     EditorGUI.EndDisabledGroup();
-                    EditorGUILayout.HelpBox("CategoryModel is auto assign from Gs2RankingCategoryModelList.", MessageType.Info);
+                    EditorGUILayout.HelpBox("Ranking is auto assign from Gs2RankingRankingList.", MessageType.Info);
                 }
                 else {
                     EditorGUI.BeginDisabledGroup(true);
-                    EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2RankingCategoryModelContext), false);
+                    EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2RankingRankingContext), false);
                     EditorGUI.indentLevel++;
-                    context.CategoryModel = EditorGUILayout.ObjectField("CategoryModel", context.CategoryModel, typeof(CategoryModel), false) as CategoryModel;
+                    EditorGUILayout.ObjectField("Ranking", context.Ranking, typeof(Ranking), false);
                     EditorGUI.indentLevel++;
-                    EditorGUILayout.TextField("NamespaceName", context.CategoryModel?.NamespaceName.ToString());
-                    EditorGUILayout.TextField("CategoryName", context.CategoryModel?.CategoryName.ToString());
                     EditorGUI.indentLevel--;
                     EditorGUI.indentLevel--;
                     EditorGUI.EndDisabledGroup();

@@ -40,14 +40,26 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Editor
                 }
             }
             else {
-                EditorGUI.BeginDisabledGroup(true);
-                EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2RankingOwnScoreContext), false);
-                EditorGUI.indentLevel++;
-                EditorGUILayout.ObjectField("OwnScore", context.Score, typeof(OwnScore), false);
-                EditorGUI.indentLevel++;
-                EditorGUI.indentLevel--;
-                EditorGUI.indentLevel--;
-                EditorGUI.EndDisabledGroup();
+                if (context.transform.parent.GetComponent<Gs2RankingOwnScoreList>() != null) {
+                    EditorGUI.BeginDisabledGroup(true);
+                    EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2RankingOwnScoreContext), false);
+                    EditorGUI.EndDisabledGroup();
+                    EditorGUILayout.HelpBox("Score is auto assign from Gs2RankingOwnScoreList.", MessageType.Info);
+                }
+                else {
+                    EditorGUI.BeginDisabledGroup(true);
+                    EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2RankingOwnScoreContext), false);
+                    EditorGUI.indentLevel++;
+                    context.Score = EditorGUILayout.ObjectField("Score", context.Score, typeof(OwnScore), false) as OwnScore;
+                    EditorGUI.indentLevel++;
+                    EditorGUILayout.TextField("NamespaceName", context.Score?.NamespaceName.ToString());
+                    EditorGUILayout.TextField("CategoryName", context.Score?.CategoryName.ToString());
+                    EditorGUILayout.TextField("ScorerUserId", context.Score?.ScorerUserId.ToString());
+                    EditorGUILayout.TextField("UniqueId", context.Score?.UniqueId.ToString());
+                    EditorGUI.indentLevel--;
+                    EditorGUI.indentLevel--;
+                    EditorGUI.EndDisabledGroup();
+                }
             }
             
             serializedObject.Update();

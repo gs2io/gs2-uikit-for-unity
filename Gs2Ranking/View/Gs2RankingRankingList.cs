@@ -20,6 +20,7 @@
 
 using System.Collections.Generic;
 using Gs2.Unity.Gs2Ranking.ScriptableObject;
+using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Ranking.Context;
 using Gs2.Unity.UiKit.Gs2Ranking.Fetcher;
 using UnityEngine;
@@ -36,10 +37,11 @@ namespace Gs2.Unity.UiKit.Gs2Ranking
         private List<Gs2RankingRankingContext> _children;
 
         public void Update() {
-            if (_fetcher.Fetched) {
+            if (_fetcher.Fetched && this._fetcher.Rankings != null) {
                 for (var i = 0; i < this.maximumItems; i++) {
                     if (i < this._fetcher.Rankings.Count) {
                         _children[i].Ranking.index = this._fetcher.Rankings[i].Index;
+                        _children[i].Ranking.User.userId = this._fetcher.Rankings[i].UserId;
                         _children[i].gameObject.SetActive(true);
                     }
                     else {
@@ -56,22 +58,29 @@ namespace Gs2.Unity.UiKit.Gs2Ranking
 
     public partial class Gs2RankingRankingList
     {
-        private Gs2RankingCategoryModelContext _context;
+        private Gs2RankingNamespaceContext _context;
+        private Gs2RankingCategoryModelContext _categoryModelContext;
         private Gs2RankingUserContext _userContext;
         private Gs2RankingRankingListFetcher _fetcher;
 
         public void Awake()
         {
-            _context = GetComponentInParent<Gs2RankingCategoryModelContext>();
+            _context = GetComponentInParent<Gs2RankingNamespaceContext>();
+            _categoryModelContext = GetComponentInParent<Gs2RankingCategoryModelContext>();
             _userContext = GetComponentInParent<Gs2RankingUserContext>();
             _fetcher = GetComponentInParent<Gs2RankingRankingListFetcher>();
+
+            if (_fetcher == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2RankingRankingListFetcher.");
+                enabled = false;
+            }
 
             _children = new List<Gs2RankingRankingContext>();
             for (var i = 0; i < this.maximumItems; i++) {
                 var node = Instantiate(this.prefab, transform);
                 node.Ranking = Ranking.New(
-                    this._userContext.User,
-                    this._context.CategoryModel,
+                    User.New(_context.Namespace, ""),
+                    this._categoryModelContext.CategoryModel,
                     0
                 );
                 node.gameObject.SetActive(false);

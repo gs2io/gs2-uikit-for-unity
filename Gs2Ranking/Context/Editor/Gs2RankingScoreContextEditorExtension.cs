@@ -34,24 +34,25 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Editor
 
             if (original == null) return;
 
+            serializedObject.Update();
+
             if (original.Score == null) {
-                EditorGUILayout.HelpBox("Ranking not assigned.", MessageType.Error);
-                EditorGUILayout.ObjectField("Score", original.Score, typeof(Score), false);
+                EditorGUILayout.HelpBox("Score not assigned.", MessageType.Error);
+                EditorGUILayout.PropertyField(serializedObject.FindProperty("Score"), true);
             }
             else {
-                EditorGUILayout.ObjectField("Score", original.Score, typeof(Score), false);
+                original.Score = EditorGUILayout.ObjectField("Score", original.Score, typeof(Score), false) as Score;
                 EditorGUI.BeginDisabledGroup(true);
                 EditorGUI.indentLevel++;
-                EditorGUILayout.TextField("NamespaceName", original.Score.NamespaceName.ToString());
-                EditorGUILayout.TextField("UserId", original.Score.UserId.ToString());
-                EditorGUILayout.TextField("CategoryName", original.Score.CategoryName.ToString());
-                EditorGUILayout.TextField("ScorerUserId", original.Score.User?.UserId?.ToString() ?? "");
-                EditorGUILayout.TextField("UniqueId", original.Score.UniqueId.ToString());
+                EditorGUILayout.TextField("NamespaceName", original.Score?.NamespaceName.ToString());
+                EditorGUILayout.TextField("UserId", original.Score?.UserId.ToString());
+                EditorGUILayout.TextField("CategoryName", original.Score?.CategoryName.ToString());
+                EditorGUILayout.TextField("ScorerUserId", original.Score?.UserId.ToString());
+                EditorGUILayout.TextField("UniqueId", original.Score?.UniqueId.ToString());
                 EditorGUI.indentLevel--;
                 EditorGUI.EndDisabledGroup();
             }
-            
-            serializedObject.Update();
+
             serializedObject.ApplyModifiedProperties();
         }
     }

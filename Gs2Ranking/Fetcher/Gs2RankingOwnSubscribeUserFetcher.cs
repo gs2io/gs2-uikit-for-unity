@@ -26,6 +26,7 @@ using Gs2.Unity.Core.Exception;
 using Gs2.Unity.Gs2Ranking.Model;
 using Gs2.Unity.Gs2Ranking.ScriptableObject;
 using Gs2.Unity.Util;
+using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Ranking.Context;
 using UnityEngine;
 using UnityEngine.Events;
@@ -75,9 +76,8 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Fetcher
                         Fetched = true;
                     }
                 }
-                else {
-                    yield return new WaitForSeconds(1);
-                }
+
+                yield return new WaitForSeconds(1);
             }
 
             var transform1 = transform;
@@ -121,6 +121,11 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Fetcher
             _clientHolder = Gs2ClientHolder.Instance;
             _gameSessionHolder = Gs2GameSessionHolder.Instance;
             _context = GetComponentInParent<Gs2RankingOwnSubscribeContext>();
+
+            if (_context == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2RankingOwnSubscribeContext.");
+                enabled = false;
+            }
         }
     }
 

@@ -16,6 +16,9 @@
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
 
+using Gs2.Unity.Gs2Ranking.ScriptableObject;
+using Gs2.Unity.UiKit.Gs2Ranking.Context;
+using Gs2.Unity.UiKit.Gs2Ranking.Fetcher;
 using UnityEditor;
 using UnityEngine;
 
@@ -28,6 +31,27 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Editor
             var original = target as Gs2RankingSubscribeUserLabel;
 
             if (original == null) return;
+
+            var fetcher = original.GetComponentInParent<Gs2RankingSubscribeUserFetcher>();
+            if (fetcher == null) {
+                EditorGUILayout.HelpBox("Gs2RankingSubscribeUserFetcher not found.", MessageType.Error);
+                if (GUILayout.Button("Add Fetcher")) {
+                    original.gameObject.AddComponent<Gs2RankingSubscribeUserFetcher>();
+                }
+            }
+            else {
+                var context = original.GetComponentInParent<Gs2RankingSubscribeUserContext>();
+                EditorGUI.BeginDisabledGroup(true);
+                EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2RankingSubscribeUserFetcher), false);
+                EditorGUI.indentLevel++;
+                context.SubscribeUser = EditorGUILayout.ObjectField("SubscribeUser", context.SubscribeUser, typeof(SubscribeUser), false) as SubscribeUser;
+                EditorGUI.indentLevel++;
+                EditorGUILayout.TextField("CategoryName", context.SubscribeUser?.CategoryName.ToString());
+                EditorGUILayout.TextField("TargetUserId", context.SubscribeUser?.TargetUserId.ToString());
+                EditorGUI.indentLevel--;
+                EditorGUI.indentLevel--;
+                EditorGUI.EndDisabledGroup();
+            }
 
             serializedObject.Update();
             original.format = EditorGUILayout.TextField("Format", original.format);

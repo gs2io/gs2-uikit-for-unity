@@ -16,6 +16,8 @@
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
 
+using Gs2.Unity.Gs2Ranking.ScriptableObject;
+using Gs2.Unity.UiKit.Gs2Ranking.Context;
 using UnityEditor;
 using UnityEngine;
 
@@ -28,6 +30,34 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Editor
             var original = target as Gs2RankingCategoryModelMetadataEnabler;
 
             if (original == null) return;
+
+            var context = original.GetComponentInParent<Gs2RankingCategoryModelContext>();
+            if (context == null) {
+                EditorGUILayout.HelpBox("Gs2RankingCategoryModelContext not found.", MessageType.Error);
+                if (GUILayout.Button("Add Context")) {
+                    original.gameObject.AddComponent<Gs2RankingCategoryModelContext>();
+                }
+            }
+            else {
+                if (context.transform.parent.GetComponent<Gs2RankingCategoryModelList>() != null) {
+                    EditorGUI.BeginDisabledGroup(true);
+                    EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2RankingCategoryModelContext), false);
+                    EditorGUI.EndDisabledGroup();
+                    EditorGUILayout.HelpBox("CategoryModel is auto assign from Gs2RankingCategoryModelList.", MessageType.Info);
+                }
+                else {
+                    EditorGUI.BeginDisabledGroup(true);
+                    EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2RankingCategoryModelContext), false);
+                    EditorGUI.indentLevel++;
+                    context.CategoryModel = EditorGUILayout.ObjectField("CategoryModel", context.CategoryModel, typeof(CategoryModel), false) as CategoryModel;
+                    EditorGUI.indentLevel++;
+                    EditorGUILayout.TextField("NamespaceName", context.CategoryModel?.NamespaceName.ToString());
+                    EditorGUILayout.TextField("CategoryName", context.CategoryModel?.CategoryName.ToString());
+                    EditorGUI.indentLevel--;
+                    EditorGUI.indentLevel--;
+                    EditorGUI.EndDisabledGroup();
+                }
+            }
 
             serializedObject.Update();
             EditorGUILayout.PropertyField(serializedObject.FindProperty("expression"), true);

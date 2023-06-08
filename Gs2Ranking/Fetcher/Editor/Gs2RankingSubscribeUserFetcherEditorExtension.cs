@@ -43,10 +43,10 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Editor
                 EditorGUI.BeginDisabledGroup(true);
                 EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2RankingSubscribeUserContext), false);
                 EditorGUI.indentLevel++;
-                EditorGUILayout.ObjectField("SubscribeUser", context.SubscribeUser, typeof(SubscribeUser), false);
+                context.SubscribeUser = EditorGUILayout.ObjectField("SubscribeUser", context.SubscribeUser, typeof(SubscribeUser), false) as SubscribeUser;
                 EditorGUI.indentLevel++;
-                EditorGUILayout.TextField("CategoryName", context.SubscribeUser.CategoryName.ToString());
-                EditorGUILayout.TextField("TargetUserId", context.SubscribeUser.TargetUserId.ToString());
+                EditorGUILayout.TextField("CategoryName", context.SubscribeUser?.CategoryName.ToString());
+                EditorGUILayout.TextField("TargetUserId", context.SubscribeUser?.TargetUserId.ToString());
                 EditorGUI.indentLevel--;
                 EditorGUI.indentLevel--;
                 EditorGUI.EndDisabledGroup();

@@ -16,6 +16,9 @@
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
 
+using Gs2.Unity.Gs2Ranking.ScriptableObject;
+using Gs2.Unity.UiKit.Gs2Ranking.Context;
+using Gs2.Unity.UiKit.Gs2Ranking.Fetcher;
 using UnityEditor;
 using UnityEngine;
 
@@ -28,6 +31,37 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Editor
             var original = target as Gs2RankingScoreLabel;
 
             if (original == null) return;
+
+            var fetcher = original.GetComponentInParent<Gs2RankingOwnScoreFetcher>();
+            if (fetcher == null) {
+                EditorGUILayout.HelpBox("Gs2RankingOwnScoreFetcher not found.", MessageType.Error);
+                if (GUILayout.Button("Add Fetcher")) {
+                    original.gameObject.AddComponent<Gs2RankingOwnScoreFetcher>();
+                }
+            }
+            else {
+                if (fetcher.transform.parent.GetComponent<Gs2RankingOwnScoreList>() != null) {
+                    EditorGUI.BeginDisabledGroup(true);
+                    EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2RankingOwnScoreFetcher), false);
+                    EditorGUI.EndDisabledGroup();
+                    EditorGUILayout.HelpBox("Score is auto assign from Gs2RankingOwnScoreList.", MessageType.Info);
+                }
+                else {
+                    var context = original.GetComponentInParent<Gs2RankingOwnScoreContext>();
+                    EditorGUI.BeginDisabledGroup(true);
+                    EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2RankingOwnScoreFetcher), false);
+                    EditorGUI.indentLevel++;
+                    context.Score = EditorGUILayout.ObjectField("Score", context.Score, typeof(OwnScore), false) as OwnScore;
+                    EditorGUI.indentLevel++;
+                    EditorGUILayout.TextField("NamespaceName", context.Score?.NamespaceName.ToString());
+                    EditorGUILayout.TextField("CategoryName", context.Score?.CategoryName.ToString());
+                    EditorGUILayout.TextField("ScorerUserId", context.Score?.ScorerUserId.ToString());
+                    EditorGUILayout.TextField("UniqueId", context.Score?.UniqueId.ToString());
+                    EditorGUI.indentLevel--;
+                    EditorGUI.indentLevel--;
+                    EditorGUI.EndDisabledGroup();
+                }
+            }
 
             serializedObject.Update();
             original.format = EditorGUILayout.TextField("Format", original.format);

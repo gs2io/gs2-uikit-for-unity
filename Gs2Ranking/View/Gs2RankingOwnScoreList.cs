@@ -20,6 +20,7 @@
 
 using System.Collections.Generic;
 using Gs2.Unity.Gs2Ranking.ScriptableObject;
+using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Ranking.Context;
 using Gs2.Unity.UiKit.Gs2Ranking.Fetcher;
 using UnityEngine;
@@ -36,7 +37,7 @@ namespace Gs2.Unity.UiKit.Gs2Ranking
         private List<Gs2RankingOwnScoreContext> _children;
 
         public void Update() {
-            if (_fetcher.Fetched) {
+            if (_fetcher.Fetched && _fetcher.Scores != null) {
                 for (var i = 0; i < this.maximumItems; i++) {
                     if (i < this._fetcher.Scores.Count) {
                         _children[i].Score.scorerUserId = this._fetcher.Scores[i].ScorerUserId;
@@ -64,6 +65,15 @@ namespace Gs2.Unity.UiKit.Gs2Ranking
         {
             _context = GetComponentInParent<Gs2RankingCategoryModelContext>();
             _fetcher = GetComponentInParent<Gs2RankingOwnScoreListFetcher>();
+
+            if (_context == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2RankingCategoryModelContext.");
+                enabled = false;
+            }
+            if (_fetcher == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2RankingOwnScoreListFetcher.");
+                enabled = false;
+            }
 
             _children = new List<Gs2RankingOwnScoreContext>();
             for (var i = 0; i < this.maximumItems; i++) {

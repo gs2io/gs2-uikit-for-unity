@@ -16,6 +16,8 @@
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
 
+using Gs2.Unity.Gs2Ranking.ScriptableObject;
+using Gs2.Unity.UiKit.Gs2Ranking.Context;
 using UnityEditor;
 using UnityEngine;
 
@@ -28,6 +30,26 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Editor
             var original = target as Gs2RankingSubscribeUserTargetUserIdEnabler;
 
             if (original == null) return;
+
+            var context = original.GetComponentInParent<Gs2RankingSubscribeUserContext>();
+            if (context == null) {
+                EditorGUILayout.HelpBox("Gs2RankingSubscribeUserContext not found.", MessageType.Error);
+                if (GUILayout.Button("Add Context")) {
+                    original.gameObject.AddComponent<Gs2RankingSubscribeUserContext>();
+                }
+            }
+            else {
+                EditorGUI.BeginDisabledGroup(true);
+                EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2RankingSubscribeUserContext), false);
+                EditorGUI.indentLevel++;
+                context.SubscribeUser = EditorGUILayout.ObjectField("SubscribeUser", context.SubscribeUser, typeof(SubscribeUser), false) as SubscribeUser;
+                EditorGUI.indentLevel++;
+                EditorGUILayout.TextField("CategoryName", context.SubscribeUser?.CategoryName.ToString());
+                EditorGUILayout.TextField("TargetUserId", context.SubscribeUser?.TargetUserId.ToString());
+                EditorGUI.indentLevel--;
+                EditorGUI.indentLevel--;
+                EditorGUI.EndDisabledGroup();
+            }
 
             serializedObject.Update();
             EditorGUILayout.PropertyField(serializedObject.FindProperty("expression"), true);
