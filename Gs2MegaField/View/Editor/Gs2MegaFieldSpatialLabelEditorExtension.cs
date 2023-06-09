@@ -44,7 +44,7 @@ namespace Gs2.Unity.UiKit.Gs2MegaField.Editor
                 EditorGUI.BeginDisabledGroup(true);
                 EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2MegaFieldSpatialFetcher), false);
                 EditorGUI.indentLevel++;
-                EditorGUILayout.ObjectField("Spatial", context.Spatial, typeof(Spatial), false);
+                context.Spatial = EditorGUILayout.ObjectField("Spatial", context.Spatial, typeof(Spatial), false) as Spatial;
                 EditorGUI.indentLevel++;
                 EditorGUILayout.TextField("NamespaceName", context.Spatial?.NamespaceName.ToString());
                 EditorGUILayout.TextField("UserId", context.Spatial?.UserId.ToString());

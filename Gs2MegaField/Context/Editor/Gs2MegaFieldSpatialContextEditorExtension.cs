@@ -39,7 +39,7 @@ namespace Gs2.Unity.UiKit.Gs2MegaField.Editor
                 EditorGUILayout.PropertyField(serializedObject.FindProperty("Spatial"), true);
             }
             else {
-                EditorGUILayout.ObjectField("Spatial", original.Spatial, typeof(Spatial), false);
+                original.Spatial = EditorGUILayout.ObjectField("Spatial", original.Spatial, typeof(Spatial), false) as Spatial;
                 EditorGUI.BeginDisabledGroup(true);
                 EditorGUI.indentLevel++;
                 EditorGUILayout.TextField("NamespaceName", original.Spatial?.NamespaceName.ToString());

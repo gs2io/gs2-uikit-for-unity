@@ -51,7 +51,7 @@ namespace Gs2.Unity.UiKit.Gs2MegaField.Editor
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2MegaFieldAreaModelFetcher), false);
                     EditorGUI.indentLevel++;
-                    EditorGUILayout.ObjectField("AreaModel", context.AreaModel, typeof(AreaModel), false);
+                    context.AreaModel = EditorGUILayout.ObjectField("AreaModel", context.AreaModel, typeof(AreaModel), false) as AreaModel;
                     EditorGUI.indentLevel++;
                     EditorGUILayout.TextField("NamespaceName", context.AreaModel?.NamespaceName.ToString());
                     EditorGUILayout.TextField("AreaModelName", context.AreaModel?.AreaModelName.ToString());
