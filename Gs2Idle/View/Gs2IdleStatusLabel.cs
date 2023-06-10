@@ -43,6 +43,8 @@ namespace Gs2.Unity.UiKit.Gs2Idle
                         "{randomSeed}", $"{_fetcher?.Status?.RandomSeed}"
                     ).Replace(
                         "{idleMinutes}", $"{_fetcher?.Status?.IdleMinutes}"
+                    ).Replace(
+                        "{maximumIdleMinutes}", $"{_fetcher?.Status?.MaximumIdleMinutes}"
                     )
                 );
             }

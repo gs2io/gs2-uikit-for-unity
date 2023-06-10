@@ -18,38 +18,36 @@
 
 using Gs2.Unity.Gs2Idle.ScriptableObject;
 using Gs2.Unity.UiKit.Gs2Idle.Context;
-using Gs2.Unity.UiKit.Gs2Idle.Fetcher;
 using UnityEditor;
 using UnityEngine;
 
 namespace Gs2.Unity.UiKit.Gs2Idle.Editor
 {
-    [CustomEditor(typeof(Gs2IdleStatusLabel))]
-    public class Gs2IdleStatusLabelEditorExtension : UnityEditor.Editor
+    [CustomEditor(typeof(Gs2IdleStatusMaximumIdleMinutesEnabler))]
+    public class Gs2IdleStatusMaximumIdleMinutesEnablerEditorExtension : UnityEditor.Editor
     {
         public override void OnInspectorGUI() {
-            var original = target as Gs2IdleStatusLabel;
+            var original = target as Gs2IdleStatusMaximumIdleMinutesEnabler;
 
             if (original == null) return;
 
-            var fetcher = original.GetComponentInParent<Gs2IdleOwnStatusFetcher>();
-            if (fetcher == null) {
-                EditorGUILayout.HelpBox("Gs2IdleOwnStatusFetcher not found.", MessageType.Error);
-                if (GUILayout.Button("Add Fetcher")) {
-                    original.gameObject.AddComponent<Gs2IdleOwnStatusFetcher>();
+            var context = original.GetComponentInParent<Gs2IdleOwnStatusContext>();
+            if (context == null) {
+                EditorGUILayout.HelpBox("Gs2IdleOwnStatusContext not found.", MessageType.Error);
+                if (GUILayout.Button("Add Context")) {
+                    original.gameObject.AddComponent<Gs2IdleOwnStatusContext>();
                 }
             }
             else {
-                if (fetcher.transform.parent.GetComponent<Gs2IdleOwnStatusList>() != null) {
+                if (context.transform.parent.GetComponent<Gs2IdleOwnStatusList>() != null) {
                     EditorGUI.BeginDisabledGroup(true);
-                    EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2IdleOwnStatusFetcher), false);
+                    EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2IdleOwnStatusContext), false);
                     EditorGUI.EndDisabledGroup();
                     EditorGUILayout.HelpBox("Status is auto assign from Gs2IdleOwnStatusList.", MessageType.Info);
                 }
                 else {
-                    var context = original.GetComponentInParent<Gs2IdleOwnStatusContext>();
                     EditorGUI.BeginDisabledGroup(true);
-                    EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2IdleOwnStatusFetcher), false);
+                    EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2IdleOwnStatusContext), false);
                     EditorGUI.indentLevel++;
                     context.Status = EditorGUILayout.ObjectField("Status", context.Status, typeof(OwnStatus), false) as OwnStatus;
                     EditorGUI.indentLevel++;
@@ -62,30 +60,15 @@ namespace Gs2.Unity.UiKit.Gs2Idle.Editor
             }
 
             serializedObject.Update();
-            original.format = EditorGUILayout.TextField("Format", original.format);
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("expression"), true);
 
-            GUILayout.Label("Add Format Parameter");
-            if (GUILayout.Button("CategoryName")) {
-                original.format += "{categoryName}";
-                GUI.FocusControl("");
-                EditorUtility.SetDirty(original);
+            if (original.expression == Gs2IdleStatusMaximumIdleMinutesEnabler.Expression.In || original.expression == Gs2IdleStatusMaximumIdleMinutesEnabler.Expression.NotIn) {
+                EditorGUILayout.PropertyField(serializedObject.FindProperty("enableMaximumIdleMinuteses"), true);
+            } else {
+                EditorGUILayout.PropertyField(serializedObject.FindProperty("enableMaximumIdleMinutes"), true);
             }
-            if (GUILayout.Button("RandomSeed")) {
-                original.format += "{randomSeed}";
-                GUI.FocusControl("");
-                EditorUtility.SetDirty(original);
-            }
-            if (GUILayout.Button("IdleMinutes")) {
-                original.format += "{idleMinutes}";
-                GUI.FocusControl("");
-                EditorUtility.SetDirty(original);
-            }
-            if (GUILayout.Button("MaximumIdleMinutes")) {
-                original.format += "{maximumIdleMinutes}";
-                GUI.FocusControl("");
-                EditorUtility.SetDirty(original);
-            }
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("onUpdate"), true);
+
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("target"), true);
             serializedObject.ApplyModifiedProperties();
         }
     }

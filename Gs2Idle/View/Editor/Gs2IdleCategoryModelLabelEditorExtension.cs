@@ -80,6 +80,16 @@ namespace Gs2.Unity.UiKit.Gs2Idle.Editor
                 GUI.FocusControl("");
                 EditorUtility.SetDirty(original);
             }
+            if (GUILayout.Button("DefaultMaximumIdleMinutes")) {
+                original.format += "{defaultMaximumIdleMinutes}";
+                GUI.FocusControl("");
+                EditorUtility.SetDirty(original);
+            }
+            if (GUILayout.Button("AcquireActions")) {
+                original.format += "{acquireActions}";
+                GUI.FocusControl("");
+                EditorUtility.SetDirty(original);
+            }
             if (GUILayout.Button("IdlePeriodScheduleId")) {
                 original.format += "{idlePeriodScheduleId}";
                 GUI.FocusControl("");

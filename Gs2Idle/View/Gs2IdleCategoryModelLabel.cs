@@ -44,6 +44,10 @@ namespace Gs2.Unity.UiKit.Gs2Idle
                     ).Replace(
                         "{rewardIntervalMinutes}", $"{_fetcher?.CategoryModel?.RewardIntervalMinutes}"
                     ).Replace(
+                        "{defaultMaximumIdleMinutes}", $"{_fetcher?.CategoryModel?.DefaultMaximumIdleMinutes}"
+                    ).Replace(
+                        "{acquireActions}", $"{_fetcher?.CategoryModel?.AcquireActions}"
+                    ).Replace(
                         "{idlePeriodScheduleId}", $"{_fetcher?.CategoryModel?.IdlePeriodScheduleId}"
                     ).Replace(
                         "{receivePeriodScheduleId}", $"{_fetcher?.CategoryModel?.ReceivePeriodScheduleId}"
