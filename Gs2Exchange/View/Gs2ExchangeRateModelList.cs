@@ -60,8 +60,8 @@ namespace Gs2.Unity.UiKit.Gs2Exchange
 
         public void Awake()
         {
-            _context = GetComponentInParent<Gs2ExchangeNamespaceContext>();
-            _fetcher = GetComponentInParent<Gs2ExchangeRateModelListFetcher>();
+            _context = GetComponent<Gs2ExchangeNamespaceContext>() ?? GetComponentInParent<Gs2ExchangeNamespaceContext>();
+            _fetcher = GetComponent<Gs2ExchangeRateModelListFetcher>() ?? GetComponentInParent<Gs2ExchangeRateModelListFetcher>();
 
             if (_fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ExchangeRateModelListFetcher.");

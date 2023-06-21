@@ -32,7 +32,7 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.Editor
 
             if (original == null) return;
 
-            var context = original.GetComponentInParent<Gs2LotteryOwnBoxItemsContext>();
+            var context = original.GetComponent<Gs2LotteryOwnBoxItemsContext>() ?? original.GetComponentInParent<Gs2LotteryOwnBoxItemsContext>();
             if (context == null) {
                 EditorGUILayout.HelpBox("Gs2LotteryOwnBoxItemsContext not found.", MessageType.Error);
                 if (GUILayout.Button("Add Context")) {

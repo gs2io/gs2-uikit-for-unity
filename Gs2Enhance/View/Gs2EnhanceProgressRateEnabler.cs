@@ -73,7 +73,7 @@ namespace Gs2.Unity.UiKit.Gs2Enhance
 
         public void Awake()
         {
-            _fetcher = GetComponentInParent<Gs2EnhanceOwnProgressFetcher>();
+            _fetcher = GetComponent<Gs2EnhanceOwnProgressFetcher>() ?? GetComponentInParent<Gs2EnhanceOwnProgressFetcher>();
 
             if (_fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2EnhanceOwnProgressFetcher.");

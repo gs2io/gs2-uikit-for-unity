@@ -61,8 +61,8 @@ namespace Gs2.Unity.UiKit.Gs2Limit
 
         public void Awake()
         {
-            _context = GetComponentInParent<Gs2LimitNamespaceContext>();
-            _fetcher = GetComponentInParent<Gs2LimitOwnCounterListFetcher>();
+            _context = GetComponent<Gs2LimitNamespaceContext>() ?? GetComponentInParent<Gs2LimitNamespaceContext>();
+            _fetcher = GetComponent<Gs2LimitOwnCounterListFetcher>() ?? GetComponentInParent<Gs2LimitOwnCounterListFetcher>();
 
             if (_context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2LimitNamespaceContext.");

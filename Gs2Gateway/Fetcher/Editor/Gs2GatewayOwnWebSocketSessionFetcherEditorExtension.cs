@@ -32,7 +32,7 @@ namespace Gs2.Unity.UiKit.Gs2Gateway.Editor
 
             if (original == null) return;
 
-            var context = original.GetComponentInParent<Gs2GatewayOwnWebSocketSessionContext>();
+            var context = original.GetComponent<Gs2GatewayOwnWebSocketSessionContext>() ?? original.GetComponentInParent<Gs2GatewayOwnWebSocketSessionContext>();
             if (context == null) {
                 EditorGUILayout.HelpBox("Gs2GatewayOwnWebSocketSessionContext not found.", MessageType.Error);
                 if (GUILayout.Button("Add Context")) {

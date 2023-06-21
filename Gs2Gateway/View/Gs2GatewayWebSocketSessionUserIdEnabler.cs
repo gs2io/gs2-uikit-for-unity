@@ -67,7 +67,7 @@ namespace Gs2.Unity.UiKit.Gs2Gateway
 
         public void Awake()
         {
-            _fetcher = GetComponentInParent<Gs2GatewayOwnWebSocketSessionFetcher>();
+            _fetcher = GetComponent<Gs2GatewayOwnWebSocketSessionFetcher>() ?? GetComponentInParent<Gs2GatewayOwnWebSocketSessionFetcher>();
 
             if (_fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2GatewayOwnWebSocketSessionFetcher.");

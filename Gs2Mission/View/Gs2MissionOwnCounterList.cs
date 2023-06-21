@@ -61,8 +61,8 @@ namespace Gs2.Unity.UiKit.Gs2Mission
 
         public void Awake()
         {
-            _context = GetComponentInParent<Gs2MissionNamespaceContext>();
-            _fetcher = GetComponentInParent<Gs2MissionOwnCounterListFetcher>();
+            _context = GetComponent<Gs2MissionNamespaceContext>() ?? GetComponentInParent<Gs2MissionNamespaceContext>();
+            _fetcher = GetComponent<Gs2MissionOwnCounterListFetcher>() ?? GetComponentInParent<Gs2MissionOwnCounterListFetcher>();
 
             if (_context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MissionNamespaceContext.");

@@ -67,7 +67,7 @@ namespace Gs2.Unity.UiKit.Gs2Quest
 
         public void Awake()
         {
-            _fetcher = GetComponentInParent<Gs2QuestQuestModelFetcher>();
+            _fetcher = GetComponent<Gs2QuestQuestModelFetcher>() ?? GetComponentInParent<Gs2QuestQuestModelFetcher>();
 
             if (_fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2QuestQuestModelFetcher.");

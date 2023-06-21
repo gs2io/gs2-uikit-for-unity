@@ -96,8 +96,8 @@ namespace Gs2.Unity.UiKit.Gs2Dictionary
 
         public void Awake()
         {
-            _fetcher = GetComponentInParent<Gs2CoreAcquireActionFetcher>();
-            _userDataFetcher = GetComponentInParent<Gs2DictionaryOwnEntryFetcher>();
+            _fetcher = GetComponent<Gs2CoreAcquireActionFetcher>() ?? GetComponentInParent<Gs2CoreAcquireActionFetcher>();
+            _userDataFetcher = GetComponent<Gs2DictionaryOwnEntryFetcher>() ?? GetComponentInParent<Gs2DictionaryOwnEntryFetcher>();
 
             if (_fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2CoreAcquireActionFetcher.");

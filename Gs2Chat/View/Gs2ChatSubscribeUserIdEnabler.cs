@@ -67,7 +67,7 @@ namespace Gs2.Unity.UiKit.Gs2Chat
 
         public void Awake()
         {
-            _fetcher = GetComponentInParent<Gs2ChatOwnSubscribeFetcher>();
+            _fetcher = GetComponent<Gs2ChatOwnSubscribeFetcher>() ?? GetComponentInParent<Gs2ChatOwnSubscribeFetcher>();
 
             if (_fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ChatOwnSubscribeFetcher.");

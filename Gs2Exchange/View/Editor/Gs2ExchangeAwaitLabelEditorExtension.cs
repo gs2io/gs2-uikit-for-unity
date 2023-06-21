@@ -32,7 +32,7 @@ namespace Gs2.Unity.UiKit.Gs2Exchange.Editor
 
             if (original == null) return;
 
-            var fetcher = original.GetComponentInParent<Gs2ExchangeOwnAwaitFetcher>();
+            var fetcher = original.GetComponent<Gs2ExchangeOwnAwaitFetcher>() ?? original.GetComponentInParent<Gs2ExchangeOwnAwaitFetcher>();
             if (fetcher == null) {
                 EditorGUILayout.HelpBox("Gs2ExchangeOwnAwaitFetcher not found.", MessageType.Error);
                 if (GUILayout.Button("Add Fetcher")) {
@@ -47,7 +47,7 @@ namespace Gs2.Unity.UiKit.Gs2Exchange.Editor
                     EditorGUILayout.HelpBox("Await is auto assign from Gs2ExchangeOwnAwaitList.", MessageType.Info);
                 }
                 else {
-                    var context = original.GetComponentInParent<Gs2ExchangeOwnAwaitContext>();
+                    var context = original.GetComponent<Gs2ExchangeOwnAwaitContext>() ?? original.GetComponentInParent<Gs2ExchangeOwnAwaitContext>();
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2ExchangeOwnAwaitFetcher), false);
                     EditorGUI.indentLevel++;

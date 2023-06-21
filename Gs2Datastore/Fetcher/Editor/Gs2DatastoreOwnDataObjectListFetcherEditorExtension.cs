@@ -32,7 +32,7 @@ namespace Gs2.Unity.UiKit.Gs2Datastore.Editor
 
             if (original == null) return;
 
-            var context = original.GetComponentInParent<Gs2DatastoreNamespaceContext>();
+            var context = original.GetComponent<Gs2DatastoreNamespaceContext>() ?? original.GetComponentInParent<Gs2DatastoreNamespaceContext>();
             if (context == null) {
                 EditorGUILayout.HelpBox("Gs2DatastoreNamespaceContext not found.", MessageType.Error);
                 if (GUILayout.Button("Add Context")) {

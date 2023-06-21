@@ -60,8 +60,8 @@ namespace Gs2.Unity.UiKit.Gs2Chat
 
         public void Awake()
         {
-            _context = GetComponentInParent<Gs2ChatNamespaceContext>();
-            _fetcher = GetComponentInParent<Gs2ChatOwnSubscribeListFetcher>();
+            _context = GetComponent<Gs2ChatNamespaceContext>() ?? GetComponentInParent<Gs2ChatNamespaceContext>();
+            _fetcher = GetComponent<Gs2ChatOwnSubscribeListFetcher>() ?? GetComponentInParent<Gs2ChatOwnSubscribeListFetcher>();
 
             if (_context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ChatNamespaceContext.");

@@ -30,7 +30,7 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Context
         private Gs2FormationMoldModelContext _context;
         
         public void Awake() {
-            _context = GetComponentInParent<Gs2FormationMoldModelContext>();
+            _context = GetComponent<Gs2FormationMoldModelContext>() ?? GetComponentInParent<Gs2FormationMoldModelContext>();
 
             if (_context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2FormationMoldModelContext.");

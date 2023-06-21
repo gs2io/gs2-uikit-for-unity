@@ -112,7 +112,7 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Fetcher
         {
             _clientHolder = Gs2ClientHolder.Instance;
             _gameSessionHolder = Gs2GameSessionHolder.Instance;
-            _context = GetComponentInParent<Gs2FriendPublicProfileContext>();
+            _context = GetComponent<Gs2FriendPublicProfileContext>() ?? GetComponentInParent<Gs2FriendPublicProfileContext>();
 
             if (_context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2FriendPublicProfileContext.");

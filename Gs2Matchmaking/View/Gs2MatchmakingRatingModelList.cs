@@ -60,8 +60,8 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking
 
         public void Awake()
         {
-            _context = GetComponentInParent<Gs2MatchmakingNamespaceContext>();
-            _fetcher = GetComponentInParent<Gs2MatchmakingRatingModelListFetcher>();
+            _context = GetComponent<Gs2MatchmakingNamespaceContext>() ?? GetComponentInParent<Gs2MatchmakingNamespaceContext>();
+            _fetcher = GetComponent<Gs2MatchmakingRatingModelListFetcher>() ?? GetComponentInParent<Gs2MatchmakingRatingModelListFetcher>();
 
             if (_fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MatchmakingRatingModelListFetcher.");

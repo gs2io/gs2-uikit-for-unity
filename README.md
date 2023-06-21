@@ -29,7 +29,7 @@ SDKを利用するには GS2 のクレデンシャルが必要です。
 - GS2-CSharp-SDK
 - GS2 SDK for Unity
 
-[⇒GS2-Document ダウンロード](https://app.gs2.io/docs/index.html?csharp--unity#download)
+[⇒GS2の利用を開始 - SDK - Game Engine](https://docs.gs2.io/ja/get_start/#game-engine)
 
 ## SDK の詳細仕様
 

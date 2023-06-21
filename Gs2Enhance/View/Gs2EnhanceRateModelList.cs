@@ -60,8 +60,8 @@ namespace Gs2.Unity.UiKit.Gs2Enhance
 
         public void Awake()
         {
-            _context = GetComponentInParent<Gs2EnhanceNamespaceContext>();
-            _fetcher = GetComponentInParent<Gs2EnhanceRateModelListFetcher>();
+            _context = GetComponent<Gs2EnhanceNamespaceContext>() ?? GetComponentInParent<Gs2EnhanceNamespaceContext>();
+            _fetcher = GetComponent<Gs2EnhanceRateModelListFetcher>() ?? GetComponentInParent<Gs2EnhanceRateModelListFetcher>();
 
             if (_fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2EnhanceRateModelListFetcher.");

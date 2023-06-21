@@ -60,8 +60,8 @@ namespace Gs2.Unity.UiKit.Gs2Formation
 
         public void Awake()
         {
-            _context = GetComponentInParent<Gs2FormationNamespaceContext>();
-            _fetcher = GetComponentInParent<Gs2FormationFormModelListFetcher>();
+            _context = GetComponent<Gs2FormationNamespaceContext>() ?? GetComponentInParent<Gs2FormationNamespaceContext>();
+            _fetcher = GetComponent<Gs2FormationFormModelListFetcher>() ?? GetComponentInParent<Gs2FormationFormModelListFetcher>();
 
             if (_fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2FormationFormModelListFetcher.");

@@ -112,7 +112,7 @@ namespace Gs2.Unity.UiKit.Gs2Chat.Fetcher
         {
             _clientHolder = Gs2ClientHolder.Instance;
             _gameSessionHolder = Gs2GameSessionHolder.Instance;
-            _context = GetComponentInParent<Gs2ChatMessageContext>();
+            _context = GetComponent<Gs2ChatMessageContext>() ?? GetComponentInParent<Gs2ChatMessageContext>();
 
             if (_context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ChatMessageContext.");

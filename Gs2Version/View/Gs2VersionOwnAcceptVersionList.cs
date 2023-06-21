@@ -60,8 +60,8 @@ namespace Gs2.Unity.UiKit.Gs2Version
 
         public void Awake()
         {
-            _context = GetComponentInParent<Gs2VersionNamespaceContext>();
-            _fetcher = GetComponentInParent<Gs2VersionOwnAcceptVersionListFetcher>();
+            _context = GetComponent<Gs2VersionNamespaceContext>() ?? GetComponentInParent<Gs2VersionNamespaceContext>();
+            _fetcher = GetComponent<Gs2VersionOwnAcceptVersionListFetcher>() ?? GetComponentInParent<Gs2VersionOwnAcceptVersionListFetcher>();
 
             if (_context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2VersionNamespaceContext.");

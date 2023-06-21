@@ -32,7 +32,7 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Editor
 
             if (original == null) return;
 
-            var fetcher = original.GetComponentInParent<Gs2RankingCategoryModelFetcher>();
+            var fetcher = original.GetComponent<Gs2RankingCategoryModelFetcher>() ?? original.GetComponentInParent<Gs2RankingCategoryModelFetcher>();
             if (fetcher == null) {
                 EditorGUILayout.HelpBox("Gs2RankingCategoryModelFetcher not found.", MessageType.Error);
                 if (GUILayout.Button("Add Fetcher")) {
@@ -47,7 +47,7 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Editor
                     EditorGUILayout.HelpBox("CategoryModel is auto assign from Gs2RankingCategoryModelList.", MessageType.Info);
                 }
                 else {
-                    var context = original.GetComponentInParent<Gs2RankingCategoryModelContext>();
+                    var context = original.GetComponent<Gs2RankingCategoryModelContext>() ?? original.GetComponentInParent<Gs2RankingCategoryModelContext>();
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2RankingCategoryModelFetcher), false);
                     EditorGUI.indentLevel++;

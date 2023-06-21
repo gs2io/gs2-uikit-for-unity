@@ -32,7 +32,7 @@ namespace Gs2.Unity.UiKit.Gs2Limit.Editor
 
             if (original == null) return;
 
-            var fetcher = original.GetComponentInParent<Gs2LimitOwnCounterFetcher>();
+            var fetcher = original.GetComponent<Gs2LimitOwnCounterFetcher>() ?? original.GetComponentInParent<Gs2LimitOwnCounterFetcher>();
             if (fetcher == null) {
                 EditorGUILayout.HelpBox("Gs2LimitOwnCounterFetcher not found.", MessageType.Error);
                 if (GUILayout.Button("Add Fetcher")) {
@@ -47,7 +47,7 @@ namespace Gs2.Unity.UiKit.Gs2Limit.Editor
                     EditorGUILayout.HelpBox("Counter is auto assign from Gs2LimitOwnCounterList.", MessageType.Info);
                 }
                 else {
-                    var context = original.GetComponentInParent<Gs2LimitOwnCounterContext>();
+                    var context = original.GetComponent<Gs2LimitOwnCounterContext>() ?? original.GetComponentInParent<Gs2LimitOwnCounterContext>();
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2LimitOwnCounterFetcher), false);
                     EditorGUI.indentLevel++;

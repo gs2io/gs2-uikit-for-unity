@@ -60,8 +60,8 @@ namespace Gs2.Unity.UiKit.Gs2Datastore
 
         public void Awake()
         {
-            _context = GetComponentInParent<Gs2DatastoreNamespaceContext>();
-            _fetcher = GetComponentInParent<Gs2DatastoreOwnDataObjectListFetcher>();
+            _context = GetComponent<Gs2DatastoreNamespaceContext>() ?? GetComponentInParent<Gs2DatastoreNamespaceContext>();
+            _fetcher = GetComponent<Gs2DatastoreOwnDataObjectListFetcher>() ?? GetComponentInParent<Gs2DatastoreOwnDataObjectListFetcher>();
 
             if (_context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2DatastoreNamespaceContext.");

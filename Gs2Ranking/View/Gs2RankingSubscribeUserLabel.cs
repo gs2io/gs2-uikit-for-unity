@@ -57,7 +57,7 @@ namespace Gs2.Unity.UiKit.Gs2Ranking
 
         public void Awake()
         {
-            _fetcher = GetComponentInParent<Gs2RankingSubscribeUserFetcher>();
+            _fetcher = GetComponent<Gs2RankingSubscribeUserFetcher>() ?? GetComponentInParent<Gs2RankingSubscribeUserFetcher>();
 
             if (_fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2RankingSubscribeUserFetcher.");

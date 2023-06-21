@@ -60,8 +60,8 @@ namespace Gs2.Unity.UiKit.Gs2Ranking
 
         public void Awake()
         {
-            _context = GetComponentInParent<Gs2RankingNamespaceContext>();
-            _fetcher = GetComponentInParent<Gs2RankingCategoryModelListFetcher>();
+            _context = GetComponent<Gs2RankingNamespaceContext>() ?? GetComponentInParent<Gs2RankingNamespaceContext>();
+            _fetcher = GetComponent<Gs2RankingCategoryModelListFetcher>() ?? GetComponentInParent<Gs2RankingCategoryModelListFetcher>();
 
             if (_fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2RankingCategoryModelListFetcher.");

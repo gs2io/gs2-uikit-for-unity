@@ -32,7 +32,7 @@ namespace Gs2.Unity.UiKit.Gs2Realtime.Editor
 
             if (original == null) return;
 
-            var fetcher = original.GetComponentInParent<Gs2RealtimeRoomFetcher>();
+            var fetcher = original.GetComponent<Gs2RealtimeRoomFetcher>() ?? original.GetComponentInParent<Gs2RealtimeRoomFetcher>();
             if (fetcher == null) {
                 EditorGUILayout.HelpBox("Gs2RealtimeRoomFetcher not found.", MessageType.Error);
                 if (GUILayout.Button("Add Fetcher")) {
@@ -40,7 +40,7 @@ namespace Gs2.Unity.UiKit.Gs2Realtime.Editor
                 }
             }
             else {
-                var context = original.GetComponentInParent<Gs2RealtimeRoomContext>();
+                var context = original.GetComponent<Gs2RealtimeRoomContext>() ?? original.GetComponentInParent<Gs2RealtimeRoomContext>();
                 EditorGUI.BeginDisabledGroup(true);
                 EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2RealtimeRoomFetcher), false);
                 EditorGUI.indentLevel++;

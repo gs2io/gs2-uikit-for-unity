@@ -32,7 +32,7 @@ namespace Gs2.Unity.UiKit.Gs2Account.Editor
 
             if (original == null) return;
 
-            var context = original.GetComponentInParent<Gs2AccountOwnAccountContext>();
+            var context = original.GetComponent<Gs2AccountOwnAccountContext>() ?? original.GetComponentInParent<Gs2AccountOwnAccountContext>();
             if (context == null) {
                 EditorGUILayout.HelpBox("Gs2AccountOwnAccountContext not found.", MessageType.Error);
                 if (GUILayout.Button("Add Context")) {

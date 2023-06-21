@@ -59,8 +59,7 @@ namespace Gs2.Unity.UiKit.Gs2Showcase.Context
         public IEnumerator Process()
         {
             while (true) {
-                if (_fetcher.Fetched && _fetcher.DisplayItem != null && 
-                    _callbackCount != count) {
+                if (_fetcher.Fetched && _fetcher.DisplayItem != null) {
                     if (_fetcher.DisplayItem.Type == "salesItemGroup") {
 
                         var lastSalesItem = _fetcher.DisplayItem.SalesItemGroup.SalesItems.Last();
@@ -73,7 +72,18 @@ namespace Gs2.Unity.UiKit.Gs2Showcase.Context
                                 var limit = _fetcher.DisplayItem.SalesItemGroup.SalesItems[j].ConsumeActions
                                     .FirstOrDefault(v =>
                                         v.Action == "Gs2Limit:CountUpByUserId");
-                                if (limit == null) break;
+                                if (limit == null) {
+                                    if (!purchaseByStepsCount.ContainsKey(j)) {
+                                        purchaseByStepsCount[j] = 1;
+                                    }
+                                    else {
+                                        purchaseByStepsCount[j] += 1;
+                                    }
+                                    if (++i >= this.count) {
+                                        break;
+                                    }
+                                    continue;
+                                };
                                 var request = CountUpByUserIdRequest.FromJson(JsonMapper.ToObject(limit.Request));
 
                                 var future = this._clientHolder.Gs2.Limit.Namespace(
@@ -142,11 +152,8 @@ namespace Gs2.Unity.UiKit.Gs2Showcase.Context
                         );
                         _callbackCount = count;
                     }
-                    yield return new WaitForSeconds(0.1f);
                 }
-                else {
-                    yield return new WaitForSeconds(0.1f);
-                }
+                yield return new WaitForSeconds(0.1f);
             }
         }
         

@@ -31,7 +31,7 @@ namespace Gs2.Unity.UiKit.Gs2Limit.Editor
 
             if (original == null) return;
 
-            var context = original.GetComponentInParent<Gs2LimitOwnCounterContext>();
+            var context = original.GetComponent<Gs2LimitOwnCounterContext>() ?? original.GetComponentInParent<Gs2LimitOwnCounterContext>();
             if (context == null) {
                 EditorGUILayout.HelpBox("Gs2LimitOwnCounterContext not found.", MessageType.Error);
                 if (GUILayout.Button("Add Context")) {

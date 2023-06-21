@@ -67,7 +67,7 @@ namespace Gs2.Unity.UiKit.Gs2Friend
 
         public void Awake()
         {
-            _fetcher = GetComponentInParent<Gs2FriendPublicProfileFetcher>();
+            _fetcher = GetComponent<Gs2FriendPublicProfileFetcher>() ?? GetComponentInParent<Gs2FriendPublicProfileFetcher>();
 
             if (_fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2FriendPublicProfileFetcher.");

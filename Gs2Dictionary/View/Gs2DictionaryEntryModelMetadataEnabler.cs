@@ -67,7 +67,7 @@ namespace Gs2.Unity.UiKit.Gs2Dictionary
 
         public void Awake()
         {
-            _fetcher = GetComponentInParent<Gs2DictionaryEntryModelFetcher>();
+            _fetcher = GetComponent<Gs2DictionaryEntryModelFetcher>() ?? GetComponentInParent<Gs2DictionaryEntryModelFetcher>();
 
             if (_fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2DictionaryEntryModelFetcher.");

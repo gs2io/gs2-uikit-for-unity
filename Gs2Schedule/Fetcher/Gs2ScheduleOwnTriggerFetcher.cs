@@ -113,7 +113,7 @@ namespace Gs2.Unity.UiKit.Gs2Schedule.Fetcher
         {
             _clientHolder = Gs2ClientHolder.Instance;
             _gameSessionHolder = Gs2GameSessionHolder.Instance;
-            _context = GetComponentInParent<Gs2ScheduleOwnTriggerContext>();
+            _context = GetComponent<Gs2ScheduleOwnTriggerContext>() ?? GetComponentInParent<Gs2ScheduleOwnTriggerContext>();
 
             if (_context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ScheduleOwnTriggerContext.");

@@ -61,8 +61,8 @@ namespace Gs2.Unity.UiKit.Gs2Dictionary
 
         public void Awake()
         {
-            _context = GetComponentInParent<Gs2DictionaryNamespaceContext>();
-            _fetcher = GetComponentInParent<Gs2DictionaryOwnEntryListFetcher>();
+            _context = GetComponent<Gs2DictionaryNamespaceContext>() ?? GetComponentInParent<Gs2DictionaryNamespaceContext>();
+            _fetcher = GetComponent<Gs2DictionaryOwnEntryListFetcher>() ?? GetComponentInParent<Gs2DictionaryOwnEntryListFetcher>();
 
             if (_context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2DictionaryNamespaceContext.");

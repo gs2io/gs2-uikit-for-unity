@@ -32,7 +32,7 @@ namespace Gs2.Unity.UiKit.Gs2Schedule.Editor
 
             if (original == null) return;
 
-            var context = original.GetComponentInParent<Gs2ScheduleNamespaceContext>();
+            var context = original.GetComponent<Gs2ScheduleNamespaceContext>() ?? original.GetComponentInParent<Gs2ScheduleNamespaceContext>();
             if (context == null) {
                 EditorGUILayout.HelpBox("Gs2ScheduleNamespaceContext not found.", MessageType.Error);
                 if (GUILayout.Button("Add Context")) {

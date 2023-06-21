@@ -32,7 +32,7 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Editor
 
             if (original == null) return;
 
-            var fetcher = original.GetComponentInParent<Gs2FriendOwnFriendUserFetcher>();
+            var fetcher = original.GetComponent<Gs2FriendOwnFriendUserFetcher>() ?? original.GetComponentInParent<Gs2FriendOwnFriendUserFetcher>();
             if (fetcher == null) {
                 EditorGUILayout.HelpBox("Gs2FriendOwnFriendUserFetcher not found.", MessageType.Error);
                 if (GUILayout.Button("Add Fetcher")) {
@@ -40,7 +40,7 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Editor
                 }
             }
             else {
-                var context = original.GetComponentInParent<Gs2FriendOwnFriendUserContext>();
+                var context = original.GetComponent<Gs2FriendOwnFriendUserContext>() ?? original.GetComponentInParent<Gs2FriendOwnFriendUserContext>();
                 EditorGUI.BeginDisabledGroup(true);
                 EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2FriendOwnFriendUserFetcher), false);
                 EditorGUI.indentLevel++;

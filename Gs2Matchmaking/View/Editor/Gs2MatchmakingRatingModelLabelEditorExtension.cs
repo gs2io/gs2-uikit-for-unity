@@ -32,7 +32,7 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking.Editor
 
             if (original == null) return;
 
-            var fetcher = original.GetComponentInParent<Gs2MatchmakingRatingModelFetcher>();
+            var fetcher = original.GetComponent<Gs2MatchmakingRatingModelFetcher>() ?? original.GetComponentInParent<Gs2MatchmakingRatingModelFetcher>();
             if (fetcher == null) {
                 EditorGUILayout.HelpBox("Gs2MatchmakingRatingModelFetcher not found.", MessageType.Error);
                 if (GUILayout.Button("Add Fetcher")) {
@@ -53,7 +53,7 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking.Editor
                     EditorGUILayout.HelpBox("RatingModel is auto assign from Gs2MatchmakingOwnRatingList.", MessageType.Info);
                 }
                 else {
-                    var context = original.GetComponentInParent<Gs2MatchmakingRatingModelContext>();
+                    var context = original.GetComponent<Gs2MatchmakingRatingModelContext>() ?? original.GetComponentInParent<Gs2MatchmakingRatingModelContext>();
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2MatchmakingRatingModelFetcher), false);
                     EditorGUI.indentLevel++;

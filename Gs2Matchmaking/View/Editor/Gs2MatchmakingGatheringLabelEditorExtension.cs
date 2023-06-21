@@ -32,7 +32,7 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking.Editor
 
             if (original == null) return;
 
-            var fetcher = original.GetComponentInParent<Gs2MatchmakingGatheringFetcher>();
+            var fetcher = original.GetComponent<Gs2MatchmakingGatheringFetcher>() ?? original.GetComponentInParent<Gs2MatchmakingGatheringFetcher>();
             if (fetcher == null) {
                 EditorGUILayout.HelpBox("Gs2MatchmakingGatheringFetcher not found.", MessageType.Error);
                 if (GUILayout.Button("Add Fetcher")) {
@@ -40,7 +40,7 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking.Editor
                 }
             }
             else {
-                var context = original.GetComponentInParent<Gs2MatchmakingGatheringContext>();
+                var context = original.GetComponent<Gs2MatchmakingGatheringContext>() ?? original.GetComponentInParent<Gs2MatchmakingGatheringContext>();
                 EditorGUI.BeginDisabledGroup(true);
                 EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2MatchmakingGatheringFetcher), false);
                 EditorGUI.indentLevel++;

@@ -32,7 +32,7 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Editor
 
             if (original == null) return;
 
-            var context = original.GetComponentInParent<Gs2InventoryNamespaceContext>();
+            var context = original.GetComponent<Gs2InventoryNamespaceContext>() ?? original.GetComponentInParent<Gs2InventoryNamespaceContext>();
             if (context == null) {
                 EditorGUILayout.HelpBox("Gs2InventoryNamespaceContext not found.", MessageType.Error);
                 if (GUILayout.Button("Add Context")) {

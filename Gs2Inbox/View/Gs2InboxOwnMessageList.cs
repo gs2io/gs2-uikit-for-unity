@@ -60,8 +60,8 @@ namespace Gs2.Unity.UiKit.Gs2Inbox
 
         public void Awake()
         {
-            _context = GetComponentInParent<Gs2InboxNamespaceContext>();
-            _fetcher = GetComponentInParent<Gs2InboxOwnMessageListFetcher>();
+            _context = GetComponent<Gs2InboxNamespaceContext>() ?? GetComponentInParent<Gs2InboxNamespaceContext>();
+            _fetcher = GetComponent<Gs2InboxOwnMessageListFetcher>() ?? GetComponentInParent<Gs2InboxOwnMessageListFetcher>();
 
             if (_context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2InboxNamespaceContext.");

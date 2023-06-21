@@ -61,7 +61,7 @@ namespace Gs2.Unity.UiKit.Gs2Lottery
 
         public void Awake()
         {
-            _fetcher = GetComponentInParent<Gs2LotteryLotteryModelFetcher>();
+            _fetcher = GetComponent<Gs2LotteryLotteryModelFetcher>() ?? GetComponentInParent<Gs2LotteryLotteryModelFetcher>();
 
             if (_fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2LotteryLotteryModelFetcher.");

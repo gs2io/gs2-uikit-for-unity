@@ -30,7 +30,7 @@ namespace Gs2.Unity.UiKit.Gs2Stamina.Context
         private Gs2StaminaStaminaModelContext _context;
         
         public void Awake() {
-            _context = GetComponentInParent<Gs2StaminaStaminaModelContext>();
+            _context = GetComponent<Gs2StaminaStaminaModelContext>() ?? GetComponentInParent<Gs2StaminaStaminaModelContext>();
 
             if (_context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2StaminaStaminaModelContext.");

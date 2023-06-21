@@ -113,7 +113,7 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.Fetcher
         {
             _clientHolder = Gs2ClientHolder.Instance;
             _gameSessionHolder = Gs2GameSessionHolder.Instance;
-            _context = GetComponentInParent<Gs2LotteryOwnBoxItemsContext>();
+            _context = GetComponent<Gs2LotteryOwnBoxItemsContext>() ?? GetComponentInParent<Gs2LotteryOwnBoxItemsContext>();
 
             if (_context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2LotteryOwnBoxItemsContext.");

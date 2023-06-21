@@ -32,7 +32,7 @@ namespace Gs2.Unity.UiKit.Gs2SerialKey.Editor
 
             if (original == null) return;
 
-            var fetcher = original.GetComponentInParent<Gs2SerialKeyCampaignModelFetcher>();
+            var fetcher = original.GetComponent<Gs2SerialKeyCampaignModelFetcher>() ?? original.GetComponentInParent<Gs2SerialKeyCampaignModelFetcher>();
             if (fetcher == null) {
                 EditorGUILayout.HelpBox("Gs2SerialKeyCampaignModelFetcher not found.", MessageType.Error);
                 if (GUILayout.Button("Add Fetcher")) {
@@ -40,7 +40,7 @@ namespace Gs2.Unity.UiKit.Gs2SerialKey.Editor
                 }
             }
             else {
-                var context = original.GetComponentInParent<Gs2SerialKeyCampaignModelContext>();
+                var context = original.GetComponent<Gs2SerialKeyCampaignModelContext>() ?? original.GetComponentInParent<Gs2SerialKeyCampaignModelContext>();
                 EditorGUI.BeginDisabledGroup(true);
                 EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2SerialKeyCampaignModelFetcher), false);
                 EditorGUI.indentLevel++;

@@ -119,7 +119,7 @@ namespace Gs2.Unity.UiKit.Gs2Datastore.Fetcher
         {
             _clientHolder = Gs2ClientHolder.Instance;
             _gameSessionHolder = Gs2GameSessionHolder.Instance;
-            _context = GetComponentInParent<Gs2DatastoreOwnDataObjectHistoryContext>();
+            _context = GetComponent<Gs2DatastoreOwnDataObjectHistoryContext>() ?? GetComponentInParent<Gs2DatastoreOwnDataObjectHistoryContext>();
 
             if (_context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2DatastoreOwnDataObjectHistoryContext.");

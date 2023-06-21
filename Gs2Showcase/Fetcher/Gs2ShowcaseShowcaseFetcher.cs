@@ -113,7 +113,7 @@ namespace Gs2.Unity.UiKit.Gs2Showcase.Fetcher
         {
             _clientHolder = Gs2ClientHolder.Instance;
             _gameSessionHolder = Gs2GameSessionHolder.Instance;
-            _context = GetComponentInParent<Gs2ShowcaseShowcaseContext>();
+            _context = GetComponent<Gs2ShowcaseShowcaseContext>() ?? GetComponentInParent<Gs2ShowcaseShowcaseContext>();
 
             if (_context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ShowcaseShowcaseContext.");

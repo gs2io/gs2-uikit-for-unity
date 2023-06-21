@@ -32,7 +32,7 @@ namespace Gs2.Unity.UiKit.Gs2Dictionary.Editor
 
             if (original == null) return;
 
-            var context = original.GetComponentInParent<Gs2DictionaryOwnEntryContext>();
+            var context = original.GetComponent<Gs2DictionaryOwnEntryContext>() ?? original.GetComponentInParent<Gs2DictionaryOwnEntryContext>();
             if (context == null) {
                 EditorGUILayout.HelpBox("Gs2DictionaryOwnEntryContext not found.", MessageType.Error);
                 if (GUILayout.Button("Add Context")) {

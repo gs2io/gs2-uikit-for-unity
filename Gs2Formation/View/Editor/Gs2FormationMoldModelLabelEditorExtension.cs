@@ -32,7 +32,7 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Editor
 
             if (original == null) return;
 
-            var fetcher = original.GetComponentInParent<Gs2FormationMoldModelFetcher>();
+            var fetcher = original.GetComponent<Gs2FormationMoldModelFetcher>() ?? original.GetComponentInParent<Gs2FormationMoldModelFetcher>();
             if (fetcher == null) {
                 EditorGUILayout.HelpBox("Gs2FormationMoldModelFetcher not found.", MessageType.Error);
                 if (GUILayout.Button("Add Fetcher")) {
@@ -53,7 +53,7 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Editor
                     EditorGUILayout.HelpBox("MoldModel is auto assign from Gs2FormationOwnMoldList.", MessageType.Info);
                 }
                 else {
-                    var context = original.GetComponentInParent<Gs2FormationMoldModelContext>();
+                    var context = original.GetComponent<Gs2FormationMoldModelContext>() ?? original.GetComponentInParent<Gs2FormationMoldModelContext>();
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2FormationMoldModelFetcher), false);
                     EditorGUI.indentLevel++;

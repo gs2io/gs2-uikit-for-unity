@@ -31,7 +31,7 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Editor
 
             if (original == null) return;
 
-            var context = original.GetComponentInParent<Gs2InventoryInventoryModelContext>();
+            var context = original.GetComponent<Gs2InventoryInventoryModelContext>() ?? original.GetComponentInParent<Gs2InventoryInventoryModelContext>();
             if (context == null) {
                 EditorGUILayout.HelpBox("Gs2InventoryInventoryModelContext not found.", MessageType.Error);
                 if (GUILayout.Button("Add Context")) {

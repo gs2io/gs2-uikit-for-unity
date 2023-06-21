@@ -30,7 +30,7 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking.Context
         private Gs2MatchmakingRatingModelContext _context;
         
         public void Awake() {
-            _context = GetComponentInParent<Gs2MatchmakingRatingModelContext>();
+            _context = GetComponent<Gs2MatchmakingRatingModelContext>() ?? GetComponentInParent<Gs2MatchmakingRatingModelContext>();
 
             if (_context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MatchmakingRatingModelContext.");

@@ -32,7 +32,7 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.Editor
 
             if (original == null) return;
 
-            var fetcher = original.GetComponentInParent<Gs2LotteryOwnBoxItemsFetcher>();
+            var fetcher = original.GetComponent<Gs2LotteryOwnBoxItemsFetcher>() ?? original.GetComponentInParent<Gs2LotteryOwnBoxItemsFetcher>();
             if (fetcher == null) {
                 EditorGUILayout.HelpBox("Gs2LotteryOwnBoxItemsFetcher not found.", MessageType.Error);
                 if (GUILayout.Button("Add Fetcher")) {
@@ -47,7 +47,7 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.Editor
                     EditorGUILayout.HelpBox("BoxItems is auto assign from Gs2LotteryOwnBoxItemsList.", MessageType.Info);
                 }
                 else {
-                    var context = original.GetComponentInParent<Gs2LotteryOwnBoxItemsContext>();
+                    var context = original.GetComponent<Gs2LotteryOwnBoxItemsContext>() ?? original.GetComponentInParent<Gs2LotteryOwnBoxItemsContext>();
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2LotteryOwnBoxItemsFetcher), false);
                     EditorGUI.indentLevel++;

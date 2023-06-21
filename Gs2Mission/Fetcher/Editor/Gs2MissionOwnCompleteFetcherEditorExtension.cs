@@ -32,7 +32,7 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Editor
 
             if (original == null) return;
 
-            var context = original.GetComponentInParent<Gs2MissionOwnCompleteContext>();
+            var context = original.GetComponent<Gs2MissionOwnCompleteContext>() ?? original.GetComponentInParent<Gs2MissionOwnCompleteContext>();
             if (context == null) {
                 EditorGUILayout.HelpBox("Gs2MissionOwnCompleteContext not found.", MessageType.Error);
                 if (GUILayout.Button("Add Context")) {

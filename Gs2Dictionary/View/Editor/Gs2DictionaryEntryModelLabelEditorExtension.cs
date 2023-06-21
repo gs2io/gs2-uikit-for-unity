@@ -32,7 +32,7 @@ namespace Gs2.Unity.UiKit.Gs2Dictionary.Editor
 
             if (original == null) return;
 
-            var fetcher = original.GetComponentInParent<Gs2DictionaryEntryModelFetcher>();
+            var fetcher = original.GetComponent<Gs2DictionaryEntryModelFetcher>() ?? original.GetComponentInParent<Gs2DictionaryEntryModelFetcher>();
             if (fetcher == null) {
                 EditorGUILayout.HelpBox("Gs2DictionaryEntryModelFetcher not found.", MessageType.Error);
                 if (GUILayout.Button("Add Fetcher")) {
@@ -53,7 +53,7 @@ namespace Gs2.Unity.UiKit.Gs2Dictionary.Editor
                     EditorGUILayout.HelpBox("EntryModel is auto assign from Gs2DictionaryOwnEntryList.", MessageType.Info);
                 }
                 else {
-                    var context = original.GetComponentInParent<Gs2DictionaryEntryModelContext>();
+                    var context = original.GetComponent<Gs2DictionaryEntryModelContext>() ?? original.GetComponentInParent<Gs2DictionaryEntryModelContext>();
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2DictionaryEntryModelFetcher), false);
                     EditorGUI.indentLevel++;

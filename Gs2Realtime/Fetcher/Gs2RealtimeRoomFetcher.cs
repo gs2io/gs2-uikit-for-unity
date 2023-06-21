@@ -111,7 +111,7 @@ namespace Gs2.Unity.UiKit.Gs2Realtime.Fetcher
         {
             _clientHolder = Gs2ClientHolder.Instance;
             _gameSessionHolder = Gs2GameSessionHolder.Instance;
-            _context = GetComponentInParent<Gs2RealtimeRoomContext>();
+            _context = GetComponent<Gs2RealtimeRoomContext>() ?? GetComponentInParent<Gs2RealtimeRoomContext>();
 
             if (_context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2RealtimeRoomContext.");

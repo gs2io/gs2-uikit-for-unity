@@ -32,7 +32,7 @@ namespace Gs2.Unity.UiKit.Gs2Exchange.Editor
 
             if (original == null) return;
 
-            var fetcher = original.GetComponentInParent<Gs2ExchangeRateModelFetcher>();
+            var fetcher = original.GetComponent<Gs2ExchangeRateModelFetcher>() ?? original.GetComponentInParent<Gs2ExchangeRateModelFetcher>();
             if (fetcher == null) {
                 EditorGUILayout.HelpBox("Gs2ExchangeRateModelFetcher not found.", MessageType.Error);
                 if (GUILayout.Button("Add Fetcher")) {
@@ -47,7 +47,7 @@ namespace Gs2.Unity.UiKit.Gs2Exchange.Editor
                     EditorGUILayout.HelpBox("RateModel is auto assign from Gs2ExchangeRateModelList.", MessageType.Info);
                 }
                 else {
-                    var context = original.GetComponentInParent<Gs2ExchangeRateModelContext>();
+                    var context = original.GetComponent<Gs2ExchangeRateModelContext>() ?? original.GetComponentInParent<Gs2ExchangeRateModelContext>();
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2ExchangeRateModelFetcher), false);
                     EditorGUI.indentLevel++;

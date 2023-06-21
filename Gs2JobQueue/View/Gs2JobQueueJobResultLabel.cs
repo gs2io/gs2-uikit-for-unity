@@ -57,7 +57,7 @@ namespace Gs2.Unity.UiKit.Gs2JobQueue
 
         public void Awake()
         {
-            _fetcher = GetComponentInParent<Gs2JobQueueOwnJobResultFetcher>();
+            _fetcher = GetComponent<Gs2JobQueueOwnJobResultFetcher>() ?? GetComponentInParent<Gs2JobQueueOwnJobResultFetcher>();
 
             if (_fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2JobQueueOwnJobResultFetcher.");

@@ -32,7 +32,7 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Editor
 
             if (original == null) return;
 
-            var fetcher = original.GetComponentInParent<Gs2MissionCounterModelFetcher>();
+            var fetcher = original.GetComponent<Gs2MissionCounterModelFetcher>() ?? original.GetComponentInParent<Gs2MissionCounterModelFetcher>();
             if (fetcher == null) {
                 EditorGUILayout.HelpBox("Gs2MissionCounterModelFetcher not found.", MessageType.Error);
                 if (GUILayout.Button("Add Fetcher")) {
@@ -53,7 +53,7 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Editor
                     EditorGUILayout.HelpBox("CounterModel is auto assign from Gs2MissionOwnCounterList.", MessageType.Info);
                 }
                 else {
-                    var context = original.GetComponentInParent<Gs2MissionCounterModelContext>();
+                    var context = original.GetComponent<Gs2MissionCounterModelContext>() ?? original.GetComponentInParent<Gs2MissionCounterModelContext>();
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2MissionCounterModelFetcher), false);
                     EditorGUI.indentLevel++;

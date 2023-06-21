@@ -67,7 +67,7 @@ namespace Gs2.Unity.UiKit.Gs2Showcase
 
         public void Awake()
         {
-            _fetcher = GetComponentInParent<Gs2ShowcaseShowcaseFetcher>();
+            _fetcher = GetComponent<Gs2ShowcaseShowcaseFetcher>() ?? GetComponentInParent<Gs2ShowcaseShowcaseFetcher>();
 
             if (_fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ShowcaseShowcaseFetcher.");

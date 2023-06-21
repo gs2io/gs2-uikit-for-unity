@@ -60,8 +60,8 @@ namespace Gs2.Unity.UiKit.Gs2Exchange
 
         public void Awake()
         {
-            _context = GetComponentInParent<Gs2ExchangeNamespaceContext>();
-            _fetcher = GetComponentInParent<Gs2ExchangeOwnAwaitListFetcher>();
+            _context = GetComponent<Gs2ExchangeNamespaceContext>() ?? GetComponentInParent<Gs2ExchangeNamespaceContext>();
+            _fetcher = GetComponent<Gs2ExchangeOwnAwaitListFetcher>() ?? GetComponentInParent<Gs2ExchangeOwnAwaitListFetcher>();
 
             if (_context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ExchangeNamespaceContext.");

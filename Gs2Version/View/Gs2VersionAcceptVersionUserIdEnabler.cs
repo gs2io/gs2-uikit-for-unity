@@ -67,7 +67,7 @@ namespace Gs2.Unity.UiKit.Gs2Version
 
         public void Awake()
         {
-            _fetcher = GetComponentInParent<Gs2VersionOwnAcceptVersionFetcher>();
+            _fetcher = GetComponent<Gs2VersionOwnAcceptVersionFetcher>() ?? GetComponentInParent<Gs2VersionOwnAcceptVersionFetcher>();
 
             if (_fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2VersionOwnAcceptVersionFetcher.");

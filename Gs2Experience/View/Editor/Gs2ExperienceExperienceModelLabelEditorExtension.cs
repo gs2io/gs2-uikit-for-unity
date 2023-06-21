@@ -32,7 +32,7 @@ namespace Gs2.Unity.UiKit.Gs2Experience.Editor
 
             if (original == null) return;
 
-            var fetcher = original.GetComponentInParent<Gs2ExperienceExperienceModelFetcher>();
+            var fetcher = original.GetComponent<Gs2ExperienceExperienceModelFetcher>() ?? original.GetComponentInParent<Gs2ExperienceExperienceModelFetcher>();
             if (fetcher == null) {
                 EditorGUILayout.HelpBox("Gs2ExperienceExperienceModelFetcher not found.", MessageType.Error);
                 if (GUILayout.Button("Add Fetcher")) {
@@ -47,7 +47,7 @@ namespace Gs2.Unity.UiKit.Gs2Experience.Editor
                     EditorGUILayout.HelpBox("ExperienceModel is auto assign from Gs2ExperienceExperienceModelList.", MessageType.Info);
                 }
                 else {
-                    var context = original.GetComponentInParent<Gs2ExperienceExperienceModelContext>();
+                    var context = original.GetComponent<Gs2ExperienceExperienceModelContext>() ?? original.GetComponentInParent<Gs2ExperienceExperienceModelContext>();
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2ExperienceExperienceModelFetcher), false);
                     EditorGUI.indentLevel++;

@@ -61,7 +61,7 @@ namespace Gs2.Unity.UiKit.Gs2Realtime
 
         public void Awake()
         {
-            _fetcher = GetComponentInParent<Gs2RealtimeRoomFetcher>();
+            _fetcher = GetComponent<Gs2RealtimeRoomFetcher>() ?? GetComponentInParent<Gs2RealtimeRoomFetcher>();
 
             if (_fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2RealtimeRoomFetcher.");

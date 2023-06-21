@@ -111,7 +111,7 @@ namespace Gs2.Unity.UiKit.Gs2Experience.Fetcher
         {
             _clientHolder = Gs2ClientHolder.Instance;
             _gameSessionHolder = Gs2GameSessionHolder.Instance;
-            _context = GetComponentInParent<Gs2ExperienceExperienceModelContext>();
+            _context = GetComponent<Gs2ExperienceExperienceModelContext>() ?? GetComponentInParent<Gs2ExperienceExperienceModelContext>();
 
             if (_context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ExperienceExperienceModelContext.");

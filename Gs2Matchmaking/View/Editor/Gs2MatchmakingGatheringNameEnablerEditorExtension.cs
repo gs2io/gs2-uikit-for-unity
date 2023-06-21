@@ -31,7 +31,7 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking.Editor
 
             if (original == null) return;
 
-            var context = original.GetComponentInParent<Gs2MatchmakingGatheringContext>();
+            var context = original.GetComponent<Gs2MatchmakingGatheringContext>() ?? original.GetComponentInParent<Gs2MatchmakingGatheringContext>();
             if (context == null) {
                 EditorGUILayout.HelpBox("Gs2MatchmakingGatheringContext not found.", MessageType.Error);
                 if (GUILayout.Button("Add Context")) {

@@ -32,7 +32,7 @@ namespace Gs2.Unity.UiKit.Gs2Money.Editor
 
             if (original == null) return;
 
-            var context = original.GetComponentInParent<Gs2MoneyOwnWalletContext>();
+            var context = original.GetComponent<Gs2MoneyOwnWalletContext>() ?? original.GetComponentInParent<Gs2MoneyOwnWalletContext>();
             if (context == null) {
                 EditorGUILayout.HelpBox("Gs2MoneyOwnWalletContext not found.", MessageType.Error);
                 if (GUILayout.Button("Add Context")) {

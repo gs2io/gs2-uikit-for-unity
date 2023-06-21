@@ -1,4 +1,4 @@
-[⇒README in English](README-en.md)
+[⇒日本語のREADMEへ](README.md)
 
 # GS2 UIKit for Unity
 

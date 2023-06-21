@@ -115,7 +115,7 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Fetcher
         {
             _clientHolder = Gs2ClientHolder.Instance;
             _gameSessionHolder = Gs2GameSessionHolder.Instance;
-            _context = GetComponentInParent<Gs2RankingOwnScoreContext>();
+            _context = GetComponent<Gs2RankingOwnScoreContext>() ?? GetComponentInParent<Gs2RankingOwnScoreContext>();
 
             if (_context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2RankingOwnScoreContext.");

@@ -31,7 +31,7 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Editor
 
             if (original == null) return;
 
-            var context = original.GetComponentInParent<Gs2FormationOwnFormContext>();
+            var context = original.GetComponent<Gs2FormationOwnFormContext>() ?? original.GetComponentInParent<Gs2FormationOwnFormContext>();
             if (context == null) {
                 EditorGUILayout.HelpBox("Gs2FormationOwnFormContext not found.", MessageType.Error);
                 if (GUILayout.Button("Add Context")) {

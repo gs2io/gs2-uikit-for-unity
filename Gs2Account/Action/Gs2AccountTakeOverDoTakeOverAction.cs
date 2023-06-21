@@ -119,7 +119,7 @@ namespace Gs2.Unity.UiKit.Gs2Account
         {
             this._clientHolder = Gs2ClientHolder.Instance;
             this._gameSessionHolder = Gs2GameSessionHolder.Instance;
-            this._context = GetComponentInParent<Gs2AccountTakeOverContext>();
+            this._context = GetComponent<Gs2AccountTakeOverContext>() ?? GetComponentInParent<Gs2AccountTakeOverContext>();
 
             if (_context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2AccountTakeOverContext.");

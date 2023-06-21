@@ -31,7 +31,7 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking.Editor
 
             if (original == null) return;
 
-            var context = original.GetComponentInParent<Gs2MatchmakingRatingModelContext>();
+            var context = original.GetComponent<Gs2MatchmakingRatingModelContext>() ?? original.GetComponentInParent<Gs2MatchmakingRatingModelContext>();
             if (context == null) {
                 EditorGUILayout.HelpBox("Gs2MatchmakingRatingModelContext not found.", MessageType.Error);
                 if (GUILayout.Button("Add Context")) {

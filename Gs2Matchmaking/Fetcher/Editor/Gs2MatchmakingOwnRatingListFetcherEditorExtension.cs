@@ -32,7 +32,7 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking.Editor
 
             if (original == null) return;
 
-            var context = original.GetComponentInParent<Gs2MatchmakingNamespaceContext>();
+            var context = original.GetComponent<Gs2MatchmakingNamespaceContext>() ?? original.GetComponentInParent<Gs2MatchmakingNamespaceContext>();
             if (context == null) {
                 EditorGUILayout.HelpBox("Gs2MatchmakingNamespaceContext not found.", MessageType.Error);
                 if (GUILayout.Button("Add Context")) {

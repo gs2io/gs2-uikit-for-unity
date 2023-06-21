@@ -32,7 +32,7 @@ namespace Gs2.Unity.UiKit.Gs2Enhance.Editor
 
             if (original == null) return;
 
-            var context = original.GetComponentInParent<Gs2EnhanceRateModelContext>();
+            var context = original.GetComponent<Gs2EnhanceRateModelContext>() ?? original.GetComponentInParent<Gs2EnhanceRateModelContext>();
             if (context == null) {
                 EditorGUILayout.HelpBox("Gs2EnhanceRateModelContext not found.", MessageType.Error);
                 if (GUILayout.Button("Add Context")) {

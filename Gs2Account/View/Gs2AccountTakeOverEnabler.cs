@@ -59,7 +59,7 @@ namespace Gs2.Unity.UiKit.Gs2Account
 
         public void Awake()
         {
-            _fetcher = GetComponentInParent<Gs2AccountOwnTakeOverFetcher>();
+            _fetcher = GetComponent<Gs2AccountOwnTakeOverFetcher>() ?? GetComponentInParent<Gs2AccountOwnTakeOverFetcher>();
 
             if (_fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2AccountOwnTakeOverFetcher.");

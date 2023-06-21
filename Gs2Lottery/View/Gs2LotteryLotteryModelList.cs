@@ -60,8 +60,8 @@ namespace Gs2.Unity.UiKit.Gs2Lottery
 
         public void Awake()
         {
-            _context = GetComponentInParent<Gs2LotteryNamespaceContext>();
-            _fetcher = GetComponentInParent<Gs2LotteryLotteryModelListFetcher>();
+            _context = GetComponent<Gs2LotteryNamespaceContext>() ?? GetComponentInParent<Gs2LotteryNamespaceContext>();
+            _fetcher = GetComponent<Gs2LotteryLotteryModelListFetcher>() ?? GetComponentInParent<Gs2LotteryLotteryModelListFetcher>();
 
             if (_fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2LotteryLotteryModelListFetcher.");

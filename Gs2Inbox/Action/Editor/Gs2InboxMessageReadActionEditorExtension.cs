@@ -32,7 +32,7 @@ namespace Gs2.Unity.UiKit.Gs2Inbox.Editor
 
             if (original == null) return;
 
-            var context = original.GetComponentInParent<Gs2InboxOwnMessageContext>();
+            var context = original.GetComponent<Gs2InboxOwnMessageContext>() ?? original.GetComponentInParent<Gs2InboxOwnMessageContext>();
             if (context == null) {
                 EditorGUILayout.HelpBox("Gs2InboxOwnMessageContext not found.", MessageType.Error);
                 if (GUILayout.Button("Add Context")) {

@@ -32,7 +32,7 @@ namespace Gs2.Unity.UiKit.Gs2Inbox.Editor
 
             if (original == null) return;
 
-            var fetcher = original.GetComponentInParent<Gs2InboxOwnMessageFetcher>();
+            var fetcher = original.GetComponent<Gs2InboxOwnMessageFetcher>() ?? original.GetComponentInParent<Gs2InboxOwnMessageFetcher>();
             if (fetcher == null) {
                 EditorGUILayout.HelpBox("Gs2InboxOwnMessageFetcher not found.", MessageType.Error);
                 if (GUILayout.Button("Add Fetcher")) {
@@ -47,7 +47,7 @@ namespace Gs2.Unity.UiKit.Gs2Inbox.Editor
                     EditorGUILayout.HelpBox("Message is auto assign from Gs2InboxOwnMessageList.", MessageType.Info);
                 }
                 else {
-                    var context = original.GetComponentInParent<Gs2InboxOwnMessageContext>();
+                    var context = original.GetComponent<Gs2InboxOwnMessageContext>() ?? original.GetComponentInParent<Gs2InboxOwnMessageContext>();
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2InboxOwnMessageFetcher), false);
                     EditorGUI.indentLevel++;

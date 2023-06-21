@@ -53,7 +53,7 @@ namespace Gs2.Unity.UiKit.Gs2Money
 
         public void Awake()
         {
-            _fetcher = GetComponentInParent<Gs2MoneyOwnWalletFetcher>();
+            _fetcher = GetComponent<Gs2MoneyOwnWalletFetcher>() ?? GetComponentInParent<Gs2MoneyOwnWalletFetcher>();
 
             if (_fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MoneyOwnWalletFetcher.");

@@ -59,7 +59,7 @@ namespace Gs2.Unity.UiKit.Gs2Version
 
         public void Awake()
         {
-            _fetcher = GetComponentInParent<Gs2VersionVersionModelFetcher>();
+            _fetcher = GetComponent<Gs2VersionVersionModelFetcher>() ?? GetComponentInParent<Gs2VersionVersionModelFetcher>();
 
             if (_fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2VersionVersionModelFetcher.");

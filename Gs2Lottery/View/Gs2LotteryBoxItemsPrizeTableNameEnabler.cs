@@ -67,7 +67,7 @@ namespace Gs2.Unity.UiKit.Gs2Lottery
 
         public void Awake()
         {
-            _fetcher = GetComponentInParent<Gs2LotteryOwnBoxItemsFetcher>();
+            _fetcher = GetComponent<Gs2LotteryOwnBoxItemsFetcher>() ?? GetComponentInParent<Gs2LotteryOwnBoxItemsFetcher>();
 
             if (_fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2LotteryOwnBoxItemsFetcher.");

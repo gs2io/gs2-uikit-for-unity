@@ -32,7 +32,7 @@ namespace Gs2.Unity.UiKit.Gs2Enhance.Editor
 
             if (original == null) return;
 
-            var context = original.GetComponentInParent<Gs2EnhanceNamespaceContext>();
+            var context = original.GetComponent<Gs2EnhanceNamespaceContext>() ?? original.GetComponentInParent<Gs2EnhanceNamespaceContext>();
             if (context == null) {
                 EditorGUILayout.HelpBox("Gs2EnhanceNamespaceContext not found.", MessageType.Error);
                 if (GUILayout.Button("Add Context")) {

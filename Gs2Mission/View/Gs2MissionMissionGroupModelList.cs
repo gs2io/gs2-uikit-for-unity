@@ -60,8 +60,8 @@ namespace Gs2.Unity.UiKit.Gs2Mission
 
         public void Awake()
         {
-            _context = GetComponentInParent<Gs2MissionNamespaceContext>();
-            _fetcher = GetComponentInParent<Gs2MissionMissionGroupModelListFetcher>();
+            _context = GetComponent<Gs2MissionNamespaceContext>() ?? GetComponentInParent<Gs2MissionNamespaceContext>();
+            _fetcher = GetComponent<Gs2MissionMissionGroupModelListFetcher>() ?? GetComponentInParent<Gs2MissionMissionGroupModelListFetcher>();
 
             if (_fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MissionMissionGroupModelListFetcher.");

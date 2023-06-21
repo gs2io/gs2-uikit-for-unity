@@ -32,7 +32,7 @@ namespace Gs2.Unity.UiKit.Gs2Experience.Editor
 
             if (original == null) return;
 
-            var context = original.GetComponentInParent<Gs2ExperienceExperienceModelContext>();
+            var context = original.GetComponent<Gs2ExperienceExperienceModelContext>() ?? original.GetComponentInParent<Gs2ExperienceExperienceModelContext>();
             if (context == null) {
                 EditorGUILayout.HelpBox("Gs2ExperienceExperienceModelContext not found.", MessageType.Error);
                 if (GUILayout.Button("Add Context")) {

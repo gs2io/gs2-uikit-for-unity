@@ -32,7 +32,7 @@ namespace Gs2.Unity.UiKit.Gs2SerialKey.Editor
 
             if (original == null) return;
 
-            var context = original.GetComponentInParent<Gs2SerialKeyCampaignModelContext>();
+            var context = original.GetComponent<Gs2SerialKeyCampaignModelContext>() ?? original.GetComponentInParent<Gs2SerialKeyCampaignModelContext>();
             if (context == null) {
                 EditorGUILayout.HelpBox("Gs2SerialKeyCampaignModelContext not found.", MessageType.Error);
                 if (GUILayout.Button("Add Context")) {

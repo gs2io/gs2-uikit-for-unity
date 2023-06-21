@@ -30,7 +30,7 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Context
         private Gs2InventoryInventoryModelContext _context;
         
         public void Awake() {
-            _context = GetComponentInParent<Gs2InventoryInventoryModelContext>();
+            _context = GetComponent<Gs2InventoryInventoryModelContext>() ?? GetComponentInParent<Gs2InventoryInventoryModelContext>();
 
             if (_context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2InventoryInventoryModelContext.");

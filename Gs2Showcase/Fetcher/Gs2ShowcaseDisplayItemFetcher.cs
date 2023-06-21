@@ -29,6 +29,7 @@ using Gs2.Unity.Gs2Showcase.ScriptableObject;
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.Util;
 using Gs2.Unity.UiKit.Gs2Showcase.Context;
+using Gs2.Util.LitJson;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -105,6 +106,30 @@ namespace Gs2.Unity.UiKit.Gs2Showcase.Fetcher
         protected Gs2GameSessionHolder _gameSessionHolder;
         private Gs2ShowcaseDisplayItemContext _context;
 
+        private void ChangeCounter(string namespaceName, string limitName, Gs2.Gs2Limit.Model.Counter counter) {
+            var consumeAction = DisplayItem.SalesItem.ConsumeActions.FirstOrDefault(
+                v => v.Action == "Gs2Limit:CountUpByUserId" || v.Action == "Gs2Limit:DeleteCounterByUserId"
+            );
+            if (consumeAction != null) {
+                var request = Gs2.Gs2Limit.Request.CountUpByUserIdRequest.FromJson(JsonMapper.ToObject(consumeAction.Request));
+                if (request.NamespaceName == namespaceName && 
+                    request.LimitName == limitName &&
+                    request.CounterName == counter.Name) {
+                    
+                    this._clientHolder.Gs2.ClearCache<Gs2.Gs2Showcase.Model.Showcase>(
+                        Gs2.Gs2Showcase.Domain.Model.UserDomain.CreateCacheParentKey(
+                            _context.DisplayItem.NamespaceName,
+                            counter.UserId,
+                            "Showcase"
+                        ),
+                        Gs2.Gs2Showcase.Domain.Model.ShowcaseDomain.CreateCacheKey(
+                            _context.DisplayItem.ShowcaseName
+                        )
+                    );
+                }
+            }
+        }
+        
         public void Awake()
         {
             _clientHolder = Gs2ClientHolder.Instance;
@@ -115,6 +140,12 @@ namespace Gs2.Unity.UiKit.Gs2Showcase.Fetcher
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ShowcaseDisplayItemContext.");
                 enabled = false;
             }
+            
+            Gs2.Gs2Limit.Domain.Gs2Limit.ChangeCounter += ChangeCounter;
+        }
+
+        public void OnDestroy() {
+            Gs2.Gs2Limit.Domain.Gs2Limit.ChangeCounter -= ChangeCounter;
         }
     }
 

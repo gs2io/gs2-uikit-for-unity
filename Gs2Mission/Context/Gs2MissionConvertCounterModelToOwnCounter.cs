@@ -30,7 +30,7 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Context
         private Gs2MissionCounterModelContext _context;
         
         public void Awake() {
-            _context = GetComponentInParent<Gs2MissionCounterModelContext>();
+            _context = GetComponent<Gs2MissionCounterModelContext>() ?? GetComponentInParent<Gs2MissionCounterModelContext>();
 
             if (_context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MissionCounterModelContext.");

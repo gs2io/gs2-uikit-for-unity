@@ -61,8 +61,8 @@ namespace Gs2.Unity.UiKit.Gs2Experience
 
         public void Awake()
         {
-            _context = GetComponentInParent<Gs2ExperienceNamespaceContext>();
-            _fetcher = GetComponentInParent<Gs2ExperienceOwnStatusListFetcher>();
+            _context = GetComponent<Gs2ExperienceNamespaceContext>() ?? GetComponentInParent<Gs2ExperienceNamespaceContext>();
+            _fetcher = GetComponent<Gs2ExperienceOwnStatusListFetcher>() ?? GetComponentInParent<Gs2ExperienceOwnStatusListFetcher>();
 
             if (_context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ExperienceNamespaceContext.");

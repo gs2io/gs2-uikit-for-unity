@@ -32,7 +32,7 @@ namespace Gs2.Unity.UiKit.Gs2Datastore.Editor
 
             if (original == null) return;
 
-            var fetcher = original.GetComponentInParent<Gs2DatastoreOwnDataObjectHistoryFetcher>();
+            var fetcher = original.GetComponent<Gs2DatastoreOwnDataObjectHistoryFetcher>() ?? original.GetComponentInParent<Gs2DatastoreOwnDataObjectHistoryFetcher>();
             if (fetcher == null) {
                 EditorGUILayout.HelpBox("Gs2DatastoreOwnDataObjectHistoryFetcher not found.", MessageType.Error);
                 if (GUILayout.Button("Add Fetcher")) {
@@ -47,7 +47,7 @@ namespace Gs2.Unity.UiKit.Gs2Datastore.Editor
                     EditorGUILayout.HelpBox("DataObjectHistory is auto assign from Gs2DatastoreOwnDataObjectHistoryList.", MessageType.Info);
                 }
                 else {
-                    var context = original.GetComponentInParent<Gs2DatastoreOwnDataObjectHistoryContext>();
+                    var context = original.GetComponent<Gs2DatastoreOwnDataObjectHistoryContext>() ?? original.GetComponentInParent<Gs2DatastoreOwnDataObjectHistoryContext>();
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2DatastoreOwnDataObjectHistoryFetcher), false);
                     EditorGUI.indentLevel++;

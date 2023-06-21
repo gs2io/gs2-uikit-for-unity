@@ -31,7 +31,7 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Editor
 
             if (original == null) return;
 
-            var context = original.GetComponentInParent<Gs2RankingCategoryModelContext>();
+            var context = original.GetComponent<Gs2RankingCategoryModelContext>() ?? original.GetComponentInParent<Gs2RankingCategoryModelContext>();
             if (context == null) {
                 EditorGUILayout.HelpBox("Gs2RankingCategoryModelContext not found.", MessageType.Error);
                 if (GUILayout.Button("Add Context")) {

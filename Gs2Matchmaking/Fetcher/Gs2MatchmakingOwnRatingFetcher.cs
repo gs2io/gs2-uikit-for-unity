@@ -113,7 +113,7 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking.Fetcher
         {
             _clientHolder = Gs2ClientHolder.Instance;
             _gameSessionHolder = Gs2GameSessionHolder.Instance;
-            _context = GetComponentInParent<Gs2MatchmakingOwnRatingContext>();
+            _context = GetComponent<Gs2MatchmakingOwnRatingContext>() ?? GetComponentInParent<Gs2MatchmakingOwnRatingContext>();
 
             if (_context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MatchmakingOwnRatingContext.");

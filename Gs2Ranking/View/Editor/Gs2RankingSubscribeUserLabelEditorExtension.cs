@@ -32,7 +32,7 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Editor
 
             if (original == null) return;
 
-            var fetcher = original.GetComponentInParent<Gs2RankingSubscribeUserFetcher>();
+            var fetcher = original.GetComponent<Gs2RankingSubscribeUserFetcher>() ?? original.GetComponentInParent<Gs2RankingSubscribeUserFetcher>();
             if (fetcher == null) {
                 EditorGUILayout.HelpBox("Gs2RankingSubscribeUserFetcher not found.", MessageType.Error);
                 if (GUILayout.Button("Add Fetcher")) {
@@ -40,7 +40,7 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Editor
                 }
             }
             else {
-                var context = original.GetComponentInParent<Gs2RankingSubscribeUserContext>();
+                var context = original.GetComponent<Gs2RankingSubscribeUserContext>() ?? original.GetComponentInParent<Gs2RankingSubscribeUserContext>();
                 EditorGUI.BeginDisabledGroup(true);
                 EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2RankingSubscribeUserFetcher), false);
                 EditorGUI.indentLevel++;

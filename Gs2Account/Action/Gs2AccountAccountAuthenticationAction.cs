@@ -121,7 +121,7 @@ namespace Gs2.Unity.UiKit.Gs2Account
         {
             this._clientHolder = Gs2ClientHolder.Instance;
             this._gameSessionHolder = Gs2GameSessionHolder.Instance;
-            this._context = GetComponentInParent<Gs2AccountAccountContext>();
+            this._context = GetComponent<Gs2AccountAccountContext>() ?? GetComponentInParent<Gs2AccountAccountContext>();
 
             if (_context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2AccountAccountContext.");

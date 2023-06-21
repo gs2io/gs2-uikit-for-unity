@@ -31,7 +31,7 @@ namespace Gs2.Unity.UiKit.Gs2Showcase.Editor
 
             if (original == null) return;
 
-            var context = original.GetComponentInParent<Gs2ShowcaseShowcaseContext>();
+            var context = original.GetComponent<Gs2ShowcaseShowcaseContext>() ?? original.GetComponentInParent<Gs2ShowcaseShowcaseContext>();
             if (context == null) {
                 EditorGUILayout.HelpBox("Gs2ShowcaseShowcaseContext not found.", MessageType.Error);
                 if (GUILayout.Button("Add Context")) {

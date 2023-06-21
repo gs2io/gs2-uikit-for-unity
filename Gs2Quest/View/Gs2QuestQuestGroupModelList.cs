@@ -60,8 +60,8 @@ namespace Gs2.Unity.UiKit.Gs2Quest
 
         public void Awake()
         {
-            _context = GetComponentInParent<Gs2QuestNamespaceContext>();
-            _fetcher = GetComponentInParent<Gs2QuestQuestGroupModelListFetcher>();
+            _context = GetComponent<Gs2QuestNamespaceContext>() ?? GetComponentInParent<Gs2QuestNamespaceContext>();
+            _fetcher = GetComponent<Gs2QuestQuestGroupModelListFetcher>() ?? GetComponentInParent<Gs2QuestQuestGroupModelListFetcher>();
 
             if (_fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2QuestQuestGroupModelListFetcher.");

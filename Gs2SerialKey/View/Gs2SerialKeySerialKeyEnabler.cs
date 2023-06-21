@@ -59,7 +59,7 @@ namespace Gs2.Unity.UiKit.Gs2SerialKey
 
         public void Awake()
         {
-            _fetcher = GetComponentInParent<Gs2SerialKeySerialKeyFetcher>();
+            _fetcher = GetComponent<Gs2SerialKeySerialKeyFetcher>() ?? GetComponentInParent<Gs2SerialKeySerialKeyFetcher>();
 
             if (_fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2SerialKeySerialKeyFetcher.");

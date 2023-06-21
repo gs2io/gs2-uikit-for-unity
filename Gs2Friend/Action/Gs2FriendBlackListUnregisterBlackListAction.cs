@@ -121,7 +121,7 @@ namespace Gs2.Unity.UiKit.Gs2Friend
         {
             this._clientHolder = Gs2ClientHolder.Instance;
             this._gameSessionHolder = Gs2GameSessionHolder.Instance;
-            this._context = GetComponentInParent<Gs2FriendOwnBlackListContext>();
+            this._context = GetComponent<Gs2FriendOwnBlackListContext>() ?? GetComponentInParent<Gs2FriendOwnBlackListContext>();
 
             if (_context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2FriendOwnBlackListContext.");

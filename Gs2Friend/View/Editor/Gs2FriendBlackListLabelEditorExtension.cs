@@ -32,7 +32,7 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Editor
 
             if (original == null) return;
 
-            var fetcher = original.GetComponentInParent<Gs2FriendOwnBlackListFetcher>();
+            var fetcher = original.GetComponent<Gs2FriendOwnBlackListFetcher>() ?? original.GetComponentInParent<Gs2FriendOwnBlackListFetcher>();
             if (fetcher == null) {
                 EditorGUILayout.HelpBox("Gs2FriendOwnBlackListFetcher not found.", MessageType.Error);
                 if (GUILayout.Button("Add Fetcher")) {
@@ -47,7 +47,7 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Editor
                     EditorGUILayout.HelpBox("BlackList is auto assign from Gs2FriendOwnBlackListList.", MessageType.Info);
                 }
                 else {
-                    var context = original.GetComponentInParent<Gs2FriendOwnBlackListContext>();
+                    var context = original.GetComponent<Gs2FriendOwnBlackListContext>() ?? original.GetComponentInParent<Gs2FriendOwnBlackListContext>();
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2FriendOwnBlackListFetcher), false);
                     EditorGUI.indentLevel++;
