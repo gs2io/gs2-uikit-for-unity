@@ -15,11 +15,18 @@
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
+// ReSharper disable RedundantNameQualifier
+// ReSharper disable RedundantAssignment
+// ReSharper disable NotAccessedVariable
+// ReSharper disable RedundantUsingDirective
+// ReSharper disable Unity.NoNullPropagation
+// ReSharper disable InconsistentNaming
+
+#pragma warning disable CS0472
 
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Text;
 using System.Text;
 using Gs2.Core.Exception;
 using Gs2.Unity.Core.Exception;
@@ -39,7 +46,7 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Fetcher
     /// </summary>
 
 	[AddComponentMenu("GS2 UIKit/Mission/MissionTaskModel/Fetcher/Gs2MissionMissionTaskModelFetcher")]
-    public partial class Gs2MissionMissionTaskModelFetcher : MonoBehaviour
+    public partial class Gs2MissionMissionTaskModelFetcher : MonoBehaviour, IAcquireActionsFetcher
     {
         private IEnumerator Fetch()
         {
@@ -97,6 +104,13 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Fetcher
         public void OnDisable()
         {
             StopCoroutine(nameof(Fetch));
+        }
+
+        public List<Unity.Core.Model.EzAcquireAction> AcquireActions(string context = "default") {
+            if (!Fetched) {
+                return new List<Unity.Core.Model.EzAcquireAction>();
+            }
+            return MissionTaskModel.CompleteAcquireActions;
         }
     }
 

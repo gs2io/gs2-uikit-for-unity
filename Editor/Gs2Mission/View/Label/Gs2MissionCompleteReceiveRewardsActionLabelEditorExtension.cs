@@ -12,35 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
-// ReSharper disable UnusedAutoPropertyAccessor.Global
-// ReSharper disable CheckNamespace
-
-using UnityEditor;
-using UnityEngine;
-
-namespace Gs2.Unity.UiKit.Gs2Mission.Editor
-{
-    [CustomEditor(typeof(Gs2MissionCompleteReceiveRewardsActionLabel))]
-    public class Gs2MissionCompleteReceiveRewardsActionLabelEditorExtension : UnityEditor.Editor
-    {
-        public override void OnInspectorGUI() {
-            var original = target as Gs2MissionCompleteReceiveRewardsActionLabel;
-
-            if (original == null) return;
-
-            serializedObject.Update();
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("action"), true);
-            original.format = EditorGUILayout.TextField("Format", original.format);
-
-            GUILayout.Label("Add Format Parameter");
-            if (GUILayout.Button("MissionTaskName")) {
-                original.format += "{missionTaskName}";
-                GUI.FocusControl("");
-                EditorUtility.SetDirty(original);
-            }
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("onUpdate"), true);
-            serializedObject.ApplyModifiedProperties();
-        }
-    }
-}

@@ -15,11 +15,18 @@
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
+// ReSharper disable RedundantNameQualifier
+// ReSharper disable RedundantAssignment
+// ReSharper disable NotAccessedVariable
+// ReSharper disable RedundantUsingDirective
+// ReSharper disable Unity.NoNullPropagation
+// ReSharper disable InconsistentNaming
+
+#pragma warning disable CS0472
 
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Text;
 using System.Text;
 using Gs2.Core.Exception;
 using Gs2.Unity.Core.Exception;
@@ -39,7 +46,7 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Fetcher
     /// </summary>
 
 	[AddComponentMenu("GS2 UIKit/Quest/QuestModel/Fetcher/Gs2QuestQuestModelFetcher")]
-    public partial class Gs2QuestQuestModelFetcher : MonoBehaviour
+    public partial class Gs2QuestQuestModelFetcher : MonoBehaviour, IAcquireActionsFetcher, IConsumeActionsFetcher
     {
         private IEnumerator Fetch()
         {
@@ -97,6 +104,20 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Fetcher
         public void OnDisable()
         {
             StopCoroutine(nameof(Fetch));
+        }
+
+        public List<Unity.Core.Model.EzAcquireAction> AcquireActions(string context = "default") {
+            if (!Fetched) {
+                return new List<Unity.Core.Model.EzAcquireAction>();
+            }
+            return QuestModel.FirstCompleteAcquireActions;
+        }
+
+        public List<Unity.Core.Model.EzConsumeAction> ConsumeActions(string context = "default") {
+            if (!Fetched) {
+                return new List<Unity.Core.Model.EzConsumeAction>();
+            }
+            return QuestModel.ConsumeActions;
         }
     }
 

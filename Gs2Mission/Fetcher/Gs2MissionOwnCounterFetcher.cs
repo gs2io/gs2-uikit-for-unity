@@ -12,9 +12,15 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
+// ReSharper disable RedundantNameQualifier
+// ReSharper disable RedundantAssignment
+// ReSharper disable NotAccessedVariable
+// ReSharper disable RedundantUsingDirective
 
 using System;
 using System.Collections;
@@ -81,6 +87,63 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Fetcher
                         Fetched = true;
                     }
                 }
+                else if (_gameSessionHolder != null && _gameSessionHolder.Initialized &&
+                    _clientHolder != null && _clientHolder.Initialized &&
+                    _context2 != null && this._context2.MissionTaskModel != null) {
+                    
+                    var future2 = this._clientHolder.Gs2.Mission.Namespace(
+                        this._context2.MissionTaskModel.NamespaceName
+                    ).MissionGroupModel(
+                        this._context2.MissionTaskModel.MissionGroupName
+                    ).MissionTaskModel(
+                        this._context2.MissionTaskModel.MissionTaskName
+                    ).Model();
+                    yield return future2;
+                    if (future2.Error != null)
+                    {
+                        if (future2.Error is BadRequestException || future2.Error is NotFoundException)
+                        {
+                            onError.Invoke(e = future2.Error, null);
+                            Debug.LogError($"{gameObject.GetFullPath()}: {future2.Error.Message}");
+                            break;
+                        }
+                        else {
+                            onError.Invoke(new CanIgnoreException(future2.Error), null);
+                        }
+                        yield return new WaitForSeconds(retryWaitSecond);
+                        retryWaitSecond *= 2;
+                    }
+                    
+                    var domain = this._clientHolder.Gs2.Mission.Namespace(
+                        this._context2.MissionTaskModel.NamespaceName
+                    ).Me(
+                        this._gameSessionHolder.GameSession
+                    ).Counter(
+                        future2.Result.CounterName
+                    );
+                    var future = domain.Model();
+                    yield return future;
+                    if (future.Error != null)
+                    {
+                        if (future.Error is BadRequestException || future.Error is NotFoundException)
+                        {
+                            onError.Invoke(e = future.Error, null);
+                            Debug.LogError($"{gameObject.GetFullPath()}: {future.Error.Message}");
+                            break;
+                        }
+                        else {
+                            onError.Invoke(new CanIgnoreException(future.Error), null);
+                        }
+                        yield return new WaitForSeconds(retryWaitSecond);
+                        retryWaitSecond *= 2;
+                    }
+                    else
+                    {
+                        retryWaitSecond = 1;
+                        Counter = future.Result;
+                        Fetched = true;
+                    }
+                }
                 else {
                     yield return new WaitForSeconds(1);
                 }
@@ -108,15 +171,17 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Fetcher
         private Gs2ClientHolder _clientHolder;
         private Gs2GameSessionHolder _gameSessionHolder;
         private Gs2MissionOwnCounterContext _context;
+        private Gs2MissionMissionTaskModelContext _context2;
 
         public void Awake()
         {
             _clientHolder = Gs2ClientHolder.Instance;
             _gameSessionHolder = Gs2GameSessionHolder.Instance;
             _context = GetComponent<Gs2MissionOwnCounterContext>() ?? GetComponentInParent<Gs2MissionOwnCounterContext>();
+            _context2 = GetComponent<Gs2MissionMissionTaskModelContext>() ?? GetComponentInParent<Gs2MissionMissionTaskModelContext>();
 
-            if (_context == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MissionOwnCounterContext.");
+            if (_context == null && _context2 == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MissionOwnCounterContext/Gs2MissionMissionTaskModelContext.");
                 enabled = false;
             }
         }

@@ -15,11 +15,18 @@
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
+// ReSharper disable RedundantNameQualifier
+// ReSharper disable RedundantAssignment
+// ReSharper disable NotAccessedVariable
+// ReSharper disable RedundantUsingDirective
+// ReSharper disable Unity.NoNullPropagation
+// ReSharper disable InconsistentNaming
+
+#pragma warning disable CS0472
 
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Text;
 using System.Text;
 using Gs2.Core.Exception;
 using Gs2.Unity.Core.Exception;
@@ -39,7 +46,7 @@ namespace Gs2.Unity.UiKit.Gs2Exchange.Fetcher
     /// </summary>
 
 	[AddComponentMenu("GS2 UIKit/Exchange/RateModel/Fetcher/Gs2ExchangeRateModelFetcher")]
-    public partial class Gs2ExchangeRateModelFetcher : MonoBehaviour
+    public partial class Gs2ExchangeRateModelFetcher : MonoBehaviour, IAcquireActionsFetcher, IConsumeActionsFetcher
     {
         private IEnumerator Fetch()
         {
@@ -95,6 +102,20 @@ namespace Gs2.Unity.UiKit.Gs2Exchange.Fetcher
         public void OnDisable()
         {
             StopCoroutine(nameof(Fetch));
+        }
+
+        public List<Unity.Core.Model.EzAcquireAction> AcquireActions(string context = "default") {
+            if (!Fetched) {
+                return new List<Unity.Core.Model.EzAcquireAction>();
+            }
+            return RateModel.AcquireActions;
+        }
+
+        public List<Unity.Core.Model.EzConsumeAction> ConsumeActions(string context = "default") {
+            if (!Fetched) {
+                return new List<Unity.Core.Model.EzConsumeAction>();
+            }
+            return RateModel.ConsumeActions;
         }
     }
 

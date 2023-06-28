@@ -12,10 +12,16 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable UnusedAutoPropertyAccessor.Local
 // ReSharper disable CheckNamespace
+// ReSharper disable RedundantNameQualifier
+// ReSharper disable RedundantAssignment
+// ReSharper disable NotAccessedVariable
+// ReSharper disable RedundantUsingDirective
 
 using System;
 using System.Collections;
@@ -44,14 +50,14 @@ namespace Gs2.Unity.UiKit.Gs2Mission
             yield return new WaitUntil(() => this._gameSessionHolder.Initialized);
             
             var domain = this._clientHolder.Gs2.Mission.Namespace(
-                this._context.Complete.NamespaceName
+                this._context.MissionTaskModel.NamespaceName
             ).Me(
                 this._gameSessionHolder.GameSession
             ).Complete(
-                this._context.Complete.MissionGroupName
+                this._context.MissionTaskModel.MissionGroupName
             );
             var future = domain.ReceiveRewards(
-                MissionTaskName
+                this._context.MissionTaskModel.MissionTaskName
             );
             yield return future;
             if (future.Error != null)
@@ -99,16 +105,16 @@ namespace Gs2.Unity.UiKit.Gs2Mission
     {
         private Gs2ClientHolder _clientHolder;
         private Gs2GameSessionHolder _gameSessionHolder;
-        private Gs2MissionOwnCompleteContext _context;
+        private Gs2MissionMissionTaskModelContext _context;
 
         public void Awake()
         {
             this._clientHolder = Gs2ClientHolder.Instance;
             this._gameSessionHolder = Gs2GameSessionHolder.Instance;
-            this._context = GetComponent<Gs2MissionOwnCompleteContext>() ?? GetComponentInParent<Gs2MissionOwnCompleteContext>();
+            this._context = GetComponent<Gs2MissionMissionTaskModelContext>() ?? GetComponentInParent<Gs2MissionMissionTaskModelContext>();
 
             if (_context == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MissionOwnCompleteContext.");
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MissionMissionTaskModelContext.");
                 enabled = false;
             }
         }
@@ -128,12 +134,7 @@ namespace Gs2.Unity.UiKit.Gs2Mission
     /// </summary>
     public partial class Gs2MissionCompleteReceiveRewardsAction
     {
-        public string MissionTaskName;
-
-        public void SetMissionTaskName(string value) {
-            MissionTaskName = value;
-            this.onChangeMissionTaskName.Invoke(MissionTaskName);
-        }
+        
     }
 
     /// <summary>

@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
@@ -34,9 +36,32 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Editor
 
             var context = original.GetComponent<Gs2MissionOwnCounterContext>() ?? original.GetComponentInParent<Gs2MissionOwnCounterContext>();
             if (context == null) {
-                EditorGUILayout.HelpBox("Gs2MissionOwnCounterContext not found.", MessageType.Error);
-                if (GUILayout.Button("Add Context")) {
-                    original.gameObject.AddComponent<Gs2MissionOwnCounterContext>();
+                var context2 = original.GetComponent<Gs2MissionMissionTaskModelContext>() ?? original.GetComponentInParent<Gs2MissionMissionTaskModelContext>();
+                if (context2 == null) {
+                    EditorGUILayout.HelpBox("Gs2MissionOwnCounterContext not found.", MessageType.Error);
+                    if (GUILayout.Button("Add Context")) {
+                        original.gameObject.AddComponent<Gs2MissionOwnCounterContext>();
+                    }
+                }
+                else {
+                    if (context2.transform.parent.GetComponent<Gs2MissionMissionTaskModelContext>() != null) {
+                        EditorGUI.BeginDisabledGroup(true);
+                        EditorGUILayout.ObjectField("Context", context2.gameObject, typeof(Gs2MissionMissionTaskModelContext), false);
+                        EditorGUI.EndDisabledGroup();
+                        EditorGUILayout.HelpBox("Counter is auto assign from Gs2MissionOwnCounterList.", MessageType.Info);
+                    }
+                    else {
+                        EditorGUI.BeginDisabledGroup(true);
+                        EditorGUILayout.ObjectField("Context", context2.gameObject, typeof(Gs2MissionMissionTaskModelContext), false);
+                        EditorGUI.indentLevel++;
+                        context2.MissionTaskModel = EditorGUILayout.ObjectField("MissionTaskModel", context2.MissionTaskModel, typeof(MissionTaskModel), false) as MissionTaskModel;
+                        EditorGUI.indentLevel++;
+                        EditorGUILayout.TextField("NamespaceName", context2.MissionTaskModel?.NamespaceName.ToString());
+                        EditorGUILayout.TextField("MissionTaskModel", context2.MissionTaskModel?.MissionTaskName.ToString());
+                        EditorGUI.indentLevel--;
+                        EditorGUI.indentLevel--;
+                        EditorGUI.EndDisabledGroup();
+                    }
                 }
             }
             else {
