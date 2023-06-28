@@ -21,7 +21,7 @@ using Gs2.Unity.UiKit.Gs2Realtime.Context;
 using UnityEditor;
 using UnityEngine;
 
-namespace Gs2.Unity.UiKit.Gs2Realtime.Editor
+namespace Gs2.Unity.UiKit.Gs2Realtime.Enabler.Editor
 {
     [CustomEditor(typeof(Gs2RealtimeRoomNameEnabler))]
     public class Gs2RealtimeRoomNameEnablerEditorExtension : UnityEditor.Editor

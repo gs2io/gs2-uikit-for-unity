@@ -21,7 +21,7 @@ using Gs2.Unity.UiKit.Gs2Chat.Context;
 using UnityEditor;
 using UnityEngine;
 
-namespace Gs2.Unity.UiKit.Gs2Chat.Editor
+namespace Gs2.Unity.UiKit.Gs2Chat.Enabler.Editor
 {
     [CustomEditor(typeof(Gs2ChatMessageUserIdEnabler))]
     public class Gs2ChatMessageUserIdEnablerEditorExtension : UnityEditor.Editor

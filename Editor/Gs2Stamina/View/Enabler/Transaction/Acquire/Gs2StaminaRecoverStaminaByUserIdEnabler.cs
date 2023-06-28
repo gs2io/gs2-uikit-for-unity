@@ -21,7 +21,7 @@ using Gs2.Unity.UiKit.Gs2Core.Fetcher;
 using UnityEditor;
 using UnityEngine;
 
-namespace Gs2.Unity.UiKit.Gs2Stamina.Editor
+namespace Gs2.Unity.UiKit.Gs2Stamina.Enabler.Editor
 {
     [CustomEditor(typeof(Gs2StaminaRecoverStaminaByUserIdEnabler))]
     public class Gs2StaminaRecoverStaminaByUserIdEnablerEditorExtension : UnityEditor.Editor
@@ -31,9 +31,9 @@ namespace Gs2.Unity.UiKit.Gs2Stamina.Editor
 
             if (original == null) return;
 
-            var context = original.GetComponent<Gs2CoreAcquireActionFetcher>() ?? original.GetComponentInParent<Gs2CoreAcquireActionFetcher>();
-            if (context == null) {
-                EditorGUILayout.HelpBox("Gs2CoreAcquireActionFetcher not found.", MessageType.Error);
+            var fetcher = original.GetComponent<IAcquireActionsFetcher>() ?? original.GetComponentInParent<IAcquireActionsFetcher>();
+            if (fetcher == null) {
+                EditorGUILayout.HelpBox("IAcquireActionsFetcher not found.", MessageType.Error);
             }
 
             serializedObject.Update();

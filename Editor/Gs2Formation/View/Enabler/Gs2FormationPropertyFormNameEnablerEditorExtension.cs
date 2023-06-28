@@ -21,7 +21,7 @@ using Gs2.Unity.UiKit.Gs2Formation.Context;
 using UnityEditor;
 using UnityEngine;
 
-namespace Gs2.Unity.UiKit.Gs2Formation.Editor
+namespace Gs2.Unity.UiKit.Gs2Formation.Enabler.Editor
 {
     [CustomEditor(typeof(Gs2FormationPropertyFormNameEnabler))]
     public class Gs2FormationPropertyFormNameEnablerEditorExtension : UnityEditor.Editor

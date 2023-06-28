@@ -19,7 +19,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace Gs2.Unity.UiKit.Gs2Stamina.Editor
+namespace Gs2.Unity.UiKit.Gs2Stamina.Label.Editor
 {
     [CustomEditor(typeof(Gs2StaminaSetRecoverValueByUserIdLabel))]
     public class Gs2StaminaSetRecoverValueByUserIdLabelEditorExtension : UnityEditor.Editor

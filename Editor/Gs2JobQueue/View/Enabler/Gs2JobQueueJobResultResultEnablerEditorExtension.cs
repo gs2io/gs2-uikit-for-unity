@@ -21,7 +21,7 @@ using Gs2.Unity.UiKit.Gs2JobQueue.Context;
 using UnityEditor;
 using UnityEngine;
 
-namespace Gs2.Unity.UiKit.Gs2JobQueue.Editor
+namespace Gs2.Unity.UiKit.Gs2JobQueue.Enabler.Editor
 {
     [CustomEditor(typeof(Gs2JobQueueJobResultResultEnabler))]
     public class Gs2JobQueueJobResultResultEnablerEditorExtension : UnityEditor.Editor

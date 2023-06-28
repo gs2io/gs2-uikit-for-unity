@@ -25,7 +25,7 @@ using Gs2.Util.LitJson;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace Gs2.Unity.UiKit.Gs2Quest
+namespace Gs2.Unity.UiKit.Gs2Quest.Label
 {
     /// <summary>
     /// Main
@@ -36,17 +36,16 @@ namespace Gs2.Unity.UiKit.Gs2Quest
     {
         public void Update()
         {
-            if (_fetcher.Fetched && _fetcher.ConsumeAction != null && _fetcher.ConsumeAction.Action == "Gs2Quest:DeleteProgressByUserId" &&
+            if (_fetcher.Fetched && _fetcher.Request != null &&
                     _userDataFetcher != null && _userDataFetcher.Fetched && _userDataFetcher.Progress != null) {
-                var request = DeleteProgressByUserIdRequest.FromJson(JsonMapper.ToObject(_fetcher.ConsumeAction.Request));
                 {
                     onUpdate?.Invoke(
                         format.Replace(
                             "{namespaceName}",
-                            $"{request.NamespaceName}"
+                            $"{_fetcher.Request.NamespaceName}"
                         ).Replace(
                             "{userId}",
-                            $"{request.UserId}"
+                            $"{_fetcher.Request.UserId}"
                         ).Replace(
                             "{userData:progressId}",
                             $"{_userDataFetcher.Progress.ProgressId}"
@@ -65,16 +64,15 @@ namespace Gs2.Unity.UiKit.Gs2Quest
                         )
                     );
                 }
-            } else if (_fetcher.Fetched && _fetcher.ConsumeAction != null && _fetcher.ConsumeAction.Action == "Gs2Quest:DeleteProgressByUserId") {
-                var request = DeleteProgressByUserIdRequest.FromJson(JsonMapper.ToObject(_fetcher.ConsumeAction.Request));
+            } else if (_fetcher.Fetched && _fetcher.Request != null) {
                 {
                     onUpdate?.Invoke(
                         format.Replace(
                             "{namespaceName}",
-                            $"{request.NamespaceName}"
+                            $"{_fetcher.Request.NamespaceName}"
                         ).Replace(
                             "{userId}",
-                            $"{request.UserId}"
+                            $"{_fetcher.Request.UserId}"
                         )
                     );
                 }
@@ -88,16 +86,20 @@ namespace Gs2.Unity.UiKit.Gs2Quest
 
     public partial class Gs2QuestDeleteProgressByUserIdLabel
     {
-        private Gs2CoreConsumeActionFetcher _fetcher;
+        private Gs2QuestDeleteProgressByUserIdFetcher _fetcher;
         private Gs2QuestOwnProgressFetcher _userDataFetcher;
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2CoreConsumeActionFetcher>() ?? GetComponentInParent<Gs2CoreConsumeActionFetcher>();
+            _fetcher = GetComponent<Gs2QuestDeleteProgressByUserIdFetcher>() ?? GetComponentInParent<Gs2QuestDeleteProgressByUserIdFetcher>();
             _userDataFetcher = GetComponent<Gs2QuestOwnProgressFetcher>() ?? GetComponentInParent<Gs2QuestOwnProgressFetcher>();
 
             if (_fetcher == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2CoreConsumeActionFetcher.");
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2QuestDeleteProgressByUserIdFetcher.");
+                enabled = false;
+            }
+            if (_userDataFetcher == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2QuestOwnProgressFetcher.");
                 enabled = false;
             }
 

@@ -21,7 +21,7 @@ using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2SerialKey.Fetcher;
 using UnityEngine;
 
-namespace Gs2.Unity.UiKit.Gs2SerialKey
+namespace Gs2.Unity.UiKit.Gs2SerialKey.Enabler
 {
     /// <summary>
     /// Main

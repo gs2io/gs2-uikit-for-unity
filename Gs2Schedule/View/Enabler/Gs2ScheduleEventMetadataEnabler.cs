@@ -21,7 +21,7 @@ using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Schedule.Fetcher;
 using UnityEngine;
 
-namespace Gs2.Unity.UiKit.Gs2Schedule
+namespace Gs2.Unity.UiKit.Gs2Schedule.Enabler
 {
     /// <summary>
     /// Main

@@ -27,6 +27,7 @@ using Gs2.Unity.Gs2Limit.Model;
 using Gs2.Unity.Gs2Limit.ScriptableObject;
 using Gs2.Unity.Util;
 using Gs2.Unity.UiKit.Core;
+using Gs2.Unity.UiKit.Gs2Core.Fetcher;
 using Gs2.Unity.UiKit.Gs2Limit.Context;
 using UnityEngine;
 using UnityEngine.Events;

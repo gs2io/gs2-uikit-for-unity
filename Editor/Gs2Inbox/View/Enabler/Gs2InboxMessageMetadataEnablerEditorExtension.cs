@@ -21,7 +21,7 @@ using Gs2.Unity.UiKit.Gs2Inbox.Context;
 using UnityEditor;
 using UnityEngine;
 
-namespace Gs2.Unity.UiKit.Gs2Inbox.Editor
+namespace Gs2.Unity.UiKit.Gs2Inbox.Enabler.Editor
 {
     [CustomEditor(typeof(Gs2InboxMessageMetadataEnabler))]
     public class Gs2InboxMessageMetadataEnablerEditorExtension : UnityEditor.Editor

@@ -27,37 +27,36 @@ using Gs2.Util.LitJson;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace Gs2.Unity.UiKit.Gs2Money
+namespace Gs2.Unity.UiKit.Gs2Money.Label
 {
     /// <summary>
     /// Main
     /// </summary>
 
-	[AddComponentMenu("GS2 UIKit/Money/Wallet/View/Transaction/Gs2MoneyDepositByUserIdLabel")]
+	[AddComponentMenu("GS2 UIKit/Money/Wallet/View/Label/Transaction/Gs2MoneyDepositByUserIdLabel")]
     public partial class Gs2MoneyDepositByUserIdLabel : MonoBehaviour
     {
         public void Update()
         {
-            if (_fetcher.Fetched && _fetcher.AcquireAction != null && _fetcher.AcquireAction.Action == "Gs2Money:DepositByUserId" &&
+            if (_fetcher.Fetched && _fetcher.Request != null &&
                     _userDataFetcher != null && _userDataFetcher.Fetched && _userDataFetcher.Wallet != null) {
-                var request = DepositByUserIdRequest.FromJson(JsonMapper.ToObject(_fetcher.AcquireAction.Request));
                 {
                     onUpdate?.Invoke(
                         format.Replace(
                             "{namespaceName}",
-                            $"{request.NamespaceName}"
+                            $"{_fetcher.Request.NamespaceName}"
                         ).Replace(
                             "{userId}",
-                            $"{request.UserId}"
+                            $"{_fetcher.Request.UserId}"
                         ).Replace(
                             "{slot}",
-                            $"{request.Slot}"
+                            $"{_fetcher.Request.Slot}"
                         ).Replace(
                             "{price}",
-                            $"{request.Price}"
+                            $"{_fetcher.Request.Price}"
                         ).Replace(
                             "{count}",
-                            $"{request.Count}"
+                            $"{_fetcher.Request.Count}"
                         ).Replace(
                             "{userData:slot}",
                             $"{_userDataFetcher.Wallet.Slot}"
@@ -76,25 +75,24 @@ namespace Gs2.Unity.UiKit.Gs2Money
                         )
                     );
                 }
-            } else if (_fetcher.Fetched && _fetcher.AcquireAction != null && _fetcher.AcquireAction.Action == "Gs2Money:DepositByUserId") {
-                var request = DepositByUserIdRequest.FromJson(JsonMapper.ToObject(_fetcher.AcquireAction.Request));
+            } else if (_fetcher.Fetched && _fetcher.Request != null) {
                 {
                     onUpdate?.Invoke(
                         format.Replace(
                             "{namespaceName}",
-                            $"{request.NamespaceName}"
+                            $"{_fetcher.Request.NamespaceName}"
                         ).Replace(
                             "{userId}",
-                            $"{request.UserId}"
+                            $"{_fetcher.Request.UserId}"
                         ).Replace(
                             "{slot}",
-                            $"{request.Slot}"
+                            $"{_fetcher.Request.Slot}"
                         ).Replace(
                             "{price}",
-                            $"{request.Price}"
+                            $"{_fetcher.Request.Price}"
                         ).Replace(
                             "{count}",
-                            $"{request.Count}"
+                            $"{_fetcher.Request.Count}"
                         )
                     );
                 }
@@ -108,16 +106,20 @@ namespace Gs2.Unity.UiKit.Gs2Money
 
     public partial class Gs2MoneyDepositByUserIdLabel
     {
-        private Gs2CoreAcquireActionFetcher _fetcher;
+        private Gs2MoneyDepositByUserIdFetcher _fetcher;
         private Gs2MoneyOwnWalletFetcher _userDataFetcher;
 
         public void Awake()
         {
-            _fetcher = GetComponentInParent<Gs2CoreAcquireActionFetcher>();
-            _userDataFetcher = GetComponentInParent<Gs2MoneyOwnWalletFetcher>();
+            _fetcher = GetComponent<Gs2MoneyDepositByUserIdFetcher>() ?? GetComponentInParent<Gs2MoneyDepositByUserIdFetcher>();
+            _userDataFetcher = GetComponent<Gs2MoneyOwnWalletFetcher>() ?? GetComponentInParent<Gs2MoneyOwnWalletFetcher>();
 
             if (_fetcher == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2CoreAcquireActionFetcher.");
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MoneyDepositByUserIdFetcher.");
+                enabled = false;
+            }
+            if (_userDataFetcher == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MoneyOwnWalletFetcher.");
                 enabled = false;
             }
 

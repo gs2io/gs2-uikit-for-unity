@@ -19,7 +19,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace Gs2.Unity.UiKit.Gs2Inventory.Editor
+namespace Gs2.Unity.UiKit.Gs2Inventory.Label.Editor
 {
     [CustomEditor(typeof(Gs2InventoryVerifyReferenceOfByUserIdLabel))]
     public class Gs2InventoryVerifyReferenceOfByUserIdLabelEditorExtension : UnityEditor.Editor

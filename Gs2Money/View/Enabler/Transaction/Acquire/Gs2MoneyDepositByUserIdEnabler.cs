@@ -37,27 +37,26 @@ namespace Gs2.Unity.UiKit.Gs2Money
     {
         public void Update()
         {
-            if (_fetcher.Fetched && _fetcher.AcquireAction != null && _fetcher.AcquireAction.Action == "Gs2Money:DepositByUserId") {
-                var request = DepositByUserIdRequest.FromJson(JsonMapper.ToObject(_fetcher.AcquireAction.Request));
+            if (_fetcher.Fetched && _fetcher.Request != null) {
                 switch(expression)
                 {
                     case Expression.In:
-                        target.SetActive(request.Count != null && enableCounts.Contains(request.Count.Value));
+                        target.SetActive(_fetcher.Request.Count != null && enableCounts.Contains(_fetcher.Request.Count.Value));
                         break;
                     case Expression.NotIn:
-                        target.SetActive(request.Count != null && !enableCounts.Contains(request.Count.Value));
+                        target.SetActive(_fetcher.Request.Count != null && !enableCounts.Contains(_fetcher.Request.Count.Value));
                         break;
                     case Expression.Less:
-                        target.SetActive(enableCount > request.Count);
+                        target.SetActive(enableCount > _fetcher.Request.Count);
                         break;
                     case Expression.LessEqual:
-                        target.SetActive(enableCount >= request.Count);
+                        target.SetActive(enableCount >= _fetcher.Request.Count);
                         break;
                     case Expression.Greater:
-                        target.SetActive(enableCount < request.Count);
+                        target.SetActive(enableCount < _fetcher.Request.Count);
                         break;
                     case Expression.GreaterEqual:
-                        target.SetActive(enableCount <= request.Count);
+                        target.SetActive(enableCount <= _fetcher.Request.Count);
                         break;
                 }
             }
@@ -74,14 +73,14 @@ namespace Gs2.Unity.UiKit.Gs2Money
 
     public partial class Gs2MoneyDepositByUserIdEnabler
     {
-        private Gs2CoreAcquireActionFetcher _fetcher;
+        private Gs2MoneyDepositByUserIdFetcher _fetcher;
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2CoreAcquireActionFetcher>() ?? GetComponentInParent<Gs2CoreAcquireActionFetcher>();
+            _fetcher = GetComponent<Gs2MoneyDepositByUserIdFetcher>() ?? GetComponentInParent<Gs2MoneyDepositByUserIdFetcher>();
 
             if (_fetcher == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2CoreAcquireActionFetcher.");
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MoneyDepositByUserIdFetcher.");
                 enabled = false;
             }
 

@@ -21,7 +21,7 @@ using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Inventory.Fetcher;
 using UnityEngine;
 
-namespace Gs2.Unity.UiKit.Gs2Inventory
+namespace Gs2.Unity.UiKit.Gs2Inventory.Enabler
 {
     /// <summary>
     /// Main

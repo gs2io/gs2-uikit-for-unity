@@ -25,7 +25,7 @@ using Gs2.Util.LitJson;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace Gs2.Unity.UiKit.Gs2Idle
+namespace Gs2.Unity.UiKit.Gs2Idle.Label
 {
     /// <summary>
     /// Main
@@ -36,23 +36,22 @@ namespace Gs2.Unity.UiKit.Gs2Idle
     {
         public void Update()
         {
-            if (_fetcher.Fetched && _fetcher.AcquireAction != null && _fetcher.AcquireAction.Action == "Gs2Idle:IncreaseMaximumIdleMinutesByUserId" &&
+            if (_fetcher.Fetched && _fetcher.Request != null &&
                     _userDataFetcher != null && _userDataFetcher.Fetched && _userDataFetcher.Status != null) {
-                var request = IncreaseMaximumIdleMinutesByUserIdRequest.FromJson(JsonMapper.ToObject(_fetcher.AcquireAction.Request));
                 {
                     onUpdate?.Invoke(
                         format.Replace(
                             "{namespaceName}",
-                            $"{request.NamespaceName}"
+                            $"{_fetcher.Request.NamespaceName}"
                         ).Replace(
                             "{userId}",
-                            $"{request.UserId}"
+                            $"{_fetcher.Request.UserId}"
                         ).Replace(
                             "{categoryName}",
-                            $"{request.CategoryName}"
+                            $"{_fetcher.Request.CategoryName}"
                         ).Replace(
                             "{increaseMinutes}",
-                            $"{request.IncreaseMinutes}"
+                            $"{_fetcher.Request.IncreaseMinutes}"
                         ).Replace(
                             "{userData:categoryName}",
                             $"{_userDataFetcher.Status.CategoryName}"
@@ -68,22 +67,21 @@ namespace Gs2.Unity.UiKit.Gs2Idle
                         )
                     );
                 }
-            } else if (_fetcher.Fetched && _fetcher.AcquireAction != null && _fetcher.AcquireAction.Action == "Gs2Idle:IncreaseMaximumIdleMinutesByUserId") {
-                var request = IncreaseMaximumIdleMinutesByUserIdRequest.FromJson(JsonMapper.ToObject(_fetcher.AcquireAction.Request));
+            } else if (_fetcher.Fetched && _fetcher.Request != null) {
                 {
                     onUpdate?.Invoke(
                         format.Replace(
                             "{namespaceName}",
-                            $"{request.NamespaceName}"
+                            $"{_fetcher.Request.NamespaceName}"
                         ).Replace(
                             "{userId}",
-                            $"{request.UserId}"
+                            $"{_fetcher.Request.UserId}"
                         ).Replace(
                             "{categoryName}",
-                            $"{request.CategoryName}"
+                            $"{_fetcher.Request.CategoryName}"
                         ).Replace(
                             "{increaseMinutes}",
-                            $"{request.IncreaseMinutes}"
+                            $"{_fetcher.Request.IncreaseMinutes}"
                         )
                     );
                 }
@@ -97,16 +95,20 @@ namespace Gs2.Unity.UiKit.Gs2Idle
 
     public partial class Gs2IdleIncreaseMaximumIdleMinutesByUserIdLabel
     {
-        private Gs2CoreAcquireActionFetcher _fetcher;
+        private Gs2IdleIncreaseMaximumIdleMinutesByUserIdFetcher _fetcher;
         private Gs2IdleOwnStatusFetcher _userDataFetcher;
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2CoreAcquireActionFetcher>() ?? GetComponentInParent<Gs2CoreAcquireActionFetcher>();
+            _fetcher = GetComponent<Gs2IdleIncreaseMaximumIdleMinutesByUserIdFetcher>() ?? GetComponentInParent<Gs2IdleIncreaseMaximumIdleMinutesByUserIdFetcher>();
             _userDataFetcher = GetComponent<Gs2IdleOwnStatusFetcher>() ?? GetComponentInParent<Gs2IdleOwnStatusFetcher>();
 
             if (_fetcher == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2CoreAcquireActionFetcher.");
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2IdleIncreaseMaximumIdleMinutesByUserIdFetcher.");
+                enabled = false;
+            }
+            if (_userDataFetcher == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2IdleOwnStatusFetcher.");
                 enabled = false;
             }
 

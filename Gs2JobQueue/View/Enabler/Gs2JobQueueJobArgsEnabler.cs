@@ -21,7 +21,7 @@ using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2JobQueue.Fetcher;
 using UnityEngine;
 
-namespace Gs2.Unity.UiKit.Gs2JobQueue
+namespace Gs2.Unity.UiKit.Gs2JobQueue.Enabler
 {
     /// <summary>
     /// Main

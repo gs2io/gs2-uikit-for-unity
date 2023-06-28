@@ -21,7 +21,7 @@ using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Dictionary.Fetcher;
 using UnityEngine;
 
-namespace Gs2.Unity.UiKit.Gs2Dictionary
+namespace Gs2.Unity.UiKit.Gs2Dictionary.Enabler
 {
     /// <summary>
     /// Main

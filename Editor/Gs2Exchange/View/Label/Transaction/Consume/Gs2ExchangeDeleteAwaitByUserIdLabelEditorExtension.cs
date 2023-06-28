@@ -19,7 +19,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace Gs2.Unity.UiKit.Gs2Exchange.Editor
+namespace Gs2.Unity.UiKit.Gs2Exchange.Label.Editor
 {
     [CustomEditor(typeof(Gs2ExchangeDeleteAwaitByUserIdLabel))]
     public class Gs2ExchangeDeleteAwaitByUserIdLabelEditorExtension : UnityEditor.Editor

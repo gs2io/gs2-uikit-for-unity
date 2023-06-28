@@ -23,7 +23,7 @@ using Gs2.Unity.UiKit.Gs2Showcase.Context;
 using UnityEditor;
 using UnityEngine;
 
-namespace Gs2.Unity.UiKit.Gs2Showcase.Editor
+namespace Gs2.Unity.UiKit.Gs2Showcase.Enabler.Editor
 {
     [CustomEditor(typeof(Gs2ShowcaseSalesItemNameEnabler))]
     public class Gs2ShowcaseSalesItemNameEnablerEditorExtension : UnityEditor.Editor
@@ -33,7 +33,7 @@ namespace Gs2.Unity.UiKit.Gs2Showcase.Editor
 
             if (original == null) return;
 
-            var context = original.GetComponentInParent<Gs2ShowcaseDisplayItemContext>();
+            var context = original.GetComponent<Gs2ShowcaseDisplayItemContext>() ?? original.GetComponentInParent<Gs2ShowcaseDisplayItemContext>();
             if (context == null) {
                 EditorGUILayout.HelpBox("Gs2ShowcaseDisplayItemContext not found.", MessageType.Error);
                 if (GUILayout.Button("Add Context")) {
@@ -44,7 +44,7 @@ namespace Gs2.Unity.UiKit.Gs2Showcase.Editor
                 EditorGUI.BeginDisabledGroup(true);
                 EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2ShowcaseDisplayItemContext), false);
                 EditorGUI.indentLevel++;
-                EditorGUILayout.ObjectField("DisplayItem", context.DisplayItem, typeof(DisplayItem), false);
+                context.DisplayItem = EditorGUILayout.ObjectField("DisplayItem", context.DisplayItem, typeof(DisplayItem), false) as DisplayItem;
                 EditorGUI.indentLevel++;
                 EditorGUILayout.TextField("NamespaceName", context.DisplayItem?.NamespaceName.ToString());
                 EditorGUILayout.TextField("ShowcaseName", context.DisplayItem?.ShowcaseName.ToString());

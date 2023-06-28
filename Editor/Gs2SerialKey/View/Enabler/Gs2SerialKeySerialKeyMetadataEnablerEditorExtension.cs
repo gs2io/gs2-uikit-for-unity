@@ -21,7 +21,7 @@ using Gs2.Unity.UiKit.Gs2SerialKey.Context;
 using UnityEditor;
 using UnityEngine;
 
-namespace Gs2.Unity.UiKit.Gs2SerialKey.Editor
+namespace Gs2.Unity.UiKit.Gs2SerialKey.Enabler.Editor
 {
     [CustomEditor(typeof(Gs2SerialKeySerialKeyMetadataEnabler))]
     public class Gs2SerialKeySerialKeyMetadataEnablerEditorExtension : UnityEditor.Editor

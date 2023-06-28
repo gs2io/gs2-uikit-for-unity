@@ -21,7 +21,7 @@ using Gs2.Unity.UiKit.Gs2Gateway.Context;
 using UnityEditor;
 using UnityEngine;
 
-namespace Gs2.Unity.UiKit.Gs2Gateway.Editor
+namespace Gs2.Unity.UiKit.Gs2Gateway.Enabler.Editor
 {
     [CustomEditor(typeof(Gs2GatewayWebSocketSessionConnectionIdEnabler))]
     public class Gs2GatewayWebSocketSessionConnectionIdEnablerEditorExtension : UnityEditor.Editor

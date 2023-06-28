@@ -25,7 +25,7 @@ using Gs2.Util.LitJson;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace Gs2.Unity.UiKit.Gs2Inventory
+namespace Gs2.Unity.UiKit.Gs2Inventory.Label
 {
     /// <summary>
     /// Main
@@ -36,31 +36,30 @@ namespace Gs2.Unity.UiKit.Gs2Inventory
     {
         public void Update()
         {
-            if (_fetcher.Fetched && _fetcher.ConsumeAction != null && _fetcher.ConsumeAction.Action == "Gs2Inventory:VerifyReferenceOfByUserId") {
-                var request = VerifyReferenceOfByUserIdRequest.FromJson(JsonMapper.ToObject(_fetcher.ConsumeAction.Request));
+            if (_fetcher.Fetched && _fetcher.Request != null) {
                 {
                     onUpdate?.Invoke(
                         format.Replace(
                             "{namespaceName}",
-                            $"{request.NamespaceName}"
+                            $"{_fetcher.Request.NamespaceName}"
                         ).Replace(
                             "{inventoryName}",
-                            $"{request.InventoryName}"
+                            $"{_fetcher.Request.InventoryName}"
                         ).Replace(
                             "{userId}",
-                            $"{request.UserId}"
+                            $"{_fetcher.Request.UserId}"
                         ).Replace(
                             "{itemName}",
-                            $"{request.ItemName}"
+                            $"{_fetcher.Request.ItemName}"
                         ).Replace(
                             "{itemSetName}",
-                            $"{request.ItemSetName}"
+                            $"{_fetcher.Request.ItemSetName}"
                         ).Replace(
                             "{referenceOf}",
-                            $"{request.ReferenceOf}"
+                            $"{_fetcher.Request.ReferenceOf}"
                         ).Replace(
                             "{verifyType}",
-                            $"{request.VerifyType}"
+                            $"{_fetcher.Request.VerifyType}"
                         )
                     );
                 }
@@ -74,14 +73,14 @@ namespace Gs2.Unity.UiKit.Gs2Inventory
 
     public partial class Gs2InventoryVerifyReferenceOfByUserIdLabel
     {
-        private Gs2CoreConsumeActionFetcher _fetcher;
+        private Gs2InventoryVerifyReferenceOfByUserIdFetcher _fetcher;
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2CoreConsumeActionFetcher>() ?? GetComponentInParent<Gs2CoreConsumeActionFetcher>();
+            _fetcher = GetComponent<Gs2InventoryVerifyReferenceOfByUserIdFetcher>() ?? GetComponentInParent<Gs2InventoryVerifyReferenceOfByUserIdFetcher>();
 
             if (_fetcher == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2CoreConsumeActionFetcher.");
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2InventoryVerifyReferenceOfByUserIdFetcher.");
                 enabled = false;
             }
 

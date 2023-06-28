@@ -21,7 +21,7 @@ using Gs2.Unity.UiKit.Gs2Lottery.Context;
 using UnityEditor;
 using UnityEngine;
 
-namespace Gs2.Unity.UiKit.Gs2Lottery.Editor
+namespace Gs2.Unity.UiKit.Gs2Lottery.Enabler.Editor
 {
     [CustomEditor(typeof(Gs2LotteryLotteryModelNameEnabler))]
     public class Gs2LotteryLotteryModelNameEnablerEditorExtension : UnityEditor.Editor

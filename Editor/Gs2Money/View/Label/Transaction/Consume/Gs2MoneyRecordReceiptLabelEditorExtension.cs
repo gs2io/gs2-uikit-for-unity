@@ -19,7 +19,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace Gs2.Unity.UiKit.Gs2Money.Editor
+namespace Gs2.Unity.UiKit.Gs2Money.Label.Editor
 {
     [CustomEditor(typeof(Gs2MoneyRecordReceiptLabel))]
     public class Gs2MoneyRecordReceiptLabelEditorExtension : UnityEditor.Editor

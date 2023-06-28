@@ -21,7 +21,7 @@ using Gs2.Unity.UiKit.Gs2Friend.Context;
 using UnityEditor;
 using UnityEngine;
 
-namespace Gs2.Unity.UiKit.Gs2Friend.Editor
+namespace Gs2.Unity.UiKit.Gs2Friend.Enabler.Editor
 {
     [CustomEditor(typeof(Gs2FriendFriendUserFriendProfileEnabler))]
     public class Gs2FriendFriendUserFriendProfileEnablerEditorExtension : UnityEditor.Editor

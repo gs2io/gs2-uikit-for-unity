@@ -19,7 +19,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace Gs2.Unity.UiKit.Gs2Quest.Editor
+namespace Gs2.Unity.UiKit.Gs2Quest.Label.Editor
 {
     [CustomEditor(typeof(Gs2QuestDeleteProgressByUserIdLabel))]
     public class Gs2QuestDeleteProgressByUserIdLabelEditorExtension : UnityEditor.Editor

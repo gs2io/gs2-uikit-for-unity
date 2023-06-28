@@ -25,7 +25,7 @@ using Gs2.Util.LitJson;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace Gs2.Unity.UiKit.Gs2Inbox
+namespace Gs2.Unity.UiKit.Gs2Inbox.Label
 {
     /// <summary>
     /// Main
@@ -36,29 +36,28 @@ namespace Gs2.Unity.UiKit.Gs2Inbox
     {
         public void Update()
         {
-            if (_fetcher.Fetched && _fetcher.AcquireAction != null && _fetcher.AcquireAction.Action == "Gs2Inbox:SendMessageByUserId" &&
+            if (_fetcher.Fetched && _fetcher.Request != null &&
                     _userDataFetcher != null && _userDataFetcher.Fetched && _userDataFetcher.Message != null) {
-                var request = SendMessageByUserIdRequest.FromJson(JsonMapper.ToObject(_fetcher.AcquireAction.Request));
                 {
                     onUpdate?.Invoke(
                         format.Replace(
                             "{namespaceName}",
-                            $"{request.NamespaceName}"
+                            $"{_fetcher.Request.NamespaceName}"
                         ).Replace(
                             "{userId}",
-                            $"{request.UserId}"
+                            $"{_fetcher.Request.UserId}"
                         ).Replace(
                             "{metadata}",
-                            $"{request.Metadata}"
+                            $"{_fetcher.Request.Metadata}"
                         ).Replace(
                             "{readAcquireActions}",
-                            $"{request.ReadAcquireActions}"
+                            $"{_fetcher.Request.ReadAcquireActions}"
                         ).Replace(
                             "{expiresAt}",
-                            $"{request.ExpiresAt}"
+                            $"{_fetcher.Request.ExpiresAt}"
                         ).Replace(
                             "{expiresTimeSpan}",
-                            $"{request.ExpiresTimeSpan}"
+                            $"{_fetcher.Request.ExpiresTimeSpan}"
                         ).Replace(
                             "{userData:messageId}",
                             $"{_userDataFetcher.Message.MessageId}"
@@ -86,28 +85,27 @@ namespace Gs2.Unity.UiKit.Gs2Inbox
                         )
                     );
                 }
-            } else if (_fetcher.Fetched && _fetcher.AcquireAction != null && _fetcher.AcquireAction.Action == "Gs2Inbox:SendMessageByUserId") {
-                var request = SendMessageByUserIdRequest.FromJson(JsonMapper.ToObject(_fetcher.AcquireAction.Request));
+            } else if (_fetcher.Fetched && _fetcher.Request != null) {
                 {
                     onUpdate?.Invoke(
                         format.Replace(
                             "{namespaceName}",
-                            $"{request.NamespaceName}"
+                            $"{_fetcher.Request.NamespaceName}"
                         ).Replace(
                             "{userId}",
-                            $"{request.UserId}"
+                            $"{_fetcher.Request.UserId}"
                         ).Replace(
                             "{metadata}",
-                            $"{request.Metadata}"
+                            $"{_fetcher.Request.Metadata}"
                         ).Replace(
                             "{readAcquireActions}",
-                            $"{request.ReadAcquireActions}"
+                            $"{_fetcher.Request.ReadAcquireActions}"
                         ).Replace(
                             "{expiresAt}",
-                            $"{request.ExpiresAt}"
+                            $"{_fetcher.Request.ExpiresAt}"
                         ).Replace(
                             "{expiresTimeSpan}",
-                            $"{request.ExpiresTimeSpan}"
+                            $"{_fetcher.Request.ExpiresTimeSpan}"
                         )
                     );
                 }
@@ -121,16 +119,20 @@ namespace Gs2.Unity.UiKit.Gs2Inbox
 
     public partial class Gs2InboxSendMessageByUserIdLabel
     {
-        private Gs2CoreAcquireActionFetcher _fetcher;
+        private Gs2InboxSendMessageByUserIdFetcher _fetcher;
         private Gs2InboxOwnMessageFetcher _userDataFetcher;
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2CoreAcquireActionFetcher>() ?? GetComponentInParent<Gs2CoreAcquireActionFetcher>();
+            _fetcher = GetComponent<Gs2InboxSendMessageByUserIdFetcher>() ?? GetComponentInParent<Gs2InboxSendMessageByUserIdFetcher>();
             _userDataFetcher = GetComponent<Gs2InboxOwnMessageFetcher>() ?? GetComponentInParent<Gs2InboxOwnMessageFetcher>();
 
             if (_fetcher == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2CoreAcquireActionFetcher.");
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2InboxSendMessageByUserIdFetcher.");
+                enabled = false;
+            }
+            if (_userDataFetcher == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2InboxOwnMessageFetcher.");
                 enabled = false;
             }
 

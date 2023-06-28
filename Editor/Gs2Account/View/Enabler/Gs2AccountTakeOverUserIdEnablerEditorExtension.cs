@@ -23,7 +23,7 @@ using Gs2.Unity.UiKit.Gs2Account.Context;
 using UnityEditor;
 using UnityEngine;
 
-namespace Gs2.Unity.UiKit.Gs2Account.Editor
+namespace Gs2.Unity.UiKit.Gs2Account.Enabler.Editor
 {
     [CustomEditor(typeof(Gs2AccountTakeOverUserIdEnabler))]
     public class Gs2AccountTakeOverUserIdEnablerEditorExtension : UnityEditor.Editor
@@ -33,7 +33,7 @@ namespace Gs2.Unity.UiKit.Gs2Account.Editor
 
             if (original == null) return;
 
-            var context = original.GetComponentInParent<Gs2AccountOwnTakeOverContext>();
+            var context = original.GetComponent<Gs2AccountOwnTakeOverContext>() ?? original.GetComponentInParent<Gs2AccountOwnTakeOverContext>();
             if (context == null) {
                 EditorGUILayout.HelpBox("Gs2AccountOwnTakeOverContext not found.", MessageType.Error);
                 if (GUILayout.Button("Add Context")) {
@@ -41,16 +41,24 @@ namespace Gs2.Unity.UiKit.Gs2Account.Editor
                 }
             }
             else {
-                EditorGUI.BeginDisabledGroup(true);
-                EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2AccountOwnTakeOverContext), false);
-                EditorGUI.indentLevel++;
-                EditorGUILayout.ObjectField("TakeOver", context.TakeOver, typeof(OwnTakeOver), false);
-                EditorGUI.indentLevel++;
-                EditorGUILayout.TextField("NamespaceName", context.TakeOver?.NamespaceName.ToString());
-                EditorGUILayout.TextField("Type", context.TakeOver?.Type.ToString());
-                EditorGUI.indentLevel--;
-                EditorGUI.indentLevel--;
-                EditorGUI.EndDisabledGroup();
+                if (context.transform.parent.GetComponent<Gs2AccountOwnTakeOverList>() != null) {
+                    EditorGUI.BeginDisabledGroup(true);
+                    EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2AccountOwnTakeOverContext), false);
+                    EditorGUI.EndDisabledGroup();
+                    EditorGUILayout.HelpBox("TakeOver is auto assign from Gs2AccountOwnTakeOverList.", MessageType.Info);
+                }
+                else {
+                    EditorGUI.BeginDisabledGroup(true);
+                    EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2AccountOwnTakeOverContext), false);
+                    EditorGUI.indentLevel++;
+                    context.TakeOver = EditorGUILayout.ObjectField("TakeOver", context.TakeOver, typeof(OwnTakeOver), false) as OwnTakeOver;
+                    EditorGUI.indentLevel++;
+                    EditorGUILayout.TextField("NamespaceName", context.TakeOver?.NamespaceName.ToString());
+                    EditorGUILayout.TextField("Type", context.TakeOver?.Type.ToString());
+                    EditorGUI.indentLevel--;
+                    EditorGUI.indentLevel--;
+                    EditorGUI.EndDisabledGroup();
+                }
             }
 
             serializedObject.Update();

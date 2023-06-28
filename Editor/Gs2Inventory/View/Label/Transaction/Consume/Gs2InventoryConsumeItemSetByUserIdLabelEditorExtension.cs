@@ -19,7 +19,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace Gs2.Unity.UiKit.Gs2Inventory.Editor
+namespace Gs2.Unity.UiKit.Gs2Inventory.Label.Editor
 {
     [CustomEditor(typeof(Gs2InventoryConsumeItemSetByUserIdLabel))]
     public class Gs2InventoryConsumeItemSetByUserIdLabelEditorExtension : UnityEditor.Editor
@@ -85,6 +85,11 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Editor
             }
             if (GUILayout.Button("UserData:Count")) {
                 original.format += "{userData:count}";
+                GUI.FocusControl("");
+                EditorUtility.SetDirty(original);
+            }
+            if (GUILayout.Button("UserData:Count:Changed")) {
+                original.format += "{userData:count:changed}";
                 GUI.FocusControl("");
                 EditorUtility.SetDirty(original);
             }

@@ -21,7 +21,7 @@ using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Limit.Fetcher;
 using UnityEngine;
 
-namespace Gs2.Unity.UiKit.Gs2Limit
+namespace Gs2.Unity.UiKit.Gs2Limit.Enabler
 {
     /// <summary>
     /// Main

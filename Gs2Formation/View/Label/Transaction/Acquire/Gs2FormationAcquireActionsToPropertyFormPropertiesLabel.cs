@@ -25,7 +25,7 @@ using Gs2.Util.LitJson;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace Gs2.Unity.UiKit.Gs2Formation
+namespace Gs2.Unity.UiKit.Gs2Formation.Label
 {
     /// <summary>
     /// Main
@@ -36,29 +36,28 @@ namespace Gs2.Unity.UiKit.Gs2Formation
     {
         public void Update()
         {
-            if (_fetcher.Fetched && _fetcher.AcquireAction != null && _fetcher.AcquireAction.Action == "Gs2Formation:AcquireActionsToPropertyFormProperties" &&
+            if (_fetcher.Fetched && _fetcher.Request != null &&
                     _userDataFetcher != null && _userDataFetcher.Fetched && _userDataFetcher.PropertyForm != null) {
-                var request = AcquireActionsToPropertyFormPropertiesRequest.FromJson(JsonMapper.ToObject(_fetcher.AcquireAction.Request));
                 {
                     onUpdate?.Invoke(
                         format.Replace(
                             "{namespaceName}",
-                            $"{request.NamespaceName}"
+                            $"{_fetcher.Request.NamespaceName}"
                         ).Replace(
                             "{userId}",
-                            $"{request.UserId}"
+                            $"{_fetcher.Request.UserId}"
                         ).Replace(
                             "{formModelName}",
-                            $"{request.FormModelName}"
+                            $"{_fetcher.Request.FormModelName}"
                         ).Replace(
                             "{propertyId}",
-                            $"{request.PropertyId}"
+                            $"{_fetcher.Request.PropertyId}"
                         ).Replace(
                             "{acquireAction}",
-                            $"{request.AcquireAction}"
+                            $"{_fetcher.Request.AcquireAction}"
                         ).Replace(
                             "{config}",
-                            $"{request.Config}"
+                            $"{_fetcher.Request.Config}"
                         ).Replace(
                             "{userData:name}",
                             $"{_userDataFetcher.PropertyForm.Name}"
@@ -71,28 +70,27 @@ namespace Gs2.Unity.UiKit.Gs2Formation
                         )
                     );
                 }
-            } else if (_fetcher.Fetched && _fetcher.AcquireAction != null && _fetcher.AcquireAction.Action == "Gs2Formation:AcquireActionsToPropertyFormProperties") {
-                var request = AcquireActionsToPropertyFormPropertiesRequest.FromJson(JsonMapper.ToObject(_fetcher.AcquireAction.Request));
+            } else if (_fetcher.Fetched && _fetcher.Request != null) {
                 {
                     onUpdate?.Invoke(
                         format.Replace(
                             "{namespaceName}",
-                            $"{request.NamespaceName}"
+                            $"{_fetcher.Request.NamespaceName}"
                         ).Replace(
                             "{userId}",
-                            $"{request.UserId}"
+                            $"{_fetcher.Request.UserId}"
                         ).Replace(
                             "{formModelName}",
-                            $"{request.FormModelName}"
+                            $"{_fetcher.Request.FormModelName}"
                         ).Replace(
                             "{propertyId}",
-                            $"{request.PropertyId}"
+                            $"{_fetcher.Request.PropertyId}"
                         ).Replace(
                             "{acquireAction}",
-                            $"{request.AcquireAction}"
+                            $"{_fetcher.Request.AcquireAction}"
                         ).Replace(
                             "{config}",
-                            $"{request.Config}"
+                            $"{_fetcher.Request.Config}"
                         )
                     );
                 }
@@ -106,16 +104,20 @@ namespace Gs2.Unity.UiKit.Gs2Formation
 
     public partial class Gs2FormationAcquireActionsToPropertyFormPropertiesLabel
     {
-        private Gs2CoreAcquireActionFetcher _fetcher;
+        private Gs2FormationAcquireActionsToPropertyFormPropertiesFetcher _fetcher;
         private Gs2FormationOwnPropertyFormFetcher _userDataFetcher;
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2CoreAcquireActionFetcher>() ?? GetComponentInParent<Gs2CoreAcquireActionFetcher>();
+            _fetcher = GetComponent<Gs2FormationAcquireActionsToPropertyFormPropertiesFetcher>() ?? GetComponentInParent<Gs2FormationAcquireActionsToPropertyFormPropertiesFetcher>();
             _userDataFetcher = GetComponent<Gs2FormationOwnPropertyFormFetcher>() ?? GetComponentInParent<Gs2FormationOwnPropertyFormFetcher>();
 
             if (_fetcher == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2CoreAcquireActionFetcher.");
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2FormationAcquireActionsToPropertyFormPropertiesFetcher.");
+                enabled = false;
+            }
+            if (_userDataFetcher == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2FormationOwnPropertyFormFetcher.");
                 enabled = false;
             }
 

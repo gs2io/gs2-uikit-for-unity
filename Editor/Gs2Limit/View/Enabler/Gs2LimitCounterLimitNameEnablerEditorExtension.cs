@@ -21,7 +21,7 @@ using Gs2.Unity.UiKit.Gs2Limit.Context;
 using UnityEditor;
 using UnityEngine;
 
-namespace Gs2.Unity.UiKit.Gs2Limit.Editor
+namespace Gs2.Unity.UiKit.Gs2Limit.Enabler.Editor
 {
     [CustomEditor(typeof(Gs2LimitCounterLimitNameEnabler))]
     public class Gs2LimitCounterLimitNameEnablerEditorExtension : UnityEditor.Editor

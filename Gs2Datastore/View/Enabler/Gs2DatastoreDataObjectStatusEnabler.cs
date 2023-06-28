@@ -21,7 +21,7 @@ using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Datastore.Fetcher;
 using UnityEngine;
 
-namespace Gs2.Unity.UiKit.Gs2Datastore
+namespace Gs2.Unity.UiKit.Gs2Datastore.Enabler
 {
     /// <summary>
     /// Main

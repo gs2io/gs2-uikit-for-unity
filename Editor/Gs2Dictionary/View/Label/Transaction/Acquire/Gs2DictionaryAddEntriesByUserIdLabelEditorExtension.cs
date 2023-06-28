@@ -19,7 +19,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace Gs2.Unity.UiKit.Gs2Dictionary.Editor
+namespace Gs2.Unity.UiKit.Gs2Dictionary.Label.Editor
 {
     [CustomEditor(typeof(Gs2DictionaryAddEntriesByUserIdLabel))]
     public class Gs2DictionaryAddEntriesByUserIdLabelEditorExtension : UnityEditor.Editor

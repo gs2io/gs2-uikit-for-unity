@@ -19,7 +19,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace Gs2.Unity.UiKit.Gs2Formation.Editor
+namespace Gs2.Unity.UiKit.Gs2Formation.Label.Editor
 {
     [CustomEditor(typeof(Gs2FormationSetMoldCapacityByUserIdLabel))]
     public class Gs2FormationSetMoldCapacityByUserIdLabelEditorExtension : UnityEditor.Editor

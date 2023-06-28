@@ -25,7 +25,7 @@ using Gs2.Util.LitJson;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace Gs2.Unity.UiKit.Gs2Limit
+namespace Gs2.Unity.UiKit.Gs2Limit.Label
 {
     /// <summary>
     /// Main
@@ -36,29 +36,28 @@ namespace Gs2.Unity.UiKit.Gs2Limit
     {
         public void Update()
         {
-            if (_fetcher.Fetched && _fetcher.ConsumeAction != null && _fetcher.ConsumeAction.Action == "Gs2Limit:CountUpByUserId" &&
+            if (_fetcher.Fetched && _fetcher.Request != null &&
                     _userDataFetcher != null && _userDataFetcher.Fetched && _userDataFetcher.Counter != null) {
-                var request = CountUpByUserIdRequest.FromJson(JsonMapper.ToObject(_fetcher.ConsumeAction.Request));
                 {
                     onUpdate?.Invoke(
                         format.Replace(
                             "{namespaceName}",
-                            $"{request.NamespaceName}"
+                            $"{_fetcher.Request.NamespaceName}"
                         ).Replace(
                             "{limitName}",
-                            $"{request.LimitName}"
+                            $"{_fetcher.Request.LimitName}"
                         ).Replace(
                             "{counterName}",
-                            $"{request.CounterName}"
+                            $"{_fetcher.Request.CounterName}"
                         ).Replace(
                             "{userId}",
-                            $"{request.UserId}"
+                            $"{_fetcher.Request.UserId}"
                         ).Replace(
                             "{countUpValue}",
-                            $"{request.CountUpValue}"
+                            $"{_fetcher.Request.CountUpValue}"
                         ).Replace(
                             "{maxValue}",
-                            $"{request.MaxValue}"
+                            $"{_fetcher.Request.MaxValue}"
                         ).Replace(
                             "{userData:counterId}",
                             $"{_userDataFetcher.Counter.CounterId}"
@@ -72,6 +71,9 @@ namespace Gs2.Unity.UiKit.Gs2Limit
                             "{userData:count}",
                             $"{_userDataFetcher.Counter.Count}"
                         ).Replace(
+                            "{userData:count:changed}",
+                            $"{_userDataFetcher.Counter.Count + _fetcher.Request.CountUpValue}"
+                        ).Replace(
                             "{userData:createdAt}",
                             $"{_userDataFetcher.Counter.CreatedAt}"
                         ).Replace(
@@ -80,28 +82,27 @@ namespace Gs2.Unity.UiKit.Gs2Limit
                         )
                     );
                 }
-            } else if (_fetcher.Fetched && _fetcher.ConsumeAction != null && _fetcher.ConsumeAction.Action == "Gs2Limit:CountUpByUserId") {
-                var request = CountUpByUserIdRequest.FromJson(JsonMapper.ToObject(_fetcher.ConsumeAction.Request));
+            } else if (_fetcher.Fetched && _fetcher.Request != null) {
                 {
                     onUpdate?.Invoke(
                         format.Replace(
                             "{namespaceName}",
-                            $"{request.NamespaceName}"
+                            $"{_fetcher.Request.NamespaceName}"
                         ).Replace(
                             "{limitName}",
-                            $"{request.LimitName}"
+                            $"{_fetcher.Request.LimitName}"
                         ).Replace(
                             "{counterName}",
-                            $"{request.CounterName}"
+                            $"{_fetcher.Request.CounterName}"
                         ).Replace(
                             "{userId}",
-                            $"{request.UserId}"
+                            $"{_fetcher.Request.UserId}"
                         ).Replace(
                             "{countUpValue}",
-                            $"{request.CountUpValue}"
+                            $"{_fetcher.Request.CountUpValue}"
                         ).Replace(
                             "{maxValue}",
-                            $"{request.MaxValue}"
+                            $"{_fetcher.Request.MaxValue}"
                         )
                     );
                 }
@@ -115,16 +116,20 @@ namespace Gs2.Unity.UiKit.Gs2Limit
 
     public partial class Gs2LimitCountUpByUserIdLabel
     {
-        private Gs2CoreConsumeActionFetcher _fetcher;
+        private Gs2LimitCountUpByUserIdFetcher _fetcher;
         private Gs2LimitOwnCounterFetcher _userDataFetcher;
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2CoreConsumeActionFetcher>() ?? GetComponentInParent<Gs2CoreConsumeActionFetcher>();
+            _fetcher = GetComponent<Gs2LimitCountUpByUserIdFetcher>() ?? GetComponentInParent<Gs2LimitCountUpByUserIdFetcher>();
             _userDataFetcher = GetComponent<Gs2LimitOwnCounterFetcher>() ?? GetComponentInParent<Gs2LimitOwnCounterFetcher>();
 
             if (_fetcher == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2CoreConsumeActionFetcher.");
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2LimitCountUpByUserIdFetcher.");
+                enabled = false;
+            }
+            if (_userDataFetcher == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2LimitOwnCounterFetcher.");
                 enabled = false;
             }
 

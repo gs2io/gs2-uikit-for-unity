@@ -19,7 +19,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace Gs2.Unity.UiKit.Gs2Stamina.Editor
+namespace Gs2.Unity.UiKit.Gs2Stamina.Label.Editor
 {
     [CustomEditor(typeof(Gs2StaminaConsumeStaminaByUserIdLabel))]
     public class Gs2StaminaConsumeStaminaByUserIdLabelEditorExtension : UnityEditor.Editor
@@ -60,6 +60,11 @@ namespace Gs2.Unity.UiKit.Gs2Stamina.Editor
             }
             if (GUILayout.Button("UserData:Value")) {
                 original.format += "{userData:value}";
+                GUI.FocusControl("");
+                EditorUtility.SetDirty(original);
+            }
+            if (GUILayout.Button("UserData:Value:Changed")) {
+                original.format += "{userData:value:changed}";
                 GUI.FocusControl("");
                 EditorUtility.SetDirty(original);
             }

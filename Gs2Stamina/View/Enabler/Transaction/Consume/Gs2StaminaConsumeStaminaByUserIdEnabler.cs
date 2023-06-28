@@ -26,7 +26,7 @@ using Gs2.Util.LitJson;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace Gs2.Unity.UiKit.Gs2Stamina
+namespace Gs2.Unity.UiKit.Gs2Stamina.Enabler
 {
     /// <summary>
     /// Main
@@ -37,27 +37,26 @@ namespace Gs2.Unity.UiKit.Gs2Stamina
     {
         public void Update()
         {
-            if (_fetcher.Fetched && _fetcher.ConsumeAction != null && _fetcher.ConsumeAction.Action == "Gs2Stamina:ConsumeStaminaByUserId") {
-                var request = ConsumeStaminaByUserIdRequest.FromJson(JsonMapper.ToObject(_fetcher.ConsumeAction.Request));
+            if (_fetcher.Fetched && _fetcher.Request != null) {
                 switch(expression)
                 {
                     case Expression.In:
-                        target.SetActive(request.ConsumeValue != null && enableConsumeValues.Contains(request.ConsumeValue.Value));
+                        target.SetActive(_fetcher.Request.ConsumeValue != null && enableConsumeValues.Contains(_fetcher.Request.ConsumeValue.Value));
                         break;
                     case Expression.NotIn:
-                        target.SetActive(request.ConsumeValue != null && !enableConsumeValues.Contains(request.ConsumeValue.Value));
+                        target.SetActive(_fetcher.Request.ConsumeValue != null && !enableConsumeValues.Contains(_fetcher.Request.ConsumeValue.Value));
                         break;
                     case Expression.Less:
-                        target.SetActive(enableConsumeValue > request.ConsumeValue);
+                        target.SetActive(enableConsumeValue > _fetcher.Request.ConsumeValue);
                         break;
                     case Expression.LessEqual:
-                        target.SetActive(enableConsumeValue >= request.ConsumeValue);
+                        target.SetActive(enableConsumeValue >= _fetcher.Request.ConsumeValue);
                         break;
                     case Expression.Greater:
-                        target.SetActive(enableConsumeValue < request.ConsumeValue);
+                        target.SetActive(enableConsumeValue < _fetcher.Request.ConsumeValue);
                         break;
                     case Expression.GreaterEqual:
-                        target.SetActive(enableConsumeValue <= request.ConsumeValue);
+                        target.SetActive(enableConsumeValue <= _fetcher.Request.ConsumeValue);
                         break;
                 }
             }
@@ -74,14 +73,14 @@ namespace Gs2.Unity.UiKit.Gs2Stamina
 
     public partial class Gs2StaminaConsumeStaminaByUserIdEnabler
     {
-        private Gs2CoreConsumeActionFetcher _fetcher;
+        private Gs2StaminaConsumeStaminaByUserIdFetcher _fetcher;
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2CoreConsumeActionFetcher>() ?? GetComponentInParent<Gs2CoreConsumeActionFetcher>();
+            _fetcher = GetComponent<Gs2StaminaConsumeStaminaByUserIdFetcher>() ?? GetComponentInParent<Gs2StaminaConsumeStaminaByUserIdFetcher>();
 
             if (_fetcher == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2CoreConsumeActionFetcher.");
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2StaminaConsumeStaminaByUserIdFetcher.");
                 enabled = false;
             }
 

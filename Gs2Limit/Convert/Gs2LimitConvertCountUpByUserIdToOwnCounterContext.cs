@@ -22,6 +22,7 @@ using Gs2.Gs2Limit.Request;
 using Gs2.Unity.Gs2Limit.ScriptableObject;
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Core.Fetcher;
+using Gs2.Unity.UiKit.Gs2Limit.Fetcher;
 using Gs2.Util.LitJson;
 using UnityEngine;
 using UnityEngine.Events;
@@ -35,28 +36,27 @@ namespace Gs2.Unity.UiKit.Gs2Limit.Context
 	[AddComponentMenu("GS2 UIKit/Limit/Convert/Transaction/Gs2LimitConvertConsumeCountUpByUserIdToOwnCounterContext")]
     public partial class Gs2LimitConvertCountUpByUserIdToOwnCounterContext : MonoBehaviour
     {
-        private Gs2CoreConsumeActionFetcher _fetcher;
+        private Gs2LimitCountUpByUserIdFetcher _fetcher;
         
         public void Awake() {
-            _fetcher = GetComponentInParent<Gs2CoreConsumeActionFetcher>();
+            _fetcher = GetComponent<Gs2LimitCountUpByUserIdFetcher>() ?? GetComponentInParent<Gs2LimitCountUpByUserIdFetcher>();
             
             if (_fetcher == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2CoreConsumeActionFetcher.");
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2LimitCountUpByUserIdFetcher.");
                 enabled = false;
             }
         }
         
         public void Update()
         {
-            if (_fetcher.Fetched && _fetcher.ConsumeAction != null && _fetcher.ConsumeAction.Action == "Gs2Limit:CountUpByUserId") {
-                var request = CountUpByUserIdRequest.FromJson(JsonMapper.ToObject(_fetcher.ConsumeAction.Request));
+            if (_fetcher.Fetched && _fetcher.Request != null) {
                 this.onConverted.Invoke(
                     OwnCounter.New(
                         Namespace.New(
-                            request.NamespaceName
+                            _fetcher.Request.NamespaceName
                         ),
-                        request.LimitName,
-                        request.CounterName
+                        _fetcher.Request.LimitName,
+                        _fetcher.Request.CounterName
                     )
                 );
                 enabled = false;

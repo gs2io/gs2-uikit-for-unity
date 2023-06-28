@@ -21,7 +21,7 @@ using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Chat.Fetcher;
 using UnityEngine;
 
-namespace Gs2.Unity.UiKit.Gs2Chat
+namespace Gs2.Unity.UiKit.Gs2Chat.Enabler
 {
     /// <summary>
     /// Main

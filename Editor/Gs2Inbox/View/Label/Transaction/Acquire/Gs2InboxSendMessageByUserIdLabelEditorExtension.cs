@@ -19,7 +19,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace Gs2.Unity.UiKit.Gs2Inbox.Editor
+namespace Gs2.Unity.UiKit.Gs2Inbox.Label.Editor
 {
     [CustomEditor(typeof(Gs2InboxSendMessageByUserIdLabel))]
     public class Gs2InboxSendMessageByUserIdLabelEditorExtension : UnityEditor.Editor

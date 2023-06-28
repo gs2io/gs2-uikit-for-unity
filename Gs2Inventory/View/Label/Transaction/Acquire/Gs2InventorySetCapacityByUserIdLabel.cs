@@ -25,7 +25,7 @@ using Gs2.Util.LitJson;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace Gs2.Unity.UiKit.Gs2Inventory
+namespace Gs2.Unity.UiKit.Gs2Inventory.Label
 {
     /// <summary>
     /// Main
@@ -36,23 +36,22 @@ namespace Gs2.Unity.UiKit.Gs2Inventory
     {
         public void Update()
         {
-            if (_fetcher.Fetched && _fetcher.AcquireAction != null && _fetcher.AcquireAction.Action == "Gs2Inventory:SetCapacityByUserId" &&
+            if (_fetcher.Fetched && _fetcher.Request != null &&
                     _userDataFetcher != null && _userDataFetcher.Fetched && _userDataFetcher.Inventory != null) {
-                var request = SetCapacityByUserIdRequest.FromJson(JsonMapper.ToObject(_fetcher.AcquireAction.Request));
                 {
                     onUpdate?.Invoke(
                         format.Replace(
                             "{namespaceName}",
-                            $"{request.NamespaceName}"
+                            $"{_fetcher.Request.NamespaceName}"
                         ).Replace(
                             "{inventoryName}",
-                            $"{request.InventoryName}"
+                            $"{_fetcher.Request.InventoryName}"
                         ).Replace(
                             "{userId}",
-                            $"{request.UserId}"
+                            $"{_fetcher.Request.UserId}"
                         ).Replace(
                             "{newCapacityValue}",
-                            $"{request.NewCapacityValue}"
+                            $"{_fetcher.Request.NewCapacityValue}"
                         ).Replace(
                             "{userData:inventoryId}",
                             $"{_userDataFetcher.Inventory.InventoryId}"
@@ -68,22 +67,21 @@ namespace Gs2.Unity.UiKit.Gs2Inventory
                         )
                     );
                 }
-            } else if (_fetcher.Fetched && _fetcher.AcquireAction != null && _fetcher.AcquireAction.Action == "Gs2Inventory:SetCapacityByUserId") {
-                var request = SetCapacityByUserIdRequest.FromJson(JsonMapper.ToObject(_fetcher.AcquireAction.Request));
+            } else if (_fetcher.Fetched && _fetcher.Request != null) {
                 {
                     onUpdate?.Invoke(
                         format.Replace(
                             "{namespaceName}",
-                            $"{request.NamespaceName}"
+                            $"{_fetcher.Request.NamespaceName}"
                         ).Replace(
                             "{inventoryName}",
-                            $"{request.InventoryName}"
+                            $"{_fetcher.Request.InventoryName}"
                         ).Replace(
                             "{userId}",
-                            $"{request.UserId}"
+                            $"{_fetcher.Request.UserId}"
                         ).Replace(
                             "{newCapacityValue}",
-                            $"{request.NewCapacityValue}"
+                            $"{_fetcher.Request.NewCapacityValue}"
                         )
                     );
                 }
@@ -97,16 +95,20 @@ namespace Gs2.Unity.UiKit.Gs2Inventory
 
     public partial class Gs2InventorySetCapacityByUserIdLabel
     {
-        private Gs2CoreAcquireActionFetcher _fetcher;
+        private Gs2InventorySetCapacityByUserIdFetcher _fetcher;
         private Gs2InventoryOwnInventoryFetcher _userDataFetcher;
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2CoreAcquireActionFetcher>() ?? GetComponentInParent<Gs2CoreAcquireActionFetcher>();
+            _fetcher = GetComponent<Gs2InventorySetCapacityByUserIdFetcher>() ?? GetComponentInParent<Gs2InventorySetCapacityByUserIdFetcher>();
             _userDataFetcher = GetComponent<Gs2InventoryOwnInventoryFetcher>() ?? GetComponentInParent<Gs2InventoryOwnInventoryFetcher>();
 
             if (_fetcher == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2CoreAcquireActionFetcher.");
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2InventorySetCapacityByUserIdFetcher.");
+                enabled = false;
+            }
+            if (_userDataFetcher == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2InventoryOwnInventoryFetcher.");
                 enabled = false;
             }
 

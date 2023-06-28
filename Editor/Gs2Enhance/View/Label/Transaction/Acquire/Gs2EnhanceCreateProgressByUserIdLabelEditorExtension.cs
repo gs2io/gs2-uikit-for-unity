@@ -19,7 +19,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace Gs2.Unity.UiKit.Gs2Enhance.Editor
+namespace Gs2.Unity.UiKit.Gs2Enhance.Label.Editor
 {
     [CustomEditor(typeof(Gs2EnhanceCreateProgressByUserIdLabel))]
     public class Gs2EnhanceCreateProgressByUserIdLabelEditorExtension : UnityEditor.Editor

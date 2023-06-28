@@ -22,7 +22,6 @@ using System;
 using System.Linq;
 using Gs2.Gs2Mission.Request;
 using Gs2.Unity.UiKit.Core;
-using Gs2.Unity.UiKit.Gs2Core.Fetcher;
 using Gs2.Unity.UiKit.Gs2Mission.Fetcher;
 using Gs2.Util.LitJson;
 using UnityEngine;
@@ -39,23 +38,21 @@ namespace Gs2.Unity.UiKit.Gs2Mission
     {
         public void Update()
         {
-            if (_fetcher.Fetched && _fetcher.AcquireAction != null && _fetcher.AcquireAction.Action == "Gs2Mission:IncreaseCounterByUserId" &&
-                    _userDataFetcher != null && _userDataFetcher.Fetched && _userDataFetcher.Counter != null) {
-                var request = IncreaseCounterByUserIdRequest.FromJson(JsonMapper.ToObject(_fetcher.AcquireAction.Request));
-                {
+            if (_fetcher.Fetched && _fetcher.Request != null) {
+                if (_userDataFetcher != null && _userDataFetcher.Fetched && _userDataFetcher.Counter != null) {
                     onUpdate?.Invoke(
                         format.Replace(
                             "{namespaceName}",
-                            $"{request.NamespaceName}"
+                            $"{_fetcher.Request.NamespaceName}"
                         ).Replace(
                             "{counterName}",
-                            $"{request.CounterName}"
+                            $"{_fetcher.Request.CounterName}"
                         ).Replace(
                             "{userId}",
-                            $"{request.UserId}"
+                            $"{_fetcher.Request.UserId}"
                         ).Replace(
                             "{value}",
-                            $"{request.Value}"
+                            $"{_fetcher.Request.Value}"
                         ).Replace(
                             "{userData:name}",
                             $"{_userDataFetcher.Counter.Name}"
@@ -73,35 +70,32 @@ namespace Gs2.Unity.UiKit.Gs2Mission
                             $"{_userDataFetcher.Counter.Values.FirstOrDefault(v => v.ResetType == "monthly")?.Value}"
                         ).Replace(
                             "{userData:values:notReset:changed}",
-                            $"{(_userDataFetcher.Counter.Values.FirstOrDefault(v => v.ResetType == "notReset")?.Value ?? 0) + request.Value}"
+                            $"{(_userDataFetcher.Counter.Values.FirstOrDefault(v => v.ResetType == "notReset")?.Value ?? 0) + _fetcher.Request.Value}"
                         ).Replace(
                             "{userData:values:daily:changed}",
-                            $"{(_userDataFetcher.Counter.Values.FirstOrDefault(v => v.ResetType == "daily")?.Value ?? 0) + request.Value}"
+                            $"{(_userDataFetcher.Counter.Values.FirstOrDefault(v => v.ResetType == "daily")?.Value ?? 0) + _fetcher.Request.Value}"
                         ).Replace(
                             "{userData:values:weekly:changed}",
-                            $"{(_userDataFetcher.Counter.Values.FirstOrDefault(v => v.ResetType == "weekly")?.Value ?? 0) + request.Value}"
+                            $"{(_userDataFetcher.Counter.Values.FirstOrDefault(v => v.ResetType == "weekly")?.Value ?? 0) + _fetcher.Request.Value}"
                         ).Replace(
                             "{userData:values:monthly:changed}",
-                            $"{(_userDataFetcher.Counter.Values.FirstOrDefault(v => v.ResetType == "monthly")?.Value ?? 0) + request.Value}"
+                            $"{(_userDataFetcher.Counter.Values.FirstOrDefault(v => v.ResetType == "monthly")?.Value ?? 0) + _fetcher.Request.Value}"
                         )
                     );
-                }
-            } else if (_fetcher.Fetched && _fetcher.AcquireAction != null && _fetcher.AcquireAction.Action == "Gs2Mission:IncreaseCounterByUserId") {
-                var request = IncreaseCounterByUserIdRequest.FromJson(JsonMapper.ToObject(_fetcher.AcquireAction.Request));
-                {
+                } else {
                     onUpdate?.Invoke(
                         format.Replace(
                             "{namespaceName}",
-                            $"{request.NamespaceName}"
+                            $"{_fetcher.Request.NamespaceName}"
                         ).Replace(
                             "{counterName}",
-                            $"{request.CounterName}"
+                            $"{_fetcher.Request.CounterName}"
                         ).Replace(
                             "{userId}",
-                            $"{request.UserId}"
+                            $"{_fetcher.Request.UserId}"
                         ).Replace(
                             "{value}",
-                            $"{request.Value}"
+                            $"{_fetcher.Request.Value}"
                         )
                     );
                 }
@@ -115,16 +109,20 @@ namespace Gs2.Unity.UiKit.Gs2Mission
 
     public partial class Gs2MissionIncreaseCounterByUserIdLabel
     {
-        private Gs2CoreAcquireActionFetcher _fetcher;
+        private Gs2MissionIncreaseCounterByUserIdFetcher _fetcher;
         private Gs2MissionOwnCounterFetcher _userDataFetcher;
 
         public void Awake()
         {
-            _fetcher = GetComponentInParent<Gs2CoreAcquireActionFetcher>();
-            _userDataFetcher = GetComponentInParent<Gs2MissionOwnCounterFetcher>();
+            _fetcher = GetComponent<Gs2MissionIncreaseCounterByUserIdFetcher>() ?? GetComponentInParent<Gs2MissionIncreaseCounterByUserIdFetcher>();
+            _userDataFetcher = GetComponent<Gs2MissionOwnCounterFetcher>() ?? GetComponentInParent<Gs2MissionOwnCounterFetcher>();
 
             if (_fetcher == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2CoreAcquireActionFetcher.");
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MissionIncreaseCounterByUserIdFetcher.");
+                enabled = false;
+            }
+            if (_userDataFetcher == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MissionOwnCounterFetcher.");
                 enabled = false;
             }
 

@@ -21,7 +21,7 @@ using Gs2.Unity.UiKit.Gs2Enhance.Context;
 using UnityEditor;
 using UnityEngine;
 
-namespace Gs2.Unity.UiKit.Gs2Enhance.Editor
+namespace Gs2.Unity.UiKit.Gs2Enhance.Enabler.Editor
 {
     [CustomEditor(typeof(Gs2EnhanceRateModelNameEnabler))]
     public class Gs2EnhanceRateModelNameEnablerEditorExtension : UnityEditor.Editor

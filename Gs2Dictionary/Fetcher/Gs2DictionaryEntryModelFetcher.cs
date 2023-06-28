@@ -27,6 +27,7 @@ using Gs2.Unity.Gs2Dictionary.Model;
 using Gs2.Unity.Gs2Dictionary.ScriptableObject;
 using Gs2.Unity.Util;
 using Gs2.Unity.UiKit.Core;
+using Gs2.Unity.UiKit.Gs2Core.Fetcher;
 using Gs2.Unity.UiKit.Gs2Dictionary.Context;
 using UnityEngine;
 using UnityEngine.Events;

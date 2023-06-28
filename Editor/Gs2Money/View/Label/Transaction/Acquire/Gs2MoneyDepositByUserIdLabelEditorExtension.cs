@@ -21,7 +21,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace Gs2.Unity.UiKit.Gs2Money.Editor
+namespace Gs2.Unity.UiKit.Gs2Money.Label.Editor
 {
     [CustomEditor(typeof(Gs2MoneyDepositByUserIdLabel))]
     public class Gs2MoneyDepositByUserIdLabelEditorExtension : UnityEditor.Editor

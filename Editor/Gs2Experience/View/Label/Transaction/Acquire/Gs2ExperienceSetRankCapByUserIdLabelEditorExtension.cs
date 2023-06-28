@@ -19,7 +19,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace Gs2.Unity.UiKit.Gs2Experience.Editor
+namespace Gs2.Unity.UiKit.Gs2Experience.Label.Editor
 {
     [CustomEditor(typeof(Gs2ExperienceSetRankCapByUserIdLabel))]
     public class Gs2ExperienceSetRankCapByUserIdLabelEditorExtension : UnityEditor.Editor

@@ -21,7 +21,7 @@ using Gs2.Unity.UiKit.Gs2Limit.Context;
 using UnityEditor;
 using UnityEngine;
 
-namespace Gs2.Unity.UiKit.Gs2Limit.Editor
+namespace Gs2.Unity.UiKit.Gs2Limit.Enabler.Editor
 {
     [CustomEditor(typeof(Gs2LimitLimitModelResetDayOfWeekEnabler))]
     public class Gs2LimitLimitModelResetDayOfWeekEnablerEditorExtension : UnityEditor.Editor

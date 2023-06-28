@@ -37,27 +37,26 @@ namespace Gs2.Unity.UiKit.Gs2Experience
     {
         public void Update()
         {
-            if (_fetcher.Fetched && _fetcher.AcquireAction != null && _fetcher.AcquireAction.Action == "Gs2Experience:AddRankCapByUserId") {
-                var request = AddRankCapByUserIdRequest.FromJson(JsonMapper.ToObject(_fetcher.AcquireAction.Request));
+            if (_fetcher.Fetched && _fetcher.Request != null) {
                 switch(expression)
                 {
                     case Expression.In:
-                        target.SetActive(request.RankCapValue != null && enableRankCapValues.Contains(request.RankCapValue.Value));
+                        target.SetActive(_fetcher.Request.RankCapValue != null && enableRankCapValues.Contains(_fetcher.Request.RankCapValue.Value));
                         break;
                     case Expression.NotIn:
-                        target.SetActive(request.RankCapValue != null && !enableRankCapValues.Contains(request.RankCapValue.Value));
+                        target.SetActive(_fetcher.Request.RankCapValue != null && !enableRankCapValues.Contains(_fetcher.Request.RankCapValue.Value));
                         break;
                     case Expression.Less:
-                        target.SetActive(enableRankCapValue > request.RankCapValue);
+                        target.SetActive(enableRankCapValue > _fetcher.Request.RankCapValue);
                         break;
                     case Expression.LessEqual:
-                        target.SetActive(enableRankCapValue >= request.RankCapValue);
+                        target.SetActive(enableRankCapValue >= _fetcher.Request.RankCapValue);
                         break;
                     case Expression.Greater:
-                        target.SetActive(enableRankCapValue < request.RankCapValue);
+                        target.SetActive(enableRankCapValue < _fetcher.Request.RankCapValue);
                         break;
                     case Expression.GreaterEqual:
-                        target.SetActive(enableRankCapValue <= request.RankCapValue);
+                        target.SetActive(enableRankCapValue <= _fetcher.Request.RankCapValue);
                         break;
                 }
             }
@@ -74,14 +73,14 @@ namespace Gs2.Unity.UiKit.Gs2Experience
 
     public partial class Gs2ExperienceAddRankCapByUserIdEnabler
     {
-        private Gs2CoreAcquireActionFetcher _fetcher;
+        private Gs2ExperienceAddRankCapByUserIdFetcher _fetcher;
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2CoreAcquireActionFetcher>() ?? GetComponentInParent<Gs2CoreAcquireActionFetcher>();
+            _fetcher = GetComponent<Gs2ExperienceAddRankCapByUserIdFetcher>() ?? GetComponentInParent<Gs2ExperienceAddRankCapByUserIdFetcher>();
 
             if (_fetcher == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2CoreAcquireActionFetcher.");
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ExperienceAddRankCapByUserIdFetcher.");
                 enabled = false;
             }
 

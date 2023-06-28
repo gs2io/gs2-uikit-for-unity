@@ -21,7 +21,7 @@ using Gs2.Unity.UiKit.Gs2Ranking.Context;
 using UnityEditor;
 using UnityEngine;
 
-namespace Gs2.Unity.UiKit.Gs2Ranking.Editor
+namespace Gs2.Unity.UiKit.Gs2Ranking.Enabler.Editor
 {
     [CustomEditor(typeof(Gs2RankingScoreCategoryNameEnabler))]
     public class Gs2RankingScoreCategoryNameEnablerEditorExtension : UnityEditor.Editor

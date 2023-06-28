@@ -21,7 +21,7 @@ using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Formation.Fetcher;
 using UnityEngine;
 
-namespace Gs2.Unity.UiKit.Gs2Formation
+namespace Gs2.Unity.UiKit.Gs2Formation.Enabler
 {
     /// <summary>
     /// Main

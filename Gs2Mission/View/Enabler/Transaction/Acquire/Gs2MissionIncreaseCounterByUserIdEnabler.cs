@@ -37,27 +37,26 @@ namespace Gs2.Unity.UiKit.Gs2Mission
     {
         public void Update()
         {
-            if (_fetcher.Fetched && _fetcher.AcquireAction != null && _fetcher.AcquireAction.Action == "Gs2Mission:IncreaseCounterByUserId") {
-                var request = IncreaseCounterByUserIdRequest.FromJson(JsonMapper.ToObject(_fetcher.AcquireAction.Request));
+            if (_fetcher.Fetched && _fetcher.Request != null) {
                 switch(expression)
                 {
                     case Expression.In:
-                        target.SetActive(request.Value != null && enableValues.Contains(request.Value.Value));
+                        target.SetActive(_fetcher.Request.Value != null && enableValues.Contains(_fetcher.Request.Value.Value));
                         break;
                     case Expression.NotIn:
-                        target.SetActive(request.Value != null && !enableValues.Contains(request.Value.Value));
+                        target.SetActive(_fetcher.Request.Value != null && !enableValues.Contains(_fetcher.Request.Value.Value));
                         break;
                     case Expression.Less:
-                        target.SetActive(enableValue > request.Value);
+                        target.SetActive(enableValue > _fetcher.Request.Value);
                         break;
                     case Expression.LessEqual:
-                        target.SetActive(enableValue >= request.Value);
+                        target.SetActive(enableValue >= _fetcher.Request.Value);
                         break;
                     case Expression.Greater:
-                        target.SetActive(enableValue < request.Value);
+                        target.SetActive(enableValue < _fetcher.Request.Value);
                         break;
                     case Expression.GreaterEqual:
-                        target.SetActive(enableValue <= request.Value);
+                        target.SetActive(enableValue <= _fetcher.Request.Value);
                         break;
                 }
             }
@@ -74,14 +73,14 @@ namespace Gs2.Unity.UiKit.Gs2Mission
 
     public partial class Gs2MissionIncreaseCounterByUserIdEnabler
     {
-        private Gs2CoreAcquireActionFetcher _fetcher;
+        private Gs2MissionIncreaseCounterByUserIdFetcher _fetcher;
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2CoreAcquireActionFetcher>() ?? GetComponentInParent<Gs2CoreAcquireActionFetcher>();
+            _fetcher = GetComponent<Gs2MissionIncreaseCounterByUserIdFetcher>() ?? GetComponentInParent<Gs2MissionIncreaseCounterByUserIdFetcher>();
 
             if (_fetcher == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2CoreAcquireActionFetcher.");
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MissionIncreaseCounterByUserIdFetcher.");
                 enabled = false;
             }
 

@@ -21,7 +21,7 @@ using Gs2.Unity.UiKit.Gs2MegaField.Context;
 using UnityEditor;
 using UnityEngine;
 
-namespace Gs2.Unity.UiKit.Gs2MegaField.Editor
+namespace Gs2.Unity.UiKit.Gs2MegaField.Enabler.Editor
 {
     [CustomEditor(typeof(Gs2MegaFieldAreaModelMetadataEnabler))]
     public class Gs2MegaFieldAreaModelMetadataEnablerEditorExtension : UnityEditor.Editor

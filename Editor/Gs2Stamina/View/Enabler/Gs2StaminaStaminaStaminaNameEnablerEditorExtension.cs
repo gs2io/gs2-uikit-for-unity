@@ -21,7 +21,7 @@ using Gs2.Unity.UiKit.Gs2Stamina.Context;
 using UnityEditor;
 using UnityEngine;
 
-namespace Gs2.Unity.UiKit.Gs2Stamina.Editor
+namespace Gs2.Unity.UiKit.Gs2Stamina.Enabler.Editor
 {
     [CustomEditor(typeof(Gs2StaminaStaminaStaminaNameEnabler))]
     public class Gs2StaminaStaminaStaminaNameEnablerEditorExtension : UnityEditor.Editor

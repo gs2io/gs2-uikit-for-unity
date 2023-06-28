@@ -21,7 +21,7 @@ using Gs2.Unity.UiKit.Gs2Version.Context;
 using UnityEditor;
 using UnityEngine;
 
-namespace Gs2.Unity.UiKit.Gs2Version.Editor
+namespace Gs2.Unity.UiKit.Gs2Version.Enabler.Editor
 {
     [CustomEditor(typeof(Gs2VersionAcceptVersionUserIdEnabler))]
     public class Gs2VersionAcceptVersionUserIdEnablerEditorExtension : UnityEditor.Editor

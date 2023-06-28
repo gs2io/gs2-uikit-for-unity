@@ -21,7 +21,7 @@ using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Inbox.Fetcher;
 using UnityEngine;
 
-namespace Gs2.Unity.UiKit.Gs2Inbox
+namespace Gs2.Unity.UiKit.Gs2Inbox.Enabler
 {
     /// <summary>
     /// Main

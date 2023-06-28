@@ -22,7 +22,7 @@ using UnityEditor;
 using UnityEngine;
 using Event = Gs2.Unity.Gs2Schedule.ScriptableObject.Event;
 
-namespace Gs2.Unity.UiKit.Gs2Schedule.Editor
+namespace Gs2.Unity.UiKit.Gs2Schedule.Enabler.Editor
 {
     [CustomEditor(typeof(Gs2ScheduleEventRepeatTypeEnabler))]
     public class Gs2ScheduleEventRepeatTypeEnablerEditorExtension : UnityEditor.Editor

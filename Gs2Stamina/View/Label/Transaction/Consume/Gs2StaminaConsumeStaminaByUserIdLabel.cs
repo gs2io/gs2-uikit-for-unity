@@ -25,7 +25,7 @@ using Gs2.Util.LitJson;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace Gs2.Unity.UiKit.Gs2Stamina
+namespace Gs2.Unity.UiKit.Gs2Stamina.Label
 {
     /// <summary>
     /// Main
@@ -36,29 +36,31 @@ namespace Gs2.Unity.UiKit.Gs2Stamina
     {
         public void Update()
         {
-            if (_fetcher.Fetched && _fetcher.ConsumeAction != null && _fetcher.ConsumeAction.Action == "Gs2Stamina:ConsumeStaminaByUserId" &&
+            if (_fetcher.Fetched && _fetcher.Request != null &&
                     _userDataFetcher != null && _userDataFetcher.Fetched && _userDataFetcher.Stamina != null) {
-                var request = ConsumeStaminaByUserIdRequest.FromJson(JsonMapper.ToObject(_fetcher.ConsumeAction.Request));
                 {
                     onUpdate?.Invoke(
                         format.Replace(
                             "{namespaceName}",
-                            $"{request.NamespaceName}"
+                            $"{_fetcher.Request.NamespaceName}"
                         ).Replace(
                             "{staminaName}",
-                            $"{request.StaminaName}"
+                            $"{_fetcher.Request.StaminaName}"
                         ).Replace(
                             "{userId}",
-                            $"{request.UserId}"
+                            $"{_fetcher.Request.UserId}"
                         ).Replace(
                             "{consumeValue}",
-                            $"{request.ConsumeValue}"
+                            $"{_fetcher.Request.ConsumeValue}"
                         ).Replace(
                             "{userData:staminaName}",
                             $"{_userDataFetcher.Stamina.StaminaName}"
                         ).Replace(
                             "{userData:value}",
                             $"{_userDataFetcher.Stamina.Value}"
+                        ).Replace(
+                            "{userData:value:changed}",
+                            $"{_userDataFetcher.Stamina.Value + _fetcher.Request.ConsumeValue}"
                         ).Replace(
                             "{userData:overflowValue}",
                             $"{_userDataFetcher.Stamina.OverflowValue}"
@@ -77,22 +79,21 @@ namespace Gs2.Unity.UiKit.Gs2Stamina
                         )
                     );
                 }
-            } else if (_fetcher.Fetched && _fetcher.ConsumeAction != null && _fetcher.ConsumeAction.Action == "Gs2Stamina:ConsumeStaminaByUserId") {
-                var request = ConsumeStaminaByUserIdRequest.FromJson(JsonMapper.ToObject(_fetcher.ConsumeAction.Request));
+            } else if (_fetcher.Fetched && _fetcher.Request != null) {
                 {
                     onUpdate?.Invoke(
                         format.Replace(
                             "{namespaceName}",
-                            $"{request.NamespaceName}"
+                            $"{_fetcher.Request.NamespaceName}"
                         ).Replace(
                             "{staminaName}",
-                            $"{request.StaminaName}"
+                            $"{_fetcher.Request.StaminaName}"
                         ).Replace(
                             "{userId}",
-                            $"{request.UserId}"
+                            $"{_fetcher.Request.UserId}"
                         ).Replace(
                             "{consumeValue}",
-                            $"{request.ConsumeValue}"
+                            $"{_fetcher.Request.ConsumeValue}"
                         )
                     );
                 }
@@ -106,16 +107,20 @@ namespace Gs2.Unity.UiKit.Gs2Stamina
 
     public partial class Gs2StaminaConsumeStaminaByUserIdLabel
     {
-        private Gs2CoreConsumeActionFetcher _fetcher;
+        private Gs2StaminaConsumeStaminaByUserIdFetcher _fetcher;
         private Gs2StaminaOwnStaminaFetcher _userDataFetcher;
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2CoreConsumeActionFetcher>() ?? GetComponentInParent<Gs2CoreConsumeActionFetcher>();
+            _fetcher = GetComponent<Gs2StaminaConsumeStaminaByUserIdFetcher>() ?? GetComponentInParent<Gs2StaminaConsumeStaminaByUserIdFetcher>();
             _userDataFetcher = GetComponent<Gs2StaminaOwnStaminaFetcher>() ?? GetComponentInParent<Gs2StaminaOwnStaminaFetcher>();
 
             if (_fetcher == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2CoreConsumeActionFetcher.");
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2StaminaConsumeStaminaByUserIdFetcher.");
+                enabled = false;
+            }
+            if (_userDataFetcher == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2StaminaOwnStaminaFetcher.");
                 enabled = false;
             }
 

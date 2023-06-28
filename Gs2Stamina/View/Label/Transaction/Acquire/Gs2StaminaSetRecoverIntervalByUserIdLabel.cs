@@ -25,7 +25,7 @@ using Gs2.Util.LitJson;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace Gs2.Unity.UiKit.Gs2Stamina
+namespace Gs2.Unity.UiKit.Gs2Stamina.Label
 {
     /// <summary>
     /// Main
@@ -36,23 +36,22 @@ namespace Gs2.Unity.UiKit.Gs2Stamina
     {
         public void Update()
         {
-            if (_fetcher.Fetched && _fetcher.AcquireAction != null && _fetcher.AcquireAction.Action == "Gs2Stamina:SetRecoverIntervalByUserId" &&
+            if (_fetcher.Fetched && _fetcher.Request != null &&
                     _userDataFetcher != null && _userDataFetcher.Fetched && _userDataFetcher.Stamina != null) {
-                var request = SetRecoverIntervalByUserIdRequest.FromJson(JsonMapper.ToObject(_fetcher.AcquireAction.Request));
                 {
                     onUpdate?.Invoke(
                         format.Replace(
                             "{namespaceName}",
-                            $"{request.NamespaceName}"
+                            $"{_fetcher.Request.NamespaceName}"
                         ).Replace(
                             "{staminaName}",
-                            $"{request.StaminaName}"
+                            $"{_fetcher.Request.StaminaName}"
                         ).Replace(
                             "{userId}",
-                            $"{request.UserId}"
+                            $"{_fetcher.Request.UserId}"
                         ).Replace(
                             "{recoverIntervalMinutes}",
-                            $"{request.RecoverIntervalMinutes}"
+                            $"{_fetcher.Request.RecoverIntervalMinutes}"
                         ).Replace(
                             "{userData:staminaName}",
                             $"{_userDataFetcher.Stamina.StaminaName}"
@@ -77,22 +76,21 @@ namespace Gs2.Unity.UiKit.Gs2Stamina
                         )
                     );
                 }
-            } else if (_fetcher.Fetched && _fetcher.AcquireAction != null && _fetcher.AcquireAction.Action == "Gs2Stamina:SetRecoverIntervalByUserId") {
-                var request = SetRecoverIntervalByUserIdRequest.FromJson(JsonMapper.ToObject(_fetcher.AcquireAction.Request));
+            } else if (_fetcher.Fetched && _fetcher.Request != null) {
                 {
                     onUpdate?.Invoke(
                         format.Replace(
                             "{namespaceName}",
-                            $"{request.NamespaceName}"
+                            $"{_fetcher.Request.NamespaceName}"
                         ).Replace(
                             "{staminaName}",
-                            $"{request.StaminaName}"
+                            $"{_fetcher.Request.StaminaName}"
                         ).Replace(
                             "{userId}",
-                            $"{request.UserId}"
+                            $"{_fetcher.Request.UserId}"
                         ).Replace(
                             "{recoverIntervalMinutes}",
-                            $"{request.RecoverIntervalMinutes}"
+                            $"{_fetcher.Request.RecoverIntervalMinutes}"
                         )
                     );
                 }
@@ -106,16 +104,20 @@ namespace Gs2.Unity.UiKit.Gs2Stamina
 
     public partial class Gs2StaminaSetRecoverIntervalByUserIdLabel
     {
-        private Gs2CoreAcquireActionFetcher _fetcher;
+        private Gs2StaminaSetRecoverIntervalByUserIdFetcher _fetcher;
         private Gs2StaminaOwnStaminaFetcher _userDataFetcher;
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2CoreAcquireActionFetcher>() ?? GetComponentInParent<Gs2CoreAcquireActionFetcher>();
+            _fetcher = GetComponent<Gs2StaminaSetRecoverIntervalByUserIdFetcher>() ?? GetComponentInParent<Gs2StaminaSetRecoverIntervalByUserIdFetcher>();
             _userDataFetcher = GetComponent<Gs2StaminaOwnStaminaFetcher>() ?? GetComponentInParent<Gs2StaminaOwnStaminaFetcher>();
 
             if (_fetcher == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2CoreAcquireActionFetcher.");
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2StaminaSetRecoverIntervalByUserIdFetcher.");
+                enabled = false;
+            }
+            if (_userDataFetcher == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2StaminaOwnStaminaFetcher.");
                 enabled = false;
             }
 

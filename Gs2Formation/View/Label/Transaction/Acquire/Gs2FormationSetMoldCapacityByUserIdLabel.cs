@@ -25,7 +25,7 @@ using Gs2.Util.LitJson;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace Gs2.Unity.UiKit.Gs2Formation
+namespace Gs2.Unity.UiKit.Gs2Formation.Label
 {
     /// <summary>
     /// Main
@@ -36,23 +36,22 @@ namespace Gs2.Unity.UiKit.Gs2Formation
     {
         public void Update()
         {
-            if (_fetcher.Fetched && _fetcher.AcquireAction != null && _fetcher.AcquireAction.Action == "Gs2Formation:SetMoldCapacityByUserId" &&
+            if (_fetcher.Fetched && _fetcher.Request != null &&
                     _userDataFetcher != null && _userDataFetcher.Fetched && _userDataFetcher.Mold != null) {
-                var request = SetMoldCapacityByUserIdRequest.FromJson(JsonMapper.ToObject(_fetcher.AcquireAction.Request));
                 {
                     onUpdate?.Invoke(
                         format.Replace(
                             "{namespaceName}",
-                            $"{request.NamespaceName}"
+                            $"{_fetcher.Request.NamespaceName}"
                         ).Replace(
                             "{userId}",
-                            $"{request.UserId}"
+                            $"{_fetcher.Request.UserId}"
                         ).Replace(
                             "{moldName}",
-                            $"{request.MoldName}"
+                            $"{_fetcher.Request.MoldName}"
                         ).Replace(
                             "{capacity}",
-                            $"{request.Capacity}"
+                            $"{_fetcher.Request.Capacity}"
                         ).Replace(
                             "{userData:name}",
                             $"{_userDataFetcher.Mold.Name}"
@@ -65,22 +64,21 @@ namespace Gs2.Unity.UiKit.Gs2Formation
                         )
                     );
                 }
-            } else if (_fetcher.Fetched && _fetcher.AcquireAction != null && _fetcher.AcquireAction.Action == "Gs2Formation:SetMoldCapacityByUserId") {
-                var request = SetMoldCapacityByUserIdRequest.FromJson(JsonMapper.ToObject(_fetcher.AcquireAction.Request));
+            } else if (_fetcher.Fetched && _fetcher.Request != null) {
                 {
                     onUpdate?.Invoke(
                         format.Replace(
                             "{namespaceName}",
-                            $"{request.NamespaceName}"
+                            $"{_fetcher.Request.NamespaceName}"
                         ).Replace(
                             "{userId}",
-                            $"{request.UserId}"
+                            $"{_fetcher.Request.UserId}"
                         ).Replace(
                             "{moldName}",
-                            $"{request.MoldName}"
+                            $"{_fetcher.Request.MoldName}"
                         ).Replace(
                             "{capacity}",
-                            $"{request.Capacity}"
+                            $"{_fetcher.Request.Capacity}"
                         )
                     );
                 }
@@ -94,16 +92,20 @@ namespace Gs2.Unity.UiKit.Gs2Formation
 
     public partial class Gs2FormationSetMoldCapacityByUserIdLabel
     {
-        private Gs2CoreAcquireActionFetcher _fetcher;
+        private Gs2FormationSetMoldCapacityByUserIdFetcher _fetcher;
         private Gs2FormationOwnMoldFetcher _userDataFetcher;
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2CoreAcquireActionFetcher>() ?? GetComponentInParent<Gs2CoreAcquireActionFetcher>();
+            _fetcher = GetComponent<Gs2FormationSetMoldCapacityByUserIdFetcher>() ?? GetComponentInParent<Gs2FormationSetMoldCapacityByUserIdFetcher>();
             _userDataFetcher = GetComponent<Gs2FormationOwnMoldFetcher>() ?? GetComponentInParent<Gs2FormationOwnMoldFetcher>();
 
             if (_fetcher == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2CoreAcquireActionFetcher.");
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2FormationSetMoldCapacityByUserIdFetcher.");
+                enabled = false;
+            }
+            if (_userDataFetcher == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2FormationOwnMoldFetcher.");
                 enabled = false;
             }
 

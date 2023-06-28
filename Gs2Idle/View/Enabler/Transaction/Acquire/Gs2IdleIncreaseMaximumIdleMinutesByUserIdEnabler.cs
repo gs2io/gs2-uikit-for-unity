@@ -37,27 +37,26 @@ namespace Gs2.Unity.UiKit.Gs2Idle
     {
         public void Update()
         {
-            if (_fetcher.Fetched && _fetcher.AcquireAction != null && _fetcher.AcquireAction.Action == "Gs2Idle:IncreaseMaximumIdleMinutesByUserId") {
-                var request = IncreaseMaximumIdleMinutesByUserIdRequest.FromJson(JsonMapper.ToObject(_fetcher.AcquireAction.Request));
+            if (_fetcher.Fetched && _fetcher.Request != null) {
                 switch(expression)
                 {
                     case Expression.In:
-                        target.SetActive(request.IncreaseMinutes != null && enableIncreaseMinuteses.Contains(request.IncreaseMinutes.Value));
+                        target.SetActive(_fetcher.Request.IncreaseMinutes != null && enableIncreaseMinuteses.Contains(_fetcher.Request.IncreaseMinutes.Value));
                         break;
                     case Expression.NotIn:
-                        target.SetActive(request.IncreaseMinutes != null && !enableIncreaseMinuteses.Contains(request.IncreaseMinutes.Value));
+                        target.SetActive(_fetcher.Request.IncreaseMinutes != null && !enableIncreaseMinuteses.Contains(_fetcher.Request.IncreaseMinutes.Value));
                         break;
                     case Expression.Less:
-                        target.SetActive(enableIncreaseMinutes > request.IncreaseMinutes);
+                        target.SetActive(enableIncreaseMinutes > _fetcher.Request.IncreaseMinutes);
                         break;
                     case Expression.LessEqual:
-                        target.SetActive(enableIncreaseMinutes >= request.IncreaseMinutes);
+                        target.SetActive(enableIncreaseMinutes >= _fetcher.Request.IncreaseMinutes);
                         break;
                     case Expression.Greater:
-                        target.SetActive(enableIncreaseMinutes < request.IncreaseMinutes);
+                        target.SetActive(enableIncreaseMinutes < _fetcher.Request.IncreaseMinutes);
                         break;
                     case Expression.GreaterEqual:
-                        target.SetActive(enableIncreaseMinutes <= request.IncreaseMinutes);
+                        target.SetActive(enableIncreaseMinutes <= _fetcher.Request.IncreaseMinutes);
                         break;
                 }
             }
@@ -74,14 +73,14 @@ namespace Gs2.Unity.UiKit.Gs2Idle
 
     public partial class Gs2IdleIncreaseMaximumIdleMinutesByUserIdEnabler
     {
-        private Gs2CoreAcquireActionFetcher _fetcher;
+        private Gs2IdleIncreaseMaximumIdleMinutesByUserIdFetcher _fetcher;
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2CoreAcquireActionFetcher>() ?? GetComponentInParent<Gs2CoreAcquireActionFetcher>();
+            _fetcher = GetComponent<Gs2IdleIncreaseMaximumIdleMinutesByUserIdFetcher>() ?? GetComponentInParent<Gs2IdleIncreaseMaximumIdleMinutesByUserIdFetcher>();
 
             if (_fetcher == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2CoreAcquireActionFetcher.");
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2IdleIncreaseMaximumIdleMinutesByUserIdFetcher.");
                 enabled = false;
             }
 

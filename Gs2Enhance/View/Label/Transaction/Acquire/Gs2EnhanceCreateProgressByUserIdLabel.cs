@@ -25,7 +25,7 @@ using Gs2.Util.LitJson;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace Gs2.Unity.UiKit.Gs2Enhance
+namespace Gs2.Unity.UiKit.Gs2Enhance.Label
 {
     /// <summary>
     /// Main
@@ -36,29 +36,28 @@ namespace Gs2.Unity.UiKit.Gs2Enhance
     {
         public void Update()
         {
-            if (_fetcher.Fetched && _fetcher.AcquireAction != null && _fetcher.AcquireAction.Action == "Gs2Enhance:CreateProgressByUserId" &&
+            if (_fetcher.Fetched && _fetcher.Request != null &&
                     _userDataFetcher != null && _userDataFetcher.Fetched && _userDataFetcher.Progress != null) {
-                var request = CreateProgressByUserIdRequest.FromJson(JsonMapper.ToObject(_fetcher.AcquireAction.Request));
                 {
                     onUpdate?.Invoke(
                         format.Replace(
                             "{namespaceName}",
-                            $"{request.NamespaceName}"
+                            $"{_fetcher.Request.NamespaceName}"
                         ).Replace(
                             "{userId}",
-                            $"{request.UserId}"
+                            $"{_fetcher.Request.UserId}"
                         ).Replace(
                             "{rateName}",
-                            $"{request.RateName}"
+                            $"{_fetcher.Request.RateName}"
                         ).Replace(
                             "{targetItemSetId}",
-                            $"{request.TargetItemSetId}"
+                            $"{_fetcher.Request.TargetItemSetId}"
                         ).Replace(
                             "{materials}",
-                            $"{request.Materials}"
+                            $"{_fetcher.Request.Materials}"
                         ).Replace(
                             "{force}",
-                            $"{request.Force}"
+                            $"{_fetcher.Request.Force}"
                         ).Replace(
                             "{userData:name}",
                             $"{_userDataFetcher.Progress.Name}"
@@ -77,28 +76,27 @@ namespace Gs2.Unity.UiKit.Gs2Enhance
                         )
                     );
                 }
-            } else if (_fetcher.Fetched && _fetcher.AcquireAction != null && _fetcher.AcquireAction.Action == "Gs2Enhance:CreateProgressByUserId") {
-                var request = CreateProgressByUserIdRequest.FromJson(JsonMapper.ToObject(_fetcher.AcquireAction.Request));
+            } else if (_fetcher.Fetched && _fetcher.Request != null) {
                 {
                     onUpdate?.Invoke(
                         format.Replace(
                             "{namespaceName}",
-                            $"{request.NamespaceName}"
+                            $"{_fetcher.Request.NamespaceName}"
                         ).Replace(
                             "{userId}",
-                            $"{request.UserId}"
+                            $"{_fetcher.Request.UserId}"
                         ).Replace(
                             "{rateName}",
-                            $"{request.RateName}"
+                            $"{_fetcher.Request.RateName}"
                         ).Replace(
                             "{targetItemSetId}",
-                            $"{request.TargetItemSetId}"
+                            $"{_fetcher.Request.TargetItemSetId}"
                         ).Replace(
                             "{materials}",
-                            $"{request.Materials}"
+                            $"{_fetcher.Request.Materials}"
                         ).Replace(
                             "{force}",
-                            $"{request.Force}"
+                            $"{_fetcher.Request.Force}"
                         )
                     );
                 }
@@ -112,16 +110,20 @@ namespace Gs2.Unity.UiKit.Gs2Enhance
 
     public partial class Gs2EnhanceCreateProgressByUserIdLabel
     {
-        private Gs2CoreAcquireActionFetcher _fetcher;
+        private Gs2EnhanceCreateProgressByUserIdFetcher _fetcher;
         private Gs2EnhanceOwnProgressFetcher _userDataFetcher;
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2CoreAcquireActionFetcher>() ?? GetComponentInParent<Gs2CoreAcquireActionFetcher>();
+            _fetcher = GetComponent<Gs2EnhanceCreateProgressByUserIdFetcher>() ?? GetComponentInParent<Gs2EnhanceCreateProgressByUserIdFetcher>();
             _userDataFetcher = GetComponent<Gs2EnhanceOwnProgressFetcher>() ?? GetComponentInParent<Gs2EnhanceOwnProgressFetcher>();
 
             if (_fetcher == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2CoreAcquireActionFetcher.");
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2EnhanceCreateProgressByUserIdFetcher.");
+                enabled = false;
+            }
+            if (_userDataFetcher == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2EnhanceOwnProgressFetcher.");
                 enabled = false;
             }
 

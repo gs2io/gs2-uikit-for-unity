@@ -21,7 +21,7 @@ using Gs2.Unity.UiKit.Gs2Experience.Context;
 using UnityEditor;
 using UnityEngine;
 
-namespace Gs2.Unity.UiKit.Gs2Experience.Editor
+namespace Gs2.Unity.UiKit.Gs2Experience.Enabler.Editor
 {
     [CustomEditor(typeof(Gs2ExperienceExperienceModelMetadataEnabler))]
     public class Gs2ExperienceExperienceModelMetadataEnablerEditorExtension : UnityEditor.Editor

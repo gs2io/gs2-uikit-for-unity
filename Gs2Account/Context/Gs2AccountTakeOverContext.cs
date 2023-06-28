@@ -25,7 +25,7 @@ namespace Gs2.Unity.UiKit.Gs2Account.Context
     /// Main
     /// </summary>
 
-	[AddComponentMenu("GS2 UIKit/Account/TakeOver/Gs2AccountTakeOverContext")]
+	[AddComponentMenu("GS2 UIKit/Account/TakeOver/Context/Gs2AccountTakeOverContext")]
     public partial class Gs2AccountTakeOverContext : MonoBehaviour
     {
         public void Start() {

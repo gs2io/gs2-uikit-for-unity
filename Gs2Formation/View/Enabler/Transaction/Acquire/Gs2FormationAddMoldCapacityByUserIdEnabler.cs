@@ -37,27 +37,26 @@ namespace Gs2.Unity.UiKit.Gs2Formation
     {
         public void Update()
         {
-            if (_fetcher.Fetched && _fetcher.AcquireAction != null && _fetcher.AcquireAction.Action == "Gs2Formation:AddMoldCapacityByUserId") {
-                var request = AddMoldCapacityByUserIdRequest.FromJson(JsonMapper.ToObject(_fetcher.AcquireAction.Request));
+            if (_fetcher.Fetched && _fetcher.Request != null) {
                 switch(expression)
                 {
                     case Expression.In:
-                        target.SetActive(request.Capacity != null && enableCapacities.Contains(request.Capacity.Value));
+                        target.SetActive(_fetcher.Request.Capacity != null && enableCapacities.Contains(_fetcher.Request.Capacity.Value));
                         break;
                     case Expression.NotIn:
-                        target.SetActive(request.Capacity != null && !enableCapacities.Contains(request.Capacity.Value));
+                        target.SetActive(_fetcher.Request.Capacity != null && !enableCapacities.Contains(_fetcher.Request.Capacity.Value));
                         break;
                     case Expression.Less:
-                        target.SetActive(enableCapacity > request.Capacity);
+                        target.SetActive(enableCapacity > _fetcher.Request.Capacity);
                         break;
                     case Expression.LessEqual:
-                        target.SetActive(enableCapacity >= request.Capacity);
+                        target.SetActive(enableCapacity >= _fetcher.Request.Capacity);
                         break;
                     case Expression.Greater:
-                        target.SetActive(enableCapacity < request.Capacity);
+                        target.SetActive(enableCapacity < _fetcher.Request.Capacity);
                         break;
                     case Expression.GreaterEqual:
-                        target.SetActive(enableCapacity <= request.Capacity);
+                        target.SetActive(enableCapacity <= _fetcher.Request.Capacity);
                         break;
                 }
             }
@@ -74,14 +73,14 @@ namespace Gs2.Unity.UiKit.Gs2Formation
 
     public partial class Gs2FormationAddMoldCapacityByUserIdEnabler
     {
-        private Gs2CoreAcquireActionFetcher _fetcher;
+        private Gs2FormationAddMoldCapacityByUserIdFetcher _fetcher;
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2CoreAcquireActionFetcher>() ?? GetComponentInParent<Gs2CoreAcquireActionFetcher>();
+            _fetcher = GetComponent<Gs2FormationAddMoldCapacityByUserIdFetcher>() ?? GetComponentInParent<Gs2FormationAddMoldCapacityByUserIdFetcher>();
 
             if (_fetcher == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2CoreAcquireActionFetcher.");
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2FormationAddMoldCapacityByUserIdFetcher.");
                 enabled = false;
             }
 

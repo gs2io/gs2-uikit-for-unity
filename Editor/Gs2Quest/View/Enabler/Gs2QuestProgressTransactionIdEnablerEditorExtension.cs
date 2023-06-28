@@ -21,7 +21,7 @@ using Gs2.Unity.UiKit.Gs2Quest.Context;
 using UnityEditor;
 using UnityEngine;
 
-namespace Gs2.Unity.UiKit.Gs2Quest.Editor
+namespace Gs2.Unity.UiKit.Gs2Quest.Enabler.Editor
 {
     [CustomEditor(typeof(Gs2QuestProgressTransactionIdEnabler))]
     public class Gs2QuestProgressTransactionIdEnablerEditorExtension : UnityEditor.Editor

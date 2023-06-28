@@ -25,7 +25,7 @@ using Gs2.Util.LitJson;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace Gs2.Unity.UiKit.Gs2Money
+namespace Gs2.Unity.UiKit.Gs2Money.Label
 {
     /// <summary>
     /// Main
@@ -36,22 +36,21 @@ namespace Gs2.Unity.UiKit.Gs2Money
     {
         public void Update()
         {
-            if (_fetcher.Fetched && _fetcher.ConsumeAction != null && _fetcher.ConsumeAction.Action == "Gs2Money:RecordReceipt") {
-                var request = RecordReceiptRequest.FromJson(JsonMapper.ToObject(_fetcher.ConsumeAction.Request));
+            if (_fetcher.Fetched && _fetcher.Request != null) {
                 {
                     onUpdate?.Invoke(
                         format.Replace(
                             "{namespaceName}",
-                            $"{request.NamespaceName}"
+                            $"{_fetcher.Request.NamespaceName}"
                         ).Replace(
                             "{userId}",
-                            $"{request.UserId}"
+                            $"{_fetcher.Request.UserId}"
                         ).Replace(
                             "{contentsId}",
-                            $"{request.ContentsId}"
+                            $"{_fetcher.Request.ContentsId}"
                         ).Replace(
                             "{receipt}",
-                            $"{request.Receipt}"
+                            $"{_fetcher.Request.Receipt}"
                         )
                     );
                 }
@@ -65,14 +64,14 @@ namespace Gs2.Unity.UiKit.Gs2Money
 
     public partial class Gs2MoneyRecordReceiptLabel
     {
-        private Gs2CoreConsumeActionFetcher _fetcher;
+        private Gs2MoneyRecordReceiptFetcher _fetcher;
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2CoreConsumeActionFetcher>() ?? GetComponentInParent<Gs2CoreConsumeActionFetcher>();
+            _fetcher = GetComponent<Gs2MoneyRecordReceiptFetcher>() ?? GetComponentInParent<Gs2MoneyRecordReceiptFetcher>();
 
             if (_fetcher == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2CoreConsumeActionFetcher.");
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MoneyRecordReceiptFetcher.");
                 enabled = false;
             }
 

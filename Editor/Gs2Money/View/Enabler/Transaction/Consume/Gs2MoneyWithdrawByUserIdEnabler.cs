@@ -21,7 +21,7 @@ using Gs2.Unity.UiKit.Gs2Core.Fetcher;
 using UnityEditor;
 using UnityEngine;
 
-namespace Gs2.Unity.UiKit.Gs2Money.Editor
+namespace Gs2.Unity.UiKit.Gs2Money.Enabler.Editor
 {
     [CustomEditor(typeof(Gs2MoneyWithdrawByUserIdEnabler))]
     public class Gs2MoneyWithdrawByUserIdEnablerEditorExtension : UnityEditor.Editor
@@ -31,9 +31,9 @@ namespace Gs2.Unity.UiKit.Gs2Money.Editor
 
             if (original == null) return;
 
-            var context = original.GetComponent<Gs2CoreConsumeActionFetcher>() ?? original.GetComponentInParent<Gs2CoreConsumeActionFetcher>();
-            if (context == null) {
-                EditorGUILayout.HelpBox("Gs2CoreConsumeActionFetcher not found.", MessageType.Error);
+            var fetcher = original.GetComponent<IConsumeActionsFetcher>() ?? original.GetComponentInParent<IConsumeActionsFetcher>();
+            if (fetcher == null) {
+                EditorGUILayout.HelpBox("IConsumeActionsFetcher not found.", MessageType.Error);
             }
 
             serializedObject.Update();

@@ -25,7 +25,7 @@ using Gs2.Util.LitJson;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace Gs2.Unity.UiKit.Gs2Limit
+namespace Gs2.Unity.UiKit.Gs2Limit.Label
 {
     /// <summary>
     /// Main
@@ -36,23 +36,22 @@ namespace Gs2.Unity.UiKit.Gs2Limit
     {
         public void Update()
         {
-            if (_fetcher.Fetched && _fetcher.AcquireAction != null && _fetcher.AcquireAction.Action == "Gs2Limit:DeleteCounterByUserId" &&
+            if (_fetcher.Fetched && _fetcher.Request != null &&
                     _userDataFetcher != null && _userDataFetcher.Fetched && _userDataFetcher.Counter != null) {
-                var request = DeleteCounterByUserIdRequest.FromJson(JsonMapper.ToObject(_fetcher.AcquireAction.Request));
                 {
                     onUpdate?.Invoke(
                         format.Replace(
                             "{namespaceName}",
-                            $"{request.NamespaceName}"
+                            $"{_fetcher.Request.NamespaceName}"
                         ).Replace(
                             "{limitName}",
-                            $"{request.LimitName}"
+                            $"{_fetcher.Request.LimitName}"
                         ).Replace(
                             "{userId}",
-                            $"{request.UserId}"
+                            $"{_fetcher.Request.UserId}"
                         ).Replace(
                             "{counterName}",
-                            $"{request.CounterName}"
+                            $"{_fetcher.Request.CounterName}"
                         ).Replace(
                             "{userData:counterId}",
                             $"{_userDataFetcher.Counter.CounterId}"
@@ -74,22 +73,21 @@ namespace Gs2.Unity.UiKit.Gs2Limit
                         )
                     );
                 }
-            } else if (_fetcher.Fetched && _fetcher.AcquireAction != null && _fetcher.AcquireAction.Action == "Gs2Limit:DeleteCounterByUserId") {
-                var request = DeleteCounterByUserIdRequest.FromJson(JsonMapper.ToObject(_fetcher.AcquireAction.Request));
+            } else if (_fetcher.Fetched && _fetcher.Request != null) {
                 {
                     onUpdate?.Invoke(
                         format.Replace(
                             "{namespaceName}",
-                            $"{request.NamespaceName}"
+                            $"{_fetcher.Request.NamespaceName}"
                         ).Replace(
                             "{limitName}",
-                            $"{request.LimitName}"
+                            $"{_fetcher.Request.LimitName}"
                         ).Replace(
                             "{userId}",
-                            $"{request.UserId}"
+                            $"{_fetcher.Request.UserId}"
                         ).Replace(
                             "{counterName}",
-                            $"{request.CounterName}"
+                            $"{_fetcher.Request.CounterName}"
                         )
                     );
                 }
@@ -103,16 +101,20 @@ namespace Gs2.Unity.UiKit.Gs2Limit
 
     public partial class Gs2LimitDeleteCounterByUserIdLabel
     {
-        private Gs2CoreAcquireActionFetcher _fetcher;
+        private Gs2LimitDeleteCounterByUserIdFetcher _fetcher;
         private Gs2LimitOwnCounterFetcher _userDataFetcher;
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2CoreAcquireActionFetcher>() ?? GetComponentInParent<Gs2CoreAcquireActionFetcher>();
+            _fetcher = GetComponent<Gs2LimitDeleteCounterByUserIdFetcher>() ?? GetComponentInParent<Gs2LimitDeleteCounterByUserIdFetcher>();
             _userDataFetcher = GetComponent<Gs2LimitOwnCounterFetcher>() ?? GetComponentInParent<Gs2LimitOwnCounterFetcher>();
 
             if (_fetcher == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2CoreAcquireActionFetcher.");
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2LimitDeleteCounterByUserIdFetcher.");
+                enabled = false;
+            }
+            if (_userDataFetcher == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2LimitOwnCounterFetcher.");
                 enabled = false;
             }
 

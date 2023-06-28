@@ -37,27 +37,26 @@ namespace Gs2.Unity.UiKit.Gs2Experience
     {
         public void Update()
         {
-            if (_fetcher.Fetched && _fetcher.AcquireAction != null && _fetcher.AcquireAction.Action == "Gs2Experience:AddExperienceByUserId") {
-                var request = AddExperienceByUserIdRequest.FromJson(JsonMapper.ToObject(_fetcher.AcquireAction.Request));
+            if (_fetcher.Fetched && _fetcher.Request != null) {
                 switch(expression)
                 {
                     case Expression.In:
-                        target.SetActive(request.ExperienceValue != null && enableExperienceValues.Contains(request.ExperienceValue.Value));
+                        target.SetActive(_fetcher.Request.ExperienceValue != null && enableExperienceValues.Contains(_fetcher.Request.ExperienceValue.Value));
                         break;
                     case Expression.NotIn:
-                        target.SetActive(request.ExperienceValue != null && !enableExperienceValues.Contains(request.ExperienceValue.Value));
+                        target.SetActive(_fetcher.Request.ExperienceValue != null && !enableExperienceValues.Contains(_fetcher.Request.ExperienceValue.Value));
                         break;
                     case Expression.Less:
-                        target.SetActive(enableExperienceValue > request.ExperienceValue);
+                        target.SetActive(enableExperienceValue > _fetcher.Request.ExperienceValue);
                         break;
                     case Expression.LessEqual:
-                        target.SetActive(enableExperienceValue >= request.ExperienceValue);
+                        target.SetActive(enableExperienceValue >= _fetcher.Request.ExperienceValue);
                         break;
                     case Expression.Greater:
-                        target.SetActive(enableExperienceValue < request.ExperienceValue);
+                        target.SetActive(enableExperienceValue < _fetcher.Request.ExperienceValue);
                         break;
                     case Expression.GreaterEqual:
-                        target.SetActive(enableExperienceValue <= request.ExperienceValue);
+                        target.SetActive(enableExperienceValue <= _fetcher.Request.ExperienceValue);
                         break;
                 }
             }
@@ -74,14 +73,14 @@ namespace Gs2.Unity.UiKit.Gs2Experience
 
     public partial class Gs2ExperienceAddExperienceByUserIdEnabler
     {
-        private Gs2CoreAcquireActionFetcher _fetcher;
+        private Gs2ExperienceAddExperienceByUserIdFetcher _fetcher;
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2CoreAcquireActionFetcher>() ?? GetComponentInParent<Gs2CoreAcquireActionFetcher>();
+            _fetcher = GetComponent<Gs2ExperienceAddExperienceByUserIdFetcher>() ?? GetComponentInParent<Gs2ExperienceAddExperienceByUserIdFetcher>();
 
             if (_fetcher == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2CoreAcquireActionFetcher.");
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ExperienceAddExperienceByUserIdFetcher.");
                 enabled = false;
             }
 

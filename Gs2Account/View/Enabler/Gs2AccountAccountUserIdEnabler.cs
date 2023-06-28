@@ -21,7 +21,7 @@ using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Account.Fetcher;
 using UnityEngine;
 
-namespace Gs2.Unity.UiKit.Gs2Account
+namespace Gs2.Unity.UiKit.Gs2Account.Enabler
 {
     /// <summary>
     /// Main

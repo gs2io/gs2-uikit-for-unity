@@ -19,7 +19,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace Gs2.Unity.UiKit.Gs2Idle.Editor
+namespace Gs2.Unity.UiKit.Gs2Idle.Label.Editor
 {
     [CustomEditor(typeof(Gs2IdleIncreaseMaximumIdleMinutesByUserIdLabel))]
     public class Gs2IdleIncreaseMaximumIdleMinutesByUserIdLabelEditorExtension : UnityEditor.Editor

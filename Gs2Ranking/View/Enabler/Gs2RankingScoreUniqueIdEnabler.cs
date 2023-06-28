@@ -21,7 +21,7 @@ using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Ranking.Fetcher;
 using UnityEngine;
 
-namespace Gs2.Unity.UiKit.Gs2Ranking
+namespace Gs2.Unity.UiKit.Gs2Ranking.Enabler
 {
     /// <summary>
     /// Main

@@ -25,7 +25,7 @@ using Gs2.Util.LitJson;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace Gs2.Unity.UiKit.Gs2Mission
+namespace Gs2.Unity.UiKit.Gs2Mission.Label
 {
     /// <summary>
     /// Main
@@ -36,23 +36,22 @@ namespace Gs2.Unity.UiKit.Gs2Mission
     {
         public void Update()
         {
-            if (_fetcher.Fetched && _fetcher.ConsumeAction != null && _fetcher.ConsumeAction.Action == "Gs2Mission:ReceiveByUserId" &&
+            if (_fetcher.Fetched && _fetcher.Request != null &&
                     _userDataFetcher != null && _userDataFetcher.Fetched && _userDataFetcher.Complete != null) {
-                var request = ReceiveByUserIdRequest.FromJson(JsonMapper.ToObject(_fetcher.ConsumeAction.Request));
                 {
                     onUpdate?.Invoke(
                         format.Replace(
                             "{namespaceName}",
-                            $"{request.NamespaceName}"
+                            $"{_fetcher.Request.NamespaceName}"
                         ).Replace(
                             "{missionGroupName}",
-                            $"{request.MissionGroupName}"
+                            $"{_fetcher.Request.MissionGroupName}"
                         ).Replace(
                             "{missionTaskName}",
-                            $"{request.MissionTaskName}"
+                            $"{_fetcher.Request.MissionTaskName}"
                         ).Replace(
                             "{userId}",
-                            $"{request.UserId}"
+                            $"{_fetcher.Request.UserId}"
                         ).Replace(
                             "{userData:missionGroupName}",
                             $"{_userDataFetcher.Complete.MissionGroupName}"
@@ -65,22 +64,21 @@ namespace Gs2.Unity.UiKit.Gs2Mission
                         )
                     );
                 }
-            } else if (_fetcher.Fetched && _fetcher.ConsumeAction != null && _fetcher.ConsumeAction.Action == "Gs2Mission:ReceiveByUserId") {
-                var request = ReceiveByUserIdRequest.FromJson(JsonMapper.ToObject(_fetcher.ConsumeAction.Request));
+            } else if (_fetcher.Fetched && _fetcher.Request != null) {
                 {
                     onUpdate?.Invoke(
                         format.Replace(
                             "{namespaceName}",
-                            $"{request.NamespaceName}"
+                            $"{_fetcher.Request.NamespaceName}"
                         ).Replace(
                             "{missionGroupName}",
-                            $"{request.MissionGroupName}"
+                            $"{_fetcher.Request.MissionGroupName}"
                         ).Replace(
                             "{missionTaskName}",
-                            $"{request.MissionTaskName}"
+                            $"{_fetcher.Request.MissionTaskName}"
                         ).Replace(
                             "{userId}",
-                            $"{request.UserId}"
+                            $"{_fetcher.Request.UserId}"
                         )
                     );
                 }
@@ -94,16 +92,20 @@ namespace Gs2.Unity.UiKit.Gs2Mission
 
     public partial class Gs2MissionReceiveByUserIdLabel
     {
-        private Gs2CoreConsumeActionFetcher _fetcher;
+        private Gs2MissionReceiveByUserIdFetcher _fetcher;
         private Gs2MissionOwnCompleteFetcher _userDataFetcher;
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2CoreConsumeActionFetcher>() ?? GetComponentInParent<Gs2CoreConsumeActionFetcher>();
+            _fetcher = GetComponent<Gs2MissionReceiveByUserIdFetcher>() ?? GetComponentInParent<Gs2MissionReceiveByUserIdFetcher>();
             _userDataFetcher = GetComponent<Gs2MissionOwnCompleteFetcher>() ?? GetComponentInParent<Gs2MissionOwnCompleteFetcher>();
 
             if (_fetcher == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2CoreConsumeActionFetcher.");
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MissionReceiveByUserIdFetcher.");
+                enabled = false;
+            }
+            if (_userDataFetcher == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MissionOwnCompleteFetcher.");
                 enabled = false;
             }
 

@@ -21,7 +21,7 @@ using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2MegaField.Fetcher;
 using UnityEngine;
 
-namespace Gs2.Unity.UiKit.Gs2MegaField
+namespace Gs2.Unity.UiKit.Gs2MegaField.Enabler
 {
     /// <summary>
     /// Main

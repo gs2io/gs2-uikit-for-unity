@@ -21,7 +21,7 @@ using Gs2.Unity.UiKit.Gs2Exchange.Context;
 using UnityEditor;
 using UnityEngine;
 
-namespace Gs2.Unity.UiKit.Gs2Exchange.Editor
+namespace Gs2.Unity.UiKit.Gs2Exchange.Enabler.Editor
 {
     [CustomEditor(typeof(Gs2ExchangeAwaitRateNameEnabler))]
     public class Gs2ExchangeAwaitRateNameEnablerEditorExtension : UnityEditor.Editor

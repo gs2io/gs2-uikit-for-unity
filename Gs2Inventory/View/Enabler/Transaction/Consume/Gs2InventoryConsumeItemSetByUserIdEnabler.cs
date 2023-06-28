@@ -26,7 +26,7 @@ using Gs2.Util.LitJson;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace Gs2.Unity.UiKit.Gs2Inventory
+namespace Gs2.Unity.UiKit.Gs2Inventory.Enabler
 {
     /// <summary>
     /// Main
@@ -37,27 +37,26 @@ namespace Gs2.Unity.UiKit.Gs2Inventory
     {
         public void Update()
         {
-            if (_fetcher.Fetched && _fetcher.ConsumeAction != null && _fetcher.ConsumeAction.Action == "Gs2Inventory:ConsumeItemSetByUserId") {
-                var request = ConsumeItemSetByUserIdRequest.FromJson(JsonMapper.ToObject(_fetcher.ConsumeAction.Request));
+            if (_fetcher.Fetched && _fetcher.Request != null) {
                 switch(expression)
                 {
                     case Expression.In:
-                        target.SetActive(request.ConsumeCount != null && enableConsumeCounts.Contains(request.ConsumeCount.Value));
+                        target.SetActive(_fetcher.Request.ConsumeCount != null && enableConsumeCounts.Contains(_fetcher.Request.ConsumeCount.Value));
                         break;
                     case Expression.NotIn:
-                        target.SetActive(request.ConsumeCount != null && !enableConsumeCounts.Contains(request.ConsumeCount.Value));
+                        target.SetActive(_fetcher.Request.ConsumeCount != null && !enableConsumeCounts.Contains(_fetcher.Request.ConsumeCount.Value));
                         break;
                     case Expression.Less:
-                        target.SetActive(enableConsumeCount > request.ConsumeCount);
+                        target.SetActive(enableConsumeCount > _fetcher.Request.ConsumeCount);
                         break;
                     case Expression.LessEqual:
-                        target.SetActive(enableConsumeCount >= request.ConsumeCount);
+                        target.SetActive(enableConsumeCount >= _fetcher.Request.ConsumeCount);
                         break;
                     case Expression.Greater:
-                        target.SetActive(enableConsumeCount < request.ConsumeCount);
+                        target.SetActive(enableConsumeCount < _fetcher.Request.ConsumeCount);
                         break;
                     case Expression.GreaterEqual:
-                        target.SetActive(enableConsumeCount <= request.ConsumeCount);
+                        target.SetActive(enableConsumeCount <= _fetcher.Request.ConsumeCount);
                         break;
                 }
             }
@@ -74,14 +73,14 @@ namespace Gs2.Unity.UiKit.Gs2Inventory
 
     public partial class Gs2InventoryConsumeItemSetByUserIdEnabler
     {
-        private Gs2CoreConsumeActionFetcher _fetcher;
+        private Gs2InventoryConsumeItemSetByUserIdFetcher _fetcher;
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2CoreConsumeActionFetcher>() ?? GetComponentInParent<Gs2CoreConsumeActionFetcher>();
+            _fetcher = GetComponent<Gs2InventoryConsumeItemSetByUserIdFetcher>() ?? GetComponentInParent<Gs2InventoryConsumeItemSetByUserIdFetcher>();
 
             if (_fetcher == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2CoreConsumeActionFetcher.");
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2InventoryConsumeItemSetByUserIdFetcher.");
                 enabled = false;
             }
 

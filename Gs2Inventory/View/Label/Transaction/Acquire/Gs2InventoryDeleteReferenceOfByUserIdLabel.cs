@@ -25,7 +25,7 @@ using Gs2.Util.LitJson;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace Gs2.Unity.UiKit.Gs2Inventory
+namespace Gs2.Unity.UiKit.Gs2Inventory.Label
 {
     /// <summary>
     /// Main
@@ -36,28 +36,27 @@ namespace Gs2.Unity.UiKit.Gs2Inventory
     {
         public void Update()
         {
-            if (_fetcher.Fetched && _fetcher.AcquireAction != null && _fetcher.AcquireAction.Action == "Gs2Inventory:DeleteReferenceOfByUserId") {
-                var request = DeleteReferenceOfByUserIdRequest.FromJson(JsonMapper.ToObject(_fetcher.AcquireAction.Request));
+            if (_fetcher.Fetched && _fetcher.Request != null) {
                 {
                     onUpdate?.Invoke(
                         format.Replace(
                             "{namespaceName}",
-                            $"{request.NamespaceName}"
+                            $"{_fetcher.Request.NamespaceName}"
                         ).Replace(
                             "{inventoryName}",
-                            $"{request.InventoryName}"
+                            $"{_fetcher.Request.InventoryName}"
                         ).Replace(
                             "{userId}",
-                            $"{request.UserId}"
+                            $"{_fetcher.Request.UserId}"
                         ).Replace(
                             "{itemName}",
-                            $"{request.ItemName}"
+                            $"{_fetcher.Request.ItemName}"
                         ).Replace(
                             "{itemSetName}",
-                            $"{request.ItemSetName}"
+                            $"{_fetcher.Request.ItemSetName}"
                         ).Replace(
                             "{referenceOf}",
-                            $"{request.ReferenceOf}"
+                            $"{_fetcher.Request.ReferenceOf}"
                         )
                     );
                 }
@@ -71,14 +70,14 @@ namespace Gs2.Unity.UiKit.Gs2Inventory
 
     public partial class Gs2InventoryDeleteReferenceOfByUserIdLabel
     {
-        private Gs2CoreAcquireActionFetcher _fetcher;
+        private Gs2InventoryDeleteReferenceOfByUserIdFetcher _fetcher;
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2CoreAcquireActionFetcher>() ?? GetComponentInParent<Gs2CoreAcquireActionFetcher>();
+            _fetcher = GetComponent<Gs2InventoryDeleteReferenceOfByUserIdFetcher>() ?? GetComponentInParent<Gs2InventoryDeleteReferenceOfByUserIdFetcher>();
 
             if (_fetcher == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2CoreAcquireActionFetcher.");
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2InventoryDeleteReferenceOfByUserIdFetcher.");
                 enabled = false;
             }
 

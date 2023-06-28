@@ -19,7 +19,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace Gs2.Unity.UiKit.Gs2Formation.Editor
+namespace Gs2.Unity.UiKit.Gs2Formation.Label.Editor
 {
     [CustomEditor(typeof(Gs2FormationAcquireActionsToFormPropertiesLabel))]
     public class Gs2FormationAcquireActionsToFormPropertiesLabelEditorExtension : UnityEditor.Editor

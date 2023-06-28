@@ -21,7 +21,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace Gs2.Unity.UiKit.Gs2SerialKey.Editor
+namespace Gs2.Unity.UiKit.Gs2SerialKey.Label.Editor
 {
     [CustomEditor(typeof(Gs2SerialKeyUseByUserIdLabel))]
     public class Gs2SerialKeyUseByUserIdLabelEditorExtension : UnityEditor.Editor

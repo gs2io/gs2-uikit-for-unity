@@ -21,7 +21,7 @@ using Gs2.Unity.UiKit.Gs2Showcase.Context;
 using UnityEditor;
 using UnityEngine;
 
-namespace Gs2.Unity.UiKit.Gs2Showcase.Editor
+namespace Gs2.Unity.UiKit.Gs2Showcase.Enabler.Editor
 {
     [CustomEditor(typeof(Gs2ShowcaseShowcaseNameEnabler))]
     public class Gs2ShowcaseShowcaseNameEnablerEditorExtension : UnityEditor.Editor

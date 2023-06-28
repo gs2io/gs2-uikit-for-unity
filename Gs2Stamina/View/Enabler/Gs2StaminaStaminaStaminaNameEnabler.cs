@@ -21,7 +21,7 @@ using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Stamina.Fetcher;
 using UnityEngine;
 
-namespace Gs2.Unity.UiKit.Gs2Stamina
+namespace Gs2.Unity.UiKit.Gs2Stamina.Enabler
 {
     /// <summary>
     /// Main

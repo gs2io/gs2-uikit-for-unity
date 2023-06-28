@@ -25,7 +25,7 @@ using Gs2.Util.LitJson;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace Gs2.Unity.UiKit.Gs2Stamina
+namespace Gs2.Unity.UiKit.Gs2Stamina.Label
 {
     /// <summary>
     /// Main
@@ -36,23 +36,22 @@ namespace Gs2.Unity.UiKit.Gs2Stamina
     {
         public void Update()
         {
-            if (_fetcher.Fetched && _fetcher.AcquireAction != null && _fetcher.AcquireAction.Action == "Gs2Stamina:RaiseMaxValueByUserId" &&
+            if (_fetcher.Fetched && _fetcher.Request != null &&
                     _userDataFetcher != null && _userDataFetcher.Fetched && _userDataFetcher.Stamina != null) {
-                var request = RaiseMaxValueByUserIdRequest.FromJson(JsonMapper.ToObject(_fetcher.AcquireAction.Request));
                 {
                     onUpdate?.Invoke(
                         format.Replace(
                             "{namespaceName}",
-                            $"{request.NamespaceName}"
+                            $"{_fetcher.Request.NamespaceName}"
                         ).Replace(
                             "{staminaName}",
-                            $"{request.StaminaName}"
+                            $"{_fetcher.Request.StaminaName}"
                         ).Replace(
                             "{userId}",
-                            $"{request.UserId}"
+                            $"{_fetcher.Request.UserId}"
                         ).Replace(
                             "{raiseValue}",
-                            $"{request.RaiseValue}"
+                            $"{_fetcher.Request.RaiseValue}"
                         ).Replace(
                             "{userData:staminaName}",
                             $"{_userDataFetcher.Stamina.StaminaName}"
@@ -67,7 +66,7 @@ namespace Gs2.Unity.UiKit.Gs2Stamina
                             $"{_userDataFetcher.Stamina.MaxValue}"
                         ).Replace(
                             "{userData:maxValue:changed}",
-                            $"{_userDataFetcher.Stamina.MaxValue + request.RaiseValue}"
+                            $"{_userDataFetcher.Stamina.MaxValue + _fetcher.Request.RaiseValue}"
                         ).Replace(
                             "{userData:recoverIntervalMinutes}",
                             $"{_userDataFetcher.Stamina.RecoverIntervalMinutes}"
@@ -80,22 +79,21 @@ namespace Gs2.Unity.UiKit.Gs2Stamina
                         )
                     );
                 }
-            } else if (_fetcher.Fetched && _fetcher.AcquireAction != null && _fetcher.AcquireAction.Action == "Gs2Stamina:RaiseMaxValueByUserId") {
-                var request = RaiseMaxValueByUserIdRequest.FromJson(JsonMapper.ToObject(_fetcher.AcquireAction.Request));
+            } else if (_fetcher.Fetched && _fetcher.Request != null) {
                 {
                     onUpdate?.Invoke(
                         format.Replace(
                             "{namespaceName}",
-                            $"{request.NamespaceName}"
+                            $"{_fetcher.Request.NamespaceName}"
                         ).Replace(
                             "{staminaName}",
-                            $"{request.StaminaName}"
+                            $"{_fetcher.Request.StaminaName}"
                         ).Replace(
                             "{userId}",
-                            $"{request.UserId}"
+                            $"{_fetcher.Request.UserId}"
                         ).Replace(
                             "{raiseValue}",
-                            $"{request.RaiseValue}"
+                            $"{_fetcher.Request.RaiseValue}"
                         )
                     );
                 }
@@ -109,16 +107,20 @@ namespace Gs2.Unity.UiKit.Gs2Stamina
 
     public partial class Gs2StaminaRaiseMaxValueByUserIdLabel
     {
-        private Gs2CoreAcquireActionFetcher _fetcher;
+        private Gs2StaminaRaiseMaxValueByUserIdFetcher _fetcher;
         private Gs2StaminaOwnStaminaFetcher _userDataFetcher;
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2CoreAcquireActionFetcher>() ?? GetComponentInParent<Gs2CoreAcquireActionFetcher>();
+            _fetcher = GetComponent<Gs2StaminaRaiseMaxValueByUserIdFetcher>() ?? GetComponentInParent<Gs2StaminaRaiseMaxValueByUserIdFetcher>();
             _userDataFetcher = GetComponent<Gs2StaminaOwnStaminaFetcher>() ?? GetComponentInParent<Gs2StaminaOwnStaminaFetcher>();
 
             if (_fetcher == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2CoreAcquireActionFetcher.");
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2StaminaRaiseMaxValueByUserIdFetcher.");
+                enabled = false;
+            }
+            if (_userDataFetcher == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2StaminaOwnStaminaFetcher.");
                 enabled = false;
             }
 

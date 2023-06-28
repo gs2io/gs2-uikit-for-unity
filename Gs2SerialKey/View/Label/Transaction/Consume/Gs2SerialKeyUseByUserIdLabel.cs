@@ -27,31 +27,30 @@ using Gs2.Util.LitJson;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace Gs2.Unity.UiKit.Gs2SerialKey
+namespace Gs2.Unity.UiKit.Gs2SerialKey.Label
 {
     /// <summary>
     /// Main
     /// </summary>
 
-	[AddComponentMenu("GS2 UIKit/SerialKey/SerialKey/View/Transaction/Gs2SerialKeyUseByUserIdLabel")]
+	[AddComponentMenu("GS2 UIKit/SerialKey/SerialKey/View/Label/Transaction/Gs2SerialKeyUseByUserIdLabel")]
     public partial class Gs2SerialKeyUseByUserIdLabel : MonoBehaviour
     {
         public void Update()
         {
-            if (_fetcher.Fetched && _fetcher.ConsumeAction != null && _fetcher.ConsumeAction.Action == "Gs2SerialKey:UseByUserId" &&
-                    _userDataFetcher.Fetched && _userDataFetcher.SerialKey != null) {
-                var request = UseByUserIdRequest.FromJson(JsonMapper.ToObject(_fetcher.ConsumeAction.Request));
+            if (_fetcher.Fetched && _fetcher.Request != null &&
+                    _userDataFetcher != null && _userDataFetcher.Fetched && _userDataFetcher.SerialKey != null) {
                 {
                     onUpdate?.Invoke(
                         format.Replace(
                             "{namespaceName}",
-                            $"{request.NamespaceName}"
+                            $"{_fetcher.Request.NamespaceName}"
                         ).Replace(
                             "{userId}",
-                            $"{request.UserId}"
+                            $"{_fetcher.Request.UserId}"
                         ).Replace(
                             "{code}",
-                            $"{request.Code}"
+                            $"{_fetcher.Request.Code}"
                         ).Replace(
                             "{userData:campaignModelName}",
                             $"{_userDataFetcher.SerialKey.CampaignModelName}"
@@ -67,19 +66,18 @@ namespace Gs2.Unity.UiKit.Gs2SerialKey
                         )
                     );
                 }
-            } else if (_fetcher.Fetched && _fetcher.ConsumeAction != null && _fetcher.ConsumeAction.Action == "Gs2SerialKey:UseByUserId") {
-                var request = UseByUserIdRequest.FromJson(JsonMapper.ToObject(_fetcher.ConsumeAction.Request));
+            } else if (_fetcher.Fetched && _fetcher.Request != null) {
                 {
                     onUpdate?.Invoke(
                         format.Replace(
                             "{namespaceName}",
-                            $"{request.NamespaceName}"
+                            $"{_fetcher.Request.NamespaceName}"
                         ).Replace(
                             "{userId}",
-                            $"{request.UserId}"
+                            $"{_fetcher.Request.UserId}"
                         ).Replace(
                             "{code}",
-                            $"{request.Code}"
+                            $"{_fetcher.Request.Code}"
                         )
                     );
                 }
@@ -93,16 +91,16 @@ namespace Gs2.Unity.UiKit.Gs2SerialKey
 
     public partial class Gs2SerialKeyUseByUserIdLabel
     {
-        private Gs2CoreConsumeActionFetcher _fetcher;
+        private Gs2SerialKeyUseByUserIdFetcher _fetcher;
         private Gs2SerialKeySerialKeyFetcher _userDataFetcher;
 
         public void Awake()
         {
-            _fetcher = GetComponentInParent<Gs2CoreConsumeActionFetcher>();
-            _userDataFetcher = GetComponentInParent<Gs2SerialKeySerialKeyFetcher>();
+            _fetcher = GetComponent<Gs2SerialKeyUseByUserIdFetcher>() ?? GetComponentInParent<Gs2SerialKeyUseByUserIdFetcher>();
+            _userDataFetcher = GetComponent<Gs2SerialKeySerialKeyFetcher>() ?? GetComponentInParent<Gs2SerialKeySerialKeyFetcher>();
 
             if (_fetcher == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2CoreConsumeActionFetcher.");
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2SerialKeyUseByUserIdFetcher.");
                 enabled = false;
             }
             if (_userDataFetcher == null) {

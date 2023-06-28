@@ -21,7 +21,7 @@ using Gs2.Unity.UiKit.Gs2Core.Fetcher;
 using UnityEditor;
 using UnityEngine;
 
-namespace Gs2.Unity.UiKit.Gs2Inventory.Editor
+namespace Gs2.Unity.UiKit.Gs2Inventory.Enabler.Editor
 {
     [CustomEditor(typeof(Gs2InventoryAcquireItemSetByUserIdEnabler))]
     public class Gs2InventoryAcquireItemSetByUserIdEnablerEditorExtension : UnityEditor.Editor
@@ -31,9 +31,9 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Editor
 
             if (original == null) return;
 
-            var context = original.GetComponent<Gs2CoreAcquireActionFetcher>() ?? original.GetComponentInParent<Gs2CoreAcquireActionFetcher>();
-            if (context == null) {
-                EditorGUILayout.HelpBox("Gs2CoreAcquireActionFetcher not found.", MessageType.Error);
+            var fetcher = original.GetComponent<IAcquireActionsFetcher>() ?? original.GetComponentInParent<IAcquireActionsFetcher>();
+            if (fetcher == null) {
+                EditorGUILayout.HelpBox("IAcquireActionsFetcher not found.", MessageType.Error);
             }
 
             serializedObject.Update();

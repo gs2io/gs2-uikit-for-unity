@@ -21,7 +21,7 @@ using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Friend.Fetcher;
 using UnityEngine;
 
-namespace Gs2.Unity.UiKit.Gs2Friend
+namespace Gs2.Unity.UiKit.Gs2Friend.Enabler
 {
     /// <summary>
     /// Main

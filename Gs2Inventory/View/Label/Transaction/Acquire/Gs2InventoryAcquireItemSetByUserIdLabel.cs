@@ -20,25 +20,25 @@
 
 using System;
 using System.Collections;
-using System.Linq;
 using Gs2.Core.Exception;
 using Gs2.Gs2Inventory.Request;
 using Gs2.Unity.Core.Exception;
 using Gs2.Unity.Gs2Inventory.Model;
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Core.Fetcher;
+using Gs2.Unity.UiKit.Gs2Inventory.Fetcher;
 using Gs2.Unity.Util;
 using Gs2.Util.LitJson;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace Gs2.Unity.UiKit.Gs2Inventory
+namespace Gs2.Unity.UiKit.Gs2Inventory.Label
 {
     /// <summary>
     /// Main
     /// </summary>
 
-	[AddComponentMenu("GS2 UIKit/Inventory/ItemSet/View/Transaction/Gs2InventoryAcquireItemSetByUserIdLabel")]
+	[AddComponentMenu("GS2 UIKit/Inventory/ItemSet/View/Label/Transaction/Gs2InventoryAcquireItemSetByUserIdLabel")]
     public partial class Gs2InventoryAcquireItemSetByUserIdLabel : MonoBehaviour
     {
         private EzItemSet[] _itemSets;
@@ -47,19 +47,15 @@ namespace Gs2.Unity.UiKit.Gs2Inventory
             while (true) {
                 yield return new WaitForSeconds(0.1f);
 
-                if (_fetcher.Fetched && _fetcher.AcquireAction != null &&
-                    _fetcher.AcquireAction.Action == "Gs2Inventory:AcquireItemSetByUserId") {
-                    var request =
-                        AcquireItemSetByUserIdRequest.FromJson(
-                            JsonMapper.ToObject(_fetcher.AcquireAction.Request));
+                if (_fetcher.Fetched && _fetcher.Request != null) {
                     var future = this._clientHolder.Gs2.Inventory.Namespace(
-                        request.NamespaceName
+                        _fetcher.Request.NamespaceName
                     ).Me(
                         this._sessionHolder.GameSession
                     ).Inventory(
-                        request.InventoryName
+                        _fetcher.Request.InventoryName
                     ).ItemSet(
-                        request.ItemName,
+                        _fetcher.Request.ItemName,
                         null
                     ).Model();
                     yield return future;
@@ -79,34 +75,31 @@ namespace Gs2.Unity.UiKit.Gs2Inventory
         {
             if (_itemSets != null) {
                 {
-                    var request =
-                        AcquireItemSetByUserIdRequest.FromJson(
-                            JsonMapper.ToObject(_fetcher.AcquireAction.Request));
                     onUpdate?.Invoke(
                         format.Replace(
                             "{namespaceName}",
-                            $"{request.NamespaceName}"
+                            $"{_fetcher.Request.NamespaceName}"
                         ).Replace(
                             "{inventoryName}",
-                            $"{request.InventoryName}"
+                            $"{_fetcher.Request.InventoryName}"
                         ).Replace(
                             "{itemName}",
-                            $"{request.ItemName}"
+                            $"{_fetcher.Request.ItemName}"
                         ).Replace(
                             "{userId}",
-                            $"{request.UserId}"
+                            $"{_fetcher.Request.UserId}"
                         ).Replace(
                             "{acquireCount}",
-                            $"{request.AcquireCount}"
+                            $"{_fetcher.Request.AcquireCount}"
                         ).Replace(
                             "{expiresAt}",
-                            $"{request.ExpiresAt}"
+                            $"{_fetcher.Request.ExpiresAt}"
                         ).Replace(
                             "{createNewItemSet}",
-                            $"{request.CreateNewItemSet}"
+                            $"{_fetcher.Request.CreateNewItemSet}"
                         ).Replace(
                             "{itemSetName}",
-                            $"{request.ItemSetName}"
+                            $"{_fetcher.Request.ItemSetName}"
                         ).Replace(
                             "{userData:itemSetId}",
                             _itemSets.Length == 0 ? "" : $"{_itemSets[0].ItemSetId}"
@@ -121,44 +114,46 @@ namespace Gs2.Unity.UiKit.Gs2Inventory
                             _itemSets.Length == 0 ? "" : $"{_itemSets[0].ItemName}"
                         ).Replace(
                             "{userData:count}",
-                            _itemSets.Length == 0 ? "0" : $"{_itemSets.Sum(v => v.Count)}"
+                            _itemSets.Length == 0 ? "" : $"{_itemSets[0].Count}"
+                        ).Replace(
+                            "{userData:count:changed}",
+                            _itemSets.Length == 0 ? "" : $"{_itemSets[0].Count + _fetcher.Request.AcquireCount}"
                         ).Replace(
                             "{userData:sortValue}",
-                            _itemSets.Length == 0 ? "0" : $"{_itemSets[0].SortValue}"
+                            _itemSets.Length == 0 ? "" : $"{_itemSets[0].SortValue}"
                         ).Replace(
                             "{userData:expiresAt}",
-                            _itemSets.Length == 0 ? "0" : $"{_itemSets[0].ExpiresAt}"
+                            _itemSets.Length == 0 ? "" : $"{_itemSets[0].ExpiresAt}"
                         )
                     );
                 }
-            } else if (_fetcher.Fetched && _fetcher.AcquireAction != null && _fetcher.AcquireAction.Action == "Gs2Inventory:AcquireItemSetByUserId") {
-                var request = AcquireItemSetByUserIdRequest.FromJson(JsonMapper.ToObject(_fetcher.AcquireAction.Request));
+            } else if (_fetcher.Fetched && _fetcher.Request != null) {
                 {
                     onUpdate?.Invoke(
                         format.Replace(
                             "{namespaceName}",
-                            $"{request.NamespaceName}"
+                            $"{_fetcher.Request.NamespaceName}"
                         ).Replace(
                             "{inventoryName}",
-                            $"{request.InventoryName}"
+                            $"{_fetcher.Request.InventoryName}"
                         ).Replace(
                             "{itemName}",
-                            $"{request.ItemName}"
+                            $"{_fetcher.Request.ItemName}"
                         ).Replace(
                             "{userId}",
-                            $"{request.UserId}"
+                            $"{_fetcher.Request.UserId}"
                         ).Replace(
                             "{acquireCount}",
-                            $"{request.AcquireCount}"
+                            $"{_fetcher.Request.AcquireCount}"
                         ).Replace(
                             "{expiresAt}",
-                            $"{request.ExpiresAt}"
+                            $"{_fetcher.Request.ExpiresAt}"
                         ).Replace(
                             "{createNewItemSet}",
-                            $"{request.CreateNewItemSet}"
+                            $"{_fetcher.Request.CreateNewItemSet}"
                         ).Replace(
                             "{itemSetName}",
-                            $"{request.ItemSetName}"
+                            $"{_fetcher.Request.ItemSetName}"
                         )
                     );
                 }
@@ -174,16 +169,16 @@ namespace Gs2.Unity.UiKit.Gs2Inventory
     {
         private Gs2ClientHolder _clientHolder;
         private Gs2GameSessionHolder _sessionHolder;
-        private Gs2CoreAcquireActionFetcher _fetcher;
+        private Gs2InventoryAcquireItemSetByUserIdFetcher _fetcher;
 
         public void Awake()
         {
             _clientHolder = Gs2ClientHolder.Instance;
             _sessionHolder = Gs2GameSessionHolder.Instance;
-            _fetcher = GetComponentInParent<Gs2CoreAcquireActionFetcher>();
+            _fetcher = GetComponent<Gs2InventoryAcquireItemSetByUserIdFetcher>() ?? GetComponentInParent<Gs2InventoryAcquireItemSetByUserIdFetcher>();
 
             if (_fetcher == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2CoreAcquireActionFetcher.");
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2InventoryAcquireItemSetByUserIdFetcher.");
                 enabled = false;
             }
 

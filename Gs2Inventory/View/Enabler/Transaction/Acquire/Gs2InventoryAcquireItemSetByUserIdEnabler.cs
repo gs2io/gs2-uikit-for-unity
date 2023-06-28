@@ -37,27 +37,26 @@ namespace Gs2.Unity.UiKit.Gs2Inventory
     {
         public void Update()
         {
-            if (_fetcher.Fetched && _fetcher.AcquireAction != null && _fetcher.AcquireAction.Action == "Gs2Inventory:AcquireItemSetByUserId") {
-                var request = AcquireItemSetByUserIdRequest.FromJson(JsonMapper.ToObject(_fetcher.AcquireAction.Request));
+            if (_fetcher.Fetched && _fetcher.Request != null) {
                 switch(expression)
                 {
                     case Expression.In:
-                        target.SetActive(request.AcquireCount != null && enableAcquireCounts.Contains(request.AcquireCount.Value));
+                        target.SetActive(_fetcher.Request.AcquireCount != null && enableAcquireCounts.Contains(_fetcher.Request.AcquireCount.Value));
                         break;
                     case Expression.NotIn:
-                        target.SetActive(request.AcquireCount != null && !enableAcquireCounts.Contains(request.AcquireCount.Value));
+                        target.SetActive(_fetcher.Request.AcquireCount != null && !enableAcquireCounts.Contains(_fetcher.Request.AcquireCount.Value));
                         break;
                     case Expression.Less:
-                        target.SetActive(enableAcquireCount > request.AcquireCount);
+                        target.SetActive(enableAcquireCount > _fetcher.Request.AcquireCount);
                         break;
                     case Expression.LessEqual:
-                        target.SetActive(enableAcquireCount >= request.AcquireCount);
+                        target.SetActive(enableAcquireCount >= _fetcher.Request.AcquireCount);
                         break;
                     case Expression.Greater:
-                        target.SetActive(enableAcquireCount < request.AcquireCount);
+                        target.SetActive(enableAcquireCount < _fetcher.Request.AcquireCount);
                         break;
                     case Expression.GreaterEqual:
-                        target.SetActive(enableAcquireCount <= request.AcquireCount);
+                        target.SetActive(enableAcquireCount <= _fetcher.Request.AcquireCount);
                         break;
                 }
             }
@@ -74,14 +73,14 @@ namespace Gs2.Unity.UiKit.Gs2Inventory
 
     public partial class Gs2InventoryAcquireItemSetByUserIdEnabler
     {
-        private Gs2CoreAcquireActionFetcher _fetcher;
+        private Gs2InventoryAcquireItemSetByUserIdFetcher _fetcher;
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2CoreAcquireActionFetcher>() ?? GetComponentInParent<Gs2CoreAcquireActionFetcher>();
+            _fetcher = GetComponent<Gs2InventoryAcquireItemSetByUserIdFetcher>() ?? GetComponentInParent<Gs2InventoryAcquireItemSetByUserIdFetcher>();
 
             if (_fetcher == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2CoreAcquireActionFetcher.");
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2InventoryAcquireItemSetByUserIdFetcher.");
                 enabled = false;
             }
 

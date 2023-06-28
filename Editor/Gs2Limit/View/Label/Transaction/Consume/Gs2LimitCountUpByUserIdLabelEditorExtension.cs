@@ -19,7 +19,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace Gs2.Unity.UiKit.Gs2Limit.Editor
+namespace Gs2.Unity.UiKit.Gs2Limit.Label.Editor
 {
     [CustomEditor(typeof(Gs2LimitCountUpByUserIdLabel))]
     public class Gs2LimitCountUpByUserIdLabelEditorExtension : UnityEditor.Editor
@@ -80,6 +80,11 @@ namespace Gs2.Unity.UiKit.Gs2Limit.Editor
             }
             if (GUILayout.Button("UserData:Count")) {
                 original.format += "{userData:count}";
+                GUI.FocusControl("");
+                EditorUtility.SetDirty(original);
+            }
+            if (GUILayout.Button("UserData:Count:Changed")) {
+                original.format += "{userData:count:changed}";
                 GUI.FocusControl("");
                 EditorUtility.SetDirty(original);
             }

@@ -27,37 +27,36 @@ using Gs2.Util.LitJson;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace Gs2.Unity.UiKit.Gs2Money
+namespace Gs2.Unity.UiKit.Gs2Money.Label
 {
     /// <summary>
     /// Main
     /// </summary>
 
-	[AddComponentMenu("GS2 UIKit/Money/Wallet/View/Transaction/Gs2MoneyWithdrawByUserIdLabel")]
+	[AddComponentMenu("GS2 UIKit/Money/Wallet/View/Label/Transaction/Gs2MoneyWithdrawByUserIdLabel")]
     public partial class Gs2MoneyWithdrawByUserIdLabel : MonoBehaviour
     {
         public void Update()
         {
-            if (_fetcher.Fetched && _fetcher.ConsumeAction != null && _fetcher.ConsumeAction.Action == "Gs2Money:WithdrawByUserId" &&
+            if (_fetcher.Fetched && _fetcher.Request != null &&
                     _userDataFetcher != null && _userDataFetcher.Fetched && _userDataFetcher.Wallet != null) {
-                var request = WithdrawByUserIdRequest.FromJson(JsonMapper.ToObject(_fetcher.ConsumeAction.Request));
                 {
                     onUpdate?.Invoke(
                         format.Replace(
                             "{namespaceName}",
-                            $"{request.NamespaceName}"
+                            $"{_fetcher.Request.NamespaceName}"
                         ).Replace(
                             "{userId}",
-                            $"{request.UserId}"
+                            $"{_fetcher.Request.UserId}"
                         ).Replace(
                             "{slot}",
-                            $"{request.Slot}"
+                            $"{_fetcher.Request.Slot}"
                         ).Replace(
                             "{count}",
-                            $"{request.Count}"
+                            $"{_fetcher.Request.Count}"
                         ).Replace(
                             "{paidOnly}",
-                            $"{request.PaidOnly}"
+                            $"{_fetcher.Request.PaidOnly}"
                         ).Replace(
                             "{userData:slot}",
                             $"{_userDataFetcher.Wallet.Slot}"
@@ -66,7 +65,7 @@ namespace Gs2.Unity.UiKit.Gs2Money
                             $"{_userDataFetcher.Wallet.Paid}"
                         ).Replace(
                             "{userData:paid:changed}",
-                            $"{_userDataFetcher.Wallet.Paid - request.Count}"
+                            $"{_userDataFetcher.Wallet.Paid - _fetcher.Request.Count}"
                         ).Replace(
                             "{userData:free}",
                             $"{_userDataFetcher.Wallet.Free}"
@@ -75,32 +74,31 @@ namespace Gs2.Unity.UiKit.Gs2Money
                             $"{_userDataFetcher.Wallet.Free + _userDataFetcher.Wallet.Paid}"
                         ).Replace(
                             "{userData:total:changed}",
-                            $"{_userDataFetcher.Wallet.Free + _userDataFetcher.Wallet.Paid - request.Count}"
+                            $"{_userDataFetcher.Wallet.Free + _userDataFetcher.Wallet.Paid - _fetcher.Request.Count}"
                         ).Replace(
                             "{userData:updatedAt}",
                             $"{_userDataFetcher.Wallet.UpdatedAt}"
                         )
                     );
                 }
-            } else if (_fetcher.Fetched && _fetcher.ConsumeAction != null && _fetcher.ConsumeAction.Action == "Gs2Money:WithdrawByUserId") {
-                var request = WithdrawByUserIdRequest.FromJson(JsonMapper.ToObject(_fetcher.ConsumeAction.Request));
+            } else if (_fetcher.Fetched && _fetcher.Request != null) {
                 {
                     onUpdate?.Invoke(
                         format.Replace(
                             "{namespaceName}",
-                            $"{request.NamespaceName}"
+                            $"{_fetcher.Request.NamespaceName}"
                         ).Replace(
                             "{userId}",
-                            $"{request.UserId}"
+                            $"{_fetcher.Request.UserId}"
                         ).Replace(
                             "{slot}",
-                            $"{request.Slot}"
+                            $"{_fetcher.Request.Slot}"
                         ).Replace(
                             "{count}",
-                            $"{request.Count}"
+                            $"{_fetcher.Request.Count}"
                         ).Replace(
                             "{paidOnly}",
-                            $"{request.PaidOnly}"
+                            $"{_fetcher.Request.PaidOnly}"
                         )
                     );
                 }
@@ -114,16 +112,20 @@ namespace Gs2.Unity.UiKit.Gs2Money
 
     public partial class Gs2MoneyWithdrawByUserIdLabel
     {
-        private Gs2CoreConsumeActionFetcher _fetcher;
+        private Gs2MoneyWithdrawByUserIdFetcher _fetcher;
         private Gs2MoneyOwnWalletFetcher _userDataFetcher;
 
         public void Awake()
         {
-            _fetcher = GetComponentInParent<Gs2CoreConsumeActionFetcher>();
-            _userDataFetcher = GetComponentInParent<Gs2MoneyOwnWalletFetcher>();
+            _fetcher = GetComponent<Gs2MoneyWithdrawByUserIdFetcher>() ?? GetComponentInParent<Gs2MoneyWithdrawByUserIdFetcher>();
+            _userDataFetcher = GetComponent<Gs2MoneyOwnWalletFetcher>() ?? GetComponentInParent<Gs2MoneyOwnWalletFetcher>();
 
             if (_fetcher == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2CoreConsumeActionFetcher.");
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MoneyWithdrawByUserIdFetcher.");
+                enabled = false;
+            }
+            if (_userDataFetcher == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MoneyOwnWalletFetcher.");
                 enabled = false;
             }
 

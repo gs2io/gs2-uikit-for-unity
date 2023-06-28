@@ -21,7 +21,7 @@ using Gs2.Unity.UiKit.Gs2Mission.Context;
 using UnityEditor;
 using UnityEngine;
 
-namespace Gs2.Unity.UiKit.Gs2Mission.Editor
+namespace Gs2.Unity.UiKit.Gs2Mission.Enabler.Editor
 {
     [CustomEditor(typeof(Gs2MissionMissionGroupModelResetDayOfWeekEnabler))]
     public class Gs2MissionMissionGroupModelResetDayOfWeekEnablerEditorExtension : UnityEditor.Editor

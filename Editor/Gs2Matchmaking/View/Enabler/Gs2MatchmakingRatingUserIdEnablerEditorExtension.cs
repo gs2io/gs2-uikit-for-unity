@@ -21,7 +21,7 @@ using Gs2.Unity.UiKit.Gs2Matchmaking.Context;
 using UnityEditor;
 using UnityEngine;
 
-namespace Gs2.Unity.UiKit.Gs2Matchmaking.Editor
+namespace Gs2.Unity.UiKit.Gs2Matchmaking.Enabler.Editor
 {
     [CustomEditor(typeof(Gs2MatchmakingRatingUserIdEnabler))]
     public class Gs2MatchmakingRatingUserIdEnablerEditorExtension : UnityEditor.Editor

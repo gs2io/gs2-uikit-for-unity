@@ -21,7 +21,7 @@ using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Matchmaking.Fetcher;
 using UnityEngine;
 
-namespace Gs2.Unity.UiKit.Gs2Matchmaking
+namespace Gs2.Unity.UiKit.Gs2Matchmaking.Enabler
 {
     /// <summary>
     /// Main

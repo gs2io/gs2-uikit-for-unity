@@ -26,7 +26,7 @@ using Gs2.Util.LitJson;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace Gs2.Unity.UiKit.Gs2Money
+namespace Gs2.Unity.UiKit.Gs2Money.Enabler
 {
     /// <summary>
     /// Main
@@ -37,27 +37,26 @@ namespace Gs2.Unity.UiKit.Gs2Money
     {
         public void Update()
         {
-            if (_fetcher.Fetched && _fetcher.ConsumeAction != null && _fetcher.ConsumeAction.Action == "Gs2Money:WithdrawByUserId") {
-                var request = WithdrawByUserIdRequest.FromJson(JsonMapper.ToObject(_fetcher.ConsumeAction.Request));
+            if (_fetcher.Fetched && _fetcher.Request != null) {
                 switch(expression)
                 {
                     case Expression.In:
-                        target.SetActive(request.Count != null && enableCounts.Contains(request.Count.Value));
+                        target.SetActive(_fetcher.Request.Count != null && enableCounts.Contains(_fetcher.Request.Count.Value));
                         break;
                     case Expression.NotIn:
-                        target.SetActive(request.Count != null && !enableCounts.Contains(request.Count.Value));
+                        target.SetActive(_fetcher.Request.Count != null && !enableCounts.Contains(_fetcher.Request.Count.Value));
                         break;
                     case Expression.Less:
-                        target.SetActive(enableCount > request.Count);
+                        target.SetActive(enableCount > _fetcher.Request.Count);
                         break;
                     case Expression.LessEqual:
-                        target.SetActive(enableCount >= request.Count);
+                        target.SetActive(enableCount >= _fetcher.Request.Count);
                         break;
                     case Expression.Greater:
-                        target.SetActive(enableCount < request.Count);
+                        target.SetActive(enableCount < _fetcher.Request.Count);
                         break;
                     case Expression.GreaterEqual:
-                        target.SetActive(enableCount <= request.Count);
+                        target.SetActive(enableCount <= _fetcher.Request.Count);
                         break;
                 }
             }
@@ -74,14 +73,14 @@ namespace Gs2.Unity.UiKit.Gs2Money
 
     public partial class Gs2MoneyWithdrawByUserIdEnabler
     {
-        private Gs2CoreConsumeActionFetcher _fetcher;
+        private Gs2MoneyWithdrawByUserIdFetcher _fetcher;
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2CoreConsumeActionFetcher>() ?? GetComponentInParent<Gs2CoreConsumeActionFetcher>();
+            _fetcher = GetComponent<Gs2MoneyWithdrawByUserIdFetcher>() ?? GetComponentInParent<Gs2MoneyWithdrawByUserIdFetcher>();
 
             if (_fetcher == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2CoreConsumeActionFetcher.");
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MoneyWithdrawByUserIdFetcher.");
                 enabled = false;
             }
 

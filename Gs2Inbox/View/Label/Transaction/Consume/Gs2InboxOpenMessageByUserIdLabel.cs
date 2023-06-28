@@ -25,7 +25,7 @@ using Gs2.Util.LitJson;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace Gs2.Unity.UiKit.Gs2Inbox
+namespace Gs2.Unity.UiKit.Gs2Inbox.Label
 {
     /// <summary>
     /// Main
@@ -36,20 +36,19 @@ namespace Gs2.Unity.UiKit.Gs2Inbox
     {
         public void Update()
         {
-            if (_fetcher.Fetched && _fetcher.ConsumeAction != null && _fetcher.ConsumeAction.Action == "Gs2Inbox:OpenMessageByUserId" &&
+            if (_fetcher.Fetched && _fetcher.Request != null &&
                     _userDataFetcher != null && _userDataFetcher.Fetched && _userDataFetcher.Message != null) {
-                var request = OpenMessageByUserIdRequest.FromJson(JsonMapper.ToObject(_fetcher.ConsumeAction.Request));
                 {
                     onUpdate?.Invoke(
                         format.Replace(
                             "{namespaceName}",
-                            $"{request.NamespaceName}"
+                            $"{_fetcher.Request.NamespaceName}"
                         ).Replace(
                             "{userId}",
-                            $"{request.UserId}"
+                            $"{_fetcher.Request.UserId}"
                         ).Replace(
                             "{messageName}",
-                            $"{request.MessageName}"
+                            $"{_fetcher.Request.MessageName}"
                         ).Replace(
                             "{userData:messageId}",
                             $"{_userDataFetcher.Message.MessageId}"
@@ -77,19 +76,18 @@ namespace Gs2.Unity.UiKit.Gs2Inbox
                         )
                     );
                 }
-            } else if (_fetcher.Fetched && _fetcher.ConsumeAction != null && _fetcher.ConsumeAction.Action == "Gs2Inbox:OpenMessageByUserId") {
-                var request = OpenMessageByUserIdRequest.FromJson(JsonMapper.ToObject(_fetcher.ConsumeAction.Request));
+            } else if (_fetcher.Fetched && _fetcher.Request != null) {
                 {
                     onUpdate?.Invoke(
                         format.Replace(
                             "{namespaceName}",
-                            $"{request.NamespaceName}"
+                            $"{_fetcher.Request.NamespaceName}"
                         ).Replace(
                             "{userId}",
-                            $"{request.UserId}"
+                            $"{_fetcher.Request.UserId}"
                         ).Replace(
                             "{messageName}",
-                            $"{request.MessageName}"
+                            $"{_fetcher.Request.MessageName}"
                         )
                     );
                 }
@@ -103,16 +101,20 @@ namespace Gs2.Unity.UiKit.Gs2Inbox
 
     public partial class Gs2InboxOpenMessageByUserIdLabel
     {
-        private Gs2CoreConsumeActionFetcher _fetcher;
+        private Gs2InboxOpenMessageByUserIdFetcher _fetcher;
         private Gs2InboxOwnMessageFetcher _userDataFetcher;
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2CoreConsumeActionFetcher>() ?? GetComponentInParent<Gs2CoreConsumeActionFetcher>();
+            _fetcher = GetComponent<Gs2InboxOpenMessageByUserIdFetcher>() ?? GetComponentInParent<Gs2InboxOpenMessageByUserIdFetcher>();
             _userDataFetcher = GetComponent<Gs2InboxOwnMessageFetcher>() ?? GetComponentInParent<Gs2InboxOwnMessageFetcher>();
 
             if (_fetcher == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2CoreConsumeActionFetcher.");
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2InboxOpenMessageByUserIdFetcher.");
+                enabled = false;
+            }
+            if (_userDataFetcher == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2InboxOwnMessageFetcher.");
                 enabled = false;
             }
 

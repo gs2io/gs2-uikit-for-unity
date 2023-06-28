@@ -21,7 +21,7 @@ using Gs2.Unity.UiKit.Gs2Datastore.Context;
 using UnityEditor;
 using UnityEngine;
 
-namespace Gs2.Unity.UiKit.Gs2Datastore.Editor
+namespace Gs2.Unity.UiKit.Gs2Datastore.Enabler.Editor
 {
     [CustomEditor(typeof(Gs2DatastoreDataObjectScopeEnabler))]
     public class Gs2DatastoreDataObjectScopeEnablerEditorExtension : UnityEditor.Editor

@@ -19,7 +19,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace Gs2.Unity.UiKit.Gs2Experience.Editor
+namespace Gs2.Unity.UiKit.Gs2Experience.Label.Editor
 {
     [CustomEditor(typeof(Gs2ExperienceAddExperienceByUserIdLabel))]
     public class Gs2ExperienceAddExperienceByUserIdLabelEditorExtension : UnityEditor.Editor

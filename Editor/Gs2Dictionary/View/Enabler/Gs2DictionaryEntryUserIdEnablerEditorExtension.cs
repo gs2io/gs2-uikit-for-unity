@@ -21,7 +21,7 @@ using Gs2.Unity.UiKit.Gs2Dictionary.Context;
 using UnityEditor;
 using UnityEngine;
 
-namespace Gs2.Unity.UiKit.Gs2Dictionary.Editor
+namespace Gs2.Unity.UiKit.Gs2Dictionary.Enabler.Editor
 {
     [CustomEditor(typeof(Gs2DictionaryEntryUserIdEnabler))]
     public class Gs2DictionaryEntryUserIdEnablerEditorExtension : UnityEditor.Editor

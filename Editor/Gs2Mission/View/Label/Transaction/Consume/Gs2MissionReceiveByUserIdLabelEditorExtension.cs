@@ -19,7 +19,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace Gs2.Unity.UiKit.Gs2Mission.Editor
+namespace Gs2.Unity.UiKit.Gs2Mission.Label.Editor
 {
     [CustomEditor(typeof(Gs2MissionReceiveByUserIdLabel))]
     public class Gs2MissionReceiveByUserIdLabelEditorExtension : UnityEditor.Editor

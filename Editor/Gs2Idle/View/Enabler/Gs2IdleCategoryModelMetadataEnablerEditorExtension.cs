@@ -21,7 +21,7 @@ using Gs2.Unity.UiKit.Gs2Idle.Context;
 using UnityEditor;
 using UnityEngine;
 
-namespace Gs2.Unity.UiKit.Gs2Idle.Editor
+namespace Gs2.Unity.UiKit.Gs2Idle.Enabler.Editor
 {
     [CustomEditor(typeof(Gs2IdleCategoryModelMetadataEnabler))]
     public class Gs2IdleCategoryModelMetadataEnablerEditorExtension : UnityEditor.Editor

@@ -37,27 +37,26 @@ namespace Gs2.Unity.UiKit.Gs2Stamina
     {
         public void Update()
         {
-            if (_fetcher.Fetched && _fetcher.AcquireAction != null && _fetcher.AcquireAction.Action == "Gs2Stamina:RaiseMaxValueByUserId") {
-                var request = RaiseMaxValueByUserIdRequest.FromJson(JsonMapper.ToObject(_fetcher.AcquireAction.Request));
+            if (_fetcher.Fetched && _fetcher.Request != null) {
                 switch(expression)
                 {
                     case Expression.In:
-                        target.SetActive(request.RaiseValue != null && enableRaiseValues.Contains(request.RaiseValue.Value));
+                        target.SetActive(_fetcher.Request.RaiseValue != null && enableRaiseValues.Contains(_fetcher.Request.RaiseValue.Value));
                         break;
                     case Expression.NotIn:
-                        target.SetActive(request.RaiseValue != null && !enableRaiseValues.Contains(request.RaiseValue.Value));
+                        target.SetActive(_fetcher.Request.RaiseValue != null && !enableRaiseValues.Contains(_fetcher.Request.RaiseValue.Value));
                         break;
                     case Expression.Less:
-                        target.SetActive(enableRaiseValue > request.RaiseValue);
+                        target.SetActive(enableRaiseValue > _fetcher.Request.RaiseValue);
                         break;
                     case Expression.LessEqual:
-                        target.SetActive(enableRaiseValue >= request.RaiseValue);
+                        target.SetActive(enableRaiseValue >= _fetcher.Request.RaiseValue);
                         break;
                     case Expression.Greater:
-                        target.SetActive(enableRaiseValue < request.RaiseValue);
+                        target.SetActive(enableRaiseValue < _fetcher.Request.RaiseValue);
                         break;
                     case Expression.GreaterEqual:
-                        target.SetActive(enableRaiseValue <= request.RaiseValue);
+                        target.SetActive(enableRaiseValue <= _fetcher.Request.RaiseValue);
                         break;
                 }
             }
@@ -74,14 +73,14 @@ namespace Gs2.Unity.UiKit.Gs2Stamina
 
     public partial class Gs2StaminaRaiseMaxValueByUserIdEnabler
     {
-        private Gs2CoreAcquireActionFetcher _fetcher;
+        private Gs2StaminaRaiseMaxValueByUserIdFetcher _fetcher;
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2CoreAcquireActionFetcher>() ?? GetComponentInParent<Gs2CoreAcquireActionFetcher>();
+            _fetcher = GetComponent<Gs2StaminaRaiseMaxValueByUserIdFetcher>() ?? GetComponentInParent<Gs2StaminaRaiseMaxValueByUserIdFetcher>();
 
             if (_fetcher == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2CoreAcquireActionFetcher.");
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2StaminaRaiseMaxValueByUserIdFetcher.");
                 enabled = false;
             }
 

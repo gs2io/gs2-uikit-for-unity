@@ -18,6 +18,7 @@
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
 
+using Gs2.Unity.UiKit.Gs2Mission.Fetcher;
 using UnityEditor;
 using UnityEngine;
 
@@ -31,6 +32,14 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Editor
 
             if (original == null) return;
 
+            var fetcher = original.GetComponent<Gs2MissionIncreaseCounterByUserIdFetcher>() ?? original.GetComponentInParent<Gs2MissionIncreaseCounterByUserIdFetcher>();
+            if (fetcher == null) {
+                EditorGUILayout.HelpBox("Gs2MissionIncreaseCounterByUserIdFetcher not found.", MessageType.Error);
+                if (GUILayout.Button("Add Fetcher")) {
+                    original.gameObject.AddComponent<Gs2MissionIncreaseCounterByUserIdFetcher>();
+                }
+            }
+            
             serializedObject.Update();
             original.format = EditorGUILayout.TextField("Format", original.format);
 

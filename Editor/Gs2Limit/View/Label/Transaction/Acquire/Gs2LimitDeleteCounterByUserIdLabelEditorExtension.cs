@@ -19,7 +19,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace Gs2.Unity.UiKit.Gs2Limit.Editor
+namespace Gs2.Unity.UiKit.Gs2Limit.Label.Editor
 {
     [CustomEditor(typeof(Gs2LimitDeleteCounterByUserIdLabel))]
     public class Gs2LimitDeleteCounterByUserIdLabelEditorExtension : UnityEditor.Editor

@@ -25,7 +25,7 @@ namespace Gs2.Unity.UiKit.Gs2Account.Context
     /// Main
     /// </summary>
 
-	[AddComponentMenu("GS2 UIKit/Account/Namespace/Gs2AccountNamespaceContext")]
+	[AddComponentMenu("GS2 UIKit/Account/Namespace/Context/Gs2AccountNamespaceContext")]
     public partial class Gs2AccountNamespaceContext : MonoBehaviour
     {
         public void Start() {

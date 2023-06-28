@@ -25,7 +25,7 @@ using Gs2.Util.LitJson;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace Gs2.Unity.UiKit.Gs2Experience
+namespace Gs2.Unity.UiKit.Gs2Experience.Label
 {
     /// <summary>
     /// Main
@@ -36,26 +36,25 @@ namespace Gs2.Unity.UiKit.Gs2Experience
     {
         public void Update()
         {
-            if (_fetcher.Fetched && _fetcher.AcquireAction != null && _fetcher.AcquireAction.Action == "Gs2Experience:AddExperienceByUserId" &&
+            if (_fetcher.Fetched && _fetcher.Request != null &&
                     _userDataFetcher != null && _userDataFetcher.Fetched && _userDataFetcher.Status != null) {
-                var request = AddExperienceByUserIdRequest.FromJson(JsonMapper.ToObject(_fetcher.AcquireAction.Request));
                 {
                     onUpdate?.Invoke(
                         format.Replace(
                             "{namespaceName}",
-                            $"{request.NamespaceName}"
+                            $"{_fetcher.Request.NamespaceName}"
                         ).Replace(
                             "{userId}",
-                            $"{request.UserId}"
+                            $"{_fetcher.Request.UserId}"
                         ).Replace(
                             "{experienceName}",
-                            $"{request.ExperienceName}"
+                            $"{_fetcher.Request.ExperienceName}"
                         ).Replace(
                             "{propertyId}",
-                            $"{request.PropertyId}"
+                            $"{_fetcher.Request.PropertyId}"
                         ).Replace(
                             "{experienceValue}",
-                            $"{request.ExperienceValue}"
+                            $"{_fetcher.Request.ExperienceValue}"
                         ).Replace(
                             "{userData:experienceName}",
                             $"{_userDataFetcher.Status.ExperienceName}"
@@ -67,7 +66,7 @@ namespace Gs2.Unity.UiKit.Gs2Experience
                             $"{_userDataFetcher.Status.ExperienceValue}"
                         ).Replace(
                             "{userData:experienceValue:changed}",
-                            $"{_userDataFetcher.Status.ExperienceValue + request.ExperienceValue}"
+                            $"{_userDataFetcher.Status.ExperienceValue + _fetcher.Request.ExperienceValue}"
                         ).Replace(
                             "{userData:rankValue}",
                             $"{_userDataFetcher.Status.RankValue}"
@@ -77,25 +76,24 @@ namespace Gs2.Unity.UiKit.Gs2Experience
                         )
                     );
                 }
-            } else if (_fetcher.Fetched && _fetcher.AcquireAction != null && _fetcher.AcquireAction.Action == "Gs2Experience:AddExperienceByUserId") {
-                var request = AddExperienceByUserIdRequest.FromJson(JsonMapper.ToObject(_fetcher.AcquireAction.Request));
+            } else if (_fetcher.Fetched && _fetcher.Request != null) {
                 {
                     onUpdate?.Invoke(
                         format.Replace(
                             "{namespaceName}",
-                            $"{request.NamespaceName}"
+                            $"{_fetcher.Request.NamespaceName}"
                         ).Replace(
                             "{userId}",
-                            $"{request.UserId}"
+                            $"{_fetcher.Request.UserId}"
                         ).Replace(
                             "{experienceName}",
-                            $"{request.ExperienceName}"
+                            $"{_fetcher.Request.ExperienceName}"
                         ).Replace(
                             "{propertyId}",
-                            $"{request.PropertyId}"
+                            $"{_fetcher.Request.PropertyId}"
                         ).Replace(
                             "{experienceValue}",
-                            $"{request.ExperienceValue}"
+                            $"{_fetcher.Request.ExperienceValue}"
                         )
                     );
                 }
@@ -109,16 +107,20 @@ namespace Gs2.Unity.UiKit.Gs2Experience
 
     public partial class Gs2ExperienceAddExperienceByUserIdLabel
     {
-        private Gs2CoreAcquireActionFetcher _fetcher;
+        private Gs2ExperienceAddExperienceByUserIdFetcher _fetcher;
         private Gs2ExperienceOwnStatusFetcher _userDataFetcher;
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2CoreAcquireActionFetcher>() ?? GetComponentInParent<Gs2CoreAcquireActionFetcher>();
+            _fetcher = GetComponent<Gs2ExperienceAddExperienceByUserIdFetcher>() ?? GetComponentInParent<Gs2ExperienceAddExperienceByUserIdFetcher>();
             _userDataFetcher = GetComponent<Gs2ExperienceOwnStatusFetcher>() ?? GetComponentInParent<Gs2ExperienceOwnStatusFetcher>();
 
             if (_fetcher == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2CoreAcquireActionFetcher.");
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ExperienceAddExperienceByUserIdFetcher.");
+                enabled = false;
+            }
+            if (_userDataFetcher == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ExperienceOwnStatusFetcher.");
                 enabled = false;
             }
 

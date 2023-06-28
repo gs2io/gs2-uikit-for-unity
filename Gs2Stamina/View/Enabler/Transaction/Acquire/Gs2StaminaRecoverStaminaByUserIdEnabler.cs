@@ -37,27 +37,26 @@ namespace Gs2.Unity.UiKit.Gs2Stamina
     {
         public void Update()
         {
-            if (_fetcher.Fetched && _fetcher.AcquireAction != null && _fetcher.AcquireAction.Action == "Gs2Stamina:RecoverStaminaByUserId") {
-                var request = RecoverStaminaByUserIdRequest.FromJson(JsonMapper.ToObject(_fetcher.AcquireAction.Request));
+            if (_fetcher.Fetched && _fetcher.Request != null) {
                 switch(expression)
                 {
                     case Expression.In:
-                        target.SetActive(request.RecoverValue != null && enableRecoverValues.Contains(request.RecoverValue.Value));
+                        target.SetActive(_fetcher.Request.RecoverValue != null && enableRecoverValues.Contains(_fetcher.Request.RecoverValue.Value));
                         break;
                     case Expression.NotIn:
-                        target.SetActive(request.RecoverValue != null && !enableRecoverValues.Contains(request.RecoverValue.Value));
+                        target.SetActive(_fetcher.Request.RecoverValue != null && !enableRecoverValues.Contains(_fetcher.Request.RecoverValue.Value));
                         break;
                     case Expression.Less:
-                        target.SetActive(enableRecoverValue > request.RecoverValue);
+                        target.SetActive(enableRecoverValue > _fetcher.Request.RecoverValue);
                         break;
                     case Expression.LessEqual:
-                        target.SetActive(enableRecoverValue >= request.RecoverValue);
+                        target.SetActive(enableRecoverValue >= _fetcher.Request.RecoverValue);
                         break;
                     case Expression.Greater:
-                        target.SetActive(enableRecoverValue < request.RecoverValue);
+                        target.SetActive(enableRecoverValue < _fetcher.Request.RecoverValue);
                         break;
                     case Expression.GreaterEqual:
-                        target.SetActive(enableRecoverValue <= request.RecoverValue);
+                        target.SetActive(enableRecoverValue <= _fetcher.Request.RecoverValue);
                         break;
                 }
             }
@@ -74,14 +73,14 @@ namespace Gs2.Unity.UiKit.Gs2Stamina
 
     public partial class Gs2StaminaRecoverStaminaByUserIdEnabler
     {
-        private Gs2CoreAcquireActionFetcher _fetcher;
+        private Gs2StaminaRecoverStaminaByUserIdFetcher _fetcher;
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2CoreAcquireActionFetcher>() ?? GetComponentInParent<Gs2CoreAcquireActionFetcher>();
+            _fetcher = GetComponent<Gs2StaminaRecoverStaminaByUserIdFetcher>() ?? GetComponentInParent<Gs2StaminaRecoverStaminaByUserIdFetcher>();
 
             if (_fetcher == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2CoreAcquireActionFetcher.");
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2StaminaRecoverStaminaByUserIdFetcher.");
                 enabled = false;
             }
 

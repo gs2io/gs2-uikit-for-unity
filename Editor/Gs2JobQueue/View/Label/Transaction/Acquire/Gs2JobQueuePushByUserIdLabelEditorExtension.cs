@@ -19,7 +19,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace Gs2.Unity.UiKit.Gs2JobQueue.Editor
+namespace Gs2.Unity.UiKit.Gs2JobQueue.Label.Editor
 {
     [CustomEditor(typeof(Gs2JobQueuePushByUserIdLabel))]
     public class Gs2JobQueuePushByUserIdLabelEditorExtension : UnityEditor.Editor

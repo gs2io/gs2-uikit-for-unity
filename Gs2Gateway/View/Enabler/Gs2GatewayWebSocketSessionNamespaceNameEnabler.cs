@@ -21,7 +21,7 @@ using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Gateway.Fetcher;
 using UnityEngine;
 
-namespace Gs2.Unity.UiKit.Gs2Gateway
+namespace Gs2.Unity.UiKit.Gs2Gateway.Enabler
 {
     /// <summary>
     /// Main

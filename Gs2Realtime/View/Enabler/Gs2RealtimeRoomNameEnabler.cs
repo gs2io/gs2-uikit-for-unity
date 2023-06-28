@@ -21,7 +21,7 @@ using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Realtime.Fetcher;
 using UnityEngine;
 
-namespace Gs2.Unity.UiKit.Gs2Realtime
+namespace Gs2.Unity.UiKit.Gs2Realtime.Enabler
 {
     /// <summary>
     /// Main

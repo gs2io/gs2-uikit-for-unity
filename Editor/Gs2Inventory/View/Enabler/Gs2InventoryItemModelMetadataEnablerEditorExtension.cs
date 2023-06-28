@@ -21,7 +21,7 @@ using Gs2.Unity.UiKit.Gs2Inventory.Context;
 using UnityEditor;
 using UnityEngine;
 
-namespace Gs2.Unity.UiKit.Gs2Inventory.Editor
+namespace Gs2.Unity.UiKit.Gs2Inventory.Enabler.Editor
 {
     [CustomEditor(typeof(Gs2InventoryItemModelMetadataEnabler))]
     public class Gs2InventoryItemModelMetadataEnablerEditorExtension : UnityEditor.Editor

@@ -27,6 +27,7 @@ using Gs2.Unity.Gs2Lottery.Model;
 using Gs2.Unity.Gs2Lottery.ScriptableObject;
 using Gs2.Unity.Util;
 using Gs2.Unity.UiKit.Core;
+using Gs2.Unity.UiKit.Gs2Core.Fetcher;
 using Gs2.Unity.UiKit.Gs2Lottery.Context;
 using UnityEngine;
 using UnityEngine.Events;
