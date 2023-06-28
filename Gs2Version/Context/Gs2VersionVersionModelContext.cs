@@ -25,7 +25,7 @@ namespace Gs2.Unity.UiKit.Gs2Version.Context
     /// Main
     /// </summary>
 
-	[AddComponentMenu("GS2 UIKit/Version/VersionModel/Gs2VersionVersionModelContext")]
+	[AddComponentMenu("GS2 UIKit/Version/VersionModel/Context/Gs2VersionVersionModelContext")]
     public partial class Gs2VersionVersionModelContext : MonoBehaviour
     {
         public void Start() {

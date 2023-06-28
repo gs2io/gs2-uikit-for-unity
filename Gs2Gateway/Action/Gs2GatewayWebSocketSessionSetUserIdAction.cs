@@ -36,7 +36,6 @@ using UnityEditor;
 
 namespace Gs2.Unity.UiKit.Gs2Gateway
 {
-	[AddComponentMenu("GS2 UIKit/Gateway/WebSocketSession/Action/Gs2GatewayWebSocketSessionSetUserIdAction")]
     public partial class Gs2GatewayWebSocketSessionSetUserIdAction : MonoBehaviour
     {
         private IEnumerator Process()

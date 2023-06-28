@@ -113,7 +113,7 @@ namespace Gs2.Unity.UiKit.Gs2Idle.Fetcher
         {
             _clientHolder = Gs2ClientHolder.Instance;
             _gameSessionHolder = Gs2GameSessionHolder.Instance;
-            _context = GetComponentInParent<Gs2IdleOwnStatusContext>();
+            _context = GetComponent<Gs2IdleOwnStatusContext>() ?? GetComponentInParent<Gs2IdleOwnStatusContext>();
 
             if (_context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2IdleOwnStatusContext.");

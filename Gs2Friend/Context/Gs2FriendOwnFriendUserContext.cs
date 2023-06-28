@@ -25,7 +25,7 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Context
     /// Main
     /// </summary>
 
-	[AddComponentMenu("GS2 UIKit/Friend/FriendUser/Gs2FriendOwnFriendUserContext")]
+	[AddComponentMenu("GS2 UIKit/Friend/FriendUser/Context/Gs2FriendOwnFriendUserContext")]
     public partial class Gs2FriendOwnFriendUserContext : MonoBehaviour
     {
         public void Start() {

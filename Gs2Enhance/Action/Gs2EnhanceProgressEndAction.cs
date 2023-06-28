@@ -36,7 +36,6 @@ using UnityEditor;
 
 namespace Gs2.Unity.UiKit.Gs2Enhance
 {
-	[AddComponentMenu("GS2 UIKit/Enhance/Progress/Action/Gs2EnhanceProgressEndAction")]
     public partial class Gs2EnhanceProgressEndAction : MonoBehaviour
     {
         private IEnumerator Process()

@@ -25,7 +25,7 @@ namespace Gs2.Unity.UiKit.Gs2Datastore.Context
     /// Main
     /// </summary>
 
-	[AddComponentMenu("GS2 UIKit/Datastore/Namespace/Gs2DatastoreNamespaceContext")]
+	[AddComponentMenu("GS2 UIKit/Datastore/Namespace/Context/Gs2DatastoreNamespaceContext")]
     public partial class Gs2DatastoreNamespaceContext : MonoBehaviour
     {
         public void Start() {

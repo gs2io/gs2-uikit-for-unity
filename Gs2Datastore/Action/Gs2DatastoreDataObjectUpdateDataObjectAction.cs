@@ -36,7 +36,6 @@ using UnityEditor;
 
 namespace Gs2.Unity.UiKit.Gs2Datastore
 {
-	[AddComponentMenu("GS2 UIKit/Datastore/DataObject/Action/Gs2DatastoreDataObjectUpdateDataObjectAction")]
     public partial class Gs2DatastoreDataObjectUpdateDataObjectAction : MonoBehaviour
     {
         private IEnumerator Process()

@@ -25,7 +25,7 @@ namespace Gs2.Unity.UiKit.Gs2Enhance.Context
     /// Main
     /// </summary>
 
-	[AddComponentMenu("GS2 UIKit/Enhance/RateModel/Gs2EnhanceRateModelContext")]
+	[AddComponentMenu("GS2 UIKit/Enhance/RateModel/Context/Gs2EnhanceRateModelContext")]
     public partial class Gs2EnhanceRateModelContext : MonoBehaviour
     {
         public void Start() {

@@ -25,7 +25,7 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Context
     /// Main
     /// </summary>
 
-	[AddComponentMenu("GS2 UIKit/Formation/User/Gs2FormationUserContext")]
+	[AddComponentMenu("GS2 UIKit/Formation/User/Context/Gs2FormationUserContext")]
     public partial class Gs2FormationUserContext : MonoBehaviour
     {
         public void Start() {

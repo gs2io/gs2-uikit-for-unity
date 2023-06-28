@@ -25,7 +25,7 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Context
     /// Main
     /// </summary>
 
-	[AddComponentMenu("GS2 UIKit/Quest/Progress/Gs2QuestOwnProgressContext")]
+	[AddComponentMenu("GS2 UIKit/Quest/Progress/Context/Gs2QuestOwnProgressContext")]
     public partial class Gs2QuestOwnProgressContext : MonoBehaviour
     {
         public void Start() {

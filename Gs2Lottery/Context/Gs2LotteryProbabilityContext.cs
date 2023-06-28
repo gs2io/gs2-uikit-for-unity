@@ -25,7 +25,7 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.Context
     /// Main
     /// </summary>
 
-	[AddComponentMenu("GS2 UIKit/Lottery/Probability/Gs2LotteryProbabilityContext")]
+	[AddComponentMenu("GS2 UIKit/Lottery/Probability/Context/Gs2LotteryProbabilityContext")]
     public partial class Gs2LotteryProbabilityContext : MonoBehaviour
     {
         public void Start() {

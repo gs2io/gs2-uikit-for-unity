@@ -36,7 +36,6 @@ using UnityEditor;
 
 namespace Gs2.Unity.UiKit.Gs2Limit
 {
-	[AddComponentMenu("GS2 UIKit/Limit/Counter/Action/Gs2LimitCounterCountUpAction")]
     public partial class Gs2LimitCounterCountUpAction : MonoBehaviour
     {
         private IEnumerator Process()

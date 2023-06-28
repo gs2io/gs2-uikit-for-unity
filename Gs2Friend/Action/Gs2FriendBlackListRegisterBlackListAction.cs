@@ -36,7 +36,6 @@ using UnityEditor;
 
 namespace Gs2.Unity.UiKit.Gs2Friend
 {
-	[AddComponentMenu("GS2 UIKit/Friend/BlackList/Action/Gs2FriendBlackListRegisterBlackListAction")]
     public partial class Gs2FriendBlackListRegisterBlackListAction : MonoBehaviour
     {
         private IEnumerator Process()

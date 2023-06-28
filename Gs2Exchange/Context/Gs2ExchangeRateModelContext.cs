@@ -25,7 +25,7 @@ namespace Gs2.Unity.UiKit.Gs2Exchange.Context
     /// Main
     /// </summary>
 
-	[AddComponentMenu("GS2 UIKit/Exchange/RateModel/Gs2ExchangeRateModelContext")]
+	[AddComponentMenu("GS2 UIKit/Exchange/RateModel/Context/Gs2ExchangeRateModelContext")]
     public partial class Gs2ExchangeRateModelContext : MonoBehaviour
     {
         public void Start() {

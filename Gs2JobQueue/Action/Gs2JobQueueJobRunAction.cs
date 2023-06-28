@@ -36,7 +36,6 @@ using UnityEditor;
 
 namespace Gs2.Unity.UiKit.Gs2JobQueue
 {
-	[AddComponentMenu("GS2 UIKit/JobQueue/Job/Action/Gs2JobQueueJobRunAction")]
     public partial class Gs2JobQueueJobRunAction : MonoBehaviour
     {
         private IEnumerator Process()

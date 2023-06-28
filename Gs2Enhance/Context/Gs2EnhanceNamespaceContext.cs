@@ -25,7 +25,7 @@ namespace Gs2.Unity.UiKit.Gs2Enhance.Context
     /// Main
     /// </summary>
 
-	[AddComponentMenu("GS2 UIKit/Enhance/Namespace/Gs2EnhanceNamespaceContext")]
+	[AddComponentMenu("GS2 UIKit/Enhance/Namespace/Context/Gs2EnhanceNamespaceContext")]
     public partial class Gs2EnhanceNamespaceContext : MonoBehaviour
     {
         public void Start() {

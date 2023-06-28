@@ -25,7 +25,7 @@ namespace Gs2.Unity.UiKit.Gs2Enhance.Context
     /// Main
     /// </summary>
 
-	[AddComponentMenu("GS2 UIKit/Enhance/Progress/Gs2EnhanceOwnProgressContext")]
+	[AddComponentMenu("GS2 UIKit/Enhance/Progress/Context/Gs2EnhanceOwnProgressContext")]
     public partial class Gs2EnhanceOwnProgressContext : MonoBehaviour
     {
         public void Start() {

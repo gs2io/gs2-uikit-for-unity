@@ -25,7 +25,7 @@ namespace Gs2.Unity.UiKit.Gs2SerialKey.Context
     /// Main
     /// </summary>
 
-	[AddComponentMenu("GS2 UIKit/SerialKey/CampaignModel/Gs2SerialKeyCampaignModelContext")]
+	[AddComponentMenu("GS2 UIKit/SerialKey/CampaignModel/Context/Gs2SerialKeyCampaignModelContext")]
     public partial class Gs2SerialKeyCampaignModelContext : MonoBehaviour
     {
         public void Start() {

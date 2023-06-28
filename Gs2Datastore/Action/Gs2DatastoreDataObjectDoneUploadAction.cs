@@ -36,7 +36,6 @@ using UnityEditor;
 
 namespace Gs2.Unity.UiKit.Gs2Datastore
 {
-	[AddComponentMenu("GS2 UIKit/Datastore/DataObject/Action/Gs2DatastoreDataObjectDoneUploadAction")]
     public partial class Gs2DatastoreDataObjectDoneUploadAction : MonoBehaviour
     {
         private IEnumerator Process()

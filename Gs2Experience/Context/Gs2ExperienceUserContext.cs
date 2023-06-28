@@ -25,7 +25,7 @@ namespace Gs2.Unity.UiKit.Gs2Experience.Context
     /// Main
     /// </summary>
 
-	[AddComponentMenu("GS2 UIKit/Experience/User/Gs2ExperienceUserContext")]
+	[AddComponentMenu("GS2 UIKit/Experience/User/Context/Gs2ExperienceUserContext")]
     public partial class Gs2ExperienceUserContext : MonoBehaviour
     {
         public void Start() {

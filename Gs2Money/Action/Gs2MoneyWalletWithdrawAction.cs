@@ -36,7 +36,6 @@ using UnityEditor;
 
 namespace Gs2.Unity.UiKit.Gs2Money
 {
-	[AddComponentMenu("GS2 UIKit/Money/Wallet/Action/Gs2MoneyWalletWithdrawAction")]
     public partial class Gs2MoneyWalletWithdrawAction : MonoBehaviour
     {
         private IEnumerator Process()

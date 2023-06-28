@@ -25,7 +25,7 @@ namespace Gs2.Unity.UiKit.Gs2Dictionary.Context
     /// Main
     /// </summary>
 
-	[AddComponentMenu("GS2 UIKit/Dictionary/User/Gs2DictionaryUserContext")]
+	[AddComponentMenu("GS2 UIKit/Dictionary/User/Context/Gs2DictionaryUserContext")]
     public partial class Gs2DictionaryUserContext : MonoBehaviour
     {
         public void Start() {

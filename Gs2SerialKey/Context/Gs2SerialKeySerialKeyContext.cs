@@ -25,7 +25,7 @@ namespace Gs2.Unity.UiKit.Gs2SerialKey.Context
     /// Main
     /// </summary>
 
-	[AddComponentMenu("GS2 UIKit/SerialKey/SerialKey/Gs2SerialKeySerialKeyContext")]
+	[AddComponentMenu("GS2 UIKit/SerialKey/SerialKey/Context/Gs2SerialKeySerialKeyContext")]
     public partial class Gs2SerialKeySerialKeyContext : MonoBehaviour
     {
         public void Start() {

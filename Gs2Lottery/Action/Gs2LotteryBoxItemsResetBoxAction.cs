@@ -36,7 +36,6 @@ using UnityEditor;
 
 namespace Gs2.Unity.UiKit.Gs2Lottery
 {
-	[AddComponentMenu("GS2 UIKit/Lottery/BoxItems/Action/Gs2LotteryBoxItemsResetBoxAction")]
     public partial class Gs2LotteryBoxItemsResetBoxAction : MonoBehaviour
     {
         private IEnumerator Process()

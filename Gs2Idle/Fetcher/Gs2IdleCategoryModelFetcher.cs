@@ -111,7 +111,7 @@ namespace Gs2.Unity.UiKit.Gs2Idle.Fetcher
         {
             _clientHolder = Gs2ClientHolder.Instance;
             _gameSessionHolder = Gs2GameSessionHolder.Instance;
-            _context = GetComponentInParent<Gs2IdleCategoryModelContext>();
+            _context = GetComponent<Gs2IdleCategoryModelContext>() ?? GetComponentInParent<Gs2IdleCategoryModelContext>();
 
             if (_context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2IdleCategoryModelContext.");

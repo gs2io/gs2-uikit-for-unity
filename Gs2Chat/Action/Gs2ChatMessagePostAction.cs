@@ -36,7 +36,6 @@ using UnityEditor;
 
 namespace Gs2.Unity.UiKit.Gs2Chat
 {
-	[AddComponentMenu("GS2 UIKit/Chat/Message/Action/Gs2ChatMessagePostAction")]
     public partial class Gs2ChatMessagePostAction : MonoBehaviour
     {
         private IEnumerator Process()

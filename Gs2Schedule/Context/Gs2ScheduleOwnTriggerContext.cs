@@ -25,7 +25,7 @@ namespace Gs2.Unity.UiKit.Gs2Schedule.Context
     /// Main
     /// </summary>
 
-	[AddComponentMenu("GS2 UIKit/Schedule/Trigger/Gs2ScheduleOwnTriggerContext")]
+	[AddComponentMenu("GS2 UIKit/Schedule/Trigger/Context/Gs2ScheduleOwnTriggerContext")]
     public partial class Gs2ScheduleOwnTriggerContext : MonoBehaviour
     {
         public void Start() {

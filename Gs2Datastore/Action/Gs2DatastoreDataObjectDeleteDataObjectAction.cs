@@ -36,7 +36,6 @@ using UnityEditor;
 
 namespace Gs2.Unity.UiKit.Gs2Datastore
 {
-	[AddComponentMenu("GS2 UIKit/Datastore/DataObject/Action/Gs2DatastoreDataObjectDeleteDataObjectAction")]
     public partial class Gs2DatastoreDataObjectDeleteDataObjectAction : MonoBehaviour
     {
         private IEnumerator Process()

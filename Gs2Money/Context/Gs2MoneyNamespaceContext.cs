@@ -25,7 +25,7 @@ namespace Gs2.Unity.UiKit.Gs2Money.Context
     /// Main
     /// </summary>
 
-	[AddComponentMenu("GS2 UIKit/Money/Namespace/Gs2MoneyNamespaceContext")]
+	[AddComponentMenu("GS2 UIKit/Money/Namespace/Context/Gs2MoneyNamespaceContext")]
     public partial class Gs2MoneyNamespaceContext : MonoBehaviour
     {
         public void Start() {

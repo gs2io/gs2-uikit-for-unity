@@ -25,7 +25,7 @@ namespace Gs2.Unity.UiKit.Gs2Showcase.Context
     /// Main
     /// </summary>
 
-	[AddComponentMenu("GS2 UIKit/Showcase/User/Gs2ShowcaseUserContext")]
+	[AddComponentMenu("GS2 UIKit/Showcase/User/Context/Gs2ShowcaseUserContext")]
     public partial class Gs2ShowcaseUserContext : MonoBehaviour
     {
         public void Start() {

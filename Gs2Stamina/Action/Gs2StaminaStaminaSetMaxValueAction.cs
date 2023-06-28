@@ -36,7 +36,6 @@ using UnityEditor;
 
 namespace Gs2.Unity.UiKit.Gs2Stamina
 {
-	[AddComponentMenu("GS2 UIKit/Stamina/Stamina/Action/Gs2StaminaStaminaSetMaxValueAction")]
     public partial class Gs2StaminaStaminaSetMaxValueAction : MonoBehaviour
     {
         private IEnumerator Process()

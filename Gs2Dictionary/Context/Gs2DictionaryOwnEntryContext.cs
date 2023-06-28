@@ -25,7 +25,7 @@ namespace Gs2.Unity.UiKit.Gs2Dictionary.Context
     /// Main
     /// </summary>
 
-	[AddComponentMenu("GS2 UIKit/Dictionary/Entry/Gs2DictionaryOwnEntryContext")]
+	[AddComponentMenu("GS2 UIKit/Dictionary/Entry/Context/Gs2DictionaryOwnEntryContext")]
     public partial class Gs2DictionaryOwnEntryContext : Gs2DictionaryEntryModelContext
     {
         public void Start() {

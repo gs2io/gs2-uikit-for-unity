@@ -25,7 +25,7 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Context
     /// Main
     /// </summary>
 
-	[AddComponentMenu("GS2 UIKit/Quest/Namespace/Gs2QuestNamespaceContext")]
+	[AddComponentMenu("GS2 UIKit/Quest/Namespace/Context/Gs2QuestNamespaceContext")]
     public partial class Gs2QuestNamespaceContext : MonoBehaviour
     {
         public void Start() {

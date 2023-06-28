@@ -25,7 +25,7 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Context
     /// Main
     /// </summary>
 
-	[AddComponentMenu("GS2 UIKit/Formation/PropertyForm/Gs2FormationOwnPropertyFormContext")]
+	[AddComponentMenu("GS2 UIKit/Formation/PropertyForm/Context/Gs2FormationOwnPropertyFormContext")]
     public partial class Gs2FormationOwnPropertyFormContext : MonoBehaviour
     {
         public void Start() {

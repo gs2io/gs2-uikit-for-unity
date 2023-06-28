@@ -36,7 +36,6 @@ using UnityEditor;
 
 namespace Gs2.Unity.UiKit.Gs2Formation
 {
-	[AddComponentMenu("GS2 UIKit/Formation/Form/Action/Gs2FormationFormSetFormAction")]
     public partial class Gs2FormationFormSetFormAction : MonoBehaviour
     {
         private IEnumerator Process()

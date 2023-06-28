@@ -25,7 +25,7 @@ namespace Gs2.Unity.UiKit.Gs2Exchange.Context
     /// Main
     /// </summary>
 
-	[AddComponentMenu("GS2 UIKit/Exchange/User/Gs2ExchangeUserContext")]
+	[AddComponentMenu("GS2 UIKit/Exchange/User/Context/Gs2ExchangeUserContext")]
     public partial class Gs2ExchangeUserContext : MonoBehaviour
     {
         public void Start() {

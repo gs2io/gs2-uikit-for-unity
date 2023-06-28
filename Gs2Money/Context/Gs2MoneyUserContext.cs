@@ -25,7 +25,7 @@ namespace Gs2.Unity.UiKit.Gs2Money.Context
     /// Main
     /// </summary>
 
-	[AddComponentMenu("GS2 UIKit/Money/User/Gs2MoneyUserContext")]
+	[AddComponentMenu("GS2 UIKit/Money/User/Context/Gs2MoneyUserContext")]
     public partial class Gs2MoneyUserContext : MonoBehaviour
     {
         public void Start() {

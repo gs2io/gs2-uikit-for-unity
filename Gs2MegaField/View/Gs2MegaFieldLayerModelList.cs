@@ -60,8 +60,8 @@ namespace Gs2.Unity.UiKit.Gs2MegaField
 
         public void Awake()
         {
-            _context = GetComponentInParent<Gs2MegaFieldAreaModelContext>();
-            _fetcher = GetComponentInParent<Gs2MegaFieldLayerModelListFetcher>();
+            _context = GetComponent<Gs2MegaFieldAreaModelContext>() ?? GetComponentInParent<Gs2MegaFieldAreaModelContext>();
+            _fetcher = GetComponent<Gs2MegaFieldLayerModelListFetcher>() ?? GetComponentInParent<Gs2MegaFieldLayerModelListFetcher>();
 
             if (_fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MegaFieldLayerModelListFetcher.");

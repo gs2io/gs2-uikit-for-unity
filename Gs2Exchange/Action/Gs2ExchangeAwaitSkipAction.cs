@@ -36,7 +36,6 @@ using UnityEditor;
 
 namespace Gs2.Unity.UiKit.Gs2Exchange
 {
-	[AddComponentMenu("GS2 UIKit/Exchange/Await/Action/Gs2ExchangeAwaitSkipAction")]
     public partial class Gs2ExchangeAwaitSkipAction : MonoBehaviour
     {
         private IEnumerator Process()

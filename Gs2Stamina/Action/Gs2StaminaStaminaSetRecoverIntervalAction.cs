@@ -36,7 +36,6 @@ using UnityEditor;
 
 namespace Gs2.Unity.UiKit.Gs2Stamina
 {
-	[AddComponentMenu("GS2 UIKit/Stamina/Stamina/Action/Gs2StaminaStaminaSetRecoverIntervalAction")]
     public partial class Gs2StaminaStaminaSetRecoverIntervalAction : MonoBehaviour
     {
         private IEnumerator Process()

@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Gs2.Unity.UiKit.Gs2Account
 {
-    [AddComponentMenu("GS2 UIKit/Account/PlayerPrefsAccountRepository")]
+    [AddComponentMenu("GS2 UIKit/Account/AccountRepository/PlayerPrefsAccountRepository")]
     public class PlayerPrefsAccountRepository : AbstractAccountRepository
     {
         public string playerPrefsKey = "Gs2.Account";

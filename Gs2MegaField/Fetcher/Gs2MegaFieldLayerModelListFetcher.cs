@@ -120,7 +120,7 @@ namespace Gs2.Unity.UiKit.Gs2MegaField.Fetcher
         {
             _clientHolder = Gs2ClientHolder.Instance;
             _gameSessionHolder = Gs2GameSessionHolder.Instance;
-            _context = GetComponentInParent<Gs2MegaFieldAreaModelContext>();
+            _context = GetComponent<Gs2MegaFieldAreaModelContext>() ?? GetComponentInParent<Gs2MegaFieldAreaModelContext>();
 
             if (_context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MegaFieldAreaModelContext.");

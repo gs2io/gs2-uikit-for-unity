@@ -25,7 +25,7 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Context
     /// Main
     /// </summary>
 
-	[AddComponentMenu("GS2 UIKit/Mission/Complete/Gs2MissionOwnCompleteContext")]
+	[AddComponentMenu("GS2 UIKit/Mission/Complete/Context/Gs2MissionOwnCompleteContext")]
     public partial class Gs2MissionOwnCompleteContext : MonoBehaviour
     {
         public void Start() {

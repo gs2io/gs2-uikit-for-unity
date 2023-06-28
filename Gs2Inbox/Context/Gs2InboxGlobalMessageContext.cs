@@ -25,7 +25,7 @@ namespace Gs2.Unity.UiKit.Gs2Inbox.Context
     /// Main
     /// </summary>
 
-	[AddComponentMenu("GS2 UIKit/Inbox/GlobalMessage/Gs2InboxGlobalMessageContext")]
+	[AddComponentMenu("GS2 UIKit/Inbox/GlobalMessage/Context/Gs2InboxGlobalMessageContext")]
     public partial class Gs2InboxGlobalMessageContext : MonoBehaviour
     {
         public void Start() {

@@ -118,7 +118,7 @@ namespace Gs2.Unity.UiKit.Gs2MegaField.Fetcher
         {
             _clientHolder = Gs2ClientHolder.Instance;
             _gameSessionHolder = Gs2GameSessionHolder.Instance;
-            _context = GetComponentInParent<Gs2MegaFieldNamespaceContext>();
+            _context = GetComponent<Gs2MegaFieldNamespaceContext>() ?? GetComponentInParent<Gs2MegaFieldNamespaceContext>();
 
             if (_context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MegaFieldNamespaceContext.");

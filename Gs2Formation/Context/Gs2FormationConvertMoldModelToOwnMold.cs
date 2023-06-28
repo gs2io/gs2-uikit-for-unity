@@ -24,7 +24,7 @@ using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2Formation.Context
 {
-    [AddComponentMenu("GS2 UIKit/Formation/Mold/Convert/Gs2FormationConvertMoldModelToOwnMold")]
+    [AddComponentMenu("GS2 UIKit/Formation/Mold/Context/Convert/Gs2FormationConvertMoldModelToOwnMold")]
     public class Gs2FormationConvertMoldModelToOwnMold : MonoBehaviour
     {
         private Gs2FormationMoldModelContext _context;

@@ -25,7 +25,7 @@ namespace Gs2.Unity.UiKit.Gs2Limit.Context
     /// Main
     /// </summary>
 
-	[AddComponentMenu("GS2 UIKit/Limit/User/Gs2LimitUserContext")]
+	[AddComponentMenu("GS2 UIKit/Limit/User/Context/Gs2LimitUserContext")]
     public partial class Gs2LimitUserContext : MonoBehaviour
     {
         public void Start() {

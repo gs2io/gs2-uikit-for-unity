@@ -36,7 +36,6 @@ using UnityEditor;
 
 namespace Gs2.Unity.UiKit.Gs2Account
 {
-	[AddComponentMenu("GS2 UIKit/Account/TakeOver/Action/Gs2AccountTakeOverDoTakeOverAction")]
     public partial class Gs2AccountTakeOverDoTakeOverAction : MonoBehaviour
     {
         private IEnumerator Process()

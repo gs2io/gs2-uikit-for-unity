@@ -25,7 +25,7 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Context
     /// Main
     /// </summary>
 
-	[AddComponentMenu("GS2 UIKit/Mission/Counter/Gs2MissionOwnCounterContext")]
+	[AddComponentMenu("GS2 UIKit/Mission/Counter/Context/Gs2MissionOwnCounterContext")]
     public partial class Gs2MissionOwnCounterContext : Gs2MissionCounterModelContext
     {
         public void Start() {

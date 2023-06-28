@@ -25,7 +25,7 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking.Context
     /// Main
     /// </summary>
 
-	[AddComponentMenu("GS2 UIKit/Matchmaking/User/Gs2MatchmakingUserContext")]
+	[AddComponentMenu("GS2 UIKit/Matchmaking/User/Context/Gs2MatchmakingUserContext")]
     public partial class Gs2MatchmakingUserContext : MonoBehaviour
     {
         public void Start() {

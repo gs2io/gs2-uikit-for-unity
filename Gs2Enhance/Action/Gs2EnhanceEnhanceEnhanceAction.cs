@@ -36,7 +36,6 @@ using UnityEditor;
 
 namespace Gs2.Unity.UiKit.Gs2Enhance
 {
-	[AddComponentMenu("GS2 UIKit/Enhance/Enhance/Action/Gs2EnhanceEnhanceEnhanceAction")]
     public partial class Gs2EnhanceEnhanceEnhanceAction : MonoBehaviour
     {
         private IEnumerator Process()

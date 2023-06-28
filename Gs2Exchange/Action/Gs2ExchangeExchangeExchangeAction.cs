@@ -38,7 +38,6 @@ using UnityEditor;
 
 namespace Gs2.Unity.UiKit.Gs2Exchange
 {
-	[AddComponentMenu("GS2 UIKit/Exchange/Exchange/Action/Gs2ExchangeExchangeExchangeAction")]
     public partial class Gs2ExchangeExchangeExchangeAction : MonoBehaviour
     {
         private IEnumerator Process()

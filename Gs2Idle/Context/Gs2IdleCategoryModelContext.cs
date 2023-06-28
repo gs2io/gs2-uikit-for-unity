@@ -25,7 +25,7 @@ namespace Gs2.Unity.UiKit.Gs2Idle.Context
     /// Main
     /// </summary>
 
-	[AddComponentMenu("GS2 UIKit/Idle/CategoryModel/Gs2IdleCategoryModelContext")]
+	[AddComponentMenu("GS2 UIKit/Idle/CategoryModel/Context/Gs2IdleCategoryModelContext")]
     public partial class Gs2IdleCategoryModelContext : MonoBehaviour
     {
         public void Start() {

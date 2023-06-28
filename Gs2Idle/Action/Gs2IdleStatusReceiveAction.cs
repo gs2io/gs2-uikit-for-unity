@@ -36,7 +36,6 @@ using UnityEditor;
 
 namespace Gs2.Unity.UiKit.Gs2Idle
 {
-	[AddComponentMenu("GS2 UIKit/Idle/Status/Action/Gs2IdleStatusReceiveAction")]
     public partial class Gs2IdleStatusReceiveAction : MonoBehaviour
     {
         private IEnumerator Process()
@@ -105,7 +104,7 @@ namespace Gs2.Unity.UiKit.Gs2Idle
         {
             this._clientHolder = Gs2ClientHolder.Instance;
             this._gameSessionHolder = Gs2GameSessionHolder.Instance;
-            this._context = GetComponentInParent<Gs2IdleOwnStatusContext>();
+            this._context = GetComponent<Gs2IdleOwnStatusContext>() ?? GetComponentInParent<Gs2IdleOwnStatusContext>();
 
             if (_context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2IdleOwnStatusContext.");

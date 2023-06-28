@@ -25,7 +25,7 @@ namespace Gs2.Unity.UiKit.Gs2Realtime.Context
     /// Main
     /// </summary>
 
-	[AddComponentMenu("GS2 UIKit/Realtime/Room/Gs2RealtimeRoomContext")]
+	[AddComponentMenu("GS2 UIKit/Realtime/Room/Context/Gs2RealtimeRoomContext")]
     public partial class Gs2RealtimeRoomContext : MonoBehaviour
     {
         public void Start() {

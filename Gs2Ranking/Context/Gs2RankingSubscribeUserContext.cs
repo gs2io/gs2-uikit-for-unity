@@ -25,7 +25,7 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Context
     /// Main
     /// </summary>
 
-	[AddComponentMenu("GS2 UIKit/Ranking/SubscribeUser/Gs2RankingSubscribeUserContext")]
+	[AddComponentMenu("GS2 UIKit/Ranking/SubscribeUser/Context/Gs2RankingSubscribeUserContext")]
     public partial class Gs2RankingSubscribeUserContext : MonoBehaviour
     {
         public void Start() {

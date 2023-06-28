@@ -36,7 +36,6 @@ using UnityEditor;
 
 namespace Gs2.Unity.UiKit.Gs2Ranking
 {
-	[AddComponentMenu("GS2 UIKit/Ranking/Ranking/Action/Gs2RankingRankingPutScoreAction")]
     public partial class Gs2RankingRankingPutScoreAction : MonoBehaviour
     {
         private IEnumerator Process()

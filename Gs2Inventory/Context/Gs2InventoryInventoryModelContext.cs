@@ -25,7 +25,7 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Context
     /// Main
     /// </summary>
 
-	[AddComponentMenu("GS2 UIKit/Inventory/InventoryModel/Gs2InventoryInventoryModelContext")]
+	[AddComponentMenu("GS2 UIKit/Inventory/InventoryModel/Context/Gs2InventoryInventoryModelContext")]
     public partial class Gs2InventoryInventoryModelContext : MonoBehaviour
     {
         public void Start() {

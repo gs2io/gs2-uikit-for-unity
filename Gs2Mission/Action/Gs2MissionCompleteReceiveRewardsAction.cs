@@ -36,7 +36,6 @@ using UnityEditor;
 
 namespace Gs2.Unity.UiKit.Gs2Mission
 {
-	[AddComponentMenu("GS2 UIKit/Mission/Complete/Action/Gs2MissionCompleteReceiveRewardsAction")]
     public partial class Gs2MissionCompleteReceiveRewardsAction : MonoBehaviour
     {
         private IEnumerator Process()

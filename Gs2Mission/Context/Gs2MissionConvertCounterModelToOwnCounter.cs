@@ -24,7 +24,7 @@ using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2Mission.Context
 {
-    [AddComponentMenu("GS2 UIKit/Mission/Counter/Convert/Gs2MissionConvertCounterModelToOwnCounter")]
+    [AddComponentMenu("GS2 UIKit/Mission/Counter/Context/Convert/Gs2MissionConvertCounterModelToOwnCounter")]
     public class Gs2MissionConvertCounterModelToOwnCounter : MonoBehaviour
     {
         private Gs2MissionCounterModelContext _context;

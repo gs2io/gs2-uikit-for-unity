@@ -36,7 +36,6 @@ using UnityEditor;
 
 namespace Gs2.Unity.UiKit.Gs2Inbox
 {
-	[AddComponentMenu("GS2 UIKit/Inbox/Message/Action/Gs2InboxMessageReadAction")]
     public partial class Gs2InboxMessageReadAction : MonoBehaviour
     {
         private IEnumerator Process()

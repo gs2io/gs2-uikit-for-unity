@@ -60,8 +60,8 @@ namespace Gs2.Unity.UiKit.Gs2Idle
 
         public void Awake()
         {
-            _context = GetComponentInParent<Gs2IdleNamespaceContext>();
-            _fetcher = GetComponentInParent<Gs2IdleCategoryModelListFetcher>();
+            _context = GetComponent<Gs2IdleNamespaceContext>() ?? GetComponentInParent<Gs2IdleNamespaceContext>();
+            _fetcher = GetComponent<Gs2IdleCategoryModelListFetcher>() ?? GetComponentInParent<Gs2IdleCategoryModelListFetcher>();
 
             if (_fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2IdleCategoryModelListFetcher.");

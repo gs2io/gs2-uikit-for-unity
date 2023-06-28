@@ -25,7 +25,7 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Context
     /// Main
     /// </summary>
 
-	[AddComponentMenu("GS2 UIKit/Formation/Namespace/Gs2FormationNamespaceContext")]
+	[AddComponentMenu("GS2 UIKit/Formation/Namespace/Context/Gs2FormationNamespaceContext")]
     public partial class Gs2FormationNamespaceContext : MonoBehaviour
     {
         public void Start() {

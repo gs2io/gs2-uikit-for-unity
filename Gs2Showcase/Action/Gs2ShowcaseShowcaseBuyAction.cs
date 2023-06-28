@@ -41,7 +41,6 @@ using UnityEditor;
 
 namespace Gs2.Unity.UiKit.Gs2Showcase
 {
-	[AddComponentMenu("GS2 UIKit/Showcase/Showcase/Action/Gs2ShowcaseShowcaseBuyAction")]
     public partial class Gs2ShowcaseShowcaseBuyAction : MonoBehaviour
     {
         private IEnumerator Process()

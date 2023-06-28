@@ -25,7 +25,7 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Context
     /// Main
     /// </summary>
 
-	[AddComponentMenu("GS2 UIKit/Mission/MissionGroupModel/Gs2MissionMissionGroupModelContext")]
+	[AddComponentMenu("GS2 UIKit/Mission/MissionGroupModel/Context/Gs2MissionMissionGroupModelContext")]
     public partial class Gs2MissionMissionGroupModelContext : MonoBehaviour
     {
         public void Start() {

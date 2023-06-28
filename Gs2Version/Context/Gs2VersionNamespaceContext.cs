@@ -25,7 +25,7 @@ namespace Gs2.Unity.UiKit.Gs2Version.Context
     /// Main
     /// </summary>
 
-	[AddComponentMenu("GS2 UIKit/Version/Namespace/Gs2VersionNamespaceContext")]
+	[AddComponentMenu("GS2 UIKit/Version/Namespace/Context/Gs2VersionNamespaceContext")]
     public partial class Gs2VersionNamespaceContext : MonoBehaviour
     {
         public void Start() {

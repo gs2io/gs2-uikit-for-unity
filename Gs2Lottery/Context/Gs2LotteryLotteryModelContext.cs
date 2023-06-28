@@ -25,7 +25,7 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.Context
     /// Main
     /// </summary>
 
-	[AddComponentMenu("GS2 UIKit/Lottery/LotteryModel/Gs2LotteryLotteryModelContext")]
+	[AddComponentMenu("GS2 UIKit/Lottery/LotteryModel/Context/Gs2LotteryLotteryModelContext")]
     public partial class Gs2LotteryLotteryModelContext : MonoBehaviour
     {
         public void Start() {

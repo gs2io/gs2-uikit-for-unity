@@ -36,7 +36,6 @@ using UnityEditor;
 
 namespace Gs2.Unity.UiKit.Gs2Quest
 {
-	[AddComponentMenu("GS2 UIKit/Quest/Progress/Action/Gs2QuestProgressStartAction")]
     public partial class Gs2QuestProgressStartAction : MonoBehaviour
     {
         private IEnumerator Process()

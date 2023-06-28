@@ -25,7 +25,7 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Context
     /// Main
     /// </summary>
 
-	[AddComponentMenu("GS2 UIKit/Formation/MoldModel/Gs2FormationMoldModelContext")]
+	[AddComponentMenu("GS2 UIKit/Formation/MoldModel/Context/Gs2FormationMoldModelContext")]
     public partial class Gs2FormationMoldModelContext : MonoBehaviour
     {
         public void Start() {

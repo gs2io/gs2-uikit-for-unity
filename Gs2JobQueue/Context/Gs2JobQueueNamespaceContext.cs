@@ -25,7 +25,7 @@ namespace Gs2.Unity.UiKit.Gs2JobQueue.Context
     /// Main
     /// </summary>
 
-	[AddComponentMenu("GS2 UIKit/JobQueue/Namespace/Gs2JobQueueNamespaceContext")]
+	[AddComponentMenu("GS2 UIKit/JobQueue/Namespace/Context/Gs2JobQueueNamespaceContext")]
     public partial class Gs2JobQueueNamespaceContext : MonoBehaviour
     {
         public void Start() {

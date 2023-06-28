@@ -36,7 +36,6 @@ using UnityEditor;
 
 namespace Gs2.Unity.UiKit.Gs2Friend
 {
-	[AddComponentMenu("GS2 UIKit/Friend/FollowUser/Action/Gs2FriendFollowUserFollowAction")]
     public partial class Gs2FriendFollowUserFollowAction : MonoBehaviour
     {
         private IEnumerator Process()

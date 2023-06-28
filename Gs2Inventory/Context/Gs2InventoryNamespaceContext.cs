@@ -25,7 +25,7 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Context
     /// Main
     /// </summary>
 
-	[AddComponentMenu("GS2 UIKit/Inventory/Namespace/Gs2InventoryNamespaceContext")]
+	[AddComponentMenu("GS2 UIKit/Inventory/Namespace/Context/Gs2InventoryNamespaceContext")]
     public partial class Gs2InventoryNamespaceContext : MonoBehaviour
     {
         public void Start() {

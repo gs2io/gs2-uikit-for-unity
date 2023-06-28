@@ -24,7 +24,7 @@ using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2Matchmaking.Context
 {
-    [AddComponentMenu("GS2 UIKit/Matchmaking/Rating/Convert/Gs2MatchmakingConvertRatingModelToOwnRating")]
+    [AddComponentMenu("GS2 UIKit/Matchmaking/Rating/Context/Convert/Gs2MatchmakingConvertRatingModelToOwnRating")]
     public class Gs2MatchmakingConvertRatingModelToOwnRating : MonoBehaviour
     {
         private Gs2MatchmakingRatingModelContext _context;

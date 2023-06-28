@@ -36,7 +36,6 @@ using UnityEditor;
 
 namespace Gs2.Unity.UiKit.Gs2Matchmaking
 {
-	[AddComponentMenu("GS2 UIKit/Matchmaking/Vote/Action/Gs2MatchmakingVoteVoteAction")]
     public partial class Gs2MatchmakingVoteVoteAction : MonoBehaviour
     {
         private IEnumerator Process()

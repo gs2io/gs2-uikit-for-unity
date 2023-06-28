@@ -25,7 +25,7 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.Context
     /// Main
     /// </summary>
 
-	[AddComponentMenu("GS2 UIKit/Lottery/BoxItems/Gs2LotteryOwnBoxItemsContext")]
+	[AddComponentMenu("GS2 UIKit/Lottery/BoxItems/Context/Gs2LotteryOwnBoxItemsContext")]
     public partial class Gs2LotteryOwnBoxItemsContext : MonoBehaviour
     {
         public void Start() {

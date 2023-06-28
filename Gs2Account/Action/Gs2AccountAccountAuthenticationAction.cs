@@ -36,7 +36,6 @@ using UnityEditor;
 
 namespace Gs2.Unity.UiKit.Gs2Account
 {
-	[AddComponentMenu("GS2 UIKit/Account/Account/Action/Gs2AccountAccountAuthenticationAction")]
     public partial class Gs2AccountAccountAuthenticationAction : MonoBehaviour
     {
         private IEnumerator Process()

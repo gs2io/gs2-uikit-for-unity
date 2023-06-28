@@ -24,7 +24,7 @@ using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2Stamina.Context
 {
-    [AddComponentMenu("GS2 UIKit/Stamina/Stamina/Convert/Gs2StaminaConvertStaminaModelToOwnStamina")]
+    [AddComponentMenu("GS2 UIKit/Stamina/Stamina/Context/Convert/Gs2StaminaConvertStaminaModelToOwnStamina")]
     public class Gs2StaminaConvertStaminaModelToOwnStamina : MonoBehaviour
     {
         private Gs2StaminaStaminaModelContext _context;

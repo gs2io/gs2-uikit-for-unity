@@ -25,7 +25,7 @@ namespace Gs2.Unity.UiKit.Gs2Enhance.Context
     /// Main
     /// </summary>
 
-	[AddComponentMenu("GS2 UIKit/Enhance/User/Gs2EnhanceUserContext")]
+	[AddComponentMenu("GS2 UIKit/Enhance/User/Context/Gs2EnhanceUserContext")]
     public partial class Gs2EnhanceUserContext : MonoBehaviour
     {
         public void Start() {

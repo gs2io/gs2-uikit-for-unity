@@ -36,7 +36,6 @@ using UnityEditor;
 
 namespace Gs2.Unity.UiKit.Gs2Version
 {
-	[AddComponentMenu("GS2 UIKit/Version/AcceptVersion/Action/Gs2VersionAcceptVersionAcceptAction")]
     public partial class Gs2VersionAcceptVersionAcceptAction : MonoBehaviour
     {
         private IEnumerator Process()

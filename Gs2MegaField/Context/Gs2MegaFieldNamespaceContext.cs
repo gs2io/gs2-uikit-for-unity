@@ -25,7 +25,7 @@ namespace Gs2.Unity.UiKit.Gs2MegaField.Context
     /// Main
     /// </summary>
 
-	[AddComponentMenu("GS2 UIKit/MegaField/Namespace/Gs2MegaFieldNamespaceContext")]
+	[AddComponentMenu("GS2 UIKit/MegaField/Namespace/Context/Gs2MegaFieldNamespaceContext")]
     public partial class Gs2MegaFieldNamespaceContext : MonoBehaviour
     {
         public void Start() {

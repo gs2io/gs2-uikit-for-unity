@@ -36,7 +36,6 @@ using UnityEditor;
 
 namespace Gs2.Unity.UiKit.Gs2Friend
 {
-	[AddComponentMenu("GS2 UIKit/Friend/Profile/Action/Gs2FriendProfileUpdateProfileAction")]
     public partial class Gs2FriendProfileUpdateProfileAction : MonoBehaviour
     {
         private IEnumerator Process()

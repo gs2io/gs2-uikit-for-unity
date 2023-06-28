@@ -25,7 +25,7 @@ namespace Gs2.Unity.UiKit.Gs2Datastore.Context
     /// Main
     /// </summary>
 
-	[AddComponentMenu("GS2 UIKit/Datastore/User/Gs2DatastoreUserContext")]
+	[AddComponentMenu("GS2 UIKit/Datastore/User/Context/Gs2DatastoreUserContext")]
     public partial class Gs2DatastoreUserContext : MonoBehaviour
     {
         public void Start() {

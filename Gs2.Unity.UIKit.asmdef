@@ -8,6 +8,7 @@
         "UniTask.Linq",
         "UnityEngine.Purchasing",
         "UnityEngine.Purchasing.Stores",
+        "Unity.Localization",
         "AppleAuth"
     ],
     "includePlatforms": [],
@@ -32,6 +33,11 @@
             "name": "com.cysharp.unitask",
             "expression": "",
             "define": "GS2_ENABLE_UNITASK"
+        },
+        {
+            "name": "com.unity.localization",
+            "expression": "",
+            "define": "GS2_ENABLE_LOCALIZATION"
         }
     ],
     "noEngineReferences": false

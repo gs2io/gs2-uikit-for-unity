@@ -36,7 +36,6 @@ using UnityEditor;
 
 namespace Gs2.Unity.UiKit.Gs2Stamina
 {
-	[AddComponentMenu("GS2 UIKit/Stamina/Stamina/Action/Gs2StaminaStaminaConsumeAction")]
     public partial class Gs2StaminaStaminaConsumeAction : MonoBehaviour
     {
         private IEnumerator Process()

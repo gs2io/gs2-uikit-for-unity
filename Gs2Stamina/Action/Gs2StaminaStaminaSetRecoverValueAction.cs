@@ -36,7 +36,6 @@ using UnityEditor;
 
 namespace Gs2.Unity.UiKit.Gs2Stamina
 {
-	[AddComponentMenu("GS2 UIKit/Stamina/Stamina/Action/Gs2StaminaStaminaSetRecoverValueAction")]
     public partial class Gs2StaminaStaminaSetRecoverValueAction : MonoBehaviour
     {
         private IEnumerator Process()

@@ -25,7 +25,7 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking.Context
     /// Main
     /// </summary>
 
-	[AddComponentMenu("GS2 UIKit/Matchmaking/Vote/Gs2MatchmakingVoteContext")]
+	[AddComponentMenu("GS2 UIKit/Matchmaking/Vote/Context/Gs2MatchmakingVoteContext")]
     public partial class Gs2MatchmakingVoteContext : MonoBehaviour
     {
         public void Start() {

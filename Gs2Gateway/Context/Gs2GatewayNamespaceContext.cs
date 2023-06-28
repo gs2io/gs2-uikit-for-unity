@@ -25,7 +25,7 @@ namespace Gs2.Unity.UiKit.Gs2Gateway.Context
     /// Main
     /// </summary>
 
-	[AddComponentMenu("GS2 UIKit/Gateway/Namespace/Gs2GatewayNamespaceContext")]
+	[AddComponentMenu("GS2 UIKit/Gateway/Namespace/Context/Gs2GatewayNamespaceContext")]
     public partial class Gs2GatewayNamespaceContext : MonoBehaviour
     {
         public void Start() {

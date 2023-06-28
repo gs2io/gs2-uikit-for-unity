@@ -25,7 +25,7 @@ namespace Gs2.Unity.UiKit.Gs2Chat.Context
     /// Main
     /// </summary>
 
-	[AddComponentMenu("GS2 UIKit/Chat/Message/Gs2ChatMessageContext")]
+	[AddComponentMenu("GS2 UIKit/Chat/Message/Context/Gs2ChatMessageContext")]
     public partial class Gs2ChatMessageContext : MonoBehaviour
     {
         public void Start() {

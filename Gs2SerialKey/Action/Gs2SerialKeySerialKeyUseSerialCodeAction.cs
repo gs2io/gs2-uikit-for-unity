@@ -36,7 +36,6 @@ using UnityEditor;
 
 namespace Gs2.Unity.UiKit.Gs2SerialKey
 {
-	[AddComponentMenu("GS2 UIKit/SerialKey/SerialKey/Action/Gs2SerialKeySerialKeyUseSerialCodeAction")]
     public partial class Gs2SerialKeySerialKeyUseSerialCodeAction : MonoBehaviour
     {
         private IEnumerator Process()

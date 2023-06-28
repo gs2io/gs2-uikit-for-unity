@@ -25,7 +25,7 @@ namespace Gs2.Unity.UiKit.Gs2Realtime.Context
     /// Main
     /// </summary>
 
-	[AddComponentMenu("GS2 UIKit/Realtime/Namespace/Gs2RealtimeNamespaceContext")]
+	[AddComponentMenu("GS2 UIKit/Realtime/Namespace/Context/Gs2RealtimeNamespaceContext")]
     public partial class Gs2RealtimeNamespaceContext : MonoBehaviour
     {
         public void Start() {

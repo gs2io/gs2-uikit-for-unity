@@ -26,7 +26,7 @@ namespace Gs2.Unity.UiKit.Gs2Schedule.Context
     /// Main
     /// </summary>
 
-	[AddComponentMenu("GS2 UIKit/Schedule/User/Gs2ScheduleUserContext")]
+	[AddComponentMenu("GS2 UIKit/Schedule/User/Context/Gs2ScheduleUserContext")]
     public partial class Gs2ScheduleUserContext : MonoBehaviour
     {
         public void Start() {

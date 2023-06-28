@@ -25,7 +25,7 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Context
     /// Main
     /// </summary>
 
-	[AddComponentMenu("GS2 UIKit/Friend/BlackList/Gs2FriendOwnBlackListContext")]
+	[AddComponentMenu("GS2 UIKit/Friend/BlackList/Context/Gs2FriendOwnBlackListContext")]
     public partial class Gs2FriendOwnBlackListContext : MonoBehaviour
     {
         public void Start() {

@@ -25,7 +25,7 @@ namespace Gs2.Unity.UiKit.Gs2Experience.Context
     /// Main
     /// </summary>
 
-	[AddComponentMenu("GS2 UIKit/Experience/Status/Gs2ExperienceOwnStatusContext")]
+	[AddComponentMenu("GS2 UIKit/Experience/Status/Context/Gs2ExperienceOwnStatusContext")]
     public partial class Gs2ExperienceOwnStatusContext : MonoBehaviour
     {
         public void Start() {

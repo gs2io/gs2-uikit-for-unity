@@ -25,7 +25,7 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Context
     /// Main
     /// </summary>
 
-	[AddComponentMenu("GS2 UIKit/Formation/Form/Gs2FormationOwnFormContext")]
+	[AddComponentMenu("GS2 UIKit/Formation/Form/Context/Gs2FormationOwnFormContext")]
     public partial class Gs2FormationOwnFormContext : Gs2FormationFormModelContext
     {
         public void Start() {

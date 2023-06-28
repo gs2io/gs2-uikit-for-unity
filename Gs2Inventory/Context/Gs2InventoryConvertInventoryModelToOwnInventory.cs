@@ -24,7 +24,7 @@ using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2Inventory.Context
 {
-    [AddComponentMenu("GS2 UIKit/Inventory/Inventory/Convert/Gs2InventoryConvertInventoryModelToOwnInventory")]
+    [AddComponentMenu("GS2 UIKit/Inventory/Inventory/Context/Convert/Gs2InventoryConvertInventoryModelToOwnInventory")]
     public class Gs2InventoryConvertInventoryModelToOwnInventory : MonoBehaviour
     {
         private Gs2InventoryInventoryModelContext _context;

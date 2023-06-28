@@ -25,7 +25,7 @@ namespace Gs2.Unity.UiKit.Gs2Limit.Context
     /// Main
     /// </summary>
 
-	[AddComponentMenu("GS2 UIKit/Limit/Namespace/Gs2LimitNamespaceContext")]
+	[AddComponentMenu("GS2 UIKit/Limit/Namespace/Context/Gs2LimitNamespaceContext")]
     public partial class Gs2LimitNamespaceContext : MonoBehaviour
     {
         public void Start() {

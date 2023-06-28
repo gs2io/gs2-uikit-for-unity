@@ -25,7 +25,7 @@ namespace Gs2.Unity.UiKit.Gs2Exchange.Context
     /// Main
     /// </summary>
 
-	[AddComponentMenu("GS2 UIKit/Exchange/Await/Gs2ExchangeOwnAwaitContext")]
+	[AddComponentMenu("GS2 UIKit/Exchange/Await/Context/Gs2ExchangeOwnAwaitContext")]
     public partial class Gs2ExchangeOwnAwaitContext : MonoBehaviour
     {
         public void Start() {

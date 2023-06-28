@@ -36,7 +36,6 @@ using UnityEditor;
 
 namespace Gs2.Unity.UiKit.Gs2Friend
 {
-	[AddComponentMenu("GS2 UIKit/Friend/SendFriendRequest/Action/Gs2FriendSendFriendRequestDeleteRequestAction")]
     public partial class Gs2FriendSendFriendRequestDeleteRequestAction : MonoBehaviour
     {
         private IEnumerator Process()
