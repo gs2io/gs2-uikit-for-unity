@@ -24,6 +24,7 @@
 
 #pragma warning disable CS0472
 
+using Gs2.Unity.UiKit.Gs2Stamina.Fetcher;
 using UnityEditor;
 using UnityEngine;
 
@@ -36,6 +37,21 @@ namespace Gs2.Unity.UiKit.Gs2Stamina.Label.Editor
             var original = target as Gs2StaminaSetRecoverValueByUserIdLabel;
 
             if (original == null) return;
+
+            var fetcher = original.GetComponent<Gs2StaminaSetRecoverValueByUserIdFetcher>() ?? original.GetComponentInParent<Gs2StaminaSetRecoverValueByUserIdFetcher>(true);
+             var userDataFetcher = original.GetComponent<Gs2StaminaOwnStaminaFetcher>() ?? original.GetComponentInParent<Gs2StaminaOwnStaminaFetcher>(true);
+            if (fetcher == null) {
+                EditorGUILayout.HelpBox("Gs2StaminaSetRecoverValueByUserIdFetcher not found.", MessageType.Error);
+                if (GUILayout.Button("Add Fetcher")) {
+                    original.gameObject.AddComponent<Gs2StaminaSetRecoverValueByUserIdFetcher>();
+                }
+            }
+            if (userDataFetcher == null) {
+                EditorGUILayout.HelpBox("Gs2StaminaOwnStaminaFetcher not found. Adding a Fetcher allows more values to be used.", MessageType.Warning);
+                if (GUILayout.Button("Add Fetcher")) {
+                    original.gameObject.AddComponent<Gs2StaminaOwnStaminaFetcher>();
+                }
+            }
 
             serializedObject.Update();
             original.format = EditorGUILayout.TextField("Format", original.format);
@@ -61,40 +77,42 @@ namespace Gs2.Unity.UiKit.Gs2Stamina.Label.Editor
                 GUI.FocusControl("");
                 EditorUtility.SetDirty(original);
             }
-            if (GUILayout.Button("UserData:StaminaName")) {
-                original.format += "{userData:staminaName}";
-                GUI.FocusControl("");
-                EditorUtility.SetDirty(original);
-            }
-            if (GUILayout.Button("UserData:Value")) {
-                original.format += "{userData:value}";
-                GUI.FocusControl("");
-                EditorUtility.SetDirty(original);
-            }
-            if (GUILayout.Button("UserData:OverflowValue")) {
-                original.format += "{userData:overflowValue}";
-                GUI.FocusControl("");
-                EditorUtility.SetDirty(original);
-            }
-            if (GUILayout.Button("UserData:MaxValue")) {
-                original.format += "{userData:maxValue}";
-                GUI.FocusControl("");
-                EditorUtility.SetDirty(original);
-            }
-            if (GUILayout.Button("UserData:RecoverIntervalMinutes")) {
-                original.format += "{userData:recoverIntervalMinutes}";
-                GUI.FocusControl("");
-                EditorUtility.SetDirty(original);
-            }
-            if (GUILayout.Button("UserData:RecoverValue")) {
-                original.format += "{userData:recoverValue}";
-                GUI.FocusControl("");
-                EditorUtility.SetDirty(original);
-            }
-            if (GUILayout.Button("UserData:NextRecoverAt")) {
-                original.format += "{userData:nextRecoverAt}";
-                GUI.FocusControl("");
-                EditorUtility.SetDirty(original);
+            if (userDataFetcher != null) {
+                if (GUILayout.Button("UserData:StaminaName")) {
+                    original.format += "{userData:staminaName}";
+                    GUI.FocusControl("");
+                    EditorUtility.SetDirty(original);
+                }
+                if (GUILayout.Button("UserData:Value")) {
+                    original.format += "{userData:value}";
+                    GUI.FocusControl("");
+                    EditorUtility.SetDirty(original);
+                }
+                if (GUILayout.Button("UserData:OverflowValue")) {
+                    original.format += "{userData:overflowValue}";
+                    GUI.FocusControl("");
+                    EditorUtility.SetDirty(original);
+                }
+                if (GUILayout.Button("UserData:MaxValue")) {
+                    original.format += "{userData:maxValue}";
+                    GUI.FocusControl("");
+                    EditorUtility.SetDirty(original);
+                }
+                if (GUILayout.Button("UserData:RecoverIntervalMinutes")) {
+                    original.format += "{userData:recoverIntervalMinutes}";
+                    GUI.FocusControl("");
+                    EditorUtility.SetDirty(original);
+                }
+                if (GUILayout.Button("UserData:RecoverValue")) {
+                    original.format += "{userData:recoverValue}";
+                    GUI.FocusControl("");
+                    EditorUtility.SetDirty(original);
+                }
+                if (GUILayout.Button("UserData:NextRecoverAt")) {
+                    original.format += "{userData:nextRecoverAt}";
+                    GUI.FocusControl("");
+                    EditorUtility.SetDirty(original);
+                }
             }
             EditorGUILayout.PropertyField(serializedObject.FindProperty("onUpdate"), true);
             serializedObject.ApplyModifiedProperties();

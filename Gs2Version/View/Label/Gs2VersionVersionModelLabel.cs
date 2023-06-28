@@ -84,6 +84,15 @@ namespace Gs2.Unity.UiKit.Gs2Version
 
             Update();
         }
+
+        public bool HasError()
+        {
+            _fetcher = GetComponent<Gs2VersionVersionModelFetcher>() ?? GetComponentInParent<Gs2VersionVersionModelFetcher>(true);
+            if (_fetcher == null) {
+                return true;
+            }
+            return false;
+        }
     }
 
     /// <summary>

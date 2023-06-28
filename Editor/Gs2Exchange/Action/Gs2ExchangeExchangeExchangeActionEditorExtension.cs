@@ -17,6 +17,14 @@
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
+// ReSharper disable RedundantNameQualifier
+// ReSharper disable RedundantAssignment
+// ReSharper disable NotAccessedVariable
+// ReSharper disable RedundantUsingDirective
+// ReSharper disable Unity.NoNullPropagation
+// ReSharper disable InconsistentNaming
+
+#pragma warning disable CS0472
 
 using Gs2.Unity.Gs2Exchange.ScriptableObject;
 using Gs2.Unity.UiKit.Gs2Exchange.Context;
@@ -34,7 +42,7 @@ namespace Gs2.Unity.UiKit.Gs2Exchange.Editor
 
             if (original == null) return;
 
-            var context = original.GetComponentInParent<Gs2ExchangeRateModelContext>();
+            var context = original.GetComponent<Gs2ExchangeRateModelContext>() ?? original.GetComponentInParent<Gs2ExchangeRateModelContext>(true);
             if (context == null) {
                 EditorGUILayout.HelpBox("Gs2ExchangeRateModelContext not found.", MessageType.Error);
                 if (GUILayout.Button("Add Context")) {
@@ -45,7 +53,7 @@ namespace Gs2.Unity.UiKit.Gs2Exchange.Editor
                 EditorGUI.BeginDisabledGroup(true);
                 EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2ExchangeRateModelContext), false);
                 EditorGUI.indentLevel++;
-                EditorGUILayout.ObjectField("RateModel", context.RateModel, typeof(RateModel), false);
+                context.RateModel = EditorGUILayout.ObjectField("RateModel", context.RateModel, typeof(RateModel), false) as RateModel;
                 EditorGUI.indentLevel++;
                 EditorGUILayout.TextField("NamespaceName", context.RateModel.NamespaceName.ToString());
                 EditorGUILayout.TextField("RateName", context.RateModel.RateName.ToString());

@@ -56,13 +56,13 @@ namespace Gs2.Unity.UiKit.Gs2Realtime.Fetcher
             {
                 if (_gameSessionHolder != null && _gameSessionHolder.Initialized &&
                     _clientHolder != null && _clientHolder.Initialized &&
-                    _context != null && this._context.Room != null)
+                    Context != null && this.Context.Room != null)
                 {
                     
                     var domain = this._clientHolder.Gs2.Realtime.Namespace(
-                        this._context.Room.NamespaceName
+                        this.Context.Room.NamespaceName
                     ).Room(
-                        this._context.Room.RoomName
+                        this.Context.Room.RoomName
                     );
                     var future = domain.Model();
                     yield return future;
@@ -113,18 +113,27 @@ namespace Gs2.Unity.UiKit.Gs2Realtime.Fetcher
     {
         protected Gs2ClientHolder _clientHolder;
         protected Gs2GameSessionHolder _gameSessionHolder;
-        private Gs2RealtimeRoomContext _context;
+        public Gs2RealtimeRoomContext Context { get; private set; }
 
         public void Awake()
         {
             _clientHolder = Gs2ClientHolder.Instance;
             _gameSessionHolder = Gs2GameSessionHolder.Instance;
-            _context = GetComponent<Gs2RealtimeRoomContext>() ?? GetComponentInParent<Gs2RealtimeRoomContext>();
+            Context = GetComponent<Gs2RealtimeRoomContext>() ?? GetComponentInParent<Gs2RealtimeRoomContext>();
 
-            if (_context == null) {
+            if (Context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2RealtimeRoomContext.");
                 enabled = false;
             }
+        }
+
+        public bool HasError()
+        {
+            Context = GetComponent<Gs2RealtimeRoomContext>() ?? GetComponentInParent<Gs2RealtimeRoomContext>(true);
+            if (Context == null) {
+                return true;
+            }
+            return false;
         }
     }
 

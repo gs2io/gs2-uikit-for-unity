@@ -130,6 +130,15 @@ namespace Gs2.Unity.UiKit.Gs2Account.Fetcher
                 enabled = false;
             }
         }
+
+        public bool HasError()
+        {
+            _context = GetComponent<Gs2AccountOwnAccountContext>() ?? GetComponentInParent<Gs2AccountOwnAccountContext>(true);
+            if (_context == null) {
+                return true;
+            }
+            return false;
+        }
     }
 
     /// <summary>

@@ -135,6 +135,15 @@ namespace Gs2.Unity.UiKit.Gs2Ranking
                 enabled = false;
             }
         }
+
+        public bool HasError()
+        {
+            this._context = GetComponent<Gs2RankingOwnSubscribeContext>() ?? GetComponentInParent<Gs2RankingOwnSubscribeContext>(true);
+            if (_context == null) {
+                return true;
+            }
+            return false;
+        }
     }
 
     /// <summary>

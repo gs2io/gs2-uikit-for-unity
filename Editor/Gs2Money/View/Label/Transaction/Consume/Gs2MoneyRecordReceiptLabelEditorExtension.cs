@@ -24,6 +24,7 @@
 
 #pragma warning disable CS0472
 
+using Gs2.Unity.UiKit.Gs2Money.Fetcher;
 using UnityEditor;
 using UnityEngine;
 
@@ -36,6 +37,14 @@ namespace Gs2.Unity.UiKit.Gs2Money.Label.Editor
             var original = target as Gs2MoneyRecordReceiptLabel;
 
             if (original == null) return;
+
+            var fetcher = original.GetComponent<Gs2MoneyRecordReceiptFetcher>() ?? original.GetComponentInParent<Gs2MoneyRecordReceiptFetcher>(true);
+            if (fetcher == null) {
+                EditorGUILayout.HelpBox("Gs2MoneyRecordReceiptFetcher not found.", MessageType.Error);
+                if (GUILayout.Button("Add Fetcher")) {
+                    original.gameObject.AddComponent<Gs2MoneyRecordReceiptFetcher>();
+                }
+            }
 
             serializedObject.Update();
             original.format = EditorGUILayout.TextField("Format", original.format);

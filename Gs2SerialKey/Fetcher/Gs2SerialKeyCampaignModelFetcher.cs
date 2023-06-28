@@ -56,13 +56,13 @@ namespace Gs2.Unity.UiKit.Gs2SerialKey.Fetcher
             {
                 if (_gameSessionHolder != null && _gameSessionHolder.Initialized &&
                     _clientHolder != null && _clientHolder.Initialized &&
-                    _context != null && this._context.CampaignModel != null)
+                    Context != null && this.Context.CampaignModel != null)
                 {
                     
                     var domain = this._clientHolder.Gs2.SerialKey.Namespace(
-                        this._context.CampaignModel.NamespaceName
+                        this.Context.CampaignModel.NamespaceName
                     ).CampaignModel(
-                        this._context.CampaignModel.CampaignModelName
+                        this.Context.CampaignModel.CampaignModelName
                     );
                     var future = domain.Model();
                     yield return future;
@@ -113,18 +113,27 @@ namespace Gs2.Unity.UiKit.Gs2SerialKey.Fetcher
     {
         protected Gs2ClientHolder _clientHolder;
         protected Gs2GameSessionHolder _gameSessionHolder;
-        private Gs2SerialKeyCampaignModelContext _context;
+        public Gs2SerialKeyCampaignModelContext Context { get; private set; }
 
         public void Awake()
         {
             _clientHolder = Gs2ClientHolder.Instance;
             _gameSessionHolder = Gs2GameSessionHolder.Instance;
-            _context = GetComponent<Gs2SerialKeyCampaignModelContext>() ?? GetComponentInParent<Gs2SerialKeyCampaignModelContext>();
+            Context = GetComponent<Gs2SerialKeyCampaignModelContext>() ?? GetComponentInParent<Gs2SerialKeyCampaignModelContext>();
 
-            if (_context == null) {
+            if (Context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2SerialKeyCampaignModelContext.");
                 enabled = false;
             }
+        }
+
+        public bool HasError()
+        {
+            Context = GetComponent<Gs2SerialKeyCampaignModelContext>() ?? GetComponentInParent<Gs2SerialKeyCampaignModelContext>(true);
+            if (Context == null) {
+                return true;
+            }
+            return false;
         }
     }
 

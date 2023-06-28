@@ -43,7 +43,7 @@ namespace Gs2.Unity.UiKit.Gs2Datastore.Localization.Editor
 
             if (original == null) return;
 
-            var fetcher = original.GetComponent<Gs2DatastoreOwnDataObjectFetcher>() ?? original.GetComponentInParent<Gs2DatastoreOwnDataObjectFetcher>();
+            var fetcher = original.GetComponent<Gs2DatastoreOwnDataObjectFetcher>() ?? original.GetComponentInParent<Gs2DatastoreOwnDataObjectFetcher>(true);
             if (fetcher == null) {
                 EditorGUILayout.HelpBox("Gs2DatastoreOwnDataObjectFetcher not found.", MessageType.Error);
                 if (GUILayout.Button("Add Fetcher")) {
@@ -51,14 +51,14 @@ namespace Gs2.Unity.UiKit.Gs2Datastore.Localization.Editor
                 }
             }
             else {
-                if (fetcher.transform.parent.GetComponent<Gs2DatastoreOwnDataObjectList>() != null) {
+                if (fetcher.transform.parent == null || fetcher.transform.parent.GetComponent<Gs2DatastoreOwnDataObjectList>() != null) {
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2DatastoreOwnDataObjectFetcher), false);
                     EditorGUI.EndDisabledGroup();
                     EditorGUILayout.HelpBox("DataObject is auto assign from Gs2DatastoreOwnDataObjectList.", MessageType.Info);
                 }
                 else {
-                    var context = original.GetComponent<Gs2DatastoreOwnDataObjectContext>() ?? original.GetComponentInParent<Gs2DatastoreOwnDataObjectContext>();
+                    var context = original.GetComponent<Gs2DatastoreOwnDataObjectContext>() ?? original.GetComponentInParent<Gs2DatastoreOwnDataObjectContext>(true);
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2DatastoreOwnDataObjectFetcher), false);
                     EditorGUI.indentLevel++;

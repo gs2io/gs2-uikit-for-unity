@@ -43,7 +43,7 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking.Localization.Editor
 
             if (original == null) return;
 
-            var fetcher = original.GetComponent<Gs2MatchmakingRatingModelFetcher>() ?? original.GetComponentInParent<Gs2MatchmakingRatingModelFetcher>();
+            var fetcher = original.GetComponent<Gs2MatchmakingRatingModelFetcher>() ?? original.GetComponentInParent<Gs2MatchmakingRatingModelFetcher>(true);
             if (fetcher == null) {
                 EditorGUILayout.HelpBox("Gs2MatchmakingRatingModelFetcher not found.", MessageType.Error);
                 if (GUILayout.Button("Add Fetcher")) {
@@ -51,20 +51,20 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking.Localization.Editor
                 }
             }
             else {
-                if (fetcher.transform.parent.GetComponent<Gs2MatchmakingRatingModelList>() != null) {
+                if (fetcher.transform.parent == null || fetcher.transform.parent.GetComponent<Gs2MatchmakingRatingModelList>() != null) {
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2MatchmakingRatingModelFetcher), false);
                     EditorGUI.EndDisabledGroup();
                     EditorGUILayout.HelpBox("RatingModel is auto assign from Gs2MatchmakingRatingModelList.", MessageType.Info);
                 }
-                else if (fetcher.transform.parent.GetComponent<Gs2MatchmakingOwnRatingList>() != null) {
+                else if (fetcher.transform.parent == null || fetcher.transform.parent.GetComponent<Gs2MatchmakingOwnRatingList>() != null) {
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2MatchmakingOwnRatingFetcher), false);
                     EditorGUI.EndDisabledGroup();
                     EditorGUILayout.HelpBox("RatingModel is auto assign from Gs2MatchmakingOwnRatingList.", MessageType.Info);
                 }
                 else {
-                    var context = original.GetComponent<Gs2MatchmakingRatingModelContext>() ?? original.GetComponentInParent<Gs2MatchmakingRatingModelContext>();
+                    var context = original.GetComponent<Gs2MatchmakingRatingModelContext>() ?? original.GetComponentInParent<Gs2MatchmakingRatingModelContext>(true);
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2MatchmakingRatingModelFetcher), false);
                     EditorGUI.indentLevel++;

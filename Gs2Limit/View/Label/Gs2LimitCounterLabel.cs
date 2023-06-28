@@ -120,6 +120,15 @@ namespace Gs2.Unity.UiKit.Gs2Limit
 
             Update();
         }
+
+        public bool HasError()
+        {
+            _fetcher = GetComponent<Gs2LimitOwnCounterFetcher>() ?? GetComponentInParent<Gs2LimitOwnCounterFetcher>(true);
+            if (_fetcher == null) {
+                return true;
+            }
+            return false;
+        }
     }
 
     /// <summary>

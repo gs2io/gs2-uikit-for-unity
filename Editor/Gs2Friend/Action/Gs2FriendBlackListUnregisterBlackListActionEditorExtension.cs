@@ -40,7 +40,7 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Editor
 
             if (original == null) return;
 
-            var context = original.GetComponent<Gs2FriendOwnBlackListContext>() ?? original.GetComponentInParent<Gs2FriendOwnBlackListContext>();
+            var context = original.GetComponent<Gs2FriendOwnBlackListContext>() ?? original.GetComponentInParent<Gs2FriendOwnBlackListContext>(true);
             if (context == null) {
                 EditorGUILayout.HelpBox("Gs2FriendOwnBlackListContext not found.", MessageType.Error);
                 if (GUILayout.Button("Add Context")) {

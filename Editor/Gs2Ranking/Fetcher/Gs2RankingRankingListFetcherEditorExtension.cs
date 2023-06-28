@@ -40,7 +40,7 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Editor
 
             if (original == null) return;
 
-            var context = original.GetComponent<Gs2RankingNamespaceContext>() ?? original.GetComponentInParent<Gs2RankingNamespaceContext>();
+            var context = original.GetComponent<Gs2RankingNamespaceContext>() ?? original.GetComponentInParent<Gs2RankingNamespaceContext>(true);
             if (context == null) {
                 EditorGUILayout.HelpBox("Gs2RankingNamespaceContext not found.", MessageType.Error);
                 if (GUILayout.Button("Add Context")) {

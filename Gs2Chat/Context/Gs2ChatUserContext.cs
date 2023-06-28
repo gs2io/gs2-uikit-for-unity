@@ -41,6 +41,13 @@ namespace Gs2.Unity.UiKit.Gs2Chat.Context
                 Debug.LogError("User is not set in Gs2ChatUserContext.");
             }
         }
+
+        public bool HasError() {
+            if (User == null) {
+                return true;
+            }
+            return false;
+        }
     }
 
     /// <summary>

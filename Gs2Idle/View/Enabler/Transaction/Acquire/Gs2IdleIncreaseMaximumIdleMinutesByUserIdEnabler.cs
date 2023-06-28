@@ -25,6 +25,7 @@
 #pragma warning disable CS0472
 
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using Gs2.Gs2Idle.Request;
 using Gs2.Unity.UiKit.Core;
@@ -45,32 +46,11 @@ namespace Gs2.Unity.UiKit.Gs2Idle
     {
         public void Update()
         {
-            if (_fetcher.Fetched && _fetcher.Request != null) {
-                switch(expression)
-                {
-                    case Expression.In:
-                        target.SetActive(_fetcher.Request.IncreaseMinutes != null && enableIncreaseMinuteses.Contains(_fetcher.Request.IncreaseMinutes.Value));
-                        break;
-                    case Expression.NotIn:
-                        target.SetActive(_fetcher.Request.IncreaseMinutes != null && !enableIncreaseMinuteses.Contains(_fetcher.Request.IncreaseMinutes.Value));
-                        break;
-                    case Expression.Less:
-                        target.SetActive(enableIncreaseMinutes > _fetcher.Request.IncreaseMinutes);
-                        break;
-                    case Expression.LessEqual:
-                        target.SetActive(enableIncreaseMinutes >= _fetcher.Request.IncreaseMinutes);
-                        break;
-                    case Expression.Greater:
-                        target.SetActive(enableIncreaseMinutes < _fetcher.Request.IncreaseMinutes);
-                        break;
-                    case Expression.GreaterEqual:
-                        target.SetActive(enableIncreaseMinutes <= _fetcher.Request.IncreaseMinutes);
-                        break;
-                }
+            if (this._fetcher.AcquireActions().Count(v => v.Action == "Gs2Idle:IncreaseMaximumIdleMinutesByUserId") == 0) {
+                target.SetActive(this.notIncludeAcquireActions);
             }
-            else
-            {
-                target.SetActive(enableIncreaseMinuteses.Contains(0));
+            else {
+                target.SetActive(this.includeAcquireActions);
             }
         }
     }
@@ -81,18 +61,33 @@ namespace Gs2.Unity.UiKit.Gs2Idle
 
     public partial class Gs2IdleIncreaseMaximumIdleMinutesByUserIdEnabler
     {
-        private Gs2IdleIncreaseMaximumIdleMinutesByUserIdFetcher _fetcher;
+        private IAcquireActionsFetcher _fetcher;
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2IdleIncreaseMaximumIdleMinutesByUserIdFetcher>() ?? GetComponentInParent<Gs2IdleIncreaseMaximumIdleMinutesByUserIdFetcher>();
-
+            _fetcher = GetComponent<IAcquireActionsFetcher>() ?? GetComponentInParent<IAcquireActionsFetcher>();
             if (_fetcher == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2IdleIncreaseMaximumIdleMinutesByUserIdFetcher.");
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the IAcquireActionsFetcher.");
+                enabled = false;
+            }
+            if (target == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: target is not set.");
                 enabled = false;
             }
 
             Update();
+        }
+
+        public bool HasError()
+        {
+            _fetcher = GetComponent<IAcquireActionsFetcher>() ?? GetComponentInParent<IAcquireActionsFetcher>(true);
+            if (_fetcher == null) {
+                return true;
+            }
+            if (target == null) {
+                return true;
+            }
+            return false;
         }
     }
 
@@ -111,21 +106,9 @@ namespace Gs2.Unity.UiKit.Gs2Idle
 
     public partial class Gs2IdleIncreaseMaximumIdleMinutesByUserIdEnabler
     {
-        public enum Expression {
-            In,
-            NotIn,
-            Less,
-            LessEqual,
-            Greater,
-            GreaterEqual,
-        }
-
-        public Expression expression;
-
-        public List<int> enableIncreaseMinuteses;
-
-        public int enableIncreaseMinutes;
-
+        public bool includeAcquireActions;
+        public bool notIncludeAcquireActions;
+        
         public GameObject target;
     }
 

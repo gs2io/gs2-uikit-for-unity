@@ -135,6 +135,15 @@ namespace Gs2.Unity.UiKit.Gs2Inbox.Fetcher
                 enabled = false;
             }
         }
+
+        public bool HasError()
+        {
+            _context = GetComponent<Gs2InboxNamespaceContext>() ?? GetComponentInParent<Gs2InboxNamespaceContext>(true);
+            if (_context == null) {
+                return true;
+            }
+            return false;
+        }
     }
 
     /// <summary>

@@ -41,6 +41,13 @@ namespace Gs2.Unity.UiKit.Gs2Exchange.Context
                 Debug.LogError("Await_ is not set in Gs2ExchangeOwnAwaitContext.");
             }
         }
+
+        public bool HasError() {
+            if (Await_ == null) {
+                return true;
+            }
+            return false;
+        }
     }
 
     /// <summary>

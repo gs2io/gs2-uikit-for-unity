@@ -56,13 +56,13 @@ namespace Gs2.Unity.UiKit.Gs2Exchange.Fetcher
             {
                 if (_gameSessionHolder != null && _gameSessionHolder.Initialized &&
                     _clientHolder != null && _clientHolder.Initialized &&
-                    _context != null && this._context.RateModel != null)
+                    Context != null && this.Context.RateModel != null)
                 {
                     
                     var domain = this._clientHolder.Gs2.Exchange.Namespace(
-                        this._context.RateModel.NamespaceName
+                        this.Context.RateModel.NamespaceName
                     ).RateModel(
-                        this._context.RateModel.RateName
+                        this.Context.RateModel.RateName
                     );
                     var future = domain.Model();
                     yield return future;
@@ -127,18 +127,27 @@ namespace Gs2.Unity.UiKit.Gs2Exchange.Fetcher
     {
         protected Gs2ClientHolder _clientHolder;
         protected Gs2GameSessionHolder _gameSessionHolder;
-        private Gs2ExchangeRateModelContext _context;
+        public Gs2ExchangeRateModelContext Context { get; private set; }
 
         public void Awake()
         {
             _clientHolder = Gs2ClientHolder.Instance;
             _gameSessionHolder = Gs2GameSessionHolder.Instance;
-            _context = GetComponent<Gs2ExchangeRateModelContext>() ?? GetComponentInParent<Gs2ExchangeRateModelContext>();
+            Context = GetComponent<Gs2ExchangeRateModelContext>() ?? GetComponentInParent<Gs2ExchangeRateModelContext>();
 
-            if (_context == null) {
+            if (Context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ExchangeRateModelContext.");
                 enabled = false;
             }
+        }
+
+        public bool HasError()
+        {
+            Context = GetComponent<Gs2ExchangeRateModelContext>() ?? GetComponentInParent<Gs2ExchangeRateModelContext>(true);
+            if (Context == null) {
+                return true;
+            }
+            return false;
         }
     }
 

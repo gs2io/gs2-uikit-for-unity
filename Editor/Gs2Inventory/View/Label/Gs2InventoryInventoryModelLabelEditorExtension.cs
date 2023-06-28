@@ -40,7 +40,7 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Editor
 
             if (original == null) return;
 
-            var fetcher = original.GetComponent<Gs2InventoryInventoryModelFetcher>() ?? original.GetComponentInParent<Gs2InventoryInventoryModelFetcher>();
+            var fetcher = original.GetComponent<Gs2InventoryInventoryModelFetcher>() ?? original.GetComponentInParent<Gs2InventoryInventoryModelFetcher>(true);
             if (fetcher == null) {
                 EditorGUILayout.HelpBox("Gs2InventoryInventoryModelFetcher not found.", MessageType.Error);
                 if (GUILayout.Button("Add Fetcher")) {
@@ -48,20 +48,20 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Editor
                 }
             }
             else {
-                if (fetcher.transform.parent.GetComponent<Gs2InventoryInventoryModelList>() != null) {
+                if (fetcher.transform.parent == null || fetcher.transform.parent.GetComponent<Gs2InventoryInventoryModelList>() != null) {
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2InventoryInventoryModelFetcher), false);
                     EditorGUI.EndDisabledGroup();
                     EditorGUILayout.HelpBox("InventoryModel is auto assign from Gs2InventoryInventoryModelList.", MessageType.Info);
                 }
-                else if (fetcher.transform.parent.GetComponent<Gs2InventoryOwnInventoryList>() != null) {
+                else if (fetcher.transform.parent == null || fetcher.transform.parent.GetComponent<Gs2InventoryOwnInventoryList>() != null) {
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2InventoryOwnInventoryFetcher), false);
                     EditorGUI.EndDisabledGroup();
                     EditorGUILayout.HelpBox("InventoryModel is auto assign from Gs2InventoryOwnInventoryList.", MessageType.Info);
                 }
                 else {
-                    var context = original.GetComponent<Gs2InventoryInventoryModelContext>() ?? original.GetComponentInParent<Gs2InventoryInventoryModelContext>();
+                    var context = original.GetComponent<Gs2InventoryInventoryModelContext>() ?? original.GetComponentInParent<Gs2InventoryInventoryModelContext>(true);
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2InventoryInventoryModelFetcher), false);
                     EditorGUI.indentLevel++;

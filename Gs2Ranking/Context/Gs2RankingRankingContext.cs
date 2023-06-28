@@ -41,6 +41,18 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Context
                 Debug.LogError("Ranking is not set in Gs2RankingRankingContext.");
             }
         }
+
+        public bool HasError() {
+            if (Ranking == null) {
+                if (transform.parent != null && transform.parent.GetComponent<Gs2RankingRankingList>() != null) {
+                    return false;
+                }
+                else {
+                    return true;
+                }
+            }
+            return false;
+        }
     }
 
     /// <summary>

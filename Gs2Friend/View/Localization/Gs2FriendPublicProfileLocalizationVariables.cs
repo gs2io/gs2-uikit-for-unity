@@ -73,6 +73,15 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Localization
                 enabled = false;
             }
         }
+
+        public bool HasError()
+        {
+            _fetcher = GetComponent<Gs2FriendPublicProfileFetcher>() ?? GetComponentInParent<Gs2FriendPublicProfileFetcher>(true);
+            if (_fetcher == null) {
+                return true;
+            }
+            return false;
+        }
     }
 
     /// <summary>

@@ -41,6 +41,13 @@ namespace Gs2.Unity.UiKit.Gs2JobQueue.Context
                 Debug.LogError("Job is not set in Gs2JobQueueOwnJobContext.");
             }
         }
+
+        public bool HasError() {
+            if (Job == null) {
+                return true;
+            }
+            return false;
+        }
     }
 
     /// <summary>

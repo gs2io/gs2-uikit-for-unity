@@ -56,6 +56,15 @@ namespace Gs2.Unity.UiKit.Gs2Exchange.Context
             _callbackCount = -1;
         }
 
+        public bool HasError()
+        {
+            _fetcher = GetComponent<Gs2ExchangeRateModelFetcher>() ?? GetComponentInParent<Gs2ExchangeRateModelFetcher>(true);
+            if (_fetcher == null) {
+                return true;
+            }
+            return false;
+        }
+
         public void Update()
         {
             if (_fetcher.Fetched && _fetcher.RateModel != null && _callbackCount != count)

@@ -76,6 +76,15 @@ namespace Gs2.Unity.UiKit.Gs2MegaField
 
             Update();
         }
+
+        public bool HasError()
+        {
+            _fetcher = GetComponent<Gs2MegaFieldAreaModelFetcher>() ?? GetComponentInParent<Gs2MegaFieldAreaModelFetcher>(true);
+            if (_fetcher == null) {
+                return true;
+            }
+            return false;
+        }
     }
 
     /// <summary>

@@ -25,6 +25,7 @@
 #pragma warning disable CS0472
 
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using Gs2.Gs2Limit.Request;
 using Gs2.Unity.UiKit.Core;
@@ -34,7 +35,7 @@ using Gs2.Util.LitJson;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace Gs2.Unity.UiKit.Gs2Limit.Enabler
+namespace Gs2.Unity.UiKit.Gs2Limit
 {
     /// <summary>
     /// Main
@@ -45,32 +46,11 @@ namespace Gs2.Unity.UiKit.Gs2Limit.Enabler
     {
         public void Update()
         {
-            if (_fetcher.Fetched && _fetcher.Request != null) {
-                switch(expression)
-                {
-                    case Expression.In:
-                        target.SetActive(_fetcher.Request.CountUpValue != null && enableCountUpValues.Contains(_fetcher.Request.CountUpValue.Value));
-                        break;
-                    case Expression.NotIn:
-                        target.SetActive(_fetcher.Request.CountUpValue != null && !enableCountUpValues.Contains(_fetcher.Request.CountUpValue.Value));
-                        break;
-                    case Expression.Less:
-                        target.SetActive(enableCountUpValue > _fetcher.Request.CountUpValue);
-                        break;
-                    case Expression.LessEqual:
-                        target.SetActive(enableCountUpValue >= _fetcher.Request.CountUpValue);
-                        break;
-                    case Expression.Greater:
-                        target.SetActive(enableCountUpValue < _fetcher.Request.CountUpValue);
-                        break;
-                    case Expression.GreaterEqual:
-                        target.SetActive(enableCountUpValue <= _fetcher.Request.CountUpValue);
-                        break;
-                }
+            if (this._fetcher.ConsumeActions().Count(v => v.Action == "Gs2Limit:CountUpByUserId") == 0) {
+                target.SetActive(this.notIncludeConsumeActions);
             }
-            else
-            {
-                target.SetActive(enableCountUpValues.Contains(0));
+            else {
+                target.SetActive(this.includeConsumeActions);
             }
         }
     }
@@ -81,18 +61,33 @@ namespace Gs2.Unity.UiKit.Gs2Limit.Enabler
 
     public partial class Gs2LimitCountUpByUserIdEnabler
     {
-        private Gs2LimitCountUpByUserIdFetcher _fetcher;
+        private IConsumeActionsFetcher _fetcher;
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2LimitCountUpByUserIdFetcher>() ?? GetComponentInParent<Gs2LimitCountUpByUserIdFetcher>();
-
+            _fetcher = GetComponent<IConsumeActionsFetcher>() ?? GetComponentInParent<IConsumeActionsFetcher>();
             if (_fetcher == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2LimitCountUpByUserIdFetcher.");
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the IConsumeActionsFetcher.");
+                enabled = false;
+            }
+            if (target == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: target is not set.");
                 enabled = false;
             }
 
             Update();
+        }
+
+        public bool HasError()
+        {
+            _fetcher = GetComponent<IConsumeActionsFetcher>() ?? GetComponentInParent<IConsumeActionsFetcher>(true);
+            if (_fetcher == null) {
+                return true;
+            }
+            if (target == null) {
+                return true;
+            }
+            return false;
         }
     }
 
@@ -111,21 +106,9 @@ namespace Gs2.Unity.UiKit.Gs2Limit.Enabler
 
     public partial class Gs2LimitCountUpByUserIdEnabler
     {
-        public enum Expression {
-            In,
-            NotIn,
-            Less,
-            LessEqual,
-            Greater,
-            GreaterEqual,
-        }
-
-        public Expression expression;
-
-        public List<int> enableCountUpValues;
-
-        public int enableCountUpValue;
-
+        public bool includeConsumeActions;
+        public bool notIncludeConsumeActions;
+        
         public GameObject target;
     }
 

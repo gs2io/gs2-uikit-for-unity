@@ -41,6 +41,18 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Context
                 Debug.LogError("CounterModel is not set in Gs2MissionCounterModelContext.");
             }
         }
+
+        public bool HasError() {
+            if (CounterModel == null) {
+                if (transform.parent != null && transform.parent.GetComponent<Gs2MissionCounterModelList>() != null) {
+                    return false;
+                }
+                else {
+                    return true;
+                }
+            }
+            return false;
+        }
     }
 
     /// <summary>

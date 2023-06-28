@@ -17,6 +17,14 @@
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
+// ReSharper disable RedundantNameQualifier
+// ReSharper disable RedundantAssignment
+// ReSharper disable NotAccessedVariable
+// ReSharper disable RedundantUsingDirective
+// ReSharper disable Unity.NoNullPropagation
+// ReSharper disable InconsistentNaming
+
+#pragma warning disable CS0472
 
 #if GS2_ENABLE_LOCALIZATION
 
@@ -37,7 +45,7 @@ namespace Gs2.Unity.UiKit.Gs2Account.Localization.Editor
 
             if (original == null) return;
 
-            var fetcher = original.GetComponent<Gs2AccountOwnTakeOverFetcher>() ?? original.GetComponentInParent<Gs2AccountOwnTakeOverFetcher>();
+            var fetcher = original.GetComponent<Gs2AccountOwnTakeOverFetcher>() ?? original.GetComponentInParent<Gs2AccountOwnTakeOverFetcher>(true);
             if (fetcher == null) {
                 EditorGUILayout.HelpBox("Gs2AccountOwnTakeOverFetcher not found.", MessageType.Error);
                 if (GUILayout.Button("Add Fetcher")) {
@@ -45,14 +53,14 @@ namespace Gs2.Unity.UiKit.Gs2Account.Localization.Editor
                 }
             }
             else {
-                if (fetcher.transform.parent.GetComponent<Gs2AccountOwnTakeOverList>() != null) {
+                if (fetcher.transform.parent == null || fetcher.transform.parent.GetComponent<Gs2AccountOwnTakeOverList>() != null) {
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2AccountOwnTakeOverFetcher), false);
                     EditorGUI.EndDisabledGroup();
                     EditorGUILayout.HelpBox("TakeOver is auto assign from Gs2AccountOwnTakeOverList.", MessageType.Info);
                 }
                 else {
-                    var context = original.GetComponent<Gs2AccountOwnTakeOverContext>() ?? original.GetComponentInParent<Gs2AccountOwnTakeOverContext>();
+                    var context = original.GetComponent<Gs2AccountOwnTakeOverContext>() ?? original.GetComponentInParent<Gs2AccountOwnTakeOverContext>(true);
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2AccountOwnTakeOverFetcher), false);
                     EditorGUI.indentLevel++;

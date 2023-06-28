@@ -133,6 +133,15 @@ namespace Gs2.Unity.UiKit.Gs2MegaField.Fetcher
                 enabled = false;
             }
         }
+
+        public bool HasError()
+        {
+            _context = GetComponent<Gs2MegaFieldNamespaceContext>() ?? GetComponentInParent<Gs2MegaFieldNamespaceContext>(true);
+            if (_context == null) {
+                return true;
+            }
+            return false;
+        }
     }
 
     /// <summary>

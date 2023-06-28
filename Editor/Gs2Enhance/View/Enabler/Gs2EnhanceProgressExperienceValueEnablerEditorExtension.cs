@@ -39,7 +39,7 @@ namespace Gs2.Unity.UiKit.Gs2Enhance.Editor
 
             if (original == null) return;
 
-            var context = original.GetComponent<Gs2EnhanceOwnProgressContext>() ?? original.GetComponentInParent<Gs2EnhanceOwnProgressContext>();
+            var context = original.GetComponent<Gs2EnhanceOwnProgressContext>() ?? original.GetComponentInParent<Gs2EnhanceOwnProgressContext>(true);
             if (context == null) {
                 EditorGUILayout.HelpBox("Gs2EnhanceOwnProgressContext not found.", MessageType.Error);
                 if (GUILayout.Button("Add Context")) {

@@ -88,6 +88,19 @@ namespace Gs2.Unity.UiKit.Gs2Inventory
             }
             this.prefab.gameObject.SetActive(false);
         }
+
+        public bool HasError()
+        {
+            _context = GetComponent<Gs2InventoryNamespaceContext>() ?? GetComponentInParent<Gs2InventoryNamespaceContext>(true);
+            _fetcher = GetComponent<Gs2InventoryInventoryModelListFetcher>() ?? GetComponentInParent<Gs2InventoryInventoryModelListFetcher>(true);
+            if (_context == null) {
+                return true;
+            }
+            if (_fetcher == null) {
+                return true;
+            }
+            return false;
+        }
     }
 
     /// <summary>

@@ -41,6 +41,13 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking.Context
                 Debug.LogError("Rating is not set in Gs2MatchmakingOwnRatingContext.");
             }
         }
+
+        public bool HasError() {
+            if (Rating == null) {
+                return true;
+            }
+            return false;
+        }
     }
 
     /// <summary>

@@ -88,6 +88,15 @@ namespace Gs2.Unity.UiKit.Gs2Quest
                 enabled = false;
             }
         }
+
+        public bool HasError()
+        {
+            _fetcher = GetComponent<Gs2QuestOwnProgressFetcher>() ?? GetComponentInParent<Gs2QuestOwnProgressFetcher>(true);
+            if (_fetcher == null) {
+                return true;
+            }
+            return false;
+        }
     }
 
     /// <summary>

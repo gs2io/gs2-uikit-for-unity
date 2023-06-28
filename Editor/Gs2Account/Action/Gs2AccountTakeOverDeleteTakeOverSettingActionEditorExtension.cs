@@ -40,7 +40,7 @@ namespace Gs2.Unity.UiKit.Gs2Account.Editor
 
             if (original == null) return;
 
-            var context = original.GetComponent<Gs2AccountTakeOverContext>() ?? original.GetComponentInParent<Gs2AccountTakeOverContext>();
+            var context = original.GetComponent<Gs2AccountTakeOverContext>() ?? original.GetComponentInParent<Gs2AccountTakeOverContext>(true);
             if (context == null) {
                 EditorGUILayout.HelpBox("Gs2AccountTakeOverContext not found.", MessageType.Error);
                 if (GUILayout.Button("Add Context")) {

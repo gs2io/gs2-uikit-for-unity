@@ -76,6 +76,15 @@ namespace Gs2.Unity.UiKit.Gs2Gateway
 
             Update();
         }
+
+        public bool HasError()
+        {
+            _fetcher = GetComponent<Gs2GatewayOwnWebSocketSessionFetcher>() ?? GetComponentInParent<Gs2GatewayOwnWebSocketSessionFetcher>(true);
+            if (_fetcher == null) {
+                return true;
+            }
+            return false;
+        }
     }
 
     /// <summary>

@@ -78,6 +78,15 @@ namespace Gs2.Unity.UiKit.Gs2Inventory
 
             Update();
         }
+
+        public bool HasError()
+        {
+            _fetcher = GetComponent<Gs2InventoryInventoryModelFetcher>() ?? GetComponentInParent<Gs2InventoryInventoryModelFetcher>(true);
+            if (_fetcher == null) {
+                return true;
+            }
+            return false;
+        }
     }
 
     /// <summary>

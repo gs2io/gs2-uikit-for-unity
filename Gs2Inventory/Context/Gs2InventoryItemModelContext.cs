@@ -41,6 +41,18 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Context
                 Debug.LogError("ItemModel is not set in Gs2InventoryItemModelContext.");
             }
         }
+
+        public bool HasError() {
+            if (ItemModel == null) {
+                if (transform.parent != null && transform.parent.GetComponent<Gs2InventoryItemModelList>() != null) {
+                    return false;
+                }
+                else {
+                    return true;
+                }
+            }
+            return false;
+        }
     }
 
     /// <summary>

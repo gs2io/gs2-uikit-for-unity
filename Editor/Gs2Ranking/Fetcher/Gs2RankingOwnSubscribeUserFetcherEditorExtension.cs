@@ -17,6 +17,14 @@
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
+// ReSharper disable RedundantNameQualifier
+// ReSharper disable RedundantAssignment
+// ReSharper disable NotAccessedVariable
+// ReSharper disable RedundantUsingDirective
+// ReSharper disable Unity.NoNullPropagation
+// ReSharper disable InconsistentNaming
+
+#pragma warning disable CS0472
 
 using Gs2.Unity.Gs2Ranking.ScriptableObject;
 using Gs2.Unity.UiKit.Gs2Ranking.Context;
@@ -34,9 +42,9 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Editor
 
             if (original == null) return;
 
-            var context = original.GetComponentInParent<Gs2RankingOwnSubscribeContext>();
+            var context = original.GetComponent<Gs2RankingOwnSubscribeContext>() ?? original.GetComponentInParent<Gs2RankingOwnSubscribeContext>(true);
             if (context == null) {
-                EditorGUILayout.HelpBox("Gs2RankingOwnSubscribeUserContext not found.", MessageType.Error);
+                EditorGUILayout.HelpBox("Gs2RankingOwnSubscribeContext not found.", MessageType.Error);
                 if (GUILayout.Button("Add Context")) {
                     original.gameObject.AddComponent<Gs2RankingOwnSubscribeContext>();
                 }

@@ -41,6 +41,13 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking.Context
                 Debug.LogError("Gathering is not set in Gs2MatchmakingGatheringContext.");
             }
         }
+
+        public bool HasError() {
+            if (Gathering == null) {
+                return true;
+            }
+            return false;
+        }
     }
 
     /// <summary>

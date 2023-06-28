@@ -73,6 +73,22 @@ namespace Gs2.Unity.UiKit.Gs2Inventory
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2InventoryOwnInventoryFetcher.");
                 enabled = false;
             }
+            if (target == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: target is not set.");
+                enabled = false;
+            }
+        }
+
+        public bool HasError()
+        {
+            _fetcher = GetComponent<Gs2InventoryOwnInventoryFetcher>() ?? GetComponentInParent<Gs2InventoryOwnInventoryFetcher>(true);
+            if (_fetcher == null) {
+                return true;
+            }
+            if (target == null) {
+                return true;
+            }
+            return false;
         }
     }
 

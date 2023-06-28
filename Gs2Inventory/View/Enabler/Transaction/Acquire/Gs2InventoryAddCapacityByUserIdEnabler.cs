@@ -25,6 +25,7 @@
 #pragma warning disable CS0472
 
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using Gs2.Gs2Inventory.Request;
 using Gs2.Unity.UiKit.Core;
@@ -45,32 +46,11 @@ namespace Gs2.Unity.UiKit.Gs2Inventory
     {
         public void Update()
         {
-            if (_fetcher.Fetched && _fetcher.Request != null) {
-                switch(expression)
-                {
-                    case Expression.In:
-                        target.SetActive(_fetcher.Request.AddCapacityValue != null && enableAddCapacityValues.Contains(_fetcher.Request.AddCapacityValue.Value));
-                        break;
-                    case Expression.NotIn:
-                        target.SetActive(_fetcher.Request.AddCapacityValue != null && !enableAddCapacityValues.Contains(_fetcher.Request.AddCapacityValue.Value));
-                        break;
-                    case Expression.Less:
-                        target.SetActive(enableAddCapacityValue > _fetcher.Request.AddCapacityValue);
-                        break;
-                    case Expression.LessEqual:
-                        target.SetActive(enableAddCapacityValue >= _fetcher.Request.AddCapacityValue);
-                        break;
-                    case Expression.Greater:
-                        target.SetActive(enableAddCapacityValue < _fetcher.Request.AddCapacityValue);
-                        break;
-                    case Expression.GreaterEqual:
-                        target.SetActive(enableAddCapacityValue <= _fetcher.Request.AddCapacityValue);
-                        break;
-                }
+            if (this._fetcher.AcquireActions().Count(v => v.Action == "Gs2Inventory:AddCapacityByUserId") == 0) {
+                target.SetActive(this.notIncludeAcquireActions);
             }
-            else
-            {
-                target.SetActive(enableAddCapacityValues.Contains(0));
+            else {
+                target.SetActive(this.includeAcquireActions);
             }
         }
     }
@@ -81,18 +61,33 @@ namespace Gs2.Unity.UiKit.Gs2Inventory
 
     public partial class Gs2InventoryAddCapacityByUserIdEnabler
     {
-        private Gs2InventoryAddCapacityByUserIdFetcher _fetcher;
+        private IAcquireActionsFetcher _fetcher;
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2InventoryAddCapacityByUserIdFetcher>() ?? GetComponentInParent<Gs2InventoryAddCapacityByUserIdFetcher>();
-
+            _fetcher = GetComponent<IAcquireActionsFetcher>() ?? GetComponentInParent<IAcquireActionsFetcher>();
             if (_fetcher == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2InventoryAddCapacityByUserIdFetcher.");
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the IAcquireActionsFetcher.");
+                enabled = false;
+            }
+            if (target == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: target is not set.");
                 enabled = false;
             }
 
             Update();
+        }
+
+        public bool HasError()
+        {
+            _fetcher = GetComponent<IAcquireActionsFetcher>() ?? GetComponentInParent<IAcquireActionsFetcher>(true);
+            if (_fetcher == null) {
+                return true;
+            }
+            if (target == null) {
+                return true;
+            }
+            return false;
         }
     }
 
@@ -111,21 +106,9 @@ namespace Gs2.Unity.UiKit.Gs2Inventory
 
     public partial class Gs2InventoryAddCapacityByUserIdEnabler
     {
-        public enum Expression {
-            In,
-            NotIn,
-            Less,
-            LessEqual,
-            Greater,
-            GreaterEqual,
-        }
-
-        public Expression expression;
-
-        public List<int> enableAddCapacityValues;
-
-        public int enableAddCapacityValue;
-
+        public bool includeAcquireActions;
+        public bool notIncludeAcquireActions;
+        
         public GameObject target;
     }
 

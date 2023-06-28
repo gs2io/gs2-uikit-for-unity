@@ -43,7 +43,7 @@ namespace Gs2.Unity.UiKit.Gs2Stamina.Localization.Editor
 
             if (original == null) return;
 
-            var fetcher = original.GetComponent<Gs2StaminaStaminaModelFetcher>() ?? original.GetComponentInParent<Gs2StaminaStaminaModelFetcher>();
+            var fetcher = original.GetComponent<Gs2StaminaStaminaModelFetcher>() ?? original.GetComponentInParent<Gs2StaminaStaminaModelFetcher>(true);
             if (fetcher == null) {
                 EditorGUILayout.HelpBox("Gs2StaminaStaminaModelFetcher not found.", MessageType.Error);
                 if (GUILayout.Button("Add Fetcher")) {
@@ -51,14 +51,14 @@ namespace Gs2.Unity.UiKit.Gs2Stamina.Localization.Editor
                 }
             }
             else {
-                if (fetcher.transform.parent.GetComponent<Gs2StaminaStaminaModelList>() != null) {
+                if (fetcher.transform.parent == null || fetcher.transform.parent.GetComponent<Gs2StaminaStaminaModelList>() != null) {
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2StaminaStaminaModelFetcher), false);
                     EditorGUI.EndDisabledGroup();
                     EditorGUILayout.HelpBox("StaminaModel is auto assign from Gs2StaminaStaminaModelList.", MessageType.Info);
                 }
                 else {
-                    var context = original.GetComponent<Gs2StaminaStaminaModelContext>() ?? original.GetComponentInParent<Gs2StaminaStaminaModelContext>();
+                    var context = original.GetComponent<Gs2StaminaStaminaModelContext>() ?? original.GetComponentInParent<Gs2StaminaStaminaModelContext>(true);
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2StaminaStaminaModelFetcher), false);
                     EditorGUI.indentLevel++;

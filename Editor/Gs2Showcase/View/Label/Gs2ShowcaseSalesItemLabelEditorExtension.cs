@@ -17,34 +17,44 @@
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
+// ReSharper disable RedundantNameQualifier
+// ReSharper disable RedundantAssignment
+// ReSharper disable NotAccessedVariable
+// ReSharper disable RedundantUsingDirective
+// ReSharper disable Unity.NoNullPropagation
+// ReSharper disable InconsistentNaming
+
+#pragma warning disable CS0472
 
 using Gs2.Unity.Gs2Showcase.ScriptableObject;
 using Gs2.Unity.UiKit.Gs2Showcase.Context;
+using Gs2.Unity.UiKit.Gs2Showcase.Fetcher;
 using UnityEditor;
 using UnityEngine;
 
 namespace Gs2.Unity.UiKit.Gs2Showcase.Editor
 {
-    [CustomEditor(typeof(Gs2ShowcaseSalesItemLabel))]
+    [CustomEditor(typeof(Gs2ShowcaseDisplayItemLabel))]
     public class Gs2ShowcaseSalesItemLabelEditorExtension : UnityEditor.Editor
     {
         public override void OnInspectorGUI() {
-            var original = target as Gs2ShowcaseSalesItemLabel;
+            var original = target as Gs2ShowcaseDisplayItemLabel;
 
             if (original == null) return;
 
-            var context = original.GetComponentInParent<Gs2ShowcaseDisplayItemContext>();
-            if (context == null) {
-                EditorGUILayout.HelpBox("Gs2ShowcaseDisplayItemContext not found.", MessageType.Error);
-                if (GUILayout.Button("Add Context")) {
-                    original.gameObject.AddComponent<Gs2ShowcaseDisplayItemContext>();
+            var fetcher = original.GetComponent<Gs2ShowcaseDisplayItemFetcher>() ?? original.GetComponentInParent<Gs2ShowcaseDisplayItemFetcher>(true);
+            if (fetcher == null) {
+                EditorGUILayout.HelpBox("Gs2ShowcaseDisplayItemFetcher not found.", MessageType.Error);
+                if (GUILayout.Button("Add Fetcher")) {
+                    original.gameObject.AddComponent<Gs2ShowcaseDisplayItemFetcher>();
                 }
             }
             else {
+                var context = original.GetComponent<Gs2ShowcaseDisplayItemContext>() ?? original.GetComponentInParent<Gs2ShowcaseDisplayItemContext>(true);
                 EditorGUI.BeginDisabledGroup(true);
-                EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2ShowcaseDisplayItemContext), false);
+                EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2ShowcaseDisplayItemFetcher), false);
                 EditorGUI.indentLevel++;
-                EditorGUILayout.ObjectField("DisplayItem", context.DisplayItem, typeof(DisplayItem), false);
+                context.DisplayItem = EditorGUILayout.ObjectField("DisplayItem", context.DisplayItem, typeof(DisplayItem), false) as DisplayItem;
                 EditorGUI.indentLevel++;
                 EditorGUILayout.TextField("NamespaceName", context.DisplayItem?.NamespaceName.ToString());
                 EditorGUILayout.TextField("ShowcaseName", context.DisplayItem?.ShowcaseName.ToString());

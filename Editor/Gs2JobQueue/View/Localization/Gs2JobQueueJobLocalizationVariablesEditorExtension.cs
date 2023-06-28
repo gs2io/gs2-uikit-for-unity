@@ -43,7 +43,7 @@ namespace Gs2.Unity.UiKit.Gs2JobQueue.Localization.Editor
 
             if (original == null) return;
 
-            var fetcher = original.GetComponent<Gs2JobQueueOwnJobFetcher>() ?? original.GetComponentInParent<Gs2JobQueueOwnJobFetcher>();
+            var fetcher = original.GetComponent<Gs2JobQueueOwnJobFetcher>() ?? original.GetComponentInParent<Gs2JobQueueOwnJobFetcher>(true);
             if (fetcher == null) {
                 EditorGUILayout.HelpBox("Gs2JobQueueOwnJobFetcher not found.", MessageType.Error);
                 if (GUILayout.Button("Add Fetcher")) {
@@ -51,7 +51,7 @@ namespace Gs2.Unity.UiKit.Gs2JobQueue.Localization.Editor
                 }
             }
             else {
-                var context = original.GetComponent<Gs2JobQueueOwnJobContext>() ?? original.GetComponentInParent<Gs2JobQueueOwnJobContext>();
+                var context = original.GetComponent<Gs2JobQueueOwnJobContext>() ?? original.GetComponentInParent<Gs2JobQueueOwnJobContext>(true);
                 EditorGUI.BeginDisabledGroup(true);
                 EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2JobQueueOwnJobFetcher), false);
                 EditorGUI.indentLevel++;

@@ -39,7 +39,7 @@ namespace Gs2.Unity.UiKit.Gs2Limit.Editor
 
             if (original == null) return;
 
-            var context = original.GetComponent<Gs2LimitLimitModelContext>() ?? original.GetComponentInParent<Gs2LimitLimitModelContext>();
+            var context = original.GetComponent<Gs2LimitLimitModelContext>() ?? original.GetComponentInParent<Gs2LimitLimitModelContext>(true);
             if (context == null) {
                 EditorGUILayout.HelpBox("Gs2LimitLimitModelContext not found.", MessageType.Error);
                 if (GUILayout.Button("Add Context")) {

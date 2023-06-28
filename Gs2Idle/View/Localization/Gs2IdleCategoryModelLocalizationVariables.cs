@@ -85,6 +85,15 @@ namespace Gs2.Unity.UiKit.Gs2Idle.Localization
                 enabled = false;
             }
         }
+
+        public bool HasError()
+        {
+            _fetcher = GetComponent<Gs2IdleCategoryModelFetcher>() ?? GetComponentInParent<Gs2IdleCategoryModelFetcher>(true);
+            if (_fetcher == null) {
+                return true;
+            }
+            return false;
+        }
     }
 
     /// <summary>

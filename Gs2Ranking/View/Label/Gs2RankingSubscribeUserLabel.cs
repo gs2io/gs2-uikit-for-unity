@@ -74,6 +74,15 @@ namespace Gs2.Unity.UiKit.Gs2Ranking
 
             Update();
         }
+
+        public bool HasError()
+        {
+            _fetcher = GetComponent<Gs2RankingSubscribeUserFetcher>() ?? GetComponentInParent<Gs2RankingSubscribeUserFetcher>(true);
+            if (_fetcher == null) {
+                return true;
+            }
+            return false;
+        }
     }
 
     /// <summary>

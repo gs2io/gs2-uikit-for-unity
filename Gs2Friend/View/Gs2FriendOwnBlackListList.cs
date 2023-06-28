@@ -90,6 +90,19 @@ namespace Gs2.Unity.UiKit.Gs2Friend
             }
             this.prefab.gameObject.SetActive(false);
         }
+
+        public bool HasError()
+        {
+            _context = GetComponent<Gs2FriendNamespaceContext>() ?? GetComponentInParent<Gs2FriendNamespaceContext>(true);
+            _fetcher = GetComponent<Gs2FriendOwnBlackListListFetcher>() ?? GetComponentInParent<Gs2FriendOwnBlackListListFetcher>(true);
+            if (_context == null) {
+                return true;
+            }
+            if (_fetcher == null) {
+                return true;
+            }
+            return false;
+        }
     }
 
     /// <summary>

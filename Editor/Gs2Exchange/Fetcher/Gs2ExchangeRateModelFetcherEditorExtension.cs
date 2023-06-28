@@ -40,7 +40,7 @@ namespace Gs2.Unity.UiKit.Gs2Exchange.Editor
 
             if (original == null) return;
 
-            var context = original.GetComponent<Gs2ExchangeRateModelContext>() ?? original.GetComponentInParent<Gs2ExchangeRateModelContext>();
+            var context = original.GetComponent<Gs2ExchangeRateModelContext>() ?? original.GetComponentInParent<Gs2ExchangeRateModelContext>(true);
             if (context == null) {
                 EditorGUILayout.HelpBox("Gs2ExchangeRateModelContext not found.", MessageType.Error);
                 if (GUILayout.Button("Add Context")) {

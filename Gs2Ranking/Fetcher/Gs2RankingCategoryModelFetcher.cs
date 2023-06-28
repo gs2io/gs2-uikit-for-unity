@@ -56,13 +56,13 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Fetcher
             {
                 if (_gameSessionHolder != null && _gameSessionHolder.Initialized &&
                     _clientHolder != null && _clientHolder.Initialized &&
-                    _context != null && this._context.CategoryModel != null)
+                    Context != null && this.Context.CategoryModel != null)
                 {
                     
                     var domain = this._clientHolder.Gs2.Ranking.Namespace(
-                        this._context.CategoryModel.NamespaceName
+                        this.Context.CategoryModel.NamespaceName
                     ).CategoryModel(
-                        this._context.CategoryModel.CategoryName
+                        this.Context.CategoryModel.CategoryName
                     );
                     var future = domain.Model();
                     yield return future;
@@ -113,18 +113,27 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Fetcher
     {
         protected Gs2ClientHolder _clientHolder;
         protected Gs2GameSessionHolder _gameSessionHolder;
-        private Gs2RankingCategoryModelContext _context;
+        public Gs2RankingCategoryModelContext Context { get; private set; }
 
         public void Awake()
         {
             _clientHolder = Gs2ClientHolder.Instance;
             _gameSessionHolder = Gs2GameSessionHolder.Instance;
-            _context = GetComponent<Gs2RankingCategoryModelContext>() ?? GetComponentInParent<Gs2RankingCategoryModelContext>();
+            Context = GetComponent<Gs2RankingCategoryModelContext>() ?? GetComponentInParent<Gs2RankingCategoryModelContext>();
 
-            if (_context == null) {
+            if (Context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2RankingCategoryModelContext.");
                 enabled = false;
             }
+        }
+
+        public bool HasError()
+        {
+            Context = GetComponent<Gs2RankingCategoryModelContext>() ?? GetComponentInParent<Gs2RankingCategoryModelContext>(true);
+            if (Context == null) {
+                return true;
+            }
+            return false;
         }
     }
 

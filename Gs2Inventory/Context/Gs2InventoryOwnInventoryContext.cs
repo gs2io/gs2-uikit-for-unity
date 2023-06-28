@@ -41,6 +41,13 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Context
                 Debug.LogError("Inventory is not set in Gs2InventoryOwnInventoryContext.");
             }
         }
+
+        public bool HasError() {
+            if (Inventory == null) {
+                return true;
+            }
+            return false;
+        }
     }
 
     /// <summary>

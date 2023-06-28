@@ -41,6 +41,18 @@ namespace Gs2.Unity.UiKit.Gs2MegaField.Context
                 Debug.LogError("LayerModel is not set in Gs2MegaFieldLayerModelContext.");
             }
         }
+
+        public bool HasError() {
+            if (LayerModel == null) {
+                if (transform.parent != null && transform.parent.GetComponent<Gs2MegaFieldLayerModelList>() != null) {
+                    return false;
+                }
+                else {
+                    return true;
+                }
+            }
+            return false;
+        }
     }
 
     /// <summary>

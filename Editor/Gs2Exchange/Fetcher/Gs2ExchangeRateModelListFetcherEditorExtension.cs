@@ -40,7 +40,7 @@ namespace Gs2.Unity.UiKit.Gs2Exchange.Editor
 
             if (original == null) return;
 
-            var context = original.GetComponent<Gs2ExchangeNamespaceContext>() ?? original.GetComponentInParent<Gs2ExchangeNamespaceContext>();
+            var context = original.GetComponent<Gs2ExchangeNamespaceContext>() ?? original.GetComponentInParent<Gs2ExchangeNamespaceContext>(true);
             if (context == null) {
                 EditorGUILayout.HelpBox("Gs2ExchangeNamespaceContext not found.", MessageType.Error);
                 if (GUILayout.Button("Add Context")) {

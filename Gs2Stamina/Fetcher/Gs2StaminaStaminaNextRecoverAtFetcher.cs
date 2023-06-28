@@ -68,6 +68,15 @@ namespace Gs2.Unity.UiKit.Gs2Stamina
                 enabled = false;
             }
         }
+
+        public bool HasError()
+        {
+            _fetcher = GetComponent<Gs2StaminaOwnStaminaFetcher>() ?? GetComponentInParent<Gs2StaminaOwnStaminaFetcher>(true);
+            if (_fetcher == null) {
+                return true;
+            }
+            return false;
+        }
     }
 
     /// <summary>

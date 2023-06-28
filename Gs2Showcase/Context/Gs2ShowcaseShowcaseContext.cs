@@ -41,6 +41,13 @@ namespace Gs2.Unity.UiKit.Gs2Showcase.Context
                 Debug.LogError("Showcase is not set in Gs2ShowcaseShowcaseContext.");
             }
         }
+
+        public bool HasError() {
+            if (Showcase == null) {
+                return true;
+            }
+            return false;
+        }
     }
 
     /// <summary>

@@ -41,6 +41,13 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.Context
                 Debug.LogError("User is not set in Gs2LotteryUserContext.");
             }
         }
+
+        public bool HasError() {
+            if (User == null) {
+                return true;
+            }
+            return false;
+        }
     }
 
     /// <summary>

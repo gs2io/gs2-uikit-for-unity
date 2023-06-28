@@ -130,6 +130,15 @@ namespace Gs2.Unity.UiKit.Gs2Account
                 enabled = false;
             }
         }
+
+        public bool HasError()
+        {
+            this._context = GetComponent<Gs2AccountNamespaceContext>() ?? GetComponentInParent<Gs2AccountNamespaceContext>(true);
+            if (_context == null) {
+                return true;
+            }
+            return false;
+        }
     }
 
     /// <summary>

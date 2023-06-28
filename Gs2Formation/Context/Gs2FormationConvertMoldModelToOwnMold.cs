@@ -45,7 +45,16 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Context
                 enabled = false;
             }
         }
-        
+
+        public bool HasError()
+        {
+            _context = GetComponent<Gs2FormationMoldModelContext>() ?? GetComponentInParent<Gs2FormationMoldModelContext>(true);
+            if (_context == null) {
+                return true;
+            }
+            return false;
+        }
+
         public void Start() {
             this.onConverted.Invoke(
                 OwnMold.New(

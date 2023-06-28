@@ -24,6 +24,7 @@
 
 #pragma warning disable CS0472
 
+using Gs2.Unity.UiKit.Gs2JobQueue.Fetcher;
 using UnityEditor;
 using UnityEngine;
 
@@ -36,6 +37,21 @@ namespace Gs2.Unity.UiKit.Gs2JobQueue.Label.Editor
             var original = target as Gs2JobQueuePushByUserIdLabel;
 
             if (original == null) return;
+
+            var fetcher = original.GetComponent<Gs2JobQueuePushByUserIdFetcher>() ?? original.GetComponentInParent<Gs2JobQueuePushByUserIdFetcher>(true);
+             var userDataFetcher = original.GetComponent<Gs2JobQueueOwnJobFetcher>() ?? original.GetComponentInParent<Gs2JobQueueOwnJobFetcher>(true);
+            if (fetcher == null) {
+                EditorGUILayout.HelpBox("Gs2JobQueuePushByUserIdFetcher not found.", MessageType.Error);
+                if (GUILayout.Button("Add Fetcher")) {
+                    original.gameObject.AddComponent<Gs2JobQueuePushByUserIdFetcher>();
+                }
+            }
+            if (userDataFetcher == null) {
+                EditorGUILayout.HelpBox("Gs2JobQueueOwnJobFetcher not found. Adding a Fetcher allows more values to be used.", MessageType.Warning);
+                if (GUILayout.Button("Add Fetcher")) {
+                    original.gameObject.AddComponent<Gs2JobQueueOwnJobFetcher>();
+                }
+            }
 
             serializedObject.Update();
             original.format = EditorGUILayout.TextField("Format", original.format);
@@ -56,30 +72,32 @@ namespace Gs2.Unity.UiKit.Gs2JobQueue.Label.Editor
                 GUI.FocusControl("");
                 EditorUtility.SetDirty(original);
             }
-            if (GUILayout.Button("UserData:JobId")) {
-                original.format += "{userData:jobId}";
-                GUI.FocusControl("");
-                EditorUtility.SetDirty(original);
-            }
-            if (GUILayout.Button("UserData:ScriptId")) {
-                original.format += "{userData:scriptId}";
-                GUI.FocusControl("");
-                EditorUtility.SetDirty(original);
-            }
-            if (GUILayout.Button("UserData:Args")) {
-                original.format += "{userData:args}";
-                GUI.FocusControl("");
-                EditorUtility.SetDirty(original);
-            }
-            if (GUILayout.Button("UserData:CurrentRetryCount")) {
-                original.format += "{userData:currentRetryCount}";
-                GUI.FocusControl("");
-                EditorUtility.SetDirty(original);
-            }
-            if (GUILayout.Button("UserData:MaxTryCount")) {
-                original.format += "{userData:maxTryCount}";
-                GUI.FocusControl("");
-                EditorUtility.SetDirty(original);
+            if (userDataFetcher != null) {
+                if (GUILayout.Button("UserData:JobId")) {
+                    original.format += "{userData:jobId}";
+                    GUI.FocusControl("");
+                    EditorUtility.SetDirty(original);
+                }
+                if (GUILayout.Button("UserData:ScriptId")) {
+                    original.format += "{userData:scriptId}";
+                    GUI.FocusControl("");
+                    EditorUtility.SetDirty(original);
+                }
+                if (GUILayout.Button("UserData:Args")) {
+                    original.format += "{userData:args}";
+                    GUI.FocusControl("");
+                    EditorUtility.SetDirty(original);
+                }
+                if (GUILayout.Button("UserData:CurrentRetryCount")) {
+                    original.format += "{userData:currentRetryCount}";
+                    GUI.FocusControl("");
+                    EditorUtility.SetDirty(original);
+                }
+                if (GUILayout.Button("UserData:MaxTryCount")) {
+                    original.format += "{userData:maxTryCount}";
+                    GUI.FocusControl("");
+                    EditorUtility.SetDirty(original);
+                }
             }
             EditorGUILayout.PropertyField(serializedObject.FindProperty("onUpdate"), true);
             serializedObject.ApplyModifiedProperties();

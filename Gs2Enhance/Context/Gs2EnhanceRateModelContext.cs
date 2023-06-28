@@ -41,6 +41,18 @@ namespace Gs2.Unity.UiKit.Gs2Enhance.Context
                 Debug.LogError("RateModel is not set in Gs2EnhanceRateModelContext.");
             }
         }
+
+        public bool HasError() {
+            if (RateModel == null) {
+                if (transform.parent != null && transform.parent.GetComponent<Gs2EnhanceRateModelList>() != null) {
+                    return false;
+                }
+                else {
+                    return true;
+                }
+            }
+            return false;
+        }
     }
 
     /// <summary>

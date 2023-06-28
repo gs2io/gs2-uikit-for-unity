@@ -88,6 +88,19 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking
             }
             this.prefab.gameObject.SetActive(false);
         }
+
+        public bool HasError()
+        {
+            _context = GetComponent<Gs2MatchmakingNamespaceContext>() ?? GetComponentInParent<Gs2MatchmakingNamespaceContext>(true);
+            _fetcher = GetComponent<Gs2MatchmakingRatingModelListFetcher>() ?? GetComponentInParent<Gs2MatchmakingRatingModelListFetcher>(true);
+            if (_context == null) {
+                return true;
+            }
+            if (_fetcher == null) {
+                return true;
+            }
+            return false;
+        }
     }
 
     /// <summary>

@@ -24,6 +24,7 @@
 
 #pragma warning disable CS0472
 
+using Gs2.Unity.UiKit.Gs2Mission.Fetcher;
 using UnityEditor;
 using UnityEngine;
 
@@ -36,6 +37,21 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Label.Editor
             var original = target as Gs2MissionReceiveByUserIdLabel;
 
             if (original == null) return;
+
+            var fetcher = original.GetComponent<Gs2MissionReceiveByUserIdFetcher>() ?? original.GetComponentInParent<Gs2MissionReceiveByUserIdFetcher>(true);
+             var userDataFetcher = original.GetComponent<Gs2MissionOwnCompleteFetcher>() ?? original.GetComponentInParent<Gs2MissionOwnCompleteFetcher>(true);
+            if (fetcher == null) {
+                EditorGUILayout.HelpBox("Gs2MissionReceiveByUserIdFetcher not found.", MessageType.Error);
+                if (GUILayout.Button("Add Fetcher")) {
+                    original.gameObject.AddComponent<Gs2MissionReceiveByUserIdFetcher>();
+                }
+            }
+            if (userDataFetcher == null) {
+                EditorGUILayout.HelpBox("Gs2MissionOwnCompleteFetcher not found. Adding a Fetcher allows more values to be used.", MessageType.Warning);
+                if (GUILayout.Button("Add Fetcher")) {
+                    original.gameObject.AddComponent<Gs2MissionOwnCompleteFetcher>();
+                }
+            }
 
             serializedObject.Update();
             original.format = EditorGUILayout.TextField("Format", original.format);
@@ -61,20 +77,22 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Label.Editor
                 GUI.FocusControl("");
                 EditorUtility.SetDirty(original);
             }
-            if (GUILayout.Button("UserData:MissionGroupName")) {
-                original.format += "{userData:missionGroupName}";
-                GUI.FocusControl("");
-                EditorUtility.SetDirty(original);
-            }
-            if (GUILayout.Button("UserData:CompletedMissionTaskNames")) {
-                original.format += "{userData:completedMissionTaskNames}";
-                GUI.FocusControl("");
-                EditorUtility.SetDirty(original);
-            }
-            if (GUILayout.Button("UserData:ReceivedMissionTaskNames")) {
-                original.format += "{userData:receivedMissionTaskNames}";
-                GUI.FocusControl("");
-                EditorUtility.SetDirty(original);
+            if (userDataFetcher != null) {
+                if (GUILayout.Button("UserData:MissionGroupName")) {
+                    original.format += "{userData:missionGroupName}";
+                    GUI.FocusControl("");
+                    EditorUtility.SetDirty(original);
+                }
+                if (GUILayout.Button("UserData:CompletedMissionTaskNames")) {
+                    original.format += "{userData:completedMissionTaskNames}";
+                    GUI.FocusControl("");
+                    EditorUtility.SetDirty(original);
+                }
+                if (GUILayout.Button("UserData:ReceivedMissionTaskNames")) {
+                    original.format += "{userData:receivedMissionTaskNames}";
+                    GUI.FocusControl("");
+                    EditorUtility.SetDirty(original);
+                }
             }
             EditorGUILayout.PropertyField(serializedObject.FindProperty("onUpdate"), true);
             serializedObject.ApplyModifiedProperties();

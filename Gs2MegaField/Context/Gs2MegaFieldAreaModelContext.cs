@@ -41,6 +41,18 @@ namespace Gs2.Unity.UiKit.Gs2MegaField.Context
                 Debug.LogError("AreaModel is not set in Gs2MegaFieldAreaModelContext.");
             }
         }
+
+        public bool HasError() {
+            if (AreaModel == null) {
+                if (transform.parent != null && transform.parent.GetComponent<Gs2MegaFieldAreaModelList>() != null) {
+                    return false;
+                }
+                else {
+                    return true;
+                }
+            }
+            return false;
+        }
     }
 
     /// <summary>

@@ -139,6 +139,15 @@ namespace Gs2.Unity.UiKit.Gs2Formation
                 enabled = false;
             }
         }
+
+        public bool HasError()
+        {
+            this._context = GetComponent<Gs2FormationOwnFormContext>() ?? GetComponentInParent<Gs2FormationOwnFormContext>(true);
+            if (_context == null) {
+                return true;
+            }
+            return false;
+        }
     }
 
     /// <summary>

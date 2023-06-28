@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
@@ -82,6 +84,9 @@ namespace Gs2.Unity.UiKit.Gs2Limit.Label
                             "{userData:count:changed}",
                             $"{_userDataFetcher.Counter.Count + _fetcher.Request.CountUpValue}"
                         ).Replace(
+                            "{userData:count:remain}",
+                            $"{_fetcher.Request.MaxValue - _userDataFetcher.Counter.Count}"
+                        ).Replace(
                             "{userData:createdAt}",
                             $"{_userDataFetcher.Counter.CreatedAt}"
                         ).Replace(
@@ -136,12 +141,18 @@ namespace Gs2.Unity.UiKit.Gs2Limit.Label
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2LimitCountUpByUserIdFetcher.");
                 enabled = false;
             }
-            if (_userDataFetcher == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2LimitOwnCounterFetcher.");
-                enabled = false;
-            }
 
             Update();
+        }
+
+        public bool HasError()
+        {
+            _fetcher = GetComponent<Gs2LimitCountUpByUserIdFetcher>() ?? GetComponentInParent<Gs2LimitCountUpByUserIdFetcher>(true);
+            _userDataFetcher = GetComponent<Gs2LimitOwnCounterFetcher>() ?? GetComponentInParent<Gs2LimitOwnCounterFetcher>(true);
+            if (_fetcher == null) {
+                return true;
+            }
+            return false;
         }
     }
 

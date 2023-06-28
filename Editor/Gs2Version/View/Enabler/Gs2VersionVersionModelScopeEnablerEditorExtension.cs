@@ -39,7 +39,7 @@ namespace Gs2.Unity.UiKit.Gs2Version.Enabler.Editor
 
             if (original == null) return;
 
-            var context = original.GetComponent<Gs2VersionVersionModelContext>() ?? original.GetComponentInParent<Gs2VersionVersionModelContext>();
+            var context = original.GetComponent<Gs2VersionVersionModelContext>() ?? original.GetComponentInParent<Gs2VersionVersionModelContext>(true);
             if (context == null) {
                 EditorGUILayout.HelpBox("Gs2VersionVersionModelContext not found.", MessageType.Error);
                 if (GUILayout.Button("Add Context")) {

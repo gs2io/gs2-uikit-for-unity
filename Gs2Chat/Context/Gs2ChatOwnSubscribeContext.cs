@@ -41,6 +41,13 @@ namespace Gs2.Unity.UiKit.Gs2Chat.Context
                 Debug.LogError("Subscribe is not set in Gs2ChatOwnSubscribeContext.");
             }
         }
+
+        public bool HasError() {
+            if (Subscribe == null) {
+                return true;
+            }
+            return false;
+        }
     }
 
     /// <summary>

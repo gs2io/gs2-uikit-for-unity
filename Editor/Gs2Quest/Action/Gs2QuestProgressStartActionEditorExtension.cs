@@ -40,7 +40,7 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Editor
 
             if (original == null) return;
 
-            var context = original.GetComponent<Gs2QuestOwnProgressContext>() ?? original.GetComponentInParent<Gs2QuestOwnProgressContext>();
+            var context = original.GetComponent<Gs2QuestOwnProgressContext>() ?? original.GetComponentInParent<Gs2QuestOwnProgressContext>(true);
             if (context == null) {
                 EditorGUILayout.HelpBox("Gs2QuestOwnProgressContext not found.", MessageType.Error);
                 if (GUILayout.Button("Add Context")) {

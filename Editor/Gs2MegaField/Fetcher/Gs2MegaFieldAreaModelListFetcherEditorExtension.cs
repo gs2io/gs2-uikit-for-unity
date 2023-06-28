@@ -40,7 +40,7 @@ namespace Gs2.Unity.UiKit.Gs2MegaField.Editor
 
             if (original == null) return;
 
-            var context = original.GetComponent<Gs2MegaFieldNamespaceContext>() ?? original.GetComponentInParent<Gs2MegaFieldNamespaceContext>();
+            var context = original.GetComponent<Gs2MegaFieldNamespaceContext>() ?? original.GetComponentInParent<Gs2MegaFieldNamespaceContext>(true);
             if (context == null) {
                 EditorGUILayout.HelpBox("Gs2MegaFieldNamespaceContext not found.", MessageType.Error);
                 if (GUILayout.Button("Add Context")) {

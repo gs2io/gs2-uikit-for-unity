@@ -24,6 +24,7 @@
 
 #pragma warning disable CS0472
 
+using Gs2.Unity.UiKit.Gs2Experience.Fetcher;
 using UnityEditor;
 using UnityEngine;
 
@@ -36,6 +37,21 @@ namespace Gs2.Unity.UiKit.Gs2Experience.Label.Editor
             var original = target as Gs2ExperienceAddRankCapByUserIdLabel;
 
             if (original == null) return;
+
+            var fetcher = original.GetComponent<Gs2ExperienceAddRankCapByUserIdFetcher>() ?? original.GetComponentInParent<Gs2ExperienceAddRankCapByUserIdFetcher>(true);
+             var userDataFetcher = original.GetComponent<Gs2ExperienceOwnStatusFetcher>() ?? original.GetComponentInParent<Gs2ExperienceOwnStatusFetcher>(true);
+            if (fetcher == null) {
+                EditorGUILayout.HelpBox("Gs2ExperienceAddRankCapByUserIdFetcher not found.", MessageType.Error);
+                if (GUILayout.Button("Add Fetcher")) {
+                    original.gameObject.AddComponent<Gs2ExperienceAddRankCapByUserIdFetcher>();
+                }
+            }
+            if (userDataFetcher == null) {
+                EditorGUILayout.HelpBox("Gs2ExperienceOwnStatusFetcher not found. Adding a Fetcher allows more values to be used.", MessageType.Warning);
+                if (GUILayout.Button("Add Fetcher")) {
+                    original.gameObject.AddComponent<Gs2ExperienceOwnStatusFetcher>();
+                }
+            }
 
             serializedObject.Update();
             original.format = EditorGUILayout.TextField("Format", original.format);
@@ -66,35 +82,37 @@ namespace Gs2.Unity.UiKit.Gs2Experience.Label.Editor
                 GUI.FocusControl("");
                 EditorUtility.SetDirty(original);
             }
-            if (GUILayout.Button("UserData:ExperienceName")) {
-                original.format += "{userData:experienceName}";
-                GUI.FocusControl("");
-                EditorUtility.SetDirty(original);
-            }
-            if (GUILayout.Button("UserData:PropertyId")) {
-                original.format += "{userData:propertyId}";
-                GUI.FocusControl("");
-                EditorUtility.SetDirty(original);
-            }
-            if (GUILayout.Button("UserData:ExperienceValue")) {
-                original.format += "{userData:experienceValue}";
-                GUI.FocusControl("");
-                EditorUtility.SetDirty(original);
-            }
-            if (GUILayout.Button("UserData:RankValue")) {
-                original.format += "{userData:rankValue}";
-                GUI.FocusControl("");
-                EditorUtility.SetDirty(original);
-            }
-            if (GUILayout.Button("UserData:RankCapValue")) {
-                original.format += "{userData:rankCapValue}";
-                GUI.FocusControl("");
-                EditorUtility.SetDirty(original);
-            }
-            if (GUILayout.Button("UserData:RankCapValue:Changed")) {
-                original.format += "{userData:rankCapValue:changed}";
-                GUI.FocusControl("");
-                EditorUtility.SetDirty(original);
+            if (userDataFetcher != null) {
+                if (GUILayout.Button("UserData:ExperienceName")) {
+                    original.format += "{userData:experienceName}";
+                    GUI.FocusControl("");
+                    EditorUtility.SetDirty(original);
+                }
+                if (GUILayout.Button("UserData:PropertyId")) {
+                    original.format += "{userData:propertyId}";
+                    GUI.FocusControl("");
+                    EditorUtility.SetDirty(original);
+                }
+                if (GUILayout.Button("UserData:ExperienceValue")) {
+                    original.format += "{userData:experienceValue}";
+                    GUI.FocusControl("");
+                    EditorUtility.SetDirty(original);
+                }
+                if (GUILayout.Button("UserData:RankValue")) {
+                    original.format += "{userData:rankValue}";
+                    GUI.FocusControl("");
+                    EditorUtility.SetDirty(original);
+                }
+                if (GUILayout.Button("UserData:RankCapValue")) {
+                    original.format += "{userData:rankCapValue}";
+                    GUI.FocusControl("");
+                    EditorUtility.SetDirty(original);
+                }
+                if (GUILayout.Button("UserData:RankCapValue:Changed")) {
+                    original.format += "{userData:rankCapValue:changed}";
+                    GUI.FocusControl("");
+                    EditorUtility.SetDirty(original);
+                }
             }
             EditorGUILayout.PropertyField(serializedObject.FindProperty("onUpdate"), true);
             serializedObject.ApplyModifiedProperties();

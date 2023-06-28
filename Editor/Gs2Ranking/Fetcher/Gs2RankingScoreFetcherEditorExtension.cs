@@ -17,6 +17,14 @@
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
+// ReSharper disable RedundantNameQualifier
+// ReSharper disable RedundantAssignment
+// ReSharper disable NotAccessedVariable
+// ReSharper disable RedundantUsingDirective
+// ReSharper disable Unity.NoNullPropagation
+// ReSharper disable InconsistentNaming
+
+#pragma warning disable CS0472
 
 using Gs2.Unity.Gs2Ranking.ScriptableObject;
 using Gs2.Unity.UiKit.Gs2Ranking.Context;
@@ -34,7 +42,7 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Editor
 
             if (original == null) return;
 
-            var context = original.GetComponentInParent<Gs2RankingScoreContext>();
+            var context = original.GetComponent<Gs2RankingScoreContext>() ?? original.GetComponentInParent<Gs2RankingScoreContext>(true);
             if (context == null) {
                 EditorGUILayout.HelpBox("Gs2RankingScoreContext not found.", MessageType.Error);
                 if (GUILayout.Button("Add Context")) {
@@ -45,7 +53,7 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Editor
                 EditorGUI.BeginDisabledGroup(true);
                 EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2RankingScoreContext), false);
                 EditorGUI.indentLevel++;
-                EditorGUILayout.ObjectField("Score", context.Score, typeof(Score), false);
+                context.Score = EditorGUILayout.ObjectField("Score", context.Score, typeof(Score), false) as Score;
                 EditorGUI.indentLevel++;
                 EditorGUILayout.TextField("NamespaceName", context.Score?.NamespaceName.ToString());
                 EditorGUILayout.TextField("UserId", context.Score?.UserId.ToString());

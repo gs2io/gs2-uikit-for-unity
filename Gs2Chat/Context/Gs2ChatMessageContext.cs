@@ -41,6 +41,13 @@ namespace Gs2.Unity.UiKit.Gs2Chat.Context
                 Debug.LogError("Message is not set in Gs2ChatMessageContext.");
             }
         }
+
+        public bool HasError() {
+            if (Message == null) {
+                return true;
+            }
+            return false;
+        }
     }
 
     /// <summary>

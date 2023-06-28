@@ -112,12 +112,18 @@ namespace Gs2.Unity.UiKit.Gs2JobQueue.Label
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2JobQueuePushByUserIdFetcher.");
                 enabled = false;
             }
-            if (_userDataFetcher == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2JobQueueOwnJobFetcher.");
-                enabled = false;
-            }
 
             Update();
+        }
+
+        public bool HasError()
+        {
+            _fetcher = GetComponent<Gs2JobQueuePushByUserIdFetcher>() ?? GetComponentInParent<Gs2JobQueuePushByUserIdFetcher>(true);
+            _userDataFetcher = GetComponent<Gs2JobQueueOwnJobFetcher>() ?? GetComponentInParent<Gs2JobQueueOwnJobFetcher>(true);
+            if (_fetcher == null) {
+                return true;
+            }
+            return false;
         }
     }
 

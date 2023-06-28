@@ -43,7 +43,7 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Localization.Editor
 
             if (original == null) return;
 
-            var fetcher = original.GetComponent<Gs2QuestOwnProgressFetcher>() ?? original.GetComponentInParent<Gs2QuestOwnProgressFetcher>();
+            var fetcher = original.GetComponent<Gs2QuestOwnProgressFetcher>() ?? original.GetComponentInParent<Gs2QuestOwnProgressFetcher>(true);
             if (fetcher == null) {
                 EditorGUILayout.HelpBox("Gs2QuestOwnProgressFetcher not found.", MessageType.Error);
                 if (GUILayout.Button("Add Fetcher")) {
@@ -51,7 +51,7 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Localization.Editor
                 }
             }
             else {
-                var context = original.GetComponent<Gs2QuestOwnProgressContext>() ?? original.GetComponentInParent<Gs2QuestOwnProgressContext>();
+                var context = original.GetComponent<Gs2QuestOwnProgressContext>() ?? original.GetComponentInParent<Gs2QuestOwnProgressContext>(true);
                 EditorGUI.BeginDisabledGroup(true);
                 EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2QuestOwnProgressFetcher), false);
                 EditorGUI.indentLevel++;

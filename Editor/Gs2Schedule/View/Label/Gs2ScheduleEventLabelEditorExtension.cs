@@ -41,7 +41,7 @@ namespace Gs2.Unity.UiKit.Gs2Schedule.Editor
 
             if (original == null) return;
 
-            var fetcher = original.GetComponent<Gs2ScheduleEventFetcher>() ?? original.GetComponentInParent<Gs2ScheduleEventFetcher>();
+            var fetcher = original.GetComponent<Gs2ScheduleEventFetcher>() ?? original.GetComponentInParent<Gs2ScheduleEventFetcher>(true);
             if (fetcher == null) {
                 EditorGUILayout.HelpBox("Gs2ScheduleEventFetcher not found.", MessageType.Error);
                 if (GUILayout.Button("Add Fetcher")) {
@@ -49,7 +49,7 @@ namespace Gs2.Unity.UiKit.Gs2Schedule.Editor
                 }
             }
             else {
-                var context = original.GetComponent<Gs2ScheduleEventContext>() ?? original.GetComponentInParent<Gs2ScheduleEventContext>();
+                var context = original.GetComponent<Gs2ScheduleEventContext>() ?? original.GetComponentInParent<Gs2ScheduleEventContext>(true);
                 EditorGUI.BeginDisabledGroup(true);
                 EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2ScheduleEventFetcher), false);
                 EditorGUI.indentLevel++;

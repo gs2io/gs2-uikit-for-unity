@@ -131,6 +131,15 @@ namespace Gs2.Unity.UiKit.Gs2Gateway.Fetcher
                 enabled = false;
             }
         }
+
+        public bool HasError()
+        {
+            _context = GetComponent<Gs2GatewayOwnWebSocketSessionContext>() ?? GetComponentInParent<Gs2GatewayOwnWebSocketSessionContext>(true);
+            if (_context == null) {
+                return true;
+            }
+            return false;
+        }
     }
 
     /// <summary>

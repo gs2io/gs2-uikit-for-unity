@@ -24,6 +24,7 @@
 
 #pragma warning disable CS0472
 
+using Gs2.Unity.UiKit.Gs2Inventory.Fetcher;
 using UnityEditor;
 using UnityEngine;
 
@@ -36,6 +37,21 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Label.Editor
             var original = target as Gs2InventorySetCapacityByUserIdLabel;
 
             if (original == null) return;
+
+            var fetcher = original.GetComponent<Gs2InventorySetCapacityByUserIdFetcher>() ?? original.GetComponentInParent<Gs2InventorySetCapacityByUserIdFetcher>(true);
+             var userDataFetcher = original.GetComponent<Gs2InventoryOwnInventoryFetcher>() ?? original.GetComponentInParent<Gs2InventoryOwnInventoryFetcher>(true);
+            if (fetcher == null) {
+                EditorGUILayout.HelpBox("Gs2InventorySetCapacityByUserIdFetcher not found.", MessageType.Error);
+                if (GUILayout.Button("Add Fetcher")) {
+                    original.gameObject.AddComponent<Gs2InventorySetCapacityByUserIdFetcher>();
+                }
+            }
+            if (userDataFetcher == null) {
+                EditorGUILayout.HelpBox("Gs2InventoryOwnInventoryFetcher not found. Adding a Fetcher allows more values to be used.", MessageType.Warning);
+                if (GUILayout.Button("Add Fetcher")) {
+                    original.gameObject.AddComponent<Gs2InventoryOwnInventoryFetcher>();
+                }
+            }
 
             serializedObject.Update();
             original.format = EditorGUILayout.TextField("Format", original.format);
@@ -61,25 +77,27 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Label.Editor
                 GUI.FocusControl("");
                 EditorUtility.SetDirty(original);
             }
-            if (GUILayout.Button("UserData:InventoryId")) {
-                original.format += "{userData:inventoryId}";
-                GUI.FocusControl("");
-                EditorUtility.SetDirty(original);
-            }
-            if (GUILayout.Button("UserData:InventoryName")) {
-                original.format += "{userData:inventoryName}";
-                GUI.FocusControl("");
-                EditorUtility.SetDirty(original);
-            }
-            if (GUILayout.Button("UserData:CurrentInventoryCapacityUsage")) {
-                original.format += "{userData:currentInventoryCapacityUsage}";
-                GUI.FocusControl("");
-                EditorUtility.SetDirty(original);
-            }
-            if (GUILayout.Button("UserData:CurrentInventoryMaxCapacity")) {
-                original.format += "{userData:currentInventoryMaxCapacity}";
-                GUI.FocusControl("");
-                EditorUtility.SetDirty(original);
+            if (userDataFetcher != null) {
+                if (GUILayout.Button("UserData:InventoryId")) {
+                    original.format += "{userData:inventoryId}";
+                    GUI.FocusControl("");
+                    EditorUtility.SetDirty(original);
+                }
+                if (GUILayout.Button("UserData:InventoryName")) {
+                    original.format += "{userData:inventoryName}";
+                    GUI.FocusControl("");
+                    EditorUtility.SetDirty(original);
+                }
+                if (GUILayout.Button("UserData:CurrentInventoryCapacityUsage")) {
+                    original.format += "{userData:currentInventoryCapacityUsage}";
+                    GUI.FocusControl("");
+                    EditorUtility.SetDirty(original);
+                }
+                if (GUILayout.Button("UserData:CurrentInventoryMaxCapacity")) {
+                    original.format += "{userData:currentInventoryMaxCapacity}";
+                    GUI.FocusControl("");
+                    EditorUtility.SetDirty(original);
+                }
             }
             EditorGUILayout.PropertyField(serializedObject.FindProperty("onUpdate"), true);
             serializedObject.ApplyModifiedProperties();

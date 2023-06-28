@@ -39,7 +39,7 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Fetcher.Editor
 
             if (original == null) return;
 
-            var fetcher = original.GetComponent<IAcquireActionsFetcher>() ?? original.GetComponentInParent<IAcquireActionsFetcher>();
+            var fetcher = original.GetComponent<IAcquireActionsFetcher>() ?? original.GetComponentInParent<IAcquireActionsFetcher>(true);
             if (fetcher == null) {
                 EditorGUILayout.HelpBox("IAcquireActionsFetcher not found.", MessageType.Error);
             }

@@ -133,6 +133,15 @@ namespace Gs2.Unity.UiKit.Gs2Experience.Fetcher
                 enabled = false;
             }
         }
+
+        public bool HasError()
+        {
+            _context = GetComponent<Gs2ExperienceNamespaceContext>() ?? GetComponentInParent<Gs2ExperienceNamespaceContext>(true);
+            if (_context == null) {
+                return true;
+            }
+            return false;
+        }
     }
 
     /// <summary>

@@ -41,6 +41,18 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking.Context
                 Debug.LogError("RatingModel is not set in Gs2MatchmakingRatingModelContext.");
             }
         }
+
+        public bool HasError() {
+            if (RatingModel == null) {
+                if (transform.parent != null && transform.parent.GetComponent<Gs2MatchmakingRatingModelList>() != null) {
+                    return false;
+                }
+                else {
+                    return true;
+                }
+            }
+            return false;
+        }
     }
 
     /// <summary>

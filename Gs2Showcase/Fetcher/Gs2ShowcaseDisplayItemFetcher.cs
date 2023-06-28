@@ -20,6 +20,7 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Gs2.Core.Exception;
@@ -27,11 +28,14 @@ using Gs2.Unity.Core.Exception;
 using Gs2.Unity.Gs2Showcase.Model;
 using Gs2.Unity.Gs2Showcase.ScriptableObject;
 using Gs2.Unity.UiKit.Core;
+using Gs2.Unity.UiKit.Gs2Core.Fetcher;
 using Gs2.Unity.Util;
 using Gs2.Unity.UiKit.Gs2Showcase.Context;
 using Gs2.Util.LitJson;
 using UnityEngine;
 using UnityEngine.Events;
+using EzAcquireAction = Gs2.Unity.Core.Model.EzAcquireAction;
+using EzConsumeAction = Gs2.Unity.Core.Model.EzConsumeAction;
 
 namespace Gs2.Unity.UiKit.Gs2Showcase.Fetcher
 {
@@ -40,7 +44,7 @@ namespace Gs2.Unity.UiKit.Gs2Showcase.Fetcher
     /// </summary>
 
 	[AddComponentMenu("GS2 UIKit/Showcase/DisplayItem/Fetcher/Gs2ShowcaseDisplayItemFetcher")]
-    public partial class Gs2ShowcaseDisplayItemFetcher : MonoBehaviour
+    public partial class Gs2ShowcaseDisplayItemFetcher : MonoBehaviour, IAcquireActionsFetcher, IConsumeActionsFetcher
     {
         private IEnumerator Fetch()
         {
@@ -94,6 +98,20 @@ namespace Gs2.Unity.UiKit.Gs2Showcase.Fetcher
         {
             StopCoroutine(nameof(Fetch));
         }
+
+        public List<EzAcquireAction> AcquireActions(string context = "default") {
+            if (!Fetched) {
+                return new List<Unity.Core.Model.EzAcquireAction>();
+            }
+            return DisplayItem.SalesItem.AcquireActions;
+        }
+
+        public List<EzConsumeAction> ConsumeActions(string context = "default") {
+            if (!Fetched) {
+                return new List<Unity.Core.Model.EzConsumeAction>();
+            }
+            return DisplayItem.SalesItem.ConsumeActions;
+        }
     }
 
     /// <summary>
@@ -107,6 +125,7 @@ namespace Gs2.Unity.UiKit.Gs2Showcase.Fetcher
         private Gs2ShowcaseDisplayItemContext _context;
 
         private void ChangeCounter(string namespaceName, string limitName, Gs2.Gs2Limit.Model.Counter counter) {
+            if (DisplayItem == null) return;
             var consumeAction = DisplayItem.SalesItem.ConsumeActions.FirstOrDefault(
                 v => v.Action == "Gs2Limit:CountUpByUserId" || v.Action == "Gs2Limit:DeleteCounterByUserId"
             );

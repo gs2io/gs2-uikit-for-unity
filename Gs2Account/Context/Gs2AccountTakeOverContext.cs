@@ -41,6 +41,13 @@ namespace Gs2.Unity.UiKit.Gs2Account.Context
                 Debug.LogError("TakeOver is not set in Gs2AccountTakeOverContext.");
             }
         }
+
+        public bool HasError() {
+            if (TakeOver == null) {
+                return true;
+            }
+            return false;
+        }
     }
 
     /// <summary>

@@ -17,6 +17,14 @@
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
+// ReSharper disable RedundantNameQualifier
+// ReSharper disable RedundantAssignment
+// ReSharper disable NotAccessedVariable
+// ReSharper disable RedundantUsingDirective
+// ReSharper disable Unity.NoNullPropagation
+// ReSharper disable InconsistentNaming
+
+#pragma warning disable CS0472
 
 using Gs2.Unity.Gs2Mission.ScriptableObject;
 using Gs2.Unity.UiKit.Gs2Mission.Context;
@@ -34,9 +42,9 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Editor
 
             if (original == null) return;
 
-            var context = original.GetComponent<Gs2MissionOwnCounterContext>() ?? original.GetComponentInParent<Gs2MissionOwnCounterContext>();
+            var context = original.GetComponent<Gs2MissionOwnCounterContext>() ?? original.GetComponentInParent<Gs2MissionOwnCounterContext>(true);
             if (context == null) {
-                var context2 = original.GetComponent<Gs2MissionMissionTaskModelContext>() ?? original.GetComponentInParent<Gs2MissionMissionTaskModelContext>();
+                var context2 = original.GetComponent<Gs2MissionMissionTaskModelContext>() ?? original.GetComponentInParent<Gs2MissionMissionTaskModelContext>(true);
                 if (context2 == null) {
                     EditorGUILayout.HelpBox("Gs2MissionOwnCounterContext not found.", MessageType.Error);
                     if (GUILayout.Button("Add Context")) {

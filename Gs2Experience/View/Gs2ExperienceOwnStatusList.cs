@@ -94,6 +94,19 @@ namespace Gs2.Unity.UiKit.Gs2Experience
             }
             this.prefab.gameObject.SetActive(false);
         }
+
+        public bool HasError()
+        {
+            _context = GetComponent<Gs2ExperienceNamespaceContext>() ?? GetComponentInParent<Gs2ExperienceNamespaceContext>(true);
+            _fetcher = GetComponent<Gs2ExperienceOwnStatusListFetcher>() ?? GetComponentInParent<Gs2ExperienceOwnStatusListFetcher>(true);
+            if (_context == null) {
+                return true;
+            }
+            if (_fetcher == null) {
+                return true;
+            }
+            return false;
+        }
     }
 
     /// <summary>

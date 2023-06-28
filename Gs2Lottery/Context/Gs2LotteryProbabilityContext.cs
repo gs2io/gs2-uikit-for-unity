@@ -41,6 +41,13 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.Context
                 Debug.LogError("Probability is not set in Gs2LotteryProbabilityContext.");
             }
         }
+
+        public bool HasError() {
+            if (Probability == null) {
+                return true;
+            }
+            return false;
+        }
     }
 
     /// <summary>

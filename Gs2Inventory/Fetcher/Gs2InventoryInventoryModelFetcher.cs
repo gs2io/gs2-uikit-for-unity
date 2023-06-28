@@ -56,13 +56,13 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Fetcher
             {
                 if (_gameSessionHolder != null && _gameSessionHolder.Initialized &&
                     _clientHolder != null && _clientHolder.Initialized &&
-                    _context != null && this._context.InventoryModel != null)
+                    Context != null && this.Context.InventoryModel != null)
                 {
                     
                     var domain = this._clientHolder.Gs2.Inventory.Namespace(
-                        this._context.InventoryModel.NamespaceName
+                        this.Context.InventoryModel.NamespaceName
                     ).InventoryModel(
-                        this._context.InventoryModel.InventoryName
+                        this.Context.InventoryModel.InventoryName
                     );
                     var future = domain.Model();
                     yield return future;
@@ -113,18 +113,27 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Fetcher
     {
         protected Gs2ClientHolder _clientHolder;
         protected Gs2GameSessionHolder _gameSessionHolder;
-        private Gs2InventoryInventoryModelContext _context;
+        public Gs2InventoryInventoryModelContext Context { get; private set; }
 
         public void Awake()
         {
             _clientHolder = Gs2ClientHolder.Instance;
             _gameSessionHolder = Gs2GameSessionHolder.Instance;
-            _context = GetComponent<Gs2InventoryInventoryModelContext>() ?? GetComponentInParent<Gs2InventoryInventoryModelContext>();
+            Context = GetComponent<Gs2InventoryInventoryModelContext>() ?? GetComponentInParent<Gs2InventoryInventoryModelContext>();
 
-            if (_context == null) {
+            if (Context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2InventoryInventoryModelContext.");
                 enabled = false;
             }
+        }
+
+        public bool HasError()
+        {
+            Context = GetComponent<Gs2InventoryInventoryModelContext>() ?? GetComponentInParent<Gs2InventoryInventoryModelContext>(true);
+            if (Context == null) {
+                return true;
+            }
+            return false;
         }
     }
 

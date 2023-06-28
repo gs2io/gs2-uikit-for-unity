@@ -40,7 +40,7 @@ namespace Gs2.Unity.UiKit.Gs2MegaField.Editor
 
             if (original == null) return;
 
-            var fetcher = original.GetComponent<Gs2MegaFieldLayerModelFetcher>() ?? original.GetComponentInParent<Gs2MegaFieldLayerModelFetcher>();
+            var fetcher = original.GetComponent<Gs2MegaFieldLayerModelFetcher>() ?? original.GetComponentInParent<Gs2MegaFieldLayerModelFetcher>(true);
             if (fetcher == null) {
                 EditorGUILayout.HelpBox("Gs2MegaFieldLayerModelFetcher not found.", MessageType.Error);
                 if (GUILayout.Button("Add Fetcher")) {
@@ -48,14 +48,14 @@ namespace Gs2.Unity.UiKit.Gs2MegaField.Editor
                 }
             }
             else {
-                if (fetcher.transform.parent.GetComponent<Gs2MegaFieldLayerModelList>() != null) {
+                if (fetcher.transform.parent == null || fetcher.transform.parent.GetComponent<Gs2MegaFieldLayerModelList>() != null) {
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2MegaFieldLayerModelFetcher), false);
                     EditorGUI.EndDisabledGroup();
                     EditorGUILayout.HelpBox("LayerModel is auto assign from Gs2MegaFieldLayerModelList.", MessageType.Info);
                 }
                 else {
-                    var context = original.GetComponent<Gs2MegaFieldLayerModelContext>() ?? original.GetComponentInParent<Gs2MegaFieldLayerModelContext>();
+                    var context = original.GetComponent<Gs2MegaFieldLayerModelContext>() ?? original.GetComponentInParent<Gs2MegaFieldLayerModelContext>(true);
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2MegaFieldLayerModelFetcher), false);
                     EditorGUI.indentLevel++;

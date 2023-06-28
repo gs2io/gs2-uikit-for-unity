@@ -40,7 +40,7 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Editor
 
             if (original == null) return;
 
-            var fetcher = original.GetComponent<Gs2FormationOwnPropertyFormFetcher>() ?? original.GetComponentInParent<Gs2FormationOwnPropertyFormFetcher>();
+            var fetcher = original.GetComponent<Gs2FormationOwnPropertyFormFetcher>() ?? original.GetComponentInParent<Gs2FormationOwnPropertyFormFetcher>(true);
             if (fetcher == null) {
                 EditorGUILayout.HelpBox("Gs2FormationOwnPropertyFormFetcher not found.", MessageType.Error);
                 if (GUILayout.Button("Add Fetcher")) {
@@ -48,14 +48,14 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Editor
                 }
             }
             else {
-                if (fetcher.transform.parent.GetComponent<Gs2FormationOwnPropertyFormList>() != null) {
+                if (fetcher.transform.parent == null || fetcher.transform.parent.GetComponent<Gs2FormationOwnPropertyFormList>() != null) {
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2FormationOwnPropertyFormFetcher), false);
                     EditorGUI.EndDisabledGroup();
                     EditorGUILayout.HelpBox("PropertyForm is auto assign from Gs2FormationOwnPropertyFormList.", MessageType.Info);
                 }
                 else {
-                    var context = original.GetComponent<Gs2FormationOwnPropertyFormContext>() ?? original.GetComponentInParent<Gs2FormationOwnPropertyFormContext>();
+                    var context = original.GetComponent<Gs2FormationOwnPropertyFormContext>() ?? original.GetComponentInParent<Gs2FormationOwnPropertyFormContext>(true);
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2FormationOwnPropertyFormFetcher), false);
                     EditorGUI.indentLevel++;

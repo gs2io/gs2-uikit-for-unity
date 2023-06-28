@@ -73,6 +73,22 @@ namespace Gs2.Unity.UiKit.Gs2Friend
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2FriendOwnFollowUserFetcher.");
                 enabled = false;
             }
+            if (target == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: target is not set.");
+                enabled = false;
+            }
+        }
+
+        public bool HasError()
+        {
+            _fetcher = GetComponent<Gs2FriendOwnFollowUserFetcher>() ?? GetComponentInParent<Gs2FriendOwnFollowUserFetcher>(true);
+            if (_fetcher == null) {
+                return true;
+            }
+            if (target == null) {
+                return true;
+            }
+            return false;
         }
     }
 

@@ -121,6 +121,15 @@ namespace Gs2.Unity.UiKit.Gs2Quest
                 enabled = false;
             }
         }
+
+        public bool HasError()
+        {
+            this._context = GetComponent<Gs2QuestOwnProgressContext>() ?? GetComponentInParent<Gs2QuestOwnProgressContext>(true);
+            if (_context == null) {
+                return true;
+            }
+            return false;
+        }
     }
 
     /// <summary>

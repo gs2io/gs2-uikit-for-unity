@@ -43,7 +43,7 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Localization.Editor
 
             if (original == null) return;
 
-            var fetcher = original.GetComponent<Gs2FriendOwnFollowUserFetcher>() ?? original.GetComponentInParent<Gs2FriendOwnFollowUserFetcher>();
+            var fetcher = original.GetComponent<Gs2FriendOwnFollowUserFetcher>() ?? original.GetComponentInParent<Gs2FriendOwnFollowUserFetcher>(true);
             if (fetcher == null) {
                 EditorGUILayout.HelpBox("Gs2FriendOwnFollowUserFetcher not found.", MessageType.Error);
                 if (GUILayout.Button("Add Fetcher")) {
@@ -51,14 +51,14 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Localization.Editor
                 }
             }
             else {
-                if (fetcher.transform.parent.GetComponent<Gs2FriendOwnFollowUserList>() != null) {
+                if (fetcher.transform.parent == null || fetcher.transform.parent.GetComponent<Gs2FriendOwnFollowUserList>() != null) {
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2FriendOwnFollowUserFetcher), false);
                     EditorGUI.EndDisabledGroup();
                     EditorGUILayout.HelpBox("FollowUser is auto assign from Gs2FriendOwnFollowUserList.", MessageType.Info);
                 }
                 else {
-                    var context = original.GetComponent<Gs2FriendOwnFollowUserContext>() ?? original.GetComponentInParent<Gs2FriendOwnFollowUserContext>();
+                    var context = original.GetComponent<Gs2FriendOwnFollowUserContext>() ?? original.GetComponentInParent<Gs2FriendOwnFollowUserContext>(true);
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2FriendOwnFollowUserFetcher), false);
                     EditorGUI.indentLevel++;

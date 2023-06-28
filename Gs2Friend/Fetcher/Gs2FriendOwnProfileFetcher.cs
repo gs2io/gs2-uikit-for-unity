@@ -127,6 +127,15 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Fetcher
                 enabled = false;
             }
         }
+
+        public bool HasError()
+        {
+            _context = GetComponent<Gs2FriendOwnProfileContext>() ?? GetComponentInParent<Gs2FriendOwnProfileContext>(true);
+            if (_context == null) {
+                return true;
+            }
+            return false;
+        }
     }
 
     /// <summary>

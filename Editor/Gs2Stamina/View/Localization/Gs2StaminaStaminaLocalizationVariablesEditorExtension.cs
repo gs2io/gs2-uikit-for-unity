@@ -43,7 +43,7 @@ namespace Gs2.Unity.UiKit.Gs2Stamina.Localization.Editor
 
             if (original == null) return;
 
-            var fetcher = original.GetComponent<Gs2StaminaOwnStaminaFetcher>() ?? original.GetComponentInParent<Gs2StaminaOwnStaminaFetcher>();
+            var fetcher = original.GetComponent<Gs2StaminaOwnStaminaFetcher>() ?? original.GetComponentInParent<Gs2StaminaOwnStaminaFetcher>(true);
             if (fetcher == null) {
                 EditorGUILayout.HelpBox("Gs2StaminaOwnStaminaFetcher not found.", MessageType.Error);
                 if (GUILayout.Button("Add Fetcher")) {
@@ -51,7 +51,7 @@ namespace Gs2.Unity.UiKit.Gs2Stamina.Localization.Editor
                 }
             }
             else {
-                var context = original.GetComponent<Gs2StaminaOwnStaminaContext>() ?? original.GetComponentInParent<Gs2StaminaOwnStaminaContext>();
+                var context = original.GetComponent<Gs2StaminaOwnStaminaContext>() ?? original.GetComponentInParent<Gs2StaminaOwnStaminaContext>(true);
                 EditorGUI.BeginDisabledGroup(true);
                 EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2StaminaOwnStaminaFetcher), false);
                 EditorGUI.indentLevel++;

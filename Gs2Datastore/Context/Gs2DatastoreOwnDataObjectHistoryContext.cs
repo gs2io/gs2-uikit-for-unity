@@ -41,6 +41,13 @@ namespace Gs2.Unity.UiKit.Gs2Datastore.Context
                 Debug.LogError("DataObjectHistory is not set in Gs2DatastoreOwnDataObjectHistoryContext.");
             }
         }
+
+        public bool HasError() {
+            if (DataObjectHistory == null) {
+                return true;
+            }
+            return false;
+        }
     }
 
     /// <summary>

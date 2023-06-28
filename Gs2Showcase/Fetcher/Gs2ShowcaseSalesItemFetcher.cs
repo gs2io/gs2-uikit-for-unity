@@ -17,6 +17,14 @@
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
+// ReSharper disable RedundantNameQualifier
+// ReSharper disable RedundantAssignment
+// ReSharper disable NotAccessedVariable
+// ReSharper disable RedundantUsingDirective
+// ReSharper disable Unity.NoNullPropagation
+// ReSharper disable InconsistentNaming
+
+#pragma warning disable CS0472
 
 using System;
 using System.Collections;
@@ -27,6 +35,7 @@ using Gs2.Unity.Core.Exception;
 using Gs2.Unity.Gs2Showcase.Model;
 using Gs2.Unity.Gs2Showcase.ScriptableObject;
 using Gs2.Unity.Util;
+using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Showcase.Context;
 using UnityEngine;
 using UnityEngine.Events;
@@ -112,6 +121,20 @@ namespace Gs2.Unity.UiKit.Gs2Showcase.Fetcher
             _clientHolder = Gs2ClientHolder.Instance;
             _gameSessionHolder = Gs2GameSessionHolder.Instance;
             _context = GetComponentInParent<Gs2ShowcaseDisplayItemContext>();
+
+            if (_context == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ShowcaseSalesItemContext.");
+                enabled = false;
+            }
+        }
+
+        public bool HasError()
+        {
+            _context = GetComponentInParent<Gs2ShowcaseDisplayItemContext>();
+            if (_context == null) {
+                return true;
+            }
+            return false;
         }
     }
 

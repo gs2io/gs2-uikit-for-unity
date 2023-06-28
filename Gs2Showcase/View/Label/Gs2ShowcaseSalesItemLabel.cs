@@ -78,6 +78,15 @@ namespace Gs2.Unity.UiKit.Gs2Showcase
 
             Update();
         }
+
+        public bool HasError()
+        {
+            _fetcher = GetComponent<Gs2ShowcaseSalesItemFetcher>() ?? GetComponentInParent<Gs2ShowcaseSalesItemFetcher>(true);
+            if (_fetcher == null) {
+                return true;
+            }
+            return false;
+        }
     }
 
     /// <summary>

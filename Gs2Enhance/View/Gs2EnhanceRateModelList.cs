@@ -88,6 +88,19 @@ namespace Gs2.Unity.UiKit.Gs2Enhance
             }
             this.prefab.gameObject.SetActive(false);
         }
+
+        public bool HasError()
+        {
+            _context = GetComponent<Gs2EnhanceNamespaceContext>() ?? GetComponentInParent<Gs2EnhanceNamespaceContext>(true);
+            _fetcher = GetComponent<Gs2EnhanceRateModelListFetcher>() ?? GetComponentInParent<Gs2EnhanceRateModelListFetcher>(true);
+            if (_context == null) {
+                return true;
+            }
+            if (_fetcher == null) {
+                return true;
+            }
+            return false;
+        }
     }
 
     /// <summary>

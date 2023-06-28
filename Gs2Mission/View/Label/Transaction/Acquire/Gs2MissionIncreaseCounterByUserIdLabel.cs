@@ -17,29 +17,39 @@
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
+// ReSharper disable RedundantNameQualifier
+// ReSharper disable RedundantAssignment
+// ReSharper disable NotAccessedVariable
+// ReSharper disable RedundantUsingDirective
+// ReSharper disable Unity.NoNullPropagation
+// ReSharper disable InconsistentNaming
+
+#pragma warning disable CS0472
 
 using System;
 using System.Linq;
 using Gs2.Gs2Mission.Request;
 using Gs2.Unity.UiKit.Core;
+using Gs2.Unity.UiKit.Gs2Core.Fetcher;
 using Gs2.Unity.UiKit.Gs2Mission.Fetcher;
 using Gs2.Util.LitJson;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace Gs2.Unity.UiKit.Gs2Mission
+namespace Gs2.Unity.UiKit.Gs2Mission.Label
 {
     /// <summary>
     /// Main
     /// </summary>
 
-	[AddComponentMenu("GS2 UIKit/Mission/Counter/View/Transaction/Gs2MissionIncreaseCounterByUserIdLabel")]
+	[AddComponentMenu("GS2 UIKit/Mission/Counter/View/Label/Transaction/Gs2MissionIncreaseCounterByUserIdLabel")]
     public partial class Gs2MissionIncreaseCounterByUserIdLabel : MonoBehaviour
     {
         public void Update()
         {
-            if (_fetcher.Fetched && _fetcher.Request != null) {
-                if (_userDataFetcher != null && _userDataFetcher.Fetched && _userDataFetcher.Counter != null) {
+            if (_fetcher.Fetched && _fetcher.Request != null &&
+                    _userDataFetcher != null && _userDataFetcher.Fetched && _userDataFetcher.Counter != null) {
+                {
                     onUpdate?.Invoke(
                         format.Replace(
                             "{namespaceName}",
@@ -82,7 +92,9 @@ namespace Gs2.Unity.UiKit.Gs2Mission
                             $"{(_userDataFetcher.Counter.Values.FirstOrDefault(v => v.ResetType == "monthly")?.Value ?? 0) + _fetcher.Request.Value}"
                         )
                     );
-                } else {
+                }
+            } else if (_fetcher.Fetched && _fetcher.Request != null) {
+                {
                     onUpdate?.Invoke(
                         format.Replace(
                             "{namespaceName}",
@@ -99,6 +111,13 @@ namespace Gs2.Unity.UiKit.Gs2Mission
                         )
                     );
                 }
+            } else {
+                onUpdate?.Invoke(
+                    format.Replace(
+                        "{values}",
+                        "0"
+                    )
+                );
             }
         }
     }
@@ -121,12 +140,18 @@ namespace Gs2.Unity.UiKit.Gs2Mission
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MissionIncreaseCounterByUserIdFetcher.");
                 enabled = false;
             }
-            if (_userDataFetcher == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MissionOwnCounterFetcher.");
-                enabled = false;
-            }
 
             Update();
+        }
+
+        public bool HasError()
+        {
+            _fetcher = GetComponent<Gs2MissionIncreaseCounterByUserIdFetcher>() ?? GetComponentInParent<Gs2MissionIncreaseCounterByUserIdFetcher>(true);
+            _userDataFetcher = GetComponent<Gs2MissionOwnCounterFetcher>() ?? GetComponentInParent<Gs2MissionOwnCounterFetcher>(true);
+            if (_fetcher == null) {
+                return true;
+            }
+            return false;
         }
     }
 

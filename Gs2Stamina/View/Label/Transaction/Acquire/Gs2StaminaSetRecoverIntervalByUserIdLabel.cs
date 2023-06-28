@@ -124,12 +124,18 @@ namespace Gs2.Unity.UiKit.Gs2Stamina.Label
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2StaminaSetRecoverIntervalByUserIdFetcher.");
                 enabled = false;
             }
-            if (_userDataFetcher == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2StaminaOwnStaminaFetcher.");
-                enabled = false;
-            }
 
             Update();
+        }
+
+        public bool HasError()
+        {
+            _fetcher = GetComponent<Gs2StaminaSetRecoverIntervalByUserIdFetcher>() ?? GetComponentInParent<Gs2StaminaSetRecoverIntervalByUserIdFetcher>(true);
+            _userDataFetcher = GetComponent<Gs2StaminaOwnStaminaFetcher>() ?? GetComponentInParent<Gs2StaminaOwnStaminaFetcher>(true);
+            if (_fetcher == null) {
+                return true;
+            }
+            return false;
         }
     }
 

@@ -40,7 +40,7 @@ namespace Gs2.Unity.UiKit.Gs2MegaField.Editor
 
             if (original == null) return;
 
-            var fetcher = original.GetComponent<Gs2MegaFieldAreaModelFetcher>() ?? original.GetComponentInParent<Gs2MegaFieldAreaModelFetcher>();
+            var fetcher = original.GetComponent<Gs2MegaFieldAreaModelFetcher>() ?? original.GetComponentInParent<Gs2MegaFieldAreaModelFetcher>(true);
             if (fetcher == null) {
                 EditorGUILayout.HelpBox("Gs2MegaFieldAreaModelFetcher not found.", MessageType.Error);
                 if (GUILayout.Button("Add Fetcher")) {
@@ -48,14 +48,14 @@ namespace Gs2.Unity.UiKit.Gs2MegaField.Editor
                 }
             }
             else {
-                if (fetcher.transform.parent.GetComponent<Gs2MegaFieldAreaModelList>() != null) {
+                if (fetcher.transform.parent == null || fetcher.transform.parent.GetComponent<Gs2MegaFieldAreaModelList>() != null) {
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2MegaFieldAreaModelFetcher), false);
                     EditorGUI.EndDisabledGroup();
                     EditorGUILayout.HelpBox("AreaModel is auto assign from Gs2MegaFieldAreaModelList.", MessageType.Info);
                 }
                 else {
-                    var context = original.GetComponent<Gs2MegaFieldAreaModelContext>() ?? original.GetComponentInParent<Gs2MegaFieldAreaModelContext>();
+                    var context = original.GetComponent<Gs2MegaFieldAreaModelContext>() ?? original.GetComponentInParent<Gs2MegaFieldAreaModelContext>(true);
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2MegaFieldAreaModelFetcher), false);
                     EditorGUI.indentLevel++;

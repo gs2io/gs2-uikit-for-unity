@@ -24,6 +24,7 @@
 
 #pragma warning disable CS0472
 
+using Gs2.Unity.UiKit.Gs2Exchange.Fetcher;
 using UnityEditor;
 using UnityEngine;
 
@@ -36,6 +37,21 @@ namespace Gs2.Unity.UiKit.Gs2Exchange.Label.Editor
             var original = target as Gs2ExchangeDeleteAwaitByUserIdLabel;
 
             if (original == null) return;
+
+            var fetcher = original.GetComponent<Gs2ExchangeDeleteAwaitByUserIdFetcher>() ?? original.GetComponentInParent<Gs2ExchangeDeleteAwaitByUserIdFetcher>(true);
+             var userDataFetcher = original.GetComponent<Gs2ExchangeOwnAwaitFetcher>() ?? original.GetComponentInParent<Gs2ExchangeOwnAwaitFetcher>(true);
+            if (fetcher == null) {
+                EditorGUILayout.HelpBox("Gs2ExchangeDeleteAwaitByUserIdFetcher not found.", MessageType.Error);
+                if (GUILayout.Button("Add Fetcher")) {
+                    original.gameObject.AddComponent<Gs2ExchangeDeleteAwaitByUserIdFetcher>();
+                }
+            }
+            if (userDataFetcher == null) {
+                EditorGUILayout.HelpBox("Gs2ExchangeOwnAwaitFetcher not found. Adding a Fetcher allows more values to be used.", MessageType.Warning);
+                if (GUILayout.Button("Add Fetcher")) {
+                    original.gameObject.AddComponent<Gs2ExchangeOwnAwaitFetcher>();
+                }
+            }
 
             serializedObject.Update();
             original.format = EditorGUILayout.TextField("Format", original.format);
@@ -56,25 +72,27 @@ namespace Gs2.Unity.UiKit.Gs2Exchange.Label.Editor
                 GUI.FocusControl("");
                 EditorUtility.SetDirty(original);
             }
-            if (GUILayout.Button("UserData:UserId")) {
-                original.format += "{userData:userId}";
-                GUI.FocusControl("");
-                EditorUtility.SetDirty(original);
-            }
-            if (GUILayout.Button("UserData:RateName")) {
-                original.format += "{userData:rateName}";
-                GUI.FocusControl("");
-                EditorUtility.SetDirty(original);
-            }
-            if (GUILayout.Button("UserData:Name")) {
-                original.format += "{userData:name}";
-                GUI.FocusControl("");
-                EditorUtility.SetDirty(original);
-            }
-            if (GUILayout.Button("UserData:ExchangedAt")) {
-                original.format += "{userData:exchangedAt}";
-                GUI.FocusControl("");
-                EditorUtility.SetDirty(original);
+            if (userDataFetcher != null) {
+                if (GUILayout.Button("UserData:UserId")) {
+                    original.format += "{userData:userId}";
+                    GUI.FocusControl("");
+                    EditorUtility.SetDirty(original);
+                }
+                if (GUILayout.Button("UserData:RateName")) {
+                    original.format += "{userData:rateName}";
+                    GUI.FocusControl("");
+                    EditorUtility.SetDirty(original);
+                }
+                if (GUILayout.Button("UserData:Name")) {
+                    original.format += "{userData:name}";
+                    GUI.FocusControl("");
+                    EditorUtility.SetDirty(original);
+                }
+                if (GUILayout.Button("UserData:ExchangedAt")) {
+                    original.format += "{userData:exchangedAt}";
+                    GUI.FocusControl("");
+                    EditorUtility.SetDirty(original);
+                }
             }
             EditorGUILayout.PropertyField(serializedObject.FindProperty("onUpdate"), true);
             serializedObject.ApplyModifiedProperties();

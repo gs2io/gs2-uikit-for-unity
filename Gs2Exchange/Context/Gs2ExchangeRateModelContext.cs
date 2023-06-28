@@ -41,6 +41,18 @@ namespace Gs2.Unity.UiKit.Gs2Exchange.Context
                 Debug.LogError("RateModel is not set in Gs2ExchangeRateModelContext.");
             }
         }
+
+        public bool HasError() {
+            if (RateModel == null) {
+                if (transform.parent != null && transform.parent.GetComponent<Gs2ExchangeRateModelList>() != null) {
+                    return false;
+                }
+                else {
+                    return true;
+                }
+            }
+            return false;
+        }
     }
 
     /// <summary>

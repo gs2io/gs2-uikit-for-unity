@@ -56,13 +56,13 @@ namespace Gs2.Unity.UiKit.Gs2Experience.Fetcher
             {
                 if (_gameSessionHolder != null && _gameSessionHolder.Initialized &&
                     _clientHolder != null && _clientHolder.Initialized &&
-                    _context != null && this._context.ExperienceModel != null)
+                    Context != null && this.Context.ExperienceModel != null)
                 {
                     
                     var domain = this._clientHolder.Gs2.Experience.Namespace(
-                        this._context.ExperienceModel.NamespaceName
+                        this.Context.ExperienceModel.NamespaceName
                     ).ExperienceModel(
-                        this._context.ExperienceModel.ExperienceName
+                        this.Context.ExperienceModel.ExperienceName
                     );
                     var future = domain.Model();
                     yield return future;
@@ -113,18 +113,27 @@ namespace Gs2.Unity.UiKit.Gs2Experience.Fetcher
     {
         protected Gs2ClientHolder _clientHolder;
         protected Gs2GameSessionHolder _gameSessionHolder;
-        private Gs2ExperienceExperienceModelContext _context;
+        public Gs2ExperienceExperienceModelContext Context { get; private set; }
 
         public void Awake()
         {
             _clientHolder = Gs2ClientHolder.Instance;
             _gameSessionHolder = Gs2GameSessionHolder.Instance;
-            _context = GetComponent<Gs2ExperienceExperienceModelContext>() ?? GetComponentInParent<Gs2ExperienceExperienceModelContext>();
+            Context = GetComponent<Gs2ExperienceExperienceModelContext>() ?? GetComponentInParent<Gs2ExperienceExperienceModelContext>();
 
-            if (_context == null) {
+            if (Context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ExperienceExperienceModelContext.");
                 enabled = false;
             }
+        }
+
+        public bool HasError()
+        {
+            Context = GetComponent<Gs2ExperienceExperienceModelContext>() ?? GetComponentInParent<Gs2ExperienceExperienceModelContext>(true);
+            if (Context == null) {
+                return true;
+            }
+            return false;
         }
     }
 

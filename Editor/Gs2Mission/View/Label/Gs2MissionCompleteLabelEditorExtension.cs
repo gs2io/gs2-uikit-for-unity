@@ -40,7 +40,7 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Editor
 
             if (original == null) return;
 
-            var fetcher = original.GetComponent<Gs2MissionOwnCompleteFetcher>() ?? original.GetComponentInParent<Gs2MissionOwnCompleteFetcher>();
+            var fetcher = original.GetComponent<Gs2MissionOwnCompleteFetcher>() ?? original.GetComponentInParent<Gs2MissionOwnCompleteFetcher>(true);
             if (fetcher == null) {
                 EditorGUILayout.HelpBox("Gs2MissionOwnCompleteFetcher not found.", MessageType.Error);
                 if (GUILayout.Button("Add Fetcher")) {
@@ -48,14 +48,14 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Editor
                 }
             }
             else {
-                if (fetcher.transform.parent.GetComponent<Gs2MissionOwnCompleteList>() != null) {
+                if (fetcher.transform.parent == null || fetcher.transform.parent.GetComponent<Gs2MissionOwnCompleteList>() != null) {
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2MissionOwnCompleteFetcher), false);
                     EditorGUI.EndDisabledGroup();
                     EditorGUILayout.HelpBox("Complete is auto assign from Gs2MissionOwnCompleteList.", MessageType.Info);
                 }
                 else {
-                    var context = original.GetComponent<Gs2MissionOwnCompleteContext>() ?? original.GetComponentInParent<Gs2MissionOwnCompleteContext>();
+                    var context = original.GetComponent<Gs2MissionOwnCompleteContext>() ?? original.GetComponentInParent<Gs2MissionOwnCompleteContext>(true);
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2MissionOwnCompleteFetcher), false);
                     EditorGUI.indentLevel++;

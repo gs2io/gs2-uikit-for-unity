@@ -41,6 +41,13 @@ namespace Gs2.Unity.UiKit.Gs2Stamina.Context
                 Debug.LogError("Stamina is not set in Gs2StaminaOwnStaminaContext.");
             }
         }
+
+        public bool HasError() {
+            if (Stamina == null) {
+                return true;
+            }
+            return false;
+        }
     }
 
     /// <summary>

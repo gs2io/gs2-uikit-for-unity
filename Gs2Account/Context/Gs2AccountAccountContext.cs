@@ -41,6 +41,13 @@ namespace Gs2.Unity.UiKit.Gs2Account.Context
                 Debug.LogError("Account is not set in Gs2AccountAccountContext.");
             }
         }
+
+        public bool HasError() {
+            if (Account == null) {
+                return true;
+            }
+            return false;
+        }
     }
 
     /// <summary>

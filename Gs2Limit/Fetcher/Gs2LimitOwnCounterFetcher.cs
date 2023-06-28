@@ -129,6 +129,15 @@ namespace Gs2.Unity.UiKit.Gs2Limit.Fetcher
                 enabled = false;
             }
         }
+
+        public bool HasError()
+        {
+            _context = GetComponent<Gs2LimitOwnCounterContext>() ?? GetComponentInParent<Gs2LimitOwnCounterContext>(true);
+            if (_context == null) {
+                return true;
+            }
+            return false;
+        }
     }
 
     /// <summary>

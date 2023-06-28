@@ -41,6 +41,13 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.Context
                 Debug.LogError("PrizeTable is not set in Gs2LotteryPrizeTableContext.");
             }
         }
+
+        public bool HasError() {
+            if (PrizeTable == null) {
+                return true;
+            }
+            return false;
+        }
     }
 
     /// <summary>

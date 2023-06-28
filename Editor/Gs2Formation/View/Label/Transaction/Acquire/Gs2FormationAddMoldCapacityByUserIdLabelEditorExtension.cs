@@ -24,6 +24,7 @@
 
 #pragma warning disable CS0472
 
+using Gs2.Unity.UiKit.Gs2Formation.Fetcher;
 using UnityEditor;
 using UnityEngine;
 
@@ -36,6 +37,21 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Label.Editor
             var original = target as Gs2FormationAddMoldCapacityByUserIdLabel;
 
             if (original == null) return;
+
+            var fetcher = original.GetComponent<Gs2FormationAddMoldCapacityByUserIdFetcher>() ?? original.GetComponentInParent<Gs2FormationAddMoldCapacityByUserIdFetcher>(true);
+             var userDataFetcher = original.GetComponent<Gs2FormationOwnMoldFetcher>() ?? original.GetComponentInParent<Gs2FormationOwnMoldFetcher>(true);
+            if (fetcher == null) {
+                EditorGUILayout.HelpBox("Gs2FormationAddMoldCapacityByUserIdFetcher not found.", MessageType.Error);
+                if (GUILayout.Button("Add Fetcher")) {
+                    original.gameObject.AddComponent<Gs2FormationAddMoldCapacityByUserIdFetcher>();
+                }
+            }
+            if (userDataFetcher == null) {
+                EditorGUILayout.HelpBox("Gs2FormationOwnMoldFetcher not found. Adding a Fetcher allows more values to be used.", MessageType.Warning);
+                if (GUILayout.Button("Add Fetcher")) {
+                    original.gameObject.AddComponent<Gs2FormationOwnMoldFetcher>();
+                }
+            }
 
             serializedObject.Update();
             original.format = EditorGUILayout.TextField("Format", original.format);
@@ -61,25 +77,27 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Label.Editor
                 GUI.FocusControl("");
                 EditorUtility.SetDirty(original);
             }
-            if (GUILayout.Button("UserData:Name")) {
-                original.format += "{userData:name}";
-                GUI.FocusControl("");
-                EditorUtility.SetDirty(original);
-            }
-            if (GUILayout.Button("UserData:UserId")) {
-                original.format += "{userData:userId}";
-                GUI.FocusControl("");
-                EditorUtility.SetDirty(original);
-            }
-            if (GUILayout.Button("UserData:Capacity")) {
-                original.format += "{userData:capacity}";
-                GUI.FocusControl("");
-                EditorUtility.SetDirty(original);
-            }
-            if (GUILayout.Button("UserData:Capacity:Changed")) {
-                original.format += "{userData:capacity:changed}";
-                GUI.FocusControl("");
-                EditorUtility.SetDirty(original);
+            if (userDataFetcher != null) {
+                if (GUILayout.Button("UserData:Name")) {
+                    original.format += "{userData:name}";
+                    GUI.FocusControl("");
+                    EditorUtility.SetDirty(original);
+                }
+                if (GUILayout.Button("UserData:UserId")) {
+                    original.format += "{userData:userId}";
+                    GUI.FocusControl("");
+                    EditorUtility.SetDirty(original);
+                }
+                if (GUILayout.Button("UserData:Capacity")) {
+                    original.format += "{userData:capacity}";
+                    GUI.FocusControl("");
+                    EditorUtility.SetDirty(original);
+                }
+                if (GUILayout.Button("UserData:Capacity:Changed")) {
+                    original.format += "{userData:capacity:changed}";
+                    GUI.FocusControl("");
+                    EditorUtility.SetDirty(original);
+                }
             }
             EditorGUILayout.PropertyField(serializedObject.FindProperty("onUpdate"), true);
             serializedObject.ApplyModifiedProperties();

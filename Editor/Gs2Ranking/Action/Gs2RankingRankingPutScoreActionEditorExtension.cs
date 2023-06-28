@@ -17,6 +17,14 @@
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
+// ReSharper disable RedundantNameQualifier
+// ReSharper disable RedundantAssignment
+// ReSharper disable NotAccessedVariable
+// ReSharper disable RedundantUsingDirective
+// ReSharper disable Unity.NoNullPropagation
+// ReSharper disable InconsistentNaming
+
+#pragma warning disable CS0472
 
 using Gs2.Unity.Gs2Ranking.ScriptableObject;
 using Gs2.Unity.UiKit.Gs2Ranking.Context;
@@ -34,7 +42,7 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Editor
 
             if (original == null) return;
 
-            var context = original.GetComponentInParent<Gs2RankingRankingContext>();
+            var context = original.GetComponent<Gs2RankingRankingContext>() ?? original.GetComponentInParent<Gs2RankingRankingContext>(true);
             if (context == null) {
                 EditorGUILayout.HelpBox("Gs2RankingRankingContext not found.", MessageType.Error);
                 if (GUILayout.Button("Add Context")) {
@@ -52,7 +60,7 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Editor
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2RankingRankingContext), false);
                     EditorGUI.indentLevel++;
-                    EditorGUILayout.ObjectField("Ranking", context.Ranking, typeof(Ranking), false);
+                    context.Ranking = EditorGUILayout.ObjectField("Ranking", context.Ranking, typeof(Ranking), false) as Ranking;
                     EditorGUI.indentLevel++;
                     EditorGUILayout.TextField("NamespaceName", context.Ranking?.NamespaceName.ToString());
                     EditorGUI.indentLevel--;

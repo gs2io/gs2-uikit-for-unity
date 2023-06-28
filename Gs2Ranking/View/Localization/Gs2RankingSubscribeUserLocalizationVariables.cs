@@ -73,6 +73,15 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Localization
                 enabled = false;
             }
         }
+
+        public bool HasError()
+        {
+            _fetcher = GetComponent<Gs2RankingSubscribeUserFetcher>() ?? GetComponentInParent<Gs2RankingSubscribeUserFetcher>(true);
+            if (_fetcher == null) {
+                return true;
+            }
+            return false;
+        }
     }
 
     /// <summary>

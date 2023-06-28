@@ -17,7 +17,16 @@
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
+// ReSharper disable RedundantNameQualifier
+// ReSharper disable RedundantAssignment
+// ReSharper disable NotAccessedVariable
+// ReSharper disable RedundantUsingDirective
+// ReSharper disable Unity.NoNullPropagation
+// ReSharper disable InconsistentNaming
 
+#pragma warning disable CS0472
+
+using Gs2.Unity.UiKit.Gs2Money.Fetcher;
 using UnityEditor;
 using UnityEngine;
 
@@ -30,6 +39,21 @@ namespace Gs2.Unity.UiKit.Gs2Money.Label.Editor
             var original = target as Gs2MoneyWithdrawByUserIdLabel;
 
             if (original == null) return;
+
+            var fetcher = original.GetComponent<Gs2MoneyWithdrawByUserIdFetcher>() ?? original.GetComponentInParent<Gs2MoneyWithdrawByUserIdFetcher>(true);
+             var userDataFetcher = original.GetComponent<Gs2MoneyOwnWalletFetcher>() ?? original.GetComponentInParent<Gs2MoneyOwnWalletFetcher>(true);
+            if (fetcher == null) {
+                EditorGUILayout.HelpBox("Gs2MoneyWithdrawByUserIdFetcher not found.", MessageType.Error);
+                if (GUILayout.Button("Add Fetcher")) {
+                    original.gameObject.AddComponent<Gs2MoneyWithdrawByUserIdFetcher>();
+                }
+            }
+            if (userDataFetcher == null) {
+                EditorGUILayout.HelpBox("Gs2MoneyOwnWalletFetcher not found. Adding a Fetcher allows more values to be used.", MessageType.Warning);
+                if (GUILayout.Button("Add Fetcher")) {
+                    original.gameObject.AddComponent<Gs2MoneyOwnWalletFetcher>();
+                }
+            }
 
             serializedObject.Update();
             original.format = EditorGUILayout.TextField("Format", original.format);
@@ -60,40 +84,42 @@ namespace Gs2.Unity.UiKit.Gs2Money.Label.Editor
                 GUI.FocusControl("");
                 EditorUtility.SetDirty(original);
             }
-            if (GUILayout.Button("UserData:Slot")) {
-                original.format += "{userData:slot}";
-                GUI.FocusControl("");
-                EditorUtility.SetDirty(original);
-            }
-            if (GUILayout.Button("UserData:Paid")) {
-                original.format += "{userData:paid}";
-                GUI.FocusControl("");
-                EditorUtility.SetDirty(original);
-            }
-            if (GUILayout.Button("UserData:Paid:Changed")) {
-                original.format += "{userData:paid:changed}";
-                GUI.FocusControl("");
-                EditorUtility.SetDirty(original);
-            }
-            if (GUILayout.Button("UserData:Free")) {
-                original.format += "{userData:free}";
-                GUI.FocusControl("");
-                EditorUtility.SetDirty(original);
-            }
-            if (GUILayout.Button("UserData:Total")) {
-                original.format += "{userData:total}";
-                GUI.FocusControl("");
-                EditorUtility.SetDirty(original);
-            }
-            if (GUILayout.Button("UserData:Total:Changed")) {
-                original.format += "{userData:total:changed}";
-                GUI.FocusControl("");
-                EditorUtility.SetDirty(original);
-            }
-            if (GUILayout.Button("UserData:UpdatedAt")) {
-                original.format += "{userData:updatedAt}";
-                GUI.FocusControl("");
-                EditorUtility.SetDirty(original);
+            if (userDataFetcher != null) {
+                if (GUILayout.Button("UserData:Slot")) {
+                    original.format += "{userData:slot}";
+                    GUI.FocusControl("");
+                    EditorUtility.SetDirty(original);
+                }
+                if (GUILayout.Button("UserData:Paid")) {
+                    original.format += "{userData:paid}";
+                    GUI.FocusControl("");
+                    EditorUtility.SetDirty(original);
+                }
+                if (GUILayout.Button("UserData:Paid:Changed")) {
+                    original.format += "{userData:paid:changed}";
+                    GUI.FocusControl("");
+                    EditorUtility.SetDirty(original);
+                }
+                if (GUILayout.Button("UserData:Free")) {
+                    original.format += "{userData:free}";
+                    GUI.FocusControl("");
+                    EditorUtility.SetDirty(original);
+                }
+                if (GUILayout.Button("UserData:Total")) {
+                    original.format += "{userData:total}";
+                    GUI.FocusControl("");
+                    EditorUtility.SetDirty(original);
+                }
+                if (GUILayout.Button("UserData:Total:Changed")) {
+                    original.format += "{userData:total:changed}";
+                    GUI.FocusControl("");
+                    EditorUtility.SetDirty(original);
+                }
+                if (GUILayout.Button("UserData:UpdatedAt")) {
+                    original.format += "{userData:updatedAt}";
+                    GUI.FocusControl("");
+                    EditorUtility.SetDirty(original);
+                }
             }
             EditorGUILayout.PropertyField(serializedObject.FindProperty("onUpdate"), true);
             serializedObject.ApplyModifiedProperties();

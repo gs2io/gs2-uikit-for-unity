@@ -41,6 +41,18 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Context
                 Debug.LogError("MissionGroupModel is not set in Gs2MissionMissionGroupModelContext.");
             }
         }
+
+        public bool HasError() {
+            if (MissionGroupModel == null) {
+                if (transform.parent != null && transform.parent.GetComponent<Gs2MissionMissionGroupModelList>() != null) {
+                    return false;
+                }
+                else {
+                    return true;
+                }
+            }
+            return false;
+        }
     }
 
     /// <summary>

@@ -41,6 +41,13 @@ namespace Gs2.Unity.UiKit.Gs2Money.Context
                 Debug.LogError("Wallet is not set in Gs2MoneyOwnWalletContext.");
             }
         }
+
+        public bool HasError() {
+            if (Wallet == null) {
+                return true;
+            }
+            return false;
+        }
     }
 
     /// <summary>

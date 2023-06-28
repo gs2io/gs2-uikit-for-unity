@@ -91,6 +91,15 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Label
 
             Update();
         }
+
+        public bool HasError()
+        {
+            _fetcher = GetComponent<Gs2InventoryDeleteReferenceOfByUserIdFetcher>() ?? GetComponentInParent<Gs2InventoryDeleteReferenceOfByUserIdFetcher>(true);
+            if (_fetcher == null) {
+                return true;
+            }
+            return false;
+        }
     }
 
     /// <summary>

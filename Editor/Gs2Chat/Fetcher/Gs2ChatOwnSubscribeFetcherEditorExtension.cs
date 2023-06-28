@@ -40,7 +40,7 @@ namespace Gs2.Unity.UiKit.Gs2Chat.Editor
 
             if (original == null) return;
 
-            var context = original.GetComponent<Gs2ChatOwnSubscribeContext>() ?? original.GetComponentInParent<Gs2ChatOwnSubscribeContext>();
+            var context = original.GetComponent<Gs2ChatOwnSubscribeContext>() ?? original.GetComponentInParent<Gs2ChatOwnSubscribeContext>(true);
             if (context == null) {
                 EditorGUILayout.HelpBox("Gs2ChatOwnSubscribeContext not found.", MessageType.Error);
                 if (GUILayout.Button("Add Context")) {

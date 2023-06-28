@@ -133,6 +133,15 @@ namespace Gs2.Unity.UiKit.Gs2Account
                 enabled = false;
             }
         }
+
+        public bool HasError()
+        {
+            this._context = GetComponent<Gs2AccountTakeOverContext>() ?? GetComponentInParent<Gs2AccountTakeOverContext>(true);
+            if (_context == null) {
+                return true;
+            }
+            return false;
+        }
     }
 
     /// <summary>

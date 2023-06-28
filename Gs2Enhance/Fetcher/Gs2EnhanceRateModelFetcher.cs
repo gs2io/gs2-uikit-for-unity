@@ -56,13 +56,13 @@ namespace Gs2.Unity.UiKit.Gs2Enhance.Fetcher
             {
                 if (_gameSessionHolder != null && _gameSessionHolder.Initialized &&
                     _clientHolder != null && _clientHolder.Initialized &&
-                    _context != null && this._context.RateModel != null)
+                    Context != null && this.Context.RateModel != null)
                 {
                     
                     var domain = this._clientHolder.Gs2.Enhance.Namespace(
-                        this._context.RateModel.NamespaceName
+                        this.Context.RateModel.NamespaceName
                     ).RateModel(
-                        this._context.RateModel.RateName
+                        this.Context.RateModel.RateName
                     );
                     var future = domain.Model();
                     yield return future;
@@ -113,18 +113,27 @@ namespace Gs2.Unity.UiKit.Gs2Enhance.Fetcher
     {
         protected Gs2ClientHolder _clientHolder;
         protected Gs2GameSessionHolder _gameSessionHolder;
-        private Gs2EnhanceRateModelContext _context;
+        public Gs2EnhanceRateModelContext Context { get; private set; }
 
         public void Awake()
         {
             _clientHolder = Gs2ClientHolder.Instance;
             _gameSessionHolder = Gs2GameSessionHolder.Instance;
-            _context = GetComponent<Gs2EnhanceRateModelContext>() ?? GetComponentInParent<Gs2EnhanceRateModelContext>();
+            Context = GetComponent<Gs2EnhanceRateModelContext>() ?? GetComponentInParent<Gs2EnhanceRateModelContext>();
 
-            if (_context == null) {
+            if (Context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2EnhanceRateModelContext.");
                 enabled = false;
             }
+        }
+
+        public bool HasError()
+        {
+            Context = GetComponent<Gs2EnhanceRateModelContext>() ?? GetComponentInParent<Gs2EnhanceRateModelContext>(true);
+            if (Context == null) {
+                return true;
+            }
+            return false;
         }
     }
 

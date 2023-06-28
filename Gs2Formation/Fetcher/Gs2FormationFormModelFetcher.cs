@@ -56,13 +56,13 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Fetcher
             {
                 if (_gameSessionHolder != null && _gameSessionHolder.Initialized &&
                     _clientHolder != null && _clientHolder.Initialized &&
-                    _context != null && this._context.FormModel != null)
+                    Context != null && this.Context.FormModel != null)
                 {
                     
                     var domain = this._clientHolder.Gs2.Formation.Namespace(
-                        this._context.FormModel.NamespaceName
+                        this.Context.FormModel.NamespaceName
                     ).FormModel(
-                        this._context.FormModel.FormModelName
+                        this.Context.FormModel.FormModelName
                     );
                     var future = domain.Model();
                     yield return future;
@@ -113,18 +113,27 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Fetcher
     {
         protected Gs2ClientHolder _clientHolder;
         protected Gs2GameSessionHolder _gameSessionHolder;
-        private Gs2FormationFormModelContext _context;
+        public Gs2FormationFormModelContext Context { get; private set; }
 
         public void Awake()
         {
             _clientHolder = Gs2ClientHolder.Instance;
             _gameSessionHolder = Gs2GameSessionHolder.Instance;
-            _context = GetComponent<Gs2FormationFormModelContext>() ?? GetComponentInParent<Gs2FormationFormModelContext>();
+            Context = GetComponent<Gs2FormationFormModelContext>() ?? GetComponentInParent<Gs2FormationFormModelContext>();
 
-            if (_context == null) {
+            if (Context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2FormationFormModelContext.");
                 enabled = false;
             }
+        }
+
+        public bool HasError()
+        {
+            Context = GetComponent<Gs2FormationFormModelContext>() ?? GetComponentInParent<Gs2FormationFormModelContext>(true);
+            if (Context == null) {
+                return true;
+            }
+            return false;
         }
     }
 

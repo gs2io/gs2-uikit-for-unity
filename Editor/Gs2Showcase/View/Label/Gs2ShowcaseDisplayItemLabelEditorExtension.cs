@@ -40,7 +40,7 @@ namespace Gs2.Unity.UiKit.Gs2Showcase.Editor
 
             if (original == null) return;
 
-            var fetcher = original.GetComponent<Gs2ShowcaseDisplayItemFetcher>() ?? original.GetComponentInParent<Gs2ShowcaseDisplayItemFetcher>();
+            var fetcher = original.GetComponent<Gs2ShowcaseDisplayItemFetcher>() ?? original.GetComponentInParent<Gs2ShowcaseDisplayItemFetcher>(true);
             if (fetcher == null) {
                 EditorGUILayout.HelpBox("Gs2ShowcaseDisplayItemFetcher not found.", MessageType.Error);
                 if (GUILayout.Button("Add Fetcher")) {
@@ -48,7 +48,7 @@ namespace Gs2.Unity.UiKit.Gs2Showcase.Editor
                 }
             }
             else {
-                var context = original.GetComponent<Gs2ShowcaseDisplayItemContext>() ?? original.GetComponentInParent<Gs2ShowcaseDisplayItemContext>();
+                var context = original.GetComponent<Gs2ShowcaseDisplayItemContext>() ?? original.GetComponentInParent<Gs2ShowcaseDisplayItemContext>(true);
                 EditorGUI.BeginDisabledGroup(true);
                 EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2ShowcaseDisplayItemFetcher), false);
                 EditorGUI.indentLevel++;

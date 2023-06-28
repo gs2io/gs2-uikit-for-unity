@@ -93,6 +93,13 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Label
                         )
                     );
                 }
+            } else {
+                onUpdate?.Invoke(
+                    format.Replace(
+                        "{capacity}",
+                        "0"
+                    )
+                );
             }
         }
     }
@@ -115,12 +122,18 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Label
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2FormationAddMoldCapacityByUserIdFetcher.");
                 enabled = false;
             }
-            if (_userDataFetcher == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2FormationOwnMoldFetcher.");
-                enabled = false;
-            }
 
             Update();
+        }
+
+        public bool HasError()
+        {
+            _fetcher = GetComponent<Gs2FormationAddMoldCapacityByUserIdFetcher>() ?? GetComponentInParent<Gs2FormationAddMoldCapacityByUserIdFetcher>(true);
+            _userDataFetcher = GetComponent<Gs2FormationOwnMoldFetcher>() ?? GetComponentInParent<Gs2FormationOwnMoldFetcher>(true);
+            if (_fetcher == null) {
+                return true;
+            }
+            return false;
         }
     }
 

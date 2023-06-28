@@ -88,6 +88,19 @@ namespace Gs2.Unity.UiKit.Gs2Ranking
             }
             this.prefab.gameObject.SetActive(false);
         }
+
+        public bool HasError()
+        {
+            _context = GetComponent<Gs2RankingNamespaceContext>() ?? GetComponentInParent<Gs2RankingNamespaceContext>(true);
+            _fetcher = GetComponent<Gs2RankingCategoryModelListFetcher>() ?? GetComponentInParent<Gs2RankingCategoryModelListFetcher>(true);
+            if (_context == null) {
+                return true;
+            }
+            if (_fetcher == null) {
+                return true;
+            }
+            return false;
+        }
     }
 
     /// <summary>

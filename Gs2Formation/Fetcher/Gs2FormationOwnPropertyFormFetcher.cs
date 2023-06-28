@@ -129,6 +129,15 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Fetcher
                 enabled = false;
             }
         }
+
+        public bool HasError()
+        {
+            _context = GetComponent<Gs2FormationOwnPropertyFormContext>() ?? GetComponentInParent<Gs2FormationOwnPropertyFormContext>(true);
+            if (_context == null) {
+                return true;
+            }
+            return false;
+        }
     }
 
     /// <summary>

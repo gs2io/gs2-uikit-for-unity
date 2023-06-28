@@ -41,6 +41,13 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking.Context
                 Debug.LogError("Vote is not set in Gs2MatchmakingVoteContext.");
             }
         }
+
+        public bool HasError() {
+            if (Vote == null) {
+                return true;
+            }
+            return false;
+        }
     }
 
     /// <summary>

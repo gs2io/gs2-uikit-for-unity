@@ -17,6 +17,14 @@
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
+// ReSharper disable RedundantNameQualifier
+// ReSharper disable RedundantAssignment
+// ReSharper disable NotAccessedVariable
+// ReSharper disable RedundantUsingDirective
+// ReSharper disable Unity.NoNullPropagation
+// ReSharper disable InconsistentNaming
+
+#pragma warning disable CS0472
 
 using Gs2.Unity.Gs2Showcase.ScriptableObject;
 using Gs2.Unity.UiKit.Gs2Showcase.Context;
@@ -33,7 +41,7 @@ namespace Gs2.Unity.UiKit.Gs2Showcase.Enabler.Editor
 
             if (original == null) return;
 
-            var context = original.GetComponent<Gs2ShowcaseDisplayItemContext>() ?? original.GetComponentInParent<Gs2ShowcaseDisplayItemContext>();
+            var context = original.GetComponent<Gs2ShowcaseDisplayItemContext>() ?? original.GetComponentInParent<Gs2ShowcaseDisplayItemContext>(true);
             if (context == null) {
                 EditorGUILayout.HelpBox("Gs2ShowcaseDisplayItemContext not found.", MessageType.Error);
                 if (GUILayout.Button("Add Context")) {

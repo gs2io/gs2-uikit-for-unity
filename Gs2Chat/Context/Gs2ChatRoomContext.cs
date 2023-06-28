@@ -41,6 +41,13 @@ namespace Gs2.Unity.UiKit.Gs2Chat.Context
                 Debug.LogError("Room is not set in Gs2ChatRoomContext.");
             }
         }
+
+        public bool HasError() {
+            if (Room == null) {
+                return true;
+            }
+            return false;
+        }
     }
 
     /// <summary>

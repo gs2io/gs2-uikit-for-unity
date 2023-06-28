@@ -115,12 +115,18 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Label
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2InventorySetCapacityByUserIdFetcher.");
                 enabled = false;
             }
-            if (_userDataFetcher == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2InventoryOwnInventoryFetcher.");
-                enabled = false;
-            }
 
             Update();
+        }
+
+        public bool HasError()
+        {
+            _fetcher = GetComponent<Gs2InventorySetCapacityByUserIdFetcher>() ?? GetComponentInParent<Gs2InventorySetCapacityByUserIdFetcher>(true);
+            _userDataFetcher = GetComponent<Gs2InventoryOwnInventoryFetcher>() ?? GetComponentInParent<Gs2InventoryOwnInventoryFetcher>(true);
+            if (_fetcher == null) {
+                return true;
+            }
+            return false;
         }
     }
 

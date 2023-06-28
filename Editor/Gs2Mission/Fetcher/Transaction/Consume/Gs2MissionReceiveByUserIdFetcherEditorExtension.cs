@@ -39,7 +39,7 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Fetcher.Editor
 
             if (original == null) return;
 
-            var fetcher = original.GetComponent<IConsumeActionsFetcher>() ?? original.GetComponentInParent<IConsumeActionsFetcher>();
+            var fetcher = original.GetComponent<IConsumeActionsFetcher>() ?? original.GetComponentInParent<IConsumeActionsFetcher>(true);
             if (fetcher == null) {
                 EditorGUILayout.HelpBox("IConsumeActionsFetcher not found.", MessageType.Error);
             }

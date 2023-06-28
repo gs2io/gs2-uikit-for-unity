@@ -56,13 +56,13 @@ namespace Gs2.Unity.UiKit.Gs2Version.Fetcher
             {
                 if (_gameSessionHolder != null && _gameSessionHolder.Initialized &&
                     _clientHolder != null && _clientHolder.Initialized &&
-                    _context != null && this._context.VersionModel != null)
+                    Context != null && this.Context.VersionModel != null)
                 {
                     
                     var domain = this._clientHolder.Gs2.Version.Namespace(
-                        this._context.VersionModel.NamespaceName
+                        this.Context.VersionModel.NamespaceName
                     ).VersionModel(
-                        this._context.VersionModel.VersionName
+                        this.Context.VersionModel.VersionName
                     );
                     var future = domain.Model();
                     yield return future;
@@ -113,18 +113,27 @@ namespace Gs2.Unity.UiKit.Gs2Version.Fetcher
     {
         protected Gs2ClientHolder _clientHolder;
         protected Gs2GameSessionHolder _gameSessionHolder;
-        private Gs2VersionVersionModelContext _context;
+        public Gs2VersionVersionModelContext Context { get; private set; }
 
         public void Awake()
         {
             _clientHolder = Gs2ClientHolder.Instance;
             _gameSessionHolder = Gs2GameSessionHolder.Instance;
-            _context = GetComponent<Gs2VersionVersionModelContext>() ?? GetComponentInParent<Gs2VersionVersionModelContext>();
+            Context = GetComponent<Gs2VersionVersionModelContext>() ?? GetComponentInParent<Gs2VersionVersionModelContext>();
 
-            if (_context == null) {
+            if (Context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2VersionVersionModelContext.");
                 enabled = false;
             }
+        }
+
+        public bool HasError()
+        {
+            Context = GetComponent<Gs2VersionVersionModelContext>() ?? GetComponentInParent<Gs2VersionVersionModelContext>(true);
+            if (Context == null) {
+                return true;
+            }
+            return false;
         }
     }
 

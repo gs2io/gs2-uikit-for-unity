@@ -17,6 +17,14 @@
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
+// ReSharper disable RedundantNameQualifier
+// ReSharper disable RedundantAssignment
+// ReSharper disable NotAccessedVariable
+// ReSharper disable RedundantUsingDirective
+// ReSharper disable Unity.NoNullPropagation
+// ReSharper disable InconsistentNaming
+
+#pragma warning disable CS0472
 
 using Gs2.Unity.Gs2Chat.ScriptableObject;
 using Gs2.Unity.UiKit.Gs2Chat.Context;
@@ -34,7 +42,7 @@ namespace Gs2.Unity.UiKit.Gs2Chat.Editor
 
             if (original == null) return;
 
-            var context = original.GetComponentInParent<Gs2ChatRoomContext>();
+            var context = original.GetComponent<Gs2ChatRoomContext>() ?? original.GetComponentInParent<Gs2ChatRoomContext>(true);
             if (context == null) {
                 EditorGUILayout.HelpBox("Gs2ChatRoomContext not found.", MessageType.Error);
                 if (GUILayout.Button("Add Context")) {
@@ -52,7 +60,7 @@ namespace Gs2.Unity.UiKit.Gs2Chat.Editor
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2ChatRoomContext), false);
                     EditorGUI.indentLevel++;
-                    EditorGUILayout.ObjectField("Room", context.Room, typeof(Room), false);
+                    context.Room = EditorGUILayout.ObjectField("Room", context.Room, typeof(Room), false) as Room;
                     EditorGUI.indentLevel++;
                     EditorGUILayout.TextField("NamespaceName", context.Room?.NamespaceName.ToString());
                     EditorGUILayout.TextField("RoomName", context.Room?.RoomName.ToString());

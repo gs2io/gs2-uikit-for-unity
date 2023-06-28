@@ -40,7 +40,7 @@ namespace Gs2.Unity.UiKit.Gs2Version.Editor
 
             if (original == null) return;
 
-            var fetcher = original.GetComponent<Gs2VersionVersionModelFetcher>() ?? original.GetComponentInParent<Gs2VersionVersionModelFetcher>();
+            var fetcher = original.GetComponent<Gs2VersionVersionModelFetcher>() ?? original.GetComponentInParent<Gs2VersionVersionModelFetcher>(true);
             if (fetcher == null) {
                 EditorGUILayout.HelpBox("Gs2VersionVersionModelFetcher not found.", MessageType.Error);
                 if (GUILayout.Button("Add Fetcher")) {
@@ -48,14 +48,14 @@ namespace Gs2.Unity.UiKit.Gs2Version.Editor
                 }
             }
             else {
-                if (fetcher.transform.parent.GetComponent<Gs2VersionVersionModelList>() != null) {
+                if (fetcher.transform.parent == null || fetcher.transform.parent.GetComponent<Gs2VersionVersionModelList>() != null) {
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2VersionVersionModelFetcher), false);
                     EditorGUI.EndDisabledGroup();
                     EditorGUILayout.HelpBox("VersionModel is auto assign from Gs2VersionVersionModelList.", MessageType.Info);
                 }
                 else {
-                    var context = original.GetComponent<Gs2VersionVersionModelContext>() ?? original.GetComponentInParent<Gs2VersionVersionModelContext>();
+                    var context = original.GetComponent<Gs2VersionVersionModelContext>() ?? original.GetComponentInParent<Gs2VersionVersionModelContext>(true);
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2VersionVersionModelFetcher), false);
                     EditorGUI.indentLevel++;

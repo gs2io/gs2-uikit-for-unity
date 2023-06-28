@@ -41,6 +41,13 @@ namespace Gs2.Unity.UiKit.Gs2MegaField.Context
                 Debug.LogError("Spatial is not set in Gs2MegaFieldSpatialContext.");
             }
         }
+
+        public bool HasError() {
+            if (Spatial == null) {
+                return true;
+            }
+            return false;
+        }
     }
 
     /// <summary>

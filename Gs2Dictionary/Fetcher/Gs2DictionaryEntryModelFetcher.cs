@@ -56,13 +56,13 @@ namespace Gs2.Unity.UiKit.Gs2Dictionary.Fetcher
             {
                 if (_gameSessionHolder != null && _gameSessionHolder.Initialized &&
                     _clientHolder != null && _clientHolder.Initialized &&
-                    _context != null && this._context.EntryModel != null)
+                    Context != null && this.Context.EntryModel != null)
                 {
                     
                     var domain = this._clientHolder.Gs2.Dictionary.Namespace(
-                        this._context.EntryModel.NamespaceName
+                        this.Context.EntryModel.NamespaceName
                     ).EntryModel(
-                        this._context.EntryModel.EntryName
+                        this.Context.EntryModel.EntryName
                     );
                     var future = domain.Model();
                     yield return future;
@@ -113,18 +113,27 @@ namespace Gs2.Unity.UiKit.Gs2Dictionary.Fetcher
     {
         protected Gs2ClientHolder _clientHolder;
         protected Gs2GameSessionHolder _gameSessionHolder;
-        private Gs2DictionaryEntryModelContext _context;
+        public Gs2DictionaryEntryModelContext Context { get; private set; }
 
         public void Awake()
         {
             _clientHolder = Gs2ClientHolder.Instance;
             _gameSessionHolder = Gs2GameSessionHolder.Instance;
-            _context = GetComponent<Gs2DictionaryEntryModelContext>() ?? GetComponentInParent<Gs2DictionaryEntryModelContext>();
+            Context = GetComponent<Gs2DictionaryEntryModelContext>() ?? GetComponentInParent<Gs2DictionaryEntryModelContext>();
 
-            if (_context == null) {
+            if (Context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2DictionaryEntryModelContext.");
                 enabled = false;
             }
+        }
+
+        public bool HasError()
+        {
+            Context = GetComponent<Gs2DictionaryEntryModelContext>() ?? GetComponentInParent<Gs2DictionaryEntryModelContext>(true);
+            if (Context == null) {
+                return true;
+            }
+            return false;
         }
     }
 

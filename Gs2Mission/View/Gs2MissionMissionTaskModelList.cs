@@ -88,6 +88,19 @@ namespace Gs2.Unity.UiKit.Gs2Mission
             }
             this.prefab.gameObject.SetActive(false);
         }
+
+        public bool HasError()
+        {
+            _context = GetComponent<Gs2MissionMissionGroupModelContext>() ?? GetComponentInParent<Gs2MissionMissionGroupModelContext>(true);
+            _fetcher = GetComponent<Gs2MissionMissionTaskModelListFetcher>() ?? GetComponentInParent<Gs2MissionMissionTaskModelListFetcher>(true);
+            if (_context == null) {
+                return true;
+            }
+            if (_fetcher == null) {
+                return true;
+            }
+            return false;
+        }
     }
 
     /// <summary>

@@ -40,7 +40,7 @@ namespace Gs2.Unity.UiKit.Gs2Datastore.Editor
 
             if (original == null) return;
 
-            var context = original.GetComponent<Gs2DatastoreOwnDataObjectContext>() ?? original.GetComponentInParent<Gs2DatastoreOwnDataObjectContext>();
+            var context = original.GetComponent<Gs2DatastoreOwnDataObjectContext>() ?? original.GetComponentInParent<Gs2DatastoreOwnDataObjectContext>(true);
             if (context == null) {
                 EditorGUILayout.HelpBox("Gs2DatastoreOwnDataObjectContext not found.", MessageType.Error);
                 if (GUILayout.Button("Add Context")) {

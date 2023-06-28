@@ -41,6 +41,18 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Context
                 Debug.LogError("CategoryModel is not set in Gs2RankingCategoryModelContext.");
             }
         }
+
+        public bool HasError() {
+            if (CategoryModel == null) {
+                if (transform.parent != null && transform.parent.GetComponent<Gs2RankingCategoryModelList>() != null) {
+                    return false;
+                }
+                else {
+                    return true;
+                }
+            }
+            return false;
+        }
     }
 
     /// <summary>

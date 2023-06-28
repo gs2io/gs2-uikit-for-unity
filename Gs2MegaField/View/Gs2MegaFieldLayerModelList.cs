@@ -88,6 +88,19 @@ namespace Gs2.Unity.UiKit.Gs2MegaField
             }
             this.prefab.gameObject.SetActive(false);
         }
+
+        public bool HasError()
+        {
+            _context = GetComponent<Gs2MegaFieldAreaModelContext>() ?? GetComponentInParent<Gs2MegaFieldAreaModelContext>(true);
+            _fetcher = GetComponent<Gs2MegaFieldLayerModelListFetcher>() ?? GetComponentInParent<Gs2MegaFieldLayerModelListFetcher>(true);
+            if (_context == null) {
+                return true;
+            }
+            if (_fetcher == null) {
+                return true;
+            }
+            return false;
+        }
     }
 
     /// <summary>

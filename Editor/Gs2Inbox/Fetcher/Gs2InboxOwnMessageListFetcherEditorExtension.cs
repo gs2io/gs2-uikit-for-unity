@@ -40,7 +40,7 @@ namespace Gs2.Unity.UiKit.Gs2Inbox.Editor
 
             if (original == null) return;
 
-            var context = original.GetComponent<Gs2InboxNamespaceContext>() ?? original.GetComponentInParent<Gs2InboxNamespaceContext>();
+            var context = original.GetComponent<Gs2InboxNamespaceContext>() ?? original.GetComponentInParent<Gs2InboxNamespaceContext>(true);
             if (context == null) {
                 EditorGUILayout.HelpBox("Gs2InboxNamespaceContext not found.", MessageType.Error);
                 if (GUILayout.Button("Add Context")) {

@@ -41,6 +41,13 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Context
                 Debug.LogError("ReceiveFriendRequest is not set in Gs2FriendOwnReceiveFriendRequestContext.");
             }
         }
+
+        public bool HasError() {
+            if (ReceiveFriendRequest == null) {
+                return true;
+            }
+            return false;
+        }
     }
 
     /// <summary>

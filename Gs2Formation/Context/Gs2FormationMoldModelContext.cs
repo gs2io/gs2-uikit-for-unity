@@ -41,6 +41,18 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Context
                 Debug.LogError("MoldModel is not set in Gs2FormationMoldModelContext.");
             }
         }
+
+        public bool HasError() {
+            if (MoldModel == null) {
+                if (transform.parent != null && transform.parent.GetComponent<Gs2FormationMoldModelList>() != null) {
+                    return false;
+                }
+                else {
+                    return true;
+                }
+            }
+            return false;
+        }
     }
 
     /// <summary>

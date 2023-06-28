@@ -39,7 +39,7 @@ namespace Gs2.Unity.UiKit.Gs2Chat.Enabler.Editor
 
             if (original == null) return;
 
-            var context = original.GetComponent<Gs2ChatMessageContext>() ?? original.GetComponentInParent<Gs2ChatMessageContext>();
+            var context = original.GetComponent<Gs2ChatMessageContext>() ?? original.GetComponentInParent<Gs2ChatMessageContext>(true);
             if (context == null) {
                 EditorGUILayout.HelpBox("Gs2ChatMessageContext not found.", MessageType.Error);
                 if (GUILayout.Button("Add Context")) {

@@ -109,12 +109,18 @@ namespace Gs2.Unity.UiKit.Gs2Dictionary.Label
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2DictionaryAddEntriesByUserIdFetcher.");
                 enabled = false;
             }
-            if (_userDataFetcher == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2DictionaryOwnEntryFetcher.");
-                enabled = false;
-            }
 
             Update();
+        }
+
+        public bool HasError()
+        {
+            _fetcher = GetComponent<Gs2DictionaryAddEntriesByUserIdFetcher>() ?? GetComponentInParent<Gs2DictionaryAddEntriesByUserIdFetcher>(true);
+            _userDataFetcher = GetComponent<Gs2DictionaryOwnEntryFetcher>() ?? GetComponentInParent<Gs2DictionaryOwnEntryFetcher>(true);
+            if (_fetcher == null) {
+                return true;
+            }
+            return false;
         }
     }
 

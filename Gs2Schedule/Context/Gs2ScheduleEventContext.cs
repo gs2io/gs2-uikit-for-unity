@@ -42,6 +42,13 @@ namespace Gs2.Unity.UiKit.Gs2Schedule.Context
                 Debug.LogError("Event_ is not set in Gs2ScheduleEventContext.");
             }
         }
+
+        public bool HasError() {
+            if (Event_ == null) {
+                return true;
+            }
+            return false;
+        }
     }
 
     /// <summary>

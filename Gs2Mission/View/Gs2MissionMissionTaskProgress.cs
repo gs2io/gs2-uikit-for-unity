@@ -17,10 +17,14 @@
 // ReSharper disable CheckNamespace
 
 using System;
+using System.Collections;
 using System.Linq;
-using Gs2.Core.Util;
+using Gs2.Core.Exception;
+using Gs2.Unity.Core.Exception;
+using Gs2.Unity.Gs2Mission.Model;
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Mission.Fetcher;
+using Gs2.Unity.Util;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -33,30 +37,56 @@ namespace Gs2.Unity.UiKit.Gs2Mission
 	[AddComponentMenu("GS2 UIKit/Mission/Counter/View/Gs2MissionMissionTaskProgress")]
     public partial class Gs2MissionMissionTaskProgress : MonoBehaviour
     {
+        private EzMissionGroupModel _missionGroupModel;
+        
+        public IEnumerator Process() {
+            while (true) {
+                yield return new WaitForSeconds(0.1f);
+                
+                if (_fetcher.Fetched && _fetcher.MissionTaskModel != null) {
+                    var future = this._clientHolder.Gs2.Mission.Namespace(
+                        _fetcher.Context.MissionTaskModel.NamespaceName
+                    ).MissionGroupModel(
+                        _fetcher.Context.MissionTaskModel.MissionGroupName
+                    ).Model();
+                    yield return future;
+                    if (future.Error != null) {
+                        this.onError.Invoke(new CanIgnoreException(future.Error), null);
+                    }
+
+                    _missionGroupModel = future.Result;
+                }
+            }
+        }
+
+        public void OnEnable() {
+            StartCoroutine(nameof(Process));
+        }
+        
         public void Update()
         {
-            if (_missionTaskModelFetcher.Fetched && _missionTaskModelFetcher.MissionTaskModel != null &&
-                _counterFetcher.Fetched && _counterFetcher.Counter != null)
+            if (this._missionGroupModel != null &&
+                this._userDataFetcher.Fetched && this._userDataFetcher.Counter != null)
             {
-                switch (resetType) {
-                    case ResetType.NotReset:
+                switch (this._missionGroupModel.ResetType) {
+                    case "notReset":
                         onUpdate?.Invoke(
-                            Math.Min((float)(_counterFetcher.Counter.Values.FirstOrDefault(v => v.ResetType == "notReset")?.Value ?? 0) / _missionTaskModelFetcher.MissionTaskModel.TargetValue, 1)
+                            Math.Min((float)(this._userDataFetcher.Counter.Values.FirstOrDefault(v => v.ResetType == "notReset")?.Value ?? 0) / this._fetcher.MissionTaskModel.TargetValue, 1)
                         );
                         break;
-                    case ResetType.Daily:
+                    case "daily":
                         onUpdate?.Invoke(
-                            Math.Min((float)(_counterFetcher.Counter.Values.FirstOrDefault(v => v.ResetType == "daily")?.Value ?? 0) / _missionTaskModelFetcher.MissionTaskModel.TargetValue, 1)
+                            Math.Min((float)(this._userDataFetcher.Counter.Values.FirstOrDefault(v => v.ResetType == "daily")?.Value ?? 0) / this._fetcher.MissionTaskModel.TargetValue, 1)
                         );
                         break;
-                    case ResetType.Weekly:
+                    case "weekly":
                         onUpdate?.Invoke(
-                            Math.Min((float)(_counterFetcher.Counter.Values.FirstOrDefault(v => v.ResetType == "weekly")?.Value ?? 0) / _missionTaskModelFetcher.MissionTaskModel.TargetValue, 1)
+                            Math.Min((float)(this._userDataFetcher.Counter.Values.FirstOrDefault(v => v.ResetType == "weekly")?.Value ?? 0) / this._fetcher.MissionTaskModel.TargetValue, 1)
                         );
                         break;
-                    case ResetType.Monthly:
+                    case "monthly":
                         onUpdate?.Invoke(
-                            Math.Min((float)(_counterFetcher.Counter.Values.FirstOrDefault(v => v.ResetType == "monthly")?.Value ?? 0) / _missionTaskModelFetcher.MissionTaskModel.TargetValue, 1)
+                            Math.Min((float)(this._userDataFetcher.Counter.Values.FirstOrDefault(v => v.ResetType == "monthly")?.Value ?? 0) / this._fetcher.MissionTaskModel.TargetValue, 1)
                         );
                         break;
                     default:
@@ -72,19 +102,23 @@ namespace Gs2.Unity.UiKit.Gs2Mission
 
     public partial class Gs2MissionMissionTaskProgress
     {
-        private Gs2MissionMissionTaskModelFetcher _missionTaskModelFetcher;
-        private Gs2MissionOwnCounterFetcher _counterFetcher;
+        private Gs2ClientHolder _clientHolder;
+        private Gs2GameSessionHolder _sessionHolder;
+        private Gs2MissionMissionTaskModelFetcher _fetcher;
+        private Gs2MissionOwnCounterFetcher _userDataFetcher;
 
         public void Awake()
         {
-            _missionTaskModelFetcher = GetComponentInParent<Gs2MissionMissionTaskModelFetcher>();
-            _counterFetcher = GetComponentInParent<Gs2MissionOwnCounterFetcher>();
+            _clientHolder = Gs2ClientHolder.Instance;
+            _sessionHolder = Gs2GameSessionHolder.Instance;
+            this._fetcher = GetComponentInParent<Gs2MissionMissionTaskModelFetcher>();
+            this._userDataFetcher = GetComponentInParent<Gs2MissionOwnCounterFetcher>();
             
-            if (_missionTaskModelFetcher == null) {
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MissionMissionTaskModelFetcher.");
                 enabled = false;
             }
-            if (_counterFetcher == null) {
+            if (this._userDataFetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MissionOwnCounterFetcher.");
                 enabled = false;
             }
@@ -99,15 +133,7 @@ namespace Gs2.Unity.UiKit.Gs2Mission
 
     public partial class Gs2MissionMissionTaskProgress
     {
-        public enum ResetType
-        {
-            NotReset,
-            Daily,
-            Weekly,
-            Monthly
-        }
-
-        public ResetType resetType;
+        
     }
 
     /// <summary>
@@ -137,6 +163,15 @@ namespace Gs2.Unity.UiKit.Gs2Mission
         {
             add => onUpdate.AddListener(value);
             remove => onUpdate.RemoveListener(value);
+        }
+        
+        [SerializeField]
+        internal ErrorEvent onError = new ErrorEvent();
+
+        public event UnityAction<Gs2Exception, Func<IEnumerator>> OnError
+        {
+            add => this.onError.AddListener(value);
+            remove => this.onError.RemoveListener(value);
         }
     }
 }

@@ -43,7 +43,7 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Editor
             serializedObject.Update();
 
             if (original.InventoryModel == null) {
-                if (original.transform.parent.GetComponent<Gs2InventoryInventoryModelList>() != null) {
+                if (original.transform.parent != null && original.transform.parent.GetComponent<Gs2InventoryInventoryModelList>() != null) {
                     EditorGUILayout.HelpBox("InventoryModel is auto assign from Gs2InventoryInventoryModelList.", MessageType.Info);
                 }
                 else {

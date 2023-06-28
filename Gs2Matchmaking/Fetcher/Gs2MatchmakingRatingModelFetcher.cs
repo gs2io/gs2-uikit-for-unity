@@ -56,13 +56,13 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking.Fetcher
             {
                 if (_gameSessionHolder != null && _gameSessionHolder.Initialized &&
                     _clientHolder != null && _clientHolder.Initialized &&
-                    _context != null && this._context.RatingModel != null)
+                    Context != null && this.Context.RatingModel != null)
                 {
                     
                     var domain = this._clientHolder.Gs2.Matchmaking.Namespace(
-                        this._context.RatingModel.NamespaceName
+                        this.Context.RatingModel.NamespaceName
                     ).RatingModel(
-                        this._context.RatingModel.RatingName
+                        this.Context.RatingModel.RatingName
                     );
                     var future = domain.Model();
                     yield return future;
@@ -113,18 +113,27 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking.Fetcher
     {
         protected Gs2ClientHolder _clientHolder;
         protected Gs2GameSessionHolder _gameSessionHolder;
-        private Gs2MatchmakingRatingModelContext _context;
+        public Gs2MatchmakingRatingModelContext Context { get; private set; }
 
         public void Awake()
         {
             _clientHolder = Gs2ClientHolder.Instance;
             _gameSessionHolder = Gs2GameSessionHolder.Instance;
-            _context = GetComponent<Gs2MatchmakingRatingModelContext>() ?? GetComponentInParent<Gs2MatchmakingRatingModelContext>();
+            Context = GetComponent<Gs2MatchmakingRatingModelContext>() ?? GetComponentInParent<Gs2MatchmakingRatingModelContext>();
 
-            if (_context == null) {
+            if (Context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MatchmakingRatingModelContext.");
                 enabled = false;
             }
+        }
+
+        public bool HasError()
+        {
+            Context = GetComponent<Gs2MatchmakingRatingModelContext>() ?? GetComponentInParent<Gs2MatchmakingRatingModelContext>(true);
+            if (Context == null) {
+                return true;
+            }
+            return false;
         }
     }
 

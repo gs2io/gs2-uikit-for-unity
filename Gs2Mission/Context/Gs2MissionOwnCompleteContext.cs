@@ -41,6 +41,13 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Context
                 Debug.LogError("Complete is not set in Gs2MissionOwnCompleteContext.");
             }
         }
+
+        public bool HasError() {
+            if (Complete == null) {
+                return true;
+            }
+            return false;
+        }
     }
 
     /// <summary>

@@ -41,6 +41,13 @@ namespace Gs2.Unity.UiKit.Gs2SerialKey.Context
                 Debug.LogError("CampaignModel is not set in Gs2SerialKeyCampaignModelContext.");
             }
         }
+
+        public bool HasError() {
+            if (CampaignModel == null) {
+                return true;
+            }
+            return false;
+        }
     }
 
     /// <summary>

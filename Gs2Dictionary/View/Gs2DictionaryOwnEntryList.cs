@@ -97,6 +97,19 @@ namespace Gs2.Unity.UiKit.Gs2Dictionary
             }
             this.prefab.gameObject.SetActive(false);
         }
+
+        public bool HasError()
+        {
+            _context = GetComponent<Gs2DictionaryNamespaceContext>() ?? GetComponentInParent<Gs2DictionaryNamespaceContext>(true);
+            _fetcher = GetComponent<Gs2DictionaryOwnEntryListFetcher>() ?? GetComponentInParent<Gs2DictionaryOwnEntryListFetcher>(true);
+            if (_context == null) {
+                return true;
+            }
+            if (_fetcher == null) {
+                return true;
+            }
+            return false;
+        }
     }
 
     /// <summary>

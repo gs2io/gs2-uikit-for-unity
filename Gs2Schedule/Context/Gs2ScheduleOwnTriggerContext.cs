@@ -41,6 +41,13 @@ namespace Gs2.Unity.UiKit.Gs2Schedule.Context
                 Debug.LogError("Trigger is not set in Gs2ScheduleOwnTriggerContext.");
             }
         }
+
+        public bool HasError() {
+            if (Trigger == null) {
+                return true;
+            }
+            return false;
+        }
     }
 
     /// <summary>

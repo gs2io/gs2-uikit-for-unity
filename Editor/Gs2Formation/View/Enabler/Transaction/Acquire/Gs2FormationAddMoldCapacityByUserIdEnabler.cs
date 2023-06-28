@@ -39,19 +39,14 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Enabler.Editor
 
             if (original == null) return;
 
-            var fetcher = original.GetComponent<IAcquireActionsFetcher>() ?? original.GetComponentInParent<IAcquireActionsFetcher>();
+            var fetcher = original.GetComponent<IAcquireActionsFetcher>() ?? original.GetComponentInParent<IAcquireActionsFetcher>(true);
             if (fetcher == null) {
                 EditorGUILayout.HelpBox("IAcquireActionsFetcher not found.", MessageType.Error);
             }
 
             serializedObject.Update();
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("expression"), true);
-
-            if (original.expression == Gs2FormationAddMoldCapacityByUserIdEnabler.Expression.In || original.expression == Gs2FormationAddMoldCapacityByUserIdEnabler.Expression.NotIn) {
-                EditorGUILayout.PropertyField(serializedObject.FindProperty("enableCapacities"), true);
-            } else {
-                EditorGUILayout.PropertyField(serializedObject.FindProperty("enableCapacity"), true);
-            }
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("includeAcquireActions"), true);
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("notIncludeAcquireActions"), true);
 
             EditorGUILayout.PropertyField(serializedObject.FindProperty("target"), true);
             serializedObject.ApplyModifiedProperties();

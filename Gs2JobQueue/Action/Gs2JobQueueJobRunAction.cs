@@ -133,6 +133,15 @@ namespace Gs2.Unity.UiKit.Gs2JobQueue
                 enabled = false;
             }
         }
+
+        public bool HasError()
+        {
+            this._context = GetComponent<Gs2JobQueueOwnJobContext>() ?? GetComponentInParent<Gs2JobQueueOwnJobContext>(true);
+            if (_context == null) {
+                return true;
+            }
+            return false;
+        }
     }
 
     /// <summary>

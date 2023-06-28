@@ -45,7 +45,16 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Context
                 enabled = false;
             }
         }
-        
+
+        public bool HasError()
+        {
+            _context = GetComponent<Gs2MissionCounterModelContext>() ?? GetComponentInParent<Gs2MissionCounterModelContext>(true);
+            if (_context == null) {
+                return true;
+            }
+            return false;
+        }
+
         public void Start() {
             this.onConverted.Invoke(
                 OwnCounter.New(

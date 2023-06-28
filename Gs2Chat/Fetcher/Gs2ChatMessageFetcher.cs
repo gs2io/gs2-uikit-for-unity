@@ -127,6 +127,15 @@ namespace Gs2.Unity.UiKit.Gs2Chat.Fetcher
                 enabled = false;
             }
         }
+
+        public bool HasError()
+        {
+            _context = GetComponent<Gs2ChatMessageContext>() ?? GetComponentInParent<Gs2ChatMessageContext>(true);
+            if (_context == null) {
+                return true;
+            }
+            return false;
+        }
     }
 
     /// <summary>

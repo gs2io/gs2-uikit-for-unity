@@ -139,12 +139,18 @@ namespace Gs2.Unity.UiKit.Gs2Inbox.Label
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2InboxSendMessageByUserIdFetcher.");
                 enabled = false;
             }
-            if (_userDataFetcher == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2InboxOwnMessageFetcher.");
-                enabled = false;
-            }
 
             Update();
+        }
+
+        public bool HasError()
+        {
+            _fetcher = GetComponent<Gs2InboxSendMessageByUserIdFetcher>() ?? GetComponentInParent<Gs2InboxSendMessageByUserIdFetcher>(true);
+            _userDataFetcher = GetComponent<Gs2InboxOwnMessageFetcher>() ?? GetComponentInParent<Gs2InboxOwnMessageFetcher>(true);
+            if (_fetcher == null) {
+                return true;
+            }
+            return false;
         }
     }
 

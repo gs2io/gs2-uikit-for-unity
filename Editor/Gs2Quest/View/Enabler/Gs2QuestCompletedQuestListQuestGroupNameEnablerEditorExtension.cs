@@ -39,7 +39,7 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Enabler.Editor
 
             if (original == null) return;
 
-            var context = original.GetComponent<Gs2QuestOwnCompletedQuestListContext>() ?? original.GetComponentInParent<Gs2QuestOwnCompletedQuestListContext>();
+            var context = original.GetComponent<Gs2QuestOwnCompletedQuestListContext>() ?? original.GetComponentInParent<Gs2QuestOwnCompletedQuestListContext>(true);
             if (context == null) {
                 EditorGUILayout.HelpBox("Gs2QuestOwnCompletedQuestListContext not found.", MessageType.Error);
                 if (GUILayout.Button("Add Context")) {

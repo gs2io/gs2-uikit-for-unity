@@ -41,6 +41,13 @@ namespace Gs2.Unity.UiKit.Gs2Enhance.Context
                 Debug.LogError("Progress is not set in Gs2EnhanceOwnProgressContext.");
             }
         }
+
+        public bool HasError() {
+            if (Progress == null) {
+                return true;
+            }
+            return false;
+        }
     }
 
     /// <summary>

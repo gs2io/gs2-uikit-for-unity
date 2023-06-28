@@ -24,6 +24,7 @@
 
 #pragma warning disable CS0472
 
+using Gs2.Unity.UiKit.Gs2Enhance.Fetcher;
 using UnityEditor;
 using UnityEngine;
 
@@ -36,6 +37,21 @@ namespace Gs2.Unity.UiKit.Gs2Enhance.Label.Editor
             var original = target as Gs2EnhanceDeleteProgressByUserIdLabel;
 
             if (original == null) return;
+
+            var fetcher = original.GetComponent<Gs2EnhanceDeleteProgressByUserIdFetcher>() ?? original.GetComponentInParent<Gs2EnhanceDeleteProgressByUserIdFetcher>(true);
+             var userDataFetcher = original.GetComponent<Gs2EnhanceOwnProgressFetcher>() ?? original.GetComponentInParent<Gs2EnhanceOwnProgressFetcher>(true);
+            if (fetcher == null) {
+                EditorGUILayout.HelpBox("Gs2EnhanceDeleteProgressByUserIdFetcher not found.", MessageType.Error);
+                if (GUILayout.Button("Add Fetcher")) {
+                    original.gameObject.AddComponent<Gs2EnhanceDeleteProgressByUserIdFetcher>();
+                }
+            }
+            if (userDataFetcher == null) {
+                EditorGUILayout.HelpBox("Gs2EnhanceOwnProgressFetcher not found. Adding a Fetcher allows more values to be used.", MessageType.Warning);
+                if (GUILayout.Button("Add Fetcher")) {
+                    original.gameObject.AddComponent<Gs2EnhanceOwnProgressFetcher>();
+                }
+            }
 
             serializedObject.Update();
             original.format = EditorGUILayout.TextField("Format", original.format);
@@ -51,30 +67,32 @@ namespace Gs2.Unity.UiKit.Gs2Enhance.Label.Editor
                 GUI.FocusControl("");
                 EditorUtility.SetDirty(original);
             }
-            if (GUILayout.Button("UserData:Name")) {
-                original.format += "{userData:name}";
-                GUI.FocusControl("");
-                EditorUtility.SetDirty(original);
-            }
-            if (GUILayout.Button("UserData:RateName")) {
-                original.format += "{userData:rateName}";
-                GUI.FocusControl("");
-                EditorUtility.SetDirty(original);
-            }
-            if (GUILayout.Button("UserData:PropertyId")) {
-                original.format += "{userData:propertyId}";
-                GUI.FocusControl("");
-                EditorUtility.SetDirty(original);
-            }
-            if (GUILayout.Button("UserData:ExperienceValue")) {
-                original.format += "{userData:experienceValue}";
-                GUI.FocusControl("");
-                EditorUtility.SetDirty(original);
-            }
-            if (GUILayout.Button("UserData:Rate")) {
-                original.format += "{userData:rate}";
-                GUI.FocusControl("");
-                EditorUtility.SetDirty(original);
+            if (userDataFetcher != null) {
+                if (GUILayout.Button("UserData:Name")) {
+                    original.format += "{userData:name}";
+                    GUI.FocusControl("");
+                    EditorUtility.SetDirty(original);
+                }
+                if (GUILayout.Button("UserData:RateName")) {
+                    original.format += "{userData:rateName}";
+                    GUI.FocusControl("");
+                    EditorUtility.SetDirty(original);
+                }
+                if (GUILayout.Button("UserData:PropertyId")) {
+                    original.format += "{userData:propertyId}";
+                    GUI.FocusControl("");
+                    EditorUtility.SetDirty(original);
+                }
+                if (GUILayout.Button("UserData:ExperienceValue")) {
+                    original.format += "{userData:experienceValue}";
+                    GUI.FocusControl("");
+                    EditorUtility.SetDirty(original);
+                }
+                if (GUILayout.Button("UserData:Rate")) {
+                    original.format += "{userData:rate}";
+                    GUI.FocusControl("");
+                    EditorUtility.SetDirty(original);
+                }
             }
             EditorGUILayout.PropertyField(serializedObject.FindProperty("onUpdate"), true);
             serializedObject.ApplyModifiedProperties();

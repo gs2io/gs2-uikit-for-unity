@@ -40,7 +40,7 @@ namespace Gs2.Unity.UiKit.Gs2Limit.Editor
 
             if (original == null) return;
 
-            var context = original.GetComponent<Gs2LimitNamespaceContext>() ?? original.GetComponentInParent<Gs2LimitNamespaceContext>();
+            var context = original.GetComponent<Gs2LimitNamespaceContext>() ?? original.GetComponentInParent<Gs2LimitNamespaceContext>(true);
             if (context == null) {
                 EditorGUILayout.HelpBox("Gs2LimitNamespaceContext not found.", MessageType.Error);
                 if (GUILayout.Button("Add Context")) {

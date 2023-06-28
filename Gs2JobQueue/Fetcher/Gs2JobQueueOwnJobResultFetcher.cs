@@ -130,6 +130,15 @@ namespace Gs2.Unity.UiKit.Gs2JobQueue.Fetcher
                 enabled = false;
             }
         }
+
+        public bool HasError()
+        {
+            _context = GetComponent<Gs2JobQueueOwnJobResultContext>() ?? GetComponentInParent<Gs2JobQueueOwnJobResultContext>(true);
+            if (_context == null) {
+                return true;
+            }
+            return false;
+        }
     }
 
     /// <summary>

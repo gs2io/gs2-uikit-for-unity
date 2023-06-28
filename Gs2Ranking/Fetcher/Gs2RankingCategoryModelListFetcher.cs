@@ -133,6 +133,15 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Fetcher
                 enabled = false;
             }
         }
+
+        public bool HasError()
+        {
+            _context = GetComponent<Gs2RankingNamespaceContext>() ?? GetComponentInParent<Gs2RankingNamespaceContext>(true);
+            if (_context == null) {
+                return true;
+            }
+            return false;
+        }
     }
 
     /// <summary>

@@ -39,7 +39,7 @@ namespace Gs2.Unity.UiKit.Gs2Idle.Editor
 
             if (original == null) return;
 
-            var context = original.GetComponent<Gs2IdleCategoryModelContext>() ?? original.GetComponentInParent<Gs2IdleCategoryModelContext>();
+            var context = original.GetComponent<Gs2IdleCategoryModelContext>() ?? original.GetComponentInParent<Gs2IdleCategoryModelContext>(true);
             if (context == null) {
                 EditorGUILayout.HelpBox("Gs2IdleCategoryModelContext not found.", MessageType.Error);
                 if (GUILayout.Button("Add Context")) {

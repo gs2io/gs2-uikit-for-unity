@@ -80,6 +80,10 @@ namespace Gs2.Unity.UiKit.Gs2Mission
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MissionOwnCounterFetcher.");
                 enabled = false;
             }
+            if (target == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: target is not set.");
+                enabled = false;
+            }
         }
     }
 

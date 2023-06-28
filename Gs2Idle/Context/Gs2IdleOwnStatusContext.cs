@@ -41,6 +41,13 @@ namespace Gs2.Unity.UiKit.Gs2Idle.Context
                 Debug.LogError("Status is not set in Gs2IdleOwnStatusContext.");
             }
         }
+
+        public bool HasError() {
+            if (Status == null) {
+                return true;
+            }
+            return false;
+        }
     }
 
     /// <summary>

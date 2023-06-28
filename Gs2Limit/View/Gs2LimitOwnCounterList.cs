@@ -94,6 +94,19 @@ namespace Gs2.Unity.UiKit.Gs2Limit
             }
             this.prefab.gameObject.SetActive(false);
         }
+
+        public bool HasError()
+        {
+            _context = GetComponent<Gs2LimitNamespaceContext>() ?? GetComponentInParent<Gs2LimitNamespaceContext>(true);
+            _fetcher = GetComponent<Gs2LimitOwnCounterListFetcher>() ?? GetComponentInParent<Gs2LimitOwnCounterListFetcher>(true);
+            if (_context == null) {
+                return true;
+            }
+            if (_fetcher == null) {
+                return true;
+            }
+            return false;
+        }
     }
 
     /// <summary>

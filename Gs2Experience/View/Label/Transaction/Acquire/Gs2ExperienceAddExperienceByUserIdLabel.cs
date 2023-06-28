@@ -105,6 +105,13 @@ namespace Gs2.Unity.UiKit.Gs2Experience.Label
                         )
                     );
                 }
+            } else {
+                onUpdate?.Invoke(
+                    format.Replace(
+                        "{experienceValue}",
+                        "0"
+                    )
+                );
             }
         }
     }
@@ -127,12 +134,18 @@ namespace Gs2.Unity.UiKit.Gs2Experience.Label
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ExperienceAddExperienceByUserIdFetcher.");
                 enabled = false;
             }
-            if (_userDataFetcher == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ExperienceOwnStatusFetcher.");
-                enabled = false;
-            }
 
             Update();
+        }
+
+        public bool HasError()
+        {
+            _fetcher = GetComponent<Gs2ExperienceAddExperienceByUserIdFetcher>() ?? GetComponentInParent<Gs2ExperienceAddExperienceByUserIdFetcher>(true);
+            _userDataFetcher = GetComponent<Gs2ExperienceOwnStatusFetcher>() ?? GetComponentInParent<Gs2ExperienceOwnStatusFetcher>(true);
+            if (_fetcher == null) {
+                return true;
+            }
+            return false;
         }
     }
 

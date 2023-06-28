@@ -54,6 +54,15 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Context
             }
         }
 
+        public bool HasError()
+        {
+            _fetcher = GetComponent<Gs2QuestQuestModelFetcher>() ?? GetComponentInParent<Gs2QuestQuestModelFetcher>(true);
+            if (_fetcher == null) {
+                return true;
+            }
+            return false;
+        }
+
         public void Update()
         {
             if (_fetcher.Fetched && _fetcher.QuestModel != null && _callbackCount != count)

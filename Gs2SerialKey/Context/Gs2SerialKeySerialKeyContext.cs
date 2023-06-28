@@ -41,6 +41,13 @@ namespace Gs2.Unity.UiKit.Gs2SerialKey.Context
                 Debug.LogError("SerialKey is not set in Gs2SerialKeySerialKeyContext.");
             }
         }
+
+        public bool HasError() {
+            if (SerialKey == null) {
+                return true;
+            }
+            return false;
+        }
     }
 
     /// <summary>

@@ -88,6 +88,19 @@ namespace Gs2.Unity.UiKit.Gs2Stamina
             }
             this.prefab.gameObject.SetActive(false);
         }
+
+        public bool HasError()
+        {
+            _context = GetComponent<Gs2StaminaNamespaceContext>() ?? GetComponentInParent<Gs2StaminaNamespaceContext>(true);
+            _fetcher = GetComponent<Gs2StaminaStaminaModelListFetcher>() ?? GetComponentInParent<Gs2StaminaStaminaModelListFetcher>(true);
+            if (_context == null) {
+                return true;
+            }
+            if (_fetcher == null) {
+                return true;
+            }
+            return false;
+        }
     }
 
     /// <summary>

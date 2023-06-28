@@ -40,7 +40,7 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.Editor
 
             if (original == null) return;
 
-            var fetcher = original.GetComponent<Gs2LotteryLotteryModelFetcher>() ?? original.GetComponentInParent<Gs2LotteryLotteryModelFetcher>();
+            var fetcher = original.GetComponent<Gs2LotteryLotteryModelFetcher>() ?? original.GetComponentInParent<Gs2LotteryLotteryModelFetcher>(true);
             if (fetcher == null) {
                 EditorGUILayout.HelpBox("Gs2LotteryLotteryModelFetcher not found.", MessageType.Error);
                 if (GUILayout.Button("Add Fetcher")) {
@@ -48,14 +48,14 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.Editor
                 }
             }
             else {
-                if (fetcher.transform.parent.GetComponent<Gs2LotteryLotteryModelList>() != null) {
+                if (fetcher.transform.parent == null || fetcher.transform.parent.GetComponent<Gs2LotteryLotteryModelList>() != null) {
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2LotteryLotteryModelFetcher), false);
                     EditorGUI.EndDisabledGroup();
                     EditorGUILayout.HelpBox("LotteryModel is auto assign from Gs2LotteryLotteryModelList.", MessageType.Info);
                 }
                 else {
-                    var context = original.GetComponent<Gs2LotteryLotteryModelContext>() ?? original.GetComponentInParent<Gs2LotteryLotteryModelContext>();
+                    var context = original.GetComponent<Gs2LotteryLotteryModelContext>() ?? original.GetComponentInParent<Gs2LotteryLotteryModelContext>(true);
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2LotteryLotteryModelFetcher), false);
                     EditorGUI.indentLevel++;

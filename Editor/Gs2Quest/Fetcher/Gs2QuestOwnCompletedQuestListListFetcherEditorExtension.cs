@@ -40,7 +40,7 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Editor
 
             if (original == null) return;
 
-            var context = original.GetComponent<Gs2QuestNamespaceContext>() ?? original.GetComponentInParent<Gs2QuestNamespaceContext>();
+            var context = original.GetComponent<Gs2QuestNamespaceContext>() ?? original.GetComponentInParent<Gs2QuestNamespaceContext>(true);
             if (context == null) {
                 EditorGUILayout.HelpBox("Gs2QuestNamespaceContext not found.", MessageType.Error);
                 if (GUILayout.Button("Add Context")) {

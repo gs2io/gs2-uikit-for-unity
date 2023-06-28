@@ -96,6 +96,13 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Label
                         )
                     );
                 }
+            } else {
+                onUpdate?.Invoke(
+                    format.Replace(
+                        "{currentInventoryMaxCapacity}",
+                        "0"
+                    )
+                );
             }
         }
     }
@@ -118,12 +125,18 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Label
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2InventoryAddCapacityByUserIdFetcher.");
                 enabled = false;
             }
-            if (_userDataFetcher == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2InventoryOwnInventoryFetcher.");
-                enabled = false;
-            }
 
             Update();
+        }
+
+        public bool HasError()
+        {
+            _fetcher = GetComponent<Gs2InventoryAddCapacityByUserIdFetcher>() ?? GetComponentInParent<Gs2InventoryAddCapacityByUserIdFetcher>(true);
+            _userDataFetcher = GetComponent<Gs2InventoryOwnInventoryFetcher>() ?? GetComponentInParent<Gs2InventoryOwnInventoryFetcher>(true);
+            if (_fetcher == null) {
+                return true;
+            }
+            return false;
         }
     }
 

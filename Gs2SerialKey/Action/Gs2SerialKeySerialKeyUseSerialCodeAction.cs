@@ -136,6 +136,15 @@ namespace Gs2.Unity.UiKit.Gs2SerialKey
                 enabled = false;
             }
         }
+
+        public bool HasError()
+        {
+            this._context = GetComponent<Gs2SerialKeySerialKeyContext>() ?? GetComponentInParent<Gs2SerialKeySerialKeyContext>(true);
+            if (_context == null) {
+                return true;
+            }
+            return false;
+        }
     }
 
     /// <summary>

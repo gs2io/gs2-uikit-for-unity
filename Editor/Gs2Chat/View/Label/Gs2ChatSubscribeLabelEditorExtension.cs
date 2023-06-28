@@ -40,7 +40,7 @@ namespace Gs2.Unity.UiKit.Gs2Chat.Editor
 
             if (original == null) return;
 
-            var fetcher = original.GetComponent<Gs2ChatOwnSubscribeFetcher>() ?? original.GetComponentInParent<Gs2ChatOwnSubscribeFetcher>();
+            var fetcher = original.GetComponent<Gs2ChatOwnSubscribeFetcher>() ?? original.GetComponentInParent<Gs2ChatOwnSubscribeFetcher>(true);
             if (fetcher == null) {
                 EditorGUILayout.HelpBox("Gs2ChatOwnSubscribeFetcher not found.", MessageType.Error);
                 if (GUILayout.Button("Add Fetcher")) {
@@ -48,14 +48,14 @@ namespace Gs2.Unity.UiKit.Gs2Chat.Editor
                 }
             }
             else {
-                if (fetcher.transform.parent.GetComponent<Gs2ChatOwnSubscribeList>() != null) {
+                if (fetcher.transform.parent == null || fetcher.transform.parent.GetComponent<Gs2ChatOwnSubscribeList>() != null) {
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2ChatOwnSubscribeFetcher), false);
                     EditorGUI.EndDisabledGroup();
                     EditorGUILayout.HelpBox("Subscribe is auto assign from Gs2ChatOwnSubscribeList.", MessageType.Info);
                 }
                 else {
-                    var context = original.GetComponent<Gs2ChatOwnSubscribeContext>() ?? original.GetComponentInParent<Gs2ChatOwnSubscribeContext>();
+                    var context = original.GetComponent<Gs2ChatOwnSubscribeContext>() ?? original.GetComponentInParent<Gs2ChatOwnSubscribeContext>(true);
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2ChatOwnSubscribeFetcher), false);
                     EditorGUI.indentLevel++;

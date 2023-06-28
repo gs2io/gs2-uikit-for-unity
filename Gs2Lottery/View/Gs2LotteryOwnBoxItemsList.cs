@@ -92,6 +92,19 @@ namespace Gs2.Unity.UiKit.Gs2Lottery
             }
             this.prefab.gameObject.SetActive(false);
         }
+
+        public bool HasError()
+        {
+            _context = GetComponent<Gs2LotteryNamespaceContext>() ?? GetComponentInParent<Gs2LotteryNamespaceContext>(true);
+            _fetcher = GetComponent<Gs2LotteryOwnBoxItemsListFetcher>() ?? GetComponentInParent<Gs2LotteryOwnBoxItemsListFetcher>(true);
+            if (_context == null) {
+                return true;
+            }
+            if (_fetcher == null) {
+                return true;
+            }
+            return false;
+        }
     }
 
     /// <summary>

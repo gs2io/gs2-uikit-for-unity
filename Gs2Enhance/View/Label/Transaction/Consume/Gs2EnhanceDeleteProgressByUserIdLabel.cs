@@ -106,12 +106,18 @@ namespace Gs2.Unity.UiKit.Gs2Enhance.Label
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2EnhanceDeleteProgressByUserIdFetcher.");
                 enabled = false;
             }
-            if (_userDataFetcher == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2EnhanceOwnProgressFetcher.");
-                enabled = false;
-            }
 
             Update();
+        }
+
+        public bool HasError()
+        {
+            _fetcher = GetComponent<Gs2EnhanceDeleteProgressByUserIdFetcher>() ?? GetComponentInParent<Gs2EnhanceDeleteProgressByUserIdFetcher>(true);
+            _userDataFetcher = GetComponent<Gs2EnhanceOwnProgressFetcher>() ?? GetComponentInParent<Gs2EnhanceOwnProgressFetcher>(true);
+            if (_fetcher == null) {
+                return true;
+            }
+            return false;
         }
     }
 

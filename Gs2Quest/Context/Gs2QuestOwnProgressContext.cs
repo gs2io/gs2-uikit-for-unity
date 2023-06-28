@@ -41,6 +41,13 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Context
                 Debug.LogError("Progress is not set in Gs2QuestOwnProgressContext.");
             }
         }
+
+        public bool HasError() {
+            if (Progress == null) {
+                return true;
+            }
+            return false;
+        }
     }
 
     /// <summary>

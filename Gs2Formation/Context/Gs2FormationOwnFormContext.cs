@@ -41,6 +41,13 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Context
                 Debug.LogError("Form is not set in Gs2FormationOwnFormContext.");
             }
         }
+
+        public bool HasError() {
+            if (Form == null) {
+                return true;
+            }
+            return false;
+        }
     }
 
     /// <summary>

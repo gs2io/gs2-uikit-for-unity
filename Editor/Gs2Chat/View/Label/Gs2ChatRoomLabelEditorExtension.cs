@@ -40,7 +40,7 @@ namespace Gs2.Unity.UiKit.Gs2Chat.Editor
 
             if (original == null) return;
 
-            var fetcher = original.GetComponent<Gs2ChatRoomFetcher>() ?? original.GetComponentInParent<Gs2ChatRoomFetcher>();
+            var fetcher = original.GetComponent<Gs2ChatRoomFetcher>() ?? original.GetComponentInParent<Gs2ChatRoomFetcher>(true);
             if (fetcher == null) {
                 EditorGUILayout.HelpBox("Gs2ChatRoomFetcher not found.", MessageType.Error);
                 if (GUILayout.Button("Add Fetcher")) {
@@ -48,7 +48,7 @@ namespace Gs2.Unity.UiKit.Gs2Chat.Editor
                 }
             }
             else {
-                var context = original.GetComponent<Gs2ChatRoomContext>() ?? original.GetComponentInParent<Gs2ChatRoomContext>();
+                var context = original.GetComponent<Gs2ChatRoomContext>() ?? original.GetComponentInParent<Gs2ChatRoomContext>(true);
                 EditorGUI.BeginDisabledGroup(true);
                 EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2ChatRoomFetcher), false);
                 EditorGUI.indentLevel++;

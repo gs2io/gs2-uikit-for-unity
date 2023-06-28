@@ -24,6 +24,7 @@
 
 #pragma warning disable CS0472
 
+using Gs2.Unity.UiKit.Gs2Idle.Fetcher;
 using UnityEditor;
 using UnityEngine;
 
@@ -36,6 +37,21 @@ namespace Gs2.Unity.UiKit.Gs2Idle.Label.Editor
             var original = target as Gs2IdleIncreaseMaximumIdleMinutesByUserIdLabel;
 
             if (original == null) return;
+
+            var fetcher = original.GetComponent<Gs2IdleIncreaseMaximumIdleMinutesByUserIdFetcher>() ?? original.GetComponentInParent<Gs2IdleIncreaseMaximumIdleMinutesByUserIdFetcher>(true);
+             var userDataFetcher = original.GetComponent<Gs2IdleOwnStatusFetcher>() ?? original.GetComponentInParent<Gs2IdleOwnStatusFetcher>(true);
+            if (fetcher == null) {
+                EditorGUILayout.HelpBox("Gs2IdleIncreaseMaximumIdleMinutesByUserIdFetcher not found.", MessageType.Error);
+                if (GUILayout.Button("Add Fetcher")) {
+                    original.gameObject.AddComponent<Gs2IdleIncreaseMaximumIdleMinutesByUserIdFetcher>();
+                }
+            }
+            if (userDataFetcher == null) {
+                EditorGUILayout.HelpBox("Gs2IdleOwnStatusFetcher not found. Adding a Fetcher allows more values to be used.", MessageType.Warning);
+                if (GUILayout.Button("Add Fetcher")) {
+                    original.gameObject.AddComponent<Gs2IdleOwnStatusFetcher>();
+                }
+            }
 
             serializedObject.Update();
             original.format = EditorGUILayout.TextField("Format", original.format);
@@ -61,25 +77,27 @@ namespace Gs2.Unity.UiKit.Gs2Idle.Label.Editor
                 GUI.FocusControl("");
                 EditorUtility.SetDirty(original);
             }
-            if (GUILayout.Button("UserData:CategoryName")) {
-                original.format += "{userData:categoryName}";
-                GUI.FocusControl("");
-                EditorUtility.SetDirty(original);
-            }
-            if (GUILayout.Button("UserData:RandomSeed")) {
-                original.format += "{userData:randomSeed}";
-                GUI.FocusControl("");
-                EditorUtility.SetDirty(original);
-            }
-            if (GUILayout.Button("UserData:IdleMinutes")) {
-                original.format += "{userData:idleMinutes}";
-                GUI.FocusControl("");
-                EditorUtility.SetDirty(original);
-            }
-            if (GUILayout.Button("UserData:MaximumIdleMinutes")) {
-                original.format += "{userData:maximumIdleMinutes}";
-                GUI.FocusControl("");
-                EditorUtility.SetDirty(original);
+            if (userDataFetcher != null) {
+                if (GUILayout.Button("UserData:CategoryName")) {
+                    original.format += "{userData:categoryName}";
+                    GUI.FocusControl("");
+                    EditorUtility.SetDirty(original);
+                }
+                if (GUILayout.Button("UserData:RandomSeed")) {
+                    original.format += "{userData:randomSeed}";
+                    GUI.FocusControl("");
+                    EditorUtility.SetDirty(original);
+                }
+                if (GUILayout.Button("UserData:IdleMinutes")) {
+                    original.format += "{userData:idleMinutes}";
+                    GUI.FocusControl("");
+                    EditorUtility.SetDirty(original);
+                }
+                if (GUILayout.Button("UserData:MaximumIdleMinutes")) {
+                    original.format += "{userData:maximumIdleMinutes}";
+                    GUI.FocusControl("");
+                    EditorUtility.SetDirty(original);
+                }
             }
             EditorGUILayout.PropertyField(serializedObject.FindProperty("onUpdate"), true);
             serializedObject.ApplyModifiedProperties();

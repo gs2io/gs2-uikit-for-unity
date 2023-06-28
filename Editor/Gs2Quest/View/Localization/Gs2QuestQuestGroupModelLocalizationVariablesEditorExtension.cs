@@ -43,7 +43,7 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Localization.Editor
 
             if (original == null) return;
 
-            var fetcher = original.GetComponent<Gs2QuestQuestGroupModelFetcher>() ?? original.GetComponentInParent<Gs2QuestQuestGroupModelFetcher>();
+            var fetcher = original.GetComponent<Gs2QuestQuestGroupModelFetcher>() ?? original.GetComponentInParent<Gs2QuestQuestGroupModelFetcher>(true);
             if (fetcher == null) {
                 EditorGUILayout.HelpBox("Gs2QuestQuestGroupModelFetcher not found.", MessageType.Error);
                 if (GUILayout.Button("Add Fetcher")) {
@@ -51,14 +51,14 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Localization.Editor
                 }
             }
             else {
-                if (fetcher.transform.parent.GetComponent<Gs2QuestQuestGroupModelList>() != null) {
+                if (fetcher.transform.parent == null || fetcher.transform.parent.GetComponent<Gs2QuestQuestGroupModelList>() != null) {
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2QuestQuestGroupModelFetcher), false);
                     EditorGUI.EndDisabledGroup();
                     EditorGUILayout.HelpBox("QuestGroupModel is auto assign from Gs2QuestQuestGroupModelList.", MessageType.Info);
                 }
                 else {
-                    var context = original.GetComponent<Gs2QuestQuestGroupModelContext>() ?? original.GetComponentInParent<Gs2QuestQuestGroupModelContext>();
+                    var context = original.GetComponent<Gs2QuestQuestGroupModelContext>() ?? original.GetComponentInParent<Gs2QuestQuestGroupModelContext>(true);
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2QuestQuestGroupModelFetcher), false);
                     EditorGUI.indentLevel++;

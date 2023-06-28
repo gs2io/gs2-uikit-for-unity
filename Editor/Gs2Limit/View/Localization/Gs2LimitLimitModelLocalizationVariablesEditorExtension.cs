@@ -43,7 +43,7 @@ namespace Gs2.Unity.UiKit.Gs2Limit.Localization.Editor
 
             if (original == null) return;
 
-            var fetcher = original.GetComponent<Gs2LimitLimitModelFetcher>() ?? original.GetComponentInParent<Gs2LimitLimitModelFetcher>();
+            var fetcher = original.GetComponent<Gs2LimitLimitModelFetcher>() ?? original.GetComponentInParent<Gs2LimitLimitModelFetcher>(true);
             if (fetcher == null) {
                 EditorGUILayout.HelpBox("Gs2LimitLimitModelFetcher not found.", MessageType.Error);
                 if (GUILayout.Button("Add Fetcher")) {
@@ -51,14 +51,14 @@ namespace Gs2.Unity.UiKit.Gs2Limit.Localization.Editor
                 }
             }
             else {
-                if (fetcher.transform.parent.GetComponent<Gs2LimitLimitModelList>() != null) {
+                if (fetcher.transform.parent == null || fetcher.transform.parent.GetComponent<Gs2LimitLimitModelList>() != null) {
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2LimitLimitModelFetcher), false);
                     EditorGUI.EndDisabledGroup();
                     EditorGUILayout.HelpBox("LimitModel is auto assign from Gs2LimitLimitModelList.", MessageType.Info);
                 }
                 else {
-                    var context = original.GetComponent<Gs2LimitLimitModelContext>() ?? original.GetComponentInParent<Gs2LimitLimitModelContext>();
+                    var context = original.GetComponent<Gs2LimitLimitModelContext>() ?? original.GetComponentInParent<Gs2LimitLimitModelContext>(true);
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2LimitLimitModelFetcher), false);
                     EditorGUI.indentLevel++;

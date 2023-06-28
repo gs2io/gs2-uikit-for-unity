@@ -135,6 +135,15 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Fetcher
                 enabled = false;
             }
         }
+
+        public bool HasError()
+        {
+            _context = GetComponent<Gs2MissionMissionGroupModelContext>() ?? GetComponentInParent<Gs2MissionMissionGroupModelContext>(true);
+            if (_context == null) {
+                return true;
+            }
+            return false;
+        }
     }
 
     /// <summary>

@@ -56,6 +56,15 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Context
             _callbackCount = -1;
         }
 
+        public bool HasError()
+        {
+            _fetcher = GetComponent<Gs2MissionMissionTaskModelFetcher>() ?? GetComponentInParent<Gs2MissionMissionTaskModelFetcher>(true);
+            if (_fetcher == null) {
+                return true;
+            }
+            return false;
+        }
+
         public void Update()
         {
             if (_fetcher.Fetched && _fetcher.MissionTaskModel != null && _callbackCount != count)

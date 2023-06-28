@@ -56,15 +56,15 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Fetcher
             {
                 if (_gameSessionHolder != null && _gameSessionHolder.Initialized &&
                     _clientHolder != null && _clientHolder.Initialized &&
-                    _context != null && this._context.MissionTaskModel != null)
+                    Context != null && this.Context.MissionTaskModel != null)
                 {
                     
                     var domain = this._clientHolder.Gs2.Mission.Namespace(
-                        this._context.MissionTaskModel.NamespaceName
+                        this.Context.MissionTaskModel.NamespaceName
                     ).MissionGroupModel(
-                        this._context.MissionTaskModel.MissionGroupName
+                        this.Context.MissionTaskModel.MissionGroupName
                     ).MissionTaskModel(
-                        this._context.MissionTaskModel.MissionTaskName
+                        this.Context.MissionTaskModel.MissionTaskName
                     );
                     var future = domain.Model();
                     yield return future;
@@ -122,18 +122,27 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Fetcher
     {
         protected Gs2ClientHolder _clientHolder;
         protected Gs2GameSessionHolder _gameSessionHolder;
-        private Gs2MissionMissionTaskModelContext _context;
+        public Gs2MissionMissionTaskModelContext Context { get; private set; }
 
         public void Awake()
         {
             _clientHolder = Gs2ClientHolder.Instance;
             _gameSessionHolder = Gs2GameSessionHolder.Instance;
-            _context = GetComponent<Gs2MissionMissionTaskModelContext>() ?? GetComponentInParent<Gs2MissionMissionTaskModelContext>();
+            Context = GetComponent<Gs2MissionMissionTaskModelContext>() ?? GetComponentInParent<Gs2MissionMissionTaskModelContext>();
 
-            if (_context == null) {
+            if (Context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MissionMissionTaskModelContext.");
                 enabled = false;
             }
+        }
+
+        public bool HasError()
+        {
+            Context = GetComponent<Gs2MissionMissionTaskModelContext>() ?? GetComponentInParent<Gs2MissionMissionTaskModelContext>(true);
+            if (Context == null) {
+                return true;
+            }
+            return false;
         }
     }
 

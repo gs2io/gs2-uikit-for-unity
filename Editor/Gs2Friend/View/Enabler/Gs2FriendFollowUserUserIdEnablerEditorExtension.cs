@@ -39,7 +39,7 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Enabler.Editor
 
             if (original == null) return;
 
-            var context = original.GetComponent<Gs2FriendOwnFollowUserContext>() ?? original.GetComponentInParent<Gs2FriendOwnFollowUserContext>();
+            var context = original.GetComponent<Gs2FriendOwnFollowUserContext>() ?? original.GetComponentInParent<Gs2FriendOwnFollowUserContext>(true);
             if (context == null) {
                 EditorGUILayout.HelpBox("Gs2FriendOwnFollowUserContext not found.", MessageType.Error);
                 if (GUILayout.Button("Add Context")) {

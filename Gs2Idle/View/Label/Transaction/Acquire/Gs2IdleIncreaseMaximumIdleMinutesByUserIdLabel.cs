@@ -93,6 +93,13 @@ namespace Gs2.Unity.UiKit.Gs2Idle.Label
                         )
                     );
                 }
+            } else {
+                onUpdate?.Invoke(
+                    format.Replace(
+                        "{increaseMinutes}",
+                        "0"
+                    )
+                );
             }
         }
     }
@@ -115,12 +122,18 @@ namespace Gs2.Unity.UiKit.Gs2Idle.Label
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2IdleIncreaseMaximumIdleMinutesByUserIdFetcher.");
                 enabled = false;
             }
-            if (_userDataFetcher == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2IdleOwnStatusFetcher.");
-                enabled = false;
-            }
 
             Update();
+        }
+
+        public bool HasError()
+        {
+            _fetcher = GetComponent<Gs2IdleIncreaseMaximumIdleMinutesByUserIdFetcher>() ?? GetComponentInParent<Gs2IdleIncreaseMaximumIdleMinutesByUserIdFetcher>(true);
+            _userDataFetcher = GetComponent<Gs2IdleOwnStatusFetcher>() ?? GetComponentInParent<Gs2IdleOwnStatusFetcher>(true);
+            if (_fetcher == null) {
+                return true;
+            }
+            return false;
         }
     }
 

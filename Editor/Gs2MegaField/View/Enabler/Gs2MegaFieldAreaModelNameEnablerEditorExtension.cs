@@ -39,7 +39,7 @@ namespace Gs2.Unity.UiKit.Gs2MegaField.Enabler.Editor
 
             if (original == null) return;
 
-            var context = original.GetComponent<Gs2MegaFieldAreaModelContext>() ?? original.GetComponentInParent<Gs2MegaFieldAreaModelContext>();
+            var context = original.GetComponent<Gs2MegaFieldAreaModelContext>() ?? original.GetComponentInParent<Gs2MegaFieldAreaModelContext>(true);
             if (context == null) {
                 EditorGUILayout.HelpBox("Gs2MegaFieldAreaModelContext not found.", MessageType.Error);
                 if (GUILayout.Button("Add Context")) {

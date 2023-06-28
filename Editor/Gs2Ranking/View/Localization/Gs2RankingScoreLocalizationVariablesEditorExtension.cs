@@ -43,7 +43,7 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Localization.Editor
 
             if (original == null) return;
 
-            var fetcher = original.GetComponent<Gs2RankingOwnScoreFetcher>() ?? original.GetComponentInParent<Gs2RankingOwnScoreFetcher>();
+            var fetcher = original.GetComponent<Gs2RankingOwnScoreFetcher>() ?? original.GetComponentInParent<Gs2RankingOwnScoreFetcher>(true);
             if (fetcher == null) {
                 EditorGUILayout.HelpBox("Gs2RankingOwnScoreFetcher not found.", MessageType.Error);
                 if (GUILayout.Button("Add Fetcher")) {
@@ -51,14 +51,14 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Localization.Editor
                 }
             }
             else {
-                if (fetcher.transform.parent.GetComponent<Gs2RankingOwnScoreList>() != null) {
+                if (fetcher.transform.parent == null || fetcher.transform.parent.GetComponent<Gs2RankingOwnScoreList>() != null) {
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2RankingOwnScoreFetcher), false);
                     EditorGUI.EndDisabledGroup();
                     EditorGUILayout.HelpBox("Score is auto assign from Gs2RankingOwnScoreList.", MessageType.Info);
                 }
                 else {
-                    var context = original.GetComponent<Gs2RankingOwnScoreContext>() ?? original.GetComponentInParent<Gs2RankingOwnScoreContext>();
+                    var context = original.GetComponent<Gs2RankingOwnScoreContext>() ?? original.GetComponentInParent<Gs2RankingOwnScoreContext>(true);
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2RankingOwnScoreFetcher), false);
                     EditorGUI.indentLevel++;

@@ -41,6 +41,18 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Context
                 Debug.LogError("QuestModel is not set in Gs2QuestQuestModelContext.");
             }
         }
+
+        public bool HasError() {
+            if (QuestModel == null) {
+                if (transform.parent != null && transform.parent.GetComponent<Gs2QuestQuestModelList>() != null) {
+                    return false;
+                }
+                else {
+                    return true;
+                }
+            }
+            return false;
+        }
     }
 
     /// <summary>

@@ -43,7 +43,7 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Editor
             serializedObject.Update();
 
             if (original.CategoryModel == null) {
-                if (original.transform.parent.GetComponent<Gs2RankingCategoryModelList>() != null) {
+                if (original.transform.parent != null && original.transform.parent.GetComponent<Gs2RankingCategoryModelList>() != null) {
                     EditorGUILayout.HelpBox("CategoryModel is auto assign from Gs2RankingCategoryModelList.", MessageType.Info);
                 }
                 else {

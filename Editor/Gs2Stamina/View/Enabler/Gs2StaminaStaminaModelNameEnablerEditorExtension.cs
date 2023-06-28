@@ -39,7 +39,7 @@ namespace Gs2.Unity.UiKit.Gs2Stamina.Enabler.Editor
 
             if (original == null) return;
 
-            var context = original.GetComponent<Gs2StaminaStaminaModelContext>() ?? original.GetComponentInParent<Gs2StaminaStaminaModelContext>();
+            var context = original.GetComponent<Gs2StaminaStaminaModelContext>() ?? original.GetComponentInParent<Gs2StaminaStaminaModelContext>(true);
             if (context == null) {
                 EditorGUILayout.HelpBox("Gs2StaminaStaminaModelContext not found.", MessageType.Error);
                 if (GUILayout.Button("Add Context")) {

@@ -41,6 +41,13 @@ namespace Gs2.Unity.UiKit.Gs2Realtime.Context
                 Debug.LogError("Room is not set in Gs2RealtimeRoomContext.");
             }
         }
+
+        public bool HasError() {
+            if (Room == null) {
+                return true;
+            }
+            return false;
+        }
     }
 
     /// <summary>

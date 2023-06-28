@@ -41,6 +41,18 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Context
                 Debug.LogError("FormModel is not set in Gs2FormationFormModelContext.");
             }
         }
+
+        public bool HasError() {
+            if (FormModel == null) {
+                if (transform.parent != null && transform.parent.GetComponent<Gs2FormationFormModelList>() != null) {
+                    return false;
+                }
+                else {
+                    return true;
+                }
+            }
+            return false;
+        }
     }
 
     /// <summary>

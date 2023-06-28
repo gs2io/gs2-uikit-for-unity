@@ -76,6 +76,15 @@ namespace Gs2.Unity.UiKit.Gs2Formation
 
             Update();
         }
+
+        public bool HasError()
+        {
+            _fetcher = GetComponent<Gs2FormationFormModelFetcher>() ?? GetComponentInParent<Gs2FormationFormModelFetcher>(true);
+            if (_fetcher == null) {
+                return true;
+            }
+            return false;
+        }
     }
 
     /// <summary>

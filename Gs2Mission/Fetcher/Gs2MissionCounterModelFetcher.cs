@@ -56,13 +56,13 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Fetcher
             {
                 if (_gameSessionHolder != null && _gameSessionHolder.Initialized &&
                     _clientHolder != null && _clientHolder.Initialized &&
-                    _context != null && this._context.CounterModel != null)
+                    Context != null && this.Context.CounterModel != null)
                 {
                     
                     var domain = this._clientHolder.Gs2.Mission.Namespace(
-                        this._context.CounterModel.NamespaceName
+                        this.Context.CounterModel.NamespaceName
                     ).CounterModel(
-                        this._context.CounterModel.CounterName
+                        this.Context.CounterModel.CounterName
                     );
                     var future = domain.Model();
                     yield return future;
@@ -113,18 +113,27 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Fetcher
     {
         protected Gs2ClientHolder _clientHolder;
         protected Gs2GameSessionHolder _gameSessionHolder;
-        private Gs2MissionCounterModelContext _context;
+        public Gs2MissionCounterModelContext Context { get; private set; }
 
         public void Awake()
         {
             _clientHolder = Gs2ClientHolder.Instance;
             _gameSessionHolder = Gs2GameSessionHolder.Instance;
-            _context = GetComponent<Gs2MissionCounterModelContext>() ?? GetComponentInParent<Gs2MissionCounterModelContext>();
+            Context = GetComponent<Gs2MissionCounterModelContext>() ?? GetComponentInParent<Gs2MissionCounterModelContext>();
 
-            if (_context == null) {
+            if (Context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MissionCounterModelContext.");
                 enabled = false;
             }
+        }
+
+        public bool HasError()
+        {
+            Context = GetComponent<Gs2MissionCounterModelContext>() ?? GetComponentInParent<Gs2MissionCounterModelContext>(true);
+            if (Context == null) {
+                return true;
+            }
+            return false;
         }
     }
 

@@ -43,7 +43,7 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Localization.Editor
 
             if (original == null) return;
 
-            var fetcher = original.GetComponent<Gs2MissionMissionGroupModelFetcher>() ?? original.GetComponentInParent<Gs2MissionMissionGroupModelFetcher>();
+            var fetcher = original.GetComponent<Gs2MissionMissionGroupModelFetcher>() ?? original.GetComponentInParent<Gs2MissionMissionGroupModelFetcher>(true);
             if (fetcher == null) {
                 EditorGUILayout.HelpBox("Gs2MissionMissionGroupModelFetcher not found.", MessageType.Error);
                 if (GUILayout.Button("Add Fetcher")) {
@@ -51,14 +51,14 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Localization.Editor
                 }
             }
             else {
-                if (fetcher.transform.parent.GetComponent<Gs2MissionMissionGroupModelList>() != null) {
+                if (fetcher.transform.parent == null || fetcher.transform.parent.GetComponent<Gs2MissionMissionGroupModelList>() != null) {
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2MissionMissionGroupModelFetcher), false);
                     EditorGUI.EndDisabledGroup();
                     EditorGUILayout.HelpBox("MissionGroupModel is auto assign from Gs2MissionMissionGroupModelList.", MessageType.Info);
                 }
                 else {
-                    var context = original.GetComponent<Gs2MissionMissionGroupModelContext>() ?? original.GetComponentInParent<Gs2MissionMissionGroupModelContext>();
+                    var context = original.GetComponent<Gs2MissionMissionGroupModelContext>() ?? original.GetComponentInParent<Gs2MissionMissionGroupModelContext>(true);
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2MissionMissionGroupModelFetcher), false);
                     EditorGUI.indentLevel++;

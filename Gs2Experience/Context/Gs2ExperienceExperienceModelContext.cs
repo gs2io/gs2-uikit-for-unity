@@ -41,6 +41,18 @@ namespace Gs2.Unity.UiKit.Gs2Experience.Context
                 Debug.LogError("ExperienceModel is not set in Gs2ExperienceExperienceModelContext.");
             }
         }
+
+        public bool HasError() {
+            if (ExperienceModel == null) {
+                if (transform.parent != null && transform.parent.GetComponent<Gs2ExperienceExperienceModelList>() != null) {
+                    return false;
+                }
+                else {
+                    return true;
+                }
+            }
+            return false;
+        }
     }
 
     /// <summary>

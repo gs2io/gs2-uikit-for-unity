@@ -56,15 +56,15 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Fetcher
             {
                 if (_gameSessionHolder != null && _gameSessionHolder.Initialized &&
                     _clientHolder != null && _clientHolder.Initialized &&
-                    _context != null && this._context.QuestModel != null)
+                    Context != null && this.Context.QuestModel != null)
                 {
                     
                     var domain = this._clientHolder.Gs2.Quest.Namespace(
-                        this._context.QuestModel.NamespaceName
+                        this.Context.QuestModel.NamespaceName
                     ).QuestGroupModel(
-                        this._context.QuestModel.QuestGroupName
+                        this.Context.QuestModel.QuestGroupName
                     ).QuestModel(
-                        this._context.QuestModel.QuestName
+                        this.Context.QuestModel.QuestName
                     );
                     var future = domain.Model();
                     yield return future;
@@ -129,18 +129,27 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Fetcher
     {
         protected Gs2ClientHolder _clientHolder;
         protected Gs2GameSessionHolder _gameSessionHolder;
-        private Gs2QuestQuestModelContext _context;
+        public Gs2QuestQuestModelContext Context { get; private set; }
 
         public void Awake()
         {
             _clientHolder = Gs2ClientHolder.Instance;
             _gameSessionHolder = Gs2GameSessionHolder.Instance;
-            _context = GetComponent<Gs2QuestQuestModelContext>() ?? GetComponentInParent<Gs2QuestQuestModelContext>();
+            Context = GetComponent<Gs2QuestQuestModelContext>() ?? GetComponentInParent<Gs2QuestQuestModelContext>();
 
-            if (_context == null) {
+            if (Context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2QuestQuestModelContext.");
                 enabled = false;
             }
+        }
+
+        public bool HasError()
+        {
+            Context = GetComponent<Gs2QuestQuestModelContext>() ?? GetComponentInParent<Gs2QuestQuestModelContext>(true);
+            if (Context == null) {
+                return true;
+            }
+            return false;
         }
     }
 

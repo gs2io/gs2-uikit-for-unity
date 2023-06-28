@@ -137,6 +137,15 @@ namespace Gs2.Unity.UiKit.Gs2Chat
                 enabled = false;
             }
         }
+
+        public bool HasError()
+        {
+            this._context = GetComponent<Gs2ChatNamespaceContext>() ?? GetComponentInParent<Gs2ChatNamespaceContext>(true);
+            if (_context == null) {
+                return true;
+            }
+            return false;
+        }
     }
 
     /// <summary>

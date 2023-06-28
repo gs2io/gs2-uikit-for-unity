@@ -24,6 +24,7 @@
 
 #pragma warning disable CS0472
 
+using Gs2.Unity.UiKit.Gs2Inbox.Fetcher;
 using UnityEditor;
 using UnityEngine;
 
@@ -36,6 +37,21 @@ namespace Gs2.Unity.UiKit.Gs2Inbox.Label.Editor
             var original = target as Gs2InboxOpenMessageByUserIdLabel;
 
             if (original == null) return;
+
+            var fetcher = original.GetComponent<Gs2InboxOpenMessageByUserIdFetcher>() ?? original.GetComponentInParent<Gs2InboxOpenMessageByUserIdFetcher>(true);
+             var userDataFetcher = original.GetComponent<Gs2InboxOwnMessageFetcher>() ?? original.GetComponentInParent<Gs2InboxOwnMessageFetcher>(true);
+            if (fetcher == null) {
+                EditorGUILayout.HelpBox("Gs2InboxOpenMessageByUserIdFetcher not found.", MessageType.Error);
+                if (GUILayout.Button("Add Fetcher")) {
+                    original.gameObject.AddComponent<Gs2InboxOpenMessageByUserIdFetcher>();
+                }
+            }
+            if (userDataFetcher == null) {
+                EditorGUILayout.HelpBox("Gs2InboxOwnMessageFetcher not found. Adding a Fetcher allows more values to be used.", MessageType.Warning);
+                if (GUILayout.Button("Add Fetcher")) {
+                    original.gameObject.AddComponent<Gs2InboxOwnMessageFetcher>();
+                }
+            }
 
             serializedObject.Update();
             original.format = EditorGUILayout.TextField("Format", original.format);
@@ -56,45 +72,47 @@ namespace Gs2.Unity.UiKit.Gs2Inbox.Label.Editor
                 GUI.FocusControl("");
                 EditorUtility.SetDirty(original);
             }
-            if (GUILayout.Button("UserData:MessageId")) {
-                original.format += "{userData:messageId}";
-                GUI.FocusControl("");
-                EditorUtility.SetDirty(original);
-            }
-            if (GUILayout.Button("UserData:Name")) {
-                original.format += "{userData:name}";
-                GUI.FocusControl("");
-                EditorUtility.SetDirty(original);
-            }
-            if (GUILayout.Button("UserData:Metadata")) {
-                original.format += "{userData:metadata}";
-                GUI.FocusControl("");
-                EditorUtility.SetDirty(original);
-            }
-            if (GUILayout.Button("UserData:IsRead")) {
-                original.format += "{userData:isRead}";
-                GUI.FocusControl("");
-                EditorUtility.SetDirty(original);
-            }
-            if (GUILayout.Button("UserData:ReadAcquireActions")) {
-                original.format += "{userData:readAcquireActions}";
-                GUI.FocusControl("");
-                EditorUtility.SetDirty(original);
-            }
-            if (GUILayout.Button("UserData:ReceivedAt")) {
-                original.format += "{userData:receivedAt}";
-                GUI.FocusControl("");
-                EditorUtility.SetDirty(original);
-            }
-            if (GUILayout.Button("UserData:ReadAt")) {
-                original.format += "{userData:readAt}";
-                GUI.FocusControl("");
-                EditorUtility.SetDirty(original);
-            }
-            if (GUILayout.Button("UserData:ExpiresAt")) {
-                original.format += "{userData:expiresAt}";
-                GUI.FocusControl("");
-                EditorUtility.SetDirty(original);
+            if (userDataFetcher != null) {
+                if (GUILayout.Button("UserData:MessageId")) {
+                    original.format += "{userData:messageId}";
+                    GUI.FocusControl("");
+                    EditorUtility.SetDirty(original);
+                }
+                if (GUILayout.Button("UserData:Name")) {
+                    original.format += "{userData:name}";
+                    GUI.FocusControl("");
+                    EditorUtility.SetDirty(original);
+                }
+                if (GUILayout.Button("UserData:Metadata")) {
+                    original.format += "{userData:metadata}";
+                    GUI.FocusControl("");
+                    EditorUtility.SetDirty(original);
+                }
+                if (GUILayout.Button("UserData:IsRead")) {
+                    original.format += "{userData:isRead}";
+                    GUI.FocusControl("");
+                    EditorUtility.SetDirty(original);
+                }
+                if (GUILayout.Button("UserData:ReadAcquireActions")) {
+                    original.format += "{userData:readAcquireActions}";
+                    GUI.FocusControl("");
+                    EditorUtility.SetDirty(original);
+                }
+                if (GUILayout.Button("UserData:ReceivedAt")) {
+                    original.format += "{userData:receivedAt}";
+                    GUI.FocusControl("");
+                    EditorUtility.SetDirty(original);
+                }
+                if (GUILayout.Button("UserData:ReadAt")) {
+                    original.format += "{userData:readAt}";
+                    GUI.FocusControl("");
+                    EditorUtility.SetDirty(original);
+                }
+                if (GUILayout.Button("UserData:ExpiresAt")) {
+                    original.format += "{userData:expiresAt}";
+                    GUI.FocusControl("");
+                    EditorUtility.SetDirty(original);
+                }
             }
             EditorGUILayout.PropertyField(serializedObject.FindProperty("onUpdate"), true);
             serializedObject.ApplyModifiedProperties();

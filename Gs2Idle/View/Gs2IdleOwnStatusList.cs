@@ -92,6 +92,19 @@ namespace Gs2.Unity.UiKit.Gs2Idle
             }
             this.prefab.gameObject.SetActive(false);
         }
+
+        public bool HasError()
+        {
+            _context = GetComponent<Gs2IdleNamespaceContext>() ?? GetComponentInParent<Gs2IdleNamespaceContext>(true);
+            _fetcher = GetComponent<Gs2IdleOwnStatusListFetcher>() ?? GetComponentInParent<Gs2IdleOwnStatusListFetcher>(true);
+            if (_context == null) {
+                return true;
+            }
+            if (_fetcher == null) {
+                return true;
+            }
+            return false;
+        }
     }
 
     /// <summary>

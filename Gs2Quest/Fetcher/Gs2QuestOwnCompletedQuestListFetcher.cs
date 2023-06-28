@@ -128,6 +128,15 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Fetcher
                 enabled = false;
             }
         }
+
+        public bool HasError()
+        {
+            _context = GetComponent<Gs2QuestOwnCompletedQuestListContext>() ?? GetComponentInParent<Gs2QuestOwnCompletedQuestListContext>(true);
+            if (_context == null) {
+                return true;
+            }
+            return false;
+        }
     }
 
     /// <summary>

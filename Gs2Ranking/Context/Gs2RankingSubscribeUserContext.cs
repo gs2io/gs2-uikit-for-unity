@@ -41,6 +41,13 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Context
                 Debug.LogError("SubscribeUser is not set in Gs2RankingSubscribeUserContext.");
             }
         }
+
+        public bool HasError() {
+            if (SubscribeUser == null) {
+                return true;
+            }
+            return false;
+        }
     }
 
     /// <summary>

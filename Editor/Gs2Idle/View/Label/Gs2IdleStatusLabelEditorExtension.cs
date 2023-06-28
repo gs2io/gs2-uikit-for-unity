@@ -40,7 +40,7 @@ namespace Gs2.Unity.UiKit.Gs2Idle.Editor
 
             if (original == null) return;
 
-            var fetcher = original.GetComponent<Gs2IdleOwnStatusFetcher>() ?? original.GetComponentInParent<Gs2IdleOwnStatusFetcher>();
+            var fetcher = original.GetComponent<Gs2IdleOwnStatusFetcher>() ?? original.GetComponentInParent<Gs2IdleOwnStatusFetcher>(true);
             if (fetcher == null) {
                 EditorGUILayout.HelpBox("Gs2IdleOwnStatusFetcher not found.", MessageType.Error);
                 if (GUILayout.Button("Add Fetcher")) {
@@ -48,14 +48,14 @@ namespace Gs2.Unity.UiKit.Gs2Idle.Editor
                 }
             }
             else {
-                if (fetcher.transform.parent.GetComponent<Gs2IdleOwnStatusList>() != null) {
+                if (fetcher.transform.parent == null || fetcher.transform.parent.GetComponent<Gs2IdleOwnStatusList>() != null) {
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2IdleOwnStatusFetcher), false);
                     EditorGUI.EndDisabledGroup();
                     EditorGUILayout.HelpBox("Status is auto assign from Gs2IdleOwnStatusList.", MessageType.Info);
                 }
                 else {
-                    var context = original.GetComponent<Gs2IdleOwnStatusContext>() ?? original.GetComponentInParent<Gs2IdleOwnStatusContext>();
+                    var context = original.GetComponent<Gs2IdleOwnStatusContext>() ?? original.GetComponentInParent<Gs2IdleOwnStatusContext>(true);
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2IdleOwnStatusFetcher), false);
                     EditorGUI.indentLevel++;

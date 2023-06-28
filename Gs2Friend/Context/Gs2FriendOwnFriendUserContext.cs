@@ -41,6 +41,13 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Context
                 Debug.LogError("FriendUser is not set in Gs2FriendOwnFriendUserContext.");
             }
         }
+
+        public bool HasError() {
+            if (FriendUser == null) {
+                return true;
+            }
+            return false;
+        }
     }
 
     /// <summary>

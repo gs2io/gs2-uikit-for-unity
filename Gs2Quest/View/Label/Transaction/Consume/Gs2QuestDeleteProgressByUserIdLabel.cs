@@ -106,12 +106,18 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Label
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2QuestDeleteProgressByUserIdFetcher.");
                 enabled = false;
             }
-            if (_userDataFetcher == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2QuestOwnProgressFetcher.");
-                enabled = false;
-            }
 
             Update();
+        }
+
+        public bool HasError()
+        {
+            _fetcher = GetComponent<Gs2QuestDeleteProgressByUserIdFetcher>() ?? GetComponentInParent<Gs2QuestDeleteProgressByUserIdFetcher>(true);
+            _userDataFetcher = GetComponent<Gs2QuestOwnProgressFetcher>() ?? GetComponentInParent<Gs2QuestOwnProgressFetcher>(true);
+            if (_fetcher == null) {
+                return true;
+            }
+            return false;
         }
     }
 

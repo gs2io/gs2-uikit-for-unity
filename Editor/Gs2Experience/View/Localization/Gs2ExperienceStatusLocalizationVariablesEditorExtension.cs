@@ -43,7 +43,7 @@ namespace Gs2.Unity.UiKit.Gs2Experience.Localization.Editor
 
             if (original == null) return;
 
-            var fetcher = original.GetComponent<Gs2ExperienceOwnStatusFetcher>() ?? original.GetComponentInParent<Gs2ExperienceOwnStatusFetcher>();
+            var fetcher = original.GetComponent<Gs2ExperienceOwnStatusFetcher>() ?? original.GetComponentInParent<Gs2ExperienceOwnStatusFetcher>(true);
             if (fetcher == null) {
                 EditorGUILayout.HelpBox("Gs2ExperienceOwnStatusFetcher not found.", MessageType.Error);
                 if (GUILayout.Button("Add Fetcher")) {
@@ -51,14 +51,14 @@ namespace Gs2.Unity.UiKit.Gs2Experience.Localization.Editor
                 }
             }
             else {
-                if (fetcher.transform.parent.GetComponent<Gs2ExperienceOwnStatusList>() != null) {
+                if (fetcher.transform.parent == null || fetcher.transform.parent.GetComponent<Gs2ExperienceOwnStatusList>() != null) {
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2ExperienceOwnStatusFetcher), false);
                     EditorGUI.EndDisabledGroup();
                     EditorGUILayout.HelpBox("Status is auto assign from Gs2ExperienceOwnStatusList.", MessageType.Info);
                 }
                 else {
-                    var context = original.GetComponent<Gs2ExperienceOwnStatusContext>() ?? original.GetComponentInParent<Gs2ExperienceOwnStatusContext>();
+                    var context = original.GetComponent<Gs2ExperienceOwnStatusContext>() ?? original.GetComponentInParent<Gs2ExperienceOwnStatusContext>(true);
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2ExperienceOwnStatusFetcher), false);
                     EditorGUI.indentLevel++;

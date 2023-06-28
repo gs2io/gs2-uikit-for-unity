@@ -41,7 +41,7 @@ namespace Gs2.Unity.UiKit.Gs2Schedule.Editor
 
             if (original == null) return;
 
-            var fetcher = original.GetComponent<Gs2ScheduleOwnTriggerFetcher>() ?? original.GetComponentInParent<Gs2ScheduleOwnTriggerFetcher>();
+            var fetcher = original.GetComponent<Gs2ScheduleOwnTriggerFetcher>() ?? original.GetComponentInParent<Gs2ScheduleOwnTriggerFetcher>(true);
             if (fetcher == null) {
                 EditorGUILayout.HelpBox("Gs2ScheduleOwnTriggerFetcher not found.", MessageType.Error);
                 if (GUILayout.Button("Add Fetcher")) {
@@ -49,14 +49,14 @@ namespace Gs2.Unity.UiKit.Gs2Schedule.Editor
                 }
             }
             else {
-                if (fetcher.transform.parent.GetComponent<Gs2ScheduleOwnTriggerList>() != null) {
+                if (fetcher.transform.parent == null || fetcher.transform.parent.GetComponent<Gs2ScheduleOwnTriggerList>() != null) {
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2ScheduleOwnTriggerFetcher), false);
                     EditorGUI.EndDisabledGroup();
                     EditorGUILayout.HelpBox("Trigger is auto assign from Gs2ScheduleOwnTriggerList.", MessageType.Info);
                 }
                 else {
-                    var context = original.GetComponent<Gs2ScheduleOwnTriggerContext>() ?? original.GetComponentInParent<Gs2ScheduleOwnTriggerContext>();
+                    var context = original.GetComponent<Gs2ScheduleOwnTriggerContext>() ?? original.GetComponentInParent<Gs2ScheduleOwnTriggerContext>(true);
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2ScheduleOwnTriggerFetcher), false);
                     EditorGUI.indentLevel++;

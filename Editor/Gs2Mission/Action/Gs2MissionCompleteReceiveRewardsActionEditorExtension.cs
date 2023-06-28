@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
@@ -40,7 +42,7 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Editor
 
             if (original == null) return;
 
-            var context = original.GetComponent<Gs2MissionOwnCompleteContext>() ?? original.GetComponentInParent<Gs2MissionOwnCompleteContext>();
+            var context = original.GetComponent<Gs2MissionOwnCompleteContext>() ?? original.GetComponentInParent<Gs2MissionOwnCompleteContext>(true);
             if (context == null) {
                 EditorGUILayout.HelpBox("Gs2MissionOwnCompleteContext not found.", MessageType.Error);
                 if (GUILayout.Button("Add Context")) {
@@ -69,7 +71,6 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Editor
             }
 
             serializedObject.Update();
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("MissionTaskName"), true);
             EditorGUILayout.PropertyField(serializedObject.FindProperty("onChangeMissionTaskName"), true);
             EditorGUILayout.PropertyField(serializedObject.FindProperty("onReceiveRewardsComplete"), true);
             EditorGUILayout.PropertyField(serializedObject.FindProperty("onError"), true);

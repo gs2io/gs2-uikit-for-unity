@@ -124,12 +124,18 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Label
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2FormationAcquireActionsToFormPropertiesFetcher.");
                 enabled = false;
             }
-            if (_userDataFetcher == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2FormationOwnFormFetcher.");
-                enabled = false;
-            }
 
             Update();
+        }
+
+        public bool HasError()
+        {
+            _fetcher = GetComponent<Gs2FormationAcquireActionsToFormPropertiesFetcher>() ?? GetComponentInParent<Gs2FormationAcquireActionsToFormPropertiesFetcher>(true);
+            _userDataFetcher = GetComponent<Gs2FormationOwnFormFetcher>() ?? GetComponentInParent<Gs2FormationOwnFormFetcher>(true);
+            if (_fetcher == null) {
+                return true;
+            }
+            return false;
         }
     }
 

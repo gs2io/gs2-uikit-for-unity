@@ -41,6 +41,18 @@ namespace Gs2.Unity.UiKit.Gs2Stamina.Context
                 Debug.LogError("StaminaModel is not set in Gs2StaminaStaminaModelContext.");
             }
         }
+
+        public bool HasError() {
+            if (StaminaModel == null) {
+                if (transform.parent != null && transform.parent.GetComponent<Gs2StaminaStaminaModelList>() != null) {
+                    return false;
+                }
+                else {
+                    return true;
+                }
+            }
+            return false;
+        }
     }
 
     /// <summary>

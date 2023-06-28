@@ -17,9 +17,18 @@
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
+// ReSharper disable RedundantNameQualifier
+// ReSharper disable RedundantAssignment
+// ReSharper disable NotAccessedVariable
+// ReSharper disable RedundantUsingDirective
+// ReSharper disable Unity.NoNullPropagation
+// ReSharper disable InconsistentNaming
+
+#pragma warning disable CS0472
 
 using Gs2.Unity.Gs2Account.ScriptableObject;
 using Gs2.Unity.UiKit.Gs2Account.Context;
+using Gs2.Unity.UiKit.Gs2Account.Fetcher;
 using UnityEditor;
 using UnityEngine;
 
@@ -33,24 +42,33 @@ namespace Gs2.Unity.UiKit.Gs2Account.Editor
 
             if (original == null) return;
 
-            var context = original.GetComponentInParent<Gs2AccountOwnTakeOverContext>();
-            if (context == null) {
-                EditorGUILayout.HelpBox("Gs2AccountOwnTakeOverContext not found.", MessageType.Error);
-                if (GUILayout.Button("Add Context")) {
-                    original.gameObject.AddComponent<Gs2AccountOwnTakeOverContext>();
+            var fetcher = original.GetComponent<Gs2AccountOwnTakeOverFetcher>() ?? original.GetComponentInParent<Gs2AccountOwnTakeOverFetcher>(true);
+            if (fetcher == null) {
+                EditorGUILayout.HelpBox("Gs2AccountOwnTakeOverFetcher not found.", MessageType.Error);
+                if (GUILayout.Button("Add Fetcher")) {
+                    original.gameObject.AddComponent<Gs2AccountOwnTakeOverFetcher>();
                 }
             }
             else {
-                EditorGUI.BeginDisabledGroup(true);
-                EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2AccountOwnTakeOverContext), false);
-                EditorGUI.indentLevel++;
-                EditorGUILayout.ObjectField("TakeOver", context.TakeOver, typeof(OwnTakeOver), false);
-                EditorGUI.indentLevel++;
-                EditorGUILayout.TextField("NamespaceName", context.TakeOver?.NamespaceName.ToString());
-                EditorGUILayout.TextField("Type", context.TakeOver?.Type.ToString());
-                EditorGUI.indentLevel--;
-                EditorGUI.indentLevel--;
-                EditorGUI.EndDisabledGroup();
+                if (fetcher.transform.parent == null || fetcher.transform.parent.GetComponent<Gs2AccountOwnTakeOverList>() != null) {
+                    EditorGUI.BeginDisabledGroup(true);
+                    EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2AccountOwnTakeOverFetcher), false);
+                    EditorGUI.EndDisabledGroup();
+                    EditorGUILayout.HelpBox("TakeOver is auto assign from Gs2AccountOwnTakeOverList.", MessageType.Info);
+                }
+                else {
+                    var context = original.GetComponent<Gs2AccountOwnTakeOverContext>() ?? original.GetComponentInParent<Gs2AccountOwnTakeOverContext>(true);
+                    EditorGUI.BeginDisabledGroup(true);
+                    EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2AccountOwnTakeOverFetcher), false);
+                    EditorGUI.indentLevel++;
+                    context.TakeOver = EditorGUILayout.ObjectField("TakeOver", context.TakeOver, typeof(OwnTakeOver), false) as OwnTakeOver;
+                    EditorGUI.indentLevel++;
+                    EditorGUILayout.TextField("NamespaceName", context.TakeOver?.NamespaceName.ToString());
+                    EditorGUILayout.TextField("Type", context.TakeOver?.Type.ToString());
+                    EditorGUI.indentLevel--;
+                    EditorGUI.indentLevel--;
+                    EditorGUI.EndDisabledGroup();
+                }
             }
 
             serializedObject.Update();

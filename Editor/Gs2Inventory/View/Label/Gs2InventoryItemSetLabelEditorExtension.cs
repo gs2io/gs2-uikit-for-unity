@@ -40,7 +40,7 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Editor
 
             if (original == null) return;
 
-            var fetcher = original.GetComponent<Gs2InventoryOwnItemSetFetcher>() ?? original.GetComponentInParent<Gs2InventoryOwnItemSetFetcher>();
+            var fetcher = original.GetComponent<Gs2InventoryOwnItemSetFetcher>() ?? original.GetComponentInParent<Gs2InventoryOwnItemSetFetcher>(true);
             if (fetcher == null) {
                 EditorGUILayout.HelpBox("Gs2InventoryOwnItemSetFetcher not found.", MessageType.Error);
                 if (GUILayout.Button("Add Fetcher")) {
@@ -48,14 +48,14 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Editor
                 }
             }
             else {
-                if (fetcher.transform.parent.GetComponent<Gs2InventoryOwnItemSetList>() != null) {
+                if (fetcher.transform.parent == null || fetcher.transform.parent.GetComponent<Gs2InventoryOwnItemSetList>() != null) {
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2InventoryOwnItemSetFetcher), false);
                     EditorGUI.EndDisabledGroup();
                     EditorGUILayout.HelpBox("ItemSet is auto assign from Gs2InventoryOwnItemSetList.", MessageType.Info);
                 }
                 else {
-                    var context = original.GetComponent<Gs2InventoryOwnItemSetContext>() ?? original.GetComponentInParent<Gs2InventoryOwnItemSetContext>();
+                    var context = original.GetComponent<Gs2InventoryOwnItemSetContext>() ?? original.GetComponentInParent<Gs2InventoryOwnItemSetContext>(true);
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2InventoryOwnItemSetFetcher), false);
                     EditorGUI.indentLevel++;
@@ -152,6 +152,11 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Editor
             }
             if (GUILayout.Button("ExpiresAt(Sec:09)")) {
                 original.format += "{expiresAt:ss}";
+                GUI.FocusControl("");
+                EditorUtility.SetDirty(original);
+            }
+            if (GUILayout.Button("ReferenceOf")) {
+                original.format += "{referenceOf}";
                 GUI.FocusControl("");
                 EditorUtility.SetDirty(original);
             }

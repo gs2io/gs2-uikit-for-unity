@@ -41,6 +41,18 @@ namespace Gs2.Unity.UiKit.Gs2Limit.Context
                 Debug.LogError("LimitModel is not set in Gs2LimitLimitModelContext.");
             }
         }
+
+        public bool HasError() {
+            if (LimitModel == null) {
+                if (transform.parent != null && transform.parent.GetComponent<Gs2LimitLimitModelList>() != null) {
+                    return false;
+                }
+                else {
+                    return true;
+                }
+            }
+            return false;
+        }
     }
 
     /// <summary>

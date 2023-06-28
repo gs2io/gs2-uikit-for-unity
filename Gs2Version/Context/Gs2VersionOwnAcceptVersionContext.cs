@@ -41,6 +41,13 @@ namespace Gs2.Unity.UiKit.Gs2Version.Context
                 Debug.LogError("AcceptVersion is not set in Gs2VersionOwnAcceptVersionContext.");
             }
         }
+
+        public bool HasError() {
+            if (AcceptVersion == null) {
+                return true;
+            }
+            return false;
+        }
     }
 
     /// <summary>

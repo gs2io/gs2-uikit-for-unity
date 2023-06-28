@@ -41,6 +41,13 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Context
                 Debug.LogError("Score is not set in Gs2RankingOwnScoreContext.");
             }
         }
+
+        public bool HasError() {
+            if (Score == null) {
+                return true;
+            }
+            return false;
+        }
     }
 
     /// <summary>

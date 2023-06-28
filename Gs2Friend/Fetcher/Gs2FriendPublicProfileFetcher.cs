@@ -56,13 +56,13 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Fetcher
             {
                 if (_gameSessionHolder != null && _gameSessionHolder.Initialized &&
                     _clientHolder != null && _clientHolder.Initialized &&
-                    _context != null && this._context.PublicProfile != null)
+                    Context != null && this.Context.PublicProfile != null)
                 {
                     
                     var domain = this._clientHolder.Gs2.Friend.Namespace(
-                        this._context.PublicProfile.NamespaceName
+                        this.Context.PublicProfile.NamespaceName
                     ).User(
-                        this._context.PublicProfile.UserId
+                        this.Context.PublicProfile.UserId
                     ).PublicProfile(
                     );
                     var future = domain.Model();
@@ -114,18 +114,27 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Fetcher
     {
         protected Gs2ClientHolder _clientHolder;
         protected Gs2GameSessionHolder _gameSessionHolder;
-        private Gs2FriendPublicProfileContext _context;
+        public Gs2FriendPublicProfileContext Context { get; private set; }
 
         public void Awake()
         {
             _clientHolder = Gs2ClientHolder.Instance;
             _gameSessionHolder = Gs2GameSessionHolder.Instance;
-            _context = GetComponent<Gs2FriendPublicProfileContext>() ?? GetComponentInParent<Gs2FriendPublicProfileContext>();
+            Context = GetComponent<Gs2FriendPublicProfileContext>() ?? GetComponentInParent<Gs2FriendPublicProfileContext>();
 
-            if (_context == null) {
+            if (Context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2FriendPublicProfileContext.");
                 enabled = false;
             }
+        }
+
+        public bool HasError()
+        {
+            Context = GetComponent<Gs2FriendPublicProfileContext>() ?? GetComponentInParent<Gs2FriendPublicProfileContext>(true);
+            if (Context == null) {
+                return true;
+            }
+            return false;
         }
     }
 

@@ -41,6 +41,13 @@ namespace Gs2.Unity.UiKit.Gs2Chat.Context
                 Debug.LogError("Namespace is not set in Gs2ChatNamespaceContext.");
             }
         }
+
+        public bool HasError() {
+            if (Namespace == null) {
+                return true;
+            }
+            return false;
+        }
     }
 
     /// <summary>

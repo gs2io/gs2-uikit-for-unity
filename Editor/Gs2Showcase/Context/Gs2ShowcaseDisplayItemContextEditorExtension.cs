@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
@@ -43,8 +45,13 @@ namespace Gs2.Unity.UiKit.Gs2Showcase.Editor
             serializedObject.Update();
 
             if (original.DisplayItem == null) {
-                EditorGUILayout.HelpBox("DisplayItem not assigned.", MessageType.Error);
-                EditorGUILayout.PropertyField(serializedObject.FindProperty("DisplayItem"), true);
+                if (original.transform.parent != null && original.transform.parent.GetComponent<Gs2ShowcaseDisplayItemList>() != null) {
+                    EditorGUILayout.HelpBox("DisplayItem is auto assign from Gs2ShowcaseDisplayItemList.", MessageType.Info);
+                }
+                else {
+                    EditorGUILayout.HelpBox("DisplayItem not assigned.", MessageType.Error);
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("DisplayItem"), true);
+                }
             }
             else {
                 original.DisplayItem = EditorGUILayout.ObjectField("DisplayItem", original.DisplayItem, typeof(DisplayItem), false) as DisplayItem;

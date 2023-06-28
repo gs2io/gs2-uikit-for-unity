@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
@@ -40,6 +42,16 @@ namespace Gs2.Unity.UiKit.Gs2Showcase.Context
             if (DisplayItem == null) {
                 Debug.LogError("DisplayItem is not set in Gs2ShowcaseDisplayItemContext.");
             }
+        }
+
+        public bool HasError() {
+            if (DisplayItem == null) {
+                if (transform.parent != null && transform.parent.GetComponent<Gs2ShowcaseDisplayItemList>() != null) {
+                    return false;
+                }
+                return true;
+            }
+            return false;
         }
     }
 

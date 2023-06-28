@@ -41,6 +41,13 @@ namespace Gs2.Unity.UiKit.Gs2Dictionary.Context
                 Debug.LogError("Entry is not set in Gs2DictionaryOwnEntryContext.");
             }
         }
+
+        public bool HasError() {
+            if (Entry == null) {
+                return true;
+            }
+            return false;
+        }
     }
 
     /// <summary>

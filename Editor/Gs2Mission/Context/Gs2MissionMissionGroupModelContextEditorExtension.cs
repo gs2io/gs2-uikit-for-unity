@@ -43,7 +43,7 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Editor
             serializedObject.Update();
 
             if (original.MissionGroupModel == null) {
-                if (original.transform.parent.GetComponent<Gs2MissionMissionGroupModelList>() != null) {
+                if (original.transform.parent != null && original.transform.parent.GetComponent<Gs2MissionMissionGroupModelList>() != null) {
                     EditorGUILayout.HelpBox("MissionGroupModel is auto assign from Gs2MissionMissionGroupModelList.", MessageType.Info);
                 }
                 else {

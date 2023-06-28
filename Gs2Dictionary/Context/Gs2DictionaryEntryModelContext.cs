@@ -41,6 +41,18 @@ namespace Gs2.Unity.UiKit.Gs2Dictionary.Context
                 Debug.LogError("EntryModel is not set in Gs2DictionaryEntryModelContext.");
             }
         }
+
+        public bool HasError() {
+            if (EntryModel == null) {
+                if (transform.parent != null && transform.parent.GetComponent<Gs2DictionaryEntryModelList>() != null) {
+                    return false;
+                }
+                else {
+                    return true;
+                }
+            }
+            return false;
+        }
     }
 
     /// <summary>

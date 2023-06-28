@@ -40,7 +40,7 @@ namespace Gs2.Unity.UiKit.Gs2Stamina.Editor
 
             if (original == null) return;
 
-            var context = original.GetComponent<Gs2StaminaOwnStaminaContext>() ?? original.GetComponentInParent<Gs2StaminaOwnStaminaContext>();
+            var context = original.GetComponent<Gs2StaminaOwnStaminaContext>() ?? original.GetComponentInParent<Gs2StaminaOwnStaminaContext>(true);
             if (context == null) {
                 EditorGUILayout.HelpBox("Gs2StaminaOwnStaminaContext not found.", MessageType.Error);
                 if (GUILayout.Button("Add Context")) {

@@ -41,6 +41,13 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Context
                 Debug.LogError("Counter is not set in Gs2MissionOwnCounterContext.");
             }
         }
+
+        public bool HasError() {
+            if (Counter == null) {
+                return true;
+            }
+            return false;
+        }
     }
 
     /// <summary>

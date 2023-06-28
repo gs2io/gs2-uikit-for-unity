@@ -17,6 +17,14 @@
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
+// ReSharper disable RedundantNameQualifier
+// ReSharper disable RedundantAssignment
+// ReSharper disable NotAccessedVariable
+// ReSharper disable RedundantUsingDirective
+// ReSharper disable Unity.NoNullPropagation
+// ReSharper disable InconsistentNaming
+
+#pragma warning disable CS0472
 
 using Gs2.Unity.Gs2MegaField.ScriptableObject;
 using Gs2.Unity.UiKit.Gs2MegaField.Context;
@@ -34,9 +42,9 @@ namespace Gs2.Unity.UiKit.Gs2MegaField.Editor
 
             if (original == null) return;
 
-            var context = original.GetComponentInParent<Gs2MegaFieldSpatialContext>();
+            var context = original.GetComponent<Gs2MegaFieldSpatialContext>() ?? original.GetComponentInParent<Gs2MegaFieldSpatialContext>(true);
             if (context == null) {
-                EditorGUILayout.HelpBox("Gs2MegaFieldOwnSpatialContext not found.", MessageType.Error);
+                EditorGUILayout.HelpBox("Gs2MegaFieldSpatialContext not found.", MessageType.Error);
                 if (GUILayout.Button("Add Context")) {
                     original.gameObject.AddComponent<Gs2MegaFieldSpatialContext>();
                 }
@@ -45,11 +53,11 @@ namespace Gs2.Unity.UiKit.Gs2MegaField.Editor
                 EditorGUI.BeginDisabledGroup(true);
                 EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2MegaFieldSpatialContext), false);
                 EditorGUI.indentLevel++;
-                EditorGUILayout.ObjectField("OwnSpatial", context.Spatial, typeof(OwnSpatial), false);
+                context.Spatial = EditorGUILayout.ObjectField("Spatial", context.Spatial, typeof(OwnSpatial), false) as Spatial;
                 EditorGUI.indentLevel++;
-                EditorGUILayout.TextField("NamespaceName", context.Spatial.NamespaceName.ToString());
-                EditorGUILayout.TextField("AreaModelName", context.Spatial.AreaModelName.ToString());
-                EditorGUILayout.TextField("LayerModelName", context.Spatial.LayerModelName.ToString());
+                EditorGUILayout.TextField("NamespaceName", context.Spatial?.NamespaceName.ToString());
+                EditorGUILayout.TextField("AreaModelName", context.Spatial?.AreaModelName.ToString());
+                EditorGUILayout.TextField("LayerModelName", context.Spatial?.LayerModelName.ToString());
                 EditorGUILayout.TextField("UserId", context.Spatial.UserId.ToString());
                 EditorGUI.indentLevel--;
                 EditorGUI.indentLevel--;

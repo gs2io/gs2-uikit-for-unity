@@ -24,6 +24,7 @@
 
 #pragma warning disable CS0472
 
+using Gs2.Unity.UiKit.Gs2Inventory.Fetcher;
 using UnityEditor;
 using UnityEngine;
 
@@ -36,6 +37,14 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Label.Editor
             var original = target as Gs2InventoryVerifyReferenceOfByUserIdLabel;
 
             if (original == null) return;
+
+            var fetcher = original.GetComponent<Gs2InventoryVerifyReferenceOfByUserIdFetcher>() ?? original.GetComponentInParent<Gs2InventoryVerifyReferenceOfByUserIdFetcher>(true);
+            if (fetcher == null) {
+                EditorGUILayout.HelpBox("Gs2InventoryVerifyReferenceOfByUserIdFetcher not found.", MessageType.Error);
+                if (GUILayout.Button("Add Fetcher")) {
+                    original.gameObject.AddComponent<Gs2InventoryVerifyReferenceOfByUserIdFetcher>();
+                }
+            }
 
             serializedObject.Update();
             original.format = EditorGUILayout.TextField("Format", original.format);

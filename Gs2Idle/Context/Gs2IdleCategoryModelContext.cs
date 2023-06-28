@@ -41,6 +41,18 @@ namespace Gs2.Unity.UiKit.Gs2Idle.Context
                 Debug.LogError("CategoryModel is not set in Gs2IdleCategoryModelContext.");
             }
         }
+
+        public bool HasError() {
+            if (CategoryModel == null) {
+                if (transform.parent != null && transform.parent.GetComponent<Gs2IdleCategoryModelList>() != null) {
+                    return false;
+                }
+                else {
+                    return true;
+                }
+            }
+            return false;
+        }
     }
 
     /// <summary>

@@ -56,15 +56,15 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking.Fetcher
             {
                 if (_gameSessionHolder != null && _gameSessionHolder.Initialized &&
                     _clientHolder != null && _clientHolder.Initialized &&
-                    _context != null && this._context.Gathering != null)
+                    Context != null && this.Context.Gathering != null)
                 {
                     
                     var domain = this._clientHolder.Gs2.Matchmaking.Namespace(
-                        this._context.Gathering.NamespaceName
+                        this.Context.Gathering.NamespaceName
                     ).User(
-                        this._context.Gathering.UserId
+                        this.Context.Gathering.UserId
                     ).Gathering(
-                        this._context.Gathering.GatheringName
+                        this.Context.Gathering.GatheringName
                     );
                     var future = domain.Model();
                     yield return future;
@@ -115,18 +115,27 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking.Fetcher
     {
         protected Gs2ClientHolder _clientHolder;
         protected Gs2GameSessionHolder _gameSessionHolder;
-        private Gs2MatchmakingGatheringContext _context;
+        public Gs2MatchmakingGatheringContext Context { get; private set; }
 
         public void Awake()
         {
             _clientHolder = Gs2ClientHolder.Instance;
             _gameSessionHolder = Gs2GameSessionHolder.Instance;
-            _context = GetComponent<Gs2MatchmakingGatheringContext>() ?? GetComponentInParent<Gs2MatchmakingGatheringContext>();
+            Context = GetComponent<Gs2MatchmakingGatheringContext>() ?? GetComponentInParent<Gs2MatchmakingGatheringContext>();
 
-            if (_context == null) {
+            if (Context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MatchmakingGatheringContext.");
                 enabled = false;
             }
+        }
+
+        public bool HasError()
+        {
+            Context = GetComponent<Gs2MatchmakingGatheringContext>() ?? GetComponentInParent<Gs2MatchmakingGatheringContext>(true);
+            if (Context == null) {
+                return true;
+            }
+            return false;
         }
     }
 

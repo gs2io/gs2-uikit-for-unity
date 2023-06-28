@@ -135,6 +135,15 @@ namespace Gs2.Unity.UiKit.Gs2Datastore.Fetcher
                 enabled = false;
             }
         }
+
+        public bool HasError()
+        {
+            _context = GetComponent<Gs2DatastoreNamespaceContext>() ?? GetComponentInParent<Gs2DatastoreNamespaceContext>(true);
+            if (_context == null) {
+                return true;
+            }
+            return false;
+        }
     }
 
     /// <summary>

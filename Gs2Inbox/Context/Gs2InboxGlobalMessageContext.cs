@@ -41,6 +41,13 @@ namespace Gs2.Unity.UiKit.Gs2Inbox.Context
                 Debug.LogError("GlobalMessage is not set in Gs2InboxGlobalMessageContext.");
             }
         }
+
+        public bool HasError() {
+            if (GlobalMessage == null) {
+                return true;
+            }
+            return false;
+        }
     }
 
     /// <summary>

@@ -40,7 +40,7 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.Editor
 
             if (original == null) return;
 
-            var context = original.GetComponent<Gs2LotteryNamespaceContext>() ?? original.GetComponentInParent<Gs2LotteryNamespaceContext>();
+            var context = original.GetComponent<Gs2LotteryNamespaceContext>() ?? original.GetComponentInParent<Gs2LotteryNamespaceContext>(true);
             if (context == null) {
                 EditorGUILayout.HelpBox("Gs2LotteryNamespaceContext not found.", MessageType.Error);
                 if (GUILayout.Button("Add Context")) {

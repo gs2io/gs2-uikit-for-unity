@@ -40,7 +40,7 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Editor
 
             if (original == null) return;
 
-            var context = original.GetComponent<Gs2FriendPublicProfileContext>() ?? original.GetComponentInParent<Gs2FriendPublicProfileContext>();
+            var context = original.GetComponent<Gs2FriendPublicProfileContext>() ?? original.GetComponentInParent<Gs2FriendPublicProfileContext>(true);
             if (context == null) {
                 EditorGUILayout.HelpBox("Gs2FriendPublicProfileContext not found.", MessageType.Error);
                 if (GUILayout.Button("Add Context")) {

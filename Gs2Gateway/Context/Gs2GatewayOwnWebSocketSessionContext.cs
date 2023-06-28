@@ -41,6 +41,13 @@ namespace Gs2.Unity.UiKit.Gs2Gateway.Context
                 Debug.LogError("WebSocketSession is not set in Gs2GatewayOwnWebSocketSessionContext.");
             }
         }
+
+        public bool HasError() {
+            if (WebSocketSession == null) {
+                return true;
+            }
+            return false;
+        }
     }
 
     /// <summary>

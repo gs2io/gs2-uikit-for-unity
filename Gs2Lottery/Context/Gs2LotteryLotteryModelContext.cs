@@ -41,6 +41,18 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.Context
                 Debug.LogError("LotteryModel is not set in Gs2LotteryLotteryModelContext.");
             }
         }
+
+        public bool HasError() {
+            if (LotteryModel == null) {
+                if (transform.parent != null && transform.parent.GetComponent<Gs2LotteryLotteryModelList>() != null) {
+                    return false;
+                }
+                else {
+                    return true;
+                }
+            }
+            return false;
+        }
     }
 
     /// <summary>

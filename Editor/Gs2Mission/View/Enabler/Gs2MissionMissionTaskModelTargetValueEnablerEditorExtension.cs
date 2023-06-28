@@ -39,7 +39,7 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Editor
 
             if (original == null) return;
 
-            var context = original.GetComponent<Gs2MissionMissionTaskModelContext>() ?? original.GetComponentInParent<Gs2MissionMissionTaskModelContext>();
+            var context = original.GetComponent<Gs2MissionMissionTaskModelContext>() ?? original.GetComponentInParent<Gs2MissionMissionTaskModelContext>(true);
             if (context == null) {
                 EditorGUILayout.HelpBox("Gs2MissionMissionTaskModelContext not found.", MessageType.Error);
                 if (GUILayout.Button("Add Context")) {

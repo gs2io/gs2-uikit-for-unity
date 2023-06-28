@@ -137,6 +137,15 @@ namespace Gs2.Unity.UiKit.Gs2Money
                 enabled = false;
             }
         }
+
+        public bool HasError()
+        {
+            this._context = GetComponent<Gs2MoneyOwnWalletContext>() ?? GetComponentInParent<Gs2MoneyOwnWalletContext>(true);
+            if (_context == null) {
+                return true;
+            }
+            return false;
+        }
     }
 
     /// <summary>

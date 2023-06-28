@@ -109,12 +109,18 @@ namespace Gs2.Unity.UiKit.Gs2Exchange.Label
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ExchangeDeleteAwaitByUserIdFetcher.");
                 enabled = false;
             }
-            if (_userDataFetcher == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ExchangeOwnAwaitFetcher.");
-                enabled = false;
-            }
 
             Update();
+        }
+
+        public bool HasError()
+        {
+            _fetcher = GetComponent<Gs2ExchangeDeleteAwaitByUserIdFetcher>() ?? GetComponentInParent<Gs2ExchangeDeleteAwaitByUserIdFetcher>(true);
+            _userDataFetcher = GetComponent<Gs2ExchangeOwnAwaitFetcher>() ?? GetComponentInParent<Gs2ExchangeOwnAwaitFetcher>(true);
+            if (_fetcher == null) {
+                return true;
+            }
+            return false;
         }
     }
 

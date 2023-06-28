@@ -40,7 +40,7 @@ namespace Gs2.Unity.UiKit.Gs2Datastore.Editor
 
             if (original == null) return;
 
-            var fetcher = original.GetComponent<Gs2DatastoreOwnDataObjectHistoryFetcher>() ?? original.GetComponentInParent<Gs2DatastoreOwnDataObjectHistoryFetcher>();
+            var fetcher = original.GetComponent<Gs2DatastoreOwnDataObjectHistoryFetcher>() ?? original.GetComponentInParent<Gs2DatastoreOwnDataObjectHistoryFetcher>(true);
             if (fetcher == null) {
                 EditorGUILayout.HelpBox("Gs2DatastoreOwnDataObjectHistoryFetcher not found.", MessageType.Error);
                 if (GUILayout.Button("Add Fetcher")) {
@@ -48,14 +48,14 @@ namespace Gs2.Unity.UiKit.Gs2Datastore.Editor
                 }
             }
             else {
-                if (fetcher.transform.parent.GetComponent<Gs2DatastoreOwnDataObjectHistoryList>() != null) {
+                if (fetcher.transform.parent == null || fetcher.transform.parent.GetComponent<Gs2DatastoreOwnDataObjectHistoryList>() != null) {
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2DatastoreOwnDataObjectHistoryFetcher), false);
                     EditorGUI.EndDisabledGroup();
                     EditorGUILayout.HelpBox("DataObjectHistory is auto assign from Gs2DatastoreOwnDataObjectHistoryList.", MessageType.Info);
                 }
                 else {
-                    var context = original.GetComponent<Gs2DatastoreOwnDataObjectHistoryContext>() ?? original.GetComponentInParent<Gs2DatastoreOwnDataObjectHistoryContext>();
+                    var context = original.GetComponent<Gs2DatastoreOwnDataObjectHistoryContext>() ?? original.GetComponentInParent<Gs2DatastoreOwnDataObjectHistoryContext>(true);
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2DatastoreOwnDataObjectHistoryFetcher), false);
                     EditorGUI.indentLevel++;

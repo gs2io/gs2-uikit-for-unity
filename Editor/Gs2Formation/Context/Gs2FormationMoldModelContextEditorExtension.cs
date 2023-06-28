@@ -43,7 +43,7 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Editor
             serializedObject.Update();
 
             if (original.MoldModel == null) {
-                if (original.transform.parent.GetComponent<Gs2FormationMoldModelList>() != null) {
+                if (original.transform.parent != null && original.transform.parent.GetComponent<Gs2FormationMoldModelList>() != null) {
                     EditorGUILayout.HelpBox("MoldModel is auto assign from Gs2FormationMoldModelList.", MessageType.Info);
                 }
                 else {

@@ -41,6 +41,13 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Context
                 Debug.LogError("CompletedQuestList is not set in Gs2QuestOwnCompletedQuestListContext.");
             }
         }
+
+        public bool HasError() {
+            if (CompletedQuestList == null) {
+                return true;
+            }
+            return false;
+        }
     }
 
     /// <summary>

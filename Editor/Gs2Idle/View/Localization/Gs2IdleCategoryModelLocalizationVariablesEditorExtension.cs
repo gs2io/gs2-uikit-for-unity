@@ -43,7 +43,7 @@ namespace Gs2.Unity.UiKit.Gs2Idle.Localization.Editor
 
             if (original == null) return;
 
-            var fetcher = original.GetComponent<Gs2IdleCategoryModelFetcher>() ?? original.GetComponentInParent<Gs2IdleCategoryModelFetcher>();
+            var fetcher = original.GetComponent<Gs2IdleCategoryModelFetcher>() ?? original.GetComponentInParent<Gs2IdleCategoryModelFetcher>(true);
             if (fetcher == null) {
                 EditorGUILayout.HelpBox("Gs2IdleCategoryModelFetcher not found.", MessageType.Error);
                 if (GUILayout.Button("Add Fetcher")) {
@@ -51,14 +51,14 @@ namespace Gs2.Unity.UiKit.Gs2Idle.Localization.Editor
                 }
             }
             else {
-                if (fetcher.transform.parent.GetComponent<Gs2IdleCategoryModelList>() != null) {
+                if (fetcher.transform.parent == null || fetcher.transform.parent.GetComponent<Gs2IdleCategoryModelList>() != null) {
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2IdleCategoryModelFetcher), false);
                     EditorGUI.EndDisabledGroup();
                     EditorGUILayout.HelpBox("CategoryModel is auto assign from Gs2IdleCategoryModelList.", MessageType.Info);
                 }
                 else {
-                    var context = original.GetComponent<Gs2IdleCategoryModelContext>() ?? original.GetComponentInParent<Gs2IdleCategoryModelContext>();
+                    var context = original.GetComponent<Gs2IdleCategoryModelContext>() ?? original.GetComponentInParent<Gs2IdleCategoryModelContext>(true);
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2IdleCategoryModelFetcher), false);
                     EditorGUI.indentLevel++;

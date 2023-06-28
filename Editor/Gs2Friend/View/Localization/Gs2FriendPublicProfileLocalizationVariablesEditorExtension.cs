@@ -43,7 +43,7 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Localization.Editor
 
             if (original == null) return;
 
-            var fetcher = original.GetComponent<Gs2FriendPublicProfileFetcher>() ?? original.GetComponentInParent<Gs2FriendPublicProfileFetcher>();
+            var fetcher = original.GetComponent<Gs2FriendPublicProfileFetcher>() ?? original.GetComponentInParent<Gs2FriendPublicProfileFetcher>(true);
             if (fetcher == null) {
                 EditorGUILayout.HelpBox("Gs2FriendPublicProfileFetcher not found.", MessageType.Error);
                 if (GUILayout.Button("Add Fetcher")) {
@@ -51,7 +51,7 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Localization.Editor
                 }
             }
             else {
-                var context = original.GetComponent<Gs2FriendPublicProfileContext>() ?? original.GetComponentInParent<Gs2FriendPublicProfileContext>();
+                var context = original.GetComponent<Gs2FriendPublicProfileContext>() ?? original.GetComponentInParent<Gs2FriendPublicProfileContext>(true);
                 EditorGUI.BeginDisabledGroup(true);
                 EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2FriendPublicProfileFetcher), false);
                 EditorGUI.indentLevel++;

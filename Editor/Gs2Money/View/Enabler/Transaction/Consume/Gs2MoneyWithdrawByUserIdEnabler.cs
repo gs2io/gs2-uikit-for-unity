@@ -39,19 +39,14 @@ namespace Gs2.Unity.UiKit.Gs2Money.Enabler.Editor
 
             if (original == null) return;
 
-            var fetcher = original.GetComponent<IConsumeActionsFetcher>() ?? original.GetComponentInParent<IConsumeActionsFetcher>();
+            var fetcher = original.GetComponent<IConsumeActionsFetcher>() ?? original.GetComponentInParent<IConsumeActionsFetcher>(true);
             if (fetcher == null) {
                 EditorGUILayout.HelpBox("IConsumeActionsFetcher not found.", MessageType.Error);
             }
 
             serializedObject.Update();
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("expression"), true);
-
-            if (original.expression == Gs2MoneyWithdrawByUserIdEnabler.Expression.In || original.expression == Gs2MoneyWithdrawByUserIdEnabler.Expression.NotIn) {
-                EditorGUILayout.PropertyField(serializedObject.FindProperty("enableCounts"), true);
-            } else {
-                EditorGUILayout.PropertyField(serializedObject.FindProperty("enableCount"), true);
-            }
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("includeConsumeActions"), true);
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("notIncludeConsumeActions"), true);
 
             EditorGUILayout.PropertyField(serializedObject.FindProperty("target"), true);
             serializedObject.ApplyModifiedProperties();

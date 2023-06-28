@@ -41,6 +41,13 @@ namespace Gs2.Unity.UiKit.Gs2JobQueue.Context
                 Debug.LogError("JobResult is not set in Gs2JobQueueOwnJobResultContext.");
             }
         }
+
+        public bool HasError() {
+            if (JobResult == null) {
+                return true;
+            }
+            return false;
+        }
     }
 
     /// <summary>

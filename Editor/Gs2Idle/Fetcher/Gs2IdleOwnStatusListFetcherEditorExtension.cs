@@ -40,7 +40,7 @@ namespace Gs2.Unity.UiKit.Gs2Idle.Editor
 
             if (original == null) return;
 
-            var context = original.GetComponent<Gs2IdleNamespaceContext>() ?? original.GetComponentInParent<Gs2IdleNamespaceContext>();
+            var context = original.GetComponent<Gs2IdleNamespaceContext>() ?? original.GetComponentInParent<Gs2IdleNamespaceContext>(true);
             if (context == null) {
                 EditorGUILayout.HelpBox("Gs2IdleNamespaceContext not found.", MessageType.Error);
                 if (GUILayout.Button("Add Context")) {

@@ -124,12 +124,18 @@ namespace Gs2.Unity.UiKit.Gs2Experience.Label
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ExperienceSetRankCapByUserIdFetcher.");
                 enabled = false;
             }
-            if (_userDataFetcher == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ExperienceOwnStatusFetcher.");
-                enabled = false;
-            }
 
             Update();
+        }
+
+        public bool HasError()
+        {
+            _fetcher = GetComponent<Gs2ExperienceSetRankCapByUserIdFetcher>() ?? GetComponentInParent<Gs2ExperienceSetRankCapByUserIdFetcher>(true);
+            _userDataFetcher = GetComponent<Gs2ExperienceOwnStatusFetcher>() ?? GetComponentInParent<Gs2ExperienceOwnStatusFetcher>(true);
+            if (_fetcher == null) {
+                return true;
+            }
+            return false;
         }
     }
 

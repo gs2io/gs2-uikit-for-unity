@@ -43,7 +43,7 @@ namespace Gs2.Unity.UiKit.Gs2Exchange.Localization.Editor
 
             if (original == null) return;
 
-            var fetcher = original.GetComponent<Gs2ExchangeRateModelFetcher>() ?? original.GetComponentInParent<Gs2ExchangeRateModelFetcher>();
+            var fetcher = original.GetComponent<Gs2ExchangeRateModelFetcher>() ?? original.GetComponentInParent<Gs2ExchangeRateModelFetcher>(true);
             if (fetcher == null) {
                 EditorGUILayout.HelpBox("Gs2ExchangeRateModelFetcher not found.", MessageType.Error);
                 if (GUILayout.Button("Add Fetcher")) {
@@ -51,14 +51,14 @@ namespace Gs2.Unity.UiKit.Gs2Exchange.Localization.Editor
                 }
             }
             else {
-                if (fetcher.transform.parent.GetComponent<Gs2ExchangeRateModelList>() != null) {
+                if (fetcher.transform.parent == null || fetcher.transform.parent.GetComponent<Gs2ExchangeRateModelList>() != null) {
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2ExchangeRateModelFetcher), false);
                     EditorGUI.EndDisabledGroup();
                     EditorGUILayout.HelpBox("RateModel is auto assign from Gs2ExchangeRateModelList.", MessageType.Info);
                 }
                 else {
-                    var context = original.GetComponent<Gs2ExchangeRateModelContext>() ?? original.GetComponentInParent<Gs2ExchangeRateModelContext>();
+                    var context = original.GetComponent<Gs2ExchangeRateModelContext>() ?? original.GetComponentInParent<Gs2ExchangeRateModelContext>(true);
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2ExchangeRateModelFetcher), false);
                     EditorGUI.indentLevel++;

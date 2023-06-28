@@ -41,6 +41,13 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Context
                 Debug.LogError("FollowUser is not set in Gs2FriendOwnFollowUserContext.");
             }
         }
+
+        public bool HasError() {
+            if (FollowUser == null) {
+                return true;
+            }
+            return false;
+        }
     }
 
     /// <summary>

@@ -41,6 +41,13 @@ namespace Gs2.Unity.UiKit.Gs2Idle.Context
                 Debug.LogError("User is not set in Gs2IdleUserContext.");
             }
         }
+
+        public bool HasError() {
+            if (User == null) {
+                return true;
+            }
+            return false;
+        }
     }
 
     /// <summary>

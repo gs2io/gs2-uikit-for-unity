@@ -41,6 +41,13 @@ namespace Gs2.Unity.UiKit.Gs2Enhance.Context
                 Debug.LogError("User is not set in Gs2EnhanceUserContext.");
             }
         }
+
+        public bool HasError() {
+            if (User == null) {
+                return true;
+            }
+            return false;
+        }
     }
 
     /// <summary>

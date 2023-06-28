@@ -39,7 +39,7 @@ namespace Gs2.Unity.UiKit.Gs2JobQueue.Editor
 
             if (original == null) return;
 
-            var context = original.GetComponent<Gs2JobQueueOwnJobResultContext>() ?? original.GetComponentInParent<Gs2JobQueueOwnJobResultContext>();
+            var context = original.GetComponent<Gs2JobQueueOwnJobResultContext>() ?? original.GetComponentInParent<Gs2JobQueueOwnJobResultContext>(true);
             if (context == null) {
                 EditorGUILayout.HelpBox("Gs2JobQueueOwnJobResultContext not found.", MessageType.Error);
                 if (GUILayout.Button("Add Context")) {

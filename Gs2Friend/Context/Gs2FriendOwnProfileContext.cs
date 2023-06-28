@@ -41,6 +41,13 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Context
                 Debug.LogError("Profile is not set in Gs2FriendOwnProfileContext.");
             }
         }
+
+        public bool HasError() {
+            if (Profile == null) {
+                return true;
+            }
+            return false;
+        }
     }
 
     /// <summary>

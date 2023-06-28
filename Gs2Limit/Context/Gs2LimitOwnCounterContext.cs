@@ -41,6 +41,13 @@ namespace Gs2.Unity.UiKit.Gs2Limit.Context
                 Debug.LogError("Counter is not set in Gs2LimitOwnCounterContext.");
             }
         }
+
+        public bool HasError() {
+            if (Counter == null) {
+                return true;
+            }
+            return false;
+        }
     }
 
     /// <summary>

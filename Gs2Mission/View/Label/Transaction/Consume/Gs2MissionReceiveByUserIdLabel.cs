@@ -112,12 +112,18 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Label
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MissionReceiveByUserIdFetcher.");
                 enabled = false;
             }
-            if (_userDataFetcher == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MissionOwnCompleteFetcher.");
-                enabled = false;
-            }
 
             Update();
+        }
+
+        public bool HasError()
+        {
+            _fetcher = GetComponent<Gs2MissionReceiveByUserIdFetcher>() ?? GetComponentInParent<Gs2MissionReceiveByUserIdFetcher>(true);
+            _userDataFetcher = GetComponent<Gs2MissionOwnCompleteFetcher>() ?? GetComponentInParent<Gs2MissionOwnCompleteFetcher>(true);
+            if (_fetcher == null) {
+                return true;
+            }
+            return false;
         }
     }
 

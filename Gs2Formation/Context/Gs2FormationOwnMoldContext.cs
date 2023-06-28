@@ -41,6 +41,13 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Context
                 Debug.LogError("Mold is not set in Gs2FormationOwnMoldContext.");
             }
         }
+
+        public bool HasError() {
+            if (Mold == null) {
+                return true;
+            }
+            return false;
+        }
     }
 
     /// <summary>

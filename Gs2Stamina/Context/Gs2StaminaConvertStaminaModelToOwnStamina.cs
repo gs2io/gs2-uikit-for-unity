@@ -45,7 +45,16 @@ namespace Gs2.Unity.UiKit.Gs2Stamina.Context
                 enabled = false;
             }
         }
-        
+
+        public bool HasError()
+        {
+            _context = GetComponent<Gs2StaminaStaminaModelContext>() ?? GetComponentInParent<Gs2StaminaStaminaModelContext>(true);
+            if (_context == null) {
+                return true;
+            }
+            return false;
+        }
+
         public void Start() {
             this.onConverted.Invoke(
                 OwnStamina.New(

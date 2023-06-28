@@ -42,6 +42,13 @@ namespace Gs2.Unity.UiKit.Gs2Schedule.Context
                 Debug.LogError("User is not set in Gs2ScheduleUserContext.");
             }
         }
+
+        public bool HasError() {
+            if (User == null) {
+                return true;
+            }
+            return false;
+        }
     }
 
     /// <summary>

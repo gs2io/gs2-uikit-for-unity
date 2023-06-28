@@ -39,7 +39,7 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Editor
 
             if (original == null) return;
 
-            var context = original.GetComponent<Gs2RankingOwnScoreContext>() ?? original.GetComponentInParent<Gs2RankingOwnScoreContext>();
+            var context = original.GetComponent<Gs2RankingOwnScoreContext>() ?? original.GetComponentInParent<Gs2RankingOwnScoreContext>(true);
             if (context == null) {
                 EditorGUILayout.HelpBox("Gs2RankingOwnScoreContext not found.", MessageType.Error);
                 if (GUILayout.Button("Add Context")) {

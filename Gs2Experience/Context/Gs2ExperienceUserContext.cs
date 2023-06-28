@@ -41,6 +41,13 @@ namespace Gs2.Unity.UiKit.Gs2Experience.Context
                 Debug.LogError("User is not set in Gs2ExperienceUserContext.");
             }
         }
+
+        public bool HasError() {
+            if (User == null) {
+                return true;
+            }
+            return false;
+        }
     }
 
     /// <summary>

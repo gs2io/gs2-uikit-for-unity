@@ -40,7 +40,7 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Editor
 
             if (original == null) return;
 
-            var fetcher = original.GetComponent<Gs2FormationMoldModelFetcher>() ?? original.GetComponentInParent<Gs2FormationMoldModelFetcher>();
+            var fetcher = original.GetComponent<Gs2FormationMoldModelFetcher>() ?? original.GetComponentInParent<Gs2FormationMoldModelFetcher>(true);
             if (fetcher == null) {
                 EditorGUILayout.HelpBox("Gs2FormationMoldModelFetcher not found.", MessageType.Error);
                 if (GUILayout.Button("Add Fetcher")) {
@@ -48,20 +48,20 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Editor
                 }
             }
             else {
-                if (fetcher.transform.parent.GetComponent<Gs2FormationMoldModelList>() != null) {
+                if (fetcher.transform.parent == null || fetcher.transform.parent.GetComponent<Gs2FormationMoldModelList>() != null) {
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2FormationMoldModelFetcher), false);
                     EditorGUI.EndDisabledGroup();
                     EditorGUILayout.HelpBox("MoldModel is auto assign from Gs2FormationMoldModelList.", MessageType.Info);
                 }
-                else if (fetcher.transform.parent.GetComponent<Gs2FormationOwnMoldList>() != null) {
+                else if (fetcher.transform.parent == null || fetcher.transform.parent.GetComponent<Gs2FormationOwnMoldList>() != null) {
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2FormationOwnMoldFetcher), false);
                     EditorGUI.EndDisabledGroup();
                     EditorGUILayout.HelpBox("MoldModel is auto assign from Gs2FormationOwnMoldList.", MessageType.Info);
                 }
                 else {
-                    var context = original.GetComponent<Gs2FormationMoldModelContext>() ?? original.GetComponentInParent<Gs2FormationMoldModelContext>();
+                    var context = original.GetComponent<Gs2FormationMoldModelContext>() ?? original.GetComponentInParent<Gs2FormationMoldModelContext>(true);
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2FormationMoldModelFetcher), false);
                     EditorGUI.indentLevel++;

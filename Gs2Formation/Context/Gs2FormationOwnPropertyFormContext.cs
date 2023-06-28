@@ -41,6 +41,13 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Context
                 Debug.LogError("PropertyForm is not set in Gs2FormationOwnPropertyFormContext.");
             }
         }
+
+        public bool HasError() {
+            if (PropertyForm == null) {
+                return true;
+            }
+            return false;
+        }
     }
 
     /// <summary>

@@ -40,7 +40,7 @@ namespace Gs2.Unity.UiKit.Gs2Dictionary.Editor
 
             if (original == null) return;
 
-            var context = original.GetComponent<Gs2DictionaryNamespaceContext>() ?? original.GetComponentInParent<Gs2DictionaryNamespaceContext>();
+            var context = original.GetComponent<Gs2DictionaryNamespaceContext>() ?? original.GetComponentInParent<Gs2DictionaryNamespaceContext>(true);
             if (context == null) {
                 EditorGUILayout.HelpBox("Gs2DictionaryNamespaceContext not found.", MessageType.Error);
                 if (GUILayout.Button("Add Context")) {

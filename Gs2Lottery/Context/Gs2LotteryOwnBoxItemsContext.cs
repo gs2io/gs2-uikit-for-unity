@@ -41,6 +41,13 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.Context
                 Debug.LogError("BoxItems is not set in Gs2LotteryOwnBoxItemsContext.");
             }
         }
+
+        public bool HasError() {
+            if (BoxItems == null) {
+                return true;
+            }
+            return false;
+        }
     }
 
     /// <summary>

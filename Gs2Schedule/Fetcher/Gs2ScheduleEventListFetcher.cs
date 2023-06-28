@@ -135,6 +135,15 @@ namespace Gs2.Unity.UiKit.Gs2Schedule.Fetcher
                 enabled = false;
             }
         }
+
+        public bool HasError()
+        {
+            _context = GetComponent<Gs2ScheduleNamespaceContext>() ?? GetComponentInParent<Gs2ScheduleNamespaceContext>(true);
+            if (_context == null) {
+                return true;
+            }
+            return false;
+        }
     }
 
     /// <summary>

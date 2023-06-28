@@ -41,6 +41,13 @@ namespace Gs2.Unity.UiKit.Gs2Inbox.Context
                 Debug.LogError("Namespace is not set in Gs2InboxNamespaceContext.");
             }
         }
+
+        public bool HasError() {
+            if (Namespace == null) {
+                return true;
+            }
+            return false;
+        }
     }
 
     /// <summary>

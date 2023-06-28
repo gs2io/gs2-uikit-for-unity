@@ -56,15 +56,15 @@ namespace Gs2.Unity.UiKit.Gs2Schedule.Fetcher
             {
                 if (_gameSessionHolder != null && _gameSessionHolder.Initialized &&
                     _clientHolder != null && _clientHolder.Initialized &&
-                    _context != null && this._context.Event_ != null)
+                    Context != null && this.Context.Event_ != null)
                 {
                     
                     var domain = this._clientHolder.Gs2.Schedule.Namespace(
-                        this._context.Event_.NamespaceName
+                        this.Context.Event_.NamespaceName
                     ).Me(
                         this._gameSessionHolder.GameSession
                     ).Event(
-                        this._context.Event_.EventName
+                        this.Context.Event_.EventName
                     );
                     var future = domain.Model();
                     yield return future;
@@ -115,18 +115,27 @@ namespace Gs2.Unity.UiKit.Gs2Schedule.Fetcher
     {
         protected Gs2ClientHolder _clientHolder;
         protected Gs2GameSessionHolder _gameSessionHolder;
-        private Gs2ScheduleEventContext _context;
+        public Gs2ScheduleEventContext Context { get; private set; }
 
         public void Awake()
         {
             _clientHolder = Gs2ClientHolder.Instance;
             _gameSessionHolder = Gs2GameSessionHolder.Instance;
-            _context = GetComponent<Gs2ScheduleEventContext>() ?? GetComponentInParent<Gs2ScheduleEventContext>();
+            Context = GetComponent<Gs2ScheduleEventContext>() ?? GetComponentInParent<Gs2ScheduleEventContext>();
 
-            if (_context == null) {
+            if (Context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ScheduleEventContext.");
                 enabled = false;
             }
+        }
+
+        public bool HasError()
+        {
+            Context = GetComponent<Gs2ScheduleEventContext>() ?? GetComponentInParent<Gs2ScheduleEventContext>(true);
+            if (Context == null) {
+                return true;
+            }
+            return false;
         }
     }
 

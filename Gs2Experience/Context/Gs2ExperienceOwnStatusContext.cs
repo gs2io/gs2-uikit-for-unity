@@ -41,6 +41,13 @@ namespace Gs2.Unity.UiKit.Gs2Experience.Context
                 Debug.LogError("Status is not set in Gs2ExperienceOwnStatusContext.");
             }
         }
+
+        public bool HasError() {
+            if (Status == null) {
+                return true;
+            }
+            return false;
+        }
     }
 
     /// <summary>

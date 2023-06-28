@@ -73,6 +73,22 @@ namespace Gs2.Unity.UiKit.Gs2Ranking
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2RankingSubscribeUserFetcher.");
                 enabled = false;
             }
+            if (target == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: target is not set.");
+                enabled = false;
+            }
+        }
+
+        public bool HasError()
+        {
+            _fetcher = GetComponent<Gs2RankingSubscribeUserFetcher>() ?? GetComponentInParent<Gs2RankingSubscribeUserFetcher>(true);
+            if (_fetcher == null) {
+                return true;
+            }
+            if (target == null) {
+                return true;
+            }
+            return false;
         }
     }
 

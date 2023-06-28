@@ -41,6 +41,18 @@ namespace Gs2.Unity.UiKit.Gs2Version.Context
                 Debug.LogError("VersionModel is not set in Gs2VersionVersionModelContext.");
             }
         }
+
+        public bool HasError() {
+            if (VersionModel == null) {
+                if (transform.parent != null && transform.parent.GetComponent<Gs2VersionVersionModelList>() != null) {
+                    return false;
+                }
+                else {
+                    return true;
+                }
+            }
+            return false;
+        }
     }
 
     /// <summary>

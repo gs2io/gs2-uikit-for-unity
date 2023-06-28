@@ -121,12 +121,18 @@ namespace Gs2.Unity.UiKit.Gs2Limit.Label
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2LimitDeleteCounterByUserIdFetcher.");
                 enabled = false;
             }
-            if (_userDataFetcher == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2LimitOwnCounterFetcher.");
-                enabled = false;
-            }
 
             Update();
+        }
+
+        public bool HasError()
+        {
+            _fetcher = GetComponent<Gs2LimitDeleteCounterByUserIdFetcher>() ?? GetComponentInParent<Gs2LimitDeleteCounterByUserIdFetcher>(true);
+            _userDataFetcher = GetComponent<Gs2LimitOwnCounterFetcher>() ?? GetComponentInParent<Gs2LimitOwnCounterFetcher>(true);
+            if (_fetcher == null) {
+                return true;
+            }
+            return false;
         }
     }
 

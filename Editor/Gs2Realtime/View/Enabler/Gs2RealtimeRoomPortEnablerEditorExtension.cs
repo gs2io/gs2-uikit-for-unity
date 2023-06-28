@@ -39,7 +39,7 @@ namespace Gs2.Unity.UiKit.Gs2Realtime.Editor
 
             if (original == null) return;
 
-            var context = original.GetComponent<Gs2RealtimeRoomContext>() ?? original.GetComponentInParent<Gs2RealtimeRoomContext>();
+            var context = original.GetComponent<Gs2RealtimeRoomContext>() ?? original.GetComponentInParent<Gs2RealtimeRoomContext>(true);
             if (context == null) {
                 EditorGUILayout.HelpBox("Gs2RealtimeRoomContext not found.", MessageType.Error);
                 if (GUILayout.Button("Add Context")) {

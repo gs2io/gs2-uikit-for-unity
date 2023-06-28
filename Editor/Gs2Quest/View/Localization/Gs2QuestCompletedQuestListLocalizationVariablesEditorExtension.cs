@@ -43,7 +43,7 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Localization.Editor
 
             if (original == null) return;
 
-            var fetcher = original.GetComponent<Gs2QuestOwnCompletedQuestListFetcher>() ?? original.GetComponentInParent<Gs2QuestOwnCompletedQuestListFetcher>();
+            var fetcher = original.GetComponent<Gs2QuestOwnCompletedQuestListFetcher>() ?? original.GetComponentInParent<Gs2QuestOwnCompletedQuestListFetcher>(true);
             if (fetcher == null) {
                 EditorGUILayout.HelpBox("Gs2QuestOwnCompletedQuestListFetcher not found.", MessageType.Error);
                 if (GUILayout.Button("Add Fetcher")) {
@@ -51,14 +51,14 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Localization.Editor
                 }
             }
             else {
-                if (fetcher.transform.parent.GetComponent<Gs2QuestOwnCompletedQuestListList>() != null) {
+                if (fetcher.transform.parent == null || fetcher.transform.parent.GetComponent<Gs2QuestOwnCompletedQuestListList>() != null) {
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2QuestOwnCompletedQuestListFetcher), false);
                     EditorGUI.EndDisabledGroup();
                     EditorGUILayout.HelpBox("CompletedQuestList is auto assign from Gs2QuestOwnCompletedQuestListList.", MessageType.Info);
                 }
                 else {
-                    var context = original.GetComponent<Gs2QuestOwnCompletedQuestListContext>() ?? original.GetComponentInParent<Gs2QuestOwnCompletedQuestListContext>();
+                    var context = original.GetComponent<Gs2QuestOwnCompletedQuestListContext>() ?? original.GetComponentInParent<Gs2QuestOwnCompletedQuestListContext>(true);
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2QuestOwnCompletedQuestListFetcher), false);
                     EditorGUI.indentLevel++;

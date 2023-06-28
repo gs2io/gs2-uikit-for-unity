@@ -40,7 +40,7 @@ namespace Gs2.Unity.UiKit.Gs2Exchange.Editor
 
             if (original == null) return;
 
-            var context = original.GetComponent<Gs2ExchangeOwnAwaitContext>() ?? original.GetComponentInParent<Gs2ExchangeOwnAwaitContext>();
+            var context = original.GetComponent<Gs2ExchangeOwnAwaitContext>() ?? original.GetComponentInParent<Gs2ExchangeOwnAwaitContext>(true);
             if (context == null) {
                 EditorGUILayout.HelpBox("Gs2ExchangeOwnAwaitContext not found.", MessageType.Error);
                 if (GUILayout.Button("Add Context")) {

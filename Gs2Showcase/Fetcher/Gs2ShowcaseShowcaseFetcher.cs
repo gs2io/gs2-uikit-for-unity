@@ -56,15 +56,15 @@ namespace Gs2.Unity.UiKit.Gs2Showcase.Fetcher
             {
                 if (_gameSessionHolder != null && _gameSessionHolder.Initialized &&
                     _clientHolder != null && _clientHolder.Initialized &&
-                    _context != null && this._context.Showcase != null)
+                    Context != null && this.Context.Showcase != null)
                 {
                     
                     var domain = this._clientHolder.Gs2.Showcase.Namespace(
-                        this._context.Showcase.NamespaceName
+                        this.Context.Showcase.NamespaceName
                     ).Me(
                         this._gameSessionHolder.GameSession
                     ).Showcase(
-                        this._context.Showcase.ShowcaseName
+                        this.Context.Showcase.ShowcaseName
                     );
                     var future = domain.Model();
                     yield return future;
@@ -115,18 +115,27 @@ namespace Gs2.Unity.UiKit.Gs2Showcase.Fetcher
     {
         protected Gs2ClientHolder _clientHolder;
         protected Gs2GameSessionHolder _gameSessionHolder;
-        private Gs2ShowcaseShowcaseContext _context;
+        public Gs2ShowcaseShowcaseContext Context { get; private set; }
 
         public void Awake()
         {
             _clientHolder = Gs2ClientHolder.Instance;
             _gameSessionHolder = Gs2GameSessionHolder.Instance;
-            _context = GetComponent<Gs2ShowcaseShowcaseContext>() ?? GetComponentInParent<Gs2ShowcaseShowcaseContext>();
+            Context = GetComponent<Gs2ShowcaseShowcaseContext>() ?? GetComponentInParent<Gs2ShowcaseShowcaseContext>();
 
-            if (_context == null) {
+            if (Context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ShowcaseShowcaseContext.");
                 enabled = false;
             }
+        }
+
+        public bool HasError()
+        {
+            Context = GetComponent<Gs2ShowcaseShowcaseContext>() ?? GetComponentInParent<Gs2ShowcaseShowcaseContext>(true);
+            if (Context == null) {
+                return true;
+            }
+            return false;
         }
     }
 

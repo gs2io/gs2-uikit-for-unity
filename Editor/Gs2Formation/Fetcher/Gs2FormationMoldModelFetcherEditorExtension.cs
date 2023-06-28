@@ -40,7 +40,7 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Editor
 
             if (original == null) return;
 
-            var context = original.GetComponent<Gs2FormationMoldModelContext>() ?? original.GetComponentInParent<Gs2FormationMoldModelContext>();
+            var context = original.GetComponent<Gs2FormationMoldModelContext>() ?? original.GetComponentInParent<Gs2FormationMoldModelContext>(true);
             if (context == null) {
                 EditorGUILayout.HelpBox("Gs2FormationMoldModelContext not found.", MessageType.Error);
                 if (GUILayout.Button("Add Context")) {

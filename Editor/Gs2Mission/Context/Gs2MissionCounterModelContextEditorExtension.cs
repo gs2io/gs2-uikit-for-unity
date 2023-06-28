@@ -43,7 +43,7 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Editor
             serializedObject.Update();
 
             if (original.CounterModel == null) {
-                if (original.transform.parent.GetComponent<Gs2MissionCounterModelList>() != null) {
+                if (original.transform.parent != null && original.transform.parent.GetComponent<Gs2MissionCounterModelList>() != null) {
                     EditorGUILayout.HelpBox("CounterModel is auto assign from Gs2MissionCounterModelList.", MessageType.Info);
                 }
                 else {
