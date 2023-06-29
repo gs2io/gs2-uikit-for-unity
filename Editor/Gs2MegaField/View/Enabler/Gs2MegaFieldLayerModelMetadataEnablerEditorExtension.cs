@@ -47,7 +47,7 @@ namespace Gs2.Unity.UiKit.Gs2MegaField.Enabler.Editor
                 }
             }
             else {
-                if (context.transform.parent.GetComponent<Gs2MegaFieldLayerModelList>() != null) {
+                if (context.gameObject.GetComponentInParent<Gs2MegaFieldLayerModelList>(true) != null) {
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2MegaFieldLayerModelContext), false);
                     EditorGUI.EndDisabledGroup();

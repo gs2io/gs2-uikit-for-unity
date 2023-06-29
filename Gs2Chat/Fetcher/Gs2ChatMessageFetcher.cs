@@ -54,18 +54,18 @@ namespace Gs2.Unity.UiKit.Gs2Chat.Fetcher
             {
                 if (_gameSessionHolder != null && _gameSessionHolder.Initialized &&
                     _clientHolder != null && _clientHolder.Initialized &&
-                    _context != null && this._context.Message != null)
+                    Context != null && this.Context.Message != null)
                 {
                     
                     var domain = this._clientHolder.Gs2.Chat.Namespace(
-                        this._context.Message.NamespaceName
+                        this.Context.Message.NamespaceName
                     ).Me(
                         this._gameSessionHolder.GameSession
                     ).Room(
-                        this._context.Message.RoomName,
-                        this._context.Message.Password
+                        this.Context.Message.RoomName,
+                        this.Context.Message.Password
                     ).Message(
-                        this._context.Message.MessageName
+                        this.Context.Message.MessageName
                     );
                     var future = domain.Model();
                     yield return future;
@@ -114,15 +114,15 @@ namespace Gs2.Unity.UiKit.Gs2Chat.Fetcher
     {
         protected Gs2ClientHolder _clientHolder;
         protected Gs2GameSessionHolder _gameSessionHolder;
-        private Gs2ChatMessageContext _context;
+        public Gs2ChatMessageContext Context { get; private set; }
 
         public void Awake()
         {
             _clientHolder = Gs2ClientHolder.Instance;
             _gameSessionHolder = Gs2GameSessionHolder.Instance;
-            _context = GetComponent<Gs2ChatMessageContext>() ?? GetComponentInParent<Gs2ChatMessageContext>();
+            Context = GetComponent<Gs2ChatMessageContext>() ?? GetComponentInParent<Gs2ChatMessageContext>();
 
-            if (_context == null) {
+            if (Context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ChatMessageContext.");
                 enabled = false;
             }
@@ -130,8 +130,8 @@ namespace Gs2.Unity.UiKit.Gs2Chat.Fetcher
 
         public bool HasError()
         {
-            _context = GetComponent<Gs2ChatMessageContext>() ?? GetComponentInParent<Gs2ChatMessageContext>(true);
-            if (_context == null) {
+            Context = GetComponent<Gs2ChatMessageContext>() ?? GetComponentInParent<Gs2ChatMessageContext>(true);
+            if (Context == null) {
                 return true;
             }
             return false;

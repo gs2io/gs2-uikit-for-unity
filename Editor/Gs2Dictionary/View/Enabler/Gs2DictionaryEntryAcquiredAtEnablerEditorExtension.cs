@@ -47,7 +47,7 @@ namespace Gs2.Unity.UiKit.Gs2Dictionary.Editor
                 }
             }
             else {
-                if (context.transform.parent.GetComponent<Gs2DictionaryOwnEntryList>() != null) {
+                if (context.gameObject.GetComponentInParent<Gs2DictionaryOwnEntryList>(true) != null) {
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2DictionaryOwnEntryContext), false);
                     EditorGUI.EndDisabledGroup();

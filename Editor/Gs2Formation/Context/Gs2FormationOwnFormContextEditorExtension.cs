@@ -43,7 +43,7 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Editor
             serializedObject.Update();
 
             if (original.Form == null) {
-                if (original.transform.parent.GetComponent<Gs2FormationOwnFormList>() != null) {
+                if (original.GetComponentInParent<Gs2FormationOwnFormList>(true) != null) {
                     EditorGUILayout.HelpBox("OwnForm is auto assign from Gs2FormationOwnFormList.", MessageType.Info);
                 }
                 else {

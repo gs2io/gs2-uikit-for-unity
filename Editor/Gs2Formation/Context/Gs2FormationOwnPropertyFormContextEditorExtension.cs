@@ -43,7 +43,7 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Editor
             serializedObject.Update();
 
             if (original.PropertyForm == null) {
-                if (original.transform.parent.GetComponent<Gs2FormationOwnPropertyFormList>() != null) {
+                if (original.GetComponentInParent<Gs2FormationOwnPropertyFormList>(true) != null) {
                     EditorGUILayout.HelpBox("OwnPropertyForm is auto assign from Gs2FormationOwnPropertyFormList.", MessageType.Info);
                 }
                 else {

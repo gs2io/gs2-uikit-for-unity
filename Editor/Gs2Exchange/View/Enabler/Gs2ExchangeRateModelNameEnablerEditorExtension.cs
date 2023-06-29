@@ -47,7 +47,7 @@ namespace Gs2.Unity.UiKit.Gs2Exchange.Enabler.Editor
                 }
             }
             else {
-                if (context.transform.parent.GetComponent<Gs2ExchangeRateModelList>() != null) {
+                if (context.gameObject.GetComponentInParent<Gs2ExchangeRateModelList>(true) != null) {
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2ExchangeRateModelContext), false);
                     EditorGUI.EndDisabledGroup();

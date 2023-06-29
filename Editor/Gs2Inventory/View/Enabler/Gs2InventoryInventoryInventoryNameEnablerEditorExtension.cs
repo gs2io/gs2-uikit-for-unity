@@ -47,7 +47,7 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Enabler.Editor
                 }
             }
             else {
-                if (context.transform.parent.GetComponent<Gs2InventoryOwnInventoryList>() != null) {
+                if (context.gameObject.GetComponentInParent<Gs2InventoryOwnInventoryList>(true) != null) {
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2InventoryOwnInventoryContext), false);
                     EditorGUI.EndDisabledGroup();

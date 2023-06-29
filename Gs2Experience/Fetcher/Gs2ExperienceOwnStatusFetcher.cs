@@ -56,16 +56,16 @@ namespace Gs2.Unity.UiKit.Gs2Experience.Fetcher
             {
                 if (_gameSessionHolder != null && _gameSessionHolder.Initialized &&
                     _clientHolder != null && _clientHolder.Initialized &&
-                    _context != null && this._context.Status != null)
+                    Context != null && this.Context.Status != null)
                 {
                     
                     var domain = this._clientHolder.Gs2.Experience.Namespace(
-                        this._context.Status.NamespaceName
+                        this.Context.Status.NamespaceName
                     ).Me(
                         this._gameSessionHolder.GameSession
                     ).Status(
-                        this._context.Status.ExperienceName,
-                        this._context.Status.PropertyId
+                        this.Context.Status.ExperienceName,
+                        this.Context.Status.PropertyId
                     );
                     var future = domain.Model();
                     yield return future;
@@ -114,17 +114,17 @@ namespace Gs2.Unity.UiKit.Gs2Experience.Fetcher
 
     public partial class Gs2ExperienceOwnStatusFetcher
     {
-        private Gs2ClientHolder _clientHolder;
-        private Gs2GameSessionHolder _gameSessionHolder;
-        private Gs2ExperienceOwnStatusContext _context;
+        protected Gs2ClientHolder _clientHolder;
+        protected Gs2GameSessionHolder _gameSessionHolder;
+        public Gs2ExperienceOwnStatusContext Context { get; private set; }
 
         public void Awake()
         {
             _clientHolder = Gs2ClientHolder.Instance;
             _gameSessionHolder = Gs2GameSessionHolder.Instance;
-            _context = GetComponent<Gs2ExperienceOwnStatusContext>() ?? GetComponentInParent<Gs2ExperienceOwnStatusContext>();
+            Context = GetComponent<Gs2ExperienceOwnStatusContext>() ?? GetComponentInParent<Gs2ExperienceOwnStatusContext>();
 
-            if (_context == null) {
+            if (Context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ExperienceOwnStatusContext.");
                 enabled = false;
             }
@@ -132,8 +132,8 @@ namespace Gs2.Unity.UiKit.Gs2Experience.Fetcher
 
         public bool HasError()
         {
-            _context = GetComponent<Gs2ExperienceOwnStatusContext>() ?? GetComponentInParent<Gs2ExperienceOwnStatusContext>(true);
-            if (_context == null) {
+            Context = GetComponent<Gs2ExperienceOwnStatusContext>() ?? GetComponentInParent<Gs2ExperienceOwnStatusContext>(true);
+            if (Context == null) {
                 return true;
             }
             return false;
@@ -146,8 +146,8 @@ namespace Gs2.Unity.UiKit.Gs2Experience.Fetcher
 
     public partial class Gs2ExperienceOwnStatusFetcher
     {
-        public Gs2.Unity.Gs2Experience.Model.EzStatus Status { get; private set; }
-        public bool Fetched { get; private set; }
+        public Gs2.Unity.Gs2Experience.Model.EzStatus Status { get; protected set; }
+        public bool Fetched { get; protected set; }
     }
 
     /// <summary>

@@ -44,7 +44,7 @@ namespace Gs2.Unity.UiKit.Gs2Idle.Context
 
         public bool HasError() {
             if (CategoryModel == null) {
-                if (transform.parent != null && transform.parent.GetComponent<Gs2IdleCategoryModelList>() != null) {
+                if (GetComponentInParent<Gs2IdleCategoryModelList>(true) != null) {
                     return false;
                 }
                 else {

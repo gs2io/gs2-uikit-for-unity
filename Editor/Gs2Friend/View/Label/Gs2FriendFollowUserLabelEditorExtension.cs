@@ -48,21 +48,22 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Editor
                 }
             }
             else {
-                if (fetcher.transform.parent == null || fetcher.transform.parent.GetComponent<Gs2FriendOwnFollowUserList>() != null) {
+                if (fetcher.gameObject.GetComponentInParent<Gs2FriendOwnFollowUserList>(true) != null) {
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2FriendOwnFollowUserFetcher), false);
                     EditorGUI.EndDisabledGroup();
                     EditorGUILayout.HelpBox("FollowUser is auto assign from Gs2FriendOwnFollowUserList.", MessageType.Info);
                 }
                 else {
-                    var context = original.GetComponent<Gs2FriendOwnFollowUserContext>() ?? original.GetComponentInParent<Gs2FriendOwnFollowUserContext>(true);
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2FriendOwnFollowUserFetcher), false);
                     EditorGUI.indentLevel++;
-                    context.FollowUser = EditorGUILayout.ObjectField("FollowUser", context.FollowUser, typeof(OwnFollowUser), false) as OwnFollowUser;
-                    EditorGUI.indentLevel++;
-                    EditorGUILayout.TextField("NamespaceName", context.FollowUser?.NamespaceName.ToString());
-                    EditorGUI.indentLevel--;
+                    if (fetcher.Context != null) {
+                        fetcher.Context.FollowUser = EditorGUILayout.ObjectField("FollowUser", fetcher.Context.FollowUser, typeof(OwnFollowUser), false) as OwnFollowUser;
+                        EditorGUI.indentLevel++;
+                        EditorGUILayout.TextField("NamespaceName", fetcher.Context.FollowUser?.NamespaceName.ToString());
+                        EditorGUI.indentLevel--;
+                    }
                     EditorGUI.indentLevel--;
                     EditorGUI.EndDisabledGroup();
                 }

@@ -43,7 +43,7 @@ namespace Gs2.Unity.UiKit.Gs2Datastore.Editor
             serializedObject.Update();
 
             if (original.DataObjectHistory == null) {
-                if (original.transform.parent.GetComponent<Gs2DatastoreOwnDataObjectHistoryList>() != null) {
+                if (original.GetComponentInParent<Gs2DatastoreOwnDataObjectHistoryList>(true) != null) {
                     EditorGUILayout.HelpBox("OwnDataObjectHistory is auto assign from Gs2DatastoreOwnDataObjectHistoryList.", MessageType.Info);
                 }
                 else {

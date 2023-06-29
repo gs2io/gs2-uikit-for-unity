@@ -12,23 +12,29 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
- * deny overwrite
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
+// ReSharper disable RedundantNameQualifier
+// ReSharper disable RedundantAssignment
+// ReSharper disable NotAccessedVariable
+// ReSharper disable RedundantUsingDirective
+// ReSharper disable Unity.NoNullPropagation
+// ReSharper disable InconsistentNaming
+
+#pragma warning disable CS0472
 
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Text;
 using Gs2.Core.Exception;
 using Gs2.Unity.Core.Exception;
 using Gs2.Unity.Gs2MegaField.Model;
 using Gs2.Unity.Gs2MegaField.ScriptableObject;
 using Gs2.Unity.Util;
+using Gs2.Unity.UiKit.Core;
+using Gs2.Unity.UiKit.Gs2Core.Fetcher;
 using Gs2.Unity.UiKit.Gs2MegaField.Context;
 using UnityEngine;
 using UnityEngine.Events;
@@ -44,18 +50,21 @@ namespace Gs2.Unity.UiKit.Gs2MegaField.Fetcher
     {
         private IEnumerator Fetch()
         {
+            var retryWaitSecond = 1;
             Gs2Exception e;
             while (true)
             {
                 if (_gameSessionHolder != null && _gameSessionHolder.Initialized &&
                     _clientHolder != null && _clientHolder.Initialized &&
-                    _context != null)
+                    Context != null && this.Context.LayerModel != null)
                 {
                     
                     var domain = this._clientHolder.Gs2.MegaField.Namespace(
-                        this._context.LayerModel.NamespaceName
+                        this.Context.LayerModel.NamespaceName
                     ).AreaModel(
-                        this._context.LayerModel.AreaModelName
+                        this.Context.LayerModel.AreaModelName
+                    ).LayerModel(
+                        this.Context.LayerModel.LayerModelName
                     );
                     var future = domain.Model();
                     yield return future;
@@ -64,16 +73,19 @@ namespace Gs2.Unity.UiKit.Gs2MegaField.Fetcher
                         if (future.Error is BadRequestException || future.Error is NotFoundException)
                         {
                             onError.Invoke(e = future.Error, null);
+                            Debug.LogError($"{gameObject.GetFullPath()}: {future.Error.Message}");
                             break;
                         }
-
-                        onError.Invoke(new CanIgnoreException(future.Error), null);
+                        else {
+                            onError.Invoke(new CanIgnoreException(future.Error), null);
+                        }
+                        yield return new WaitForSeconds(retryWaitSecond);
+                        retryWaitSecond *= 2;
                     }
                     else
                     {
-                        LayerModel = future.Result.LayerModels.FirstOrDefault(
-                            v => v.Name == this._context.LayerModel.LayerModelName
-                        );
+                        retryWaitSecond = 1;
+                        LayerModel = future.Result;
                         Fetched = true;
                     }
                 }
@@ -81,20 +93,7 @@ namespace Gs2.Unity.UiKit.Gs2MegaField.Fetcher
                     yield return new WaitForSeconds(1);
                 }
             }
-
-            var transform1 = transform;
-            var builder = new StringBuilder(transform1.name);
-            var current = transform1.parent;
-
-            while (current != null)
-            {
-                builder.Insert(0, current.name + "/");
-                current = current.parent;
-            }
-
-            Debug.LogError(e);
-            Debug.LogError($"{GetType()} の自動更新が停止されました。 {builder}");
-            Debug.LogError($"Automatic update of {GetType()} has been stopped. {builder}");
+            // ReSharper disable once IteratorNeverReturns
         }
 
         public void OnEnable()
@@ -116,13 +115,27 @@ namespace Gs2.Unity.UiKit.Gs2MegaField.Fetcher
     {
         protected Gs2ClientHolder _clientHolder;
         protected Gs2GameSessionHolder _gameSessionHolder;
-        private Gs2MegaFieldLayerModelContext _context;
+        public Gs2MegaFieldLayerModelContext Context { get; private set; }
 
         public void Awake()
         {
             _clientHolder = Gs2ClientHolder.Instance;
             _gameSessionHolder = Gs2GameSessionHolder.Instance;
-            _context = GetComponentInParent<Gs2MegaFieldLayerModelContext>();
+            Context = GetComponent<Gs2MegaFieldLayerModelContext>() ?? GetComponentInParent<Gs2MegaFieldLayerModelContext>();
+
+            if (Context == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MegaFieldLayerModelContext.");
+                enabled = false;
+            }
+        }
+
+        public bool HasError()
+        {
+            Context = GetComponent<Gs2MegaFieldLayerModelContext>() ?? GetComponentInParent<Gs2MegaFieldLayerModelContext>(true);
+            if (Context == null) {
+                return true;
+            }
+            return false;
         }
     }
 

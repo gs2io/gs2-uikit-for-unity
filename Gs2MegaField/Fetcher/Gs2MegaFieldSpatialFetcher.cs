@@ -54,16 +54,16 @@ namespace Gs2.Unity.UiKit.Gs2MegaField.Fetcher
             {
                 if (_gameSessionHolder != null && _gameSessionHolder.Initialized &&
                     _clientHolder != null && _clientHolder.Initialized &&
-                    _context != null && this._context.Spatial != null)
+                    Context != null && this.Context.Spatial != null)
                 {
                     
                     var domain = this._clientHolder.Gs2.MegaField.Namespace(
-                        this._context.Spatial.NamespaceName
+                        this.Context.Spatial.NamespaceName
                     ).Me(
                         this._gameSessionHolder.GameSession
                     ).Spatial(
-                        this._context.Spatial.AreaModelName,
-                        this._context.Spatial.LayerModelName
+                        this.Context.Spatial.AreaModelName,
+                        this.Context.Spatial.LayerModelName
                     );
                     var future = domain.Model();
                     yield return future;
@@ -112,15 +112,15 @@ namespace Gs2.Unity.UiKit.Gs2MegaField.Fetcher
     {
         protected Gs2ClientHolder _clientHolder;
         protected Gs2GameSessionHolder _gameSessionHolder;
-        private Gs2MegaFieldSpatialContext _context;
+        public Gs2MegaFieldSpatialContext Context { get; private set; }
 
         public void Awake()
         {
             _clientHolder = Gs2ClientHolder.Instance;
             _gameSessionHolder = Gs2GameSessionHolder.Instance;
-            _context = GetComponent<Gs2MegaFieldSpatialContext>() ?? GetComponentInParent<Gs2MegaFieldSpatialContext>();
+            Context = GetComponent<Gs2MegaFieldSpatialContext>() ?? GetComponentInParent<Gs2MegaFieldSpatialContext>();
 
-            if (_context == null) {
+            if (Context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MegaFieldSpatialContext.");
                 enabled = false;
             }
@@ -128,8 +128,8 @@ namespace Gs2.Unity.UiKit.Gs2MegaField.Fetcher
 
         public bool HasError()
         {
-            _context = GetComponent<Gs2MegaFieldSpatialContext>() ?? GetComponentInParent<Gs2MegaFieldSpatialContext>(true);
-            if (_context == null) {
+            Context = GetComponent<Gs2MegaFieldSpatialContext>() ?? GetComponentInParent<Gs2MegaFieldSpatialContext>(true);
+            if (Context == null) {
                 return true;
             }
             return false;

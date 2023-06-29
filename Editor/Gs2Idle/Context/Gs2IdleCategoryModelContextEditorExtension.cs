@@ -43,7 +43,7 @@ namespace Gs2.Unity.UiKit.Gs2Idle.Editor
             serializedObject.Update();
 
             if (original.CategoryModel == null) {
-                if (original.transform.parent != null && original.transform.parent.GetComponent<Gs2IdleCategoryModelList>() != null) {
+                if (original.GetComponentInParent<Gs2IdleCategoryModelList>(true) != null) {
                     EditorGUILayout.HelpBox("CategoryModel is auto assign from Gs2IdleCategoryModelList.", MessageType.Info);
                 }
                 else {

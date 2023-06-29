@@ -44,7 +44,7 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.Context
 
         public bool HasError() {
             if (LotteryModel == null) {
-                if (transform.parent != null && transform.parent.GetComponent<Gs2LotteryLotteryModelList>() != null) {
+                if (GetComponentInParent<Gs2LotteryLotteryModelList>(true) != null) {
                     return false;
                 }
                 else {

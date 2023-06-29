@@ -51,7 +51,7 @@ namespace Gs2.Unity.UiKit.Gs2Version.Localization.Editor
                 }
             }
             else {
-                if (fetcher.transform.parent == null || fetcher.transform.parent.GetComponent<Gs2VersionOwnAcceptVersionList>() != null) {
+                if (fetcher.gameObject.GetComponentInParent<Gs2VersionOwnAcceptVersionList>(true) != null) {
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2VersionOwnAcceptVersionFetcher), false);
                     EditorGUI.EndDisabledGroup();

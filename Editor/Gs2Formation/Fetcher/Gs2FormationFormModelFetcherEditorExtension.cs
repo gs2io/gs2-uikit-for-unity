@@ -48,13 +48,13 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Editor
                 }
             }
             else {
-                if (context.transform.parent.GetComponent<Gs2FormationFormModelList>() != null) {
+                if (context.gameObject.GetComponentInParent<Gs2FormationFormModelList>(true) != null) {
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2FormationFormModelContext), false);
                     EditorGUI.EndDisabledGroup();
                     EditorGUILayout.HelpBox("FormModel is auto assign from Gs2FormationFormModelList.", MessageType.Info);
                 }
-                else if (context.transform.parent.GetComponent<Gs2FormationOwnFormList>() != null) {
+                else if (context.gameObject.GetComponentInParent<Gs2FormationOwnFormList>(true) != null) {
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2FormationOwnFormContext), false);
                     EditorGUI.EndDisabledGroup();

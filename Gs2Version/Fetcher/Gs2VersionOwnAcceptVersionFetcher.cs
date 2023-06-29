@@ -53,15 +53,15 @@ namespace Gs2.Unity.UiKit.Gs2Version.Fetcher
             {
                 if (_gameSessionHolder != null && _gameSessionHolder.Initialized &&
                     _clientHolder != null && _clientHolder.Initialized &&
-                    _context != null)
+                    Context != null)
                 {
                     
                     var domain = this._clientHolder.Gs2.Version.Namespace(
-                        this._context.AcceptVersion.NamespaceName
+                        this.Context.AcceptVersion.NamespaceName
                     ).Me(
                         this._gameSessionHolder.GameSession
                     ).AcceptVersion(
-                        this._context.AcceptVersion.VersionName
+                        this.Context.AcceptVersion.VersionName
                     );
                     var future = domain.Model();
                     yield return future;
@@ -119,15 +119,15 @@ namespace Gs2.Unity.UiKit.Gs2Version.Fetcher
     {
         protected Gs2ClientHolder _clientHolder;
         protected Gs2GameSessionHolder _gameSessionHolder;
-        private Gs2VersionOwnAcceptVersionContext _context;
+        public Gs2VersionOwnAcceptVersionContext Context { get; private set; }
 
         public void Awake()
         {
             _clientHolder = Gs2ClientHolder.Instance;
             _gameSessionHolder = Gs2GameSessionHolder.Instance;
-            _context = GetComponent<Gs2VersionOwnAcceptVersionContext>() ?? GetComponentInParent<Gs2VersionOwnAcceptVersionContext>();
+            Context = GetComponent<Gs2VersionOwnAcceptVersionContext>() ?? GetComponentInParent<Gs2VersionOwnAcceptVersionContext>();
 
-            if (_context == null) {
+            if (Context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2VersionOwnAcceptVersionContext.");
                 enabled = false;
             }
@@ -135,8 +135,8 @@ namespace Gs2.Unity.UiKit.Gs2Version.Fetcher
 
         public bool HasError()
         {
-            _context = GetComponent<Gs2VersionOwnAcceptVersionContext>() ?? GetComponentInParent<Gs2VersionOwnAcceptVersionContext>(true);
-            if (_context == null) {
+            Context = GetComponent<Gs2VersionOwnAcceptVersionContext>() ?? GetComponentInParent<Gs2VersionOwnAcceptVersionContext>(true);
+            if (Context == null) {
                 return true;
             }
             return false;

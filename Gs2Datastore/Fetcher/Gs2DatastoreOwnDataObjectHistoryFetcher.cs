@@ -53,17 +53,17 @@ namespace Gs2.Unity.UiKit.Gs2Datastore.Fetcher
             {
                 if (_gameSessionHolder != null && _gameSessionHolder.Initialized &&
                     _clientHolder != null && _clientHolder.Initialized &&
-                    _context != null)
+                    Context != null)
                 {
                     
                     var domain = this._clientHolder.Gs2.Datastore.Namespace(
-                        this._context.DataObjectHistory.NamespaceName
+                        this.Context.DataObjectHistory.NamespaceName
                     ).Me(
                         this._gameSessionHolder.GameSession
                     ).DataObject(
-                        this._context.DataObjectHistory.DataObjectName
+                        this.Context.DataObjectHistory.DataObjectName
                     ).DataObjectHistory(
-                        this._context.DataObjectHistory.Generation
+                        this.Context.DataObjectHistory.Generation
                     );
                     var future = domain.Model();
                     yield return future;
@@ -121,15 +121,15 @@ namespace Gs2.Unity.UiKit.Gs2Datastore.Fetcher
     {
         protected Gs2ClientHolder _clientHolder;
         protected Gs2GameSessionHolder _gameSessionHolder;
-        private Gs2DatastoreOwnDataObjectHistoryContext _context;
+        public Gs2DatastoreOwnDataObjectHistoryContext Context { get; private set; }
 
         public void Awake()
         {
             _clientHolder = Gs2ClientHolder.Instance;
             _gameSessionHolder = Gs2GameSessionHolder.Instance;
-            _context = GetComponent<Gs2DatastoreOwnDataObjectHistoryContext>() ?? GetComponentInParent<Gs2DatastoreOwnDataObjectHistoryContext>();
+            Context = GetComponent<Gs2DatastoreOwnDataObjectHistoryContext>() ?? GetComponentInParent<Gs2DatastoreOwnDataObjectHistoryContext>();
 
-            if (_context == null) {
+            if (Context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2DatastoreOwnDataObjectHistoryContext.");
                 enabled = false;
             }
@@ -137,8 +137,8 @@ namespace Gs2.Unity.UiKit.Gs2Datastore.Fetcher
 
         public bool HasError()
         {
-            _context = GetComponent<Gs2DatastoreOwnDataObjectHistoryContext>() ?? GetComponentInParent<Gs2DatastoreOwnDataObjectHistoryContext>(true);
-            if (_context == null) {
+            Context = GetComponent<Gs2DatastoreOwnDataObjectHistoryContext>() ?? GetComponentInParent<Gs2DatastoreOwnDataObjectHistoryContext>(true);
+            if (Context == null) {
                 return true;
             }
             return false;

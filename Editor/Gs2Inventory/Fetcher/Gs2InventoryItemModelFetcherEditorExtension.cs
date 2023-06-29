@@ -48,13 +48,13 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Editor
                 }
             }
             else {
-                if (context.transform.parent.GetComponent<Gs2InventoryItemModelList>() != null) {
+                if (context.gameObject.GetComponentInParent<Gs2InventoryItemModelList>(true) != null) {
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2InventoryItemModelContext), false);
                     EditorGUI.EndDisabledGroup();
                     EditorGUILayout.HelpBox("ItemModel is auto assign from Gs2InventoryItemModelList.", MessageType.Info);
                 }
-                else if (context.transform.parent.GetComponent<Gs2InventoryOwnItemSetList>() != null) {
+                else if (context.gameObject.GetComponentInParent<Gs2InventoryOwnItemSetList>(true) != null) {
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2InventoryOwnItemSetContext), false);
                     EditorGUI.EndDisabledGroup();
@@ -66,6 +66,8 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Editor
                     EditorGUI.indentLevel++;
                     context.ItemModel = EditorGUILayout.ObjectField("ItemModel", context.ItemModel, typeof(ItemModel), false) as ItemModel;
                     EditorGUI.indentLevel++;
+                    EditorGUILayout.TextField("NamespaceName", context.ItemModel?.NamespaceName.ToString());
+                    EditorGUILayout.TextField("InventoryName", context.ItemModel?.InventoryName.ToString());
                     EditorGUILayout.TextField("ItemName", context.ItemModel?.ItemName.ToString());
                     EditorGUI.indentLevel--;
                     EditorGUI.indentLevel--;

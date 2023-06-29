@@ -51,18 +51,18 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Fetcher
             {
                 if (_gameSessionHolder != null && _gameSessionHolder.Initialized &&
                     _clientHolder != null && _clientHolder.Initialized &&
-                    _context != null && this._context.ItemSet != null)
+                    _context != null && this._context.ItemModel != null)
                 {
                     
                     var domain = this._clientHolder.Gs2.Inventory.Namespace(
-                        this._context.ItemSet.NamespaceName
+                        this._context.ItemModel.NamespaceName
                     ).Me(
                         this._gameSessionHolder.GameSession
                     ).Inventory(
-                        this._context.ItemSet.InventoryName
+                        this._context.ItemModel.InventoryName
                     ).ItemSet(
-                        this._context.ItemSet.ItemName,
-                        this._context.ItemSet.ItemSetName
+                        this._context.ItemModel.ItemName,
+                        this._context.itemSetName
                     );
                     var future = domain.Model();
                     yield return future;

@@ -56,17 +56,17 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Fetcher
             {
                 if (_gameSessionHolder != null && _gameSessionHolder.Initialized &&
                     _clientHolder != null && _clientHolder.Initialized &&
-                    _context != null && this._context.Form != null)
+                    Context != null && this.Context.Form != null)
                 {
                     
                     var domain = this._clientHolder.Gs2.Formation.Namespace(
-                        this._context.Form.NamespaceName
+                        this.Context.Form.NamespaceName
                     ).Me(
                         this._gameSessionHolder.GameSession
                     ).Mold(
-                        this._context.Form.MoldName
+                        this.Context.Form.MoldName
                     ).Form(
-                        this._context.Form.Index
+                        this.Context.Form.Index
                     );
                     var future = domain.Model();
                     yield return future;
@@ -115,17 +115,17 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Fetcher
 
     public partial class Gs2FormationOwnFormFetcher
     {
-        private Gs2ClientHolder _clientHolder;
-        private Gs2GameSessionHolder _gameSessionHolder;
-        private Gs2FormationOwnFormContext _context;
+        protected Gs2ClientHolder _clientHolder;
+        protected Gs2GameSessionHolder _gameSessionHolder;
+        public Gs2FormationOwnFormContext Context { get; private set; }
 
         public void Awake()
         {
             _clientHolder = Gs2ClientHolder.Instance;
             _gameSessionHolder = Gs2GameSessionHolder.Instance;
-            _context = GetComponent<Gs2FormationOwnFormContext>() ?? GetComponentInParent<Gs2FormationOwnFormContext>();
+            Context = GetComponent<Gs2FormationOwnFormContext>() ?? GetComponentInParent<Gs2FormationOwnFormContext>();
 
-            if (_context == null) {
+            if (Context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2FormationOwnFormContext.");
                 enabled = false;
             }
@@ -133,8 +133,8 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Fetcher
 
         public bool HasError()
         {
-            _context = GetComponent<Gs2FormationOwnFormContext>() ?? GetComponentInParent<Gs2FormationOwnFormContext>(true);
-            if (_context == null) {
+            Context = GetComponent<Gs2FormationOwnFormContext>() ?? GetComponentInParent<Gs2FormationOwnFormContext>(true);
+            if (Context == null) {
                 return true;
             }
             return false;
@@ -147,8 +147,8 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Fetcher
 
     public partial class Gs2FormationOwnFormFetcher
     {
-        public Gs2.Unity.Gs2Formation.Model.EzForm Form { get; private set; }
-        public bool Fetched { get; private set; }
+        public Gs2.Unity.Gs2Formation.Model.EzForm Form { get; protected set; }
+        public bool Fetched { get; protected set; }
     }
 
     /// <summary>

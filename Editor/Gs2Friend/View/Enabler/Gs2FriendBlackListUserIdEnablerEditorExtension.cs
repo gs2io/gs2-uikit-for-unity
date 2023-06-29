@@ -47,7 +47,7 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Enabler.Editor
                 }
             }
             else {
-                if (context.transform.parent.GetComponent<Gs2FriendOwnBlackListList>() != null) {
+                if (context.gameObject.GetComponentInParent<Gs2FriendOwnBlackListList>(true) != null) {
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2FriendOwnBlackListContext), false);
                     EditorGUI.EndDisabledGroup();

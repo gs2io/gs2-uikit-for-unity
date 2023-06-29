@@ -56,15 +56,15 @@ namespace Gs2.Unity.UiKit.Gs2Money.Fetcher
             {
                 if (_gameSessionHolder != null && _gameSessionHolder.Initialized &&
                     _clientHolder != null && _clientHolder.Initialized &&
-                    _context != null && this._context.Wallet != null)
+                    Context != null && this.Context.Wallet != null)
                 {
                     
                     var domain = this._clientHolder.Gs2.Money.Namespace(
-                        this._context.Wallet.NamespaceName
+                        this.Context.Wallet.NamespaceName
                     ).Me(
                         this._gameSessionHolder.GameSession
                     ).Wallet(
-                        this._context.Wallet.Slot
+                        this.Context.Wallet.Slot
                     );
                     var future = domain.Model();
                     yield return future;
@@ -113,17 +113,17 @@ namespace Gs2.Unity.UiKit.Gs2Money.Fetcher
 
     public partial class Gs2MoneyOwnWalletFetcher
     {
-        private Gs2ClientHolder _clientHolder;
-        private Gs2GameSessionHolder _gameSessionHolder;
-        private Gs2MoneyOwnWalletContext _context;
+        protected Gs2ClientHolder _clientHolder;
+        protected Gs2GameSessionHolder _gameSessionHolder;
+        public Gs2MoneyOwnWalletContext Context { get; private set; }
 
         public void Awake()
         {
             _clientHolder = Gs2ClientHolder.Instance;
             _gameSessionHolder = Gs2GameSessionHolder.Instance;
-            _context = GetComponent<Gs2MoneyOwnWalletContext>() ?? GetComponentInParent<Gs2MoneyOwnWalletContext>();
+            Context = GetComponent<Gs2MoneyOwnWalletContext>() ?? GetComponentInParent<Gs2MoneyOwnWalletContext>();
 
-            if (_context == null) {
+            if (Context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MoneyOwnWalletContext.");
                 enabled = false;
             }
@@ -131,8 +131,8 @@ namespace Gs2.Unity.UiKit.Gs2Money.Fetcher
 
         public bool HasError()
         {
-            _context = GetComponent<Gs2MoneyOwnWalletContext>() ?? GetComponentInParent<Gs2MoneyOwnWalletContext>(true);
-            if (_context == null) {
+            Context = GetComponent<Gs2MoneyOwnWalletContext>() ?? GetComponentInParent<Gs2MoneyOwnWalletContext>(true);
+            if (Context == null) {
                 return true;
             }
             return false;
@@ -145,8 +145,8 @@ namespace Gs2.Unity.UiKit.Gs2Money.Fetcher
 
     public partial class Gs2MoneyOwnWalletFetcher
     {
-        public Gs2.Unity.Gs2Money.Model.EzWallet Wallet { get; private set; }
-        public bool Fetched { get; private set; }
+        public Gs2.Unity.Gs2Money.Model.EzWallet Wallet { get; protected set; }
+        public bool Fetched { get; protected set; }
     }
 
     /// <summary>

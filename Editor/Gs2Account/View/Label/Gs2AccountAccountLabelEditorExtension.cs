@@ -48,13 +48,12 @@ namespace Gs2.Unity.UiKit.Gs2Account.Editor
                 }
             }
             else {
-                var context = original.GetComponent<Gs2AccountOwnAccountContext>() ?? original.GetComponentInParent<Gs2AccountOwnAccountContext>(true);
                 EditorGUI.BeginDisabledGroup(true);
                 EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2AccountOwnAccountFetcher), false);
                 EditorGUI.indentLevel++;
-                context.Account = EditorGUILayout.ObjectField("Account", context.Account, typeof(OwnAccount), false) as OwnAccount;
+                fetcher.Context.Account = EditorGUILayout.ObjectField("Account", fetcher.Context.Account, typeof(OwnAccount), false) as OwnAccount;
                 EditorGUI.indentLevel++;
-                EditorGUILayout.TextField("NamespaceName", context.Account?.NamespaceName.ToString());
+                EditorGUILayout.TextField("NamespaceName", fetcher.Context.Account?.NamespaceName.ToString());
                 EditorGUI.indentLevel--;
                 EditorGUI.indentLevel--;
                 EditorGUI.EndDisabledGroup();

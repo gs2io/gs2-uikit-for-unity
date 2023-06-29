@@ -44,7 +44,7 @@ namespace Gs2.Unity.UiKit.Gs2Dictionary.Context
 
         public bool HasError() {
             if (EntryModel == null) {
-                if (transform.parent != null && transform.parent.GetComponent<Gs2DictionaryEntryModelList>() != null) {
+                if (GetComponentInParent<Gs2DictionaryEntryModelList>(true) != null) {
                     return false;
                 }
                 else {

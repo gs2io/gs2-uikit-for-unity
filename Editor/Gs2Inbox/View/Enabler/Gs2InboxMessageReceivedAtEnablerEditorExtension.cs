@@ -47,7 +47,7 @@ namespace Gs2.Unity.UiKit.Gs2Inbox.Editor
                 }
             }
             else {
-                if (context.transform.parent.GetComponent<Gs2InboxOwnMessageList>() != null) {
+                if (context.gameObject.GetComponentInParent<Gs2InboxOwnMessageList>(true) != null) {
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2InboxOwnMessageContext), false);
                     EditorGUI.EndDisabledGroup();

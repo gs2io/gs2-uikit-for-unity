@@ -44,7 +44,7 @@ namespace Gs2.Unity.UiKit.Gs2Version.Context
 
         public bool HasError() {
             if (VersionModel == null) {
-                if (transform.parent != null && transform.parent.GetComponent<Gs2VersionVersionModelList>() != null) {
+                if (GetComponentInParent<Gs2VersionVersionModelList>(true) != null) {
                     return false;
                 }
                 else {

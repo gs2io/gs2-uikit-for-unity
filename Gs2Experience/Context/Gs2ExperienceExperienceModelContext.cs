@@ -44,7 +44,7 @@ namespace Gs2.Unity.UiKit.Gs2Experience.Context
 
         public bool HasError() {
             if (ExperienceModel == null) {
-                if (transform.parent != null && transform.parent.GetComponent<Gs2ExperienceExperienceModelList>() != null) {
+                if (GetComponentInParent<Gs2ExperienceExperienceModelList>(true) != null) {
                     return false;
                 }
                 else {

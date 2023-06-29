@@ -35,20 +35,29 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Context
     [AddComponentMenu("GS2 UIKit/Mission/Counter/Context/Convert/Gs2MissionConvertCounterModelToOwnCounter")]
     public class Gs2MissionConvertCounterModelToOwnCounter : MonoBehaviour
     {
-        private Gs2MissionCounterModelContext _context;
-        
-        public void Awake() {
-            _context = GetComponent<Gs2MissionCounterModelContext>() ?? GetComponentInParent<Gs2MissionCounterModelContext>();
+        private Gs2MissionCounterModelContext _originalContext;
+        private Gs2MissionOwnCounterContext _context;
 
-            if (_context == null) {
+        public void Awake() {
+            _originalContext = GetComponent<Gs2MissionCounterModelContext>() ?? GetComponentInParent<Gs2MissionCounterModelContext>();
+            if (_originalContext == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MissionCounterModelContext.");
+                enabled = false;
+            }
+            _context = GetComponent<Gs2MissionOwnCounterContext>();
+            if (_context == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MissionOwnCounterContext.");
                 enabled = false;
             }
         }
 
         public bool HasError()
         {
-            _context = GetComponent<Gs2MissionCounterModelContext>() ?? GetComponentInParent<Gs2MissionCounterModelContext>(true);
+            _originalContext = GetComponent<Gs2MissionCounterModelContext>() ?? GetComponentInParent<Gs2MissionCounterModelContext>(true);
+            if (_originalContext == null) {
+                return true;
+            }
+            _context = GetComponent<Gs2MissionOwnCounterContext>();
             if (_context == null) {
                 return true;
             }
@@ -56,28 +65,13 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Context
         }
 
         public void Start() {
-            this.onConverted.Invoke(
+            _context.SetOwnCounter(
                 OwnCounter.New(
-                    _context.CounterModel.Namespace,
-                    _context.CounterModel.counterName
+                    _originalContext.CounterModel.Namespace,
+                    _originalContext.CounterModel.counterName
                 )
             );
             enabled = false;
-        }
-        
-        [Serializable]
-        private class ConvertEvent : UnityEvent<OwnCounter>
-        {
-
-        }
-
-        [SerializeField]
-        private ConvertEvent onConverted = new ConvertEvent();
-
-        public event UnityAction<OwnCounter> OnConvert
-        {
-            add => onConverted.AddListener(value);
-            remove => onConverted.RemoveListener(value);
         }
     }
 }

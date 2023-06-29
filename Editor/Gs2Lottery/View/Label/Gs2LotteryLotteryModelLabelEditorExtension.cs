@@ -48,22 +48,23 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.Editor
                 }
             }
             else {
-                if (fetcher.transform.parent == null || fetcher.transform.parent.GetComponent<Gs2LotteryLotteryModelList>() != null) {
+                if (fetcher.gameObject.GetComponentInParent<Gs2LotteryLotteryModelList>(true) != null) {
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2LotteryLotteryModelFetcher), false);
                     EditorGUI.EndDisabledGroup();
                     EditorGUILayout.HelpBox("LotteryModel is auto assign from Gs2LotteryLotteryModelList.", MessageType.Info);
                 }
                 else {
-                    var context = original.GetComponent<Gs2LotteryLotteryModelContext>() ?? original.GetComponentInParent<Gs2LotteryLotteryModelContext>(true);
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2LotteryLotteryModelFetcher), false);
                     EditorGUI.indentLevel++;
-                    context.LotteryModel = EditorGUILayout.ObjectField("LotteryModel", context.LotteryModel, typeof(LotteryModel), false) as LotteryModel;
-                    EditorGUI.indentLevel++;
-                    EditorGUILayout.TextField("NamespaceName", context.LotteryModel?.NamespaceName.ToString());
-                    EditorGUILayout.TextField("LotteryName", context.LotteryModel?.LotteryName.ToString());
-                    EditorGUI.indentLevel--;
+                    if (fetcher.Context != null) {
+                        fetcher.Context.LotteryModel = EditorGUILayout.ObjectField("LotteryModel", fetcher.Context.LotteryModel, typeof(LotteryModel), false) as LotteryModel;
+                        EditorGUI.indentLevel++;
+                        EditorGUILayout.TextField("NamespaceName", fetcher.Context.LotteryModel?.NamespaceName.ToString());
+                        EditorGUILayout.TextField("LotteryName", fetcher.Context.LotteryModel?.LotteryName.ToString());
+                        EditorGUI.indentLevel--;
+                    }
                     EditorGUI.indentLevel--;
                     EditorGUI.EndDisabledGroup();
                 }

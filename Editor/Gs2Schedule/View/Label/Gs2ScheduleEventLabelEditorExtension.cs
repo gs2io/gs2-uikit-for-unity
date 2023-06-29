@@ -49,14 +49,13 @@ namespace Gs2.Unity.UiKit.Gs2Schedule.Editor
                 }
             }
             else {
-                var context = original.GetComponent<Gs2ScheduleEventContext>() ?? original.GetComponentInParent<Gs2ScheduleEventContext>(true);
                 EditorGUI.BeginDisabledGroup(true);
                 EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2ScheduleEventFetcher), false);
                 EditorGUI.indentLevel++;
-                context.Event_ = EditorGUILayout.ObjectField("Event", context.Event_, typeof(Event), false) as Event;
+                fetcher.Context.Event_ = EditorGUILayout.ObjectField("Event", fetcher.Context.Event_, typeof(Event), false) as Event;
                 EditorGUI.indentLevel++;
-                EditorGUILayout.TextField("NamespaceName", context.Event_?.NamespaceName.ToString());
-                EditorGUILayout.TextField("EventName", context.Event_?.EventName.ToString());
+                EditorGUILayout.TextField("NamespaceName", fetcher.Context.Event_?.NamespaceName.ToString());
+                EditorGUILayout.TextField("EventName", fetcher.Context.Event_?.EventName.ToString());
                 EditorGUI.indentLevel--;
                 EditorGUI.indentLevel--;
                 EditorGUI.EndDisabledGroup();

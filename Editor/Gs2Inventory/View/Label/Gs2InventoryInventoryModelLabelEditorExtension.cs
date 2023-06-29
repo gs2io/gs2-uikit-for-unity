@@ -48,28 +48,29 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Editor
                 }
             }
             else {
-                if (fetcher.transform.parent == null || fetcher.transform.parent.GetComponent<Gs2InventoryInventoryModelList>() != null) {
+                if (fetcher.gameObject.GetComponentInParent<Gs2InventoryInventoryModelList>(true) != null) {
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2InventoryInventoryModelFetcher), false);
                     EditorGUI.EndDisabledGroup();
                     EditorGUILayout.HelpBox("InventoryModel is auto assign from Gs2InventoryInventoryModelList.", MessageType.Info);
                 }
-                else if (fetcher.transform.parent == null || fetcher.transform.parent.GetComponent<Gs2InventoryOwnInventoryList>() != null) {
+                else if (fetcher.gameObject.GetComponentInParent<Gs2InventoryOwnInventoryList>(true) != null) {
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2InventoryOwnInventoryFetcher), false);
                     EditorGUI.EndDisabledGroup();
                     EditorGUILayout.HelpBox("InventoryModel is auto assign from Gs2InventoryOwnInventoryList.", MessageType.Info);
                 }
                 else {
-                    var context = original.GetComponent<Gs2InventoryInventoryModelContext>() ?? original.GetComponentInParent<Gs2InventoryInventoryModelContext>(true);
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2InventoryInventoryModelFetcher), false);
                     EditorGUI.indentLevel++;
-                    context.InventoryModel = EditorGUILayout.ObjectField("InventoryModel", context.InventoryModel, typeof(InventoryModel), false) as InventoryModel;
-                    EditorGUI.indentLevel++;
-                    EditorGUILayout.TextField("NamespaceName", context.InventoryModel?.NamespaceName.ToString());
-                    EditorGUILayout.TextField("InventoryName", context.InventoryModel?.InventoryName.ToString());
-                    EditorGUI.indentLevel--;
+                    if (fetcher.Context != null) {
+                        fetcher.Context.InventoryModel = EditorGUILayout.ObjectField("InventoryModel", fetcher.Context.InventoryModel, typeof(InventoryModel), false) as InventoryModel;
+                        EditorGUI.indentLevel++;
+                        EditorGUILayout.TextField("NamespaceName", fetcher.Context.InventoryModel?.NamespaceName.ToString());
+                        EditorGUILayout.TextField("InventoryName", fetcher.Context.InventoryModel?.InventoryName.ToString());
+                        EditorGUI.indentLevel--;
+                    }
                     EditorGUI.indentLevel--;
                     EditorGUI.EndDisabledGroup();
                 }

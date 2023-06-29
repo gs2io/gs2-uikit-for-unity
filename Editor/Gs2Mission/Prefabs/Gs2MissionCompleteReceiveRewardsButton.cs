@@ -5,7 +5,7 @@ namespace Editor.Gs2Mission.Prefabs
 {
     public static class Gs2MissionCompleteReceiveRewardsButton
     {
-        [MenuItem("GameObject/UI/Game Server Services/Mission/ReceiveRewardsButton", priority = 0)]
+        [MenuItem("GameObject/UI/Game Server Services/Mission/Group/Task/ReceiveRewardsButton", priority = 0)]
         private static void CreateButton()
         {
             var prefab = AssetDatabase.LoadAssetAtPath<GameObject>(

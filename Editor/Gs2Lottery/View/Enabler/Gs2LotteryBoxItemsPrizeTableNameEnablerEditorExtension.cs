@@ -47,7 +47,7 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.Enabler.Editor
                 }
             }
             else {
-                if (context.transform.parent.GetComponent<Gs2LotteryOwnBoxItemsList>() != null) {
+                if (context.gameObject.GetComponentInParent<Gs2LotteryOwnBoxItemsList>(true) != null) {
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2LotteryOwnBoxItemsContext), false);
                     EditorGUI.EndDisabledGroup();

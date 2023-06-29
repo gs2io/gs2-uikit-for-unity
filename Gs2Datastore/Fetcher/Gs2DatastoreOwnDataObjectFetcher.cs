@@ -53,15 +53,15 @@ namespace Gs2.Unity.UiKit.Gs2Datastore.Fetcher
             {
                 if (_gameSessionHolder != null && _gameSessionHolder.Initialized &&
                     _clientHolder != null && _clientHolder.Initialized &&
-                    _context != null)
+                    Context != null)
                 {
                     
                     var domain = this._clientHolder.Gs2.Datastore.Namespace(
-                        this._context.DataObject.NamespaceName
+                        this.Context.DataObject.NamespaceName
                     ).Me(
                         this._gameSessionHolder.GameSession
                     ).DataObject(
-                        this._context.DataObject.DataObjectName
+                        this.Context.DataObject.DataObjectName
                     );
                     var future = domain.Model();
                     yield return future;
@@ -119,15 +119,15 @@ namespace Gs2.Unity.UiKit.Gs2Datastore.Fetcher
     {
         protected Gs2ClientHolder _clientHolder;
         protected Gs2GameSessionHolder _gameSessionHolder;
-        private Gs2DatastoreOwnDataObjectContext _context;
+        public Gs2DatastoreOwnDataObjectContext Context { get; private set; }
 
         public void Awake()
         {
             _clientHolder = Gs2ClientHolder.Instance;
             _gameSessionHolder = Gs2GameSessionHolder.Instance;
-            _context = GetComponent<Gs2DatastoreOwnDataObjectContext>() ?? GetComponentInParent<Gs2DatastoreOwnDataObjectContext>();
+            Context = GetComponent<Gs2DatastoreOwnDataObjectContext>() ?? GetComponentInParent<Gs2DatastoreOwnDataObjectContext>();
 
-            if (_context == null) {
+            if (Context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2DatastoreOwnDataObjectContext.");
                 enabled = false;
             }
@@ -135,8 +135,8 @@ namespace Gs2.Unity.UiKit.Gs2Datastore.Fetcher
 
         public bool HasError()
         {
-            _context = GetComponent<Gs2DatastoreOwnDataObjectContext>() ?? GetComponentInParent<Gs2DatastoreOwnDataObjectContext>(true);
-            if (_context == null) {
+            Context = GetComponent<Gs2DatastoreOwnDataObjectContext>() ?? GetComponentInParent<Gs2DatastoreOwnDataObjectContext>(true);
+            if (Context == null) {
                 return true;
             }
             return false;

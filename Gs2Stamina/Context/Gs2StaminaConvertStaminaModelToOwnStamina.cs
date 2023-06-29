@@ -35,20 +35,29 @@ namespace Gs2.Unity.UiKit.Gs2Stamina.Context
     [AddComponentMenu("GS2 UIKit/Stamina/Stamina/Context/Convert/Gs2StaminaConvertStaminaModelToOwnStamina")]
     public class Gs2StaminaConvertStaminaModelToOwnStamina : MonoBehaviour
     {
-        private Gs2StaminaStaminaModelContext _context;
-        
-        public void Awake() {
-            _context = GetComponent<Gs2StaminaStaminaModelContext>() ?? GetComponentInParent<Gs2StaminaStaminaModelContext>();
+        private Gs2StaminaStaminaModelContext _originalContext;
+        private Gs2StaminaOwnStaminaContext _context;
 
-            if (_context == null) {
+        public void Awake() {
+            _originalContext = GetComponent<Gs2StaminaStaminaModelContext>() ?? GetComponentInParent<Gs2StaminaStaminaModelContext>();
+            if (_originalContext == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2StaminaStaminaModelContext.");
+                enabled = false;
+            }
+            _context = GetComponent<Gs2StaminaOwnStaminaContext>();
+            if (_context == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2StaminaOwnStaminaContext.");
                 enabled = false;
             }
         }
 
         public bool HasError()
         {
-            _context = GetComponent<Gs2StaminaStaminaModelContext>() ?? GetComponentInParent<Gs2StaminaStaminaModelContext>(true);
+            _originalContext = GetComponent<Gs2StaminaStaminaModelContext>() ?? GetComponentInParent<Gs2StaminaStaminaModelContext>(true);
+            if (_originalContext == null) {
+                return true;
+            }
+            _context = GetComponent<Gs2StaminaOwnStaminaContext>();
             if (_context == null) {
                 return true;
             }
@@ -56,28 +65,13 @@ namespace Gs2.Unity.UiKit.Gs2Stamina.Context
         }
 
         public void Start() {
-            this.onConverted.Invoke(
+            _context.SetOwnStamina(
                 OwnStamina.New(
-                    _context.StaminaModel.Namespace,
-                    _context.StaminaModel.staminaName
+                    _originalContext.StaminaModel.Namespace,
+                    _originalContext.StaminaModel.staminaName
                 )
             );
             enabled = false;
-        }
-        
-        [Serializable]
-        private class ConvertEvent : UnityEvent<OwnStamina>
-        {
-
-        }
-
-        [SerializeField]
-        private ConvertEvent onConverted = new ConvertEvent();
-
-        public event UnityAction<OwnStamina> OnConvert
-        {
-            add => onConverted.AddListener(value);
-            remove => onConverted.RemoveListener(value);
         }
     }
 }

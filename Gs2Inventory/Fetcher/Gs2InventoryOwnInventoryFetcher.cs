@@ -56,15 +56,15 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Fetcher
             {
                 if (_gameSessionHolder != null && _gameSessionHolder.Initialized &&
                     _clientHolder != null && _clientHolder.Initialized &&
-                    _context != null && this._context.Inventory != null)
+                    Context != null && this.Context.Inventory != null)
                 {
                     
                     var domain = this._clientHolder.Gs2.Inventory.Namespace(
-                        this._context.Inventory.NamespaceName
+                        this.Context.Inventory.NamespaceName
                     ).Me(
                         this._gameSessionHolder.GameSession
                     ).Inventory(
-                        this._context.Inventory.InventoryName
+                        this.Context.Inventory.InventoryName
                     );
                     var future = domain.Model();
                     yield return future;
@@ -113,17 +113,17 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Fetcher
 
     public partial class Gs2InventoryOwnInventoryFetcher
     {
-        private Gs2ClientHolder _clientHolder;
-        private Gs2GameSessionHolder _gameSessionHolder;
-        private Gs2InventoryOwnInventoryContext _context;
+        protected Gs2ClientHolder _clientHolder;
+        protected Gs2GameSessionHolder _gameSessionHolder;
+        public Gs2InventoryOwnInventoryContext Context { get; private set; }
 
         public void Awake()
         {
             _clientHolder = Gs2ClientHolder.Instance;
             _gameSessionHolder = Gs2GameSessionHolder.Instance;
-            _context = GetComponent<Gs2InventoryOwnInventoryContext>() ?? GetComponentInParent<Gs2InventoryOwnInventoryContext>();
+            Context = GetComponent<Gs2InventoryOwnInventoryContext>() ?? GetComponentInParent<Gs2InventoryOwnInventoryContext>();
 
-            if (_context == null) {
+            if (Context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2InventoryOwnInventoryContext.");
                 enabled = false;
             }
@@ -131,8 +131,8 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Fetcher
 
         public bool HasError()
         {
-            _context = GetComponent<Gs2InventoryOwnInventoryContext>() ?? GetComponentInParent<Gs2InventoryOwnInventoryContext>(true);
-            if (_context == null) {
+            Context = GetComponent<Gs2InventoryOwnInventoryContext>() ?? GetComponentInParent<Gs2InventoryOwnInventoryContext>(true);
+            if (Context == null) {
                 return true;
             }
             return false;
@@ -145,8 +145,8 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Fetcher
 
     public partial class Gs2InventoryOwnInventoryFetcher
     {
-        public Gs2.Unity.Gs2Inventory.Model.EzInventory Inventory { get; private set; }
-        public bool Fetched { get; private set; }
+        public Gs2.Unity.Gs2Inventory.Model.EzInventory Inventory { get; protected set; }
+        public bool Fetched { get; protected set; }
     }
 
     /// <summary>

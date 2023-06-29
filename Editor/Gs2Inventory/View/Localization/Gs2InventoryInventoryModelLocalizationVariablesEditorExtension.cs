@@ -51,13 +51,13 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Localization.Editor
                 }
             }
             else {
-                if (fetcher.transform.parent == null || fetcher.transform.parent.GetComponent<Gs2InventoryInventoryModelList>() != null) {
+                if (fetcher.gameObject.GetComponentInParent<Gs2InventoryInventoryModelList>(true) != null) {
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2InventoryInventoryModelFetcher), false);
                     EditorGUI.EndDisabledGroup();
                     EditorGUILayout.HelpBox("InventoryModel is auto assign from Gs2InventoryInventoryModelList.", MessageType.Info);
                 }
-                else if (fetcher.transform.parent == null || fetcher.transform.parent.GetComponent<Gs2InventoryOwnInventoryList>() != null) {
+                else if (fetcher.gameObject.GetComponentInParent<Gs2InventoryOwnInventoryList>(true) != null) {
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2InventoryOwnInventoryFetcher), false);
                     EditorGUI.EndDisabledGroup();

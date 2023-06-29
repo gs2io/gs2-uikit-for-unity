@@ -48,22 +48,23 @@ namespace Gs2.Unity.UiKit.Gs2MegaField.Editor
                 }
             }
             else {
-                if (fetcher.transform.parent == null || fetcher.transform.parent.GetComponent<Gs2MegaFieldAreaModelList>() != null) {
+                if (fetcher.gameObject.GetComponentInParent<Gs2MegaFieldAreaModelList>(true) != null) {
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2MegaFieldAreaModelFetcher), false);
                     EditorGUI.EndDisabledGroup();
                     EditorGUILayout.HelpBox("AreaModel is auto assign from Gs2MegaFieldAreaModelList.", MessageType.Info);
                 }
                 else {
-                    var context = original.GetComponent<Gs2MegaFieldAreaModelContext>() ?? original.GetComponentInParent<Gs2MegaFieldAreaModelContext>(true);
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2MegaFieldAreaModelFetcher), false);
                     EditorGUI.indentLevel++;
-                    context.AreaModel = EditorGUILayout.ObjectField("AreaModel", context.AreaModel, typeof(AreaModel), false) as AreaModel;
-                    EditorGUI.indentLevel++;
-                    EditorGUILayout.TextField("NamespaceName", context.AreaModel?.NamespaceName.ToString());
-                    EditorGUILayout.TextField("AreaModelName", context.AreaModel?.AreaModelName.ToString());
-                    EditorGUI.indentLevel--;
+                    if (fetcher.Context != null) {
+                        fetcher.Context.AreaModel = EditorGUILayout.ObjectField("AreaModel", fetcher.Context.AreaModel, typeof(AreaModel), false) as AreaModel;
+                        EditorGUI.indentLevel++;
+                        EditorGUILayout.TextField("NamespaceName", fetcher.Context.AreaModel?.NamespaceName.ToString());
+                        EditorGUILayout.TextField("AreaModelName", fetcher.Context.AreaModel?.AreaModelName.ToString());
+                        EditorGUI.indentLevel--;
+                    }
                     EditorGUI.indentLevel--;
                     EditorGUI.EndDisabledGroup();
                 }

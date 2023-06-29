@@ -51,13 +51,13 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Localization.Editor
                 }
             }
             else {
-                if (fetcher.transform.parent == null || fetcher.transform.parent.GetComponent<Gs2FormationFormModelList>() != null) {
+                if (fetcher.gameObject.GetComponentInParent<Gs2FormationFormModelList>(true) != null) {
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2FormationFormModelFetcher), false);
                     EditorGUI.EndDisabledGroup();
                     EditorGUILayout.HelpBox("FormModel is auto assign from Gs2FormationFormModelList.", MessageType.Info);
                 }
-                else if (fetcher.transform.parent == null || fetcher.transform.parent.GetComponent<Gs2FormationOwnFormList>() != null) {
+                else if (fetcher.gameObject.GetComponentInParent<Gs2FormationOwnFormList>(true) != null) {
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2FormationOwnFormFetcher), false);
                     EditorGUI.EndDisabledGroup();

@@ -43,7 +43,7 @@ namespace Gs2.Unity.UiKit.Gs2Experience.Editor
             serializedObject.Update();
 
             if (original.Status == null) {
-                if (original.transform.parent.GetComponent<Gs2ExperienceOwnStatusList>() != null) {
+                if (original.GetComponentInParent<Gs2ExperienceOwnStatusList>(true) != null) {
                     EditorGUILayout.HelpBox("OwnStatus is auto assign from Gs2ExperienceOwnStatusList.", MessageType.Info);
                 }
                 else {

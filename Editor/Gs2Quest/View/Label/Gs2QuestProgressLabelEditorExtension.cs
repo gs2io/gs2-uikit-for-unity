@@ -48,13 +48,12 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Editor
                 }
             }
             else {
-                var context = original.GetComponent<Gs2QuestOwnProgressContext>() ?? original.GetComponentInParent<Gs2QuestOwnProgressContext>(true);
                 EditorGUI.BeginDisabledGroup(true);
                 EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2QuestOwnProgressFetcher), false);
                 EditorGUI.indentLevel++;
-                context.Progress = EditorGUILayout.ObjectField("Progress", context.Progress, typeof(OwnProgress), false) as OwnProgress;
+                fetcher.Context.Progress = EditorGUILayout.ObjectField("Progress", fetcher.Context.Progress, typeof(OwnProgress), false) as OwnProgress;
                 EditorGUI.indentLevel++;
-                EditorGUILayout.TextField("NamespaceName", context.Progress?.NamespaceName.ToString());
+                EditorGUILayout.TextField("NamespaceName", fetcher.Context.Progress?.NamespaceName.ToString());
                 EditorGUI.indentLevel--;
                 EditorGUI.indentLevel--;
                 EditorGUI.EndDisabledGroup();

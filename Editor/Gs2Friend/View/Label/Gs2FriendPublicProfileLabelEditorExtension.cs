@@ -48,14 +48,13 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Editor
                 }
             }
             else {
-                var context = original.GetComponent<Gs2FriendPublicProfileContext>() ?? original.GetComponentInParent<Gs2FriendPublicProfileContext>(true);
                 EditorGUI.BeginDisabledGroup(true);
                 EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2FriendPublicProfileFetcher), false);
                 EditorGUI.indentLevel++;
-                context.PublicProfile = EditorGUILayout.ObjectField("PublicProfile", context.PublicProfile, typeof(PublicProfile), false) as PublicProfile;
+                fetcher.Context.PublicProfile = EditorGUILayout.ObjectField("PublicProfile", fetcher.Context.PublicProfile, typeof(PublicProfile), false) as PublicProfile;
                 EditorGUI.indentLevel++;
-                EditorGUILayout.TextField("NamespaceName", context.PublicProfile?.NamespaceName.ToString());
-                EditorGUILayout.TextField("UserId", context.PublicProfile?.UserId.ToString());
+                EditorGUILayout.TextField("NamespaceName", fetcher.Context.PublicProfile?.NamespaceName.ToString());
+                EditorGUILayout.TextField("UserId", fetcher.Context.PublicProfile?.UserId.ToString());
                 EditorGUI.indentLevel--;
                 EditorGUI.indentLevel--;
                 EditorGUI.EndDisabledGroup();

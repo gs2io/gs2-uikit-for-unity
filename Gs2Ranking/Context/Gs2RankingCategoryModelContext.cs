@@ -44,7 +44,7 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Context
 
         public bool HasError() {
             if (CategoryModel == null) {
-                if (transform.parent != null && transform.parent.GetComponent<Gs2RankingCategoryModelList>() != null) {
+                if (GetComponentInParent<Gs2RankingCategoryModelList>(true) != null) {
                     return false;
                 }
                 else {

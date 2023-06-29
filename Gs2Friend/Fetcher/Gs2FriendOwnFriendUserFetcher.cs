@@ -56,17 +56,17 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Fetcher
             {
                 if (_gameSessionHolder != null && _gameSessionHolder.Initialized &&
                     _clientHolder != null && _clientHolder.Initialized &&
-                    _context != null && this._context.FriendUser != null)
+                    Context != null && this.Context.FriendUser != null)
                 {
                     
                     var domain = this._clientHolder.Gs2.Friend.Namespace(
-                        this._context.FriendUser.NamespaceName
+                        this.Context.FriendUser.NamespaceName
                     ).Me(
                         this._gameSessionHolder.GameSession
                     ).Friend(
-                        this._context.FriendUser.WithProfile
+                        this.Context.FriendUser.WithProfile
                     ).FriendUser(
-                        this._context.FriendUser.TargetUserId
+                        this.Context.FriendUser.TargetUserId
                     );
                     var future = domain.Model();
                     yield return future;
@@ -115,17 +115,17 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Fetcher
 
     public partial class Gs2FriendOwnFriendUserFetcher
     {
-        private Gs2ClientHolder _clientHolder;
-        private Gs2GameSessionHolder _gameSessionHolder;
-        private Gs2FriendOwnFriendUserContext _context;
+        protected Gs2ClientHolder _clientHolder;
+        protected Gs2GameSessionHolder _gameSessionHolder;
+        public Gs2FriendOwnFriendUserContext Context { get; private set; }
 
         public void Awake()
         {
             _clientHolder = Gs2ClientHolder.Instance;
             _gameSessionHolder = Gs2GameSessionHolder.Instance;
-            _context = GetComponent<Gs2FriendOwnFriendUserContext>() ?? GetComponentInParent<Gs2FriendOwnFriendUserContext>();
+            Context = GetComponent<Gs2FriendOwnFriendUserContext>() ?? GetComponentInParent<Gs2FriendOwnFriendUserContext>();
 
-            if (_context == null) {
+            if (Context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2FriendOwnFriendUserContext.");
                 enabled = false;
             }
@@ -133,8 +133,8 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Fetcher
 
         public bool HasError()
         {
-            _context = GetComponent<Gs2FriendOwnFriendUserContext>() ?? GetComponentInParent<Gs2FriendOwnFriendUserContext>(true);
-            if (_context == null) {
+            Context = GetComponent<Gs2FriendOwnFriendUserContext>() ?? GetComponentInParent<Gs2FriendOwnFriendUserContext>(true);
+            if (Context == null) {
                 return true;
             }
             return false;
@@ -147,8 +147,8 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Fetcher
 
     public partial class Gs2FriendOwnFriendUserFetcher
     {
-        public Gs2.Unity.Gs2Friend.Model.EzFriendUser FriendUser { get; private set; }
-        public bool Fetched { get; private set; }
+        public Gs2.Unity.Gs2Friend.Model.EzFriendUser FriendUser { get; protected set; }
+        public bool Fetched { get; protected set; }
     }
 
     /// <summary>

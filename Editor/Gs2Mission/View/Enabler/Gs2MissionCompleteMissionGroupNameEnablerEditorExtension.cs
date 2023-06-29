@@ -47,7 +47,7 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Enabler.Editor
                 }
             }
             else {
-                if (context.transform.parent.GetComponent<Gs2MissionOwnCompleteList>() != null) {
+                if (context.gameObject.GetComponentInParent<Gs2MissionOwnCompleteList>(true) != null) {
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2MissionOwnCompleteContext), false);
                     EditorGUI.EndDisabledGroup();

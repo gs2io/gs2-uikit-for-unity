@@ -43,7 +43,7 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Editor
             serializedObject.Update();
 
             if (original.Counter == null) {
-                if (original.transform.parent.GetComponent<Gs2MissionOwnCounterList>() != null) {
+                if (original.GetComponentInParent<Gs2MissionOwnCounterList>(true) != null) {
                     EditorGUILayout.HelpBox("OwnCounter is auto assign from Gs2MissionOwnCounterList.", MessageType.Info);
                 }
                 else {

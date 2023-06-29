@@ -48,22 +48,23 @@ namespace Gs2.Unity.UiKit.Gs2Stamina.Editor
                 }
             }
             else {
-                if (fetcher.transform.parent == null || fetcher.transform.parent.GetComponent<Gs2StaminaStaminaModelList>() != null) {
+                if (fetcher.gameObject.GetComponentInParent<Gs2StaminaStaminaModelList>(true) != null) {
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2StaminaStaminaModelFetcher), false);
                     EditorGUI.EndDisabledGroup();
                     EditorGUILayout.HelpBox("StaminaModel is auto assign from Gs2StaminaStaminaModelList.", MessageType.Info);
                 }
                 else {
-                    var context = original.GetComponent<Gs2StaminaStaminaModelContext>() ?? original.GetComponentInParent<Gs2StaminaStaminaModelContext>(true);
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2StaminaStaminaModelFetcher), false);
                     EditorGUI.indentLevel++;
-                    context.StaminaModel = EditorGUILayout.ObjectField("StaminaModel", context.StaminaModel, typeof(StaminaModel), false) as StaminaModel;
-                    EditorGUI.indentLevel++;
-                    EditorGUILayout.TextField("NamespaceName", context.StaminaModel?.NamespaceName.ToString());
-                    EditorGUILayout.TextField("StaminaName", context.StaminaModel?.StaminaName.ToString());
-                    EditorGUI.indentLevel--;
+                    if (fetcher.Context != null) {
+                        fetcher.Context.StaminaModel = EditorGUILayout.ObjectField("StaminaModel", fetcher.Context.StaminaModel, typeof(StaminaModel), false) as StaminaModel;
+                        EditorGUI.indentLevel++;
+                        EditorGUILayout.TextField("NamespaceName", fetcher.Context.StaminaModel?.NamespaceName.ToString());
+                        EditorGUILayout.TextField("StaminaName", fetcher.Context.StaminaModel?.StaminaName.ToString());
+                        EditorGUI.indentLevel--;
+                    }
                     EditorGUI.indentLevel--;
                     EditorGUI.EndDisabledGroup();
                 }

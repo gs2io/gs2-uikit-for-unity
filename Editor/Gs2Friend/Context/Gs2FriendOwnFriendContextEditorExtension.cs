@@ -43,7 +43,7 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Editor
             serializedObject.Update();
 
             if (original.Friend == null) {
-                if (original.transform.parent.GetComponent<Gs2FriendOwnFriendList>() != null) {
+                if (original.GetComponentInParent<Gs2FriendOwnFriendList>(true) != null) {
                     EditorGUILayout.HelpBox("OwnFriend is auto assign from Gs2FriendOwnFriendList.", MessageType.Info);
                 }
                 else {

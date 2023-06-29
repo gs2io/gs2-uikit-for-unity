@@ -48,23 +48,24 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Editor
                 }
             }
             else {
-                if (fetcher.transform.parent == null || fetcher.transform.parent.GetComponent<Gs2FormationOwnFormList>() != null) {
+                if (fetcher.gameObject.GetComponentInParent<Gs2FormationOwnFormList>(true) != null) {
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2FormationOwnFormFetcher), false);
                     EditorGUI.EndDisabledGroup();
                     EditorGUILayout.HelpBox("Form is auto assign from Gs2FormationOwnFormList.", MessageType.Info);
                 }
                 else {
-                    var context = original.GetComponent<Gs2FormationOwnFormContext>() ?? original.GetComponentInParent<Gs2FormationOwnFormContext>(true);
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2FormationOwnFormFetcher), false);
                     EditorGUI.indentLevel++;
-                    context.Form = EditorGUILayout.ObjectField("Form", context.Form, typeof(OwnForm), false) as OwnForm;
-                    EditorGUI.indentLevel++;
-                    EditorGUILayout.TextField("NamespaceName", context.Form?.NamespaceName.ToString());
-                    EditorGUILayout.TextField("MoldName", context.Form?.MoldName.ToString());
-                    EditorGUILayout.TextField("Index", context.Form?.Index.ToString());
-                    EditorGUI.indentLevel--;
+                    if (fetcher.Context != null) {
+                        fetcher.Context.Form = EditorGUILayout.ObjectField("Form", fetcher.Context.Form, typeof(OwnForm), false) as OwnForm;
+                        EditorGUI.indentLevel++;
+                        EditorGUILayout.TextField("NamespaceName", fetcher.Context.Form?.NamespaceName.ToString());
+                        EditorGUILayout.TextField("MoldName", fetcher.Context.Form?.MoldName.ToString());
+                        EditorGUILayout.TextField("Index", fetcher.Context.Form?.Index.ToString());
+                        EditorGUI.indentLevel--;
+                    }
                     EditorGUI.indentLevel--;
                     EditorGUI.EndDisabledGroup();
                 }

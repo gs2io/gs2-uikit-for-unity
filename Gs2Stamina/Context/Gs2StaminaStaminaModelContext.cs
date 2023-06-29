@@ -44,7 +44,7 @@ namespace Gs2.Unity.UiKit.Gs2Stamina.Context
 
         public bool HasError() {
             if (StaminaModel == null) {
-                if (transform.parent != null && transform.parent.GetComponent<Gs2StaminaStaminaModelList>() != null) {
+                if (GetComponentInParent<Gs2StaminaStaminaModelList>(true) != null) {
                     return false;
                 }
                 else {

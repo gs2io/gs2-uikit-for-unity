@@ -56,15 +56,15 @@ namespace Gs2.Unity.UiKit.Gs2Inbox.Fetcher
             {
                 if (_gameSessionHolder != null && _gameSessionHolder.Initialized &&
                     _clientHolder != null && _clientHolder.Initialized &&
-                    _context != null && this._context.Message != null)
+                    Context != null && this.Context.Message != null)
                 {
                     
                     var domain = this._clientHolder.Gs2.Inbox.Namespace(
-                        this._context.Message.NamespaceName
+                        this.Context.Message.NamespaceName
                     ).Me(
                         this._gameSessionHolder.GameSession
                     ).Message(
-                        this._context.Message.MessageName
+                        this.Context.Message.MessageName
                     );
                     var future = domain.Model();
                     yield return future;
@@ -113,17 +113,17 @@ namespace Gs2.Unity.UiKit.Gs2Inbox.Fetcher
 
     public partial class Gs2InboxOwnMessageFetcher
     {
-        private Gs2ClientHolder _clientHolder;
-        private Gs2GameSessionHolder _gameSessionHolder;
-        private Gs2InboxOwnMessageContext _context;
+        protected Gs2ClientHolder _clientHolder;
+        protected Gs2GameSessionHolder _gameSessionHolder;
+        public Gs2InboxOwnMessageContext Context { get; private set; }
 
         public void Awake()
         {
             _clientHolder = Gs2ClientHolder.Instance;
             _gameSessionHolder = Gs2GameSessionHolder.Instance;
-            _context = GetComponent<Gs2InboxOwnMessageContext>() ?? GetComponentInParent<Gs2InboxOwnMessageContext>();
+            Context = GetComponent<Gs2InboxOwnMessageContext>() ?? GetComponentInParent<Gs2InboxOwnMessageContext>();
 
-            if (_context == null) {
+            if (Context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2InboxOwnMessageContext.");
                 enabled = false;
             }
@@ -131,8 +131,8 @@ namespace Gs2.Unity.UiKit.Gs2Inbox.Fetcher
 
         public bool HasError()
         {
-            _context = GetComponent<Gs2InboxOwnMessageContext>() ?? GetComponentInParent<Gs2InboxOwnMessageContext>(true);
-            if (_context == null) {
+            Context = GetComponent<Gs2InboxOwnMessageContext>() ?? GetComponentInParent<Gs2InboxOwnMessageContext>(true);
+            if (Context == null) {
                 return true;
             }
             return false;
@@ -145,8 +145,8 @@ namespace Gs2.Unity.UiKit.Gs2Inbox.Fetcher
 
     public partial class Gs2InboxOwnMessageFetcher
     {
-        public Gs2.Unity.Gs2Inbox.Model.EzMessage Message { get; private set; }
-        public bool Fetched { get; private set; }
+        public Gs2.Unity.Gs2Inbox.Model.EzMessage Message { get; protected set; }
+        public bool Fetched { get; protected set; }
     }
 
     /// <summary>

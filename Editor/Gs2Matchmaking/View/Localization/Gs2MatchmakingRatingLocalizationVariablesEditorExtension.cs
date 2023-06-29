@@ -51,7 +51,7 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking.Localization.Editor
                 }
             }
             else {
-                if (fetcher.transform.parent == null || fetcher.transform.parent.GetComponent<Gs2MatchmakingOwnRatingList>() != null) {
+                if (fetcher.gameObject.GetComponentInParent<Gs2MatchmakingOwnRatingList>(true) != null) {
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2MatchmakingOwnRatingFetcher), false);
                     EditorGUI.EndDisabledGroup();

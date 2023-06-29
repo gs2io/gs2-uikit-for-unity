@@ -43,7 +43,7 @@ namespace Gs2.Unity.UiKit.Gs2Exchange.Editor
             serializedObject.Update();
 
             if (original.RateModel == null) {
-                if (original.transform.parent != null && original.transform.parent.GetComponent<Gs2ExchangeRateModelList>() != null) {
+                if (original.GetComponentInParent<Gs2ExchangeRateModelList>(true) != null) {
                     EditorGUILayout.HelpBox("RateModel is auto assign from Gs2ExchangeRateModelList.", MessageType.Info);
                 }
                 else {

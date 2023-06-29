@@ -51,7 +51,7 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Localization.Editor
                 }
             }
             else {
-                if (fetcher.transform.parent == null || fetcher.transform.parent.GetComponent<Gs2FormationOwnFormList>() != null) {
+                if (fetcher.gameObject.GetComponentInParent<Gs2FormationOwnFormList>(true) != null) {
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2FormationOwnFormFetcher), false);
                     EditorGUI.EndDisabledGroup();

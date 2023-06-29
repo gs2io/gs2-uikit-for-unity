@@ -44,7 +44,7 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Context
 
         public bool HasError() {
             if (QuestModel == null) {
-                if (transform.parent != null && transform.parent.GetComponent<Gs2QuestQuestModelList>() != null) {
+                if (GetComponentInParent<Gs2QuestQuestModelList>(true) != null) {
                     return false;
                 }
                 else {

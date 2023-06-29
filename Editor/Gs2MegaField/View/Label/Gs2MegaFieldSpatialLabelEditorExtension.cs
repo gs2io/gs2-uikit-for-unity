@@ -48,16 +48,15 @@ namespace Gs2.Unity.UiKit.Gs2MegaField.Editor
                 }
             }
             else {
-                var context = original.GetComponent<Gs2MegaFieldSpatialContext>() ?? original.GetComponentInParent<Gs2MegaFieldSpatialContext>(true);
                 EditorGUI.BeginDisabledGroup(true);
                 EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2MegaFieldSpatialFetcher), false);
                 EditorGUI.indentLevel++;
-                context.Spatial = EditorGUILayout.ObjectField("Spatial", context.Spatial, typeof(Spatial), false) as Spatial;
+                fetcher.Context.Spatial = EditorGUILayout.ObjectField("Spatial", fetcher.Context.Spatial, typeof(Spatial), false) as Spatial;
                 EditorGUI.indentLevel++;
-                EditorGUILayout.TextField("NamespaceName", context.Spatial?.NamespaceName.ToString());
-                EditorGUILayout.TextField("UserId", context.Spatial?.UserId.ToString());
-                EditorGUILayout.TextField("AreaModelName", context.Spatial?.AreaModelName.ToString());
-                EditorGUILayout.TextField("LayerModelName", context.Spatial?.LayerModelName.ToString());
+                EditorGUILayout.TextField("NamespaceName", fetcher.Context.Spatial?.NamespaceName.ToString());
+                EditorGUILayout.TextField("UserId", fetcher.Context.Spatial?.UserId.ToString());
+                EditorGUILayout.TextField("AreaModelName", fetcher.Context.Spatial?.AreaModelName.ToString());
+                EditorGUILayout.TextField("LayerModelName", fetcher.Context.Spatial?.LayerModelName.ToString());
                 EditorGUI.indentLevel--;
                 EditorGUI.indentLevel--;
                 EditorGUI.EndDisabledGroup();

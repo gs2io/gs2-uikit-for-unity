@@ -48,7 +48,7 @@ namespace Gs2.Unity.UiKit.Gs2Schedule.Editor
                 }
             }
             else {
-                if (context.transform.parent.GetComponent<Gs2ScheduleOwnTriggerList>() != null) {
+                if (context.gameObject.GetComponentInParent<Gs2ScheduleOwnTriggerList>(true) != null) {
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2ScheduleOwnTriggerContext), false);
                     EditorGUI.EndDisabledGroup();

@@ -43,7 +43,7 @@ namespace Gs2.Unity.UiKit.Gs2Dictionary.Editor
             serializedObject.Update();
 
             if (original.EntryModel == null) {
-                if (original.transform.parent != null && original.transform.parent.GetComponent<Gs2DictionaryEntryModelList>() != null) {
+                if (original.GetComponentInParent<Gs2DictionaryEntryModelList>(true) != null) {
                     EditorGUILayout.HelpBox("EntryModel is auto assign from Gs2DictionaryEntryModelList.", MessageType.Info);
                 }
                 else {

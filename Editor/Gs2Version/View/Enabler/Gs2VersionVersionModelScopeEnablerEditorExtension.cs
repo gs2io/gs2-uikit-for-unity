@@ -47,7 +47,7 @@ namespace Gs2.Unity.UiKit.Gs2Version.Enabler.Editor
                 }
             }
             else {
-                if (context.transform.parent.GetComponent<Gs2VersionVersionModelList>() != null) {
+                if (context.gameObject.GetComponentInParent<Gs2VersionVersionModelList>(true) != null) {
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2VersionVersionModelContext), false);
                     EditorGUI.EndDisabledGroup();

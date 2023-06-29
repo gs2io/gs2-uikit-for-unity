@@ -48,14 +48,13 @@ namespace Gs2.Unity.UiKit.Gs2SerialKey.Editor
                 }
             }
             else {
-                var context = original.GetComponent<Gs2SerialKeySerialKeyContext>() ?? original.GetComponentInParent<Gs2SerialKeySerialKeyContext>(true);
                 EditorGUI.BeginDisabledGroup(true);
                 EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2SerialKeySerialKeyFetcher), false);
                 EditorGUI.indentLevel++;
-                context.SerialKey = EditorGUILayout.ObjectField("SerialKey", context.SerialKey, typeof(SerialKey), false) as SerialKey;
+                fetcher.Context.SerialKey = EditorGUILayout.ObjectField("SerialKey", fetcher.Context.SerialKey, typeof(SerialKey), false) as SerialKey;
                 EditorGUI.indentLevel++;
-                EditorGUILayout.TextField("NamespaceName", context.SerialKey?.NamespaceName.ToString());
-                EditorGUILayout.TextField("SerialKeyCode", context.SerialKey?.SerialKeyCode.ToString());
+                EditorGUILayout.TextField("NamespaceName", fetcher.Context.SerialKey?.NamespaceName.ToString());
+                EditorGUILayout.TextField("SerialKeyCode", fetcher.Context.SerialKey?.SerialKeyCode.ToString());
                 EditorGUI.indentLevel--;
                 EditorGUI.indentLevel--;
                 EditorGUI.EndDisabledGroup();

@@ -43,7 +43,7 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Editor
             serializedObject.Update();
 
             if (original.Score == null) {
-                if (original.transform.parent.GetComponent<Gs2RankingOwnScoreList>() != null) {
+                if (original.GetComponentInParent<Gs2RankingOwnScoreList>(true) != null) {
                     EditorGUILayout.HelpBox("OwnScore is auto assign from Gs2RankingOwnScoreList.", MessageType.Info);
                 }
                 else {

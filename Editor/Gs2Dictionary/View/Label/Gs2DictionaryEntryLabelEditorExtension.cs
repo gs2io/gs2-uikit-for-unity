@@ -48,22 +48,23 @@ namespace Gs2.Unity.UiKit.Gs2Dictionary.Editor
                 }
             }
             else {
-                if (fetcher.transform.parent == null || fetcher.transform.parent.GetComponent<Gs2DictionaryOwnEntryList>() != null) {
+                if (fetcher.gameObject.GetComponentInParent<Gs2DictionaryOwnEntryList>(true) != null) {
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2DictionaryOwnEntryFetcher), false);
                     EditorGUI.EndDisabledGroup();
                     EditorGUILayout.HelpBox("Entry is auto assign from Gs2DictionaryOwnEntryList.", MessageType.Info);
                 }
                 else {
-                    var context = original.GetComponent<Gs2DictionaryOwnEntryContext>() ?? original.GetComponentInParent<Gs2DictionaryOwnEntryContext>(true);
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2DictionaryOwnEntryFetcher), false);
                     EditorGUI.indentLevel++;
-                    context.Entry = EditorGUILayout.ObjectField("Entry", context.Entry, typeof(OwnEntry), false) as OwnEntry;
-                    EditorGUI.indentLevel++;
-                    EditorGUILayout.TextField("NamespaceName", context.Entry?.NamespaceName.ToString());
-                    EditorGUILayout.TextField("EntryModelName", context.Entry?.EntryModelName.ToString());
-                    EditorGUI.indentLevel--;
+                    if (fetcher.Context != null) {
+                        fetcher.Context.Entry = EditorGUILayout.ObjectField("Entry", fetcher.Context.Entry, typeof(OwnEntry), false) as OwnEntry;
+                        EditorGUI.indentLevel++;
+                        EditorGUILayout.TextField("NamespaceName", fetcher.Context.Entry?.NamespaceName.ToString());
+                        EditorGUILayout.TextField("EntryModelName", fetcher.Context.Entry?.EntryModelName.ToString());
+                        EditorGUI.indentLevel--;
+                    }
                     EditorGUI.indentLevel--;
                     EditorGUI.EndDisabledGroup();
                 }

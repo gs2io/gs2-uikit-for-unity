@@ -44,7 +44,7 @@ namespace Gs2.Unity.UiKit.Gs2Limit.Context
 
         public bool HasError() {
             if (LimitModel == null) {
-                if (transform.parent != null && transform.parent.GetComponent<Gs2LimitLimitModelList>() != null) {
+                if (GetComponentInParent<Gs2LimitLimitModelList>(true) != null) {
                     return false;
                 }
                 else {

@@ -56,15 +56,15 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Fetcher
             {
                 if (_gameSessionHolder != null && _gameSessionHolder.Initialized &&
                     _clientHolder != null && _clientHolder.Initialized &&
-                    _context != null && this._context.CompletedQuestList != null)
+                    Context != null && this.Context.CompletedQuestList != null)
                 {
                     
                     var domain = this._clientHolder.Gs2.Quest.Namespace(
-                        this._context.CompletedQuestList.NamespaceName
+                        this.Context.CompletedQuestList.NamespaceName
                     ).Me(
                         this._gameSessionHolder.GameSession
                     ).CompletedQuestList(
-                        this._context.CompletedQuestList.QuestGroupName
+                        this.Context.CompletedQuestList.QuestGroupName
                     );
                     var future = domain.Model();
                     yield return future;
@@ -113,17 +113,17 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Fetcher
 
     public partial class Gs2QuestOwnCompletedQuestListFetcher
     {
-        private Gs2ClientHolder _clientHolder;
-        private Gs2GameSessionHolder _gameSessionHolder;
-        private Gs2QuestOwnCompletedQuestListContext _context;
+        protected Gs2ClientHolder _clientHolder;
+        protected Gs2GameSessionHolder _gameSessionHolder;
+        public Gs2QuestOwnCompletedQuestListContext Context { get; private set; }
 
         public void Awake()
         {
             _clientHolder = Gs2ClientHolder.Instance;
             _gameSessionHolder = Gs2GameSessionHolder.Instance;
-            _context = GetComponent<Gs2QuestOwnCompletedQuestListContext>() ?? GetComponentInParent<Gs2QuestOwnCompletedQuestListContext>();
+            Context = GetComponent<Gs2QuestOwnCompletedQuestListContext>() ?? GetComponentInParent<Gs2QuestOwnCompletedQuestListContext>();
 
-            if (_context == null) {
+            if (Context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2QuestOwnCompletedQuestListContext.");
                 enabled = false;
             }
@@ -131,8 +131,8 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Fetcher
 
         public bool HasError()
         {
-            _context = GetComponent<Gs2QuestOwnCompletedQuestListContext>() ?? GetComponentInParent<Gs2QuestOwnCompletedQuestListContext>(true);
-            if (_context == null) {
+            Context = GetComponent<Gs2QuestOwnCompletedQuestListContext>() ?? GetComponentInParent<Gs2QuestOwnCompletedQuestListContext>(true);
+            if (Context == null) {
                 return true;
             }
             return false;
@@ -145,8 +145,8 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Fetcher
 
     public partial class Gs2QuestOwnCompletedQuestListFetcher
     {
-        public Gs2.Unity.Gs2Quest.Model.EzCompletedQuestList CompletedQuestList { get; private set; }
-        public bool Fetched { get; private set; }
+        public Gs2.Unity.Gs2Quest.Model.EzCompletedQuestList CompletedQuestList { get; protected set; }
+        public bool Fetched { get; protected set; }
     }
 
     /// <summary>

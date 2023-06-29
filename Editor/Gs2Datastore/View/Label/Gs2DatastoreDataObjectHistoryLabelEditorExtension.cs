@@ -48,23 +48,24 @@ namespace Gs2.Unity.UiKit.Gs2Datastore.Editor
                 }
             }
             else {
-                if (fetcher.transform.parent == null || fetcher.transform.parent.GetComponent<Gs2DatastoreOwnDataObjectHistoryList>() != null) {
+                if (fetcher.gameObject.GetComponentInParent<Gs2DatastoreOwnDataObjectHistoryList>(true) != null) {
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2DatastoreOwnDataObjectHistoryFetcher), false);
                     EditorGUI.EndDisabledGroup();
                     EditorGUILayout.HelpBox("DataObjectHistory is auto assign from Gs2DatastoreOwnDataObjectHistoryList.", MessageType.Info);
                 }
                 else {
-                    var context = original.GetComponent<Gs2DatastoreOwnDataObjectHistoryContext>() ?? original.GetComponentInParent<Gs2DatastoreOwnDataObjectHistoryContext>(true);
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2DatastoreOwnDataObjectHistoryFetcher), false);
                     EditorGUI.indentLevel++;
-                    context.DataObjectHistory = EditorGUILayout.ObjectField("DataObjectHistory", context.DataObjectHistory, typeof(OwnDataObjectHistory), false) as OwnDataObjectHistory;
-                    EditorGUI.indentLevel++;
-                    EditorGUILayout.TextField("NamespaceName", context.DataObjectHistory?.NamespaceName.ToString());
-                    EditorGUILayout.TextField("DataObjectName", context.DataObjectHistory?.DataObjectName.ToString());
-                    EditorGUILayout.TextField("Generation", context.DataObjectHistory?.Generation.ToString());
-                    EditorGUI.indentLevel--;
+                    if (fetcher.Context != null) {
+                        fetcher.Context.DataObjectHistory = EditorGUILayout.ObjectField("DataObjectHistory", fetcher.Context.DataObjectHistory, typeof(OwnDataObjectHistory), false) as OwnDataObjectHistory;
+                        EditorGUI.indentLevel++;
+                        EditorGUILayout.TextField("NamespaceName", fetcher.Context.DataObjectHistory?.NamespaceName.ToString());
+                        EditorGUILayout.TextField("DataObjectName", fetcher.Context.DataObjectHistory?.DataObjectName.ToString());
+                        EditorGUILayout.TextField("Generation", fetcher.Context.DataObjectHistory?.Generation.ToString());
+                        EditorGUI.indentLevel--;
+                    }
                     EditorGUI.indentLevel--;
                     EditorGUI.EndDisabledGroup();
                 }

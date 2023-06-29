@@ -48,7 +48,7 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking.Editor
                 }
             }
             else {
-                if (context.transform.parent.GetComponent<Gs2MatchmakingOwnRatingList>() != null) {
+                if (context.gameObject.GetComponentInParent<Gs2MatchmakingOwnRatingList>(true) != null) {
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2MatchmakingOwnRatingContext), false);
                     EditorGUI.EndDisabledGroup();

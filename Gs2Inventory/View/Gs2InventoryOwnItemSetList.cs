@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
@@ -47,8 +49,8 @@ namespace Gs2.Unity.UiKit.Gs2Inventory
                 for (var i = 0; i < this.maximumItems; i++) {
                     if (i < this._fetcher.ItemSets.Count) {
                         _children[i].ItemModel.itemName = this._fetcher.ItemSets[i].ItemName;
-                        _children[i].ItemSet.itemName = this._fetcher.ItemSets[i].ItemName;
-                        _children[i].ItemSet.itemSetName = this._fetcher.ItemSets[i].Name;
+                        _children[i].ItemModel.itemName = this._fetcher.ItemSets[i].ItemName;
+                        _children[i].itemSetName = this._fetcher.ItemSets[i].Name;
                         _children[i].gameObject.SetActive(true);
                     }
                     else {
@@ -87,11 +89,6 @@ namespace Gs2.Unity.UiKit.Gs2Inventory
                 var node = Instantiate(this.prefab, transform);
                 node.ItemModel = ItemModel.New(
                     _context.InventoryModel,
-                    ""
-                );
-                node.ItemSet = OwnItemSet.New(
-                    _context.Inventory,
-                    "",
                     ""
                 );
                 node.gameObject.SetActive(false);

@@ -48,7 +48,7 @@ namespace Gs2.Unity.UiKit.Gs2Chat.Editor
                 }
             }
             else {
-                if (context.transform.parent.GetComponent<Gs2ChatOwnSubscribeList>() != null) {
+                if (context.gameObject.GetComponentInParent<Gs2ChatOwnSubscribeList>(true) != null) {
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2ChatOwnSubscribeContext), false);
                     EditorGUI.EndDisabledGroup();

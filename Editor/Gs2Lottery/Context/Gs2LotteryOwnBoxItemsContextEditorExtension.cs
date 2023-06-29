@@ -43,7 +43,7 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.Editor
             serializedObject.Update();
 
             if (original.BoxItems == null) {
-                if (original.transform.parent.GetComponent<Gs2LotteryOwnBoxItemsList>() != null) {
+                if (original.GetComponentInParent<Gs2LotteryOwnBoxItemsList>(true) != null) {
                     EditorGUILayout.HelpBox("OwnBoxItems is auto assign from Gs2LotteryOwnBoxItemsList.", MessageType.Info);
                 }
                 else {

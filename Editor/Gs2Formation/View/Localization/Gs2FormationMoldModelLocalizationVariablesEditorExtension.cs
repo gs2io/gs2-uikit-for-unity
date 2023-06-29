@@ -51,13 +51,13 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Localization.Editor
                 }
             }
             else {
-                if (fetcher.transform.parent == null || fetcher.transform.parent.GetComponent<Gs2FormationMoldModelList>() != null) {
+                if (fetcher.gameObject.GetComponentInParent<Gs2FormationMoldModelList>(true) != null) {
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2FormationMoldModelFetcher), false);
                     EditorGUI.EndDisabledGroup();
                     EditorGUILayout.HelpBox("MoldModel is auto assign from Gs2FormationMoldModelList.", MessageType.Info);
                 }
-                else if (fetcher.transform.parent == null || fetcher.transform.parent.GetComponent<Gs2FormationOwnMoldList>() != null) {
+                else if (fetcher.gameObject.GetComponentInParent<Gs2FormationOwnMoldList>(true) != null) {
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2FormationOwnMoldFetcher), false);
                     EditorGUI.EndDisabledGroup();

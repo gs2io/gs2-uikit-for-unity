@@ -48,7 +48,7 @@ namespace Gs2.Unity.UiKit.Gs2Account.Editor
                 }
             }
             else {
-                if (context.transform.parent.GetComponent<Gs2AccountOwnTakeOverList>() != null) {
+                if (context.transform.GetComponentInParent<Gs2AccountOwnTakeOverList>(true) != null) {
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2AccountAccountContext), false);
                     EditorGUI.EndDisabledGroup();

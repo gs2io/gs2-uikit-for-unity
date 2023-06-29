@@ -51,7 +51,7 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.Localization.Editor
                 }
             }
             else {
-                if (fetcher.transform.parent == null || fetcher.transform.parent.GetComponent<Gs2LotteryOwnBoxItemsList>() != null) {
+                if (fetcher.gameObject.GetComponentInParent<Gs2LotteryOwnBoxItemsList>(true) != null) {
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2LotteryOwnBoxItemsFetcher), false);
                     EditorGUI.EndDisabledGroup();

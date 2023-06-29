@@ -48,22 +48,23 @@ namespace Gs2.Unity.UiKit.Gs2Version.Editor
                 }
             }
             else {
-                if (fetcher.transform.parent == null || fetcher.transform.parent.GetComponent<Gs2VersionOwnAcceptVersionList>() != null) {
+                if (fetcher.gameObject.GetComponentInParent<Gs2VersionOwnAcceptVersionList>(true) != null) {
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2VersionOwnAcceptVersionFetcher), false);
                     EditorGUI.EndDisabledGroup();
                     EditorGUILayout.HelpBox("AcceptVersion is auto assign from Gs2VersionOwnAcceptVersionList.", MessageType.Info);
                 }
                 else {
-                    var context = original.GetComponent<Gs2VersionOwnAcceptVersionContext>() ?? original.GetComponentInParent<Gs2VersionOwnAcceptVersionContext>(true);
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2VersionOwnAcceptVersionFetcher), false);
                     EditorGUI.indentLevel++;
-                    context.AcceptVersion = EditorGUILayout.ObjectField("AcceptVersion", context.AcceptVersion, typeof(OwnAcceptVersion), false) as OwnAcceptVersion;
-                    EditorGUI.indentLevel++;
-                    EditorGUILayout.TextField("NamespaceName", context.AcceptVersion?.NamespaceName.ToString());
-                    EditorGUILayout.TextField("VersionName", context.AcceptVersion?.VersionName.ToString());
-                    EditorGUI.indentLevel--;
+                    if (fetcher.Context != null) {
+                        fetcher.Context.AcceptVersion = EditorGUILayout.ObjectField("AcceptVersion", fetcher.Context.AcceptVersion, typeof(OwnAcceptVersion), false) as OwnAcceptVersion;
+                        EditorGUI.indentLevel++;
+                        EditorGUILayout.TextField("NamespaceName", fetcher.Context.AcceptVersion?.NamespaceName.ToString());
+                        EditorGUILayout.TextField("VersionName", fetcher.Context.AcceptVersion?.VersionName.ToString());
+                        EditorGUI.indentLevel--;
+                    }
                     EditorGUI.indentLevel--;
                     EditorGUI.EndDisabledGroup();
                 }

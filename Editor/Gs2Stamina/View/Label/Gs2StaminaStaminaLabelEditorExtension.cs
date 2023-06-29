@@ -48,14 +48,13 @@ namespace Gs2.Unity.UiKit.Gs2Stamina.Editor
                 }
             }
             else {
-                var context = original.GetComponent<Gs2StaminaOwnStaminaContext>() ?? original.GetComponentInParent<Gs2StaminaOwnStaminaContext>(true);
                 EditorGUI.BeginDisabledGroup(true);
                 EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2StaminaOwnStaminaFetcher), false);
                 EditorGUI.indentLevel++;
-                context.Stamina = EditorGUILayout.ObjectField("Stamina", context.Stamina, typeof(OwnStamina), false) as OwnStamina;
+                fetcher.Context.Stamina = EditorGUILayout.ObjectField("Stamina", fetcher.Context.Stamina, typeof(OwnStamina), false) as OwnStamina;
                 EditorGUI.indentLevel++;
-                EditorGUILayout.TextField("NamespaceName", context.Stamina?.NamespaceName.ToString());
-                EditorGUILayout.TextField("StaminaName", context.Stamina?.StaminaName.ToString());
+                EditorGUILayout.TextField("NamespaceName", fetcher.Context.Stamina?.NamespaceName.ToString());
+                EditorGUILayout.TextField("StaminaName", fetcher.Context.Stamina?.StaminaName.ToString());
                 EditorGUI.indentLevel--;
                 EditorGUI.indentLevel--;
                 EditorGUI.EndDisabledGroup();

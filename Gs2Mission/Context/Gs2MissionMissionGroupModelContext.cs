@@ -44,7 +44,7 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Context
 
         public bool HasError() {
             if (MissionGroupModel == null) {
-                if (transform.parent != null && transform.parent.GetComponent<Gs2MissionMissionGroupModelList>() != null) {
+                if (GetComponentInParent<Gs2MissionMissionGroupModelList>(true) != null) {
                     return false;
                 }
                 else {

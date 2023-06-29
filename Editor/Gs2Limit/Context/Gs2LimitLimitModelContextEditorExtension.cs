@@ -43,7 +43,7 @@ namespace Gs2.Unity.UiKit.Gs2Limit.Editor
             serializedObject.Update();
 
             if (original.LimitModel == null) {
-                if (original.transform.parent != null && original.transform.parent.GetComponent<Gs2LimitLimitModelList>() != null) {
+                if (original.GetComponentInParent<Gs2LimitLimitModelList>(true) != null) {
                     EditorGUILayout.HelpBox("LimitModel is auto assign from Gs2LimitLimitModelList.", MessageType.Info);
                 }
                 else {

@@ -47,7 +47,7 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Enabler.Editor
                 }
             }
             else {
-                if (context.transform.parent.GetComponent<Gs2QuestQuestGroupModelList>() != null) {
+                if (context.gameObject.GetComponentInParent<Gs2QuestQuestGroupModelList>(true) != null) {
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2QuestQuestGroupModelContext), false);
                     EditorGUI.EndDisabledGroup();

@@ -48,14 +48,13 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Editor
                 }
             }
             else {
-                var context = original.GetComponent<Gs2RankingSubscribeUserContext>() ?? original.GetComponentInParent<Gs2RankingSubscribeUserContext>(true);
                 EditorGUI.BeginDisabledGroup(true);
                 EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2RankingSubscribeUserFetcher), false);
                 EditorGUI.indentLevel++;
-                context.SubscribeUser = EditorGUILayout.ObjectField("SubscribeUser", context.SubscribeUser, typeof(SubscribeUser), false) as SubscribeUser;
+                fetcher.Context.SubscribeUser = EditorGUILayout.ObjectField("SubscribeUser", fetcher.Context.SubscribeUser, typeof(SubscribeUser), false) as SubscribeUser;
                 EditorGUI.indentLevel++;
-                EditorGUILayout.TextField("CategoryName", context.SubscribeUser?.CategoryName.ToString());
-                EditorGUILayout.TextField("TargetUserId", context.SubscribeUser?.TargetUserId.ToString());
+                EditorGUILayout.TextField("CategoryName", fetcher.Context.SubscribeUser?.CategoryName.ToString());
+                EditorGUILayout.TextField("TargetUserId", fetcher.Context.SubscribeUser?.TargetUserId.ToString());
                 EditorGUI.indentLevel--;
                 EditorGUI.indentLevel--;
                 EditorGUI.EndDisabledGroup();

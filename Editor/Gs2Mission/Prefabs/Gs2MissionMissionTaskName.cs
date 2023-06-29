@@ -5,7 +5,7 @@ namespace Editor.Gs2Mission.Prefabs
 {
     public static class Gs2MissionMissionTaskName
     {
-        [MenuItem("GameObject/UI/Game Server Services/Mission/TaskName", priority = 0)]
+        [MenuItem("GameObject/UI/Game Server Services/Mission/Group/Task/TaskName", priority = 0)]
         private static void CreateButton()
         {
             var prefab = AssetDatabase.LoadAssetAtPath<GameObject>(

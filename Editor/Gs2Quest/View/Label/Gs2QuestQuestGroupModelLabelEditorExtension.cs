@@ -48,22 +48,23 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Editor
                 }
             }
             else {
-                if (fetcher.transform.parent == null || fetcher.transform.parent.GetComponent<Gs2QuestQuestGroupModelList>() != null) {
+                if (fetcher.gameObject.GetComponentInParent<Gs2QuestQuestGroupModelList>(true) != null) {
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2QuestQuestGroupModelFetcher), false);
                     EditorGUI.EndDisabledGroup();
                     EditorGUILayout.HelpBox("QuestGroupModel is auto assign from Gs2QuestQuestGroupModelList.", MessageType.Info);
                 }
                 else {
-                    var context = original.GetComponent<Gs2QuestQuestGroupModelContext>() ?? original.GetComponentInParent<Gs2QuestQuestGroupModelContext>(true);
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2QuestQuestGroupModelFetcher), false);
                     EditorGUI.indentLevel++;
-                    context.QuestGroupModel = EditorGUILayout.ObjectField("QuestGroupModel", context.QuestGroupModel, typeof(QuestGroupModel), false) as QuestGroupModel;
-                    EditorGUI.indentLevel++;
-                    EditorGUILayout.TextField("NamespaceName", context.QuestGroupModel?.NamespaceName.ToString());
-                    EditorGUILayout.TextField("QuestGroupName", context.QuestGroupModel?.QuestGroupName.ToString());
-                    EditorGUI.indentLevel--;
+                    if (fetcher.Context != null) {
+                        fetcher.Context.QuestGroupModel = EditorGUILayout.ObjectField("QuestGroupModel", fetcher.Context.QuestGroupModel, typeof(QuestGroupModel), false) as QuestGroupModel;
+                        EditorGUI.indentLevel++;
+                        EditorGUILayout.TextField("NamespaceName", fetcher.Context.QuestGroupModel?.NamespaceName.ToString());
+                        EditorGUILayout.TextField("QuestGroupName", fetcher.Context.QuestGroupModel?.QuestGroupName.ToString());
+                        EditorGUI.indentLevel--;
+                    }
                     EditorGUI.indentLevel--;
                     EditorGUI.EndDisabledGroup();
                 }

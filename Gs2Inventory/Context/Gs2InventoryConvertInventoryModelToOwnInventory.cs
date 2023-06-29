@@ -35,20 +35,29 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Context
     [AddComponentMenu("GS2 UIKit/Inventory/Inventory/Context/Convert/Gs2InventoryConvertInventoryModelToOwnInventory")]
     public class Gs2InventoryConvertInventoryModelToOwnInventory : MonoBehaviour
     {
-        private Gs2InventoryInventoryModelContext _context;
-        
-        public void Awake() {
-            _context = GetComponent<Gs2InventoryInventoryModelContext>() ?? GetComponentInParent<Gs2InventoryInventoryModelContext>();
+        private Gs2InventoryInventoryModelContext _originalContext;
+        private Gs2InventoryOwnInventoryContext _context;
 
-            if (_context == null) {
+        public void Awake() {
+            _originalContext = GetComponent<Gs2InventoryInventoryModelContext>() ?? GetComponentInParent<Gs2InventoryInventoryModelContext>();
+            if (_originalContext == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2InventoryInventoryModelContext.");
+                enabled = false;
+            }
+            _context = GetComponent<Gs2InventoryOwnInventoryContext>();
+            if (_context == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2InventoryOwnInventoryContext.");
                 enabled = false;
             }
         }
 
         public bool HasError()
         {
-            _context = GetComponent<Gs2InventoryInventoryModelContext>() ?? GetComponentInParent<Gs2InventoryInventoryModelContext>(true);
+            _originalContext = GetComponent<Gs2InventoryInventoryModelContext>() ?? GetComponentInParent<Gs2InventoryInventoryModelContext>(true);
+            if (_originalContext == null) {
+                return true;
+            }
+            _context = GetComponent<Gs2InventoryOwnInventoryContext>();
             if (_context == null) {
                 return true;
             }
@@ -56,28 +65,13 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Context
         }
 
         public void Start() {
-            this.onConverted.Invoke(
+            _context.SetOwnInventory(
                 OwnInventory.New(
-                    _context.InventoryModel.Namespace,
-                    _context.InventoryModel.inventoryName
+                    _originalContext.InventoryModel.Namespace,
+                    _originalContext.InventoryModel.inventoryName
                 )
             );
             enabled = false;
-        }
-        
-        [Serializable]
-        private class ConvertEvent : UnityEvent<OwnInventory>
-        {
-
-        }
-
-        [SerializeField]
-        private ConvertEvent onConverted = new ConvertEvent();
-
-        public event UnityAction<OwnInventory> OnConvert
-        {
-            add => onConverted.AddListener(value);
-            remove => onConverted.RemoveListener(value);
         }
     }
 }

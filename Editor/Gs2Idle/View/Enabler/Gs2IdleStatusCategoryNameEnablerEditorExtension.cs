@@ -47,7 +47,7 @@ namespace Gs2.Unity.UiKit.Gs2Idle.Enabler.Editor
                 }
             }
             else {
-                if (context.transform.parent.GetComponent<Gs2IdleOwnStatusList>() != null) {
+                if (context.gameObject.GetComponentInParent<Gs2IdleOwnStatusList>(true) != null) {
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2IdleOwnStatusContext), false);
                     EditorGUI.EndDisabledGroup();

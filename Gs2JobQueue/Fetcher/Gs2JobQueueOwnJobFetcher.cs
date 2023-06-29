@@ -53,15 +53,15 @@ namespace Gs2.Unity.UiKit.Gs2JobQueue.Fetcher
             {
                 if (_gameSessionHolder != null && _gameSessionHolder.Initialized &&
                     _clientHolder != null && _clientHolder.Initialized &&
-                    _context != null)
+                    Context != null)
                 {
                     
                     var domain = this._clientHolder.Gs2.JobQueue.Namespace(
-                        this._context.Job.NamespaceName
+                        this.Context.Job.NamespaceName
                     ).Me(
                         this._gameSessionHolder.GameSession
                     ).Job(
-                        this._context.Job.JobName
+                        this.Context.Job.JobName
                     );
                     var future = domain.Model();
                     yield return future;
@@ -119,15 +119,15 @@ namespace Gs2.Unity.UiKit.Gs2JobQueue.Fetcher
     {
         protected Gs2ClientHolder _clientHolder;
         protected Gs2GameSessionHolder _gameSessionHolder;
-        private Gs2JobQueueOwnJobContext _context;
+        public Gs2JobQueueOwnJobContext Context { get; private set; }
 
         public void Awake()
         {
             _clientHolder = Gs2ClientHolder.Instance;
             _gameSessionHolder = Gs2GameSessionHolder.Instance;
-            _context = GetComponent<Gs2JobQueueOwnJobContext>() ?? GetComponentInParent<Gs2JobQueueOwnJobContext>();
+            Context = GetComponent<Gs2JobQueueOwnJobContext>() ?? GetComponentInParent<Gs2JobQueueOwnJobContext>();
 
-            if (_context == null) {
+            if (Context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2JobQueueOwnJobContext.");
                 enabled = false;
             }
@@ -135,8 +135,8 @@ namespace Gs2.Unity.UiKit.Gs2JobQueue.Fetcher
 
         public bool HasError()
         {
-            _context = GetComponent<Gs2JobQueueOwnJobContext>() ?? GetComponentInParent<Gs2JobQueueOwnJobContext>(true);
-            if (_context == null) {
+            Context = GetComponent<Gs2JobQueueOwnJobContext>() ?? GetComponentInParent<Gs2JobQueueOwnJobContext>(true);
+            if (Context == null) {
                 return true;
             }
             return false;

@@ -51,7 +51,7 @@ namespace Gs2.Unity.UiKit.Gs2Stamina.Localization.Editor
                 }
             }
             else {
-                if (fetcher.transform.parent == null || fetcher.transform.parent.GetComponent<Gs2StaminaStaminaModelList>() != null) {
+                if (fetcher.gameObject.GetComponentInParent<Gs2StaminaStaminaModelList>(true) != null) {
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2StaminaStaminaModelFetcher), false);
                     EditorGUI.EndDisabledGroup();

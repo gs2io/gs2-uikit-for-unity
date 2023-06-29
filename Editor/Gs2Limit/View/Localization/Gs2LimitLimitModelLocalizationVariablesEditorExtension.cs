@@ -51,7 +51,7 @@ namespace Gs2.Unity.UiKit.Gs2Limit.Localization.Editor
                 }
             }
             else {
-                if (fetcher.transform.parent == null || fetcher.transform.parent.GetComponent<Gs2LimitLimitModelList>() != null) {
+                if (fetcher.gameObject.GetComponentInParent<Gs2LimitLimitModelList>(true) != null) {
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2LimitLimitModelFetcher), false);
                     EditorGUI.EndDisabledGroup();

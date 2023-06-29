@@ -48,7 +48,7 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Editor
                 }
             }
             else {
-                if (context.transform.parent.GetComponent<Gs2FormationOwnPropertyFormList>() != null) {
+                if (context.transform.GetComponentInParent<Gs2FormationOwnPropertyFormList>(true) != null) {
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2FormationOwnPropertyFormContext), false);
                     EditorGUI.EndDisabledGroup();

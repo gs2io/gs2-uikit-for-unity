@@ -52,7 +52,7 @@ namespace Gs2.Unity.UiKit.Gs2Schedule.Localization.Editor
                 }
             }
             else {
-                if (fetcher.transform.parent == null || fetcher.transform.parent.GetComponent<Gs2ScheduleOwnTriggerList>() != null) {
+                if (fetcher.gameObject.GetComponentInParent<Gs2ScheduleOwnTriggerList>(true) != null) {
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2ScheduleOwnTriggerFetcher), false);
                     EditorGUI.EndDisabledGroup();

@@ -48,7 +48,7 @@ namespace Gs2.Unity.UiKit.Gs2Stamina.Editor
                 }
             }
             else {
-                if (context.transform.parent.GetComponent<Gs2StaminaStaminaModelList>() != null) {
+                if (context.gameObject.GetComponentInParent<Gs2StaminaStaminaModelList>(true) != null) {
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2StaminaStaminaModelContext), false);
                     EditorGUI.EndDisabledGroup();

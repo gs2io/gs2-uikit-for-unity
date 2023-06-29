@@ -48,24 +48,25 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Editor
                 }
             }
             else {
-                if (fetcher.transform.parent == null || fetcher.transform.parent.GetComponent<Gs2RankingOwnScoreList>() != null) {
+                if (fetcher.gameObject.GetComponentInParent<Gs2RankingOwnScoreList>(true) != null) {
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2RankingOwnScoreFetcher), false);
                     EditorGUI.EndDisabledGroup();
                     EditorGUILayout.HelpBox("Score is auto assign from Gs2RankingOwnScoreList.", MessageType.Info);
                 }
                 else {
-                    var context = original.GetComponent<Gs2RankingOwnScoreContext>() ?? original.GetComponentInParent<Gs2RankingOwnScoreContext>(true);
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2RankingOwnScoreFetcher), false);
                     EditorGUI.indentLevel++;
-                    context.Score = EditorGUILayout.ObjectField("Score", context.Score, typeof(OwnScore), false) as OwnScore;
-                    EditorGUI.indentLevel++;
-                    EditorGUILayout.TextField("NamespaceName", context.Score?.NamespaceName.ToString());
-                    EditorGUILayout.TextField("CategoryName", context.Score?.CategoryName.ToString());
-                    EditorGUILayout.TextField("ScorerUserId", context.Score?.ScorerUserId.ToString());
-                    EditorGUILayout.TextField("UniqueId", context.Score?.UniqueId.ToString());
-                    EditorGUI.indentLevel--;
+                    if (fetcher.Context != null) {
+                        fetcher.Context.Score = EditorGUILayout.ObjectField("Score", fetcher.Context.Score, typeof(OwnScore), false) as OwnScore;
+                        EditorGUI.indentLevel++;
+                        EditorGUILayout.TextField("NamespaceName", fetcher.Context.Score?.NamespaceName.ToString());
+                        EditorGUILayout.TextField("CategoryName", fetcher.Context.Score?.CategoryName.ToString());
+                        EditorGUILayout.TextField("ScorerUserId", fetcher.Context.Score?.ScorerUserId.ToString());
+                        EditorGUILayout.TextField("UniqueId", fetcher.Context.Score?.UniqueId.ToString());
+                        EditorGUI.indentLevel--;
+                    }
                     EditorGUI.indentLevel--;
                     EditorGUI.EndDisabledGroup();
                 }

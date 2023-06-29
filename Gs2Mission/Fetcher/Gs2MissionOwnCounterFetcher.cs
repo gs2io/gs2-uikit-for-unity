@@ -21,6 +21,10 @@
 // ReSharper disable RedundantAssignment
 // ReSharper disable NotAccessedVariable
 // ReSharper disable RedundantUsingDirective
+// ReSharper disable Unity.NoNullPropagation
+// ReSharper disable InconsistentNaming
+
+#pragma warning disable CS0472
 
 using System;
 using System.Collections;
@@ -184,6 +188,16 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Fetcher
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MissionOwnCounterContext/Gs2MissionMissionTaskModelContext.");
                 enabled = false;
             }
+        }
+
+        public bool HasError()
+        {
+            _context = GetComponent<Gs2MissionOwnCounterContext>() ?? GetComponentInParent<Gs2MissionOwnCounterContext>(true);
+            _context2 = GetComponent<Gs2MissionMissionTaskModelContext>() ?? GetComponentInParent<Gs2MissionMissionTaskModelContext>();
+            if (_context == null && _context2 == null) {
+                return true;
+            }
+            return false;
         }
     }
 

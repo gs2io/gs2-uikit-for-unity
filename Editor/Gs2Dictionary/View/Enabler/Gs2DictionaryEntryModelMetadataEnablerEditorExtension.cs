@@ -47,13 +47,13 @@ namespace Gs2.Unity.UiKit.Gs2Dictionary.Enabler.Editor
                 }
             }
             else {
-                if (context.transform.parent.GetComponent<Gs2DictionaryEntryModelList>() != null) {
+                if (context.gameObject.GetComponentInParent<Gs2DictionaryEntryModelList>(true) != null) {
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2DictionaryEntryModelContext), false);
                     EditorGUI.EndDisabledGroup();
                     EditorGUILayout.HelpBox("EntryModel is auto assign from Gs2DictionaryEntryModelList.", MessageType.Info);
                 }
-                else if (context.transform.parent.GetComponent<Gs2DictionaryOwnEntryList>() != null) {
+                else if (context.gameObject.GetComponentInParent<Gs2DictionaryOwnEntryList>(true) != null) {
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2DictionaryOwnEntryContext), false);
                     EditorGUI.EndDisabledGroup();

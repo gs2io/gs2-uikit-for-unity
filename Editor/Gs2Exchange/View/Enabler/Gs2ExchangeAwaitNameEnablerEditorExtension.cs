@@ -47,7 +47,7 @@ namespace Gs2.Unity.UiKit.Gs2Exchange.Enabler.Editor
                 }
             }
             else {
-                if (context.transform.parent.GetComponent<Gs2ExchangeOwnAwaitList>() != null) {
+                if (context.gameObject.GetComponentInParent<Gs2ExchangeOwnAwaitList>(true) != null) {
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2ExchangeOwnAwaitContext), false);
                     EditorGUI.EndDisabledGroup();

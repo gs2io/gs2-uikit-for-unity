@@ -48,7 +48,7 @@ namespace Gs2.Unity.UiKit.Gs2Enhance.Editor
                 }
             }
             else {
-                if (context.transform.parent.GetComponent<Gs2EnhanceRateModelList>() != null) {
+                if (context.gameObject.GetComponentInParent<Gs2EnhanceRateModelList>(true) != null) {
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2EnhanceRateModelContext), false);
                     EditorGUI.EndDisabledGroup();

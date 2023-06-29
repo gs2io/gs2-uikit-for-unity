@@ -43,8 +43,13 @@ namespace Gs2.Unity.UiKit.Gs2Stamina.Editor
             serializedObject.Update();
 
             if (original.Stamina == null) {
-                EditorGUILayout.HelpBox("OwnStamina not assigned.", MessageType.Error);
-                EditorGUILayout.PropertyField(serializedObject.FindProperty("Stamina"), true);
+                if (original.GetComponent<Gs2StaminaConvertStaminaModelToOwnStamina>() != null) {
+                    EditorGUILayout.HelpBox("OwnStamina is auto assign from Gs2StaminaConvertStaminaModelToOwnStamina.", MessageType.Info);
+                }
+                else {
+                    EditorGUILayout.HelpBox("OwnStamina not assigned.", MessageType.Error);
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("Stamina"), true);
+                }
             }
             else {
                 original.Stamina = EditorGUILayout.ObjectField("OwnStamina", original.Stamina, typeof(OwnStamina), false) as OwnStamina;

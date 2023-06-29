@@ -48,21 +48,22 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Editor
                 }
             }
             else {
-                if (fetcher.transform.parent == null || fetcher.transform.parent.GetComponent<Gs2QuestQuestModelList>() != null) {
+                if (fetcher.gameObject.GetComponentInParent<Gs2QuestQuestModelList>(true) != null) {
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2QuestQuestModelFetcher), false);
                     EditorGUI.EndDisabledGroup();
                     EditorGUILayout.HelpBox("QuestModel is auto assign from Gs2QuestQuestModelList.", MessageType.Info);
                 }
                 else {
-                    var context = original.GetComponent<Gs2QuestQuestModelContext>() ?? original.GetComponentInParent<Gs2QuestQuestModelContext>(true);
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2QuestQuestModelFetcher), false);
                     EditorGUI.indentLevel++;
-                    context.QuestModel = EditorGUILayout.ObjectField("QuestModel", context.QuestModel, typeof(QuestModel), false) as QuestModel;
-                    EditorGUI.indentLevel++;
-                    EditorGUILayout.TextField("QuestName", context.QuestModel?.QuestName.ToString());
-                    EditorGUI.indentLevel--;
+                    if (fetcher.Context != null) {
+                        fetcher.Context.QuestModel = EditorGUILayout.ObjectField("QuestModel", fetcher.Context.QuestModel, typeof(QuestModel), false) as QuestModel;
+                        EditorGUI.indentLevel++;
+                        EditorGUILayout.TextField("QuestName", fetcher.Context.QuestModel?.QuestName.ToString());
+                        EditorGUI.indentLevel--;
+                    }
                     EditorGUI.indentLevel--;
                     EditorGUI.EndDisabledGroup();
                 }

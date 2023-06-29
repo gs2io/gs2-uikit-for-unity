@@ -43,7 +43,7 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Editor
             serializedObject.Update();
 
             if (original.Ranking == null) {
-                if (original.transform.parent != null && original.transform.parent.GetComponent<Gs2RankingRankingList>() != null) {
+                if (original.GetComponentInParent<Gs2RankingRankingList>(true) != null) {
                     EditorGUILayout.HelpBox("Ranking is auto assign from Gs2RankingRankingList.", MessageType.Info);
                 }
                 else {

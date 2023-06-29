@@ -48,21 +48,22 @@ namespace Gs2.Unity.UiKit.Gs2MegaField.Editor
                 }
             }
             else {
-                if (fetcher.transform.parent == null || fetcher.transform.parent.GetComponent<Gs2MegaFieldLayerModelList>() != null) {
+                if (fetcher.gameObject.GetComponentInParent<Gs2MegaFieldLayerModelList>(true) != null) {
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2MegaFieldLayerModelFetcher), false);
                     EditorGUI.EndDisabledGroup();
                     EditorGUILayout.HelpBox("LayerModel is auto assign from Gs2MegaFieldLayerModelList.", MessageType.Info);
                 }
                 else {
-                    var context = original.GetComponent<Gs2MegaFieldLayerModelContext>() ?? original.GetComponentInParent<Gs2MegaFieldLayerModelContext>(true);
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2MegaFieldLayerModelFetcher), false);
                     EditorGUI.indentLevel++;
-                    context.LayerModel = EditorGUILayout.ObjectField("LayerModel", context.LayerModel, typeof(LayerModel), false) as LayerModel;
-                    EditorGUI.indentLevel++;
-                    EditorGUILayout.TextField("LayerModelName", context.LayerModel?.LayerModelName.ToString());
-                    EditorGUI.indentLevel--;
+                    if (fetcher.Context != null) {
+                        fetcher.Context.LayerModel = EditorGUILayout.ObjectField("LayerModel", fetcher.Context.LayerModel, typeof(LayerModel), false) as LayerModel;
+                        EditorGUI.indentLevel++;
+                        EditorGUILayout.TextField("LayerModelName", fetcher.Context.LayerModel?.LayerModelName.ToString());
+                        EditorGUI.indentLevel--;
+                    }
                     EditorGUI.indentLevel--;
                     EditorGUI.EndDisabledGroup();
                 }

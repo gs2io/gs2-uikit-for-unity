@@ -51,13 +51,13 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Localization.Editor
                 }
             }
             else {
-                if (fetcher.transform.parent == null || fetcher.transform.parent.GetComponent<Gs2MissionCounterModelList>() != null) {
+                if (fetcher.gameObject.GetComponentInParent<Gs2MissionCounterModelList>(true) != null) {
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2MissionCounterModelFetcher), false);
                     EditorGUI.EndDisabledGroup();
                     EditorGUILayout.HelpBox("CounterModel is auto assign from Gs2MissionCounterModelList.", MessageType.Info);
                 }
-                else if (fetcher.transform.parent == null || fetcher.transform.parent.GetComponent<Gs2MissionOwnCounterList>() != null) {
+                else if (fetcher.gameObject.GetComponentInParent<Gs2MissionOwnCounterList>(true) != null) {
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2MissionOwnCounterFetcher), false);
                     EditorGUI.EndDisabledGroup();

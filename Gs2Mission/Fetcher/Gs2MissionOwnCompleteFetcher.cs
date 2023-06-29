@@ -56,15 +56,15 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Fetcher
             {
                 if (_gameSessionHolder != null && _gameSessionHolder.Initialized &&
                     _clientHolder != null && _clientHolder.Initialized &&
-                    _context != null && this._context.Complete != null)
+                    Context != null && this.Context.Complete != null)
                 {
                     
                     var domain = this._clientHolder.Gs2.Mission.Namespace(
-                        this._context.Complete.NamespaceName
+                        this.Context.Complete.NamespaceName
                     ).Me(
                         this._gameSessionHolder.GameSession
                     ).Complete(
-                        this._context.Complete.MissionGroupName
+                        this.Context.Complete.MissionGroupName
                     );
                     var future = domain.Model();
                     yield return future;
@@ -113,17 +113,17 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Fetcher
 
     public partial class Gs2MissionOwnCompleteFetcher
     {
-        private Gs2ClientHolder _clientHolder;
-        private Gs2GameSessionHolder _gameSessionHolder;
-        private Gs2MissionOwnCompleteContext _context;
+        protected Gs2ClientHolder _clientHolder;
+        protected Gs2GameSessionHolder _gameSessionHolder;
+        public Gs2MissionOwnCompleteContext Context { get; private set; }
 
         public void Awake()
         {
             _clientHolder = Gs2ClientHolder.Instance;
             _gameSessionHolder = Gs2GameSessionHolder.Instance;
-            _context = GetComponent<Gs2MissionOwnCompleteContext>() ?? GetComponentInParent<Gs2MissionOwnCompleteContext>();
+            Context = GetComponent<Gs2MissionOwnCompleteContext>() ?? GetComponentInParent<Gs2MissionOwnCompleteContext>();
 
-            if (_context == null) {
+            if (Context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MissionOwnCompleteContext.");
                 enabled = false;
             }
@@ -131,8 +131,8 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Fetcher
 
         public bool HasError()
         {
-            _context = GetComponent<Gs2MissionOwnCompleteContext>() ?? GetComponentInParent<Gs2MissionOwnCompleteContext>(true);
-            if (_context == null) {
+            Context = GetComponent<Gs2MissionOwnCompleteContext>() ?? GetComponentInParent<Gs2MissionOwnCompleteContext>(true);
+            if (Context == null) {
                 return true;
             }
             return false;
@@ -145,8 +145,8 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Fetcher
 
     public partial class Gs2MissionOwnCompleteFetcher
     {
-        public Gs2.Unity.Gs2Mission.Model.EzComplete Complete { get; private set; }
-        public bool Fetched { get; private set; }
+        public Gs2.Unity.Gs2Mission.Model.EzComplete Complete { get; protected set; }
+        public bool Fetched { get; protected set; }
     }
 
     /// <summary>

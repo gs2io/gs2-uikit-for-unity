@@ -51,13 +51,13 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking.Localization.Editor
                 }
             }
             else {
-                if (fetcher.transform.parent == null || fetcher.transform.parent.GetComponent<Gs2MatchmakingRatingModelList>() != null) {
+                if (fetcher.gameObject.GetComponentInParent<Gs2MatchmakingRatingModelList>(true) != null) {
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2MatchmakingRatingModelFetcher), false);
                     EditorGUI.EndDisabledGroup();
                     EditorGUILayout.HelpBox("RatingModel is auto assign from Gs2MatchmakingRatingModelList.", MessageType.Info);
                 }
-                else if (fetcher.transform.parent == null || fetcher.transform.parent.GetComponent<Gs2MatchmakingOwnRatingList>() != null) {
+                else if (fetcher.gameObject.GetComponentInParent<Gs2MatchmakingOwnRatingList>(true) != null) {
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2MatchmakingOwnRatingFetcher), false);
                     EditorGUI.EndDisabledGroup();

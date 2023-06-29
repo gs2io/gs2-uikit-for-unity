@@ -17,17 +17,26 @@
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
+// ReSharper disable RedundantNameQualifier
+// ReSharper disable RedundantAssignment
+// ReSharper disable NotAccessedVariable
+// ReSharper disable RedundantUsingDirective
+// ReSharper disable Unity.NoNullPropagation
+// ReSharper disable InconsistentNaming
+
+#pragma warning disable CS0472
 
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Text;
 using System.Text;
 using Gs2.Core.Exception;
 using Gs2.Unity.Core.Exception;
 using Gs2.Unity.Gs2Chat.Model;
 using Gs2.Unity.Gs2Chat.ScriptableObject;
 using Gs2.Unity.Util;
+using Gs2.Unity.UiKit.Core;
+using Gs2.Unity.UiKit.Gs2Core.Fetcher;
 using Gs2.Unity.UiKit.Gs2Chat.Context;
 using UnityEngine;
 using UnityEngine.Events;
@@ -43,21 +52,22 @@ namespace Gs2.Unity.UiKit.Gs2Chat.Fetcher
     {
         private IEnumerator Fetch()
         {
+            var retryWaitSecond = 1;
             Gs2Exception e;
             while (true)
             {
                 if (_gameSessionHolder != null && _gameSessionHolder.Initialized &&
                     _clientHolder != null && _clientHolder.Initialized &&
-                    _context != null)
+                    Context != null && this.Context.Room != null)
                 {
                     
                     var domain = this._clientHolder.Gs2.Chat.Namespace(
-                        this._context.Room.NamespaceName
+                        this.Context.Room.NamespaceName
                     ).Me(
                         this._gameSessionHolder.GameSession
                     ).Room(
-                        this._context.Room.RoomName,
-                        this._context.Room.Password
+                        this.Context.Room.RoomName,
+                        this.Context.Room.Password
                     );
                     var future = domain.Model();
                     yield return future;
@@ -66,13 +76,18 @@ namespace Gs2.Unity.UiKit.Gs2Chat.Fetcher
                         if (future.Error is BadRequestException || future.Error is NotFoundException)
                         {
                             onError.Invoke(e = future.Error, null);
+                            Debug.LogError($"{gameObject.GetFullPath()}: {future.Error.Message}");
                             break;
                         }
-
-                        onError.Invoke(new CanIgnoreException(future.Error), null);
+                        else {
+                            onError.Invoke(new CanIgnoreException(future.Error), null);
+                        }
+                        yield return new WaitForSeconds(retryWaitSecond);
+                        retryWaitSecond *= 2;
                     }
                     else
                     {
+                        retryWaitSecond = 1;
                         Room = future.Result;
                         Fetched = true;
                     }
@@ -81,20 +96,7 @@ namespace Gs2.Unity.UiKit.Gs2Chat.Fetcher
                     yield return new WaitForSeconds(1);
                 }
             }
-
-            var transform1 = transform;
-            var builder = new StringBuilder(transform1.name);
-            var current = transform1.parent;
-
-            while (current != null)
-            {
-                builder.Insert(0, current.name + "/");
-                current = current.parent;
-            }
-
-            Debug.LogError(e);
-            Debug.LogError($"{GetType()} の自動更新が停止されました。 {builder}");
-            Debug.LogError($"Automatic update of {GetType()} has been stopped. {builder}");
+            // ReSharper disable once IteratorNeverReturns
         }
 
         public void OnEnable()
@@ -116,13 +118,27 @@ namespace Gs2.Unity.UiKit.Gs2Chat.Fetcher
     {
         protected Gs2ClientHolder _clientHolder;
         protected Gs2GameSessionHolder _gameSessionHolder;
-        private Gs2ChatRoomContext _context;
+        public Gs2ChatRoomContext Context { get; private set; }
 
         public void Awake()
         {
             _clientHolder = Gs2ClientHolder.Instance;
             _gameSessionHolder = Gs2GameSessionHolder.Instance;
-            _context = GetComponentInParent<Gs2ChatRoomContext>();
+            Context = GetComponent<Gs2ChatRoomContext>() ?? GetComponentInParent<Gs2ChatRoomContext>();
+
+            if (Context == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ChatRoomContext.");
+                enabled = false;
+            }
+        }
+
+        public bool HasError()
+        {
+            Context = GetComponent<Gs2ChatRoomContext>() ?? GetComponentInParent<Gs2ChatRoomContext>(true);
+            if (Context == null) {
+                return true;
+            }
+            return false;
         }
     }
 

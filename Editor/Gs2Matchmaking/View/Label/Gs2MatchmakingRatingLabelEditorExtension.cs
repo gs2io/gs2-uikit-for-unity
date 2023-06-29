@@ -48,22 +48,23 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking.Editor
                 }
             }
             else {
-                if (fetcher.transform.parent == null || fetcher.transform.parent.GetComponent<Gs2MatchmakingOwnRatingList>() != null) {
+                if (fetcher.gameObject.GetComponentInParent<Gs2MatchmakingOwnRatingList>(true) != null) {
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2MatchmakingOwnRatingFetcher), false);
                     EditorGUI.EndDisabledGroup();
                     EditorGUILayout.HelpBox("Rating is auto assign from Gs2MatchmakingOwnRatingList.", MessageType.Info);
                 }
                 else {
-                    var context = original.GetComponent<Gs2MatchmakingOwnRatingContext>() ?? original.GetComponentInParent<Gs2MatchmakingOwnRatingContext>(true);
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2MatchmakingOwnRatingFetcher), false);
                     EditorGUI.indentLevel++;
-                    context.Rating = EditorGUILayout.ObjectField("Rating", context.Rating, typeof(OwnRating), false) as OwnRating;
-                    EditorGUI.indentLevel++;
-                    EditorGUILayout.TextField("NamespaceName", context.Rating?.NamespaceName.ToString());
-                    EditorGUILayout.TextField("RatingName", context.Rating?.RatingName.ToString());
-                    EditorGUI.indentLevel--;
+                    if (fetcher.Context != null) {
+                        fetcher.Context.Rating = EditorGUILayout.ObjectField("Rating", fetcher.Context.Rating, typeof(OwnRating), false) as OwnRating;
+                        EditorGUI.indentLevel++;
+                        EditorGUILayout.TextField("NamespaceName", fetcher.Context.Rating?.NamespaceName.ToString());
+                        EditorGUILayout.TextField("RatingName", fetcher.Context.Rating?.RatingName.ToString());
+                        EditorGUI.indentLevel--;
+                    }
                     EditorGUI.indentLevel--;
                     EditorGUI.EndDisabledGroup();
                 }

@@ -48,23 +48,24 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Editor
                 }
             }
             else {
-                if (fetcher.transform.parent == null || fetcher.transform.parent.GetComponent<Gs2FormationOwnPropertyFormList>() != null) {
+                if (fetcher.gameObject.GetComponentInParent<Gs2FormationOwnPropertyFormList>(true) != null) {
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2FormationOwnPropertyFormFetcher), false);
                     EditorGUI.EndDisabledGroup();
                     EditorGUILayout.HelpBox("PropertyForm is auto assign from Gs2FormationOwnPropertyFormList.", MessageType.Info);
                 }
                 else {
-                    var context = original.GetComponent<Gs2FormationOwnPropertyFormContext>() ?? original.GetComponentInParent<Gs2FormationOwnPropertyFormContext>(true);
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2FormationOwnPropertyFormFetcher), false);
                     EditorGUI.indentLevel++;
-                    context.PropertyForm = EditorGUILayout.ObjectField("PropertyForm", context.PropertyForm, typeof(OwnPropertyForm), false) as OwnPropertyForm;
-                    EditorGUI.indentLevel++;
-                    EditorGUILayout.TextField("NamespaceName", context.PropertyForm?.NamespaceName.ToString());
-                    EditorGUILayout.TextField("FormModelName", context.PropertyForm?.FormModelName.ToString());
-                    EditorGUILayout.TextField("PropertyId", context.PropertyForm?.PropertyId.ToString());
-                    EditorGUI.indentLevel--;
+                    if (fetcher.Context != null) {
+                        fetcher.Context.PropertyForm = EditorGUILayout.ObjectField("PropertyForm", fetcher.Context.PropertyForm, typeof(OwnPropertyForm), false) as OwnPropertyForm;
+                        EditorGUI.indentLevel++;
+                        EditorGUILayout.TextField("NamespaceName", fetcher.Context.PropertyForm?.NamespaceName.ToString());
+                        EditorGUILayout.TextField("FormModelName", fetcher.Context.PropertyForm?.FormModelName.ToString());
+                        EditorGUILayout.TextField("PropertyId", fetcher.Context.PropertyForm?.PropertyId.ToString());
+                        EditorGUI.indentLevel--;
+                    }
                     EditorGUI.indentLevel--;
                     EditorGUI.EndDisabledGroup();
                 }

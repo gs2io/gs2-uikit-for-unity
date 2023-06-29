@@ -43,7 +43,7 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Editor
             serializedObject.Update();
 
             if (original.Complete == null) {
-                if (original.transform.parent.GetComponent<Gs2MissionOwnCompleteList>() != null) {
+                if (original.GetComponentInParent<Gs2MissionOwnCompleteList>(true) != null) {
                     EditorGUILayout.HelpBox("OwnComplete is auto assign from Gs2MissionOwnCompleteList.", MessageType.Info);
                 }
                 else {

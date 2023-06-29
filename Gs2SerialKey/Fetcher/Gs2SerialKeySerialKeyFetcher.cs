@@ -17,11 +17,18 @@
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
+// ReSharper disable RedundantNameQualifier
+// ReSharper disable RedundantAssignment
+// ReSharper disable NotAccessedVariable
+// ReSharper disable RedundantUsingDirective
+// ReSharper disable Unity.NoNullPropagation
+// ReSharper disable InconsistentNaming
+
+#pragma warning disable CS0472
 
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Text;
 using System.Text;
 using Gs2.Core.Exception;
 using Gs2.Unity.Core.Exception;
@@ -29,6 +36,7 @@ using Gs2.Unity.Gs2SerialKey.Model;
 using Gs2.Unity.Gs2SerialKey.ScriptableObject;
 using Gs2.Unity.Util;
 using Gs2.Unity.UiKit.Core;
+using Gs2.Unity.UiKit.Gs2Core.Fetcher;
 using Gs2.Unity.UiKit.Gs2SerialKey.Context;
 using UnityEngine;
 using UnityEngine.Events;
@@ -50,15 +58,15 @@ namespace Gs2.Unity.UiKit.Gs2SerialKey.Fetcher
             {
                 if (_gameSessionHolder != null && _gameSessionHolder.Initialized &&
                     _clientHolder != null && _clientHolder.Initialized &&
-                    _context != null && this._context.SerialKey != null)
+                    Context != null && this.Context.SerialKey != null)
                 {
                     
                     var domain = this._clientHolder.Gs2.SerialKey.Namespace(
-                        this._context.SerialKey.NamespaceName
+                        this.Context.SerialKey.NamespaceName
                     ).User(
-                        this._context.SerialKey.UserId
+                        this.Context.SerialKey.UserId
                     ).SerialKey(
-                        this._context.SerialKey.SerialKeyCode
+                        this.Context.SerialKey.SerialKeyCode
                     );
                     var future = domain.Model();
                     yield return future;
@@ -109,18 +117,27 @@ namespace Gs2.Unity.UiKit.Gs2SerialKey.Fetcher
     {
         protected Gs2ClientHolder _clientHolder;
         protected Gs2GameSessionHolder _gameSessionHolder;
-        private Gs2SerialKeySerialKeyContext _context;
+        public Gs2SerialKeySerialKeyContext Context { get; private set; }
 
         public void Awake()
         {
             _clientHolder = Gs2ClientHolder.Instance;
             _gameSessionHolder = Gs2GameSessionHolder.Instance;
-            _context = GetComponentInParent<Gs2SerialKeySerialKeyContext>();
+            Context = GetComponent<Gs2SerialKeySerialKeyContext>() ?? GetComponentInParent<Gs2SerialKeySerialKeyContext>();
 
-            if (_context == null) {
+            if (Context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2SerialKeySerialKeyContext.");
                 enabled = false;
             }
+        }
+
+        public bool HasError()
+        {
+            Context = GetComponent<Gs2SerialKeySerialKeyContext>() ?? GetComponentInParent<Gs2SerialKeySerialKeyContext>(true);
+            if (Context == null) {
+                return true;
+            }
+            return false;
         }
     }
 

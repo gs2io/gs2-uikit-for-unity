@@ -55,6 +55,7 @@ namespace Gs2.Unity.UiKit.Gs2Chat.Editor
                 EditorGUI.indentLevel++;
                 EditorGUILayout.TextField("NamespaceName", context.Room?.NamespaceName.ToString());
                 EditorGUILayout.TextField("RoomName", context.Room?.RoomName.ToString());
+                EditorGUILayout.TextField("Password", context.Room?.Password.ToString());
                 EditorGUI.indentLevel--;
                 EditorGUI.indentLevel--;
                 EditorGUI.EndDisabledGroup();

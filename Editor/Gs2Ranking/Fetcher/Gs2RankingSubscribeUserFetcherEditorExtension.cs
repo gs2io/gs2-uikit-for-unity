@@ -53,6 +53,7 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Editor
                 EditorGUI.indentLevel++;
                 context.SubscribeUser = EditorGUILayout.ObjectField("SubscribeUser", context.SubscribeUser, typeof(SubscribeUser), false) as SubscribeUser;
                 EditorGUI.indentLevel++;
+                EditorGUILayout.TextField("NamespaceName", context.SubscribeUser?.NamespaceName.ToString());
                 EditorGUILayout.TextField("CategoryName", context.SubscribeUser?.CategoryName.ToString());
                 EditorGUILayout.TextField("TargetUserId", context.SubscribeUser?.TargetUserId.ToString());
                 EditorGUI.indentLevel--;

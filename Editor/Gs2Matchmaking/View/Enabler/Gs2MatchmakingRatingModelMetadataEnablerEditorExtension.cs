@@ -47,13 +47,13 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking.Enabler.Editor
                 }
             }
             else {
-                if (context.transform.parent.GetComponent<Gs2MatchmakingRatingModelList>() != null) {
+                if (context.gameObject.GetComponentInParent<Gs2MatchmakingRatingModelList>(true) != null) {
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2MatchmakingRatingModelContext), false);
                     EditorGUI.EndDisabledGroup();
                     EditorGUILayout.HelpBox("RatingModel is auto assign from Gs2MatchmakingRatingModelList.", MessageType.Info);
                 }
-                else if (context.transform.parent.GetComponent<Gs2MatchmakingOwnRatingList>() != null) {
+                else if (context.gameObject.GetComponentInParent<Gs2MatchmakingOwnRatingList>(true) != null) {
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2MatchmakingOwnRatingContext), false);
                     EditorGUI.EndDisabledGroup();

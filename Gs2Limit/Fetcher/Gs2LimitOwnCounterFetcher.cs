@@ -56,16 +56,16 @@ namespace Gs2.Unity.UiKit.Gs2Limit.Fetcher
             {
                 if (_gameSessionHolder != null && _gameSessionHolder.Initialized &&
                     _clientHolder != null && _clientHolder.Initialized &&
-                    _context != null && this._context.Counter != null)
+                    Context != null && this.Context.Counter != null)
                 {
                     
                     var domain = this._clientHolder.Gs2.Limit.Namespace(
-                        this._context.Counter.NamespaceName
+                        this.Context.Counter.NamespaceName
                     ).Me(
                         this._gameSessionHolder.GameSession
                     ).Counter(
-                        this._context.Counter.LimitName,
-                        this._context.Counter.CounterName
+                        this.Context.Counter.LimitName,
+                        this.Context.Counter.CounterName
                     );
                     var future = domain.Model();
                     yield return future;
@@ -114,17 +114,17 @@ namespace Gs2.Unity.UiKit.Gs2Limit.Fetcher
 
     public partial class Gs2LimitOwnCounterFetcher
     {
-        private Gs2ClientHolder _clientHolder;
-        private Gs2GameSessionHolder _gameSessionHolder;
-        private Gs2LimitOwnCounterContext _context;
+        protected Gs2ClientHolder _clientHolder;
+        protected Gs2GameSessionHolder _gameSessionHolder;
+        public Gs2LimitOwnCounterContext Context { get; private set; }
 
         public void Awake()
         {
             _clientHolder = Gs2ClientHolder.Instance;
             _gameSessionHolder = Gs2GameSessionHolder.Instance;
-            _context = GetComponent<Gs2LimitOwnCounterContext>() ?? GetComponentInParent<Gs2LimitOwnCounterContext>();
+            Context = GetComponent<Gs2LimitOwnCounterContext>() ?? GetComponentInParent<Gs2LimitOwnCounterContext>();
 
-            if (_context == null) {
+            if (Context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2LimitOwnCounterContext.");
                 enabled = false;
             }
@@ -132,8 +132,8 @@ namespace Gs2.Unity.UiKit.Gs2Limit.Fetcher
 
         public bool HasError()
         {
-            _context = GetComponent<Gs2LimitOwnCounterContext>() ?? GetComponentInParent<Gs2LimitOwnCounterContext>(true);
-            if (_context == null) {
+            Context = GetComponent<Gs2LimitOwnCounterContext>() ?? GetComponentInParent<Gs2LimitOwnCounterContext>(true);
+            if (Context == null) {
                 return true;
             }
             return false;
@@ -146,8 +146,8 @@ namespace Gs2.Unity.UiKit.Gs2Limit.Fetcher
 
     public partial class Gs2LimitOwnCounterFetcher
     {
-        public Gs2.Unity.Gs2Limit.Model.EzCounter Counter { get; private set; }
-        public bool Fetched { get; private set; }
+        public Gs2.Unity.Gs2Limit.Model.EzCounter Counter { get; protected set; }
+        public bool Fetched { get; protected set; }
     }
 
     /// <summary>

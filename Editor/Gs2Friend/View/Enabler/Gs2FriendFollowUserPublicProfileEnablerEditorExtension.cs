@@ -47,7 +47,7 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Enabler.Editor
                 }
             }
             else {
-                if (context.transform.parent.GetComponent<Gs2FriendOwnFollowUserList>() != null) {
+                if (context.gameObject.GetComponentInParent<Gs2FriendOwnFollowUserList>(true) != null) {
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2FriendOwnFollowUserContext), false);
                     EditorGUI.EndDisabledGroup();

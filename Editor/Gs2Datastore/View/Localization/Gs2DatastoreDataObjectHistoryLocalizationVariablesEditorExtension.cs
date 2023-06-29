@@ -51,7 +51,7 @@ namespace Gs2.Unity.UiKit.Gs2Datastore.Localization.Editor
                 }
             }
             else {
-                if (fetcher.transform.parent == null || fetcher.transform.parent.GetComponent<Gs2DatastoreOwnDataObjectHistoryList>() != null) {
+                if (fetcher.gameObject.GetComponentInParent<Gs2DatastoreOwnDataObjectHistoryList>(true) != null) {
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2DatastoreOwnDataObjectHistoryFetcher), false);
                     EditorGUI.EndDisabledGroup();

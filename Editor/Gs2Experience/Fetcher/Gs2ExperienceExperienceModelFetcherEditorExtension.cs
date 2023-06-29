@@ -48,7 +48,7 @@ namespace Gs2.Unity.UiKit.Gs2Experience.Editor
                 }
             }
             else {
-                if (context.transform.parent.GetComponent<Gs2ExperienceExperienceModelList>() != null) {
+                if (context.gameObject.GetComponentInParent<Gs2ExperienceExperienceModelList>(true) != null) {
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2ExperienceExperienceModelContext), false);
                     EditorGUI.EndDisabledGroup();

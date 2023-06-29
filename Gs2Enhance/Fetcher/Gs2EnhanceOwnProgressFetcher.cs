@@ -56,11 +56,11 @@ namespace Gs2.Unity.UiKit.Gs2Enhance.Fetcher
             {
                 if (_gameSessionHolder != null && _gameSessionHolder.Initialized &&
                     _clientHolder != null && _clientHolder.Initialized &&
-                    _context != null && this._context.Progress != null)
+                    Context != null && this.Context.Progress != null)
                 {
                     
                     var domain = this._clientHolder.Gs2.Enhance.Namespace(
-                        this._context.Progress.NamespaceName
+                        this.Context.Progress.NamespaceName
                     ).Me(
                         this._gameSessionHolder.GameSession
                     ).Progress(
@@ -112,17 +112,17 @@ namespace Gs2.Unity.UiKit.Gs2Enhance.Fetcher
 
     public partial class Gs2EnhanceOwnProgressFetcher
     {
-        private Gs2ClientHolder _clientHolder;
-        private Gs2GameSessionHolder _gameSessionHolder;
-        private Gs2EnhanceOwnProgressContext _context;
+        protected Gs2ClientHolder _clientHolder;
+        protected Gs2GameSessionHolder _gameSessionHolder;
+        public Gs2EnhanceOwnProgressContext Context { get; private set; }
 
         public void Awake()
         {
             _clientHolder = Gs2ClientHolder.Instance;
             _gameSessionHolder = Gs2GameSessionHolder.Instance;
-            _context = GetComponent<Gs2EnhanceOwnProgressContext>() ?? GetComponentInParent<Gs2EnhanceOwnProgressContext>();
+            Context = GetComponent<Gs2EnhanceOwnProgressContext>() ?? GetComponentInParent<Gs2EnhanceOwnProgressContext>();
 
-            if (_context == null) {
+            if (Context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2EnhanceOwnProgressContext.");
                 enabled = false;
             }
@@ -130,8 +130,8 @@ namespace Gs2.Unity.UiKit.Gs2Enhance.Fetcher
 
         public bool HasError()
         {
-            _context = GetComponent<Gs2EnhanceOwnProgressContext>() ?? GetComponentInParent<Gs2EnhanceOwnProgressContext>(true);
-            if (_context == null) {
+            Context = GetComponent<Gs2EnhanceOwnProgressContext>() ?? GetComponentInParent<Gs2EnhanceOwnProgressContext>(true);
+            if (Context == null) {
                 return true;
             }
             return false;
@@ -144,8 +144,8 @@ namespace Gs2.Unity.UiKit.Gs2Enhance.Fetcher
 
     public partial class Gs2EnhanceOwnProgressFetcher
     {
-        public Gs2.Unity.Gs2Enhance.Model.EzProgress Progress { get; private set; }
-        public bool Fetched { get; private set; }
+        public Gs2.Unity.Gs2Enhance.Model.EzProgress Progress { get; protected set; }
+        public bool Fetched { get; protected set; }
     }
 
     /// <summary>

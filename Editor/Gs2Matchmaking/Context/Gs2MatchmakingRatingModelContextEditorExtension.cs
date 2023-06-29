@@ -43,7 +43,7 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking.Editor
             serializedObject.Update();
 
             if (original.RatingModel == null) {
-                if (original.transform.parent != null && original.transform.parent.GetComponent<Gs2MatchmakingRatingModelList>() != null) {
+                if (original.GetComponentInParent<Gs2MatchmakingRatingModelList>(true) != null) {
                     EditorGUILayout.HelpBox("RatingModel is auto assign from Gs2MatchmakingRatingModelList.", MessageType.Info);
                 }
                 else {

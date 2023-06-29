@@ -48,7 +48,7 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Editor
                 }
             }
             else {
-                if (context.transform.parent.GetComponent<Gs2RankingCategoryModelList>() != null) {
+                if (context.gameObject.GetComponentInParent<Gs2RankingCategoryModelList>(true) != null) {
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2RankingCategoryModelContext), false);
                     EditorGUI.EndDisabledGroup();

@@ -51,7 +51,7 @@ namespace Gs2.Unity.UiKit.Gs2Enhance.Localization.Editor
                 }
             }
             else {
-                if (fetcher.transform.parent == null || fetcher.transform.parent.GetComponent<Gs2EnhanceRateModelList>() != null) {
+                if (fetcher.gameObject.GetComponentInParent<Gs2EnhanceRateModelList>(true) != null) {
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2EnhanceRateModelFetcher), false);
                     EditorGUI.EndDisabledGroup();

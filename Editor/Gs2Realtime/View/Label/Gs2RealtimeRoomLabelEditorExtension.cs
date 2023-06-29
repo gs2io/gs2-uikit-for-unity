@@ -48,14 +48,13 @@ namespace Gs2.Unity.UiKit.Gs2Realtime.Editor
                 }
             }
             else {
-                var context = original.GetComponent<Gs2RealtimeRoomContext>() ?? original.GetComponentInParent<Gs2RealtimeRoomContext>(true);
                 EditorGUI.BeginDisabledGroup(true);
                 EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2RealtimeRoomFetcher), false);
                 EditorGUI.indentLevel++;
-                context.Room = EditorGUILayout.ObjectField("Room", context.Room, typeof(Room), false) as Room;
+                fetcher.Context.Room = EditorGUILayout.ObjectField("Room", fetcher.Context.Room, typeof(Room), false) as Room;
                 EditorGUI.indentLevel++;
-                EditorGUILayout.TextField("NamespaceName", context.Room?.NamespaceName.ToString());
-                EditorGUILayout.TextField("RoomName", context.Room?.RoomName.ToString());
+                EditorGUILayout.TextField("NamespaceName", fetcher.Context.Room?.NamespaceName.ToString());
+                EditorGUILayout.TextField("RoomName", fetcher.Context.Room?.RoomName.ToString());
                 EditorGUI.indentLevel--;
                 EditorGUI.indentLevel--;
                 EditorGUI.EndDisabledGroup();

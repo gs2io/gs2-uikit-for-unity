@@ -48,22 +48,23 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Editor
                 }
             }
             else {
-                if (fetcher.transform.parent == null || fetcher.transform.parent.GetComponent<Gs2RankingCategoryModelList>() != null) {
+                if (fetcher.gameObject.GetComponentInParent<Gs2RankingCategoryModelList>(true) != null) {
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2RankingCategoryModelFetcher), false);
                     EditorGUI.EndDisabledGroup();
                     EditorGUILayout.HelpBox("CategoryModel is auto assign from Gs2RankingCategoryModelList.", MessageType.Info);
                 }
                 else {
-                    var context = original.GetComponent<Gs2RankingCategoryModelContext>() ?? original.GetComponentInParent<Gs2RankingCategoryModelContext>(true);
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2RankingCategoryModelFetcher), false);
                     EditorGUI.indentLevel++;
-                    context.CategoryModel = EditorGUILayout.ObjectField("CategoryModel", context.CategoryModel, typeof(CategoryModel), false) as CategoryModel;
-                    EditorGUI.indentLevel++;
-                    EditorGUILayout.TextField("NamespaceName", context.CategoryModel?.NamespaceName.ToString());
-                    EditorGUILayout.TextField("CategoryName", context.CategoryModel?.CategoryName.ToString());
-                    EditorGUI.indentLevel--;
+                    if (fetcher.Context != null) {
+                        fetcher.Context.CategoryModel = EditorGUILayout.ObjectField("CategoryModel", fetcher.Context.CategoryModel, typeof(CategoryModel), false) as CategoryModel;
+                        EditorGUI.indentLevel++;
+                        EditorGUILayout.TextField("NamespaceName", fetcher.Context.CategoryModel?.NamespaceName.ToString());
+                        EditorGUILayout.TextField("CategoryName", fetcher.Context.CategoryModel?.CategoryName.ToString());
+                        EditorGUI.indentLevel--;
+                    }
                     EditorGUI.indentLevel--;
                     EditorGUI.EndDisabledGroup();
                 }

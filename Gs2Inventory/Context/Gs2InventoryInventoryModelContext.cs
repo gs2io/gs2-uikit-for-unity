@@ -44,7 +44,7 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Context
 
         public bool HasError() {
             if (InventoryModel == null) {
-                if (transform.parent != null && transform.parent.GetComponent<Gs2InventoryInventoryModelList>() != null) {
+                if (GetComponentInParent<Gs2InventoryInventoryModelList>(true) != null) {
                     return false;
                 }
                 else {

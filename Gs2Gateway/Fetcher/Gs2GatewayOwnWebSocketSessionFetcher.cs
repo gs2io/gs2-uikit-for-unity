@@ -53,11 +53,11 @@ namespace Gs2.Unity.UiKit.Gs2Gateway.Fetcher
             {
                 if (_gameSessionHolder != null && _gameSessionHolder.Initialized &&
                     _clientHolder != null && _clientHolder.Initialized &&
-                    _context != null)
+                    Context != null)
                 {
                     
                     var domain = this._clientHolder.Gs2.Gateway.Namespace(
-                        this._context.WebSocketSession.NamespaceName
+                        this.Context.WebSocketSession.NamespaceName
                     ).Me(
                         this._gameSessionHolder.GameSession
                     ).WebSocketSession(
@@ -118,15 +118,15 @@ namespace Gs2.Unity.UiKit.Gs2Gateway.Fetcher
     {
         protected Gs2ClientHolder _clientHolder;
         protected Gs2GameSessionHolder _gameSessionHolder;
-        private Gs2GatewayOwnWebSocketSessionContext _context;
+        public Gs2GatewayOwnWebSocketSessionContext Context { get; private set; }
 
         public void Awake()
         {
             _clientHolder = Gs2ClientHolder.Instance;
             _gameSessionHolder = Gs2GameSessionHolder.Instance;
-            _context = GetComponent<Gs2GatewayOwnWebSocketSessionContext>() ?? GetComponentInParent<Gs2GatewayOwnWebSocketSessionContext>();
+            Context = GetComponent<Gs2GatewayOwnWebSocketSessionContext>() ?? GetComponentInParent<Gs2GatewayOwnWebSocketSessionContext>();
 
-            if (_context == null) {
+            if (Context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2GatewayOwnWebSocketSessionContext.");
                 enabled = false;
             }
@@ -134,8 +134,8 @@ namespace Gs2.Unity.UiKit.Gs2Gateway.Fetcher
 
         public bool HasError()
         {
-            _context = GetComponent<Gs2GatewayOwnWebSocketSessionContext>() ?? GetComponentInParent<Gs2GatewayOwnWebSocketSessionContext>(true);
-            if (_context == null) {
+            Context = GetComponent<Gs2GatewayOwnWebSocketSessionContext>() ?? GetComponentInParent<Gs2GatewayOwnWebSocketSessionContext>(true);
+            if (Context == null) {
                 return true;
             }
             return false;

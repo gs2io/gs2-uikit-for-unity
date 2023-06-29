@@ -48,7 +48,7 @@ namespace Gs2.Unity.UiKit.Gs2Datastore.Editor
                 }
             }
             else {
-                if (context.transform.parent.GetComponent<Gs2DatastoreOwnDataObjectList>() != null) {
+                if (context.gameObject.GetComponentInParent<Gs2DatastoreOwnDataObjectList>(true) != null) {
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2DatastoreOwnDataObjectContext), false);
                     EditorGUI.EndDisabledGroup();

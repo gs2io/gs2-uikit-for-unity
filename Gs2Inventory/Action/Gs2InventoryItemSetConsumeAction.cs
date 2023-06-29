@@ -47,14 +47,14 @@ namespace Gs2.Unity.UiKit.Gs2Inventory
             yield return new WaitUntil(() => this._gameSessionHolder.Initialized);
             
             var domain = this._clientHolder.Gs2.Inventory.Namespace(
-                this._context.ItemSet.NamespaceName
+                this._context.ItemModel.NamespaceName
             ).Me(
                 this._gameSessionHolder.GameSession
             ).Inventory(
-                this._context.ItemSet.InventoryName
+                this._context.ItemModel.InventoryName
             ).ItemSet(
-                this._context.ItemSet.ItemName,
-                this._context.ItemSet.ItemSetName
+                this._context.ItemModel.ItemName,
+                this._context.itemSetName
             );
             var future = domain.Consume(
                 ConsumeCount

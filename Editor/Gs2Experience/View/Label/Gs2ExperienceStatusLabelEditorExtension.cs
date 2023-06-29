@@ -48,23 +48,24 @@ namespace Gs2.Unity.UiKit.Gs2Experience.Editor
                 }
             }
             else {
-                if (fetcher.transform.parent == null || fetcher.transform.parent.GetComponent<Gs2ExperienceOwnStatusList>() != null) {
+                if (fetcher.gameObject.GetComponentInParent<Gs2ExperienceOwnStatusList>(true) != null) {
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2ExperienceOwnStatusFetcher), false);
                     EditorGUI.EndDisabledGroup();
                     EditorGUILayout.HelpBox("Status is auto assign from Gs2ExperienceOwnStatusList.", MessageType.Info);
                 }
                 else {
-                    var context = original.GetComponent<Gs2ExperienceOwnStatusContext>() ?? original.GetComponentInParent<Gs2ExperienceOwnStatusContext>(true);
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2ExperienceOwnStatusFetcher), false);
                     EditorGUI.indentLevel++;
-                    context.Status = EditorGUILayout.ObjectField("Status", context.Status, typeof(OwnStatus), false) as OwnStatus;
-                    EditorGUI.indentLevel++;
-                    EditorGUILayout.TextField("NamespaceName", context.Status?.NamespaceName.ToString());
-                    EditorGUILayout.TextField("ExperienceName", context.Status?.ExperienceName.ToString());
-                    EditorGUILayout.TextField("PropertyId", context.Status?.PropertyId.ToString());
-                    EditorGUI.indentLevel--;
+                    if (fetcher.Context != null) {
+                        fetcher.Context.Status = EditorGUILayout.ObjectField("Status", fetcher.Context.Status, typeof(OwnStatus), false) as OwnStatus;
+                        EditorGUI.indentLevel++;
+                        EditorGUILayout.TextField("NamespaceName", fetcher.Context.Status?.NamespaceName.ToString());
+                        EditorGUILayout.TextField("ExperienceName", fetcher.Context.Status?.ExperienceName.ToString());
+                        EditorGUILayout.TextField("PropertyId", fetcher.Context.Status?.PropertyId.ToString());
+                        EditorGUI.indentLevel--;
+                    }
                     EditorGUI.indentLevel--;
                     EditorGUI.EndDisabledGroup();
                 }

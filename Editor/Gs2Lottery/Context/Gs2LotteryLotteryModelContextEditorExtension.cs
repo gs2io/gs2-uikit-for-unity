@@ -43,7 +43,7 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.Editor
             serializedObject.Update();
 
             if (original.LotteryModel == null) {
-                if (original.transform.parent != null && original.transform.parent.GetComponent<Gs2LotteryLotteryModelList>() != null) {
+                if (original.GetComponentInParent<Gs2LotteryLotteryModelList>(true) != null) {
                     EditorGUILayout.HelpBox("LotteryModel is auto assign from Gs2LotteryLotteryModelList.", MessageType.Info);
                 }
                 else {

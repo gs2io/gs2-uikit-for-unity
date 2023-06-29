@@ -48,22 +48,23 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Editor
                 }
             }
             else {
-                if (fetcher.transform.parent == null || fetcher.transform.parent.GetComponent<Gs2QuestOwnCompletedQuestListList>() != null) {
+                if (fetcher.gameObject.GetComponentInParent<Gs2QuestOwnCompletedQuestListList>(true) != null) {
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2QuestOwnCompletedQuestListFetcher), false);
                     EditorGUI.EndDisabledGroup();
                     EditorGUILayout.HelpBox("CompletedQuestList is auto assign from Gs2QuestOwnCompletedQuestListList.", MessageType.Info);
                 }
                 else {
-                    var context = original.GetComponent<Gs2QuestOwnCompletedQuestListContext>() ?? original.GetComponentInParent<Gs2QuestOwnCompletedQuestListContext>(true);
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2QuestOwnCompletedQuestListFetcher), false);
                     EditorGUI.indentLevel++;
-                    context.CompletedQuestList = EditorGUILayout.ObjectField("CompletedQuestList", context.CompletedQuestList, typeof(OwnCompletedQuestList), false) as OwnCompletedQuestList;
-                    EditorGUI.indentLevel++;
-                    EditorGUILayout.TextField("NamespaceName", context.CompletedQuestList?.NamespaceName.ToString());
-                    EditorGUILayout.TextField("QuestGroupName", context.CompletedQuestList?.QuestGroupName.ToString());
-                    EditorGUI.indentLevel--;
+                    if (fetcher.Context != null) {
+                        fetcher.Context.CompletedQuestList = EditorGUILayout.ObjectField("CompletedQuestList", fetcher.Context.CompletedQuestList, typeof(OwnCompletedQuestList), false) as OwnCompletedQuestList;
+                        EditorGUI.indentLevel++;
+                        EditorGUILayout.TextField("NamespaceName", fetcher.Context.CompletedQuestList?.NamespaceName.ToString());
+                        EditorGUILayout.TextField("QuestGroupName", fetcher.Context.CompletedQuestList?.QuestGroupName.ToString());
+                        EditorGUI.indentLevel--;
+                    }
                     EditorGUI.indentLevel--;
                     EditorGUI.EndDisabledGroup();
                 }

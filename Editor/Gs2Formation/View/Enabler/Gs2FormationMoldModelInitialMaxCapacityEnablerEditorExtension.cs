@@ -47,13 +47,13 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Editor
                 }
             }
             else {
-                if (context.transform.parent.GetComponent<Gs2FormationMoldModelList>() != null) {
+                if (context.gameObject.GetComponentInParent<Gs2FormationMoldModelList>(true) != null) {
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2FormationMoldModelContext), false);
                     EditorGUI.EndDisabledGroup();
                     EditorGUILayout.HelpBox("MoldModel is auto assign from Gs2FormationMoldModelList.", MessageType.Info);
                 }
-                else if (context.transform.parent.GetComponent<Gs2FormationOwnMoldList>() != null) {
+                else if (context.gameObject.GetComponentInParent<Gs2FormationOwnMoldList>(true) != null) {
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2FormationOwnMoldContext), false);
                     EditorGUI.EndDisabledGroup();

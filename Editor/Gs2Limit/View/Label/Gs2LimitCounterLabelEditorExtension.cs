@@ -48,23 +48,24 @@ namespace Gs2.Unity.UiKit.Gs2Limit.Editor
                 }
             }
             else {
-                if (fetcher.transform.parent == null || fetcher.transform.parent.GetComponent<Gs2LimitOwnCounterList>() != null) {
+                if (fetcher.gameObject.GetComponentInParent<Gs2LimitOwnCounterList>(true) != null) {
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2LimitOwnCounterFetcher), false);
                     EditorGUI.EndDisabledGroup();
                     EditorGUILayout.HelpBox("Counter is auto assign from Gs2LimitOwnCounterList.", MessageType.Info);
                 }
                 else {
-                    var context = original.GetComponent<Gs2LimitOwnCounterContext>() ?? original.GetComponentInParent<Gs2LimitOwnCounterContext>(true);
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2LimitOwnCounterFetcher), false);
                     EditorGUI.indentLevel++;
-                    context.Counter = EditorGUILayout.ObjectField("Counter", context.Counter, typeof(OwnCounter), false) as OwnCounter;
-                    EditorGUI.indentLevel++;
-                    EditorGUILayout.TextField("NamespaceName", context.Counter?.NamespaceName.ToString());
-                    EditorGUILayout.TextField("LimitName", context.Counter?.LimitName.ToString());
-                    EditorGUILayout.TextField("CounterName", context.Counter?.CounterName.ToString());
-                    EditorGUI.indentLevel--;
+                    if (fetcher.Context != null) {
+                        fetcher.Context.Counter = EditorGUILayout.ObjectField("Counter", fetcher.Context.Counter, typeof(OwnCounter), false) as OwnCounter;
+                        EditorGUI.indentLevel++;
+                        EditorGUILayout.TextField("NamespaceName", fetcher.Context.Counter?.NamespaceName.ToString());
+                        EditorGUILayout.TextField("LimitName", fetcher.Context.Counter?.LimitName.ToString());
+                        EditorGUILayout.TextField("CounterName", fetcher.Context.Counter?.CounterName.ToString());
+                        EditorGUI.indentLevel--;
+                    }
                     EditorGUI.indentLevel--;
                     EditorGUI.EndDisabledGroup();
                 }

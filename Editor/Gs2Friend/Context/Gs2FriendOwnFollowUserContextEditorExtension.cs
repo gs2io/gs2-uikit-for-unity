@@ -43,7 +43,7 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Editor
             serializedObject.Update();
 
             if (original.FollowUser == null) {
-                if (original.transform.parent.GetComponent<Gs2FriendOwnFollowUserList>() != null) {
+                if (original.GetComponentInParent<Gs2FriendOwnFollowUserList>(true) != null) {
                     EditorGUILayout.HelpBox("OwnFollowUser is auto assign from Gs2FriendOwnFollowUserList.", MessageType.Info);
                 }
                 else {

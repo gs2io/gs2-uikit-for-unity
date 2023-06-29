@@ -48,22 +48,23 @@ namespace Gs2.Unity.UiKit.Gs2Inbox.Editor
                 }
             }
             else {
-                if (fetcher.transform.parent == null || fetcher.transform.parent.GetComponent<Gs2InboxOwnMessageList>() != null) {
+                if (fetcher.gameObject.GetComponentInParent<Gs2InboxOwnMessageList>(true) != null) {
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2InboxOwnMessageFetcher), false);
                     EditorGUI.EndDisabledGroup();
                     EditorGUILayout.HelpBox("Message is auto assign from Gs2InboxOwnMessageList.", MessageType.Info);
                 }
                 else {
-                    var context = original.GetComponent<Gs2InboxOwnMessageContext>() ?? original.GetComponentInParent<Gs2InboxOwnMessageContext>(true);
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2InboxOwnMessageFetcher), false);
                     EditorGUI.indentLevel++;
-                    context.Message = EditorGUILayout.ObjectField("Message", context.Message, typeof(OwnMessage), false) as OwnMessage;
-                    EditorGUI.indentLevel++;
-                    EditorGUILayout.TextField("NamespaceName", context.Message?.NamespaceName.ToString());
-                    EditorGUILayout.TextField("MessageName", context.Message?.MessageName.ToString());
-                    EditorGUI.indentLevel--;
+                    if (fetcher.Context != null) {
+                        fetcher.Context.Message = EditorGUILayout.ObjectField("Message", fetcher.Context.Message, typeof(OwnMessage), false) as OwnMessage;
+                        EditorGUI.indentLevel++;
+                        EditorGUILayout.TextField("NamespaceName", fetcher.Context.Message?.NamespaceName.ToString());
+                        EditorGUILayout.TextField("MessageName", fetcher.Context.Message?.MessageName.ToString());
+                        EditorGUI.indentLevel--;
+                    }
                     EditorGUI.indentLevel--;
                     EditorGUI.EndDisabledGroup();
                 }

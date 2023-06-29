@@ -53,11 +53,11 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Fetcher
             {
                 if (_gameSessionHolder != null && _gameSessionHolder.Initialized &&
                     _clientHolder != null && _clientHolder.Initialized &&
-                    _context != null)
+                    Context != null)
                 {
                     
                     var domain = this._clientHolder.Gs2.Friend.Namespace(
-                        this._context.BlackList.NamespaceName
+                        this.Context.BlackList.NamespaceName
                     ).Me(
                         this._gameSessionHolder.GameSession
                     ).BlackList(
@@ -118,15 +118,15 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Fetcher
     {
         protected Gs2ClientHolder _clientHolder;
         protected Gs2GameSessionHolder _gameSessionHolder;
-        private Gs2FriendOwnBlackListContext _context;
+        public Gs2FriendOwnBlackListContext Context { get; private set; }
 
         public void Awake()
         {
             _clientHolder = Gs2ClientHolder.Instance;
             _gameSessionHolder = Gs2GameSessionHolder.Instance;
-            _context = GetComponent<Gs2FriendOwnBlackListContext>() ?? GetComponentInParent<Gs2FriendOwnBlackListContext>();
+            Context = GetComponent<Gs2FriendOwnBlackListContext>() ?? GetComponentInParent<Gs2FriendOwnBlackListContext>();
 
-            if (_context == null) {
+            if (Context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2FriendOwnBlackListContext.");
                 enabled = false;
             }
@@ -134,8 +134,8 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Fetcher
 
         public bool HasError()
         {
-            _context = GetComponent<Gs2FriendOwnBlackListContext>() ?? GetComponentInParent<Gs2FriendOwnBlackListContext>(true);
-            if (_context == null) {
+            Context = GetComponent<Gs2FriendOwnBlackListContext>() ?? GetComponentInParent<Gs2FriendOwnBlackListContext>(true);
+            if (Context == null) {
                 return true;
             }
             return false;

@@ -56,17 +56,17 @@ namespace Gs2.Unity.UiKit.Gs2JobQueue.Fetcher
             {
                 if (_gameSessionHolder != null && _gameSessionHolder.Initialized &&
                     _clientHolder != null && _clientHolder.Initialized &&
-                    _context != null && this._context.JobResult != null)
+                    Context != null && this.Context.JobResult != null)
                 {
                     
                     var domain = this._clientHolder.Gs2.JobQueue.Namespace(
-                        this._context.JobResult.NamespaceName
+                        this.Context.JobResult.NamespaceName
                     ).Me(
                         this._gameSessionHolder.GameSession
                     ).Job(
-                        this._context.JobResult.JobName
+                        this.Context.JobResult.JobName
                     ).JobResult(
-                        this._context.JobResult.TryNumber
+                        this.Context.JobResult.TryNumber
                     );
                     var future = domain.Model();
                     yield return future;
@@ -115,17 +115,17 @@ namespace Gs2.Unity.UiKit.Gs2JobQueue.Fetcher
 
     public partial class Gs2JobQueueOwnJobResultFetcher
     {
-        private Gs2ClientHolder _clientHolder;
-        private Gs2GameSessionHolder _gameSessionHolder;
-        private Gs2JobQueueOwnJobResultContext _context;
+        protected Gs2ClientHolder _clientHolder;
+        protected Gs2GameSessionHolder _gameSessionHolder;
+        public Gs2JobQueueOwnJobResultContext Context { get; private set; }
 
         public void Awake()
         {
             _clientHolder = Gs2ClientHolder.Instance;
             _gameSessionHolder = Gs2GameSessionHolder.Instance;
-            _context = GetComponent<Gs2JobQueueOwnJobResultContext>() ?? GetComponentInParent<Gs2JobQueueOwnJobResultContext>();
+            Context = GetComponent<Gs2JobQueueOwnJobResultContext>() ?? GetComponentInParent<Gs2JobQueueOwnJobResultContext>();
 
-            if (_context == null) {
+            if (Context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2JobQueueOwnJobResultContext.");
                 enabled = false;
             }
@@ -133,8 +133,8 @@ namespace Gs2.Unity.UiKit.Gs2JobQueue.Fetcher
 
         public bool HasError()
         {
-            _context = GetComponent<Gs2JobQueueOwnJobResultContext>() ?? GetComponentInParent<Gs2JobQueueOwnJobResultContext>(true);
-            if (_context == null) {
+            Context = GetComponent<Gs2JobQueueOwnJobResultContext>() ?? GetComponentInParent<Gs2JobQueueOwnJobResultContext>(true);
+            if (Context == null) {
                 return true;
             }
             return false;
@@ -147,8 +147,8 @@ namespace Gs2.Unity.UiKit.Gs2JobQueue.Fetcher
 
     public partial class Gs2JobQueueOwnJobResultFetcher
     {
-        public Gs2.Unity.Gs2JobQueue.Model.EzJobResult JobResult { get; private set; }
-        public bool Fetched { get; private set; }
+        public Gs2.Unity.Gs2JobQueue.Model.EzJobResult JobResult { get; protected set; }
+        public bool Fetched { get; protected set; }
     }
 
     /// <summary>

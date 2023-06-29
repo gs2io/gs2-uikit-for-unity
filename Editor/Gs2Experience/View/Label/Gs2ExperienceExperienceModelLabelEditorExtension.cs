@@ -48,22 +48,23 @@ namespace Gs2.Unity.UiKit.Gs2Experience.Editor
                 }
             }
             else {
-                if (fetcher.transform.parent == null || fetcher.transform.parent.GetComponent<Gs2ExperienceExperienceModelList>() != null) {
+                if (fetcher.gameObject.GetComponentInParent<Gs2ExperienceExperienceModelList>(true) != null) {
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2ExperienceExperienceModelFetcher), false);
                     EditorGUI.EndDisabledGroup();
                     EditorGUILayout.HelpBox("ExperienceModel is auto assign from Gs2ExperienceExperienceModelList.", MessageType.Info);
                 }
                 else {
-                    var context = original.GetComponent<Gs2ExperienceExperienceModelContext>() ?? original.GetComponentInParent<Gs2ExperienceExperienceModelContext>(true);
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2ExperienceExperienceModelFetcher), false);
                     EditorGUI.indentLevel++;
-                    context.ExperienceModel = EditorGUILayout.ObjectField("ExperienceModel", context.ExperienceModel, typeof(ExperienceModel), false) as ExperienceModel;
-                    EditorGUI.indentLevel++;
-                    EditorGUILayout.TextField("NamespaceName", context.ExperienceModel?.NamespaceName.ToString());
-                    EditorGUILayout.TextField("ExperienceName", context.ExperienceModel?.ExperienceName.ToString());
-                    EditorGUI.indentLevel--;
+                    if (fetcher.Context != null) {
+                        fetcher.Context.ExperienceModel = EditorGUILayout.ObjectField("ExperienceModel", fetcher.Context.ExperienceModel, typeof(ExperienceModel), false) as ExperienceModel;
+                        EditorGUI.indentLevel++;
+                        EditorGUILayout.TextField("NamespaceName", fetcher.Context.ExperienceModel?.NamespaceName.ToString());
+                        EditorGUILayout.TextField("ExperienceName", fetcher.Context.ExperienceModel?.ExperienceName.ToString());
+                        EditorGUI.indentLevel--;
+                    }
                     EditorGUI.indentLevel--;
                     EditorGUI.EndDisabledGroup();
                 }

@@ -51,7 +51,7 @@ namespace Gs2.Unity.UiKit.Gs2Chat.Localization.Editor
                 }
             }
             else {
-                if (fetcher.transform.parent == null || fetcher.transform.parent.GetComponent<Gs2ChatOwnSubscribeList>() != null) {
+                if (fetcher.gameObject.GetComponentInParent<Gs2ChatOwnSubscribeList>(true) != null) {
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2ChatOwnSubscribeFetcher), false);
                     EditorGUI.EndDisabledGroup();

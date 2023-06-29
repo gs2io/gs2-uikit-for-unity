@@ -48,13 +48,13 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Editor
                 }
             }
             else {
-                if (context.transform.parent.GetComponent<Gs2InventoryInventoryModelList>() != null) {
+                if (context.gameObject.GetComponentInParent<Gs2InventoryInventoryModelList>(true) != null) {
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2InventoryInventoryModelContext), false);
                     EditorGUI.EndDisabledGroup();
                     EditorGUILayout.HelpBox("InventoryModel is auto assign from Gs2InventoryInventoryModelList.", MessageType.Info);
                 }
-                else if (context.transform.parent.GetComponent<Gs2InventoryOwnInventoryList>() != null) {
+                else if (context.gameObject.GetComponentInParent<Gs2InventoryOwnInventoryList>(true) != null) {
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2InventoryOwnInventoryContext), false);
                     EditorGUI.EndDisabledGroup();

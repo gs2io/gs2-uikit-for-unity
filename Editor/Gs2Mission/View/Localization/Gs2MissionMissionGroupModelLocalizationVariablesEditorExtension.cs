@@ -51,7 +51,7 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Localization.Editor
                 }
             }
             else {
-                if (fetcher.transform.parent == null || fetcher.transform.parent.GetComponent<Gs2MissionMissionGroupModelList>() != null) {
+                if (fetcher.gameObject.GetComponentInParent<Gs2MissionMissionGroupModelList>(true) != null) {
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2MissionMissionGroupModelFetcher), false);
                     EditorGUI.EndDisabledGroup();

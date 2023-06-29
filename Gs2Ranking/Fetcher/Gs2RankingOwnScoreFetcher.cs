@@ -56,17 +56,17 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Fetcher
             {
                 if (_gameSessionHolder != null && _gameSessionHolder.Initialized &&
                     _clientHolder != null && _clientHolder.Initialized &&
-                    _context != null && this._context.Score != null)
+                    Context != null && this.Context.Score != null)
                 {
                     
                     var domain = this._clientHolder.Gs2.Ranking.Namespace(
-                        this._context.Score.NamespaceName
+                        this.Context.Score.NamespaceName
                     ).Me(
                         this._gameSessionHolder.GameSession
                     ).Score(
-                        this._context.Score.CategoryName,
-                        this._context.Score.ScorerUserId,
-                        this._context.Score.UniqueId
+                        this.Context.Score.CategoryName,
+                        this.Context.Score.ScorerUserId,
+                        this.Context.Score.UniqueId
                     );
                     var future = domain.Model();
                     yield return future;
@@ -115,17 +115,17 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Fetcher
 
     public partial class Gs2RankingOwnScoreFetcher
     {
-        private Gs2ClientHolder _clientHolder;
-        private Gs2GameSessionHolder _gameSessionHolder;
-        private Gs2RankingOwnScoreContext _context;
+        protected Gs2ClientHolder _clientHolder;
+        protected Gs2GameSessionHolder _gameSessionHolder;
+        public Gs2RankingOwnScoreContext Context { get; private set; }
 
         public void Awake()
         {
             _clientHolder = Gs2ClientHolder.Instance;
             _gameSessionHolder = Gs2GameSessionHolder.Instance;
-            _context = GetComponent<Gs2RankingOwnScoreContext>() ?? GetComponentInParent<Gs2RankingOwnScoreContext>();
+            Context = GetComponent<Gs2RankingOwnScoreContext>() ?? GetComponentInParent<Gs2RankingOwnScoreContext>();
 
-            if (_context == null) {
+            if (Context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2RankingOwnScoreContext.");
                 enabled = false;
             }
@@ -133,8 +133,8 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Fetcher
 
         public bool HasError()
         {
-            _context = GetComponent<Gs2RankingOwnScoreContext>() ?? GetComponentInParent<Gs2RankingOwnScoreContext>(true);
-            if (_context == null) {
+            Context = GetComponent<Gs2RankingOwnScoreContext>() ?? GetComponentInParent<Gs2RankingOwnScoreContext>(true);
+            if (Context == null) {
                 return true;
             }
             return false;
@@ -147,8 +147,8 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Fetcher
 
     public partial class Gs2RankingOwnScoreFetcher
     {
-        public Gs2.Unity.Gs2Ranking.Model.EzScore Score { get; private set; }
-        public bool Fetched { get; private set; }
+        public Gs2.Unity.Gs2Ranking.Model.EzScore Score { get; protected set; }
+        public bool Fetched { get; protected set; }
     }
 
     /// <summary>

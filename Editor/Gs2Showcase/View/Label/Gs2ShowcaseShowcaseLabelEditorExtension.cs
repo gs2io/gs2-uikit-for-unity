@@ -48,14 +48,13 @@ namespace Gs2.Unity.UiKit.Gs2Showcase.Editor
                 }
             }
             else {
-                var context = original.GetComponent<Gs2ShowcaseShowcaseContext>() ?? original.GetComponentInParent<Gs2ShowcaseShowcaseContext>(true);
                 EditorGUI.BeginDisabledGroup(true);
                 EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2ShowcaseShowcaseFetcher), false);
                 EditorGUI.indentLevel++;
-                context.Showcase = EditorGUILayout.ObjectField("Showcase", context.Showcase, typeof(Showcase), false) as Showcase;
+                fetcher.Context.Showcase = EditorGUILayout.ObjectField("Showcase", fetcher.Context.Showcase, typeof(Showcase), false) as Showcase;
                 EditorGUI.indentLevel++;
-                EditorGUILayout.TextField("NamespaceName", context.Showcase?.NamespaceName.ToString());
-                EditorGUILayout.TextField("ShowcaseName", context.Showcase?.ShowcaseName.ToString());
+                EditorGUILayout.TextField("NamespaceName", fetcher.Context.Showcase?.NamespaceName.ToString());
+                EditorGUILayout.TextField("ShowcaseName", fetcher.Context.Showcase?.ShowcaseName.ToString());
                 EditorGUI.indentLevel--;
                 EditorGUI.indentLevel--;
                 EditorGUI.EndDisabledGroup();

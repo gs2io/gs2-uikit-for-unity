@@ -44,7 +44,7 @@ namespace Gs2.Unity.UiKit.Gs2Exchange.Context
 
         public bool HasError() {
             if (RateModel == null) {
-                if (transform.parent != null && transform.parent.GetComponent<Gs2ExchangeRateModelList>() != null) {
+                if (GetComponentInParent<Gs2ExchangeRateModelList>(true) != null) {
                     return false;
                 }
                 else {

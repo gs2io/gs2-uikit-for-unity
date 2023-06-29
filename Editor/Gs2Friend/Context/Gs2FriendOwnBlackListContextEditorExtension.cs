@@ -43,7 +43,7 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Editor
             serializedObject.Update();
 
             if (original.BlackList == null) {
-                if (original.transform.parent.GetComponent<Gs2FriendOwnBlackListList>() != null) {
+                if (original.GetComponentInParent<Gs2FriendOwnBlackListList>(true) != null) {
                     EditorGUILayout.HelpBox("OwnBlackList is auto assign from Gs2FriendOwnBlackListList.", MessageType.Info);
                 }
                 else {

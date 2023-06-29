@@ -48,22 +48,23 @@ namespace Gs2.Unity.UiKit.Gs2Enhance.Editor
                 }
             }
             else {
-                if (fetcher.transform.parent == null || fetcher.transform.parent.GetComponent<Gs2EnhanceRateModelList>() != null) {
+                if (fetcher.gameObject.GetComponentInParent<Gs2EnhanceRateModelList>(true) != null) {
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2EnhanceRateModelFetcher), false);
                     EditorGUI.EndDisabledGroup();
                     EditorGUILayout.HelpBox("RateModel is auto assign from Gs2EnhanceRateModelList.", MessageType.Info);
                 }
                 else {
-                    var context = original.GetComponent<Gs2EnhanceRateModelContext>() ?? original.GetComponentInParent<Gs2EnhanceRateModelContext>(true);
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2EnhanceRateModelFetcher), false);
                     EditorGUI.indentLevel++;
-                    context.RateModel = EditorGUILayout.ObjectField("RateModel", context.RateModel, typeof(RateModel), false) as RateModel;
-                    EditorGUI.indentLevel++;
-                    EditorGUILayout.TextField("NamespaceName", context.RateModel?.NamespaceName.ToString());
-                    EditorGUILayout.TextField("RateName", context.RateModel?.RateName.ToString());
-                    EditorGUI.indentLevel--;
+                    if (fetcher.Context != null) {
+                        fetcher.Context.RateModel = EditorGUILayout.ObjectField("RateModel", fetcher.Context.RateModel, typeof(RateModel), false) as RateModel;
+                        EditorGUI.indentLevel++;
+                        EditorGUILayout.TextField("NamespaceName", fetcher.Context.RateModel?.NamespaceName.ToString());
+                        EditorGUILayout.TextField("RateName", fetcher.Context.RateModel?.RateName.ToString());
+                        EditorGUI.indentLevel--;
+                    }
                     EditorGUI.indentLevel--;
                     EditorGUI.EndDisabledGroup();
                 }

@@ -48,22 +48,23 @@ namespace Gs2.Unity.UiKit.Gs2Limit.Editor
                 }
             }
             else {
-                if (fetcher.transform.parent == null || fetcher.transform.parent.GetComponent<Gs2LimitLimitModelList>() != null) {
+                if (fetcher.gameObject.GetComponentInParent<Gs2LimitLimitModelList>(true) != null) {
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2LimitLimitModelFetcher), false);
                     EditorGUI.EndDisabledGroup();
                     EditorGUILayout.HelpBox("LimitModel is auto assign from Gs2LimitLimitModelList.", MessageType.Info);
                 }
                 else {
-                    var context = original.GetComponent<Gs2LimitLimitModelContext>() ?? original.GetComponentInParent<Gs2LimitLimitModelContext>(true);
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2LimitLimitModelFetcher), false);
                     EditorGUI.indentLevel++;
-                    context.LimitModel = EditorGUILayout.ObjectField("LimitModel", context.LimitModel, typeof(LimitModel), false) as LimitModel;
-                    EditorGUI.indentLevel++;
-                    EditorGUILayout.TextField("NamespaceName", context.LimitModel?.NamespaceName.ToString());
-                    EditorGUILayout.TextField("LimitName", context.LimitModel?.LimitName.ToString());
-                    EditorGUI.indentLevel--;
+                    if (fetcher.Context != null) {
+                        fetcher.Context.LimitModel = EditorGUILayout.ObjectField("LimitModel", fetcher.Context.LimitModel, typeof(LimitModel), false) as LimitModel;
+                        EditorGUI.indentLevel++;
+                        EditorGUILayout.TextField("NamespaceName", fetcher.Context.LimitModel?.NamespaceName.ToString());
+                        EditorGUILayout.TextField("LimitName", fetcher.Context.LimitModel?.LimitName.ToString());
+                        EditorGUI.indentLevel--;
+                    }
                     EditorGUI.indentLevel--;
                     EditorGUI.EndDisabledGroup();
                 }

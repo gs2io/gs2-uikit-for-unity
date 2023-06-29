@@ -44,7 +44,7 @@ namespace Gs2.Unity.UiKit.Gs2Schedule.Editor
             serializedObject.Update();
 
             if (original.Trigger == null) {
-                if (original.transform.parent.GetComponent<Gs2ScheduleOwnTriggerList>() != null) {
+                if (original.GetComponentInParent<Gs2ScheduleOwnTriggerList>(true) != null) {
                     EditorGUILayout.HelpBox("OwnTrigger is auto assign from Gs2ScheduleOwnTriggerList.", MessageType.Info);
                 }
                 else {

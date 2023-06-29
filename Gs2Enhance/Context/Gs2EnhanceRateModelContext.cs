@@ -44,7 +44,7 @@ namespace Gs2.Unity.UiKit.Gs2Enhance.Context
 
         public bool HasError() {
             if (RateModel == null) {
-                if (transform.parent != null && transform.parent.GetComponent<Gs2EnhanceRateModelList>() != null) {
+                if (GetComponentInParent<Gs2EnhanceRateModelList>(true) != null) {
                     return false;
                 }
                 else {

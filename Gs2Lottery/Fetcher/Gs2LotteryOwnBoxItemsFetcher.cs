@@ -56,15 +56,15 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.Fetcher
             {
                 if (_gameSessionHolder != null && _gameSessionHolder.Initialized &&
                     _clientHolder != null && _clientHolder.Initialized &&
-                    _context != null && this._context.BoxItems != null)
+                    Context != null && this.Context.BoxItems != null)
                 {
                     
                     var domain = this._clientHolder.Gs2.Lottery.Namespace(
-                        this._context.BoxItems.NamespaceName
+                        this.Context.BoxItems.NamespaceName
                     ).Me(
                         this._gameSessionHolder.GameSession
                     ).BoxItems(
-                        this._context.BoxItems.PrizeTableName
+                        this.Context.BoxItems.PrizeTableName
                     );
                     var future = domain.Model();
                     yield return future;
@@ -113,17 +113,17 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.Fetcher
 
     public partial class Gs2LotteryOwnBoxItemsFetcher
     {
-        private Gs2ClientHolder _clientHolder;
-        private Gs2GameSessionHolder _gameSessionHolder;
-        private Gs2LotteryOwnBoxItemsContext _context;
+        protected Gs2ClientHolder _clientHolder;
+        protected Gs2GameSessionHolder _gameSessionHolder;
+        public Gs2LotteryOwnBoxItemsContext Context { get; private set; }
 
         public void Awake()
         {
             _clientHolder = Gs2ClientHolder.Instance;
             _gameSessionHolder = Gs2GameSessionHolder.Instance;
-            _context = GetComponent<Gs2LotteryOwnBoxItemsContext>() ?? GetComponentInParent<Gs2LotteryOwnBoxItemsContext>();
+            Context = GetComponent<Gs2LotteryOwnBoxItemsContext>() ?? GetComponentInParent<Gs2LotteryOwnBoxItemsContext>();
 
-            if (_context == null) {
+            if (Context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2LotteryOwnBoxItemsContext.");
                 enabled = false;
             }
@@ -131,8 +131,8 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.Fetcher
 
         public bool HasError()
         {
-            _context = GetComponent<Gs2LotteryOwnBoxItemsContext>() ?? GetComponentInParent<Gs2LotteryOwnBoxItemsContext>(true);
-            if (_context == null) {
+            Context = GetComponent<Gs2LotteryOwnBoxItemsContext>() ?? GetComponentInParent<Gs2LotteryOwnBoxItemsContext>(true);
+            if (Context == null) {
                 return true;
             }
             return false;
@@ -145,8 +145,8 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.Fetcher
 
     public partial class Gs2LotteryOwnBoxItemsFetcher
     {
-        public Gs2.Unity.Gs2Lottery.Model.EzBoxItems BoxItems { get; private set; }
-        public bool Fetched { get; private set; }
+        public Gs2.Unity.Gs2Lottery.Model.EzBoxItems BoxItems { get; protected set; }
+        public bool Fetched { get; protected set; }
     }
 
     /// <summary>

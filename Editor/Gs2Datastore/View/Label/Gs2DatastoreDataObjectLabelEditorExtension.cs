@@ -48,22 +48,23 @@ namespace Gs2.Unity.UiKit.Gs2Datastore.Editor
                 }
             }
             else {
-                if (fetcher.transform.parent == null || fetcher.transform.parent.GetComponent<Gs2DatastoreOwnDataObjectList>() != null) {
+                if (fetcher.gameObject.GetComponentInParent<Gs2DatastoreOwnDataObjectList>(true) != null) {
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2DatastoreOwnDataObjectFetcher), false);
                     EditorGUI.EndDisabledGroup();
                     EditorGUILayout.HelpBox("DataObject is auto assign from Gs2DatastoreOwnDataObjectList.", MessageType.Info);
                 }
                 else {
-                    var context = original.GetComponent<Gs2DatastoreOwnDataObjectContext>() ?? original.GetComponentInParent<Gs2DatastoreOwnDataObjectContext>(true);
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2DatastoreOwnDataObjectFetcher), false);
                     EditorGUI.indentLevel++;
-                    context.DataObject = EditorGUILayout.ObjectField("DataObject", context.DataObject, typeof(OwnDataObject), false) as OwnDataObject;
-                    EditorGUI.indentLevel++;
-                    EditorGUILayout.TextField("NamespaceName", context.DataObject?.NamespaceName.ToString());
-                    EditorGUILayout.TextField("DataObjectName", context.DataObject?.DataObjectName.ToString());
-                    EditorGUI.indentLevel--;
+                    if (fetcher.Context != null) {
+                        fetcher.Context.DataObject = EditorGUILayout.ObjectField("DataObject", fetcher.Context.DataObject, typeof(OwnDataObject), false) as OwnDataObject;
+                        EditorGUI.indentLevel++;
+                        EditorGUILayout.TextField("NamespaceName", fetcher.Context.DataObject?.NamespaceName.ToString());
+                        EditorGUILayout.TextField("DataObjectName", fetcher.Context.DataObject?.DataObjectName.ToString());
+                        EditorGUI.indentLevel--;
+                    }
                     EditorGUI.indentLevel--;
                     EditorGUI.EndDisabledGroup();
                 }

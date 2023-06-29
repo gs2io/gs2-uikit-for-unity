@@ -43,7 +43,7 @@ namespace Gs2.Unity.UiKit.Gs2Exchange.Editor
             serializedObject.Update();
 
             if (original.Await_ == null) {
-                if (original.transform.parent.GetComponent<Gs2ExchangeOwnAwaitList>() != null) {
+                if (original.GetComponentInParent<Gs2ExchangeOwnAwaitList>(true) != null) {
                     EditorGUILayout.HelpBox("OwnAwait is auto assign from Gs2ExchangeOwnAwaitList.", MessageType.Info);
                 }
                 else {

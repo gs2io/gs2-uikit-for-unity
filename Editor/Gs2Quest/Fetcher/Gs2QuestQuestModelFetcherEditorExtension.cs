@@ -48,7 +48,7 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Editor
                 }
             }
             else {
-                if (context.transform.parent.GetComponent<Gs2QuestQuestModelList>() != null) {
+                if (context.gameObject.GetComponentInParent<Gs2QuestQuestModelList>(true) != null) {
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2QuestQuestModelContext), false);
                     EditorGUI.EndDisabledGroup();
@@ -60,6 +60,8 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Editor
                     EditorGUI.indentLevel++;
                     context.QuestModel = EditorGUILayout.ObjectField("QuestModel", context.QuestModel, typeof(QuestModel), false) as QuestModel;
                     EditorGUI.indentLevel++;
+                    EditorGUILayout.TextField("NamespaceName", context.QuestModel?.NamespaceName.ToString());
+                    EditorGUILayout.TextField("QuestGroupName", context.QuestModel?.QuestGroupName.ToString());
                     EditorGUILayout.TextField("QuestName", context.QuestModel?.QuestName.ToString());
                     EditorGUI.indentLevel--;
                     EditorGUI.indentLevel--;

@@ -48,7 +48,7 @@ namespace Gs2.Unity.UiKit.Gs2Limit.Editor
                 }
             }
             else {
-                if (context.transform.parent.GetComponent<Gs2LimitOwnCounterList>() != null) {
+                if (context.transform.GetComponentInParent<Gs2LimitOwnCounterList>(true) != null) {
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2LimitOwnCounterContext), false);
                     EditorGUI.EndDisabledGroup();

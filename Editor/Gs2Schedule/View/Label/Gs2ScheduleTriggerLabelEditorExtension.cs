@@ -49,22 +49,23 @@ namespace Gs2.Unity.UiKit.Gs2Schedule.Editor
                 }
             }
             else {
-                if (fetcher.transform.parent == null || fetcher.transform.parent.GetComponent<Gs2ScheduleOwnTriggerList>() != null) {
+                if (fetcher.gameObject.GetComponentInParent<Gs2ScheduleOwnTriggerList>(true) != null) {
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2ScheduleOwnTriggerFetcher), false);
                     EditorGUI.EndDisabledGroup();
                     EditorGUILayout.HelpBox("Trigger is auto assign from Gs2ScheduleOwnTriggerList.", MessageType.Info);
                 }
                 else {
-                    var context = original.GetComponent<Gs2ScheduleOwnTriggerContext>() ?? original.GetComponentInParent<Gs2ScheduleOwnTriggerContext>(true);
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2ScheduleOwnTriggerFetcher), false);
                     EditorGUI.indentLevel++;
-                    context.Trigger = EditorGUILayout.ObjectField("Trigger", context.Trigger, typeof(OwnTrigger), false) as OwnTrigger;
-                    EditorGUI.indentLevel++;
-                    EditorGUILayout.TextField("NamespaceName", context.Trigger?.NamespaceName.ToString());
-                    EditorGUILayout.TextField("TriggerName", context.Trigger?.TriggerName.ToString());
-                    EditorGUI.indentLevel--;
+                    if (fetcher.Context != null) {
+                        fetcher.Context.Trigger = EditorGUILayout.ObjectField("Trigger", fetcher.Context.Trigger, typeof(OwnTrigger), false) as OwnTrigger;
+                        EditorGUI.indentLevel++;
+                        EditorGUILayout.TextField("NamespaceName", fetcher.Context.Trigger?.NamespaceName.ToString());
+                        EditorGUILayout.TextField("TriggerName", fetcher.Context.Trigger?.TriggerName.ToString());
+                        EditorGUI.indentLevel--;
+                    }
                     EditorGUI.indentLevel--;
                     EditorGUI.EndDisabledGroup();
                 }

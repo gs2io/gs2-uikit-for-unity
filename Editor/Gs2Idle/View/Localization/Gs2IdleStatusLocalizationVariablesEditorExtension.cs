@@ -51,7 +51,7 @@ namespace Gs2.Unity.UiKit.Gs2Idle.Localization.Editor
                 }
             }
             else {
-                if (fetcher.transform.parent == null || fetcher.transform.parent.GetComponent<Gs2IdleOwnStatusList>() != null) {
+                if (fetcher.gameObject.GetComponentInParent<Gs2IdleOwnStatusList>(true) != null) {
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2IdleOwnStatusFetcher), false);
                     EditorGUI.EndDisabledGroup();

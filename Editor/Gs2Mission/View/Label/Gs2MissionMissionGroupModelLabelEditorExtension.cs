@@ -48,22 +48,23 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Editor
                 }
             }
             else {
-                if (fetcher.transform.parent == null || fetcher.transform.parent.GetComponent<Gs2MissionMissionGroupModelList>() != null) {
+                if (fetcher.gameObject.GetComponentInParent<Gs2MissionMissionGroupModelList>(true) != null) {
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2MissionMissionGroupModelFetcher), false);
                     EditorGUI.EndDisabledGroup();
                     EditorGUILayout.HelpBox("MissionGroupModel is auto assign from Gs2MissionMissionGroupModelList.", MessageType.Info);
                 }
                 else {
-                    var context = original.GetComponent<Gs2MissionMissionGroupModelContext>() ?? original.GetComponentInParent<Gs2MissionMissionGroupModelContext>(true);
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2MissionMissionGroupModelFetcher), false);
                     EditorGUI.indentLevel++;
-                    context.MissionGroupModel = EditorGUILayout.ObjectField("MissionGroupModel", context.MissionGroupModel, typeof(MissionGroupModel), false) as MissionGroupModel;
-                    EditorGUI.indentLevel++;
-                    EditorGUILayout.TextField("NamespaceName", context.MissionGroupModel?.NamespaceName.ToString());
-                    EditorGUILayout.TextField("MissionGroupName", context.MissionGroupModel?.MissionGroupName.ToString());
-                    EditorGUI.indentLevel--;
+                    if (fetcher.Context != null) {
+                        fetcher.Context.MissionGroupModel = EditorGUILayout.ObjectField("MissionGroupModel", fetcher.Context.MissionGroupModel, typeof(MissionGroupModel), false) as MissionGroupModel;
+                        EditorGUI.indentLevel++;
+                        EditorGUILayout.TextField("NamespaceName", fetcher.Context.MissionGroupModel?.NamespaceName.ToString());
+                        EditorGUILayout.TextField("MissionGroupName", fetcher.Context.MissionGroupModel?.MissionGroupName.ToString());
+                        EditorGUI.indentLevel--;
+                    }
                     EditorGUI.indentLevel--;
                     EditorGUI.EndDisabledGroup();
                 }

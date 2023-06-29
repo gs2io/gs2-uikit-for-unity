@@ -56,11 +56,11 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Fetcher
             {
                 if (_gameSessionHolder != null && _gameSessionHolder.Initialized &&
                     _clientHolder != null && _clientHolder.Initialized &&
-                    _context != null && this._context.Profile != null)
+                    Context != null && this.Context.Profile != null)
                 {
                     
                     var domain = this._clientHolder.Gs2.Friend.Namespace(
-                        this._context.Profile.NamespaceName
+                        this.Context.Profile.NamespaceName
                     ).Me(
                         this._gameSessionHolder.GameSession
                     ).Profile(
@@ -112,17 +112,17 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Fetcher
 
     public partial class Gs2FriendOwnProfileFetcher
     {
-        private Gs2ClientHolder _clientHolder;
-        private Gs2GameSessionHolder _gameSessionHolder;
-        private Gs2FriendOwnProfileContext _context;
+        protected Gs2ClientHolder _clientHolder;
+        protected Gs2GameSessionHolder _gameSessionHolder;
+        public Gs2FriendOwnProfileContext Context { get; private set; }
 
         public void Awake()
         {
             _clientHolder = Gs2ClientHolder.Instance;
             _gameSessionHolder = Gs2GameSessionHolder.Instance;
-            _context = GetComponent<Gs2FriendOwnProfileContext>() ?? GetComponentInParent<Gs2FriendOwnProfileContext>();
+            Context = GetComponent<Gs2FriendOwnProfileContext>() ?? GetComponentInParent<Gs2FriendOwnProfileContext>();
 
-            if (_context == null) {
+            if (Context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2FriendOwnProfileContext.");
                 enabled = false;
             }
@@ -130,8 +130,8 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Fetcher
 
         public bool HasError()
         {
-            _context = GetComponent<Gs2FriendOwnProfileContext>() ?? GetComponentInParent<Gs2FriendOwnProfileContext>(true);
-            if (_context == null) {
+            Context = GetComponent<Gs2FriendOwnProfileContext>() ?? GetComponentInParent<Gs2FriendOwnProfileContext>(true);
+            if (Context == null) {
                 return true;
             }
             return false;
@@ -144,8 +144,8 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Fetcher
 
     public partial class Gs2FriendOwnProfileFetcher
     {
-        public Gs2.Unity.Gs2Friend.Model.EzProfile Profile { get; private set; }
-        public bool Fetched { get; private set; }
+        public Gs2.Unity.Gs2Friend.Model.EzProfile Profile { get; protected set; }
+        public bool Fetched { get; protected set; }
     }
 
     /// <summary>

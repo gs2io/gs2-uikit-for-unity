@@ -48,22 +48,23 @@ namespace Gs2.Unity.UiKit.Gs2Chat.Editor
                 }
             }
             else {
-                if (fetcher.transform.parent == null || fetcher.transform.parent.GetComponent<Gs2ChatOwnSubscribeList>() != null) {
+                if (fetcher.gameObject.GetComponentInParent<Gs2ChatOwnSubscribeList>(true) != null) {
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2ChatOwnSubscribeFetcher), false);
                     EditorGUI.EndDisabledGroup();
                     EditorGUILayout.HelpBox("Subscribe is auto assign from Gs2ChatOwnSubscribeList.", MessageType.Info);
                 }
                 else {
-                    var context = original.GetComponent<Gs2ChatOwnSubscribeContext>() ?? original.GetComponentInParent<Gs2ChatOwnSubscribeContext>(true);
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2ChatOwnSubscribeFetcher), false);
                     EditorGUI.indentLevel++;
-                    context.Subscribe = EditorGUILayout.ObjectField("Subscribe", context.Subscribe, typeof(OwnSubscribe), false) as OwnSubscribe;
-                    EditorGUI.indentLevel++;
-                    EditorGUILayout.TextField("NamespaceName", context.Subscribe?.NamespaceName.ToString());
-                    EditorGUILayout.TextField("RoomName", context.Subscribe?.RoomName.ToString());
-                    EditorGUI.indentLevel--;
+                    if (fetcher.Context != null) {
+                        fetcher.Context.Subscribe = EditorGUILayout.ObjectField("Subscribe", fetcher.Context.Subscribe, typeof(OwnSubscribe), false) as OwnSubscribe;
+                        EditorGUI.indentLevel++;
+                        EditorGUILayout.TextField("NamespaceName", fetcher.Context.Subscribe?.NamespaceName.ToString());
+                        EditorGUILayout.TextField("RoomName", fetcher.Context.Subscribe?.RoomName.ToString());
+                        EditorGUI.indentLevel--;
+                    }
                     EditorGUI.indentLevel--;
                     EditorGUI.EndDisabledGroup();
                 }

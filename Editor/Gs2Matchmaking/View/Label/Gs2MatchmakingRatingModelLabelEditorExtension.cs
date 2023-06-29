@@ -48,28 +48,29 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking.Editor
                 }
             }
             else {
-                if (fetcher.transform.parent == null || fetcher.transform.parent.GetComponent<Gs2MatchmakingRatingModelList>() != null) {
+                if (fetcher.gameObject.GetComponentInParent<Gs2MatchmakingRatingModelList>(true) != null) {
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2MatchmakingRatingModelFetcher), false);
                     EditorGUI.EndDisabledGroup();
                     EditorGUILayout.HelpBox("RatingModel is auto assign from Gs2MatchmakingRatingModelList.", MessageType.Info);
                 }
-                else if (fetcher.transform.parent == null || fetcher.transform.parent.GetComponent<Gs2MatchmakingOwnRatingList>() != null) {
+                else if (fetcher.gameObject.GetComponentInParent<Gs2MatchmakingOwnRatingList>(true) != null) {
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2MatchmakingOwnRatingFetcher), false);
                     EditorGUI.EndDisabledGroup();
                     EditorGUILayout.HelpBox("RatingModel is auto assign from Gs2MatchmakingOwnRatingList.", MessageType.Info);
                 }
                 else {
-                    var context = original.GetComponent<Gs2MatchmakingRatingModelContext>() ?? original.GetComponentInParent<Gs2MatchmakingRatingModelContext>(true);
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2MatchmakingRatingModelFetcher), false);
                     EditorGUI.indentLevel++;
-                    context.RatingModel = EditorGUILayout.ObjectField("RatingModel", context.RatingModel, typeof(RatingModel), false) as RatingModel;
-                    EditorGUI.indentLevel++;
-                    EditorGUILayout.TextField("NamespaceName", context.RatingModel?.NamespaceName.ToString());
-                    EditorGUILayout.TextField("RatingName", context.RatingModel?.RatingName.ToString());
-                    EditorGUI.indentLevel--;
+                    if (fetcher.Context != null) {
+                        fetcher.Context.RatingModel = EditorGUILayout.ObjectField("RatingModel", fetcher.Context.RatingModel, typeof(RatingModel), false) as RatingModel;
+                        EditorGUI.indentLevel++;
+                        EditorGUILayout.TextField("NamespaceName", fetcher.Context.RatingModel?.NamespaceName.ToString());
+                        EditorGUILayout.TextField("RatingName", fetcher.Context.RatingModel?.RatingName.ToString());
+                        EditorGUI.indentLevel--;
+                    }
                     EditorGUI.indentLevel--;
                     EditorGUI.EndDisabledGroup();
                 }

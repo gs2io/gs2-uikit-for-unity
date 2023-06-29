@@ -51,7 +51,7 @@ namespace Gs2.Unity.UiKit.Gs2Inbox.Localization.Editor
                 }
             }
             else {
-                if (fetcher.transform.parent == null || fetcher.transform.parent.GetComponent<Gs2InboxOwnMessageList>() != null) {
+                if (fetcher.gameObject.GetComponentInParent<Gs2InboxOwnMessageList>(true) != null) {
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2InboxOwnMessageFetcher), false);
                     EditorGUI.EndDisabledGroup();

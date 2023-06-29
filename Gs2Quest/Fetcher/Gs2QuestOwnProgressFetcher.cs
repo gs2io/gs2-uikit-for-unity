@@ -56,11 +56,11 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Fetcher
             {
                 if (_gameSessionHolder != null && _gameSessionHolder.Initialized &&
                     _clientHolder != null && _clientHolder.Initialized &&
-                    _context != null && this._context.Progress != null)
+                    Context != null && this.Context.Progress != null)
                 {
                     
                     var domain = this._clientHolder.Gs2.Quest.Namespace(
-                        this._context.Progress.NamespaceName
+                        this.Context.Progress.NamespaceName
                     ).Me(
                         this._gameSessionHolder.GameSession
                     ).Progress(
@@ -112,17 +112,17 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Fetcher
 
     public partial class Gs2QuestOwnProgressFetcher
     {
-        private Gs2ClientHolder _clientHolder;
-        private Gs2GameSessionHolder _gameSessionHolder;
-        private Gs2QuestOwnProgressContext _context;
+        protected Gs2ClientHolder _clientHolder;
+        protected Gs2GameSessionHolder _gameSessionHolder;
+        public Gs2QuestOwnProgressContext Context { get; private set; }
 
         public void Awake()
         {
             _clientHolder = Gs2ClientHolder.Instance;
             _gameSessionHolder = Gs2GameSessionHolder.Instance;
-            _context = GetComponent<Gs2QuestOwnProgressContext>() ?? GetComponentInParent<Gs2QuestOwnProgressContext>();
+            Context = GetComponent<Gs2QuestOwnProgressContext>() ?? GetComponentInParent<Gs2QuestOwnProgressContext>();
 
-            if (_context == null) {
+            if (Context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2QuestOwnProgressContext.");
                 enabled = false;
             }
@@ -130,8 +130,8 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Fetcher
 
         public bool HasError()
         {
-            _context = GetComponent<Gs2QuestOwnProgressContext>() ?? GetComponentInParent<Gs2QuestOwnProgressContext>(true);
-            if (_context == null) {
+            Context = GetComponent<Gs2QuestOwnProgressContext>() ?? GetComponentInParent<Gs2QuestOwnProgressContext>(true);
+            if (Context == null) {
                 return true;
             }
             return false;
@@ -144,8 +144,8 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Fetcher
 
     public partial class Gs2QuestOwnProgressFetcher
     {
-        public Gs2.Unity.Gs2Quest.Model.EzProgress Progress { get; private set; }
-        public bool Fetched { get; private set; }
+        public Gs2.Unity.Gs2Quest.Model.EzProgress Progress { get; protected set; }
+        public bool Fetched { get; protected set; }
     }
 
     /// <summary>

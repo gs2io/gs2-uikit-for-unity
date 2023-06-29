@@ -48,28 +48,29 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Editor
                 }
             }
             else {
-                if (fetcher.transform.parent == null || fetcher.transform.parent.GetComponent<Gs2MissionCounterModelList>() != null) {
+                if (fetcher.gameObject.GetComponentInParent<Gs2MissionCounterModelList>(true) != null) {
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2MissionCounterModelFetcher), false);
                     EditorGUI.EndDisabledGroup();
                     EditorGUILayout.HelpBox("CounterModel is auto assign from Gs2MissionCounterModelList.", MessageType.Info);
                 }
-                else if (fetcher.transform.parent == null || fetcher.transform.parent.GetComponent<Gs2MissionOwnCounterList>() != null) {
+                else if (fetcher.gameObject.GetComponentInParent<Gs2MissionOwnCounterList>(true) != null) {
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2MissionOwnCounterFetcher), false);
                     EditorGUI.EndDisabledGroup();
                     EditorGUILayout.HelpBox("CounterModel is auto assign from Gs2MissionOwnCounterList.", MessageType.Info);
                 }
                 else {
-                    var context = original.GetComponent<Gs2MissionCounterModelContext>() ?? original.GetComponentInParent<Gs2MissionCounterModelContext>(true);
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2MissionCounterModelFetcher), false);
                     EditorGUI.indentLevel++;
-                    context.CounterModel = EditorGUILayout.ObjectField("CounterModel", context.CounterModel, typeof(CounterModel), false) as CounterModel;
-                    EditorGUI.indentLevel++;
-                    EditorGUILayout.TextField("NamespaceName", context.CounterModel?.NamespaceName.ToString());
-                    EditorGUILayout.TextField("CounterName", context.CounterModel?.CounterName.ToString());
-                    EditorGUI.indentLevel--;
+                    if (fetcher.Context != null) {
+                        fetcher.Context.CounterModel = EditorGUILayout.ObjectField("CounterModel", fetcher.Context.CounterModel, typeof(CounterModel), false) as CounterModel;
+                        EditorGUI.indentLevel++;
+                        EditorGUILayout.TextField("NamespaceName", fetcher.Context.CounterModel?.NamespaceName.ToString());
+                        EditorGUILayout.TextField("CounterName", fetcher.Context.CounterModel?.CounterName.ToString());
+                        EditorGUI.indentLevel--;
+                    }
                     EditorGUI.indentLevel--;
                     EditorGUI.EndDisabledGroup();
                 }

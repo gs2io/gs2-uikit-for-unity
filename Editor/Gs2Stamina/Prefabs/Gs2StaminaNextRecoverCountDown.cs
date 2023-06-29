@@ -5,7 +5,7 @@ namespace Editor.Gs2Stamina.Prefabs
 {
     public static class Gs2StaminaNextRecoverCountDown
     {
-        [MenuItem("GameObject/UI/Game Server Services/Stamina/NextRecoverCountDown", priority = 0)]
+        [MenuItem("GameObject/UI/Game Server Services/Stamina/Stamina/NextRecoverCountDown", priority = 0)]
         private static void CreateButton()
         {
             var prefab = AssetDatabase.LoadAssetAtPath<GameObject>(

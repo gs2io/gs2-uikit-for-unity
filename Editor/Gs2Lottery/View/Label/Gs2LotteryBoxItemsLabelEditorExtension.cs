@@ -48,22 +48,23 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.Editor
                 }
             }
             else {
-                if (fetcher.transform.parent == null || fetcher.transform.parent.GetComponent<Gs2LotteryOwnBoxItemsList>() != null) {
+                if (fetcher.gameObject.GetComponentInParent<Gs2LotteryOwnBoxItemsList>(true) != null) {
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2LotteryOwnBoxItemsFetcher), false);
                     EditorGUI.EndDisabledGroup();
                     EditorGUILayout.HelpBox("BoxItems is auto assign from Gs2LotteryOwnBoxItemsList.", MessageType.Info);
                 }
                 else {
-                    var context = original.GetComponent<Gs2LotteryOwnBoxItemsContext>() ?? original.GetComponentInParent<Gs2LotteryOwnBoxItemsContext>(true);
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2LotteryOwnBoxItemsFetcher), false);
                     EditorGUI.indentLevel++;
-                    context.BoxItems = EditorGUILayout.ObjectField("BoxItems", context.BoxItems, typeof(OwnBoxItems), false) as OwnBoxItems;
-                    EditorGUI.indentLevel++;
-                    EditorGUILayout.TextField("NamespaceName", context.BoxItems?.NamespaceName.ToString());
-                    EditorGUILayout.TextField("PrizeTableName", context.BoxItems?.PrizeTableName.ToString());
-                    EditorGUI.indentLevel--;
+                    if (fetcher.Context != null) {
+                        fetcher.Context.BoxItems = EditorGUILayout.ObjectField("BoxItems", fetcher.Context.BoxItems, typeof(OwnBoxItems), false) as OwnBoxItems;
+                        EditorGUI.indentLevel++;
+                        EditorGUILayout.TextField("NamespaceName", fetcher.Context.BoxItems?.NamespaceName.ToString());
+                        EditorGUILayout.TextField("PrizeTableName", fetcher.Context.BoxItems?.PrizeTableName.ToString());
+                        EditorGUI.indentLevel--;
+                    }
                     EditorGUI.indentLevel--;
                     EditorGUI.EndDisabledGroup();
                 }

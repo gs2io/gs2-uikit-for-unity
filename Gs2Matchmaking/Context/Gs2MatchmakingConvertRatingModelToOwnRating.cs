@@ -35,20 +35,29 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking.Context
     [AddComponentMenu("GS2 UIKit/Matchmaking/Rating/Context/Convert/Gs2MatchmakingConvertRatingModelToOwnRating")]
     public class Gs2MatchmakingConvertRatingModelToOwnRating : MonoBehaviour
     {
-        private Gs2MatchmakingRatingModelContext _context;
-        
-        public void Awake() {
-            _context = GetComponent<Gs2MatchmakingRatingModelContext>() ?? GetComponentInParent<Gs2MatchmakingRatingModelContext>();
+        private Gs2MatchmakingRatingModelContext _originalContext;
+        private Gs2MatchmakingOwnRatingContext _context;
 
-            if (_context == null) {
+        public void Awake() {
+            _originalContext = GetComponent<Gs2MatchmakingRatingModelContext>() ?? GetComponentInParent<Gs2MatchmakingRatingModelContext>();
+            if (_originalContext == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MatchmakingRatingModelContext.");
+                enabled = false;
+            }
+            _context = GetComponent<Gs2MatchmakingOwnRatingContext>();
+            if (_context == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MatchmakingOwnRatingContext.");
                 enabled = false;
             }
         }
 
         public bool HasError()
         {
-            _context = GetComponent<Gs2MatchmakingRatingModelContext>() ?? GetComponentInParent<Gs2MatchmakingRatingModelContext>(true);
+            _originalContext = GetComponent<Gs2MatchmakingRatingModelContext>() ?? GetComponentInParent<Gs2MatchmakingRatingModelContext>(true);
+            if (_originalContext == null) {
+                return true;
+            }
+            _context = GetComponent<Gs2MatchmakingOwnRatingContext>();
             if (_context == null) {
                 return true;
             }
@@ -56,28 +65,13 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking.Context
         }
 
         public void Start() {
-            this.onConverted.Invoke(
+            _context.SetOwnRating(
                 OwnRating.New(
-                    _context.RatingModel.Namespace,
-                    _context.RatingModel.ratingName
+                    _originalContext.RatingModel.Namespace,
+                    _originalContext.RatingModel.ratingName
                 )
             );
             enabled = false;
-        }
-        
-        [Serializable]
-        private class ConvertEvent : UnityEvent<OwnRating>
-        {
-
-        }
-
-        [SerializeField]
-        private ConvertEvent onConverted = new ConvertEvent();
-
-        public event UnityAction<OwnRating> OnConvert
-        {
-            add => onConverted.AddListener(value);
-            remove => onConverted.RemoveListener(value);
         }
     }
 }

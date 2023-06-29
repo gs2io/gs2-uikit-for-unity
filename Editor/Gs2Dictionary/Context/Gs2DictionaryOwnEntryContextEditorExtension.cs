@@ -43,7 +43,7 @@ namespace Gs2.Unity.UiKit.Gs2Dictionary.Editor
             serializedObject.Update();
 
             if (original.Entry == null) {
-                if (original.transform.parent.GetComponent<Gs2DictionaryOwnEntryList>() != null) {
+                if (original.GetComponentInParent<Gs2DictionaryOwnEntryList>(true) != null) {
                     EditorGUILayout.HelpBox("OwnEntry is auto assign from Gs2DictionaryOwnEntryList.", MessageType.Info);
                 }
                 else {

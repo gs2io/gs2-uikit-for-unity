@@ -35,20 +35,29 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Context
     [AddComponentMenu("GS2 UIKit/Formation/Mold/Context/Convert/Gs2FormationConvertMoldModelToOwnMold")]
     public class Gs2FormationConvertMoldModelToOwnMold : MonoBehaviour
     {
-        private Gs2FormationMoldModelContext _context;
-        
-        public void Awake() {
-            _context = GetComponent<Gs2FormationMoldModelContext>() ?? GetComponentInParent<Gs2FormationMoldModelContext>();
+        private Gs2FormationMoldModelContext _originalContext;
+        private Gs2FormationOwnMoldContext _context;
 
-            if (_context == null) {
+        public void Awake() {
+            _originalContext = GetComponent<Gs2FormationMoldModelContext>() ?? GetComponentInParent<Gs2FormationMoldModelContext>();
+            if (_originalContext == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2FormationMoldModelContext.");
+                enabled = false;
+            }
+            _context = GetComponent<Gs2FormationOwnMoldContext>();
+            if (_context == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2FormationOwnMoldContext.");
                 enabled = false;
             }
         }
 
         public bool HasError()
         {
-            _context = GetComponent<Gs2FormationMoldModelContext>() ?? GetComponentInParent<Gs2FormationMoldModelContext>(true);
+            _originalContext = GetComponent<Gs2FormationMoldModelContext>() ?? GetComponentInParent<Gs2FormationMoldModelContext>(true);
+            if (_originalContext == null) {
+                return true;
+            }
+            _context = GetComponent<Gs2FormationOwnMoldContext>();
             if (_context == null) {
                 return true;
             }
@@ -56,28 +65,13 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Context
         }
 
         public void Start() {
-            this.onConverted.Invoke(
+            _context.SetOwnMold(
                 OwnMold.New(
-                    _context.MoldModel.Namespace,
-                    _context.MoldModel.moldName
+                    _originalContext.MoldModel.Namespace,
+                    _originalContext.MoldModel.moldName
                 )
             );
             enabled = false;
-        }
-        
-        [Serializable]
-        private class ConvertEvent : UnityEvent<OwnMold>
-        {
-
-        }
-
-        [SerializeField]
-        private ConvertEvent onConverted = new ConvertEvent();
-
-        public event UnityAction<OwnMold> OnConvert
-        {
-            add => onConverted.AddListener(value);
-            remove => onConverted.RemoveListener(value);
         }
     }
 }

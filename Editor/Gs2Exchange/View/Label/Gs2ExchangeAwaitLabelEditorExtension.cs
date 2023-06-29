@@ -48,22 +48,23 @@ namespace Gs2.Unity.UiKit.Gs2Exchange.Editor
                 }
             }
             else {
-                if (fetcher.transform.parent == null || fetcher.transform.parent.GetComponent<Gs2ExchangeOwnAwaitList>() != null) {
+                if (fetcher.gameObject.GetComponentInParent<Gs2ExchangeOwnAwaitList>(true) != null) {
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2ExchangeOwnAwaitFetcher), false);
                     EditorGUI.EndDisabledGroup();
                     EditorGUILayout.HelpBox("Await is auto assign from Gs2ExchangeOwnAwaitList.", MessageType.Info);
                 }
                 else {
-                    var context = original.GetComponent<Gs2ExchangeOwnAwaitContext>() ?? original.GetComponentInParent<Gs2ExchangeOwnAwaitContext>(true);
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2ExchangeOwnAwaitFetcher), false);
                     EditorGUI.indentLevel++;
-                    context.Await_ = EditorGUILayout.ObjectField("Await", context.Await_, typeof(OwnAwait), false) as OwnAwait;
-                    EditorGUI.indentLevel++;
-                    EditorGUILayout.TextField("NamespaceName", context.Await_?.NamespaceName.ToString());
-                    EditorGUILayout.TextField("AwaitName", context.Await_?.AwaitName.ToString());
-                    EditorGUI.indentLevel--;
+                    if (fetcher.Context != null) {
+                        fetcher.Context.Await_ = EditorGUILayout.ObjectField("Await", fetcher.Context.Await_, typeof(OwnAwait), false) as OwnAwait;
+                        EditorGUI.indentLevel++;
+                        EditorGUILayout.TextField("NamespaceName", fetcher.Context.Await_?.NamespaceName.ToString());
+                        EditorGUILayout.TextField("AwaitName", fetcher.Context.Await_?.AwaitName.ToString());
+                        EditorGUI.indentLevel--;
+                    }
                     EditorGUI.indentLevel--;
                     EditorGUI.EndDisabledGroup();
                 }

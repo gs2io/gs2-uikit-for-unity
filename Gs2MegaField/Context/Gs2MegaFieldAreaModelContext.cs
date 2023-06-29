@@ -44,7 +44,7 @@ namespace Gs2.Unity.UiKit.Gs2MegaField.Context
 
         public bool HasError() {
             if (AreaModel == null) {
-                if (transform.parent != null && transform.parent.GetComponent<Gs2MegaFieldAreaModelList>() != null) {
+                if (GetComponentInParent<Gs2MegaFieldAreaModelList>(true) != null) {
                     return false;
                 }
                 else {

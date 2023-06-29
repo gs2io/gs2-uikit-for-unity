@@ -54,7 +54,6 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Editor
                 context.PublicProfile = EditorGUILayout.ObjectField("PublicProfile", context.PublicProfile, typeof(PublicProfile), false) as PublicProfile;
                 EditorGUI.indentLevel++;
                 EditorGUILayout.TextField("NamespaceName", context.PublicProfile?.NamespaceName.ToString());
-                EditorGUILayout.TextField("UserId", context.PublicProfile?.UserId.ToString());
                 EditorGUI.indentLevel--;
                 EditorGUI.indentLevel--;
                 EditorGUI.EndDisabledGroup();

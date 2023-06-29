@@ -5,7 +5,7 @@ namespace Editor.Gs2Mission.Prefabs
 {
     public static class Gs2MissionCounterValue
     {
-        [MenuItem("GameObject/UI/Game Server Services/Mission/CounterValue", priority = 0)]
+        [MenuItem("GameObject/UI/Game Server Services/Mission/Counter/CounterValue", priority = 0)]
         private static void CreateButton()
         {
             var prefab = AssetDatabase.LoadAssetAtPath<GameObject>(

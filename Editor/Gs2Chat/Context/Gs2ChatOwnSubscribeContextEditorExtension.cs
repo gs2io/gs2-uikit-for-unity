@@ -43,7 +43,7 @@ namespace Gs2.Unity.UiKit.Gs2Chat.Editor
             serializedObject.Update();
 
             if (original.Subscribe == null) {
-                if (original.transform.parent.GetComponent<Gs2ChatOwnSubscribeList>() != null) {
+                if (original.GetComponentInParent<Gs2ChatOwnSubscribeList>(true) != null) {
                     EditorGUILayout.HelpBox("OwnSubscribe is auto assign from Gs2ChatOwnSubscribeList.", MessageType.Info);
                 }
                 else {

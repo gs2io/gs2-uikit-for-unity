@@ -48,28 +48,29 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Editor
                 }
             }
             else {
-                if (fetcher.transform.parent == null || fetcher.transform.parent.GetComponent<Gs2FormationMoldModelList>() != null) {
+                if (fetcher.gameObject.GetComponentInParent<Gs2FormationMoldModelList>(true) != null) {
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2FormationMoldModelFetcher), false);
                     EditorGUI.EndDisabledGroup();
                     EditorGUILayout.HelpBox("MoldModel is auto assign from Gs2FormationMoldModelList.", MessageType.Info);
                 }
-                else if (fetcher.transform.parent == null || fetcher.transform.parent.GetComponent<Gs2FormationOwnMoldList>() != null) {
+                else if (fetcher.gameObject.GetComponentInParent<Gs2FormationOwnMoldList>(true) != null) {
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2FormationOwnMoldFetcher), false);
                     EditorGUI.EndDisabledGroup();
                     EditorGUILayout.HelpBox("MoldModel is auto assign from Gs2FormationOwnMoldList.", MessageType.Info);
                 }
                 else {
-                    var context = original.GetComponent<Gs2FormationMoldModelContext>() ?? original.GetComponentInParent<Gs2FormationMoldModelContext>(true);
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2FormationMoldModelFetcher), false);
                     EditorGUI.indentLevel++;
-                    context.MoldModel = EditorGUILayout.ObjectField("MoldModel", context.MoldModel, typeof(MoldModel), false) as MoldModel;
-                    EditorGUI.indentLevel++;
-                    EditorGUILayout.TextField("NamespaceName", context.MoldModel?.NamespaceName.ToString());
-                    EditorGUILayout.TextField("MoldName", context.MoldModel?.MoldName.ToString());
-                    EditorGUI.indentLevel--;
+                    if (fetcher.Context != null) {
+                        fetcher.Context.MoldModel = EditorGUILayout.ObjectField("MoldModel", fetcher.Context.MoldModel, typeof(MoldModel), false) as MoldModel;
+                        EditorGUI.indentLevel++;
+                        EditorGUILayout.TextField("NamespaceName", fetcher.Context.MoldModel?.NamespaceName.ToString());
+                        EditorGUILayout.TextField("MoldName", fetcher.Context.MoldModel?.MoldName.ToString());
+                        EditorGUI.indentLevel--;
+                    }
                     EditorGUI.indentLevel--;
                     EditorGUI.EndDisabledGroup();
                 }

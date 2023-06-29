@@ -53,15 +53,15 @@ namespace Gs2.Unity.UiKit.Gs2Showcase.Fetcher
             {
                 if (_gameSessionHolder != null && _gameSessionHolder.Initialized &&
                     _clientHolder != null && _clientHolder.Initialized &&
-                    _context != null && this._context.DisplayItem != null)
+                    Context != null && this.Context.DisplayItem != null)
                 {
                     
                     var domain = this._clientHolder.Gs2.Showcase.Namespace(
-                        this._context.DisplayItem.NamespaceName
+                        this.Context.DisplayItem.NamespaceName
                     ).Me(
                         this._gameSessionHolder.GameSession
                     ).Showcase(
-                        this._context.DisplayItem.ShowcaseName
+                        this.Context.DisplayItem.ShowcaseName
                     );
                     var future = domain.Model();
                     yield return future;
@@ -78,7 +78,7 @@ namespace Gs2.Unity.UiKit.Gs2Showcase.Fetcher
                     else
                     {
                         DisplayItem = future.Result.DisplayItems.FirstOrDefault(
-                            v => v.DisplayItemId == _context.DisplayItem.DisplayItemId
+                            v => v.DisplayItemId == Context.DisplayItem.DisplayItemId
                         );
                         Fetched = true;
                     }
@@ -122,7 +122,7 @@ namespace Gs2.Unity.UiKit.Gs2Showcase.Fetcher
     {
         protected Gs2ClientHolder _clientHolder;
         protected Gs2GameSessionHolder _gameSessionHolder;
-        private Gs2ShowcaseDisplayItemContext _context;
+        public Gs2ShowcaseDisplayItemContext Context { get; protected set; }
 
         private void ChangeCounter(string namespaceName, string limitName, Gs2.Gs2Limit.Model.Counter counter) {
             if (DisplayItem == null) return;
@@ -137,12 +137,12 @@ namespace Gs2.Unity.UiKit.Gs2Showcase.Fetcher
                     
                     this._clientHolder.Gs2.ClearCache<Gs2.Gs2Showcase.Model.Showcase>(
                         Gs2.Gs2Showcase.Domain.Model.UserDomain.CreateCacheParentKey(
-                            _context.DisplayItem.NamespaceName,
+                            Context.DisplayItem.NamespaceName,
                             counter.UserId,
                             "Showcase"
                         ),
                         Gs2.Gs2Showcase.Domain.Model.ShowcaseDomain.CreateCacheKey(
-                            _context.DisplayItem.ShowcaseName
+                            Context.DisplayItem.ShowcaseName
                         )
                     );
                 }
@@ -153,9 +153,9 @@ namespace Gs2.Unity.UiKit.Gs2Showcase.Fetcher
         {
             _clientHolder = Gs2ClientHolder.Instance;
             _gameSessionHolder = Gs2GameSessionHolder.Instance;
-            _context = GetComponentInParent<Gs2ShowcaseDisplayItemContext>();
+            Context = GetComponentInParent<Gs2ShowcaseDisplayItemContext>();
             
-            if (_context == null) {
+            if (Context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ShowcaseDisplayItemContext.");
                 enabled = false;
             }
