@@ -63,12 +63,11 @@ namespace Gs2.Unity.UiKit.Gs2Enhance
 
     public partial class Gs2EnhanceRateModelList
     {
-        private Gs2EnhanceNamespaceContext _context;
         private Gs2EnhanceRateModelListFetcher _fetcher;
+        public Gs2EnhanceNamespaceContext Context => _fetcher.Context;
 
         public void Awake()
         {
-            _context = GetComponent<Gs2EnhanceNamespaceContext>() ?? GetComponentInParent<Gs2EnhanceNamespaceContext>();
             _fetcher = GetComponent<Gs2EnhanceRateModelListFetcher>() ?? GetComponentInParent<Gs2EnhanceRateModelListFetcher>();
 
             if (_fetcher == null) {
@@ -80,7 +79,7 @@ namespace Gs2.Unity.UiKit.Gs2Enhance
             for (var i = 0; i < this.maximumItems; i++) {
                 var node = Instantiate(this.prefab, transform);
                 node.RateModel = RateModel.New(
-                    _context.Namespace,
+                    _fetcher.Context.Namespace,
                     ""
                 );
                 node.gameObject.SetActive(false);
@@ -91,11 +90,7 @@ namespace Gs2.Unity.UiKit.Gs2Enhance
 
         public bool HasError()
         {
-            _context = GetComponent<Gs2EnhanceNamespaceContext>() ?? GetComponentInParent<Gs2EnhanceNamespaceContext>(true);
             _fetcher = GetComponent<Gs2EnhanceRateModelListFetcher>() ?? GetComponentInParent<Gs2EnhanceRateModelListFetcher>(true);
-            if (_context == null) {
-                return true;
-            }
             if (_fetcher == null) {
                 return true;
             }

@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable UnusedAutoPropertyAccessor.Local
@@ -36,7 +38,7 @@ using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Quest.Context;
 using UnityEngine;
 using UnityEngine.Events;
-using Progress = Gs2.Unity.Gs2Quest.ScriptableObject.OwnProgress;
+using Progress = Gs2.Unity.Gs2Quest.ScriptableObject.QuestGroupModel;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -52,7 +54,7 @@ namespace Gs2.Unity.UiKit.Gs2Quest
             yield return new WaitUntil(() => this._gameSessionHolder.Initialized);
             
             var domain = this._clientHolder.Gs2.Quest.Namespace(
-                this._context.Progress.NamespaceName
+                this._context.QuestModel.NamespaceName
             ).Me(
                 this._gameSessionHolder.GameSession
             );
@@ -108,23 +110,23 @@ namespace Gs2.Unity.UiKit.Gs2Quest
     {
         private Gs2ClientHolder _clientHolder;
         private Gs2GameSessionHolder _gameSessionHolder;
-        private Gs2QuestOwnProgressContext _context;
+        private Gs2QuestQuestModelContext _context;
 
         public void Awake()
         {
             this._clientHolder = Gs2ClientHolder.Instance;
             this._gameSessionHolder = Gs2GameSessionHolder.Instance;
-            this._context = GetComponent<Gs2QuestOwnProgressContext>() ?? GetComponentInParent<Gs2QuestOwnProgressContext>();
+            this._context = GetComponent<Gs2QuestQuestModelContext>() ?? GetComponentInParent<Gs2QuestQuestModelContext>();
 
             if (_context == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2QuestOwnProgressContext.");
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2QuestQuestModelContext.");
                 enabled = false;
             }
         }
 
         public bool HasError()
         {
-            this._context = GetComponent<Gs2QuestOwnProgressContext>() ?? GetComponentInParent<Gs2QuestOwnProgressContext>(true);
+            this._context = GetComponent<Gs2QuestQuestModelContext>() ?? GetComponentInParent<Gs2QuestQuestModelContext>(true);
             if (_context == null) {
                 return true;
             }

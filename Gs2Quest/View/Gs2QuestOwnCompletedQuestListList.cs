@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
@@ -40,13 +42,13 @@ namespace Gs2.Unity.UiKit.Gs2Quest
     [AddComponentMenu("GS2 UIKit/Quest/CompletedQuestList/View/Gs2QuestOwnCompletedQuestListList")]
     public partial class Gs2QuestOwnCompletedQuestListList : MonoBehaviour
     {
-        private List<Gs2QuestOwnCompletedQuestListContext> _children;
+        private List<Gs2QuestQuestGroupModelContext> _children;
 
         public void Update() {
-            if (_fetcher.Fetched && _fetcher.CompletedQuestList != null) {
+            if (_fetcher.Fetched && this._fetcher.CompletedQuestList != null) {
                 for (var i = 0; i < this.maximumItems; i++) {
                     if (i < this._fetcher.CompletedQuestList.Count) {
-                        _children[i].CompletedQuestList.questGroupName = this._fetcher.CompletedQuestList[i].QuestGroupName;
+                        _children[i].QuestGroupModel.questGroupName = this._fetcher.CompletedQuestList[i].QuestGroupName;
                         _children[i].gameObject.SetActive(true);
                     }
                     else {
@@ -63,28 +65,23 @@ namespace Gs2.Unity.UiKit.Gs2Quest
 
     public partial class Gs2QuestOwnCompletedQuestListList
     {
-        private Gs2QuestNamespaceContext _context;
         private Gs2QuestOwnCompletedQuestListListFetcher _fetcher;
+        private Gs2QuestNamespaceContext Context => _fetcher.Context;
 
         public void Awake()
         {
-            _context = GetComponent<Gs2QuestNamespaceContext>() ?? GetComponentInParent<Gs2QuestNamespaceContext>();
             _fetcher = GetComponent<Gs2QuestOwnCompletedQuestListListFetcher>() ?? GetComponentInParent<Gs2QuestOwnCompletedQuestListListFetcher>();
 
-            if (_context == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2QuestNamespaceContext.");
-                enabled = false;
-            }
             if (_fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2QuestOwnCompletedQuestListListFetcher.");
                 enabled = false;
             }
 
-            _children = new List<Gs2QuestOwnCompletedQuestListContext>();
+            _children = new List<Gs2QuestQuestGroupModelContext>();
             for (var i = 0; i < this.maximumItems; i++) {
                 var node = Instantiate(this.prefab, transform);
-                node.CompletedQuestList = OwnCompletedQuestList.New(
-                    _context.Namespace,
+                node.QuestGroupModel = QuestGroupModel.New(
+                    _fetcher.Context.Namespace,
                     ""
                 );
                 node.gameObject.SetActive(false);
@@ -95,11 +92,7 @@ namespace Gs2.Unity.UiKit.Gs2Quest
 
         public bool HasError()
         {
-            _context = GetComponent<Gs2QuestNamespaceContext>() ?? GetComponentInParent<Gs2QuestNamespaceContext>(true);
             _fetcher = GetComponent<Gs2QuestOwnCompletedQuestListListFetcher>() ?? GetComponentInParent<Gs2QuestOwnCompletedQuestListListFetcher>(true);
-            if (_context == null) {
-                return true;
-            }
             if (_fetcher == null) {
                 return true;
             }
@@ -122,7 +115,7 @@ namespace Gs2.Unity.UiKit.Gs2Quest
 
     public partial class Gs2QuestOwnCompletedQuestListList
     {
-        public Gs2QuestOwnCompletedQuestListContext prefab;
+        public Gs2QuestQuestGroupModelContext prefab;
         public int maximumItems;
     }
 

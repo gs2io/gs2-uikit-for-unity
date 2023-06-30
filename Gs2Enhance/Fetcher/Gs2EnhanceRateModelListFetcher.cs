@@ -55,11 +55,11 @@ namespace Gs2.Unity.UiKit.Gs2Enhance.Fetcher
             {
                 if (_gameSessionHolder != null && _gameSessionHolder.Initialized && 
                     _clientHolder != null && _clientHolder.Initialized &&
-                    _context != null)
+                    Context != null)
                 {
                     
                     var domain = this._clientHolder.Gs2.Enhance.Namespace(
-                        this._context.Namespace.NamespaceName
+                        this.Context.Namespace.NamespaceName
                     );
                     var it = domain.RateModels();
                     var items = new List<Gs2.Unity.Gs2Enhance.Model.EzRateModel>();
@@ -120,15 +120,15 @@ namespace Gs2.Unity.UiKit.Gs2Enhance.Fetcher
     {
         private Gs2ClientHolder _clientHolder;
         private Gs2GameSessionHolder _gameSessionHolder;
-        private Gs2EnhanceNamespaceContext _context;
+        public Gs2EnhanceNamespaceContext Context { get; private set; }
 
         public void Awake()
         {
             _clientHolder = Gs2ClientHolder.Instance;
             _gameSessionHolder = Gs2GameSessionHolder.Instance;
-            _context = GetComponent<Gs2EnhanceNamespaceContext>() ?? GetComponentInParent<Gs2EnhanceNamespaceContext>();
+            Context = GetComponent<Gs2EnhanceNamespaceContext>() ?? GetComponentInParent<Gs2EnhanceNamespaceContext>();
 
-            if (_context == null) {
+            if (Context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2EnhanceNamespaceContext.");
                 enabled = false;
             }
@@ -136,8 +136,8 @@ namespace Gs2.Unity.UiKit.Gs2Enhance.Fetcher
 
         public bool HasError()
         {
-            _context = GetComponent<Gs2EnhanceNamespaceContext>() ?? GetComponentInParent<Gs2EnhanceNamespaceContext>(true);
-            if (_context == null) {
+            Context = GetComponent<Gs2EnhanceNamespaceContext>() ?? GetComponentInParent<Gs2EnhanceNamespaceContext>(true);
+            if (Context == null) {
                 return true;
             }
             return false;

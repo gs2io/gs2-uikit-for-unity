@@ -17,6 +17,14 @@
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
+// ReSharper disable RedundantNameQualifier
+// ReSharper disable RedundantAssignment
+// ReSharper disable NotAccessedVariable
+// ReSharper disable RedundantUsingDirective
+// ReSharper disable Unity.NoNullPropagation
+// ReSharper disable InconsistentNaming
+
+#pragma warning disable CS0472
 
 using System;
 using System.Collections;
@@ -27,6 +35,7 @@ using Gs2.Unity.Core.Exception;
 using Gs2.Unity.Gs2Lottery.Model;
 using Gs2.Unity.Gs2Lottery.ScriptableObject;
 using Gs2.Unity.Util;
+using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Lottery.Context;
 using UnityEngine;
 using UnityEngine.Events;
@@ -48,11 +57,11 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.Fetcher
             {
                 if (_gameSessionHolder != null && _gameSessionHolder.Initialized && 
                     _clientHolder != null && _clientHolder.Initialized &&
-                    _context != null)
+                    Context != null)
                 {
                     
                     var domain = this._clientHolder.Gs2.Lottery.Namespace(
-                        this._context.Namespace.NamespaceName
+                        this.Context.Namespace.NamespaceName
                     ).Me(
                         this._gameSessionHolder.GameSession
                     );
@@ -66,6 +75,8 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.Fetcher
                             if (it.Error is BadRequestException || it.Error is NotFoundException)
                             {
                                 onError.Invoke(e = it.Error, null);
+                                Debug.LogError($"{gameObject.GetFullPath()}: {it.Error.Message}");
+                                break;
                             }
                             else {
                                 onError.Invoke(new CanIgnoreException(it.Error), null);
@@ -113,13 +124,27 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.Fetcher
     {
         private Gs2ClientHolder _clientHolder;
         private Gs2GameSessionHolder _gameSessionHolder;
-        private Gs2LotteryNamespaceContext _context;
+        public Gs2LotteryNamespaceContext Context;
 
         public void Awake()
         {
             _clientHolder = Gs2ClientHolder.Instance;
             _gameSessionHolder = Gs2GameSessionHolder.Instance;
-            _context = GetComponentInParent<Gs2LotteryNamespaceContext>();
+            Context = GetComponent<Gs2LotteryNamespaceContext>() ?? GetComponentInParent<Gs2LotteryNamespaceContext>();
+
+            if (Context == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2LotteryNamespaceContext.");
+                enabled = false;
+            }
+        }
+
+        public bool HasError()
+        {
+            Context = GetComponent<Gs2LotteryNamespaceContext>() ?? GetComponentInParent<Gs2LotteryNamespaceContext>(true);
+            if (Context == null) {
+                return true;
+            }
+            return false;
         }
     }
 

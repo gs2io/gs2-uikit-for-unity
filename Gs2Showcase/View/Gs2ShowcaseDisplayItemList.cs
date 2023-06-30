@@ -54,19 +54,17 @@ namespace Gs2.Unity.UiKit.Gs2Showcase
 
     public partial class Gs2ShowcaseDisplayItemList
     {
-        private Gs2ShowcaseShowcaseContext _context;
         private Gs2ShowcaseShowcaseFetcher _fetcher;
 
         public void Awake()
         {
-            _context = GetComponentInParent<Gs2ShowcaseShowcaseContext>();
             _fetcher = GetComponentInParent<Gs2ShowcaseShowcaseFetcher>();
 
             _children = new List<Gs2ShowcaseDisplayItemContext>();
             for (var i = 0; i < this.maximumItems; i++) {
                 var node = Instantiate(this.prefab, transform);
                 node.DisplayItem = DisplayItem.New(
-                    _context.Showcase,
+                    _fetcher.Context.Showcase,
                     ""
                 );
                 node.gameObject.SetActive(false);

@@ -63,12 +63,11 @@ namespace Gs2.Unity.UiKit.Gs2Mission
 
     public partial class Gs2MissionCounterModelList
     {
-        private Gs2MissionNamespaceContext _context;
         private Gs2MissionCounterModelListFetcher _fetcher;
+        public Gs2MissionNamespaceContext Context => _fetcher.Context;
 
         public void Awake()
         {
-            _context = GetComponent<Gs2MissionNamespaceContext>() ?? GetComponentInParent<Gs2MissionNamespaceContext>();
             _fetcher = GetComponent<Gs2MissionCounterModelListFetcher>() ?? GetComponentInParent<Gs2MissionCounterModelListFetcher>();
 
             if (_fetcher == null) {
@@ -80,7 +79,7 @@ namespace Gs2.Unity.UiKit.Gs2Mission
             for (var i = 0; i < this.maximumItems; i++) {
                 var node = Instantiate(this.prefab, transform);
                 node.CounterModel = CounterModel.New(
-                    _context.Namespace,
+                    _fetcher.Context.Namespace,
                     ""
                 );
                 node.gameObject.SetActive(false);
@@ -91,11 +90,7 @@ namespace Gs2.Unity.UiKit.Gs2Mission
 
         public bool HasError()
         {
-            _context = GetComponent<Gs2MissionNamespaceContext>() ?? GetComponentInParent<Gs2MissionNamespaceContext>(true);
             _fetcher = GetComponent<Gs2MissionCounterModelListFetcher>() ?? GetComponentInParent<Gs2MissionCounterModelListFetcher>(true);
-            if (_context == null) {
-                return true;
-            }
             if (_fetcher == null) {
                 return true;
             }

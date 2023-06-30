@@ -43,7 +43,7 @@ namespace Gs2.Unity.UiKit.Gs2Schedule
         private List<Gs2ScheduleOwnTriggerContext> _children;
 
         public void Update() {
-            if (_fetcher.Fetched && _fetcher.Triggers != null) {
+            if (_fetcher.Fetched && this._fetcher.Triggers != null) {
                 for (var i = 0; i < this.maximumItems; i++) {
                     if (i < this._fetcher.Triggers.Count) {
                         _children[i].Trigger.triggerName = this._fetcher.Triggers[i].Name;
@@ -63,18 +63,13 @@ namespace Gs2.Unity.UiKit.Gs2Schedule
 
     public partial class Gs2ScheduleOwnTriggerList
     {
-        private Gs2ScheduleNamespaceContext _context;
         private Gs2ScheduleOwnTriggerListFetcher _fetcher;
+        private Gs2ScheduleNamespaceContext Context => _fetcher.Context;
 
         public void Awake()
         {
-            _context = GetComponent<Gs2ScheduleNamespaceContext>() ?? GetComponentInParent<Gs2ScheduleNamespaceContext>();
             _fetcher = GetComponent<Gs2ScheduleOwnTriggerListFetcher>() ?? GetComponentInParent<Gs2ScheduleOwnTriggerListFetcher>();
 
-            if (_context == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ScheduleNamespaceContext.");
-                enabled = false;
-            }
             if (_fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ScheduleOwnTriggerListFetcher.");
                 enabled = false;
@@ -84,7 +79,7 @@ namespace Gs2.Unity.UiKit.Gs2Schedule
             for (var i = 0; i < this.maximumItems; i++) {
                 var node = Instantiate(this.prefab, transform);
                 node.Trigger = OwnTrigger.New(
-                    _context.Namespace,
+                    _fetcher.Context.Namespace,
                     ""
                 );
                 node.gameObject.SetActive(false);
@@ -95,11 +90,7 @@ namespace Gs2.Unity.UiKit.Gs2Schedule
 
         public bool HasError()
         {
-            _context = GetComponent<Gs2ScheduleNamespaceContext>() ?? GetComponentInParent<Gs2ScheduleNamespaceContext>(true);
             _fetcher = GetComponent<Gs2ScheduleOwnTriggerListFetcher>() ?? GetComponentInParent<Gs2ScheduleOwnTriggerListFetcher>(true);
-            if (_context == null) {
-                return true;
-            }
             if (_fetcher == null) {
                 return true;
             }

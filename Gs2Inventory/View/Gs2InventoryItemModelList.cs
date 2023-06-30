@@ -63,12 +63,11 @@ namespace Gs2.Unity.UiKit.Gs2Inventory
 
     public partial class Gs2InventoryItemModelList
     {
-        private Gs2InventoryInventoryModelContext _context;
         private Gs2InventoryItemModelListFetcher _fetcher;
+        public Gs2InventoryInventoryModelContext Context => _fetcher.Context;
 
         public void Awake()
         {
-            _context = GetComponent<Gs2InventoryInventoryModelContext>() ?? GetComponentInParent<Gs2InventoryInventoryModelContext>();
             _fetcher = GetComponent<Gs2InventoryItemModelListFetcher>() ?? GetComponentInParent<Gs2InventoryItemModelListFetcher>();
 
             if (_fetcher == null) {
@@ -80,7 +79,7 @@ namespace Gs2.Unity.UiKit.Gs2Inventory
             for (var i = 0; i < this.maximumItems; i++) {
                 var node = Instantiate(this.prefab, transform);
                 node.ItemModel = ItemModel.New(
-                    _context.InventoryModel,
+                    _fetcher.Context.InventoryModel,
                     ""
                 );
                 node.gameObject.SetActive(false);
@@ -91,11 +90,7 @@ namespace Gs2.Unity.UiKit.Gs2Inventory
 
         public bool HasError()
         {
-            _context = GetComponent<Gs2InventoryInventoryModelContext>() ?? GetComponentInParent<Gs2InventoryInventoryModelContext>(true);
             _fetcher = GetComponent<Gs2InventoryItemModelListFetcher>() ?? GetComponentInParent<Gs2InventoryItemModelListFetcher>(true);
-            if (_context == null) {
-                return true;
-            }
             if (_fetcher == null) {
                 return true;
             }

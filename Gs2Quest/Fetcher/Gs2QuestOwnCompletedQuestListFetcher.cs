@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
@@ -56,15 +58,15 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Fetcher
             {
                 if (_gameSessionHolder != null && _gameSessionHolder.Initialized &&
                     _clientHolder != null && _clientHolder.Initialized &&
-                    Context != null && this.Context.CompletedQuestList != null)
+                    Context != null && this.Context.QuestGroupModel != null)
                 {
                     
                     var domain = this._clientHolder.Gs2.Quest.Namespace(
-                        this.Context.CompletedQuestList.NamespaceName
+                        this.Context.QuestGroupModel.NamespaceName
                     ).Me(
                         this._gameSessionHolder.GameSession
                     ).CompletedQuestList(
-                        this.Context.CompletedQuestList.QuestGroupName
+                        this.Context.QuestGroupModel.QuestGroupName
                     );
                     var future = domain.Model();
                     yield return future;
@@ -115,23 +117,23 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Fetcher
     {
         protected Gs2ClientHolder _clientHolder;
         protected Gs2GameSessionHolder _gameSessionHolder;
-        public Gs2QuestOwnCompletedQuestListContext Context { get; private set; }
+        public Gs2QuestQuestGroupModelContext Context { get; private set; }
 
         public void Awake()
         {
             _clientHolder = Gs2ClientHolder.Instance;
             _gameSessionHolder = Gs2GameSessionHolder.Instance;
-            Context = GetComponent<Gs2QuestOwnCompletedQuestListContext>() ?? GetComponentInParent<Gs2QuestOwnCompletedQuestListContext>();
+            Context = GetComponent<Gs2QuestQuestGroupModelContext>() ?? GetComponentInParent<Gs2QuestQuestGroupModelContext>();
 
             if (Context == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2QuestOwnCompletedQuestListContext.");
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2QuestQuestGroupModelContext.");
                 enabled = false;
             }
         }
 
         public bool HasError()
         {
-            Context = GetComponent<Gs2QuestOwnCompletedQuestListContext>() ?? GetComponentInParent<Gs2QuestOwnCompletedQuestListContext>(true);
+            Context = GetComponent<Gs2QuestQuestGroupModelContext>() ?? GetComponentInParent<Gs2QuestQuestGroupModelContext>(true);
             if (Context == null) {
                 return true;
             }

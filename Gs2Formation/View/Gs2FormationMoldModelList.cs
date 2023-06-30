@@ -63,12 +63,11 @@ namespace Gs2.Unity.UiKit.Gs2Formation
 
     public partial class Gs2FormationMoldModelList
     {
-        private Gs2FormationNamespaceContext _context;
         private Gs2FormationMoldModelListFetcher _fetcher;
+        public Gs2FormationNamespaceContext Context => _fetcher.Context;
 
         public void Awake()
         {
-            _context = GetComponent<Gs2FormationNamespaceContext>() ?? GetComponentInParent<Gs2FormationNamespaceContext>();
             _fetcher = GetComponent<Gs2FormationMoldModelListFetcher>() ?? GetComponentInParent<Gs2FormationMoldModelListFetcher>();
 
             if (_fetcher == null) {
@@ -80,7 +79,7 @@ namespace Gs2.Unity.UiKit.Gs2Formation
             for (var i = 0; i < this.maximumItems; i++) {
                 var node = Instantiate(this.prefab, transform);
                 node.MoldModel = MoldModel.New(
-                    _context.Namespace,
+                    _fetcher.Context.Namespace,
                     ""
                 );
                 node.gameObject.SetActive(false);
@@ -91,11 +90,7 @@ namespace Gs2.Unity.UiKit.Gs2Formation
 
         public bool HasError()
         {
-            _context = GetComponent<Gs2FormationNamespaceContext>() ?? GetComponentInParent<Gs2FormationNamespaceContext>(true);
             _fetcher = GetComponent<Gs2FormationMoldModelListFetcher>() ?? GetComponentInParent<Gs2FormationMoldModelListFetcher>(true);
-            if (_context == null) {
-                return true;
-            }
             if (_fetcher == null) {
                 return true;
             }

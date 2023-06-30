@@ -53,13 +53,13 @@ namespace Gs2.Unity.UiKit.Gs2Inbox.Fetcher
             Gs2Exception e;
             while (true)
             {
-                if (_gameSessionHolder != null && _gameSessionHolder.Initialized && 
+                if (_gameSessionHolder != null && _gameSessionHolder.Initialized &&
                     _clientHolder != null && _clientHolder.Initialized &&
-                    _context != null)
+                    Context != null)
                 {
                     
                     var domain = this._clientHolder.Gs2.Inbox.Namespace(
-                        this._context.Namespace.NamespaceName
+                        this.Context.Namespace.NamespaceName
                     ).Me(
                         this._gameSessionHolder.GameSession
                     );
@@ -117,20 +117,20 @@ namespace Gs2.Unity.UiKit.Gs2Inbox.Fetcher
     /// <summary>
     /// Dependent components
     /// </summary>
-    
+
     public partial class Gs2InboxOwnMessageListFetcher
     {
         private Gs2ClientHolder _clientHolder;
         private Gs2GameSessionHolder _gameSessionHolder;
-        private Gs2InboxNamespaceContext _context;
+        public Gs2InboxNamespaceContext Context;
 
         public void Awake()
         {
             _clientHolder = Gs2ClientHolder.Instance;
             _gameSessionHolder = Gs2GameSessionHolder.Instance;
-            _context = GetComponent<Gs2InboxNamespaceContext>() ?? GetComponentInParent<Gs2InboxNamespaceContext>();
+            Context = GetComponent<Gs2InboxNamespaceContext>() ?? GetComponentInParent<Gs2InboxNamespaceContext>();
 
-            if (_context == null) {
+            if (Context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2InboxNamespaceContext.");
                 enabled = false;
             }
@@ -138,8 +138,8 @@ namespace Gs2.Unity.UiKit.Gs2Inbox.Fetcher
 
         public bool HasError()
         {
-            _context = GetComponent<Gs2InboxNamespaceContext>() ?? GetComponentInParent<Gs2InboxNamespaceContext>(true);
-            if (_context == null) {
+            Context = GetComponent<Gs2InboxNamespaceContext>() ?? GetComponentInParent<Gs2InboxNamespaceContext>(true);
+            if (Context == null) {
                 return true;
             }
             return false;

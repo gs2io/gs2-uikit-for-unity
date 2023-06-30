@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
@@ -51,9 +53,10 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Editor
                 EditorGUI.BeginDisabledGroup(true);
                 EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2QuestOwnProgressFetcher), false);
                 EditorGUI.indentLevel++;
-                fetcher.Context.Progress = EditorGUILayout.ObjectField("Progress", fetcher.Context.Progress, typeof(OwnProgress), false) as OwnProgress;
+                fetcher.Context.QuestGroupModel = EditorGUILayout.ObjectField("QuestGroupModel", fetcher.Context.QuestGroupModel, typeof(QuestGroupModel), false) as QuestGroupModel;
                 EditorGUI.indentLevel++;
-                EditorGUILayout.TextField("NamespaceName", fetcher.Context.Progress?.NamespaceName.ToString());
+                EditorGUILayout.TextField("NamespaceName", fetcher.Context.QuestGroupModel?.NamespaceName.ToString());
+                EditorGUILayout.TextField("QuestGroupName", fetcher.Context.QuestGroupModel?.QuestGroupName.ToString());
                 EditorGUI.indentLevel--;
                 EditorGUI.indentLevel--;
                 EditorGUI.EndDisabledGroup();

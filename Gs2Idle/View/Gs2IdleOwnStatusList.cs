@@ -43,7 +43,7 @@ namespace Gs2.Unity.UiKit.Gs2Idle
         private List<Gs2IdleOwnStatusContext> _children;
 
         public void Update() {
-            if (_fetcher.Fetched && _fetcher.Statuses != null) {
+            if (_fetcher.Fetched && this._fetcher.Statuses != null) {
                 for (var i = 0; i < this.maximumItems; i++) {
                     if (i < this._fetcher.Statuses.Count) {
                         _children[i].Status.categoryName = this._fetcher.Statuses[i].CategoryName;
@@ -63,18 +63,13 @@ namespace Gs2.Unity.UiKit.Gs2Idle
 
     public partial class Gs2IdleOwnStatusList
     {
-        private Gs2IdleNamespaceContext _context;
         private Gs2IdleOwnStatusListFetcher _fetcher;
+        private Gs2IdleNamespaceContext Context => _fetcher.Context;
 
         public void Awake()
         {
-            _context = GetComponent<Gs2IdleNamespaceContext>() ?? GetComponentInParent<Gs2IdleNamespaceContext>();
             _fetcher = GetComponent<Gs2IdleOwnStatusListFetcher>() ?? GetComponentInParent<Gs2IdleOwnStatusListFetcher>();
 
-            if (_context == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2IdleNamespaceContext.");
-                enabled = false;
-            }
             if (_fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2IdleOwnStatusListFetcher.");
                 enabled = false;
@@ -84,7 +79,7 @@ namespace Gs2.Unity.UiKit.Gs2Idle
             for (var i = 0; i < this.maximumItems; i++) {
                 var node = Instantiate(this.prefab, transform);
                 node.Status = OwnStatus.New(
-                    _context.Namespace,
+                    _fetcher.Context.Namespace,
                     ""
                 );
                 node.gameObject.SetActive(false);
@@ -95,11 +90,7 @@ namespace Gs2.Unity.UiKit.Gs2Idle
 
         public bool HasError()
         {
-            _context = GetComponent<Gs2IdleNamespaceContext>() ?? GetComponentInParent<Gs2IdleNamespaceContext>(true);
             _fetcher = GetComponent<Gs2IdleOwnStatusListFetcher>() ?? GetComponentInParent<Gs2IdleOwnStatusListFetcher>(true);
-            if (_context == null) {
-                return true;
-            }
             if (_fetcher == null) {
                 return true;
             }

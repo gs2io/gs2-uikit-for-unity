@@ -63,12 +63,11 @@ namespace Gs2.Unity.UiKit.Gs2Exchange
 
     public partial class Gs2ExchangeRateModelList
     {
-        private Gs2ExchangeNamespaceContext _context;
         private Gs2ExchangeRateModelListFetcher _fetcher;
+        public Gs2ExchangeNamespaceContext Context => _fetcher.Context;
 
         public void Awake()
         {
-            _context = GetComponent<Gs2ExchangeNamespaceContext>() ?? GetComponentInParent<Gs2ExchangeNamespaceContext>();
             _fetcher = GetComponent<Gs2ExchangeRateModelListFetcher>() ?? GetComponentInParent<Gs2ExchangeRateModelListFetcher>();
 
             if (_fetcher == null) {
@@ -80,7 +79,7 @@ namespace Gs2.Unity.UiKit.Gs2Exchange
             for (var i = 0; i < this.maximumItems; i++) {
                 var node = Instantiate(this.prefab, transform);
                 node.RateModel = RateModel.New(
-                    _context.Namespace,
+                    _fetcher.Context.Namespace,
                     ""
                 );
                 node.gameObject.SetActive(false);
@@ -91,11 +90,7 @@ namespace Gs2.Unity.UiKit.Gs2Exchange
 
         public bool HasError()
         {
-            _context = GetComponent<Gs2ExchangeNamespaceContext>() ?? GetComponentInParent<Gs2ExchangeNamespaceContext>(true);
             _fetcher = GetComponent<Gs2ExchangeRateModelListFetcher>() ?? GetComponentInParent<Gs2ExchangeRateModelListFetcher>(true);
-            if (_context == null) {
-                return true;
-            }
             if (_fetcher == null) {
                 return true;
             }

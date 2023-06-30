@@ -63,12 +63,11 @@ namespace Gs2.Unity.UiKit.Gs2Idle
 
     public partial class Gs2IdleCategoryModelList
     {
-        private Gs2IdleNamespaceContext _context;
         private Gs2IdleCategoryModelListFetcher _fetcher;
+        public Gs2IdleNamespaceContext Context => _fetcher.Context;
 
         public void Awake()
         {
-            _context = GetComponent<Gs2IdleNamespaceContext>() ?? GetComponentInParent<Gs2IdleNamespaceContext>();
             _fetcher = GetComponent<Gs2IdleCategoryModelListFetcher>() ?? GetComponentInParent<Gs2IdleCategoryModelListFetcher>();
 
             if (_fetcher == null) {
@@ -80,7 +79,7 @@ namespace Gs2.Unity.UiKit.Gs2Idle
             for (var i = 0; i < this.maximumItems; i++) {
                 var node = Instantiate(this.prefab, transform);
                 node.CategoryModel = CategoryModel.New(
-                    _context.Namespace,
+                    _fetcher.Context.Namespace,
                     ""
                 );
                 node.gameObject.SetActive(false);
@@ -91,11 +90,7 @@ namespace Gs2.Unity.UiKit.Gs2Idle
 
         public bool HasError()
         {
-            _context = GetComponent<Gs2IdleNamespaceContext>() ?? GetComponentInParent<Gs2IdleNamespaceContext>(true);
             _fetcher = GetComponent<Gs2IdleCategoryModelListFetcher>() ?? GetComponentInParent<Gs2IdleCategoryModelListFetcher>(true);
-            if (_context == null) {
-                return true;
-            }
             if (_fetcher == null) {
                 return true;
             }

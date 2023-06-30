@@ -43,7 +43,7 @@ namespace Gs2.Unity.UiKit.Gs2Chat
         private List<Gs2ChatOwnSubscribeContext> _children;
 
         public void Update() {
-            if (_fetcher.Fetched && _fetcher.Subscribes != null) {
+            if (_fetcher.Fetched && this._fetcher.Subscribes != null) {
                 for (var i = 0; i < this.maximumItems; i++) {
                     if (i < this._fetcher.Subscribes.Count) {
                         _children[i].Subscribe.roomName = this._fetcher.Subscribes[i].RoomName;
@@ -63,18 +63,13 @@ namespace Gs2.Unity.UiKit.Gs2Chat
 
     public partial class Gs2ChatOwnSubscribeList
     {
-        private Gs2ChatNamespaceContext _context;
         private Gs2ChatOwnSubscribeListFetcher _fetcher;
+        private Gs2ChatNamespaceContext Context => _fetcher.Context;
 
         public void Awake()
         {
-            _context = GetComponent<Gs2ChatNamespaceContext>() ?? GetComponentInParent<Gs2ChatNamespaceContext>();
             _fetcher = GetComponent<Gs2ChatOwnSubscribeListFetcher>() ?? GetComponentInParent<Gs2ChatOwnSubscribeListFetcher>();
 
-            if (_context == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ChatNamespaceContext.");
-                enabled = false;
-            }
             if (_fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ChatOwnSubscribeListFetcher.");
                 enabled = false;
@@ -84,7 +79,7 @@ namespace Gs2.Unity.UiKit.Gs2Chat
             for (var i = 0; i < this.maximumItems; i++) {
                 var node = Instantiate(this.prefab, transform);
                 node.Subscribe = OwnSubscribe.New(
-                    _context.Namespace,
+                    _fetcher.Context.Namespace,
                     ""
                 );
                 node.gameObject.SetActive(false);
@@ -95,11 +90,7 @@ namespace Gs2.Unity.UiKit.Gs2Chat
 
         public bool HasError()
         {
-            _context = GetComponent<Gs2ChatNamespaceContext>() ?? GetComponentInParent<Gs2ChatNamespaceContext>(true);
             _fetcher = GetComponent<Gs2ChatOwnSubscribeListFetcher>() ?? GetComponentInParent<Gs2ChatOwnSubscribeListFetcher>(true);
-            if (_context == null) {
-                return true;
-            }
             if (_fetcher == null) {
                 return true;
             }

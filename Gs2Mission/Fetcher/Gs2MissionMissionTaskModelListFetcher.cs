@@ -55,13 +55,13 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Fetcher
             {
                 if (_gameSessionHolder != null && _gameSessionHolder.Initialized && 
                     _clientHolder != null && _clientHolder.Initialized &&
-                    _context != null)
+                    Context != null)
                 {
                     
                     var domain = this._clientHolder.Gs2.Mission.Namespace(
-                        this._context.MissionGroupModel.NamespaceName
+                        this.Context.MissionGroupModel.NamespaceName
                     ).MissionGroupModel(
-                        this._context.MissionGroupModel.MissionGroupName
+                        this.Context.MissionGroupModel.MissionGroupName
                     );
                     var it = domain.MissionTaskModels();
                     var items = new List<Gs2.Unity.Gs2Mission.Model.EzMissionTaskModel>();
@@ -122,15 +122,15 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Fetcher
     {
         private Gs2ClientHolder _clientHolder;
         private Gs2GameSessionHolder _gameSessionHolder;
-        private Gs2MissionMissionGroupModelContext _context;
+        public Gs2MissionMissionGroupModelContext Context { get; private set; }
 
         public void Awake()
         {
             _clientHolder = Gs2ClientHolder.Instance;
             _gameSessionHolder = Gs2GameSessionHolder.Instance;
-            _context = GetComponent<Gs2MissionMissionGroupModelContext>() ?? GetComponentInParent<Gs2MissionMissionGroupModelContext>();
+            Context = GetComponent<Gs2MissionMissionGroupModelContext>() ?? GetComponentInParent<Gs2MissionMissionGroupModelContext>();
 
-            if (_context == null) {
+            if (Context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MissionMissionGroupModelContext.");
                 enabled = false;
             }
@@ -138,8 +138,8 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Fetcher
 
         public bool HasError()
         {
-            _context = GetComponent<Gs2MissionMissionGroupModelContext>() ?? GetComponentInParent<Gs2MissionMissionGroupModelContext>(true);
-            if (_context == null) {
+            Context = GetComponent<Gs2MissionMissionGroupModelContext>() ?? GetComponentInParent<Gs2MissionMissionGroupModelContext>(true);
+            if (Context == null) {
                 return true;
             }
             return false;

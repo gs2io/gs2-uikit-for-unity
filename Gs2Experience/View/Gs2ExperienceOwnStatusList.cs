@@ -43,7 +43,7 @@ namespace Gs2.Unity.UiKit.Gs2Experience
         private List<Gs2ExperienceOwnStatusContext> _children;
 
         public void Update() {
-            if (_fetcher.Fetched && _fetcher.Statuses != null) {
+            if (_fetcher.Fetched && this._fetcher.Statuses != null) {
                 for (var i = 0; i < this.maximumItems; i++) {
                     if (i < this._fetcher.Statuses.Count) {
                         _children[i].Status.experienceName = this._fetcher.Statuses[i].ExperienceName;
@@ -64,18 +64,13 @@ namespace Gs2.Unity.UiKit.Gs2Experience
 
     public partial class Gs2ExperienceOwnStatusList
     {
-        private Gs2ExperienceNamespaceContext _context;
         private Gs2ExperienceOwnStatusListFetcher _fetcher;
+        private Gs2ExperienceNamespaceContext Context => _fetcher.Context;
 
         public void Awake()
         {
-            _context = GetComponent<Gs2ExperienceNamespaceContext>() ?? GetComponentInParent<Gs2ExperienceNamespaceContext>();
             _fetcher = GetComponent<Gs2ExperienceOwnStatusListFetcher>() ?? GetComponentInParent<Gs2ExperienceOwnStatusListFetcher>();
 
-            if (_context == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ExperienceNamespaceContext.");
-                enabled = false;
-            }
             if (_fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ExperienceOwnStatusListFetcher.");
                 enabled = false;
@@ -85,7 +80,7 @@ namespace Gs2.Unity.UiKit.Gs2Experience
             for (var i = 0; i < this.maximumItems; i++) {
                 var node = Instantiate(this.prefab, transform);
                 node.Status = OwnStatus.New(
-                    _context.Namespace,
+                    _fetcher.Context.Namespace,
                     "",
                     ""
                 );
@@ -97,11 +92,7 @@ namespace Gs2.Unity.UiKit.Gs2Experience
 
         public bool HasError()
         {
-            _context = GetComponent<Gs2ExperienceNamespaceContext>() ?? GetComponentInParent<Gs2ExperienceNamespaceContext>(true);
             _fetcher = GetComponent<Gs2ExperienceOwnStatusListFetcher>() ?? GetComponentInParent<Gs2ExperienceOwnStatusListFetcher>(true);
-            if (_context == null) {
-                return true;
-            }
             if (_fetcher == null) {
                 return true;
             }

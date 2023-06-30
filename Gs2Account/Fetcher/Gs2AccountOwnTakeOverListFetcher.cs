@@ -53,13 +53,13 @@ namespace Gs2.Unity.UiKit.Gs2Account.Fetcher
             Gs2Exception e;
             while (true)
             {
-                if (_gameSessionHolder != null && _gameSessionHolder.Initialized && 
+                if (_gameSessionHolder != null && _gameSessionHolder.Initialized &&
                     _clientHolder != null && _clientHolder.Initialized &&
-                    _context != null)
+                    Context != null)
                 {
                     
                     var domain = this._clientHolder.Gs2.Account.Namespace(
-                        this._context.Account.NamespaceName
+                        this.Context.Account.NamespaceName
                     ).Me(
                         this._gameSessionHolder.GameSession
                     );
@@ -117,20 +117,20 @@ namespace Gs2.Unity.UiKit.Gs2Account.Fetcher
     /// <summary>
     /// Dependent components
     /// </summary>
-    
+
     public partial class Gs2AccountOwnTakeOverListFetcher
     {
         private Gs2ClientHolder _clientHolder;
         private Gs2GameSessionHolder _gameSessionHolder;
-        private Gs2AccountOwnAccountContext _context;
+        public Gs2AccountOwnAccountContext Context { get; private set; }
 
         public void Awake()
         {
             _clientHolder = Gs2ClientHolder.Instance;
             _gameSessionHolder = Gs2GameSessionHolder.Instance;
-            _context = GetComponent<Gs2AccountOwnAccountContext>() ?? GetComponentInParent<Gs2AccountOwnAccountContext>();
+            Context = GetComponent<Gs2AccountOwnAccountContext>() ?? GetComponentInParent<Gs2AccountOwnAccountContext>();
 
-            if (_context == null) {
+            if (Context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2AccountOwnAccountContext.");
                 enabled = false;
             }
@@ -138,8 +138,8 @@ namespace Gs2.Unity.UiKit.Gs2Account.Fetcher
 
         public bool HasError()
         {
-            _context = GetComponent<Gs2AccountOwnAccountContext>() ?? GetComponentInParent<Gs2AccountOwnAccountContext>(true);
-            if (_context == null) {
+            Context = GetComponent<Gs2AccountOwnAccountContext>() ?? GetComponentInParent<Gs2AccountOwnAccountContext>(true);
+            if (Context == null) {
                 return true;
             }
             return false;

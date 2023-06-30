@@ -43,7 +43,7 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking
         private List<Gs2MatchmakingOwnRatingContext> _children;
 
         public void Update() {
-            if (_fetcher.Fetched && _fetcher.Ratings != null) {
+            if (_fetcher.Fetched && this._fetcher.Ratings != null) {
                 for (var i = 0; i < this.maximumItems; i++) {
                     if (i < this._fetcher.Ratings.Count) {
                         _children[i].RatingModel.ratingName = this._fetcher.Ratings[i].Name;
@@ -64,18 +64,13 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking
 
     public partial class Gs2MatchmakingOwnRatingList
     {
-        private Gs2MatchmakingNamespaceContext _context;
         private Gs2MatchmakingOwnRatingListFetcher _fetcher;
+        private Gs2MatchmakingNamespaceContext Context => _fetcher.Context;
 
         public void Awake()
         {
-            _context = GetComponent<Gs2MatchmakingNamespaceContext>() ?? GetComponentInParent<Gs2MatchmakingNamespaceContext>();
             _fetcher = GetComponent<Gs2MatchmakingOwnRatingListFetcher>() ?? GetComponentInParent<Gs2MatchmakingOwnRatingListFetcher>();
 
-            if (_context == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MatchmakingNamespaceContext.");
-                enabled = false;
-            }
             if (_fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MatchmakingOwnRatingListFetcher.");
                 enabled = false;
@@ -85,11 +80,11 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking
             for (var i = 0; i < this.maximumItems; i++) {
                 var node = Instantiate(this.prefab, transform);
                 node.RatingModel = RatingModel.New(
-                    _context.Namespace,
+                    _fetcher.Context.Namespace,
                     ""
                 );
                 node.Rating = OwnRating.New(
-                    _context.Namespace,
+                    _fetcher.Context.Namespace,
                     ""
                 );
                 node.gameObject.SetActive(false);
@@ -100,11 +95,7 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking
 
         public bool HasError()
         {
-            _context = GetComponent<Gs2MatchmakingNamespaceContext>() ?? GetComponentInParent<Gs2MatchmakingNamespaceContext>(true);
             _fetcher = GetComponent<Gs2MatchmakingOwnRatingListFetcher>() ?? GetComponentInParent<Gs2MatchmakingOwnRatingListFetcher>(true);
-            if (_context == null) {
-                return true;
-            }
             if (_fetcher == null) {
                 return true;
             }

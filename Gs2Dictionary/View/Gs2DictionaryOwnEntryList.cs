@@ -43,7 +43,7 @@ namespace Gs2.Unity.UiKit.Gs2Dictionary
         private List<Gs2DictionaryOwnEntryContext> _children;
 
         public void Update() {
-            if (_fetcher.Fetched && _fetcher.Entries != null) {
+            if (_fetcher.Fetched && this._fetcher.Entries != null) {
                 for (var i = 0; i < this.maximumItems; i++) {
                     if (i < this._fetcher.Entries.Count) {
                         _children[i].EntryModel.entryName = this._fetcher.Entries[i].Name;
@@ -64,18 +64,13 @@ namespace Gs2.Unity.UiKit.Gs2Dictionary
 
     public partial class Gs2DictionaryOwnEntryList
     {
-        private Gs2DictionaryNamespaceContext _context;
         private Gs2DictionaryOwnEntryListFetcher _fetcher;
+        private Gs2DictionaryNamespaceContext Context => _fetcher.Context;
 
         public void Awake()
         {
-            _context = GetComponent<Gs2DictionaryNamespaceContext>() ?? GetComponentInParent<Gs2DictionaryNamespaceContext>();
             _fetcher = GetComponent<Gs2DictionaryOwnEntryListFetcher>() ?? GetComponentInParent<Gs2DictionaryOwnEntryListFetcher>();
 
-            if (_context == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2DictionaryNamespaceContext.");
-                enabled = false;
-            }
             if (_fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2DictionaryOwnEntryListFetcher.");
                 enabled = false;
@@ -85,11 +80,11 @@ namespace Gs2.Unity.UiKit.Gs2Dictionary
             for (var i = 0; i < this.maximumItems; i++) {
                 var node = Instantiate(this.prefab, transform);
                 node.EntryModel = EntryModel.New(
-                    _context.Namespace,
+                    _fetcher.Context.Namespace,
                     ""
                 );
                 node.Entry = OwnEntry.New(
-                    _context.Namespace,
+                    _fetcher.Context.Namespace,
                     ""
                 );
                 node.gameObject.SetActive(false);
@@ -100,11 +95,7 @@ namespace Gs2.Unity.UiKit.Gs2Dictionary
 
         public bool HasError()
         {
-            _context = GetComponent<Gs2DictionaryNamespaceContext>() ?? GetComponentInParent<Gs2DictionaryNamespaceContext>(true);
             _fetcher = GetComponent<Gs2DictionaryOwnEntryListFetcher>() ?? GetComponentInParent<Gs2DictionaryOwnEntryListFetcher>(true);
-            if (_context == null) {
-                return true;
-            }
             if (_fetcher == null) {
                 return true;
             }

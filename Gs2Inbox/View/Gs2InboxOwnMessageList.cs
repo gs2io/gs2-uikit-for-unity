@@ -43,7 +43,7 @@ namespace Gs2.Unity.UiKit.Gs2Inbox
         private List<Gs2InboxOwnMessageContext> _children;
 
         public void Update() {
-            if (_fetcher.Fetched && _fetcher.Messages != null) {
+            if (_fetcher.Fetched && this._fetcher.Messages != null) {
                 for (var i = 0; i < this.maximumItems; i++) {
                     if (i < this._fetcher.Messages.Count) {
                         _children[i].Message.messageName = this._fetcher.Messages[i].Name;
@@ -63,18 +63,13 @@ namespace Gs2.Unity.UiKit.Gs2Inbox
 
     public partial class Gs2InboxOwnMessageList
     {
-        private Gs2InboxNamespaceContext _context;
         private Gs2InboxOwnMessageListFetcher _fetcher;
+        private Gs2InboxNamespaceContext Context => _fetcher.Context;
 
         public void Awake()
         {
-            _context = GetComponent<Gs2InboxNamespaceContext>() ?? GetComponentInParent<Gs2InboxNamespaceContext>();
             _fetcher = GetComponent<Gs2InboxOwnMessageListFetcher>() ?? GetComponentInParent<Gs2InboxOwnMessageListFetcher>();
 
-            if (_context == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2InboxNamespaceContext.");
-                enabled = false;
-            }
             if (_fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2InboxOwnMessageListFetcher.");
                 enabled = false;
@@ -84,7 +79,7 @@ namespace Gs2.Unity.UiKit.Gs2Inbox
             for (var i = 0; i < this.maximumItems; i++) {
                 var node = Instantiate(this.prefab, transform);
                 node.Message = OwnMessage.New(
-                    _context.Namespace,
+                    _fetcher.Context.Namespace,
                     ""
                 );
                 node.gameObject.SetActive(false);
@@ -95,11 +90,7 @@ namespace Gs2.Unity.UiKit.Gs2Inbox
 
         public bool HasError()
         {
-            _context = GetComponent<Gs2InboxNamespaceContext>() ?? GetComponentInParent<Gs2InboxNamespaceContext>(true);
             _fetcher = GetComponent<Gs2InboxOwnMessageListFetcher>() ?? GetComponentInParent<Gs2InboxOwnMessageListFetcher>(true);
-            if (_context == null) {
-                return true;
-            }
             if (_fetcher == null) {
                 return true;
             }

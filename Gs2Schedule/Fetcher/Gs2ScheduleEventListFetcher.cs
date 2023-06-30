@@ -55,11 +55,11 @@ namespace Gs2.Unity.UiKit.Gs2Schedule.Fetcher
             {
                 if (_gameSessionHolder != null && _gameSessionHolder.Initialized && 
                     _clientHolder != null && _clientHolder.Initialized &&
-                    _context != null)
+                    Context != null)
                 {
                     
                     var domain = this._clientHolder.Gs2.Schedule.Namespace(
-                        this._context.Namespace.NamespaceName
+                        this.Context.Namespace.NamespaceName
                     ).Me(
                         this._gameSessionHolder.GameSession
                     );
@@ -122,15 +122,15 @@ namespace Gs2.Unity.UiKit.Gs2Schedule.Fetcher
     {
         private Gs2ClientHolder _clientHolder;
         private Gs2GameSessionHolder _gameSessionHolder;
-        private Gs2ScheduleNamespaceContext _context;
+        public Gs2ScheduleNamespaceContext Context { get; private set; }
 
         public void Awake()
         {
             _clientHolder = Gs2ClientHolder.Instance;
             _gameSessionHolder = Gs2GameSessionHolder.Instance;
-            _context = GetComponent<Gs2ScheduleNamespaceContext>() ?? GetComponentInParent<Gs2ScheduleNamespaceContext>();
+            Context = GetComponent<Gs2ScheduleNamespaceContext>() ?? GetComponentInParent<Gs2ScheduleNamespaceContext>();
 
-            if (_context == null) {
+            if (Context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ScheduleNamespaceContext.");
                 enabled = false;
             }
@@ -138,8 +138,8 @@ namespace Gs2.Unity.UiKit.Gs2Schedule.Fetcher
 
         public bool HasError()
         {
-            _context = GetComponent<Gs2ScheduleNamespaceContext>() ?? GetComponentInParent<Gs2ScheduleNamespaceContext>(true);
-            if (_context == null) {
+            Context = GetComponent<Gs2ScheduleNamespaceContext>() ?? GetComponentInParent<Gs2ScheduleNamespaceContext>(true);
+            if (Context == null) {
                 return true;
             }
             return false;

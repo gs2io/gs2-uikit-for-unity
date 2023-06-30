@@ -43,7 +43,7 @@ namespace Gs2.Unity.UiKit.Gs2Formation
         private List<Gs2FormationOwnFormContext> _children;
 
         public void Update() {
-            if (_fetcher.Fetched && _fetcher.Forms != null) {
+            if (_fetcher.Fetched && this._fetcher.Forms != null) {
                 for (var i = 0; i < this.maximumItems; i++) {
                     if (i < this._fetcher.Forms.Count) {
                         _children[i].Form.index = this._fetcher.Forms[i].Index;
@@ -63,18 +63,13 @@ namespace Gs2.Unity.UiKit.Gs2Formation
 
     public partial class Gs2FormationOwnFormList
     {
-        private Gs2FormationOwnMoldContext _context;
         private Gs2FormationOwnFormListFetcher _fetcher;
+        private Gs2FormationOwnMoldContext Context => _fetcher.Context;
 
         public void Awake()
         {
-            _context = GetComponent<Gs2FormationOwnMoldContext>() ?? GetComponentInParent<Gs2FormationOwnMoldContext>();
             _fetcher = GetComponent<Gs2FormationOwnFormListFetcher>() ?? GetComponentInParent<Gs2FormationOwnFormListFetcher>();
 
-            if (_context == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2FormationOwnMoldContext.");
-                enabled = false;
-            }
             if (_fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2FormationOwnFormListFetcher.");
                 enabled = false;
@@ -84,7 +79,7 @@ namespace Gs2.Unity.UiKit.Gs2Formation
             for (var i = 0; i < this.maximumItems; i++) {
                 var node = Instantiate(this.prefab, transform);
                 node.Form = OwnForm.New(
-                    _context.Mold,
+                    _fetcher.Context.Mold,
                     0
                 );
                 node.gameObject.SetActive(false);
@@ -95,11 +90,7 @@ namespace Gs2.Unity.UiKit.Gs2Formation
 
         public bool HasError()
         {
-            _context = GetComponent<Gs2FormationOwnMoldContext>() ?? GetComponentInParent<Gs2FormationOwnMoldContext>(true);
             _fetcher = GetComponent<Gs2FormationOwnFormListFetcher>() ?? GetComponentInParent<Gs2FormationOwnFormListFetcher>(true);
-            if (_context == null) {
-                return true;
-            }
             if (_fetcher == null) {
                 return true;
             }

@@ -29,7 +29,7 @@ namespace Gs2.Unity.UiKit.Gs2Ranking
     /// Main
     /// </summary>
 
-	[AddComponentMenu("GS2 UIKit/Ranking/Ranking/View/Gs2RankingRankingLabel")]
+	[AddComponentMenu("GS2 UIKit/Ranking/Ranking/View/Label/Gs2RankingRankingLabel")]
     public partial class Gs2RankingRankingLabel : MonoBehaviour
     {
         public void Update()

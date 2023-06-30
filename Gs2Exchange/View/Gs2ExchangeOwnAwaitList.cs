@@ -43,7 +43,7 @@ namespace Gs2.Unity.UiKit.Gs2Exchange
         private List<Gs2ExchangeOwnAwaitContext> _children;
 
         public void Update() {
-            if (_fetcher.Fetched && _fetcher.Awaits != null) {
+            if (_fetcher.Fetched && this._fetcher.Awaits != null) {
                 for (var i = 0; i < this.maximumItems; i++) {
                     if (i < this._fetcher.Awaits.Count) {
                         _children[i].Await_.awaitName = this._fetcher.Awaits[i].Name;
@@ -63,18 +63,13 @@ namespace Gs2.Unity.UiKit.Gs2Exchange
 
     public partial class Gs2ExchangeOwnAwaitList
     {
-        private Gs2ExchangeNamespaceContext _context;
         private Gs2ExchangeOwnAwaitListFetcher _fetcher;
+        private Gs2ExchangeNamespaceContext Context => _fetcher.Context;
 
         public void Awake()
         {
-            _context = GetComponent<Gs2ExchangeNamespaceContext>() ?? GetComponentInParent<Gs2ExchangeNamespaceContext>();
             _fetcher = GetComponent<Gs2ExchangeOwnAwaitListFetcher>() ?? GetComponentInParent<Gs2ExchangeOwnAwaitListFetcher>();
 
-            if (_context == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ExchangeNamespaceContext.");
-                enabled = false;
-            }
             if (_fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ExchangeOwnAwaitListFetcher.");
                 enabled = false;
@@ -84,7 +79,7 @@ namespace Gs2.Unity.UiKit.Gs2Exchange
             for (var i = 0; i < this.maximumItems; i++) {
                 var node = Instantiate(this.prefab, transform);
                 node.Await_ = OwnAwait.New(
-                    _context.Namespace,
+                    _fetcher.Context.Namespace,
                     ""
                 );
                 node.gameObject.SetActive(false);
@@ -95,11 +90,7 @@ namespace Gs2.Unity.UiKit.Gs2Exchange
 
         public bool HasError()
         {
-            _context = GetComponent<Gs2ExchangeNamespaceContext>() ?? GetComponentInParent<Gs2ExchangeNamespaceContext>(true);
             _fetcher = GetComponent<Gs2ExchangeOwnAwaitListFetcher>() ?? GetComponentInParent<Gs2ExchangeOwnAwaitListFetcher>(true);
-            if (_context == null) {
-                return true;
-            }
             if (_fetcher == null) {
                 return true;
             }

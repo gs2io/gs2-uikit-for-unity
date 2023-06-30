@@ -43,7 +43,7 @@ namespace Gs2.Unity.UiKit.Gs2Friend
         private List<Gs2FriendOwnBlackListContext> _children;
 
         public void Update() {
-            if (_fetcher.Fetched && _fetcher.BlackList != null) {
+            if (_fetcher.Fetched && this._fetcher.BlackList != null) {
                 for (var i = 0; i < this.maximumItems; i++) {
                     if (i < this._fetcher.BlackList.Count) {
                         _children[i].gameObject.SetActive(true);
@@ -62,18 +62,13 @@ namespace Gs2.Unity.UiKit.Gs2Friend
 
     public partial class Gs2FriendOwnBlackListList
     {
-        private Gs2FriendNamespaceContext _context;
         private Gs2FriendOwnBlackListListFetcher _fetcher;
+        private Gs2FriendNamespaceContext Context => _fetcher.Context;
 
         public void Awake()
         {
-            _context = GetComponent<Gs2FriendNamespaceContext>() ?? GetComponentInParent<Gs2FriendNamespaceContext>();
             _fetcher = GetComponent<Gs2FriendOwnBlackListListFetcher>() ?? GetComponentInParent<Gs2FriendOwnBlackListListFetcher>();
 
-            if (_context == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2FriendNamespaceContext.");
-                enabled = false;
-            }
             if (_fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2FriendOwnBlackListListFetcher.");
                 enabled = false;
@@ -83,7 +78,7 @@ namespace Gs2.Unity.UiKit.Gs2Friend
             for (var i = 0; i < this.maximumItems; i++) {
                 var node = Instantiate(this.prefab, transform);
                 node.BlackList = OwnBlackList.New(
-                    _context.Namespace
+                    _fetcher.Context.Namespace
                 );
                 node.gameObject.SetActive(false);
                 _children.Add(node);
@@ -93,11 +88,7 @@ namespace Gs2.Unity.UiKit.Gs2Friend
 
         public bool HasError()
         {
-            _context = GetComponent<Gs2FriendNamespaceContext>() ?? GetComponentInParent<Gs2FriendNamespaceContext>(true);
             _fetcher = GetComponent<Gs2FriendOwnBlackListListFetcher>() ?? GetComponentInParent<Gs2FriendOwnBlackListListFetcher>(true);
-            if (_context == null) {
-                return true;
-            }
             if (_fetcher == null) {
                 return true;
             }

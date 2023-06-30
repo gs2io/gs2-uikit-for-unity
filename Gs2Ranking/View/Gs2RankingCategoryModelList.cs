@@ -63,12 +63,11 @@ namespace Gs2.Unity.UiKit.Gs2Ranking
 
     public partial class Gs2RankingCategoryModelList
     {
-        private Gs2RankingNamespaceContext _context;
         private Gs2RankingCategoryModelListFetcher _fetcher;
+        public Gs2RankingNamespaceContext Context => _fetcher.Context;
 
         public void Awake()
         {
-            _context = GetComponent<Gs2RankingNamespaceContext>() ?? GetComponentInParent<Gs2RankingNamespaceContext>();
             _fetcher = GetComponent<Gs2RankingCategoryModelListFetcher>() ?? GetComponentInParent<Gs2RankingCategoryModelListFetcher>();
 
             if (_fetcher == null) {
@@ -80,7 +79,7 @@ namespace Gs2.Unity.UiKit.Gs2Ranking
             for (var i = 0; i < this.maximumItems; i++) {
                 var node = Instantiate(this.prefab, transform);
                 node.CategoryModel = CategoryModel.New(
-                    _context.Namespace,
+                    _fetcher.Context.Namespace,
                     ""
                 );
                 node.gameObject.SetActive(false);
@@ -91,11 +90,7 @@ namespace Gs2.Unity.UiKit.Gs2Ranking
 
         public bool HasError()
         {
-            _context = GetComponent<Gs2RankingNamespaceContext>() ?? GetComponentInParent<Gs2RankingNamespaceContext>(true);
             _fetcher = GetComponent<Gs2RankingCategoryModelListFetcher>() ?? GetComponentInParent<Gs2RankingCategoryModelListFetcher>(true);
-            if (_context == null) {
-                return true;
-            }
             if (_fetcher == null) {
                 return true;
             }

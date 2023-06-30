@@ -63,12 +63,11 @@ namespace Gs2.Unity.UiKit.Gs2Stamina
 
     public partial class Gs2StaminaStaminaModelList
     {
-        private Gs2StaminaNamespaceContext _context;
         private Gs2StaminaStaminaModelListFetcher _fetcher;
+        public Gs2StaminaNamespaceContext Context => _fetcher.Context;
 
         public void Awake()
         {
-            _context = GetComponent<Gs2StaminaNamespaceContext>() ?? GetComponentInParent<Gs2StaminaNamespaceContext>();
             _fetcher = GetComponent<Gs2StaminaStaminaModelListFetcher>() ?? GetComponentInParent<Gs2StaminaStaminaModelListFetcher>();
 
             if (_fetcher == null) {
@@ -80,7 +79,7 @@ namespace Gs2.Unity.UiKit.Gs2Stamina
             for (var i = 0; i < this.maximumItems; i++) {
                 var node = Instantiate(this.prefab, transform);
                 node.StaminaModel = StaminaModel.New(
-                    _context.Namespace,
+                    _fetcher.Context.Namespace,
                     ""
                 );
                 node.gameObject.SetActive(false);
@@ -91,11 +90,7 @@ namespace Gs2.Unity.UiKit.Gs2Stamina
 
         public bool HasError()
         {
-            _context = GetComponent<Gs2StaminaNamespaceContext>() ?? GetComponentInParent<Gs2StaminaNamespaceContext>(true);
             _fetcher = GetComponent<Gs2StaminaStaminaModelListFetcher>() ?? GetComponentInParent<Gs2StaminaStaminaModelListFetcher>(true);
-            if (_context == null) {
-                return true;
-            }
             if (_fetcher == null) {
                 return true;
             }

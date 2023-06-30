@@ -17,9 +17,18 @@
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
+// ReSharper disable RedundantNameQualifier
+// ReSharper disable RedundantAssignment
+// ReSharper disable NotAccessedVariable
+// ReSharper disable RedundantUsingDirective
+// ReSharper disable Unity.NoNullPropagation
+// ReSharper disable InconsistentNaming
+
+#pragma warning disable CS0472
 
 using System.Collections.Generic;
 using Gs2.Unity.Gs2Friend.ScriptableObject;
+using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Friend.Context;
 using Gs2.Unity.UiKit.Gs2Friend.Fetcher;
 using UnityEngine;
@@ -36,7 +45,7 @@ namespace Gs2.Unity.UiKit.Gs2Friend
         private List<Gs2FriendOwnFollowUserContext> _children;
 
         public void Update() {
-            if (_fetcher.Fetched) {
+            if (_fetcher.Fetched && this._fetcher.FollowUsers != null) {
                 for (var i = 0; i < this.maximumItems; i++) {
                     if (i < this._fetcher.FollowUsers.Count) {
                         _children[i].FollowUser.targetUserId = this._fetcher.FollowUsers[i].UserId;
@@ -56,25 +65,38 @@ namespace Gs2.Unity.UiKit.Gs2Friend
 
     public partial class Gs2FriendOwnFollowUserList
     {
-        private Gs2FriendNamespaceContext _context;
         private Gs2FriendOwnFollowUserListFetcher _fetcher;
+        private Gs2FriendNamespaceContext Context => _fetcher.Context;
 
         public void Awake()
         {
-            _context = GetComponentInParent<Gs2FriendNamespaceContext>();
-            _fetcher = GetComponentInParent<Gs2FriendOwnFollowUserListFetcher>();
+            _fetcher = GetComponent<Gs2FriendOwnFollowUserListFetcher>() ?? GetComponentInParent<Gs2FriendOwnFollowUserListFetcher>();
+
+            if (_fetcher == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2FriendOwnFollowUserListFetcher.");
+                enabled = false;
+            }
 
             _children = new List<Gs2FriendOwnFollowUserContext>();
             for (var i = 0; i < this.maximumItems; i++) {
                 var node = Instantiate(this.prefab, transform);
                 node.FollowUser = OwnFollowUser.New(
-                    _context.Namespace,
+                    _fetcher.Context.Namespace,
                     ""
                 );
                 node.gameObject.SetActive(false);
                 _children.Add(node);
             }
             this.prefab.gameObject.SetActive(false);
+        }
+
+        public bool HasError()
+        {
+            _fetcher = GetComponent<Gs2FriendOwnFollowUserListFetcher>() ?? GetComponentInParent<Gs2FriendOwnFollowUserListFetcher>(true);
+            if (_fetcher == null) {
+                return true;
+            }
+            return false;
         }
     }
 

@@ -55,11 +55,11 @@ namespace Gs2.Unity.UiKit.Gs2MegaField.Fetcher
             {
                 if (_gameSessionHolder != null && _gameSessionHolder.Initialized && 
                     _clientHolder != null && _clientHolder.Initialized &&
-                    _context != null)
+                    Context != null)
                 {
                     
                     var domain = this._clientHolder.Gs2.MegaField.Namespace(
-                        this._context.Namespace.NamespaceName
+                        this.Context.Namespace.NamespaceName
                     );
                     var it = domain.AreaModels();
                     var items = new List<Gs2.Unity.Gs2MegaField.Model.EzAreaModel>();
@@ -120,15 +120,15 @@ namespace Gs2.Unity.UiKit.Gs2MegaField.Fetcher
     {
         private Gs2ClientHolder _clientHolder;
         private Gs2GameSessionHolder _gameSessionHolder;
-        private Gs2MegaFieldNamespaceContext _context;
+        public Gs2MegaFieldNamespaceContext Context { get; private set; }
 
         public void Awake()
         {
             _clientHolder = Gs2ClientHolder.Instance;
             _gameSessionHolder = Gs2GameSessionHolder.Instance;
-            _context = GetComponent<Gs2MegaFieldNamespaceContext>() ?? GetComponentInParent<Gs2MegaFieldNamespaceContext>();
+            Context = GetComponent<Gs2MegaFieldNamespaceContext>() ?? GetComponentInParent<Gs2MegaFieldNamespaceContext>();
 
-            if (_context == null) {
+            if (Context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MegaFieldNamespaceContext.");
                 enabled = false;
             }
@@ -136,8 +136,8 @@ namespace Gs2.Unity.UiKit.Gs2MegaField.Fetcher
 
         public bool HasError()
         {
-            _context = GetComponent<Gs2MegaFieldNamespaceContext>() ?? GetComponentInParent<Gs2MegaFieldNamespaceContext>(true);
-            if (_context == null) {
+            Context = GetComponent<Gs2MegaFieldNamespaceContext>() ?? GetComponentInParent<Gs2MegaFieldNamespaceContext>(true);
+            if (Context == null) {
                 return true;
             }
             return false;

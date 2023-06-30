@@ -63,12 +63,11 @@ namespace Gs2.Unity.UiKit.Gs2Mission
 
     public partial class Gs2MissionMissionTaskModelList
     {
-        private Gs2MissionMissionGroupModelContext _context;
         private Gs2MissionMissionTaskModelListFetcher _fetcher;
+        public Gs2MissionMissionGroupModelContext Context => _fetcher.Context;
 
         public void Awake()
         {
-            _context = GetComponent<Gs2MissionMissionGroupModelContext>() ?? GetComponentInParent<Gs2MissionMissionGroupModelContext>();
             _fetcher = GetComponent<Gs2MissionMissionTaskModelListFetcher>() ?? GetComponentInParent<Gs2MissionMissionTaskModelListFetcher>();
 
             if (_fetcher == null) {
@@ -80,7 +79,7 @@ namespace Gs2.Unity.UiKit.Gs2Mission
             for (var i = 0; i < this.maximumItems; i++) {
                 var node = Instantiate(this.prefab, transform);
                 node.MissionTaskModel = MissionTaskModel.New(
-                    _context.MissionGroupModel,
+                    _fetcher.Context.MissionGroupModel,
                     ""
                 );
                 node.gameObject.SetActive(false);
@@ -91,11 +90,7 @@ namespace Gs2.Unity.UiKit.Gs2Mission
 
         public bool HasError()
         {
-            _context = GetComponent<Gs2MissionMissionGroupModelContext>() ?? GetComponentInParent<Gs2MissionMissionGroupModelContext>(true);
             _fetcher = GetComponent<Gs2MissionMissionTaskModelListFetcher>() ?? GetComponentInParent<Gs2MissionMissionTaskModelListFetcher>(true);
-            if (_context == null) {
-                return true;
-            }
             if (_fetcher == null) {
                 return true;
             }

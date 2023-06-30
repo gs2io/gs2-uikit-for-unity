@@ -63,12 +63,11 @@ namespace Gs2.Unity.UiKit.Gs2Dictionary
 
     public partial class Gs2DictionaryEntryModelList
     {
-        private Gs2DictionaryNamespaceContext _context;
         private Gs2DictionaryEntryModelListFetcher _fetcher;
+        public Gs2DictionaryNamespaceContext Context => _fetcher.Context;
 
         public void Awake()
         {
-            _context = GetComponent<Gs2DictionaryNamespaceContext>() ?? GetComponentInParent<Gs2DictionaryNamespaceContext>();
             _fetcher = GetComponent<Gs2DictionaryEntryModelListFetcher>() ?? GetComponentInParent<Gs2DictionaryEntryModelListFetcher>();
 
             if (_fetcher == null) {
@@ -80,7 +79,7 @@ namespace Gs2.Unity.UiKit.Gs2Dictionary
             for (var i = 0; i < this.maximumItems; i++) {
                 var node = Instantiate(this.prefab, transform);
                 node.EntryModel = EntryModel.New(
-                    _context.Namespace,
+                    _fetcher.Context.Namespace,
                     ""
                 );
                 node.gameObject.SetActive(false);
@@ -91,11 +90,7 @@ namespace Gs2.Unity.UiKit.Gs2Dictionary
 
         public bool HasError()
         {
-            _context = GetComponent<Gs2DictionaryNamespaceContext>() ?? GetComponentInParent<Gs2DictionaryNamespaceContext>(true);
             _fetcher = GetComponent<Gs2DictionaryEntryModelListFetcher>() ?? GetComponentInParent<Gs2DictionaryEntryModelListFetcher>(true);
-            if (_context == null) {
-                return true;
-            }
             if (_fetcher == null) {
                 return true;
             }

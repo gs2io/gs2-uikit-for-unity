@@ -43,7 +43,7 @@ namespace Gs2.Unity.UiKit.Gs2Version
         private List<Gs2VersionOwnAcceptVersionContext> _children;
 
         public void Update() {
-            if (_fetcher.Fetched && _fetcher.AcceptVersions != null) {
+            if (_fetcher.Fetched && this._fetcher.AcceptVersions != null) {
                 for (var i = 0; i < this.maximumItems; i++) {
                     if (i < this._fetcher.AcceptVersions.Count) {
                         _children[i].AcceptVersion.versionName = this._fetcher.AcceptVersions[i].VersionName;
@@ -63,18 +63,13 @@ namespace Gs2.Unity.UiKit.Gs2Version
 
     public partial class Gs2VersionOwnAcceptVersionList
     {
-        private Gs2VersionNamespaceContext _context;
         private Gs2VersionOwnAcceptVersionListFetcher _fetcher;
+        private Gs2VersionNamespaceContext Context => _fetcher.Context;
 
         public void Awake()
         {
-            _context = GetComponent<Gs2VersionNamespaceContext>() ?? GetComponentInParent<Gs2VersionNamespaceContext>();
             _fetcher = GetComponent<Gs2VersionOwnAcceptVersionListFetcher>() ?? GetComponentInParent<Gs2VersionOwnAcceptVersionListFetcher>();
 
-            if (_context == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2VersionNamespaceContext.");
-                enabled = false;
-            }
             if (_fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2VersionOwnAcceptVersionListFetcher.");
                 enabled = false;
@@ -84,7 +79,7 @@ namespace Gs2.Unity.UiKit.Gs2Version
             for (var i = 0; i < this.maximumItems; i++) {
                 var node = Instantiate(this.prefab, transform);
                 node.AcceptVersion = OwnAcceptVersion.New(
-                    _context.Namespace,
+                    _fetcher.Context.Namespace,
                     ""
                 );
                 node.gameObject.SetActive(false);
@@ -95,11 +90,7 @@ namespace Gs2.Unity.UiKit.Gs2Version
 
         public bool HasError()
         {
-            _context = GetComponent<Gs2VersionNamespaceContext>() ?? GetComponentInParent<Gs2VersionNamespaceContext>(true);
             _fetcher = GetComponent<Gs2VersionOwnAcceptVersionListFetcher>() ?? GetComponentInParent<Gs2VersionOwnAcceptVersionListFetcher>(true);
-            if (_context == null) {
-                return true;
-            }
             if (_fetcher == null) {
                 return true;
             }

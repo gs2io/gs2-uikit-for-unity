@@ -63,12 +63,11 @@ namespace Gs2.Unity.UiKit.Gs2Limit
 
     public partial class Gs2LimitLimitModelList
     {
-        private Gs2LimitNamespaceContext _context;
         private Gs2LimitLimitModelListFetcher _fetcher;
+        public Gs2LimitNamespaceContext Context => _fetcher.Context;
 
         public void Awake()
         {
-            _context = GetComponent<Gs2LimitNamespaceContext>() ?? GetComponentInParent<Gs2LimitNamespaceContext>();
             _fetcher = GetComponent<Gs2LimitLimitModelListFetcher>() ?? GetComponentInParent<Gs2LimitLimitModelListFetcher>();
 
             if (_fetcher == null) {
@@ -80,7 +79,7 @@ namespace Gs2.Unity.UiKit.Gs2Limit
             for (var i = 0; i < this.maximumItems; i++) {
                 var node = Instantiate(this.prefab, transform);
                 node.LimitModel = LimitModel.New(
-                    _context.Namespace,
+                    _fetcher.Context.Namespace,
                     ""
                 );
                 node.gameObject.SetActive(false);
@@ -91,11 +90,7 @@ namespace Gs2.Unity.UiKit.Gs2Limit
 
         public bool HasError()
         {
-            _context = GetComponent<Gs2LimitNamespaceContext>() ?? GetComponentInParent<Gs2LimitNamespaceContext>(true);
             _fetcher = GetComponent<Gs2LimitLimitModelListFetcher>() ?? GetComponentInParent<Gs2LimitLimitModelListFetcher>(true);
-            if (_context == null) {
-                return true;
-            }
             if (_fetcher == null) {
                 return true;
             }

@@ -17,6 +17,14 @@
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
+// ReSharper disable RedundantNameQualifier
+// ReSharper disable RedundantAssignment
+// ReSharper disable NotAccessedVariable
+// ReSharper disable RedundantUsingDirective
+// ReSharper disable Unity.NoNullPropagation
+// ReSharper disable InconsistentNaming
+
+#pragma warning disable CS0472
 
 using System;
 using System.Collections;
@@ -47,18 +55,18 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Fetcher
             Gs2Exception e;
             while (true)
             {
-                if (_gameSessionHolder != null && _gameSessionHolder.Initialized && 
+                if (_gameSessionHolder != null && _gameSessionHolder.Initialized &&
                     _clientHolder != null && _clientHolder.Initialized &&
-                    _context != null && _userContext != null)
+                    Context != null)
                 {
                     
                     var domain = this._clientHolder.Gs2.Ranking.Namespace(
-                        this._context.CategoryModel.NamespaceName
+                        this.Context.CategoryModel.NamespaceName
                     ).Me(
                         this._gameSessionHolder.GameSession
                     );
                     var it = domain.Scores(
-                        this._context.CategoryModel.CategoryName,
+                        this.Context.CategoryModel.CategoryName,
                         this._userContext.User.UserId
                     );
                     var items = new List<Gs2.Unity.Gs2Ranking.Model.EzScore>();
@@ -114,25 +122,42 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Fetcher
     /// <summary>
     /// Dependent components
     /// </summary>
-    
+
     public partial class Gs2RankingOwnScoreListFetcher
     {
         private Gs2ClientHolder _clientHolder;
         private Gs2GameSessionHolder _gameSessionHolder;
-        private Gs2RankingCategoryModelContext _context;
+        public Gs2RankingCategoryModelContext Context;
         private Gs2RankingUserContext _userContext;
 
         public void Awake()
         {
             _clientHolder = Gs2ClientHolder.Instance;
             _gameSessionHolder = Gs2GameSessionHolder.Instance;
-            _context = GetComponentInParent<Gs2RankingCategoryModelContext>();
-            _userContext = GetComponentInParent<Gs2RankingUserContext>();
+            Context = GetComponent<Gs2RankingCategoryModelContext>() ?? GetComponentInParent<Gs2RankingCategoryModelContext>();
+            _userContext = GetComponent<Gs2RankingUserContext>() ?? GetComponentInParent<Gs2RankingUserContext>();
 
-            if (_context == null) {
+            if (Context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2RankingCategoryModelContext.");
                 enabled = false;
             }
+            if (_userContext == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2RankingUserContext.");
+                enabled = false;
+            }
+        }
+
+        public bool HasError()
+        {
+            Context = GetComponent<Gs2RankingCategoryModelContext>() ?? GetComponentInParent<Gs2RankingCategoryModelContext>(true);
+            if (Context == null) {
+                return true;
+            }
+            _userContext = GetComponent<Gs2RankingUserContext>() ?? GetComponentInParent<Gs2RankingUserContext>();
+            if (_userContext == null) {
+                return true;
+            }
+            return false;
         }
     }
 

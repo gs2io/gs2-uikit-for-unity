@@ -43,7 +43,7 @@ namespace Gs2.Unity.UiKit.Gs2Limit
         private List<Gs2LimitOwnCounterContext> _children;
 
         public void Update() {
-            if (_fetcher.Fetched && _fetcher.Counters != null) {
+            if (_fetcher.Fetched && this._fetcher.Counters != null) {
                 for (var i = 0; i < this.maximumItems; i++) {
                     if (i < this._fetcher.Counters.Count) {
                         _children[i].Counter.limitName = this._fetcher.Counters[i].LimitName;
@@ -64,18 +64,13 @@ namespace Gs2.Unity.UiKit.Gs2Limit
 
     public partial class Gs2LimitOwnCounterList
     {
-        private Gs2LimitNamespaceContext _context;
         private Gs2LimitOwnCounterListFetcher _fetcher;
+        private Gs2LimitNamespaceContext Context => _fetcher.Context;
 
         public void Awake()
         {
-            _context = GetComponent<Gs2LimitNamespaceContext>() ?? GetComponentInParent<Gs2LimitNamespaceContext>();
             _fetcher = GetComponent<Gs2LimitOwnCounterListFetcher>() ?? GetComponentInParent<Gs2LimitOwnCounterListFetcher>();
 
-            if (_context == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2LimitNamespaceContext.");
-                enabled = false;
-            }
             if (_fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2LimitOwnCounterListFetcher.");
                 enabled = false;
@@ -85,7 +80,7 @@ namespace Gs2.Unity.UiKit.Gs2Limit
             for (var i = 0; i < this.maximumItems; i++) {
                 var node = Instantiate(this.prefab, transform);
                 node.Counter = OwnCounter.New(
-                    _context.Namespace,
+                    _fetcher.Context.Namespace,
                     "",
                     ""
                 );
@@ -97,11 +92,7 @@ namespace Gs2.Unity.UiKit.Gs2Limit
 
         public bool HasError()
         {
-            _context = GetComponent<Gs2LimitNamespaceContext>() ?? GetComponentInParent<Gs2LimitNamespaceContext>(true);
             _fetcher = GetComponent<Gs2LimitOwnCounterListFetcher>() ?? GetComponentInParent<Gs2LimitOwnCounterListFetcher>(true);
-            if (_context == null) {
-                return true;
-            }
             if (_fetcher == null) {
                 return true;
             }

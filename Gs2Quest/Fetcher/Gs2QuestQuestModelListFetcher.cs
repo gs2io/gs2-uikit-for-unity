@@ -55,13 +55,13 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Fetcher
             {
                 if (_gameSessionHolder != null && _gameSessionHolder.Initialized && 
                     _clientHolder != null && _clientHolder.Initialized &&
-                    _context != null)
+                    Context != null)
                 {
                     
                     var domain = this._clientHolder.Gs2.Quest.Namespace(
-                        this._context.QuestGroupModel.NamespaceName
+                        this.Context.QuestGroupModel.NamespaceName
                     ).QuestGroupModel(
-                        this._context.QuestGroupModel.QuestGroupName
+                        this.Context.QuestGroupModel.QuestGroupName
                     );
                     var it = domain.QuestModels();
                     var items = new List<Gs2.Unity.Gs2Quest.Model.EzQuestModel>();
@@ -122,15 +122,15 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Fetcher
     {
         private Gs2ClientHolder _clientHolder;
         private Gs2GameSessionHolder _gameSessionHolder;
-        private Gs2QuestQuestGroupModelContext _context;
+        public Gs2QuestQuestGroupModelContext Context { get; private set; }
 
         public void Awake()
         {
             _clientHolder = Gs2ClientHolder.Instance;
             _gameSessionHolder = Gs2GameSessionHolder.Instance;
-            _context = GetComponent<Gs2QuestQuestGroupModelContext>() ?? GetComponentInParent<Gs2QuestQuestGroupModelContext>();
+            Context = GetComponent<Gs2QuestQuestGroupModelContext>() ?? GetComponentInParent<Gs2QuestQuestGroupModelContext>();
 
-            if (_context == null) {
+            if (Context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2QuestQuestGroupModelContext.");
                 enabled = false;
             }
@@ -138,8 +138,8 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Fetcher
 
         public bool HasError()
         {
-            _context = GetComponent<Gs2QuestQuestGroupModelContext>() ?? GetComponentInParent<Gs2QuestQuestGroupModelContext>(true);
-            if (_context == null) {
+            Context = GetComponent<Gs2QuestQuestGroupModelContext>() ?? GetComponentInParent<Gs2QuestQuestGroupModelContext>(true);
+            if (Context == null) {
                 return true;
             }
             return false;

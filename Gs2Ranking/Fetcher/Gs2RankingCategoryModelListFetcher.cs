@@ -55,11 +55,11 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Fetcher
             {
                 if (_gameSessionHolder != null && _gameSessionHolder.Initialized && 
                     _clientHolder != null && _clientHolder.Initialized &&
-                    _context != null)
+                    Context != null)
                 {
                     
                     var domain = this._clientHolder.Gs2.Ranking.Namespace(
-                        this._context.Namespace.NamespaceName
+                        this.Context.Namespace.NamespaceName
                     );
                     var it = domain.CategoryModels();
                     var items = new List<Gs2.Unity.Gs2Ranking.Model.EzCategoryModel>();
@@ -120,15 +120,15 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Fetcher
     {
         private Gs2ClientHolder _clientHolder;
         private Gs2GameSessionHolder _gameSessionHolder;
-        private Gs2RankingNamespaceContext _context;
+        public Gs2RankingNamespaceContext Context { get; private set; }
 
         public void Awake()
         {
             _clientHolder = Gs2ClientHolder.Instance;
             _gameSessionHolder = Gs2GameSessionHolder.Instance;
-            _context = GetComponent<Gs2RankingNamespaceContext>() ?? GetComponentInParent<Gs2RankingNamespaceContext>();
+            Context = GetComponent<Gs2RankingNamespaceContext>() ?? GetComponentInParent<Gs2RankingNamespaceContext>();
 
-            if (_context == null) {
+            if (Context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2RankingNamespaceContext.");
                 enabled = false;
             }
@@ -136,8 +136,8 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Fetcher
 
         public bool HasError()
         {
-            _context = GetComponent<Gs2RankingNamespaceContext>() ?? GetComponentInParent<Gs2RankingNamespaceContext>(true);
-            if (_context == null) {
+            Context = GetComponent<Gs2RankingNamespaceContext>() ?? GetComponentInParent<Gs2RankingNamespaceContext>(true);
+            if (Context == null) {
                 return true;
             }
             return false;

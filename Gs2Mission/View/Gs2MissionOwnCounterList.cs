@@ -43,7 +43,7 @@ namespace Gs2.Unity.UiKit.Gs2Mission
         private List<Gs2MissionOwnCounterContext> _children;
 
         public void Update() {
-            if (_fetcher.Fetched && _fetcher.Counters != null) {
+            if (_fetcher.Fetched && this._fetcher.Counters != null) {
                 for (var i = 0; i < this.maximumItems; i++) {
                     if (i < this._fetcher.Counters.Count) {
                         _children[i].CounterModel.counterName = this._fetcher.Counters[i].Name;
@@ -64,18 +64,13 @@ namespace Gs2.Unity.UiKit.Gs2Mission
 
     public partial class Gs2MissionOwnCounterList
     {
-        private Gs2MissionNamespaceContext _context;
         private Gs2MissionOwnCounterListFetcher _fetcher;
+        private Gs2MissionNamespaceContext Context => _fetcher.Context;
 
         public void Awake()
         {
-            _context = GetComponent<Gs2MissionNamespaceContext>() ?? GetComponentInParent<Gs2MissionNamespaceContext>();
             _fetcher = GetComponent<Gs2MissionOwnCounterListFetcher>() ?? GetComponentInParent<Gs2MissionOwnCounterListFetcher>();
 
-            if (_context == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MissionNamespaceContext.");
-                enabled = false;
-            }
             if (_fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MissionOwnCounterListFetcher.");
                 enabled = false;
@@ -85,11 +80,11 @@ namespace Gs2.Unity.UiKit.Gs2Mission
             for (var i = 0; i < this.maximumItems; i++) {
                 var node = Instantiate(this.prefab, transform);
                 node.CounterModel = CounterModel.New(
-                    _context.Namespace,
+                    _fetcher.Context.Namespace,
                     ""
                 );
                 node.Counter = OwnCounter.New(
-                    _context.Namespace,
+                    _fetcher.Context.Namespace,
                     ""
                 );
                 node.gameObject.SetActive(false);
@@ -100,11 +95,7 @@ namespace Gs2.Unity.UiKit.Gs2Mission
 
         public bool HasError()
         {
-            _context = GetComponent<Gs2MissionNamespaceContext>() ?? GetComponentInParent<Gs2MissionNamespaceContext>(true);
             _fetcher = GetComponent<Gs2MissionOwnCounterListFetcher>() ?? GetComponentInParent<Gs2MissionOwnCounterListFetcher>(true);
-            if (_context == null) {
-                return true;
-            }
             if (_fetcher == null) {
                 return true;
             }

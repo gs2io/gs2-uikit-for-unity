@@ -43,7 +43,7 @@ namespace Gs2.Unity.UiKit.Gs2Lottery
         private List<Gs2LotteryOwnBoxItemsContext> _children;
 
         public void Update() {
-            if (_fetcher.Fetched && _fetcher.BoxItemses != null) {
+            if (_fetcher.Fetched && this._fetcher.BoxItemses != null) {
                 for (var i = 0; i < this.maximumItems; i++) {
                     if (i < this._fetcher.BoxItemses.Count) {
                         _children[i].BoxItems.prizeTableName = this._fetcher.BoxItemses[i].PrizeTableName;
@@ -63,18 +63,13 @@ namespace Gs2.Unity.UiKit.Gs2Lottery
 
     public partial class Gs2LotteryOwnBoxItemsList
     {
-        private Gs2LotteryNamespaceContext _context;
         private Gs2LotteryOwnBoxItemsListFetcher _fetcher;
+        private Gs2LotteryNamespaceContext Context => _fetcher.Context;
 
         public void Awake()
         {
-            _context = GetComponent<Gs2LotteryNamespaceContext>() ?? GetComponentInParent<Gs2LotteryNamespaceContext>();
             _fetcher = GetComponent<Gs2LotteryOwnBoxItemsListFetcher>() ?? GetComponentInParent<Gs2LotteryOwnBoxItemsListFetcher>();
 
-            if (_context == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2LotteryNamespaceContext.");
-                enabled = false;
-            }
             if (_fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2LotteryOwnBoxItemsListFetcher.");
                 enabled = false;
@@ -84,7 +79,7 @@ namespace Gs2.Unity.UiKit.Gs2Lottery
             for (var i = 0; i < this.maximumItems; i++) {
                 var node = Instantiate(this.prefab, transform);
                 node.BoxItems = OwnBoxItems.New(
-                    _context.Namespace,
+                    _fetcher.Context.Namespace,
                     ""
                 );
                 node.gameObject.SetActive(false);
@@ -95,11 +90,7 @@ namespace Gs2.Unity.UiKit.Gs2Lottery
 
         public bool HasError()
         {
-            _context = GetComponent<Gs2LotteryNamespaceContext>() ?? GetComponentInParent<Gs2LotteryNamespaceContext>(true);
             _fetcher = GetComponent<Gs2LotteryOwnBoxItemsListFetcher>() ?? GetComponentInParent<Gs2LotteryOwnBoxItemsListFetcher>(true);
-            if (_context == null) {
-                return true;
-            }
             if (_fetcher == null) {
                 return true;
             }

@@ -63,12 +63,11 @@ namespace Gs2.Unity.UiKit.Gs2Chat
 
     public partial class Gs2ChatMessageList
     {
-        private Gs2ChatRoomContext _context;
         private Gs2ChatMessageListFetcher _fetcher;
+        public Gs2ChatRoomContext Context => _fetcher.Context;
 
         public void Awake()
         {
-            _context = GetComponent<Gs2ChatRoomContext>() ?? GetComponentInParent<Gs2ChatRoomContext>();
             _fetcher = GetComponent<Gs2ChatMessageListFetcher>() ?? GetComponentInParent<Gs2ChatMessageListFetcher>();
 
             if (_fetcher == null) {
@@ -80,7 +79,7 @@ namespace Gs2.Unity.UiKit.Gs2Chat
             for (var i = 0; i < this.maximumItems; i++) {
                 var node = Instantiate(this.prefab, transform);
                 node.Message = Message.New(
-                    _context.Room,
+                    _fetcher.Context.Room,
                     ""
                 );
                 node.gameObject.SetActive(false);
@@ -91,11 +90,7 @@ namespace Gs2.Unity.UiKit.Gs2Chat
 
         public bool HasError()
         {
-            _context = GetComponent<Gs2ChatRoomContext>() ?? GetComponentInParent<Gs2ChatRoomContext>(true);
             _fetcher = GetComponent<Gs2ChatMessageListFetcher>() ?? GetComponentInParent<Gs2ChatMessageListFetcher>(true);
-            if (_context == null) {
-                return true;
-            }
             if (_fetcher == null) {
                 return true;
             }

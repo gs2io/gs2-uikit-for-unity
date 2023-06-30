@@ -43,7 +43,7 @@ namespace Gs2.Unity.UiKit.Gs2Datastore
         private List<Gs2DatastoreOwnDataObjectHistoryContext> _children;
 
         public void Update() {
-            if (_fetcher.Fetched && _fetcher.DataObjectHistories != null) {
+            if (_fetcher.Fetched && this._fetcher.DataObjectHistories != null) {
                 for (var i = 0; i < this.maximumItems; i++) {
                     if (i < this._fetcher.DataObjectHistories.Count) {
                         _children[i].DataObjectHistory.generation = this._fetcher.DataObjectHistories[i].Generation;
@@ -63,18 +63,13 @@ namespace Gs2.Unity.UiKit.Gs2Datastore
 
     public partial class Gs2DatastoreOwnDataObjectHistoryList
     {
-        private Gs2DatastoreOwnDataObjectContext _context;
         private Gs2DatastoreOwnDataObjectHistoryListFetcher _fetcher;
+        private Gs2DatastoreOwnDataObjectContext Context => _fetcher.Context;
 
         public void Awake()
         {
-            _context = GetComponent<Gs2DatastoreOwnDataObjectContext>() ?? GetComponentInParent<Gs2DatastoreOwnDataObjectContext>();
             _fetcher = GetComponent<Gs2DatastoreOwnDataObjectHistoryListFetcher>() ?? GetComponentInParent<Gs2DatastoreOwnDataObjectHistoryListFetcher>();
 
-            if (_context == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2DatastoreOwnDataObjectContext.");
-                enabled = false;
-            }
             if (_fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2DatastoreOwnDataObjectHistoryListFetcher.");
                 enabled = false;
@@ -84,7 +79,7 @@ namespace Gs2.Unity.UiKit.Gs2Datastore
             for (var i = 0; i < this.maximumItems; i++) {
                 var node = Instantiate(this.prefab, transform);
                 node.DataObjectHistory = OwnDataObjectHistory.New(
-                    _context.DataObject,
+                    _fetcher.Context.DataObject,
                     ""
                 );
                 node.gameObject.SetActive(false);
@@ -95,11 +90,7 @@ namespace Gs2.Unity.UiKit.Gs2Datastore
 
         public bool HasError()
         {
-            _context = GetComponent<Gs2DatastoreOwnDataObjectContext>() ?? GetComponentInParent<Gs2DatastoreOwnDataObjectContext>(true);
             _fetcher = GetComponent<Gs2DatastoreOwnDataObjectHistoryListFetcher>() ?? GetComponentInParent<Gs2DatastoreOwnDataObjectHistoryListFetcher>(true);
-            if (_context == null) {
-                return true;
-            }
             if (_fetcher == null) {
                 return true;
             }

@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
@@ -43,7 +45,7 @@ namespace Gs2.Unity.UiKit.Gs2Formation
         private List<Gs2FormationOwnPropertyFormContext> _children;
 
         public void Update() {
-            if (_fetcher.Fetched && _fetcher.PropertyForms != null) {
+            if (_fetcher.Fetched && this._fetcher.PropertyForms != null) {
                 for (var i = 0; i < this.maximumItems; i++) {
                     if (i < this._fetcher.PropertyForms.Count) {
                         _children[i].PropertyForm.formModelName = this._fetcher.PropertyForms[i].Name;
@@ -64,18 +66,13 @@ namespace Gs2.Unity.UiKit.Gs2Formation
 
     public partial class Gs2FormationOwnPropertyFormList
     {
-        private Gs2FormationNamespaceContext _context;
         private Gs2FormationOwnPropertyFormListFetcher _fetcher;
+        private Gs2FormationFormModelContext Context => _fetcher.Context;
 
         public void Awake()
         {
-            _context = GetComponent<Gs2FormationNamespaceContext>() ?? GetComponentInParent<Gs2FormationNamespaceContext>();
             _fetcher = GetComponent<Gs2FormationOwnPropertyFormListFetcher>() ?? GetComponentInParent<Gs2FormationOwnPropertyFormListFetcher>();
 
-            if (_context == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2FormationNamespaceContext.");
-                enabled = false;
-            }
             if (_fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2FormationOwnPropertyFormListFetcher.");
                 enabled = false;
@@ -85,8 +82,8 @@ namespace Gs2.Unity.UiKit.Gs2Formation
             for (var i = 0; i < this.maximumItems; i++) {
                 var node = Instantiate(this.prefab, transform);
                 node.PropertyForm = OwnPropertyForm.New(
-                    _context.Namespace,
-                    "",
+                    _fetcher.Context.FormModel.Namespace,
+                    _fetcher.Context.FormModel.FormModelName,
                     ""
                 );
                 node.gameObject.SetActive(false);
@@ -97,11 +94,7 @@ namespace Gs2.Unity.UiKit.Gs2Formation
 
         public bool HasError()
         {
-            _context = GetComponent<Gs2FormationNamespaceContext>() ?? GetComponentInParent<Gs2FormationNamespaceContext>(true);
             _fetcher = GetComponent<Gs2FormationOwnPropertyFormListFetcher>() ?? GetComponentInParent<Gs2FormationOwnPropertyFormListFetcher>(true);
-            if (_context == null) {
-                return true;
-            }
             if (_fetcher == null) {
                 return true;
             }

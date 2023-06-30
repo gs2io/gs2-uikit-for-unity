@@ -63,12 +63,11 @@ namespace Gs2.Unity.UiKit.Gs2Lottery
 
     public partial class Gs2LotteryLotteryModelList
     {
-        private Gs2LotteryNamespaceContext _context;
         private Gs2LotteryLotteryModelListFetcher _fetcher;
+        public Gs2LotteryNamespaceContext Context => _fetcher.Context;
 
         public void Awake()
         {
-            _context = GetComponent<Gs2LotteryNamespaceContext>() ?? GetComponentInParent<Gs2LotteryNamespaceContext>();
             _fetcher = GetComponent<Gs2LotteryLotteryModelListFetcher>() ?? GetComponentInParent<Gs2LotteryLotteryModelListFetcher>();
 
             if (_fetcher == null) {
@@ -80,7 +79,7 @@ namespace Gs2.Unity.UiKit.Gs2Lottery
             for (var i = 0; i < this.maximumItems; i++) {
                 var node = Instantiate(this.prefab, transform);
                 node.LotteryModel = LotteryModel.New(
-                    _context.Namespace,
+                    _fetcher.Context.Namespace,
                     ""
                 );
                 node.gameObject.SetActive(false);
@@ -91,11 +90,7 @@ namespace Gs2.Unity.UiKit.Gs2Lottery
 
         public bool HasError()
         {
-            _context = GetComponent<Gs2LotteryNamespaceContext>() ?? GetComponentInParent<Gs2LotteryNamespaceContext>(true);
             _fetcher = GetComponent<Gs2LotteryLotteryModelListFetcher>() ?? GetComponentInParent<Gs2LotteryLotteryModelListFetcher>(true);
-            if (_context == null) {
-                return true;
-            }
             if (_fetcher == null) {
                 return true;
             }

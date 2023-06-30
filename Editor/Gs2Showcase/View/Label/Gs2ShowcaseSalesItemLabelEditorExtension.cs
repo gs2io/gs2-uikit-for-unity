@@ -34,11 +34,11 @@ using UnityEngine;
 
 namespace Gs2.Unity.UiKit.Gs2Showcase.Editor
 {
-    [CustomEditor(typeof(Gs2ShowcaseDisplayItemLabel))]
+    [CustomEditor(typeof(Gs2ShowcaseSalesItemLabel))]
     public class Gs2ShowcaseSalesItemLabelEditorExtension : UnityEditor.Editor
     {
         public override void OnInspectorGUI() {
-            var original = target as Gs2ShowcaseDisplayItemLabel;
+            var original = target as Gs2ShowcaseSalesItemLabel;
 
             if (original == null) return;
 

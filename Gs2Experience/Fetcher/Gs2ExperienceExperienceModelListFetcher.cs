@@ -55,11 +55,11 @@ namespace Gs2.Unity.UiKit.Gs2Experience.Fetcher
             {
                 if (_gameSessionHolder != null && _gameSessionHolder.Initialized && 
                     _clientHolder != null && _clientHolder.Initialized &&
-                    _context != null)
+                    Context != null)
                 {
                     
                     var domain = this._clientHolder.Gs2.Experience.Namespace(
-                        this._context.Namespace.NamespaceName
+                        this.Context.Namespace.NamespaceName
                     );
                     var it = domain.ExperienceModels();
                     var items = new List<Gs2.Unity.Gs2Experience.Model.EzExperienceModel>();
@@ -120,15 +120,15 @@ namespace Gs2.Unity.UiKit.Gs2Experience.Fetcher
     {
         private Gs2ClientHolder _clientHolder;
         private Gs2GameSessionHolder _gameSessionHolder;
-        private Gs2ExperienceNamespaceContext _context;
+        public Gs2ExperienceNamespaceContext Context { get; private set; }
 
         public void Awake()
         {
             _clientHolder = Gs2ClientHolder.Instance;
             _gameSessionHolder = Gs2GameSessionHolder.Instance;
-            _context = GetComponent<Gs2ExperienceNamespaceContext>() ?? GetComponentInParent<Gs2ExperienceNamespaceContext>();
+            Context = GetComponent<Gs2ExperienceNamespaceContext>() ?? GetComponentInParent<Gs2ExperienceNamespaceContext>();
 
-            if (_context == null) {
+            if (Context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ExperienceNamespaceContext.");
                 enabled = false;
             }
@@ -136,8 +136,8 @@ namespace Gs2.Unity.UiKit.Gs2Experience.Fetcher
 
         public bool HasError()
         {
-            _context = GetComponent<Gs2ExperienceNamespaceContext>() ?? GetComponentInParent<Gs2ExperienceNamespaceContext>(true);
-            if (_context == null) {
+            Context = GetComponent<Gs2ExperienceNamespaceContext>() ?? GetComponentInParent<Gs2ExperienceNamespaceContext>(true);
+            if (Context == null) {
                 return true;
             }
             return false;

@@ -63,12 +63,11 @@ namespace Gs2.Unity.UiKit.Gs2MegaField
 
     public partial class Gs2MegaFieldLayerModelList
     {
-        private Gs2MegaFieldAreaModelContext _context;
         private Gs2MegaFieldLayerModelListFetcher _fetcher;
+        public Gs2MegaFieldAreaModelContext Context => _fetcher.Context;
 
         public void Awake()
         {
-            _context = GetComponent<Gs2MegaFieldAreaModelContext>() ?? GetComponentInParent<Gs2MegaFieldAreaModelContext>();
             _fetcher = GetComponent<Gs2MegaFieldLayerModelListFetcher>() ?? GetComponentInParent<Gs2MegaFieldLayerModelListFetcher>();
 
             if (_fetcher == null) {
@@ -80,7 +79,7 @@ namespace Gs2.Unity.UiKit.Gs2MegaField
             for (var i = 0; i < this.maximumItems; i++) {
                 var node = Instantiate(this.prefab, transform);
                 node.LayerModel = LayerModel.New(
-                    _context.AreaModel,
+                    _fetcher.Context.AreaModel,
                     ""
                 );
                 node.gameObject.SetActive(false);
@@ -91,11 +90,7 @@ namespace Gs2.Unity.UiKit.Gs2MegaField
 
         public bool HasError()
         {
-            _context = GetComponent<Gs2MegaFieldAreaModelContext>() ?? GetComponentInParent<Gs2MegaFieldAreaModelContext>(true);
             _fetcher = GetComponent<Gs2MegaFieldLayerModelListFetcher>() ?? GetComponentInParent<Gs2MegaFieldLayerModelListFetcher>(true);
-            if (_context == null) {
-                return true;
-            }
             if (_fetcher == null) {
                 return true;
             }

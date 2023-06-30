@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
@@ -59,10 +61,10 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Editor
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2QuestOwnCompletedQuestListFetcher), false);
                     EditorGUI.indentLevel++;
                     if (fetcher.Context != null) {
-                        fetcher.Context.CompletedQuestList = EditorGUILayout.ObjectField("CompletedQuestList", fetcher.Context.CompletedQuestList, typeof(OwnCompletedQuestList), false) as OwnCompletedQuestList;
+                        fetcher.Context.QuestGroupModel = EditorGUILayout.ObjectField("QuestGroupModel", fetcher.Context.QuestGroupModel, typeof(QuestGroupModel), false) as QuestGroupModel;
                         EditorGUI.indentLevel++;
-                        EditorGUILayout.TextField("NamespaceName", fetcher.Context.CompletedQuestList?.NamespaceName.ToString());
-                        EditorGUILayout.TextField("QuestGroupName", fetcher.Context.CompletedQuestList?.QuestGroupName.ToString());
+                        EditorGUILayout.TextField("NamespaceName", fetcher.Context.QuestGroupModel?.NamespaceName.ToString());
+                        EditorGUILayout.TextField("QuestGroupName", fetcher.Context.QuestGroupModel?.QuestGroupName.ToString());
                         EditorGUI.indentLevel--;
                     }
                     EditorGUI.indentLevel--;

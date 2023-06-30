@@ -43,7 +43,7 @@ namespace Gs2.Unity.UiKit.Gs2Datastore
         private List<Gs2DatastoreOwnDataObjectContext> _children;
 
         public void Update() {
-            if (_fetcher.Fetched && _fetcher.DataObjects != null) {
+            if (_fetcher.Fetched && this._fetcher.DataObjects != null) {
                 for (var i = 0; i < this.maximumItems; i++) {
                     if (i < this._fetcher.DataObjects.Count) {
                         _children[i].DataObject.dataObjectName = this._fetcher.DataObjects[i].Name;
@@ -63,18 +63,13 @@ namespace Gs2.Unity.UiKit.Gs2Datastore
 
     public partial class Gs2DatastoreOwnDataObjectList
     {
-        private Gs2DatastoreNamespaceContext _context;
         private Gs2DatastoreOwnDataObjectListFetcher _fetcher;
+        private Gs2DatastoreNamespaceContext Context => _fetcher.Context;
 
         public void Awake()
         {
-            _context = GetComponent<Gs2DatastoreNamespaceContext>() ?? GetComponentInParent<Gs2DatastoreNamespaceContext>();
             _fetcher = GetComponent<Gs2DatastoreOwnDataObjectListFetcher>() ?? GetComponentInParent<Gs2DatastoreOwnDataObjectListFetcher>();
 
-            if (_context == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2DatastoreNamespaceContext.");
-                enabled = false;
-            }
             if (_fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2DatastoreOwnDataObjectListFetcher.");
                 enabled = false;
@@ -84,7 +79,7 @@ namespace Gs2.Unity.UiKit.Gs2Datastore
             for (var i = 0; i < this.maximumItems; i++) {
                 var node = Instantiate(this.prefab, transform);
                 node.DataObject = OwnDataObject.New(
-                    _context.Namespace,
+                    _fetcher.Context.Namespace,
                     ""
                 );
                 node.gameObject.SetActive(false);
@@ -95,11 +90,7 @@ namespace Gs2.Unity.UiKit.Gs2Datastore
 
         public bool HasError()
         {
-            _context = GetComponent<Gs2DatastoreNamespaceContext>() ?? GetComponentInParent<Gs2DatastoreNamespaceContext>(true);
             _fetcher = GetComponent<Gs2DatastoreOwnDataObjectListFetcher>() ?? GetComponentInParent<Gs2DatastoreOwnDataObjectListFetcher>(true);
-            if (_context == null) {
-                return true;
-            }
             if (_fetcher == null) {
                 return true;
             }

@@ -17,6 +17,14 @@
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
+// ReSharper disable RedundantNameQualifier
+// ReSharper disable RedundantAssignment
+// ReSharper disable NotAccessedVariable
+// ReSharper disable RedundantUsingDirective
+// ReSharper disable Unity.NoNullPropagation
+// ReSharper disable InconsistentNaming
+
+#pragma warning disable CS0472
 
 using System;
 using System.Collections;
@@ -27,6 +35,7 @@ using Gs2.Unity.Core.Exception;
 using Gs2.Unity.Gs2Friend.Model;
 using Gs2.Unity.Gs2Friend.ScriptableObject;
 using Gs2.Unity.Util;
+using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Friend.Context;
 using UnityEngine;
 using UnityEngine.Events;
@@ -42,16 +51,17 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Fetcher
     {
         private IEnumerator Fetch()
         {
+            var retryWaitSecond = 1;
             Gs2Exception e;
             while (true)
             {
-                if (_gameSessionHolder != null && _gameSessionHolder.Initialized && 
+                if (_gameSessionHolder != null && _gameSessionHolder.Initialized &&
                     _clientHolder != null && _clientHolder.Initialized &&
-                    _context != null)
+                    Context != null)
                 {
                     
                     var domain = this._clientHolder.Gs2.Friend.Namespace(
-                        this._context.Namespace.NamespaceName
+                        this.Context.Namespace.NamespaceName
                     ).Me(
                         this._gameSessionHolder.GameSession
                     );
@@ -65,42 +75,34 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Fetcher
                             if (it.Error is BadRequestException || it.Error is NotFoundException)
                             {
                                 onError.Invoke(e = it.Error, null);
-                                goto END;
+                                Debug.LogError($"{gameObject.GetFullPath()}: {it.Error.Message}");
+                                break;
                             }
-
-                            onError.Invoke(new CanIgnoreException(it.Error), null);
-                            break;
+                            else {
+                                onError.Invoke(new CanIgnoreException(it.Error), null);
+                            }
+                            yield return new WaitForSeconds(retryWaitSecond);
+                            retryWaitSecond *= 2;
                         }
-
-                        if (it.Current != null)
-                        {
-                            items.Add(it.Current);
-                        } else {
-                            break;
+                        else {
+                            if (it.Current != null)
+                            {
+                                items.Add(it.Current);
+                            } else {
+                                break;
+                            }
                         }
                     }
 
+                    retryWaitSecond = 1;
                     ReceiveFriendRequests = items;
                     Fetched = true;
                 }
-
-                yield return new WaitForSeconds(1);
+                else {
+                    yield return new WaitForSeconds(1);
+                }
             }
-            END:
-            
-            var transform1 = transform;
-            var builder = new StringBuilder(transform1.name);
-            var current = transform1.parent;
-
-            while (current != null)
-            {
-                builder.Insert(0, current.name + "/");
-                current = current.parent;
-            }
-            
-            Debug.LogError(e);
-            Debug.LogError($"{GetType()} の自動更新が停止されました。 {builder}");
-            Debug.LogError($"Automatic update of {GetType()} has been stopped. {builder}");
+            // ReSharper disable once IteratorNeverReturns
         }
 
         public void OnEnable()
@@ -117,18 +119,32 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Fetcher
     /// <summary>
     /// Dependent components
     /// </summary>
-    
+
     public partial class Gs2FriendOwnReceiveFriendRequestListFetcher
     {
         private Gs2ClientHolder _clientHolder;
         private Gs2GameSessionHolder _gameSessionHolder;
-        private Gs2FriendNamespaceContext _context;
+        public Gs2FriendNamespaceContext Context;
 
         public void Awake()
         {
             _clientHolder = Gs2ClientHolder.Instance;
             _gameSessionHolder = Gs2GameSessionHolder.Instance;
-            _context = GetComponentInParent<Gs2FriendNamespaceContext>();
+            Context = GetComponent<Gs2FriendNamespaceContext>() ?? GetComponentInParent<Gs2FriendNamespaceContext>();
+
+            if (Context == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2FriendNamespaceContext.");
+                enabled = false;
+            }
+        }
+
+        public bool HasError()
+        {
+            Context = GetComponent<Gs2FriendNamespaceContext>() ?? GetComponentInParent<Gs2FriendNamespaceContext>(true);
+            if (Context == null) {
+                return true;
+            }
+            return false;
         }
     }
 

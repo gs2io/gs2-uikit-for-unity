@@ -45,7 +45,7 @@ namespace Gs2.Unity.UiKit.Gs2Inventory
         private List<Gs2InventoryOwnItemSetContext> _children;
 
         public void Update() {
-            if (_fetcher.Fetched && _fetcher.ItemSets != null) {
+            if (_fetcher.Fetched && this._fetcher.ItemSets != null) {
                 for (var i = 0; i < this.maximumItems; i++) {
                     if (i < this._fetcher.ItemSets.Count) {
                         _children[i].ItemModel.itemName = this._fetcher.ItemSets[i].ItemName;
@@ -67,18 +67,13 @@ namespace Gs2.Unity.UiKit.Gs2Inventory
 
     public partial class Gs2InventoryOwnItemSetList
     {
-        private Gs2InventoryOwnInventoryContext _context;
         private Gs2InventoryOwnItemSetListFetcher _fetcher;
+        private Gs2InventoryOwnInventoryContext Context => _fetcher.Context;
 
         public void Awake()
         {
-            _context = GetComponent<Gs2InventoryOwnInventoryContext>() ?? GetComponentInParent<Gs2InventoryOwnInventoryContext>();
             _fetcher = GetComponent<Gs2InventoryOwnItemSetListFetcher>() ?? GetComponentInParent<Gs2InventoryOwnItemSetListFetcher>();
 
-            if (_context == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2InventoryOwnInventoryContext.");
-                enabled = false;
-            }
             if (_fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2InventoryOwnItemSetListFetcher.");
                 enabled = false;
@@ -88,7 +83,7 @@ namespace Gs2.Unity.UiKit.Gs2Inventory
             for (var i = 0; i < this.maximumItems; i++) {
                 var node = Instantiate(this.prefab, transform);
                 node.ItemModel = ItemModel.New(
-                    _context.InventoryModel,
+                    _fetcher.Context.InventoryModel,
                     ""
                 );
                 node.gameObject.SetActive(false);
@@ -99,11 +94,7 @@ namespace Gs2.Unity.UiKit.Gs2Inventory
 
         public bool HasError()
         {
-            _context = GetComponent<Gs2InventoryOwnInventoryContext>() ?? GetComponentInParent<Gs2InventoryOwnInventoryContext>(true);
             _fetcher = GetComponent<Gs2InventoryOwnItemSetListFetcher>() ?? GetComponentInParent<Gs2InventoryOwnItemSetListFetcher>(true);
-            if (_context == null) {
-                return true;
-            }
             if (_fetcher == null) {
                 return true;
             }

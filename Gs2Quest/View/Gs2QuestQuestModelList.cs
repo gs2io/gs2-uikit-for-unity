@@ -63,12 +63,11 @@ namespace Gs2.Unity.UiKit.Gs2Quest
 
     public partial class Gs2QuestQuestModelList
     {
-        private Gs2QuestQuestGroupModelContext _context;
         private Gs2QuestQuestModelListFetcher _fetcher;
+        public Gs2QuestQuestGroupModelContext Context => _fetcher.Context;
 
         public void Awake()
         {
-            _context = GetComponent<Gs2QuestQuestGroupModelContext>() ?? GetComponentInParent<Gs2QuestQuestGroupModelContext>();
             _fetcher = GetComponent<Gs2QuestQuestModelListFetcher>() ?? GetComponentInParent<Gs2QuestQuestModelListFetcher>();
 
             if (_fetcher == null) {
@@ -80,7 +79,7 @@ namespace Gs2.Unity.UiKit.Gs2Quest
             for (var i = 0; i < this.maximumItems; i++) {
                 var node = Instantiate(this.prefab, transform);
                 node.QuestModel = QuestModel.New(
-                    _context.QuestGroupModel,
+                    _fetcher.Context.QuestGroupModel,
                     ""
                 );
                 node.gameObject.SetActive(false);
@@ -91,11 +90,7 @@ namespace Gs2.Unity.UiKit.Gs2Quest
 
         public bool HasError()
         {
-            _context = GetComponent<Gs2QuestQuestGroupModelContext>() ?? GetComponentInParent<Gs2QuestQuestGroupModelContext>(true);
             _fetcher = GetComponent<Gs2QuestQuestModelListFetcher>() ?? GetComponentInParent<Gs2QuestQuestModelListFetcher>(true);
-            if (_context == null) {
-                return true;
-            }
             if (_fetcher == null) {
                 return true;
             }

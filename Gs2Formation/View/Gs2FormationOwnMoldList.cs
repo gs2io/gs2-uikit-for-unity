@@ -43,7 +43,7 @@ namespace Gs2.Unity.UiKit.Gs2Formation
         private List<Gs2FormationOwnMoldContext> _children;
 
         public void Update() {
-            if (_fetcher.Fetched && _fetcher.Molds != null) {
+            if (_fetcher.Fetched && this._fetcher.Molds != null) {
                 for (var i = 0; i < this.maximumItems; i++) {
                     if (i < this._fetcher.Molds.Count) {
                         _children[i].MoldModel.moldName = this._fetcher.Molds[i].Name;
@@ -64,18 +64,13 @@ namespace Gs2.Unity.UiKit.Gs2Formation
 
     public partial class Gs2FormationOwnMoldList
     {
-        private Gs2FormationNamespaceContext _context;
         private Gs2FormationOwnMoldListFetcher _fetcher;
+        private Gs2FormationNamespaceContext Context => _fetcher.Context;
 
         public void Awake()
         {
-            _context = GetComponent<Gs2FormationNamespaceContext>() ?? GetComponentInParent<Gs2FormationNamespaceContext>();
             _fetcher = GetComponent<Gs2FormationOwnMoldListFetcher>() ?? GetComponentInParent<Gs2FormationOwnMoldListFetcher>();
 
-            if (_context == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2FormationNamespaceContext.");
-                enabled = false;
-            }
             if (_fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2FormationOwnMoldListFetcher.");
                 enabled = false;
@@ -85,11 +80,11 @@ namespace Gs2.Unity.UiKit.Gs2Formation
             for (var i = 0; i < this.maximumItems; i++) {
                 var node = Instantiate(this.prefab, transform);
                 node.MoldModel = MoldModel.New(
-                    _context.Namespace,
+                    _fetcher.Context.Namespace,
                     ""
                 );
                 node.Mold = OwnMold.New(
-                    _context.Namespace,
+                    _fetcher.Context.Namespace,
                     ""
                 );
                 node.gameObject.SetActive(false);
@@ -100,11 +95,7 @@ namespace Gs2.Unity.UiKit.Gs2Formation
 
         public bool HasError()
         {
-            _context = GetComponent<Gs2FormationNamespaceContext>() ?? GetComponentInParent<Gs2FormationNamespaceContext>(true);
             _fetcher = GetComponent<Gs2FormationOwnMoldListFetcher>() ?? GetComponentInParent<Gs2FormationOwnMoldListFetcher>(true);
-            if (_context == null) {
-                return true;
-            }
             if (_fetcher == null) {
                 return true;
             }

@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
@@ -32,31 +34,31 @@ using UnityEngine;
 
 namespace Gs2.Unity.UiKit.Gs2Quest.Editor
 {
-    [CustomEditor(typeof(Gs2QuestOwnCompletedQuestListContext))]
+    [CustomEditor(typeof(Gs2QuestQuestGroupModelContext))]
     public class Gs2QuestOwnCompletedQuestListContextEditorExtension : UnityEditor.Editor
     {
         public override void OnInspectorGUI() {
-            var original = target as Gs2QuestOwnCompletedQuestListContext;
+            var original = target as Gs2QuestQuestGroupModelContext;
 
             if (original == null) return;
 
             serializedObject.Update();
 
-            if (original.CompletedQuestList == null) {
+            if (original.QuestGroupModel == null) {
                 if (original.GetComponentInParent<Gs2QuestOwnCompletedQuestListList>(true) != null) {
-                    EditorGUILayout.HelpBox("OwnCompletedQuestList is auto assign from Gs2QuestOwnCompletedQuestListList.", MessageType.Info);
+                    EditorGUILayout.HelpBox("QuestGroupModel is auto assign from Gs2QuestOwnCompletedQuestListList.", MessageType.Info);
                 }
                 else {
-                    EditorGUILayout.HelpBox("OwnCompletedQuestList not assigned.", MessageType.Error);
-                    EditorGUILayout.PropertyField(serializedObject.FindProperty("CompletedQuestList"), true);
+                    EditorGUILayout.HelpBox("QuestGroupModel not assigned.", MessageType.Error);
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("QuestGroupModel"), true);
                 }
             }
             else {
-                original.CompletedQuestList = EditorGUILayout.ObjectField("OwnCompletedQuestList", original.CompletedQuestList, typeof(OwnCompletedQuestList), false) as OwnCompletedQuestList;
+                original.QuestGroupModel = EditorGUILayout.ObjectField("QuestGroupModel", original.QuestGroupModel, typeof(QuestGroupModel), false) as QuestGroupModel;
                 EditorGUI.BeginDisabledGroup(true);
                 EditorGUI.indentLevel++;
-                EditorGUILayout.TextField("NamespaceName", original.CompletedQuestList?.NamespaceName.ToString());
-                EditorGUILayout.TextField("QuestGroupName", original.CompletedQuestList?.QuestGroupName.ToString());
+                EditorGUILayout.TextField("NamespaceName", original.QuestGroupModel?.NamespaceName.ToString());
+                EditorGUILayout.TextField("QuestGroupName", original.QuestGroupModel?.QuestGroupName.ToString());
                 EditorGUI.indentLevel--;
                 EditorGUI.EndDisabledGroup();
             }

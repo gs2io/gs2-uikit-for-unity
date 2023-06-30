@@ -63,12 +63,11 @@ namespace Gs2.Unity.UiKit.Gs2Version
 
     public partial class Gs2VersionVersionModelList
     {
-        private Gs2VersionNamespaceContext _context;
         private Gs2VersionVersionModelListFetcher _fetcher;
+        public Gs2VersionNamespaceContext Context => _fetcher.Context;
 
         public void Awake()
         {
-            _context = GetComponent<Gs2VersionNamespaceContext>() ?? GetComponentInParent<Gs2VersionNamespaceContext>();
             _fetcher = GetComponent<Gs2VersionVersionModelListFetcher>() ?? GetComponentInParent<Gs2VersionVersionModelListFetcher>();
 
             if (_fetcher == null) {
@@ -80,7 +79,7 @@ namespace Gs2.Unity.UiKit.Gs2Version
             for (var i = 0; i < this.maximumItems; i++) {
                 var node = Instantiate(this.prefab, transform);
                 node.VersionModel = VersionModel.New(
-                    _context.Namespace,
+                    _fetcher.Context.Namespace,
                     ""
                 );
                 node.gameObject.SetActive(false);
@@ -91,11 +90,7 @@ namespace Gs2.Unity.UiKit.Gs2Version
 
         public bool HasError()
         {
-            _context = GetComponent<Gs2VersionNamespaceContext>() ?? GetComponentInParent<Gs2VersionNamespaceContext>(true);
             _fetcher = GetComponent<Gs2VersionVersionModelListFetcher>() ?? GetComponentInParent<Gs2VersionVersionModelListFetcher>(true);
-            if (_context == null) {
-                return true;
-            }
             if (_fetcher == null) {
                 return true;
             }

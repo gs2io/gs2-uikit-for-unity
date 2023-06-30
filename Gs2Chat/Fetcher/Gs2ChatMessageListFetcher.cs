@@ -55,16 +55,16 @@ namespace Gs2.Unity.UiKit.Gs2Chat.Fetcher
             {
                 if (_gameSessionHolder != null && _gameSessionHolder.Initialized && 
                     _clientHolder != null && _clientHolder.Initialized &&
-                    _context != null)
+                    Context != null)
                 {
                     
                     var domain = this._clientHolder.Gs2.Chat.Namespace(
-                        this._context.Room.NamespaceName
+                        this.Context.Room.NamespaceName
                     ).Me(
                         this._gameSessionHolder.GameSession
                     ).Room(
-                        this._context.Room.RoomName,
-                        this._context.Room.Password
+                        this.Context.Room.RoomName,
+                        this.Context.Room.Password
                     );
                     var it = domain.Messages();
                     var items = new List<Gs2.Unity.Gs2Chat.Model.EzMessage>();
@@ -125,15 +125,15 @@ namespace Gs2.Unity.UiKit.Gs2Chat.Fetcher
     {
         private Gs2ClientHolder _clientHolder;
         private Gs2GameSessionHolder _gameSessionHolder;
-        private Gs2ChatRoomContext _context;
+        public Gs2ChatRoomContext Context { get; private set; }
 
         public void Awake()
         {
             _clientHolder = Gs2ClientHolder.Instance;
             _gameSessionHolder = Gs2GameSessionHolder.Instance;
-            _context = GetComponent<Gs2ChatRoomContext>() ?? GetComponentInParent<Gs2ChatRoomContext>();
+            Context = GetComponent<Gs2ChatRoomContext>() ?? GetComponentInParent<Gs2ChatRoomContext>();
 
-            if (_context == null) {
+            if (Context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ChatRoomContext.");
                 enabled = false;
             }
@@ -141,8 +141,8 @@ namespace Gs2.Unity.UiKit.Gs2Chat.Fetcher
 
         public bool HasError()
         {
-            _context = GetComponent<Gs2ChatRoomContext>() ?? GetComponentInParent<Gs2ChatRoomContext>(true);
-            if (_context == null) {
+            Context = GetComponent<Gs2ChatRoomContext>() ?? GetComponentInParent<Gs2ChatRoomContext>(true);
+            if (Context == null) {
                 return true;
             }
             return false;

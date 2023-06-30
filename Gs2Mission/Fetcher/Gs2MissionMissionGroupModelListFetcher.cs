@@ -55,11 +55,11 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Fetcher
             {
                 if (_gameSessionHolder != null && _gameSessionHolder.Initialized && 
                     _clientHolder != null && _clientHolder.Initialized &&
-                    _context != null)
+                    Context != null)
                 {
                     
                     var domain = this._clientHolder.Gs2.Mission.Namespace(
-                        this._context.Namespace.NamespaceName
+                        this.Context.Namespace.NamespaceName
                     );
                     var it = domain.MissionGroupModels();
                     var items = new List<Gs2.Unity.Gs2Mission.Model.EzMissionGroupModel>();
@@ -120,15 +120,15 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Fetcher
     {
         private Gs2ClientHolder _clientHolder;
         private Gs2GameSessionHolder _gameSessionHolder;
-        private Gs2MissionNamespaceContext _context;
+        public Gs2MissionNamespaceContext Context { get; private set; }
 
         public void Awake()
         {
             _clientHolder = Gs2ClientHolder.Instance;
             _gameSessionHolder = Gs2GameSessionHolder.Instance;
-            _context = GetComponent<Gs2MissionNamespaceContext>() ?? GetComponentInParent<Gs2MissionNamespaceContext>();
+            Context = GetComponent<Gs2MissionNamespaceContext>() ?? GetComponentInParent<Gs2MissionNamespaceContext>();
 
-            if (_context == null) {
+            if (Context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MissionNamespaceContext.");
                 enabled = false;
             }
@@ -136,8 +136,8 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Fetcher
 
         public bool HasError()
         {
-            _context = GetComponent<Gs2MissionNamespaceContext>() ?? GetComponentInParent<Gs2MissionNamespaceContext>(true);
-            if (_context == null) {
+            Context = GetComponent<Gs2MissionNamespaceContext>() ?? GetComponentInParent<Gs2MissionNamespaceContext>(true);
+            if (Context == null) {
                 return true;
             }
             return false;

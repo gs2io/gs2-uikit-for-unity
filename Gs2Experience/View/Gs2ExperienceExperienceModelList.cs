@@ -63,12 +63,11 @@ namespace Gs2.Unity.UiKit.Gs2Experience
 
     public partial class Gs2ExperienceExperienceModelList
     {
-        private Gs2ExperienceNamespaceContext _context;
         private Gs2ExperienceExperienceModelListFetcher _fetcher;
+        public Gs2ExperienceNamespaceContext Context => _fetcher.Context;
 
         public void Awake()
         {
-            _context = GetComponent<Gs2ExperienceNamespaceContext>() ?? GetComponentInParent<Gs2ExperienceNamespaceContext>();
             _fetcher = GetComponent<Gs2ExperienceExperienceModelListFetcher>() ?? GetComponentInParent<Gs2ExperienceExperienceModelListFetcher>();
 
             if (_fetcher == null) {
@@ -80,7 +79,7 @@ namespace Gs2.Unity.UiKit.Gs2Experience
             for (var i = 0; i < this.maximumItems; i++) {
                 var node = Instantiate(this.prefab, transform);
                 node.ExperienceModel = ExperienceModel.New(
-                    _context.Namespace,
+                    _fetcher.Context.Namespace,
                     ""
                 );
                 node.gameObject.SetActive(false);
@@ -91,11 +90,7 @@ namespace Gs2.Unity.UiKit.Gs2Experience
 
         public bool HasError()
         {
-            _context = GetComponent<Gs2ExperienceNamespaceContext>() ?? GetComponentInParent<Gs2ExperienceNamespaceContext>(true);
             _fetcher = GetComponent<Gs2ExperienceExperienceModelListFetcher>() ?? GetComponentInParent<Gs2ExperienceExperienceModelListFetcher>(true);
-            if (_context == null) {
-                return true;
-            }
             if (_fetcher == null) {
                 return true;
             }
