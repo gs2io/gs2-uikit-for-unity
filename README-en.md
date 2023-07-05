@@ -31,9 +31,15 @@ Follow the instructions in [GS2 Setup](https://docs.gs2.io/en/get_start/tutorial
 
 [⇒Start using GS2 - SDK - Game Engine](https://docs.gs2.io/en/get_start/#game-engine)
 
-## SDK Detailed Specifications
+## SDK detailed specifications
 
-https://docs.gs2.io/en/
+For details on the API for each service and communication method, please refer to the
+
+ [⇒API Reference](https://docs.gs2.io/en/api_reference/) page.
+
+For information on the initialization process, please refer to the
+
+ [⇒API Reference - Initialization process](https://docs.gs2.io/en/api_reference/initialize/) page.
 
 ## GS2 UIKit for Unity Tutorial
 

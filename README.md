@@ -33,7 +33,15 @@ SDKを利用するには GS2 のクレデンシャルが必要です。
 
 ## SDK の詳細仕様
 
-https://docs.gs2.io/ja/
+各種サービス・通信方式のAPIの詳細については
+
+ [⇒API リファレンス](https://docs.gs2.io/ja/api_reference/)
+
+初期化処理については
+
+ [⇒API リファレンス - 初期化処理](https://docs.gs2.io/ja/api_reference/initialize/)
+ 
+をご参照ください。
 
 ## GS2 UIKit for Unity のチュートリアル
 
