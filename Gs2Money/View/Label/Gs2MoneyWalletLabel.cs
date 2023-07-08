@@ -17,6 +17,14 @@
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
+// ReSharper disable RedundantNameQualifier
+// ReSharper disable RedundantAssignment
+// ReSharper disable NotAccessedVariable
+// ReSharper disable RedundantUsingDirective
+// ReSharper disable Unity.NoNullPropagation
+// ReSharper disable InconsistentNaming
+
+#pragma warning disable CS0472
 
 using System;
 using Gs2.Core.Util;
@@ -31,7 +39,7 @@ namespace Gs2.Unity.UiKit.Gs2Money
     /// Main
     /// </summary>
 
-	[AddComponentMenu("GS2 UIKit/Money/Wallet/View/Gs2MoneyWalletLabel")]
+	[AddComponentMenu("GS2 UIKit/Money/Wallet/View/Label/Gs2MoneyWalletLabel")]
     public partial class Gs2MoneyWalletLabel : MonoBehaviour
     {
         public void Update()
@@ -84,8 +92,23 @@ namespace Gs2.Unity.UiKit.Gs2Money
 
         public void Awake()
         {
-            _fetcher = GetComponentInParent<Gs2MoneyOwnWalletFetcher>();
+            _fetcher = GetComponent<Gs2MoneyOwnWalletFetcher>() ?? GetComponentInParent<Gs2MoneyOwnWalletFetcher>();
+
+            if (_fetcher == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MoneyOwnWalletFetcher.");
+                enabled = false;
+            }
+
             Update();
+        }
+
+        public bool HasError()
+        {
+            _fetcher = GetComponent<Gs2MoneyOwnWalletFetcher>() ?? GetComponentInParent<Gs2MoneyOwnWalletFetcher>(true);
+            if (_fetcher == null) {
+                return true;
+            }
+            return false;
         }
     }
 

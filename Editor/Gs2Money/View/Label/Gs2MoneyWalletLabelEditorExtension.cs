@@ -17,7 +17,18 @@
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
+// ReSharper disable RedundantNameQualifier
+// ReSharper disable RedundantAssignment
+// ReSharper disable NotAccessedVariable
+// ReSharper disable RedundantUsingDirective
+// ReSharper disable Unity.NoNullPropagation
+// ReSharper disable InconsistentNaming
 
+#pragma warning disable CS0472
+
+using Gs2.Unity.Gs2Money.ScriptableObject;
+using Gs2.Unity.UiKit.Gs2Money.Context;
+using Gs2.Unity.UiKit.Gs2Money.Fetcher;
 using UnityEditor;
 using UnityEngine;
 
@@ -30,6 +41,26 @@ namespace Gs2.Unity.UiKit.Gs2Money.Editor
             var original = target as Gs2MoneyWalletLabel;
 
             if (original == null) return;
+
+            var fetcher = original.GetComponent<Gs2MoneyOwnWalletFetcher>() ?? original.GetComponentInParent<Gs2MoneyOwnWalletFetcher>(true);
+            if (fetcher == null) {
+                EditorGUILayout.HelpBox("Gs2MoneyOwnWalletFetcher not found.", MessageType.Error);
+                if (GUILayout.Button("Add Fetcher")) {
+                    original.gameObject.AddComponent<Gs2MoneyOwnWalletFetcher>();
+                }
+            }
+            else {
+                EditorGUI.BeginDisabledGroup(true);
+                EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2MoneyOwnWalletFetcher), false);
+                EditorGUI.indentLevel++;
+                fetcher.Context.Wallet = EditorGUILayout.ObjectField("Wallet", fetcher.Context.Wallet, typeof(OwnWallet), false) as OwnWallet;
+                EditorGUI.indentLevel++;
+                EditorGUILayout.TextField("NamespaceName", fetcher.Context.Wallet?.NamespaceName.ToString());
+                EditorGUILayout.TextField("Slot", fetcher.Context.Wallet?.Slot.ToString());
+                EditorGUI.indentLevel--;
+                EditorGUI.indentLevel--;
+                EditorGUI.EndDisabledGroup();
+            }
 
             serializedObject.Update();
             original.format = EditorGUILayout.TextField("Format", original.format);

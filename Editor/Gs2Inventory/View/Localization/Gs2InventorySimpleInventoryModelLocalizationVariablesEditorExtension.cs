@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
@@ -56,12 +58,6 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Localization.Editor
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2InventorySimpleInventoryModelFetcher), false);
                     EditorGUI.EndDisabledGroup();
                     EditorGUILayout.HelpBox("SimpleInventoryModel is auto assign from Gs2InventorySimpleInventoryModelList.", MessageType.Info);
-                }
-                else if (fetcher.gameObject.GetComponentInParent<Gs2InventoryOwnSimpleInventoryList>(true) != null) {
-                    EditorGUI.BeginDisabledGroup(true);
-                    EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2InventoryOwnSimpleInventoryFetcher), false);
-                    EditorGUI.EndDisabledGroup();
-                    EditorGUILayout.HelpBox("SimpleInventoryModel is auto assign from Gs2InventoryOwnSimpleInventoryList.", MessageType.Info);
                 }
                 else {
                     var context = original.GetComponent<Gs2InventorySimpleInventoryModelContext>() ?? original.GetComponentInParent<Gs2InventorySimpleInventoryModelContext>(true);
