@@ -44,7 +44,12 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Context
 
         public bool HasError() {
             if (Mold == null) {
-                return true;
+                if (GetComponentInParent<Gs2FormationOwnMoldList>(true) != null) {
+                    return false;
+                }
+                else {
+                    return true;
+                }
             }
             return false;
         }

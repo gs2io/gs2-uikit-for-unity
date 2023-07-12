@@ -44,7 +44,12 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Context
 
         public bool HasError() {
             if (Complete == null) {
-                return true;
+                if (GetComponentInParent<Gs2MissionOwnCompleteList>(true) != null) {
+                    return false;
+                }
+                else {
+                    return true;
+                }
             }
             return false;
         }

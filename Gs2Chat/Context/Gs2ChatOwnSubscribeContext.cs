@@ -44,7 +44,12 @@ namespace Gs2.Unity.UiKit.Gs2Chat.Context
 
         public bool HasError() {
             if (Subscribe == null) {
-                return true;
+                if (GetComponentInParent<Gs2ChatOwnSubscribeList>(true) != null) {
+                    return false;
+                }
+                else {
+                    return true;
+                }
             }
             return false;
         }

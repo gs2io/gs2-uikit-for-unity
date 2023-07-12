@@ -44,7 +44,12 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking.Context
 
         public bool HasError() {
             if (Rating == null) {
-                return true;
+                if (GetComponentInParent<Gs2MatchmakingOwnRatingList>(true) != null) {
+                    return false;
+                }
+                else {
+                    return true;
+                }
             }
             return false;
         }

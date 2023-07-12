@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
@@ -40,20 +42,21 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.Editor
 
             if (original == null) return;
 
-            var context = original.GetComponent<Gs2LotteryNamespaceContext>() ?? original.GetComponentInParent<Gs2LotteryNamespaceContext>(true);
+            var context = original.GetComponent<Gs2LotteryLotteryModelContext>() ?? original.GetComponentInParent<Gs2LotteryLotteryModelContext>(true);
             if (context == null) {
-                EditorGUILayout.HelpBox("Gs2LotteryNamespaceContext not found.", MessageType.Error);
+                EditorGUILayout.HelpBox("Gs2LotteryLotteryModelContext not found.", MessageType.Error);
                 if (GUILayout.Button("Add Context")) {
-                    original.gameObject.AddComponent<Gs2LotteryNamespaceContext>();
+                    original.gameObject.AddComponent<Gs2LotteryLotteryModelContext>();
                 }
             }
             else {
                 EditorGUI.BeginDisabledGroup(true);
-                EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2LotteryNamespaceContext), false);
+                EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2LotteryLotteryModelContext), false);
                 EditorGUI.indentLevel++;
-                context.Namespace = EditorGUILayout.ObjectField("Namespace", context.Namespace, typeof(Namespace), false) as Namespace;
+                context.LotteryModel = EditorGUILayout.ObjectField("LotteryModel", context.LotteryModel, typeof(LotteryModel), false) as LotteryModel;
                 EditorGUI.indentLevel++;
-                EditorGUILayout.TextField("NamespaceName", context.Namespace?.NamespaceName.ToString());
+                EditorGUILayout.TextField("NamespaceName", context.LotteryModel?.NamespaceName.ToString());
+                EditorGUILayout.TextField("LotteryName", context.LotteryModel?.LotteryName.ToString());
                 EditorGUI.indentLevel--;
                 EditorGUI.indentLevel--;
                 EditorGUI.EndDisabledGroup();

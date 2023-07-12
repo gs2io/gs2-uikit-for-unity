@@ -43,10 +43,16 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Enabler.Editor
             var fetcher = original.GetComponent<Gs2MissionMissionTaskModelFetcher>() ?? original.GetComponentInParent<Gs2MissionMissionTaskModelFetcher>(true);
             if (fetcher == null) {
                 EditorGUILayout.HelpBox("Gs2MissionMissionTaskModelFetcher not found.", MessageType.Error);
+                if (GUILayout.Button("Add Fetcher")) {
+                    original.gameObject.AddComponent<Gs2MissionMissionTaskModelFetcher>();
+                }
             }
             var userDataFetcher = original.GetComponent<Gs2MissionOwnCompleteFetcher>() ?? original.GetComponentInParent<Gs2MissionOwnCompleteFetcher>(true);
             if (userDataFetcher == null) {
                 EditorGUILayout.HelpBox("Gs2MissionOwnCompleteFetcher not found.", MessageType.Error);
+                if (GUILayout.Button("Add Fetcher")) {
+                    original.gameObject.AddComponent<Gs2MissionOwnCompleteFetcher>();
+                }
             }
 
             DrawDefaultInspector();

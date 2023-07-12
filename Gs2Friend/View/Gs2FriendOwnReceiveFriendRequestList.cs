@@ -33,13 +33,13 @@ namespace Gs2.Unity.UiKit.Gs2Friend
     [AddComponentMenu("GS2 UIKit/Friend/ReceiveFriendRequest/View/Gs2FriendOwnReceiveFriendRequestList")]
     public partial class Gs2FriendOwnReceiveFriendRequestList : MonoBehaviour
     {
-        private List<Gs2FriendOwnReceiveFriendRequestContext> _children;
+        private List<Gs2FriendOwnFriendUserContext> _children;
 
         public void Update() {
             if (_fetcher.Fetched) {
                 for (var i = 0; i < this.maximumItems; i++) {
                     if (i < this._fetcher.ReceiveFriendRequests.Count) {
-                        _children[i].ReceiveFriendRequest.fromUserId = this._fetcher.ReceiveFriendRequests[i].TargetUserId;
+                        _children[i].FriendUser.targetUserId = this._fetcher.ReceiveFriendRequests[i].TargetUserId;
                         _children[i].gameObject.SetActive(true);
                     }
                     else {
@@ -64,10 +64,10 @@ namespace Gs2.Unity.UiKit.Gs2Friend
             _context = GetComponentInParent<Gs2FriendNamespaceContext>();
             _fetcher = GetComponentInParent<Gs2FriendOwnReceiveFriendRequestListFetcher>();
 
-            _children = new List<Gs2FriendOwnReceiveFriendRequestContext>();
+            _children = new List<Gs2FriendOwnFriendUserContext>();
             for (var i = 0; i < this.maximumItems; i++) {
                 var node = Instantiate(this.prefab, transform);
-                node.ReceiveFriendRequest = OwnReceiveFriendRequest.New(
+                node.FriendUser = OwnFriendUser.New(
                     _context.Namespace,
                     ""
                 );
@@ -93,7 +93,7 @@ namespace Gs2.Unity.UiKit.Gs2Friend
 
     public partial class Gs2FriendOwnReceiveFriendRequestList
     {
-        public Gs2FriendOwnReceiveFriendRequestContext prefab;
+        public Gs2FriendOwnFriendUserContext prefab;
         public int maximumItems;
     }
 

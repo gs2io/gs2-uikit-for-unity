@@ -44,7 +44,12 @@ namespace Gs2.Unity.UiKit.Gs2Experience.Context
 
         public bool HasError() {
             if (Status == null) {
-                return true;
+                if (GetComponentInParent<Gs2ExperienceOwnStatusList>(true) != null) {
+                    return false;
+                }
+                else {
+                    return true;
+                }
             }
             return false;
         }

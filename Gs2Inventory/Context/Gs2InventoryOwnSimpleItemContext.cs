@@ -44,7 +44,12 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Context
 
         public bool HasError() {
             if (SimpleItem == null) {
-                return true;
+                if (GetComponentInParent<Gs2InventoryOwnSimpleItemList>(true) != null) {
+                    return false;
+                }
+                else {
+                    return true;
+                }
             }
             return false;
         }

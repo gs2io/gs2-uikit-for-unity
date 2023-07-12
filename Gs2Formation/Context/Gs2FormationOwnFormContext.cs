@@ -44,7 +44,12 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Context
 
         public bool HasError() {
             if (Form == null) {
-                return true;
+                if (GetComponentInParent<Gs2FormationOwnFormList>(true) != null) {
+                    return false;
+                }
+                else {
+                    return true;
+                }
             }
             return false;
         }

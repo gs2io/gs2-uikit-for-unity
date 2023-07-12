@@ -44,7 +44,12 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.Context
 
         public bool HasError() {
             if (BoxItems == null) {
-                return true;
+                if (GetComponentInParent<Gs2LotteryOwnBoxItemsList>(true) != null) {
+                    return false;
+                }
+                else {
+                    return true;
+                }
             }
             return false;
         }

@@ -86,9 +86,9 @@ GameObject:
   m_Component:
   - component: {fileID: 4013030501435013673}
   - component: {fileID: 4013030501435013672}
-  - component: {fileID: 7927362220508016797}
+  - component: {fileID: 2400706104899379231}
   m_Layer: 5
-  m_Name: Progress
+  m_Name: ProgressBar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -167,7 +167,7 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &7927362220508016797
+--- !u!114 &2400706104899379231
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -176,7 +176,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 4013030501435013670}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 987b9e6171a14a9ea9554dc2dd8c981f, type: 3}
+  m_Script: {fileID: 11500000, guid: f6e2ef985635451ea6334e4df50e2b5b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   onUpdate:
@@ -194,9 +194,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  onError:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!1 &4013030502563621237
 GameObject:
   m_ObjectHideFlags: 0

@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
@@ -43,8 +45,19 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Editor
             serializedObject.Update();
 
             if (original.FriendUser == null) {
-                EditorGUILayout.HelpBox("OwnFriendUser not assigned.", MessageType.Error);
-                EditorGUILayout.PropertyField(serializedObject.FindProperty("FriendUser"), true);
+                if (original.GetComponentInParent<Gs2FriendOwnFriendList>(true) != null) {
+                    EditorGUILayout.HelpBox("OwnFriendUser is auto assign from Gs2FriendOwnFriendList.", MessageType.Info);
+                }
+                else if (original.GetComponentInParent<Gs2FriendOwnSendFriendRequestList>(true) != null) {
+                    EditorGUILayout.HelpBox("OwnFriendUser is auto assign from Gs2FriendOwnSendFriendRequestList.", MessageType.Info);
+                }
+                else if (original.GetComponentInParent<Gs2FriendOwnReceiveFriendRequestList>(true) != null) {
+                    EditorGUILayout.HelpBox("OwnFriendUser is auto assign from Gs2FriendOwnReceiveFriendRequestList.", MessageType.Info);
+                }
+                else {
+                    EditorGUILayout.HelpBox("OwnFriendUser not assigned.", MessageType.Error);
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("FriendUser"), true);
+                }
             }
             else {
                 original.FriendUser = EditorGUILayout.ObjectField("OwnFriendUser", original.FriendUser, typeof(OwnFriendUser), false) as OwnFriendUser;

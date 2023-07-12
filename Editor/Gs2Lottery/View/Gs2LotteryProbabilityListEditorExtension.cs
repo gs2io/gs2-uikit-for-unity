@@ -52,9 +52,11 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.Editor
                 EditorGUI.BeginDisabledGroup(true);
                 EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2LotteryProbabilityListFetcher), false);
                 EditorGUI.indentLevel++;
-                fetcher.Context.LotteryModel = EditorGUILayout.ObjectField("LotteryModel", fetcher.Context.LotteryModel, typeof(LotteryModel), false) as LotteryModel;
-                EditorGUI.indentLevel++;
-                EditorGUI.indentLevel--;
+                if (fetcher.Context.LotteryModel != null) {
+                    fetcher.Context.LotteryModel = EditorGUILayout.ObjectField("LotteryModel", fetcher.Context.LotteryModel, typeof(LotteryModel), false) as LotteryModel;
+                    EditorGUI.indentLevel++;
+                    EditorGUI.indentLevel--;
+                }
                 EditorGUI.indentLevel--;
                 EditorGUI.EndDisabledGroup();
             }

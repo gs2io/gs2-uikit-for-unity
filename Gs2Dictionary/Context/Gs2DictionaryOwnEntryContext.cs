@@ -44,7 +44,12 @@ namespace Gs2.Unity.UiKit.Gs2Dictionary.Context
 
         public bool HasError() {
             if (Entry == null) {
-                return true;
+                if (GetComponentInParent<Gs2DictionaryOwnEntryList>(true) != null) {
+                    return false;
+                }
+                else {
+                    return true;
+                }
             }
             return false;
         }

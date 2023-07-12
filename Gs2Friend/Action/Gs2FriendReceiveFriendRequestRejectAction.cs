@@ -29,7 +29,6 @@ using Gs2.Unity.Util;
 using Gs2.Unity.UiKit.Gs2Friend.Context;
 using UnityEngine;
 using UnityEngine.Events;
-using ReceiveFriendRequest = Gs2.Unity.Gs2Friend.ScriptableObject.OwnReceiveFriendRequest;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -45,11 +44,11 @@ namespace Gs2.Unity.UiKit.Gs2Friend
             yield return new WaitUntil(() => this._gameSessionHolder.Initialized);
             
             var domain = this._clientHolder.Gs2.Friend.Namespace(
-                this._context.ReceiveFriendRequest.NamespaceName
+                this._context.FriendUser.NamespaceName
             ).Me(
                 this._gameSessionHolder.GameSession
             ).ReceiveFriendRequest(
-                this._context.ReceiveFriendRequest.FromUserId
+                this._context.FriendUser.TargetUserId
             );
             var future = domain.Reject(
             );
@@ -115,13 +114,13 @@ namespace Gs2.Unity.UiKit.Gs2Friend
     {
         private Gs2ClientHolder _clientHolder;
         private Gs2GameSessionHolder _gameSessionHolder;
-        private Gs2FriendOwnReceiveFriendRequestContext _context;
+        private Gs2FriendOwnFriendUserContext _context;
 
         public void Awake()
         {
             this._clientHolder = Gs2ClientHolder.Instance;
             this._gameSessionHolder = Gs2GameSessionHolder.Instance;
-            this._context = GetComponentInParent<Gs2FriendOwnReceiveFriendRequestContext>();
+            this._context = GetComponentInParent<Gs2FriendOwnFriendUserContext>();
         }
     }
 

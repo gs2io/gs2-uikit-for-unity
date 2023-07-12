@@ -12,54 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
-// ReSharper disable UnusedAutoPropertyAccessor.Global
-// ReSharper disable CheckNamespace
-// ReSharper disable RedundantNameQualifier
-// ReSharper disable RedundantAssignment
-// ReSharper disable NotAccessedVariable
-// ReSharper disable RedundantUsingDirective
-// ReSharper disable Unity.NoNullPropagation
-// ReSharper disable InconsistentNaming
-
-#pragma warning disable CS0472
-
-using Gs2.Unity.Gs2Friend.ScriptableObject;
-using Gs2.Unity.UiKit.Gs2Friend.Context;
-using Gs2.Unity.UiKit.Gs2Friend.Fetcher;
-using UnityEditor;
-using UnityEngine;
-
-namespace Gs2.Unity.UiKit.Gs2Friend.Editor
-{
-    [CustomEditor(typeof(Gs2FriendOwnReceiveFriendRequestContext))]
-    public class Gs2FriendOwnReceiveFriendRequestContextEditorExtension : UnityEditor.Editor
-    {
-        public override void OnInspectorGUI() {
-            var original = target as Gs2FriendOwnReceiveFriendRequestContext;
-
-            if (original == null) return;
-
-            serializedObject.Update();
-
-            if (original.ReceiveFriendRequest == null) {
-                if (original.GetComponentInParent<Gs2FriendOwnReceiveFriendRequestList>(true) != null) {
-                    EditorGUILayout.HelpBox("OwnReceiveFriendRequest is auto assign from Gs2FriendOwnReceiveFriendRequestList.", MessageType.Info);
-                }
-                else {
-                    EditorGUILayout.HelpBox("OwnReceiveFriendRequest not assigned.", MessageType.Error);
-                    EditorGUILayout.PropertyField(serializedObject.FindProperty("ReceiveFriendRequest"), true);
-                }
-            }
-            else {
-                original.ReceiveFriendRequest = EditorGUILayout.ObjectField("OwnReceiveFriendRequest", original.ReceiveFriendRequest, typeof(OwnReceiveFriendRequest), false) as OwnReceiveFriendRequest;
-                EditorGUI.BeginDisabledGroup(true);
-                EditorGUI.indentLevel++;
-                EditorGUI.indentLevel--;
-                EditorGUI.EndDisabledGroup();
-            }
-
-            serializedObject.ApplyModifiedProperties();
-        }
-    }
-}

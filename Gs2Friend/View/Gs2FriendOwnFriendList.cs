@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
@@ -37,10 +39,10 @@ namespace Gs2.Unity.UiKit.Gs2Friend
     /// Main
     /// </summary>
 
-    [AddComponentMenu("GS2 UIKit/Friend/Friend/View/Gs2FriendOwnFriendList")]
+    [AddComponentMenu("GS2 UIKit/Friend/FriendUser/View/Gs2FriendOwnFriendList")]
     public partial class Gs2FriendOwnFriendList : MonoBehaviour
     {
-        private List<Gs2FriendOwnFriendContext> _children;
+        private List<Gs2FriendOwnFriendUserContext> _children;
 
         public void Update() {
             if (_fetcher.Fetched && this._fetcher.Friends != null) {
@@ -74,11 +76,12 @@ namespace Gs2.Unity.UiKit.Gs2Friend
                 enabled = false;
             }
 
-            _children = new List<Gs2FriendOwnFriendContext>();
+            _children = new List<Gs2FriendOwnFriendUserContext>();
             for (var i = 0; i < this.maximumItems; i++) {
                 var node = Instantiate(this.prefab, transform);
-                node.Friend = OwnFriend.New(
-                    _fetcher.Context.Namespace
+                node.FriendUser = OwnFriendUser.New(
+                    _fetcher.Context.Namespace,
+                    ""
                 );
                 node.gameObject.SetActive(false);
                 _children.Add(node);
@@ -111,7 +114,7 @@ namespace Gs2.Unity.UiKit.Gs2Friend
 
     public partial class Gs2FriendOwnFriendList
     {
-        public Gs2FriendOwnFriendContext prefab;
+        public Gs2FriendOwnFriendUserContext prefab;
         public int maximumItems;
     }
 

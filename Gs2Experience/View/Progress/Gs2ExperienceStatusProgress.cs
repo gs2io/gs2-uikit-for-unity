@@ -69,9 +69,32 @@ namespace Gs2.Unity.UiKit.Gs2Experience
 
         public void Awake()
         {
-            _modelFetcher = GetComponentInParent<Gs2ExperienceExperienceModelFetcher>();
-            _fetcher = GetComponentInParent<Gs2ExperienceOwnStatusFetcher>();
+            _modelFetcher = GetComponent<Gs2ExperienceExperienceModelFetcher>() ?? GetComponentInParent<Gs2ExperienceExperienceModelFetcher>();
+            if (_modelFetcher == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ExperienceExperienceModelFetcher.");
+                enabled = false;
+            }
+
+            _fetcher = GetComponent<Gs2ExperienceOwnStatusFetcher>() ?? GetComponentInParent<Gs2ExperienceOwnStatusFetcher>();
+            if (_fetcher == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ExperienceOwnStatusFetcher.");
+                enabled = false;
+            }
+
             Update();
+        }
+
+        public bool HasError()
+        {
+            _modelFetcher = GetComponent<Gs2ExperienceExperienceModelFetcher>() ?? GetComponentInParent<Gs2ExperienceExperienceModelFetcher>(true);
+            if (_modelFetcher == null) {
+                return true;
+            }
+            _fetcher = GetComponent<Gs2ExperienceOwnStatusFetcher>() ?? GetComponentInParent<Gs2ExperienceOwnStatusFetcher>(true);
+            if (_fetcher == null) {
+                return true;
+            }
+            return false;
         }
     }
 

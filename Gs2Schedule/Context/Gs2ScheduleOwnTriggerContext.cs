@@ -44,7 +44,12 @@ namespace Gs2.Unity.UiKit.Gs2Schedule.Context
 
         public bool HasError() {
             if (Trigger == null) {
-                return true;
+                if (GetComponentInParent<Gs2ScheduleOwnTriggerList>(true) != null) {
+                    return false;
+                }
+                else {
+                    return true;
+                }
             }
             return false;
         }

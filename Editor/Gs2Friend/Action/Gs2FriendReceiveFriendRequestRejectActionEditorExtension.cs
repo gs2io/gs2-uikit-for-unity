@@ -42,28 +42,28 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Editor
 
             if (original == null) return;
 
-            var context = original.GetComponent<Gs2FriendOwnReceiveFriendRequestContext>() ?? original.GetComponentInParent<Gs2FriendOwnReceiveFriendRequestContext>(true);
+            var context = original.GetComponent<Gs2FriendOwnFriendUserContext>() ?? original.GetComponentInParent<Gs2FriendOwnFriendUserContext>(true);
             if (context == null) {
-                EditorGUILayout.HelpBox("Gs2FriendOwnReceiveFriendRequestContext not found.", MessageType.Error);
+                EditorGUILayout.HelpBox("Gs2FriendOwnFriendUserContext not found.", MessageType.Error);
                 if (GUILayout.Button("Add Context")) {
-                    original.gameObject.AddComponent<Gs2FriendOwnReceiveFriendRequestContext>();
+                    original.gameObject.AddComponent<Gs2FriendOwnFriendUserContext>();
                 }
             }
             else {
                 if (context.transform.parent.GetComponent<Gs2FriendOwnReceiveFriendRequestList>() != null) {
                     EditorGUI.BeginDisabledGroup(true);
-                    EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2FriendOwnReceiveFriendRequestContext), false);
+                    EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2FriendOwnFriendUserContext), false);
                     EditorGUI.EndDisabledGroup();
                     EditorGUILayout.HelpBox("ReceiveFriendRequest is auto assign from Gs2FriendReceiveFriendRequestList.", MessageType.Info);
                 }
                 else {
                     EditorGUI.BeginDisabledGroup(true);
-                    EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2FriendOwnReceiveFriendRequestContext), false);
+                    EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2FriendOwnFriendUserContext), false);
                     EditorGUI.indentLevel++;
-                    context.ReceiveFriendRequest = EditorGUILayout.ObjectField("OwnReceiveFriendRequest", context.ReceiveFriendRequest, typeof(OwnReceiveFriendRequest), false) as OwnReceiveFriendRequest;
+                    context.FriendUser = EditorGUILayout.ObjectField("OwnFriendUser", context.FriendUser, typeof(OwnFriendUser), false) as OwnFriendUser;
                     EditorGUI.indentLevel++;
-                    EditorGUILayout.TextField("NamespaceName", context.ReceiveFriendRequest?.NamespaceName.ToString());
-                    EditorGUILayout.TextField("FromUserId", context.ReceiveFriendRequest.FromUserId.ToString());
+                    EditorGUILayout.TextField("NamespaceName", context.FriendUser?.NamespaceName.ToString());
+                    EditorGUILayout.TextField("FromUserId", context.FriendUser.TargetUserId.ToString());
                     EditorGUI.indentLevel--;
                     EditorGUI.indentLevel--;
                     EditorGUI.EndDisabledGroup();

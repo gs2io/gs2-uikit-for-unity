@@ -44,7 +44,12 @@ namespace Gs2.Unity.UiKit.Gs2Inbox.Context
 
         public bool HasError() {
             if (Message == null) {
-                return true;
+                if (GetComponentInParent<Gs2InboxOwnMessageList>(true) != null) {
+                    return false;
+                }
+                else {
+                    return true;
+                }
             }
             return false;
         }

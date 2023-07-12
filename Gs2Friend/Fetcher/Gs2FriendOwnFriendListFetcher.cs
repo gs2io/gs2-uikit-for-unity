@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
@@ -44,7 +46,7 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Fetcher
     /// Main
     /// </summary>
 
-	[AddComponentMenu("GS2 UIKit/Friend/Friend/Fetcher/Gs2FriendOwnFriendListFetcher")]
+	[AddComponentMenu("GS2 UIKit/Friend/FriendUser/Fetcher/Gs2FriendOwnFriendListFetcher")]
     public partial class Gs2FriendOwnFriendListFetcher : MonoBehaviour
     {
         private IEnumerator Fetch()

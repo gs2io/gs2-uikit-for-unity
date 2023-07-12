@@ -67,7 +67,7 @@ namespace Gs2.Unity.UiKit.Gs2Lottery
             _children = new List<Gs2LotteryProbabilityContext>();
             for (var i = 0; i < this.maximumItems; i++) {
                 var node = Instantiate(this.prefab, transform);
-                node.Probability = Probability.New(
+                node.Probability = OwnProbability.New(
                     _context.LotteryModel,
                     ""
                 );

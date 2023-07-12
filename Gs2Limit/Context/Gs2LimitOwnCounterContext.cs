@@ -44,7 +44,12 @@ namespace Gs2.Unity.UiKit.Gs2Limit.Context
 
         public bool HasError() {
             if (Counter == null) {
-                return true;
+                if (GetComponentInParent<Gs2LimitOwnCounterList>(true) != null) {
+                    return false;
+                }
+                else {
+                    return true;
+                }
             }
             return false;
         }

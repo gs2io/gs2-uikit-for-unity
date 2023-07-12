@@ -44,7 +44,12 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Context
 
         public bool HasError() {
             if (BlackList == null) {
-                return true;
+                if (GetComponentInParent<Gs2FriendOwnBlackListList>(true) != null) {
+                    return false;
+                }
+                else {
+                    return true;
+                }
             }
             return false;
         }

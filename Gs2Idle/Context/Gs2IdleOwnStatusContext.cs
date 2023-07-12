@@ -44,7 +44,12 @@ namespace Gs2.Unity.UiKit.Gs2Idle.Context
 
         public bool HasError() {
             if (Status == null) {
-                return true;
+                if (GetComponentInParent<Gs2IdleOwnStatusList>(true) != null) {
+                    return false;
+                }
+                else {
+                    return true;
+                }
             }
             return false;
         }

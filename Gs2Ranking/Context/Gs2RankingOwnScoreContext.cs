@@ -44,7 +44,12 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Context
 
         public bool HasError() {
             if (Score == null) {
-                return true;
+                if (GetComponentInParent<Gs2RankingOwnScoreList>(true) != null) {
+                    return false;
+                }
+                else {
+                    return true;
+                }
             }
             return false;
         }

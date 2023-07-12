@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
@@ -26,6 +28,7 @@
 
 using Gs2.Unity.Gs2Lottery.ScriptableObject;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Gs2.Unity.UiKit.Gs2Lottery.Context
 {
@@ -37,14 +40,19 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.Context
     public partial class Gs2LotteryProbabilityContext : MonoBehaviour
     {
         public void Start() {
-            if (Probability == null) {
+            if (this.Probability == null) {
                 Debug.LogError("Probability is not set in Gs2LotteryProbabilityContext.");
             }
         }
 
         public bool HasError() {
-            if (Probability == null) {
-                return true;
+            if (this.Probability == null) {
+                if (GetComponentInParent<Gs2LotteryProbabilityList>(true) != null) {
+                    return false;
+                }
+                else {
+                    return true;
+                }
             }
             return false;
         }
@@ -74,10 +82,10 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.Context
 
     public partial class Gs2LotteryProbabilityContext
     {
-        public Probability Probability;
+        [FormerlySerializedAs("OwnProbability")] public OwnProbability Probability;
 
-        public void SetProbability(Probability Probability) {
-            this.Probability = Probability;
+        public void SetProbability(OwnProbability OwnProbability) {
+            this.Probability = OwnProbability;
         }
     }
 

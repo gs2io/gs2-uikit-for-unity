@@ -12,55 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
-// ReSharper disable UnusedAutoPropertyAccessor.Global
-// ReSharper disable CheckNamespace
-// ReSharper disable RedundantNameQualifier
-// ReSharper disable RedundantAssignment
-// ReSharper disable NotAccessedVariable
-// ReSharper disable RedundantUsingDirective
-// ReSharper disable Unity.NoNullPropagation
-// ReSharper disable InconsistentNaming
-
-#pragma warning disable CS0472
-
-using Gs2.Unity.Gs2Friend.ScriptableObject;
-using Gs2.Unity.UiKit.Gs2Friend.Context;
-using Gs2.Unity.UiKit.Gs2Friend.Fetcher;
-using UnityEditor;
-using UnityEngine;
-
-namespace Gs2.Unity.UiKit.Gs2Friend.Editor
-{
-    [CustomEditor(typeof(Gs2FriendOwnFriendContext))]
-    public class Gs2FriendOwnFriendContextEditorExtension : UnityEditor.Editor
-    {
-        public override void OnInspectorGUI() {
-            var original = target as Gs2FriendOwnFriendContext;
-
-            if (original == null) return;
-
-            serializedObject.Update();
-
-            if (original.Friend == null) {
-                if (original.GetComponentInParent<Gs2FriendOwnFriendList>(true) != null) {
-                    EditorGUILayout.HelpBox("OwnFriend is auto assign from Gs2FriendOwnFriendList.", MessageType.Info);
-                }
-                else {
-                    EditorGUILayout.HelpBox("OwnFriend not assigned.", MessageType.Error);
-                    EditorGUILayout.PropertyField(serializedObject.FindProperty("Friend"), true);
-                }
-            }
-            else {
-                original.Friend = EditorGUILayout.ObjectField("OwnFriend", original.Friend, typeof(OwnFriend), false) as OwnFriend;
-                EditorGUI.BeginDisabledGroup(true);
-                EditorGUI.indentLevel++;
-                EditorGUILayout.TextField("NamespaceName", original.Friend?.NamespaceName.ToString());
-                EditorGUI.indentLevel--;
-                EditorGUI.EndDisabledGroup();
-            }
-
-            serializedObject.ApplyModifiedProperties();
-        }
-    }
-}

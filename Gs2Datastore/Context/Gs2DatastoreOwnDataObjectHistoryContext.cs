@@ -44,7 +44,12 @@ namespace Gs2.Unity.UiKit.Gs2Datastore.Context
 
         public bool HasError() {
             if (DataObjectHistory == null) {
-                return true;
+                if (GetComponentInParent<Gs2DatastoreOwnDataObjectHistoryList>(true) != null) {
+                    return false;
+                }
+                else {
+                    return true;
+                }
             }
             return false;
         }

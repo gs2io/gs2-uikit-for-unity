@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
@@ -43,14 +45,21 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.Editor
             serializedObject.Update();
 
             if (original.Probability == null) {
-                EditorGUILayout.HelpBox("Probability not assigned.", MessageType.Error);
-                EditorGUILayout.PropertyField(serializedObject.FindProperty("Probability"), true);
+                if (original.GetComponentInParent<Gs2LotteryProbabilityList>(true) != null) {
+                    EditorGUILayout.HelpBox("LotteryModel is auto assign from Gs2LotteryProbabilityList.", MessageType.Info);
+                }
+                else {
+                    EditorGUILayout.HelpBox("Probability not assigned.", MessageType.Error);
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("Probability"), true);
+                }
             }
             else {
-                original.Probability = EditorGUILayout.ObjectField("Probability", original.Probability, typeof(Probability), false) as Probability;
+                original.Probability = EditorGUILayout.ObjectField("OwnProbability", original.Probability, typeof(OwnProbability), false) as OwnProbability;
                 EditorGUI.BeginDisabledGroup(true);
                 EditorGUI.indentLevel++;
                 EditorGUILayout.TextField("NamespaceName", original.Probability?.NamespaceName.ToString());
+                EditorGUILayout.TextField("LotteryName", original.Probability?.LotteryName.ToString());
+                EditorGUILayout.TextField("PrizeId", original.Probability?.PrizeId.ToString());
                 EditorGUI.indentLevel--;
                 EditorGUI.EndDisabledGroup();
             }

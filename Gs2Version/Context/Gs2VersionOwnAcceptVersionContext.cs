@@ -44,7 +44,12 @@ namespace Gs2.Unity.UiKit.Gs2Version.Context
 
         public bool HasError() {
             if (AcceptVersion == null) {
-                return true;
+                if (GetComponentInParent<Gs2VersionOwnAcceptVersionList>(true) != null) {
+                    return false;
+                }
+                else {
+                    return true;
+                }
             }
             return false;
         }
