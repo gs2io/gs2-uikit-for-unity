@@ -44,7 +44,12 @@ namespace Gs2.Unity.UiKit.Gs2Exchange.Context
 
         public bool HasError() {
             if (Await_ == null) {
-                return true;
+                if (GetComponentInParent<Gs2ExchangeOwnAwaitList>(true) != null) {
+                    return false;
+                }
+                else {
+                    return true;
+                }
             }
             return false;
         }
