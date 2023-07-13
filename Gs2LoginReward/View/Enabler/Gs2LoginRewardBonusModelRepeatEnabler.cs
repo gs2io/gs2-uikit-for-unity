@@ -24,47 +24,43 @@
 
 #pragma warning disable CS0472
 
-using System;
-using Gs2.Core.Util;
+using System.Collections.Generic;
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2LoginReward.Fetcher;
 using UnityEngine;
-using UnityEngine.Events;
 
-namespace Gs2.Unity.UiKit.Gs2LoginReward
+namespace Gs2.Unity.UiKit.Gs2LoginReward.Enabler
 {
     /// <summary>
     /// Main
     /// </summary>
 
-	[AddComponentMenu("GS2 UIKit/LoginReward/BonusModel/View/Label/Gs2LoginRewardBonusModelLabel")]
-    public partial class Gs2LoginRewardBonusModelLabel : MonoBehaviour
+	[AddComponentMenu("GS2 UIKit/LoginReward/BonusModel/View/Enabler/Properties/Repeat/Gs2LoginRewardBonusModelRepeatEnabler")]
+    public partial class Gs2LoginRewardBonusModelRepeatEnabler : MonoBehaviour
     {
         public void Update()
         {
             if (_fetcher.Fetched && _fetcher.BonusModel != null)
             {
-                onUpdate?.Invoke(
-                    format.Replace(
-                        "{name}", $"{_fetcher?.BonusModel?.Name}"
-                    ).Replace(
-                        "{metadata}", $"{_fetcher?.BonusModel?.Metadata}"
-                    ).Replace(
-                        "{mode}", $"{_fetcher?.BonusModel?.Mode}"
-                    ).Replace(
-                        "{periodEventId}", $"{_fetcher?.BonusModel?.PeriodEventId}"
-                    ).Replace(
-                        "{resetHour}", $"{_fetcher?.BonusModel?.ResetHour}"
-                    ).Replace(
-                        "{repeat}", $"{_fetcher?.BonusModel?.Repeat}"
-                    ).Replace(
-                        "{rewards}", $"{_fetcher?.BonusModel?.Rewards}"
-                    ).Replace(
-                        "{missedReceiveRelief}", $"{_fetcher?.BonusModel?.MissedReceiveRelief}"
-                    ).Replace(
-                        "{missedReceiveReliefConsumeActions}", $"{_fetcher?.BonusModel?.MissedReceiveReliefConsumeActions}"
-                    )
-                );
+                switch(expression)
+                {
+                    case Expression.In:
+                        target.SetActive(enableRepeats.Contains(_fetcher.BonusModel.Repeat));
+                        break;
+                    case Expression.NotIn:
+                        target.SetActive(!enableRepeats.Contains(_fetcher.BonusModel.Repeat));
+                        break;
+                    case Expression.StartsWith:
+                        target.SetActive(enableRepeat.StartsWith(_fetcher.BonusModel.Repeat));
+                        break;
+                    case Expression.EndsWith:
+                        target.SetActive(enableRepeat.EndsWith(_fetcher.BonusModel.Repeat));
+                        break;
+                }
+            }
+            else
+            {
+                target.SetActive(false);
             }
         }
     }
@@ -73,7 +69,7 @@ namespace Gs2.Unity.UiKit.Gs2LoginReward
     /// Dependent components
     /// </summary>
 
-    public partial class Gs2LoginRewardBonusModelLabel
+    public partial class Gs2LoginRewardBonusModelRepeatEnabler
     {
         private Gs2LoginRewardBonusModelFetcher _fetcher;
 
@@ -85,14 +81,19 @@ namespace Gs2.Unity.UiKit.Gs2LoginReward
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2LoginRewardBonusModelFetcher.");
                 enabled = false;
             }
-
-            Update();
+            if (target == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: target is not set.");
+                enabled = false;
+            }
         }
 
         public bool HasError()
         {
             _fetcher = GetComponent<Gs2LoginRewardBonusModelFetcher>() ?? GetComponentInParent<Gs2LoginRewardBonusModelFetcher>(true);
             if (_fetcher == null) {
+                return true;
+            }
+            if (target == null) {
                 return true;
             }
             return false;
@@ -103,7 +104,7 @@ namespace Gs2.Unity.UiKit.Gs2LoginReward
     /// Public properties
     /// </summary>
 
-    public partial class Gs2LoginRewardBonusModelLabel
+    public partial class Gs2LoginRewardBonusModelRepeatEnabler
     {
 
     }
@@ -112,29 +113,29 @@ namespace Gs2.Unity.UiKit.Gs2LoginReward
     /// Parameters for Inspector
     /// </summary>
 
-    public partial class Gs2LoginRewardBonusModelLabel
+    public partial class Gs2LoginRewardBonusModelRepeatEnabler
     {
-        public string format;
+        public enum Expression {
+            In,
+            NotIn,
+            StartsWith,
+            EndsWith,
+        }
+
+        public Expression expression;
+
+        public List<string> enableRepeats;
+
+        public string enableRepeat;
+
+        public GameObject target;
     }
 
     /// <summary>
     /// Event handlers
     /// </summary>
-    public partial class Gs2LoginRewardBonusModelLabel
+    public partial class Gs2LoginRewardBonusModelRepeatEnabler
     {
-        [Serializable]
-        private class UpdateEvent : UnityEvent<string>
-        {
-
-        }
-
-        [SerializeField]
-        private UpdateEvent onUpdate = new UpdateEvent();
-
-        public event UnityAction<string> OnUpdate
-        {
-            add => onUpdate.AddListener(value);
-            remove => onUpdate.RemoveListener(value);
-        }
+        
     }
 }

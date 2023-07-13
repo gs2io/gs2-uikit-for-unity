@@ -84,6 +84,11 @@ namespace Gs2.Unity.UiKit.Gs2LoginReward.Editor
                 GUI.FocusControl("");
                 EditorUtility.SetDirty(original);
             }
+            if (GUILayout.Button("Mode")) {
+                original.format += "{mode}";
+                GUI.FocusControl("");
+                EditorUtility.SetDirty(original);
+            }
             if (GUILayout.Button("PeriodEventId")) {
                 original.format += "{periodEventId}";
                 GUI.FocusControl("");
@@ -91,6 +96,11 @@ namespace Gs2.Unity.UiKit.Gs2LoginReward.Editor
             }
             if (GUILayout.Button("ResetHour")) {
                 original.format += "{resetHour}";
+                GUI.FocusControl("");
+                EditorUtility.SetDirty(original);
+            }
+            if (GUILayout.Button("Repeat")) {
+                original.format += "{repeat}";
                 GUI.FocusControl("");
                 EditorUtility.SetDirty(original);
             }

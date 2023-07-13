@@ -50,11 +50,17 @@ namespace Gs2.Unity.UiKit.Gs2LoginReward.Localization
                 target.StringReference["metadata"] = new StringVariable {
                     Value = _fetcher?.BonusModel?.Metadata ?? "",
                 };
+                target.StringReference["mode"] = new StringVariable {
+                    Value = _fetcher?.BonusModel?.Mode ?? "",
+                };
                 target.StringReference["periodEventId"] = new StringVariable {
                     Value = _fetcher?.BonusModel?.PeriodEventId ?? "",
                 };
                 target.StringReference["resetHour"] = new IntVariable {
                     Value = _fetcher?.BonusModel?.ResetHour ?? 0,
+                };
+                target.StringReference["repeat"] = new StringVariable {
+                    Value = _fetcher?.BonusModel?.Repeat ?? "",
                 };
                 target.StringReference["missedReceiveRelief"] = new StringVariable {
                     Value = _fetcher?.BonusModel?.MissedReceiveRelief ?? "",
