@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable UnusedAutoPropertyAccessor.Local
@@ -51,13 +53,13 @@ namespace Gs2.Unity.UiKit.Gs2Showcase
             yield return new WaitUntil(() => this._gameSessionHolder.Initialized);
             
             var domain = this._clientHolder.Gs2.Showcase.Namespace(
-                this._context.ownRandomDisplayItem.NamespaceName
+                this._context.RandomDisplayItem.NamespaceName
             ).Me(
                 this._gameSessionHolder.GameSession
             ).RandomShowcase(
-                this._context.ownRandomDisplayItem.ShowcaseName
+                this._context.RandomDisplayItem.ShowcaseName
             ).RandomDisplayItem(
-                this._context.ownRandomDisplayItem.DisplayItemName
+                this._context.RandomDisplayItem.DisplayItemName
             );
             var future = domain.RandomShowcaseBuy(
                 Quantity,
@@ -118,7 +120,7 @@ namespace Gs2.Unity.UiKit.Gs2Showcase
             this._context = GetComponent<Gs2ShowcaseOwnRandomDisplayItemContext>() ?? GetComponentInParent<Gs2ShowcaseOwnRandomDisplayItemContext>();
 
             if (_context == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ShowcaseRandomDisplayItemContext.");
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ShowcaseOwnRandomDisplayItemContext.");
                 enabled = false;
             }
         }

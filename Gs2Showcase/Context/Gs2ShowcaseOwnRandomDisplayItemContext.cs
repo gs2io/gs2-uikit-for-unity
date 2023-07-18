@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrtite
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
@@ -77,6 +79,8 @@ namespace Gs2.Unity.UiKit.Gs2Showcase.Context
     {
         [FormerlySerializedAs("RandomDisplayItem")] public OwnRandomDisplayItem ownRandomDisplayItem;
 
+        public OwnRandomDisplayItem RandomDisplayItem => this.ownRandomDisplayItem;
+        
         public void SetRandomDisplayItem(OwnRandomDisplayItem ownRandomDisplayItem) {
             this.ownRandomDisplayItem = ownRandomDisplayItem;
         }
