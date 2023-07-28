@@ -25,6 +25,7 @@
 #pragma warning disable CS0472
 
 using Gs2.Unity.Gs2Showcase.ScriptableObject;
+using Gs2.Unity.UiKit.Core;
 using UnityEngine;
 
 namespace Gs2.Unity.UiKit.Gs2Showcase.Context
@@ -38,7 +39,7 @@ namespace Gs2.Unity.UiKit.Gs2Showcase.Context
     {
         public void Start() {
             if (RandomShowcase == null) {
-                Debug.LogError("RandomShowcase is not set in Gs2ShowcaseRandomShowcaseContext.");
+                Debug.LogError($"{gameObject.GetFullPath()}: RandomShowcase is not set in Gs2ShowcaseRandomShowcaseContext.");
             }
         }
 

@@ -30,8 +30,10 @@ using System.Collections.Generic;
 using System.Linq;
 using Gs2.Core.Exception;
 using Gs2.Gs2Dictionary.Request;
+using Gs2.Unity.Gs2Dictionary.ScriptableObject;
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Core.Fetcher;
+using Gs2.Unity.UiKit.Gs2Dictionary.Context;
 using Gs2.Unity.UiKit.Gs2Dictionary.Fetcher;
 using Gs2.Unity.Util;
 using Gs2.Util.LitJson;
@@ -45,7 +47,7 @@ namespace Gs2.Unity.UiKit.Gs2Dictionary.Fetcher
     /// </summary>
 
 	[AddComponentMenu("GS2 UIKit/Dictionary/Entry/Fetcher/Acquire/Gs2DictionaryAddEntriesByUserIdFetcher")]
-    public partial class Gs2DictionaryAddEntriesByUserIdFetcher : MonoBehaviour
+    public partial class Gs2DictionaryAddEntriesByUserIdFetcher : Gs2DictionaryNamespaceContext
     {
         private IEnumerator Fetch()
         {
@@ -55,6 +57,13 @@ namespace Gs2.Unity.UiKit.Gs2Dictionary.Fetcher
                     var action = _fetcher.AcquireActions().FirstOrDefault(v => v.Action == "Gs2Dictionary:AddEntriesByUserId");
                     if (action != null) {
                         Request = AddEntriesByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
+                        if (Namespace == null || (
+                                Namespace.NamespaceName == Request.NamespaceName)
+                           ) {
+                            Namespace = Namespace.New(
+                                Request.NamespaceName
+                            );
+                        }
                         Fetched = true;
                     }
                 }
@@ -81,6 +90,10 @@ namespace Gs2.Unity.UiKit.Gs2Dictionary.Fetcher
     public partial class Gs2DictionaryAddEntriesByUserIdFetcher
     {
         private IAcquireActionsFetcher _fetcher;
+
+        public new void Start() {
+
+        }
 
         public void Awake()
         {

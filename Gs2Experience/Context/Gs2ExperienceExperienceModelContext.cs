@@ -25,6 +25,7 @@
 #pragma warning disable CS0472
 
 using Gs2.Unity.Gs2Experience.ScriptableObject;
+using Gs2.Unity.UiKit.Core;
 using UnityEngine;
 
 namespace Gs2.Unity.UiKit.Gs2Experience.Context
@@ -38,7 +39,7 @@ namespace Gs2.Unity.UiKit.Gs2Experience.Context
     {
         public void Start() {
             if (ExperienceModel == null) {
-                Debug.LogError("ExperienceModel is not set in Gs2ExperienceExperienceModelContext.");
+                Debug.LogError($"{gameObject.GetFullPath()}: ExperienceModel is not set in Gs2ExperienceExperienceModelContext.");
             }
         }
 

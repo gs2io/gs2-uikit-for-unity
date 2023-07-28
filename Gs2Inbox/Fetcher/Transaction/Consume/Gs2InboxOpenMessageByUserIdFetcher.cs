@@ -30,9 +30,10 @@ using System.Collections.Generic;
 using System.Linq;
 using Gs2.Core.Exception;
 using Gs2.Gs2Inbox.Request;
+using Gs2.Unity.Gs2Inbox.ScriptableObject;
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Core.Fetcher;
-using Gs2.Unity.UiKit.Gs2Inbox.Fetcher;
+using Gs2.Unity.UiKit.Gs2Inbox.Context;
 using Gs2.Unity.Util;
 using Gs2.Util.LitJson;
 using UnityEngine;
@@ -45,7 +46,7 @@ namespace Gs2.Unity.UiKit.Gs2Inbox.Fetcher
     /// </summary>
 
 	[AddComponentMenu("GS2 UIKit/Inbox/Message/Fetcher/Consume/Gs2InboxOpenMessageByUserIdFetcher")]
-    public partial class Gs2InboxOpenMessageByUserIdFetcher : MonoBehaviour
+    public partial class Gs2InboxOpenMessageByUserIdFetcher : Gs2InboxOwnMessageContext
     {
         private IEnumerator Fetch()
         {
@@ -55,6 +56,17 @@ namespace Gs2.Unity.UiKit.Gs2Inbox.Fetcher
                     var action = _fetcher.ConsumeActions().FirstOrDefault(v => v.Action == "Gs2Inbox:OpenMessageByUserId");
                     if (action != null) {
                         Request = OpenMessageByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
+                        if (Message == null || (
+                                Message.NamespaceName == Request.NamespaceName &&
+                                Message.MessageName == Request.MessageName)
+                           ) {
+                            Message = OwnMessage.New(
+                                Namespace.New(
+                                    Request.NamespaceName
+                                ),
+                                Request.MessageName
+                            );
+                        }
                         Fetched = true;
                     }
                 }
@@ -82,6 +94,10 @@ namespace Gs2.Unity.UiKit.Gs2Inbox.Fetcher
     {
         private IConsumeActionsFetcher _fetcher;
 
+        public new void Start() {
+
+        }
+        
         public void Awake()
         {
             _fetcher = GetComponent<IConsumeActionsFetcher>() ?? GetComponentInParent<IConsumeActionsFetcher>();

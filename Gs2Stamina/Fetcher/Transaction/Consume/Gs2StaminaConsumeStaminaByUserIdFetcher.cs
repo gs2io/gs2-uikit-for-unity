@@ -30,9 +30,10 @@ using System.Collections.Generic;
 using System.Linq;
 using Gs2.Core.Exception;
 using Gs2.Gs2Stamina.Request;
+using Gs2.Unity.Gs2Stamina.ScriptableObject;
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Core.Fetcher;
-using Gs2.Unity.UiKit.Gs2Stamina.Fetcher;
+using Gs2.Unity.UiKit.Gs2Stamina.Context;
 using Gs2.Unity.Util;
 using Gs2.Util.LitJson;
 using UnityEngine;
@@ -45,7 +46,7 @@ namespace Gs2.Unity.UiKit.Gs2Stamina.Fetcher
     /// </summary>
 
 	[AddComponentMenu("GS2 UIKit/Stamina/Stamina/Fetcher/Consume/Gs2StaminaConsumeStaminaByUserIdFetcher")]
-    public partial class Gs2StaminaConsumeStaminaByUserIdFetcher : MonoBehaviour
+    public partial class Gs2StaminaConsumeStaminaByUserIdFetcher : Gs2StaminaOwnStaminaContext
     {
         private IEnumerator Fetch()
         {
@@ -55,6 +56,17 @@ namespace Gs2.Unity.UiKit.Gs2Stamina.Fetcher
                     var action = _fetcher.ConsumeActions().FirstOrDefault(v => v.Action == "Gs2Stamina:ConsumeStaminaByUserId");
                     if (action != null) {
                         Request = ConsumeStaminaByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
+                        if (Stamina == null || (
+                                Stamina.NamespaceName == Request.NamespaceName &&
+                                Stamina.StaminaName == Request.StaminaName)
+                           ) {
+                            Stamina = OwnStamina.New(
+                                Namespace.New(
+                                    Request.NamespaceName
+                                ),
+                                Request.StaminaName
+                            );
+                        }
                         Fetched = true;
                     }
                 }
@@ -82,6 +94,10 @@ namespace Gs2.Unity.UiKit.Gs2Stamina.Fetcher
     {
         private IConsumeActionsFetcher _fetcher;
 
+        public new void Start() {
+
+        }
+        
         public void Awake()
         {
             _fetcher = GetComponent<IConsumeActionsFetcher>() ?? GetComponentInParent<IConsumeActionsFetcher>();

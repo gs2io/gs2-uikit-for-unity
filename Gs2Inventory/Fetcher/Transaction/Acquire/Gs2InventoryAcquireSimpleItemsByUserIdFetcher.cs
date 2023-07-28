@@ -30,8 +30,10 @@ using System.Collections.Generic;
 using System.Linq;
 using Gs2.Core.Exception;
 using Gs2.Gs2Inventory.Request;
+using Gs2.Unity.Gs2Inventory.ScriptableObject;
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Core.Fetcher;
+using Gs2.Unity.UiKit.Gs2Inventory.Context;
 using Gs2.Unity.UiKit.Gs2Inventory.Fetcher;
 using Gs2.Unity.Util;
 using Gs2.Util.LitJson;
@@ -45,7 +47,7 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Fetcher
     /// </summary>
 
 	[AddComponentMenu("GS2 UIKit/Inventory/SimpleItem/Fetcher/Acquire/Gs2InventoryAcquireSimpleItemsByUserIdFetcher")]
-    public partial class Gs2InventoryAcquireSimpleItemsByUserIdFetcher : MonoBehaviour
+    public partial class Gs2InventoryAcquireSimpleItemsByUserIdFetcher : Gs2InventoryOwnSimpleInventoryContext
     {
         private IEnumerator Fetch()
         {
@@ -55,6 +57,17 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Fetcher
                     var action = _fetcher.AcquireActions().FirstOrDefault(v => v.Action == "Gs2Inventory:AcquireSimpleItemsByUserId");
                     if (action != null) {
                         Request = AcquireSimpleItemsByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
+                        if (SimpleInventory == null || (
+                                SimpleInventory.NamespaceName == Request.NamespaceName &&
+                                SimpleInventory.InventoryName == Request.InventoryName)
+                           ) {
+                            SimpleInventory = OwnSimpleInventory.New(
+                                Namespace.New(
+                                    Request.NamespaceName
+                                ),
+                                Request.InventoryName
+                            );
+                        }
                         Fetched = true;
                     }
                 }
@@ -81,6 +94,10 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Fetcher
     public partial class Gs2InventoryAcquireSimpleItemsByUserIdFetcher
     {
         private IAcquireActionsFetcher _fetcher;
+
+        public new void Start() {
+
+        }
 
         public void Awake()
         {

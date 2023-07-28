@@ -25,6 +25,7 @@
 #pragma warning disable CS0472
 
 using Gs2.Unity.Gs2Account.ScriptableObject;
+using Gs2.Unity.UiKit.Core;
 using UnityEngine;
 
 namespace Gs2.Unity.UiKit.Gs2Account.Context
@@ -38,7 +39,7 @@ namespace Gs2.Unity.UiKit.Gs2Account.Context
     {
         public void Start() {
             if (Account == null) {
-                Debug.LogError("Account is not set in Gs2AccountAccountContext.");
+                Debug.LogError($"{gameObject.GetFullPath()}: Account is not set in Gs2AccountAccountContext.");
             }
         }
 

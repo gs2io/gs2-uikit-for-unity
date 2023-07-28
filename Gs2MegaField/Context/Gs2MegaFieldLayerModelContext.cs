@@ -25,6 +25,7 @@
 #pragma warning disable CS0472
 
 using Gs2.Unity.Gs2MegaField.ScriptableObject;
+using Gs2.Unity.UiKit.Core;
 using UnityEngine;
 
 namespace Gs2.Unity.UiKit.Gs2MegaField.Context
@@ -38,7 +39,7 @@ namespace Gs2.Unity.UiKit.Gs2MegaField.Context
     {
         public void Start() {
             if (LayerModel == null) {
-                Debug.LogError("LayerModel is not set in Gs2MegaFieldLayerModelContext.");
+                Debug.LogError($"{gameObject.GetFullPath()}: LayerModel is not set in Gs2MegaFieldLayerModelContext.");
             }
         }
 

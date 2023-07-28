@@ -25,6 +25,7 @@
 #pragma warning disable CS0472
 
 using Gs2.Unity.Gs2Stamina.ScriptableObject;
+using Gs2.Unity.UiKit.Core;
 using UnityEngine;
 
 namespace Gs2.Unity.UiKit.Gs2Stamina.Context
@@ -38,7 +39,7 @@ namespace Gs2.Unity.UiKit.Gs2Stamina.Context
     {
         public void Start() {
             if (Stamina == null) {
-                Debug.LogError("Stamina is not set in Gs2StaminaOwnStaminaContext.");
+                Debug.LogError($"{gameObject.GetFullPath()}: Stamina is not set in Gs2StaminaOwnStaminaContext.");
             }
         }
 

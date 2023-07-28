@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
@@ -30,9 +32,10 @@ using System.Collections.Generic;
 using System.Linq;
 using Gs2.Core.Exception;
 using Gs2.Gs2SerialKey.Request;
+using Gs2.Unity.Gs2SerialKey.ScriptableObject;
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Core.Fetcher;
-using Gs2.Unity.UiKit.Gs2SerialKey.Fetcher;
+using Gs2.Unity.UiKit.Gs2SerialKey.Context;
 using Gs2.Unity.Util;
 using Gs2.Util.LitJson;
 using UnityEngine;
@@ -45,7 +48,7 @@ namespace Gs2.Unity.UiKit.Gs2SerialKey.Fetcher
     /// </summary>
 
 	[AddComponentMenu("GS2 UIKit/SerialKey/SerialKey/Fetcher/Consume/Gs2SerialKeyUseByUserIdFetcher")]
-    public partial class Gs2SerialKeyUseByUserIdFetcher : MonoBehaviour
+    public partial class Gs2SerialKeyUseByUserIdFetcher : Gs2SerialKeySerialKeyContext
     {
         private IEnumerator Fetch()
         {
@@ -55,6 +58,17 @@ namespace Gs2.Unity.UiKit.Gs2SerialKey.Fetcher
                     var action = _fetcher.ConsumeActions().FirstOrDefault(v => v.Action == "Gs2SerialKey:UseByUserId");
                     if (action != null) {
                         Request = UseByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
+                        if (SerialKey == null || (
+                                SerialKey.NamespaceName == Request.NamespaceName &&
+                                SerialKey.SerialKeyCode == Request.Code)
+                           ) {
+                            SerialKey = SerialKey.New(
+                                Namespace.New(
+                                    Request.NamespaceName
+                                ),
+                                Request.Code
+                            );
+                        }
                         Fetched = true;
                     }
                 }

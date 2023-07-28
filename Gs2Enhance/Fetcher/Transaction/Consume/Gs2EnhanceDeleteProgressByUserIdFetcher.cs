@@ -30,9 +30,10 @@ using System.Collections.Generic;
 using System.Linq;
 using Gs2.Core.Exception;
 using Gs2.Gs2Enhance.Request;
+using Gs2.Unity.Gs2Enhance.ScriptableObject;
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Core.Fetcher;
-using Gs2.Unity.UiKit.Gs2Enhance.Fetcher;
+using Gs2.Unity.UiKit.Gs2Enhance.Context;
 using Gs2.Unity.Util;
 using Gs2.Util.LitJson;
 using UnityEngine;
@@ -45,7 +46,7 @@ namespace Gs2.Unity.UiKit.Gs2Enhance.Fetcher
     /// </summary>
 
 	[AddComponentMenu("GS2 UIKit/Enhance/Progress/Fetcher/Consume/Gs2EnhanceDeleteProgressByUserIdFetcher")]
-    public partial class Gs2EnhanceDeleteProgressByUserIdFetcher : MonoBehaviour
+    public partial class Gs2EnhanceDeleteProgressByUserIdFetcher : Gs2EnhanceNamespaceContext
     {
         private IEnumerator Fetch()
         {
@@ -55,6 +56,13 @@ namespace Gs2.Unity.UiKit.Gs2Enhance.Fetcher
                     var action = _fetcher.ConsumeActions().FirstOrDefault(v => v.Action == "Gs2Enhance:DeleteProgressByUserId");
                     if (action != null) {
                         Request = DeleteProgressByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
+                        if (Namespace == null || (
+                                Namespace.NamespaceName == Request.NamespaceName)
+                           ) {
+                            Namespace = Namespace.New(
+                                Request.NamespaceName
+                            );
+                        }
                         Fetched = true;
                     }
                 }
@@ -82,6 +90,10 @@ namespace Gs2.Unity.UiKit.Gs2Enhance.Fetcher
     {
         private IConsumeActionsFetcher _fetcher;
 
+        public new void Start() {
+
+        }
+        
         public void Awake()
         {
             _fetcher = GetComponent<IConsumeActionsFetcher>() ?? GetComponentInParent<IConsumeActionsFetcher>();

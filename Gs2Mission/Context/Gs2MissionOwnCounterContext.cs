@@ -25,6 +25,7 @@
 #pragma warning disable CS0472
 
 using Gs2.Unity.Gs2Mission.ScriptableObject;
+using Gs2.Unity.UiKit.Core;
 using UnityEngine;
 
 namespace Gs2.Unity.UiKit.Gs2Mission.Context
@@ -38,7 +39,7 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Context
     {
         public void Start() {
             if (Counter == null) {
-                Debug.LogError("Counter is not set in Gs2MissionOwnCounterContext.");
+                Debug.LogError($"{gameObject.GetFullPath()}: Counter is not set in Gs2MissionOwnCounterContext.");
             }
         }
 

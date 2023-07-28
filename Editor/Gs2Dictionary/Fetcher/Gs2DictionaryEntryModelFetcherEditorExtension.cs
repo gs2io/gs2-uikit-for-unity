@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
@@ -53,12 +55,6 @@ namespace Gs2.Unity.UiKit.Gs2Dictionary.Editor
                     EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2DictionaryEntryModelContext), false);
                     EditorGUI.EndDisabledGroup();
                     EditorGUILayout.HelpBox("EntryModel is auto assign from Gs2DictionaryEntryModelList.", MessageType.Info);
-                }
-                else if (context.gameObject.GetComponentInParent<Gs2DictionaryOwnEntryList>(true) != null) {
-                    EditorGUI.BeginDisabledGroup(true);
-                    EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2DictionaryOwnEntryContext), false);
-                    EditorGUI.EndDisabledGroup();
-                    EditorGUILayout.HelpBox("EntryModel is auto assign from Gs2DictionaryOwnEntryList.", MessageType.Info);
                 }
                 else {
                     EditorGUI.BeginDisabledGroup(true);

@@ -69,6 +69,12 @@ namespace Gs2.Unity.UiKit.Gs2Experience
 
         public void Awake()
         {
+            if (prefab == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ExperienceOwnStatusContext Prefab.");
+                enabled = false;
+                return;
+            }
+
             _fetcher = GetComponent<Gs2ExperienceOwnStatusListFetcher>() ?? GetComponentInParent<Gs2ExperienceOwnStatusListFetcher>();
 
             if (_fetcher == null) {
@@ -76,11 +82,18 @@ namespace Gs2.Unity.UiKit.Gs2Experience
                 enabled = false;
             }
 
+            var context = GetComponent<Gs2ExperienceNamespaceContext>() ?? GetComponentInParent<Gs2ExperienceNamespaceContext>(true);
+            if (context == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ExperienceOwnStatusListFetcher::Context.");
+                enabled = false;
+                return;
+            }
+
             _children = new List<Gs2ExperienceOwnStatusContext>();
             for (var i = 0; i < this.maximumItems; i++) {
                 var node = Instantiate(this.prefab, transform);
                 node.Status = OwnStatus.New(
-                    _fetcher.Context.Namespace,
+                    context.Namespace,
                     "",
                     ""
                 );

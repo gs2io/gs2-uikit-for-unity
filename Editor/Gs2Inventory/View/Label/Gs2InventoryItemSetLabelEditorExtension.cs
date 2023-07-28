@@ -12,8 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
- * deny overwrite
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
@@ -57,17 +55,18 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Editor
                     EditorGUILayout.HelpBox("ItemSet is auto assign from Gs2InventoryOwnItemSetList.", MessageType.Info);
                 }
                 else {
-                    var context = original.GetComponent<Gs2InventoryOwnItemSetContext>() ?? original.GetComponentInParent<Gs2InventoryOwnItemSetContext>(true);
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2InventoryOwnItemSetFetcher), false);
                     EditorGUI.indentLevel++;
-                    context.ItemModel = EditorGUILayout.ObjectField("ItemModel", context.ItemModel, typeof(ItemModel), false) as ItemModel;
-                    EditorGUI.indentLevel++;
-                    EditorGUILayout.TextField("NamespaceName", context.ItemModel?.NamespaceName.ToString());
-                    EditorGUILayout.TextField("InventoryName", context.ItemModel?.InventoryName.ToString());
-                    EditorGUILayout.TextField("ItemName", context.ItemModel?.ItemName.ToString());
-                    EditorGUILayout.TextField("ItemSetName", context.itemSetName?.ToString());
-                    EditorGUI.indentLevel--;
+                    if (fetcher.Context != null) {
+                        fetcher.Context.ItemSet = EditorGUILayout.ObjectField("ItemSet", fetcher.Context.ItemSet, typeof(OwnItemSet), false) as OwnItemSet;
+                        EditorGUI.indentLevel++;
+                        EditorGUILayout.TextField("NamespaceName", fetcher.Context.ItemSet?.NamespaceName.ToString());
+                        EditorGUILayout.TextField("InventoryName", fetcher.Context.ItemSet?.InventoryName.ToString());
+                        EditorGUILayout.TextField("ItemName", fetcher.Context.ItemSet?.ItemName.ToString());
+                        EditorGUILayout.TextField("ItemSetName", fetcher.Context.ItemSet?.ItemSetName.ToString());
+                        EditorGUI.indentLevel--;
+                    }
                     EditorGUI.indentLevel--;
                     EditorGUI.EndDisabledGroup();
                 }

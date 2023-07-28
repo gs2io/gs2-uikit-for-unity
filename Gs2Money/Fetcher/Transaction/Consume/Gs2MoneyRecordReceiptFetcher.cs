@@ -30,9 +30,10 @@ using System.Collections.Generic;
 using System.Linq;
 using Gs2.Core.Exception;
 using Gs2.Gs2Money.Request;
+using Gs2.Unity.Gs2Money.ScriptableObject;
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Core.Fetcher;
-using Gs2.Unity.UiKit.Gs2Money.Fetcher;
+using Gs2.Unity.UiKit.Gs2Money.Context;
 using Gs2.Unity.Util;
 using Gs2.Util.LitJson;
 using UnityEngine;
@@ -45,7 +46,7 @@ namespace Gs2.Unity.UiKit.Gs2Money.Fetcher
     /// </summary>
 
 	[AddComponentMenu("GS2 UIKit/Money/Receipt/Fetcher/Consume/Gs2MoneyRecordReceiptFetcher")]
-    public partial class Gs2MoneyRecordReceiptFetcher : MonoBehaviour
+    public partial class Gs2MoneyRecordReceiptFetcher : Gs2MoneyNamespaceContext
     {
         private IEnumerator Fetch()
         {
@@ -55,6 +56,13 @@ namespace Gs2.Unity.UiKit.Gs2Money.Fetcher
                     var action = _fetcher.ConsumeActions().FirstOrDefault(v => v.Action == "Gs2Money:RecordReceipt");
                     if (action != null) {
                         Request = RecordReceiptRequest.FromJson(JsonMapper.ToObject(action.Request));
+                        if (Namespace == null || (
+                                Namespace.NamespaceName == Request.NamespaceName)
+                           ) {
+                            Namespace = Namespace.New(
+                                Request.NamespaceName
+                            );
+                        }
                         Fetched = true;
                     }
                 }
@@ -82,6 +90,10 @@ namespace Gs2.Unity.UiKit.Gs2Money.Fetcher
     {
         private IConsumeActionsFetcher _fetcher;
 
+        public new void Start() {
+
+        }
+        
         public void Awake()
         {
             _fetcher = GetComponent<IConsumeActionsFetcher>() ?? GetComponentInParent<IConsumeActionsFetcher>();

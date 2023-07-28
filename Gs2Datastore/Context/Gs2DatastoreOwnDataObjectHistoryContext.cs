@@ -25,6 +25,7 @@
 #pragma warning disable CS0472
 
 using Gs2.Unity.Gs2Datastore.ScriptableObject;
+using Gs2.Unity.UiKit.Core;
 using UnityEngine;
 
 namespace Gs2.Unity.UiKit.Gs2Datastore.Context
@@ -38,7 +39,7 @@ namespace Gs2.Unity.UiKit.Gs2Datastore.Context
     {
         public void Start() {
             if (DataObjectHistory == null) {
-                Debug.LogError("DataObjectHistory is not set in Gs2DatastoreOwnDataObjectHistoryContext.");
+                Debug.LogError($"{gameObject.GetFullPath()}: DataObjectHistory is not set in Gs2DatastoreOwnDataObjectHistoryContext.");
             }
         }
 

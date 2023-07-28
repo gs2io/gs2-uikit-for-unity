@@ -30,8 +30,10 @@ using System.Collections.Generic;
 using System.Linq;
 using Gs2.Core.Exception;
 using Gs2.Gs2Inbox.Request;
+using Gs2.Unity.Gs2Inbox.ScriptableObject;
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Core.Fetcher;
+using Gs2.Unity.UiKit.Gs2Inbox.Context;
 using Gs2.Unity.UiKit.Gs2Inbox.Fetcher;
 using Gs2.Unity.Util;
 using Gs2.Util.LitJson;
@@ -45,7 +47,7 @@ namespace Gs2.Unity.UiKit.Gs2Inbox.Fetcher
     /// </summary>
 
 	[AddComponentMenu("GS2 UIKit/Inbox/Message/Fetcher/Acquire/Gs2InboxSendMessageByUserIdFetcher")]
-    public partial class Gs2InboxSendMessageByUserIdFetcher : MonoBehaviour
+    public partial class Gs2InboxSendMessageByUserIdFetcher : Gs2InboxNamespaceContext
     {
         private IEnumerator Fetch()
         {
@@ -55,6 +57,13 @@ namespace Gs2.Unity.UiKit.Gs2Inbox.Fetcher
                     var action = _fetcher.AcquireActions().FirstOrDefault(v => v.Action == "Gs2Inbox:SendMessageByUserId");
                     if (action != null) {
                         Request = SendMessageByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
+                        if (Namespace == null || (
+                                Namespace.NamespaceName == Request.NamespaceName)
+                           ) {
+                            Namespace = Namespace.New(
+                                Request.NamespaceName
+                            );
+                        }
                         Fetched = true;
                     }
                 }
@@ -81,6 +90,10 @@ namespace Gs2.Unity.UiKit.Gs2Inbox.Fetcher
     public partial class Gs2InboxSendMessageByUserIdFetcher
     {
         private IAcquireActionsFetcher _fetcher;
+
+        public new void Start() {
+
+        }
 
         public void Awake()
         {

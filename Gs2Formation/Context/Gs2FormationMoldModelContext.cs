@@ -25,6 +25,7 @@
 #pragma warning disable CS0472
 
 using Gs2.Unity.Gs2Formation.ScriptableObject;
+using Gs2.Unity.UiKit.Core;
 using UnityEngine;
 
 namespace Gs2.Unity.UiKit.Gs2Formation.Context
@@ -38,7 +39,7 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Context
     {
         public void Start() {
             if (MoldModel == null) {
-                Debug.LogError("MoldModel is not set in Gs2FormationMoldModelContext.");
+                Debug.LogError($"{gameObject.GetFullPath()}: MoldModel is not set in Gs2FormationMoldModelContext.");
             }
         }
 

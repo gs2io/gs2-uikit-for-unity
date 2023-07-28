@@ -30,8 +30,10 @@ using System.Collections.Generic;
 using System.Linq;
 using Gs2.Core.Exception;
 using Gs2.Gs2Idle.Request;
+using Gs2.Unity.Gs2Idle.ScriptableObject;
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Core.Fetcher;
+using Gs2.Unity.UiKit.Gs2Idle.Context;
 using Gs2.Unity.UiKit.Gs2Idle.Fetcher;
 using Gs2.Unity.Util;
 using Gs2.Util.LitJson;
@@ -45,7 +47,7 @@ namespace Gs2.Unity.UiKit.Gs2Idle.Fetcher
     /// </summary>
 
 	[AddComponentMenu("GS2 UIKit/Idle/Status/Fetcher/Acquire/Gs2IdleIncreaseMaximumIdleMinutesByUserIdFetcher")]
-    public partial class Gs2IdleIncreaseMaximumIdleMinutesByUserIdFetcher : MonoBehaviour
+    public partial class Gs2IdleIncreaseMaximumIdleMinutesByUserIdFetcher : Gs2IdleOwnStatusContext
     {
         private IEnumerator Fetch()
         {
@@ -55,6 +57,17 @@ namespace Gs2.Unity.UiKit.Gs2Idle.Fetcher
                     var action = _fetcher.AcquireActions().FirstOrDefault(v => v.Action == "Gs2Idle:IncreaseMaximumIdleMinutesByUserId");
                     if (action != null) {
                         Request = IncreaseMaximumIdleMinutesByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
+                        if (Status == null || (
+                                Status.NamespaceName == Request.NamespaceName &&
+                                Status.CategoryName == Request.CategoryName)
+                           ) {
+                            Status = OwnStatus.New(
+                                Namespace.New(
+                                    Request.NamespaceName
+                                ),
+                                Request.CategoryName
+                            );
+                        }
                         Fetched = true;
                     }
                 }
@@ -81,6 +94,10 @@ namespace Gs2.Unity.UiKit.Gs2Idle.Fetcher
     public partial class Gs2IdleIncreaseMaximumIdleMinutesByUserIdFetcher
     {
         private IAcquireActionsFetcher _fetcher;
+
+        public new void Start() {
+
+        }
 
         public void Awake()
         {

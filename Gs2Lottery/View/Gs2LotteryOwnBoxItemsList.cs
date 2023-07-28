@@ -68,6 +68,12 @@ namespace Gs2.Unity.UiKit.Gs2Lottery
 
         public void Awake()
         {
+            if (prefab == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2LotteryOwnBoxItemsContext Prefab.");
+                enabled = false;
+                return;
+            }
+
             _fetcher = GetComponent<Gs2LotteryOwnBoxItemsListFetcher>() ?? GetComponentInParent<Gs2LotteryOwnBoxItemsListFetcher>();
 
             if (_fetcher == null) {
@@ -75,11 +81,18 @@ namespace Gs2.Unity.UiKit.Gs2Lottery
                 enabled = false;
             }
 
+            var context = GetComponent<Gs2LotteryNamespaceContext>() ?? GetComponentInParent<Gs2LotteryNamespaceContext>(true);
+            if (context == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2LotteryOwnBoxItemsListFetcher::Context.");
+                enabled = false;
+                return;
+            }
+
             _children = new List<Gs2LotteryOwnBoxItemsContext>();
             for (var i = 0; i < this.maximumItems; i++) {
                 var node = Instantiate(this.prefab, transform);
                 node.BoxItems = OwnBoxItems.New(
-                    _fetcher.Context.Namespace,
+                    context.Namespace,
                     ""
                 );
                 node.gameObject.SetActive(false);

@@ -12,8 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
- * deny overwrite
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
@@ -59,12 +57,12 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Enabler.Editor
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2InventoryOwnItemSetContext), false);
                     EditorGUI.indentLevel++;
-                    context.ItemModel = EditorGUILayout.ObjectField("ItemModel", context.ItemModel, typeof(ItemModel), false) as ItemModel;
+                    context.ItemSet = EditorGUILayout.ObjectField("ItemSet", context.ItemSet, typeof(OwnItemSet), false) as OwnItemSet;
                     EditorGUI.indentLevel++;
-                    EditorGUILayout.TextField("NamespaceName", context.ItemModel?.NamespaceName.ToString());
-                    EditorGUILayout.TextField("InventoryName", context.ItemModel?.InventoryName.ToString());
-                    EditorGUILayout.TextField("ItemName", context.ItemModel?.ItemName.ToString());
-                    EditorGUILayout.TextField("ItemSetName", context.itemSetName?.ToString());
+                    EditorGUILayout.TextField("NamespaceName", context.ItemSet?.NamespaceName.ToString());
+                    EditorGUILayout.TextField("InventoryName", context.ItemSet?.InventoryName.ToString());
+                    EditorGUILayout.TextField("ItemName", context.ItemSet?.ItemName.ToString());
+                    EditorGUILayout.TextField("ItemSetName", context.ItemSet?.ItemSetName.ToString());
                     EditorGUI.indentLevel--;
                     EditorGUI.indentLevel--;
                     EditorGUI.EndDisabledGroup();

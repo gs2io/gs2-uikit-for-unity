@@ -30,9 +30,10 @@ using System.Collections.Generic;
 using System.Linq;
 using Gs2.Core.Exception;
 using Gs2.Gs2Exchange.Request;
+using Gs2.Unity.Gs2Exchange.ScriptableObject;
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Core.Fetcher;
-using Gs2.Unity.UiKit.Gs2Exchange.Fetcher;
+using Gs2.Unity.UiKit.Gs2Exchange.Context;
 using Gs2.Unity.Util;
 using Gs2.Util.LitJson;
 using UnityEngine;
@@ -45,7 +46,7 @@ namespace Gs2.Unity.UiKit.Gs2Exchange.Fetcher
     /// </summary>
 
 	[AddComponentMenu("GS2 UIKit/Exchange/Await/Fetcher/Consume/Gs2ExchangeDeleteAwaitByUserIdFetcher")]
-    public partial class Gs2ExchangeDeleteAwaitByUserIdFetcher : MonoBehaviour
+    public partial class Gs2ExchangeDeleteAwaitByUserIdFetcher : Gs2ExchangeOwnAwaitContext
     {
         private IEnumerator Fetch()
         {
@@ -55,6 +56,17 @@ namespace Gs2.Unity.UiKit.Gs2Exchange.Fetcher
                     var action = _fetcher.ConsumeActions().FirstOrDefault(v => v.Action == "Gs2Exchange:DeleteAwaitByUserId");
                     if (action != null) {
                         Request = DeleteAwaitByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
+                        if (Await_ == null || (
+                                Await_.NamespaceName == Request.NamespaceName &&
+                                Await_.AwaitName == Request.AwaitName)
+                           ) {
+                            Await_ = OwnAwait.New(
+                                Namespace.New(
+                                    Request.NamespaceName
+                                ),
+                                Request.AwaitName
+                            );
+                        }
                         Fetched = true;
                     }
                 }
@@ -82,6 +94,10 @@ namespace Gs2.Unity.UiKit.Gs2Exchange.Fetcher
     {
         private IConsumeActionsFetcher _fetcher;
 
+        public new void Start() {
+
+        }
+        
         public void Awake()
         {
             _fetcher = GetComponent<IConsumeActionsFetcher>() ?? GetComponentInParent<IConsumeActionsFetcher>();

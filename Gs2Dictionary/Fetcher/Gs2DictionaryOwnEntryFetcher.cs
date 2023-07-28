@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
@@ -56,15 +58,15 @@ namespace Gs2.Unity.UiKit.Gs2Dictionary.Fetcher
             {
                 if (_gameSessionHolder != null && _gameSessionHolder.Initialized &&
                     _clientHolder != null && _clientHolder.Initialized &&
-                    Context != null && this.Context.Entry != null)
+                    Context != null && this.Context.EntryModel != null)
                 {
                     
                     var domain = this._clientHolder.Gs2.Dictionary.Namespace(
-                        this.Context.Entry.NamespaceName
+                        this.Context.EntryModel.NamespaceName
                     ).Me(
                         this._gameSessionHolder.GameSession
                     ).Entry(
-                        this.Context.Entry.EntryModelName
+                        this.Context.EntryModel.EntryName
                     );
                     var future = domain.Model();
                     yield return future;
@@ -115,23 +117,23 @@ namespace Gs2.Unity.UiKit.Gs2Dictionary.Fetcher
     {
         protected Gs2ClientHolder _clientHolder;
         protected Gs2GameSessionHolder _gameSessionHolder;
-        public Gs2DictionaryOwnEntryContext Context { get; private set; }
+        public Gs2DictionaryEntryModelContext Context { get; private set; }
 
         public void Awake()
         {
             _clientHolder = Gs2ClientHolder.Instance;
             _gameSessionHolder = Gs2GameSessionHolder.Instance;
-            Context = GetComponent<Gs2DictionaryOwnEntryContext>() ?? GetComponentInParent<Gs2DictionaryOwnEntryContext>();
+            Context = GetComponent<Gs2DictionaryEntryModelContext>() ?? GetComponentInParent<Gs2DictionaryEntryModelContext>();
 
             if (Context == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2DictionaryOwnEntryContext.");
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2DictionaryEntryModelContext.");
                 enabled = false;
             }
         }
 
         public bool HasError()
         {
-            Context = GetComponent<Gs2DictionaryOwnEntryContext>() ?? GetComponentInParent<Gs2DictionaryOwnEntryContext>(true);
+            Context = GetComponent<Gs2DictionaryEntryModelContext>() ?? GetComponentInParent<Gs2DictionaryEntryModelContext>(true);
             if (Context == null) {
                 return true;
             }

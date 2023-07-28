@@ -30,8 +30,10 @@ using System.Collections.Generic;
 using System.Linq;
 using Gs2.Core.Exception;
 using Gs2.Gs2Enhance.Request;
+using Gs2.Unity.Gs2Enhance.ScriptableObject;
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Core.Fetcher;
+using Gs2.Unity.UiKit.Gs2Enhance.Context;
 using Gs2.Unity.UiKit.Gs2Enhance.Fetcher;
 using Gs2.Unity.Util;
 using Gs2.Util.LitJson;
@@ -45,7 +47,7 @@ namespace Gs2.Unity.UiKit.Gs2Enhance.Fetcher
     /// </summary>
 
 	[AddComponentMenu("GS2 UIKit/Enhance/Progress/Fetcher/Acquire/Gs2EnhanceCreateProgressByUserIdFetcher")]
-    public partial class Gs2EnhanceCreateProgressByUserIdFetcher : MonoBehaviour
+    public partial class Gs2EnhanceCreateProgressByUserIdFetcher : Gs2EnhanceNamespaceContext
     {
         private IEnumerator Fetch()
         {
@@ -55,6 +57,13 @@ namespace Gs2.Unity.UiKit.Gs2Enhance.Fetcher
                     var action = _fetcher.AcquireActions().FirstOrDefault(v => v.Action == "Gs2Enhance:CreateProgressByUserId");
                     if (action != null) {
                         Request = CreateProgressByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
+                        if (Namespace == null || (
+                                Namespace.NamespaceName == Request.NamespaceName)
+                           ) {
+                            Namespace = Namespace.New(
+                                Request.NamespaceName
+                            );
+                        }
                         Fetched = true;
                     }
                 }
@@ -81,6 +90,10 @@ namespace Gs2.Unity.UiKit.Gs2Enhance.Fetcher
     public partial class Gs2EnhanceCreateProgressByUserIdFetcher
     {
         private IAcquireActionsFetcher _fetcher;
+
+        public new void Start() {
+
+        }
 
         public void Awake()
         {

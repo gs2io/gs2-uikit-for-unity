@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
@@ -40,14 +42,13 @@ namespace Gs2.Unity.UiKit.Gs2Dictionary
     [AddComponentMenu("GS2 UIKit/Dictionary/Entry/View/Gs2DictionaryOwnEntryList")]
     public partial class Gs2DictionaryOwnEntryList : MonoBehaviour
     {
-        private List<Gs2DictionaryOwnEntryContext> _children;
+        private List<Gs2DictionaryEntryModelContext> _children;
 
         public void Update() {
             if (_fetcher.Fetched && this._fetcher.Entries != null) {
                 for (var i = 0; i < this.maximumItems; i++) {
                     if (i < this._fetcher.Entries.Count) {
                         _children[i].EntryModel.entryName = this._fetcher.Entries[i].Name;
-                        _children[i].Entry.entryModelName = this._fetcher.Entries[i].Name;
                         _children[i].gameObject.SetActive(true);
                     }
                     else {
@@ -76,14 +77,10 @@ namespace Gs2.Unity.UiKit.Gs2Dictionary
                 enabled = false;
             }
 
-            _children = new List<Gs2DictionaryOwnEntryContext>();
+            _children = new List<Gs2DictionaryEntryModelContext>();
             for (var i = 0; i < this.maximumItems; i++) {
                 var node = Instantiate(this.prefab, transform);
                 node.EntryModel = EntryModel.New(
-                    _fetcher.Context.Namespace,
-                    ""
-                );
-                node.Entry = OwnEntry.New(
                     _fetcher.Context.Namespace,
                     ""
                 );
@@ -118,7 +115,7 @@ namespace Gs2.Unity.UiKit.Gs2Dictionary
 
     public partial class Gs2DictionaryOwnEntryList
     {
-        public Gs2DictionaryOwnEntryContext prefab;
+        public Gs2DictionaryEntryModelContext prefab;
         public int maximumItems;
     }
 

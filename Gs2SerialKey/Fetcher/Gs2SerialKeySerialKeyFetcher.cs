@@ -63,8 +63,8 @@ namespace Gs2.Unity.UiKit.Gs2SerialKey.Fetcher
                     
                     var domain = this._clientHolder.Gs2.SerialKey.Namespace(
                         this.Context.SerialKey.NamespaceName
-                    ).User(
-                        this.Context.SerialKey.UserId
+                    ).Me(
+                        _gameSessionHolder.GameSession
                     ).SerialKey(
                         this.Context.SerialKey.SerialKeyCode
                     );

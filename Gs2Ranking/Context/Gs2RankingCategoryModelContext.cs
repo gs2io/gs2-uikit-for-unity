@@ -25,6 +25,7 @@
 #pragma warning disable CS0472
 
 using Gs2.Unity.Gs2Ranking.ScriptableObject;
+using Gs2.Unity.UiKit.Core;
 using UnityEngine;
 
 namespace Gs2.Unity.UiKit.Gs2Ranking.Context
@@ -38,7 +39,7 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Context
     {
         public void Start() {
             if (CategoryModel == null) {
-                Debug.LogError("CategoryModel is not set in Gs2RankingCategoryModelContext.");
+                Debug.LogError($"{gameObject.GetFullPath()}: CategoryModel is not set in Gs2RankingCategoryModelContext.");
             }
         }
 

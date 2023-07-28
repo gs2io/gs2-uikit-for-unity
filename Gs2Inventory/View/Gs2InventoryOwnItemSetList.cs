@@ -12,8 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
- * deny overwrite
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
@@ -49,8 +47,8 @@ namespace Gs2.Unity.UiKit.Gs2Inventory
                 for (var i = 0; i < this.maximumItems; i++) {
                     if (i < this._fetcher.ItemSets.Count) {
                         _children[i].ItemModel.itemName = this._fetcher.ItemSets[i].ItemName;
-                        _children[i].ItemModel.itemName = this._fetcher.ItemSets[i].ItemName;
-                        _children[i].itemSetName = this._fetcher.ItemSets[i].Name;
+                        _children[i].ItemSet.itemName = this._fetcher.ItemSets[i].ItemName;
+                        _children[i].ItemSet.itemSetName = this._fetcher.ItemSets[i].Name;
                         _children[i].gameObject.SetActive(true);
                     }
                     else {
@@ -72,6 +70,12 @@ namespace Gs2.Unity.UiKit.Gs2Inventory
 
         public void Awake()
         {
+            if (prefab == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2InventoryOwnItemSetContext Prefab.");
+                enabled = false;
+                return;
+            }
+
             _fetcher = GetComponent<Gs2InventoryOwnItemSetListFetcher>() ?? GetComponentInParent<Gs2InventoryOwnItemSetListFetcher>();
 
             if (_fetcher == null) {
@@ -79,11 +83,23 @@ namespace Gs2.Unity.UiKit.Gs2Inventory
                 enabled = false;
             }
 
+            var context = GetComponent<Gs2InventoryOwnInventoryContext>() ?? GetComponentInParent<Gs2InventoryOwnInventoryContext>(true);
+            if (context == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2InventoryOwnItemSetListFetcher::Context.");
+                enabled = false;
+                return;
+            }
+
             _children = new List<Gs2InventoryOwnItemSetContext>();
             for (var i = 0; i < this.maximumItems; i++) {
                 var node = Instantiate(this.prefab, transform);
                 node.ItemModel = ItemModel.New(
-                    _fetcher.Context.InventoryModel,
+                    context.InventoryModel,
+                    ""
+                );
+                node.ItemSet = OwnItemSet.New(
+                    context.Inventory,
+                    "",
                     ""
                 );
                 node.gameObject.SetActive(false);

@@ -68,18 +68,31 @@ namespace Gs2.Unity.UiKit.Gs2Ranking
 
         public void Awake()
         {
+            if (prefab == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2RankingCategoryModelContext Prefab.");
+                enabled = false;
+                return;
+            }
+
             _fetcher = GetComponent<Gs2RankingCategoryModelListFetcher>() ?? GetComponentInParent<Gs2RankingCategoryModelListFetcher>();
 
             if (_fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2RankingCategoryModelListFetcher.");
                 enabled = false;
+                return;
+            }
+            var context = GetComponent<Gs2RankingNamespaceContext>() ?? GetComponentInParent<Gs2RankingNamespaceContext>(true);
+            if (context == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2RankingCategoryModelListFetcher::Context.");
+                enabled = false;
+                return;
             }
 
             _children = new List<Gs2RankingCategoryModelContext>();
             for (var i = 0; i < this.maximumItems; i++) {
                 var node = Instantiate(this.prefab, transform);
                 node.CategoryModel = CategoryModel.New(
-                    _fetcher.Context.Namespace,
+                    context.Namespace,
                     ""
                 );
                 node.gameObject.SetActive(false);

@@ -67,6 +67,12 @@ namespace Gs2.Unity.UiKit.Gs2Friend
 
         public void Awake()
         {
+            if (prefab == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2FriendOwnBlackListContext Prefab.");
+                enabled = false;
+                return;
+            }
+
             _fetcher = GetComponent<Gs2FriendOwnBlackListListFetcher>() ?? GetComponentInParent<Gs2FriendOwnBlackListListFetcher>();
 
             if (_fetcher == null) {
@@ -74,11 +80,18 @@ namespace Gs2.Unity.UiKit.Gs2Friend
                 enabled = false;
             }
 
+            var context = GetComponent<Gs2FriendNamespaceContext>() ?? GetComponentInParent<Gs2FriendNamespaceContext>(true);
+            if (context == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2FriendOwnBlackListListFetcher::Context.");
+                enabled = false;
+                return;
+            }
+
             _children = new List<Gs2FriendOwnBlackListContext>();
             for (var i = 0; i < this.maximumItems; i++) {
                 var node = Instantiate(this.prefab, transform);
                 node.BlackList = OwnBlackList.New(
-                    _fetcher.Context.Namespace
+                    context.Namespace
                 );
                 node.gameObject.SetActive(false);
                 _children.Add(node);

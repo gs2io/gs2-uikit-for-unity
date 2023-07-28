@@ -25,6 +25,7 @@
 #pragma warning disable CS0472
 
 using Gs2.Unity.Gs2LoginReward.ScriptableObject;
+using Gs2.Unity.UiKit.Core;
 using UnityEngine;
 
 namespace Gs2.Unity.UiKit.Gs2LoginReward.Context
@@ -38,7 +39,7 @@ namespace Gs2.Unity.UiKit.Gs2LoginReward.Context
     {
         public void Start() {
             if (ReceiveStatus == null) {
-                Debug.LogError("ReceiveStatus is not set in Gs2LoginRewardOwnReceiveStatusContext.");
+                Debug.LogError($"{gameObject.GetFullPath()}: ReceiveStatus is not set in Gs2LoginRewardOwnReceiveStatusContext.");
             }
         }
 

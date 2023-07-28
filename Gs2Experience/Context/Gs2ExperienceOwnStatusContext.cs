@@ -25,6 +25,7 @@
 #pragma warning disable CS0472
 
 using Gs2.Unity.Gs2Experience.ScriptableObject;
+using Gs2.Unity.UiKit.Core;
 using UnityEngine;
 
 namespace Gs2.Unity.UiKit.Gs2Experience.Context
@@ -38,7 +39,7 @@ namespace Gs2.Unity.UiKit.Gs2Experience.Context
     {
         public void Start() {
             if (Status == null) {
-                Debug.LogError("Status is not set in Gs2ExperienceOwnStatusContext.");
+                Debug.LogError($"{gameObject.GetFullPath()}: Status is not set in Gs2ExperienceOwnStatusContext.");
             }
         }
 

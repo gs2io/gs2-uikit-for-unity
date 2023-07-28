@@ -68,6 +68,12 @@ namespace Gs2.Unity.UiKit.Gs2StateMachine
 
         public void Awake()
         {
+            if (prefab == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2StateMachineOwnStatusContext Prefab.");
+                enabled = false;
+                return;
+            }
+
             _fetcher = GetComponent<Gs2StateMachineOwnStatusListFetcher>() ?? GetComponentInParent<Gs2StateMachineOwnStatusListFetcher>();
 
             if (_fetcher == null) {
@@ -75,11 +81,18 @@ namespace Gs2.Unity.UiKit.Gs2StateMachine
                 enabled = false;
             }
 
+            var context = GetComponent<Gs2StateMachineNamespaceContext>() ?? GetComponentInParent<Gs2StateMachineNamespaceContext>(true);
+            if (context == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2StateMachineOwnStatusListFetcher::Context.");
+                enabled = false;
+                return;
+            }
+
             _children = new List<Gs2StateMachineOwnStatusContext>();
             for (var i = 0; i < this.maximumItems; i++) {
                 var node = Instantiate(this.prefab, transform);
                 node.Status = OwnStatus.New(
-                    _fetcher.Context.Namespace,
+                    context.Namespace,
                     ""
                 );
                 node.gameObject.SetActive(false);

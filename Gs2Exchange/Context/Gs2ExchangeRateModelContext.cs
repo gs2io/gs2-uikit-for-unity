@@ -25,6 +25,7 @@
 #pragma warning disable CS0472
 
 using Gs2.Unity.Gs2Exchange.ScriptableObject;
+using Gs2.Unity.UiKit.Core;
 using UnityEngine;
 
 namespace Gs2.Unity.UiKit.Gs2Exchange.Context
@@ -38,7 +39,7 @@ namespace Gs2.Unity.UiKit.Gs2Exchange.Context
     {
         public void Start() {
             if (RateModel == null) {
-                Debug.LogError("RateModel is not set in Gs2ExchangeRateModelContext.");
+                Debug.LogError($"{gameObject.GetFullPath()}: RateModel is not set in Gs2ExchangeRateModelContext.");
             }
         }
 

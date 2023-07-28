@@ -25,6 +25,7 @@
 #pragma warning disable CS0472
 
 using Gs2.Unity.Gs2Inventory.ScriptableObject;
+using Gs2.Unity.UiKit.Core;
 using UnityEngine;
 
 namespace Gs2.Unity.UiKit.Gs2Inventory.Context
@@ -38,7 +39,7 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Context
     {
         public void Start() {
             if (Inventory == null) {
-                Debug.LogError("Inventory is not set in Gs2InventoryOwnInventoryContext.");
+                Debug.LogError($"{gameObject.GetFullPath()}: Inventory is not set in Gs2InventoryOwnInventoryContext.");
             }
         }
 

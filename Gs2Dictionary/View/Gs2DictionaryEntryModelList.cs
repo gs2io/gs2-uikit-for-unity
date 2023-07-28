@@ -68,18 +68,31 @@ namespace Gs2.Unity.UiKit.Gs2Dictionary
 
         public void Awake()
         {
+            if (prefab == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2DictionaryEntryModelContext Prefab.");
+                enabled = false;
+                return;
+            }
+
             _fetcher = GetComponent<Gs2DictionaryEntryModelListFetcher>() ?? GetComponentInParent<Gs2DictionaryEntryModelListFetcher>();
 
             if (_fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2DictionaryEntryModelListFetcher.");
                 enabled = false;
+                return;
+            }
+            var context = GetComponent<Gs2DictionaryNamespaceContext>() ?? GetComponentInParent<Gs2DictionaryNamespaceContext>(true);
+            if (context == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2DictionaryEntryModelListFetcher::Context.");
+                enabled = false;
+                return;
             }
 
             _children = new List<Gs2DictionaryEntryModelContext>();
             for (var i = 0; i < this.maximumItems; i++) {
                 var node = Instantiate(this.prefab, transform);
                 node.EntryModel = EntryModel.New(
-                    _fetcher.Context.Namespace,
+                    context.Namespace,
                     ""
                 );
                 node.gameObject.SetActive(false);

@@ -25,6 +25,7 @@
 #pragma warning disable CS0472
 
 using Gs2.Unity.Gs2Chat.ScriptableObject;
+using Gs2.Unity.UiKit.Core;
 using UnityEngine;
 
 namespace Gs2.Unity.UiKit.Gs2Chat.Context
@@ -38,7 +39,7 @@ namespace Gs2.Unity.UiKit.Gs2Chat.Context
     {
         public void Start() {
             if (Subscribe == null) {
-                Debug.LogError("Subscribe is not set in Gs2ChatOwnSubscribeContext.");
+                Debug.LogError($"{gameObject.GetFullPath()}: Subscribe is not set in Gs2ChatOwnSubscribeContext.");
             }
         }
 

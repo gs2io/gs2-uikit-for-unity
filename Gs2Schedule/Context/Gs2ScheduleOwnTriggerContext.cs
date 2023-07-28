@@ -25,6 +25,7 @@
 #pragma warning disable CS0472
 
 using Gs2.Unity.Gs2Schedule.ScriptableObject;
+using Gs2.Unity.UiKit.Core;
 using UnityEngine;
 
 namespace Gs2.Unity.UiKit.Gs2Schedule.Context
@@ -38,7 +39,7 @@ namespace Gs2.Unity.UiKit.Gs2Schedule.Context
     {
         public void Start() {
             if (Trigger == null) {
-                Debug.LogError("Trigger is not set in Gs2ScheduleOwnTriggerContext.");
+                Debug.LogError($"{gameObject.GetFullPath()}: Trigger is not set in Gs2ScheduleOwnTriggerContext.");
             }
         }
 

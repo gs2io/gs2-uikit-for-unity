@@ -68,6 +68,12 @@ namespace Gs2.Unity.UiKit.Gs2Datastore
 
         public void Awake()
         {
+            if (prefab == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2DatastoreOwnDataObjectHistoryContext Prefab.");
+                enabled = false;
+                return;
+            }
+
             _fetcher = GetComponent<Gs2DatastoreOwnDataObjectHistoryListFetcher>() ?? GetComponentInParent<Gs2DatastoreOwnDataObjectHistoryListFetcher>();
 
             if (_fetcher == null) {
@@ -75,11 +81,18 @@ namespace Gs2.Unity.UiKit.Gs2Datastore
                 enabled = false;
             }
 
+            var context = GetComponent<Gs2DatastoreOwnDataObjectContext>() ?? GetComponentInParent<Gs2DatastoreOwnDataObjectContext>(true);
+            if (context == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2DatastoreOwnDataObjectHistoryListFetcher::Context.");
+                enabled = false;
+                return;
+            }
+
             _children = new List<Gs2DatastoreOwnDataObjectHistoryContext>();
             for (var i = 0; i < this.maximumItems; i++) {
                 var node = Instantiate(this.prefab, transform);
                 node.DataObjectHistory = OwnDataObjectHistory.New(
-                    _fetcher.Context.DataObject,
+                    context.DataObject,
                     ""
                 );
                 node.gameObject.SetActive(false);

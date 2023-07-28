@@ -12,8 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
- * deny overwrite
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
@@ -44,24 +42,23 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Editor
 
             serializedObject.Update();
 
-            if (original.ItemModel == null) {
+            if (original.ItemSet == null) {
                 if (original.GetComponentInParent<Gs2InventoryOwnItemSetList>(true) != null) {
                     EditorGUILayout.HelpBox("OwnItemSet is auto assign from Gs2InventoryOwnItemSetList.", MessageType.Info);
                 }
                 else {
                     EditorGUILayout.HelpBox("OwnItemSet not assigned.", MessageType.Error);
-                    EditorGUILayout.PropertyField(serializedObject.FindProperty("ItemModel"), true);
-                    EditorGUILayout.TextField("ItemSetName", original.itemSetName.ToString());
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("ItemSet"), true);
                 }
             }
             else {
-                original.ItemModel = EditorGUILayout.ObjectField("ItemModel", original.ItemModel, typeof(ItemModel), false) as ItemModel;
+                original.ItemSet = EditorGUILayout.ObjectField("OwnItemSet", original.ItemSet, typeof(OwnItemSet), false) as OwnItemSet;
                 EditorGUI.BeginDisabledGroup(true);
                 EditorGUI.indentLevel++;
-                EditorGUILayout.TextField("NamespaceName", original.ItemModel?.NamespaceName.ToString());
-                EditorGUILayout.TextField("InventoryName", original.ItemModel?.InventoryName.ToString());
-                EditorGUILayout.TextField("ItemName", original.ItemModel?.ItemName.ToString());
-                EditorGUILayout.TextField("ItemSetName", original.itemSetName.ToString());
+                EditorGUILayout.TextField("NamespaceName", original.ItemSet?.NamespaceName.ToString());
+                EditorGUILayout.TextField("InventoryName", original.ItemSet?.InventoryName.ToString());
+                EditorGUILayout.TextField("ItemName", original.ItemSet?.ItemName.ToString());
+                EditorGUILayout.TextField("ItemSetName", original.ItemSet?.ItemSetName.ToString());
                 EditorGUI.indentLevel--;
                 EditorGUI.EndDisabledGroup();
             }

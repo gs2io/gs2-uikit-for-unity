@@ -69,6 +69,12 @@ namespace Gs2.Unity.UiKit.Gs2Limit
 
         public void Awake()
         {
+            if (prefab == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2LimitOwnCounterContext Prefab.");
+                enabled = false;
+                return;
+            }
+
             _fetcher = GetComponent<Gs2LimitOwnCounterListFetcher>() ?? GetComponentInParent<Gs2LimitOwnCounterListFetcher>();
 
             if (_fetcher == null) {
@@ -76,11 +82,18 @@ namespace Gs2.Unity.UiKit.Gs2Limit
                 enabled = false;
             }
 
+            var context = GetComponent<Gs2LimitNamespaceContext>() ?? GetComponentInParent<Gs2LimitNamespaceContext>(true);
+            if (context == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2LimitOwnCounterListFetcher::Context.");
+                enabled = false;
+                return;
+            }
+
             _children = new List<Gs2LimitOwnCounterContext>();
             for (var i = 0; i < this.maximumItems; i++) {
                 var node = Instantiate(this.prefab, transform);
                 node.Counter = OwnCounter.New(
-                    _fetcher.Context.Namespace,
+                    context.Namespace,
                     "",
                     ""
                 );

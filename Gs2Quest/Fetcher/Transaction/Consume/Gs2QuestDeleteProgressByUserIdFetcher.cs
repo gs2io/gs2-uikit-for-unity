@@ -30,9 +30,10 @@ using System.Collections.Generic;
 using System.Linq;
 using Gs2.Core.Exception;
 using Gs2.Gs2Quest.Request;
+using Gs2.Unity.Gs2Quest.ScriptableObject;
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Core.Fetcher;
-using Gs2.Unity.UiKit.Gs2Quest.Fetcher;
+using Gs2.Unity.UiKit.Gs2Quest.Context;
 using Gs2.Unity.Util;
 using Gs2.Util.LitJson;
 using UnityEngine;
@@ -45,7 +46,7 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Fetcher
     /// </summary>
 
 	[AddComponentMenu("GS2 UIKit/Quest/Progress/Fetcher/Consume/Gs2QuestDeleteProgressByUserIdFetcher")]
-    public partial class Gs2QuestDeleteProgressByUserIdFetcher : MonoBehaviour
+    public partial class Gs2QuestDeleteProgressByUserIdFetcher : Gs2QuestNamespaceContext
     {
         private IEnumerator Fetch()
         {
@@ -55,6 +56,13 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Fetcher
                     var action = _fetcher.ConsumeActions().FirstOrDefault(v => v.Action == "Gs2Quest:DeleteProgressByUserId");
                     if (action != null) {
                         Request = DeleteProgressByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
+                        if (Namespace == null || (
+                                Namespace.NamespaceName == Request.NamespaceName)
+                           ) {
+                            Namespace = Namespace.New(
+                                Request.NamespaceName
+                            );
+                        }
                         Fetched = true;
                     }
                 }
@@ -82,6 +90,10 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Fetcher
     {
         private IConsumeActionsFetcher _fetcher;
 
+        public new void Start() {
+
+        }
+        
         public void Awake()
         {
             _fetcher = GetComponent<IConsumeActionsFetcher>() ?? GetComponentInParent<IConsumeActionsFetcher>();

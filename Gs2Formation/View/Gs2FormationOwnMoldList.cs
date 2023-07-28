@@ -69,6 +69,12 @@ namespace Gs2.Unity.UiKit.Gs2Formation
 
         public void Awake()
         {
+            if (prefab == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2FormationOwnMoldContext Prefab.");
+                enabled = false;
+                return;
+            }
+
             _fetcher = GetComponent<Gs2FormationOwnMoldListFetcher>() ?? GetComponentInParent<Gs2FormationOwnMoldListFetcher>();
 
             if (_fetcher == null) {
@@ -76,15 +82,22 @@ namespace Gs2.Unity.UiKit.Gs2Formation
                 enabled = false;
             }
 
+            var context = GetComponent<Gs2FormationNamespaceContext>() ?? GetComponentInParent<Gs2FormationNamespaceContext>(true);
+            if (context == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2FormationOwnMoldListFetcher::Context.");
+                enabled = false;
+                return;
+            }
+
             _children = new List<Gs2FormationOwnMoldContext>();
             for (var i = 0; i < this.maximumItems; i++) {
                 var node = Instantiate(this.prefab, transform);
                 node.MoldModel = MoldModel.New(
-                    _fetcher.Context.Namespace,
+                    context.Namespace,
                     ""
                 );
                 node.Mold = OwnMold.New(
-                    _fetcher.Context.Namespace,
+                    context.Namespace,
                     ""
                 );
                 node.gameObject.SetActive(false);

@@ -25,6 +25,7 @@
 #pragma warning disable CS0472
 
 using Gs2.Unity.Gs2Inventory.ScriptableObject;
+using Gs2.Unity.UiKit.Core;
 using UnityEngine;
 
 namespace Gs2.Unity.UiKit.Gs2Inventory.Context
@@ -38,7 +39,7 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Context
     {
         public void Start() {
             if (SimpleItemModel == null) {
-                Debug.LogError("SimpleItemModel is not set in Gs2InventorySimpleItemModelContext.");
+                Debug.LogError($"{gameObject.GetFullPath()}: SimpleItemModel is not set in Gs2InventorySimpleItemModelContext.");
             }
         }
 

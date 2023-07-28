@@ -25,6 +25,7 @@
 #pragma warning disable CS0472
 
 using Gs2.Unity.Gs2Dictionary.ScriptableObject;
+using Gs2.Unity.UiKit.Core;
 using UnityEngine;
 
 namespace Gs2.Unity.UiKit.Gs2Dictionary.Context
@@ -38,7 +39,7 @@ namespace Gs2.Unity.UiKit.Gs2Dictionary.Context
     {
         public void Start() {
             if (EntryModel == null) {
-                Debug.LogError("EntryModel is not set in Gs2DictionaryEntryModelContext.");
+                Debug.LogError($"{gameObject.GetFullPath()}: EntryModel is not set in Gs2DictionaryEntryModelContext.");
             }
         }
 

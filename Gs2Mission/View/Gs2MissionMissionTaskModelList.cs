@@ -68,18 +68,31 @@ namespace Gs2.Unity.UiKit.Gs2Mission
 
         public void Awake()
         {
+            if (prefab == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MissionMissionTaskModelContext Prefab.");
+                enabled = false;
+                return;
+            }
+
             _fetcher = GetComponent<Gs2MissionMissionTaskModelListFetcher>() ?? GetComponentInParent<Gs2MissionMissionTaskModelListFetcher>();
 
             if (_fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MissionMissionTaskModelListFetcher.");
                 enabled = false;
+                return;
+            }
+            var context = GetComponent<Gs2MissionMissionGroupModelContext>() ?? GetComponentInParent<Gs2MissionMissionGroupModelContext>(true);
+            if (context == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MissionMissionTaskModelListFetcher::Context.");
+                enabled = false;
+                return;
             }
 
             _children = new List<Gs2MissionMissionTaskModelContext>();
             for (var i = 0; i < this.maximumItems; i++) {
                 var node = Instantiate(this.prefab, transform);
                 node.MissionTaskModel = MissionTaskModel.New(
-                    _fetcher.Context.MissionGroupModel,
+                    context.MissionGroupModel,
                     ""
                 );
                 node.gameObject.SetActive(false);

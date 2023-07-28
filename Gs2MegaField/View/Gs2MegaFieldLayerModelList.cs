@@ -68,18 +68,31 @@ namespace Gs2.Unity.UiKit.Gs2MegaField
 
         public void Awake()
         {
+            if (prefab == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MegaFieldLayerModelContext Prefab.");
+                enabled = false;
+                return;
+            }
+
             _fetcher = GetComponent<Gs2MegaFieldLayerModelListFetcher>() ?? GetComponentInParent<Gs2MegaFieldLayerModelListFetcher>();
 
             if (_fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MegaFieldLayerModelListFetcher.");
                 enabled = false;
+                return;
+            }
+            var context = GetComponent<Gs2MegaFieldAreaModelContext>() ?? GetComponentInParent<Gs2MegaFieldAreaModelContext>(true);
+            if (context == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MegaFieldLayerModelListFetcher::Context.");
+                enabled = false;
+                return;
             }
 
             _children = new List<Gs2MegaFieldLayerModelContext>();
             for (var i = 0; i < this.maximumItems; i++) {
                 var node = Instantiate(this.prefab, transform);
                 node.LayerModel = LayerModel.New(
-                    _fetcher.Context.AreaModel,
+                    context.AreaModel,
                     ""
                 );
                 node.gameObject.SetActive(false);

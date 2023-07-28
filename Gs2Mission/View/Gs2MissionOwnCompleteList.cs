@@ -68,6 +68,12 @@ namespace Gs2.Unity.UiKit.Gs2Mission
 
         public void Awake()
         {
+            if (prefab == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MissionOwnCompleteContext Prefab.");
+                enabled = false;
+                return;
+            }
+
             _fetcher = GetComponent<Gs2MissionOwnCompleteListFetcher>() ?? GetComponentInParent<Gs2MissionOwnCompleteListFetcher>();
 
             if (_fetcher == null) {
@@ -75,11 +81,18 @@ namespace Gs2.Unity.UiKit.Gs2Mission
                 enabled = false;
             }
 
+            var context = GetComponent<Gs2MissionNamespaceContext>() ?? GetComponentInParent<Gs2MissionNamespaceContext>(true);
+            if (context == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MissionOwnCompleteListFetcher::Context.");
+                enabled = false;
+                return;
+            }
+
             _children = new List<Gs2MissionOwnCompleteContext>();
             for (var i = 0; i < this.maximumItems; i++) {
                 var node = Instantiate(this.prefab, transform);
                 node.Complete = OwnComplete.New(
-                    _fetcher.Context.Namespace,
+                    context.Namespace,
                     ""
                 );
                 node.gameObject.SetActive(false);

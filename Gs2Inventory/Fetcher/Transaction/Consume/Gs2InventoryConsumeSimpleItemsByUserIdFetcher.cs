@@ -30,9 +30,10 @@ using System.Collections.Generic;
 using System.Linq;
 using Gs2.Core.Exception;
 using Gs2.Gs2Inventory.Request;
+using Gs2.Unity.Gs2Inventory.ScriptableObject;
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Core.Fetcher;
-using Gs2.Unity.UiKit.Gs2Inventory.Fetcher;
+using Gs2.Unity.UiKit.Gs2Inventory.Context;
 using Gs2.Unity.Util;
 using Gs2.Util.LitJson;
 using UnityEngine;
@@ -45,7 +46,7 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Fetcher
     /// </summary>
 
 	[AddComponentMenu("GS2 UIKit/Inventory/SimpleItem/Fetcher/Consume/Gs2InventoryConsumeSimpleItemsByUserIdFetcher")]
-    public partial class Gs2InventoryConsumeSimpleItemsByUserIdFetcher : MonoBehaviour
+    public partial class Gs2InventoryConsumeSimpleItemsByUserIdFetcher : Gs2InventoryOwnSimpleInventoryContext
     {
         private IEnumerator Fetch()
         {
@@ -55,6 +56,17 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Fetcher
                     var action = _fetcher.ConsumeActions().FirstOrDefault(v => v.Action == "Gs2Inventory:ConsumeSimpleItemsByUserId");
                     if (action != null) {
                         Request = ConsumeSimpleItemsByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
+                        if (SimpleInventory == null || (
+                                SimpleInventory.NamespaceName == Request.NamespaceName &&
+                                SimpleInventory.InventoryName == Request.InventoryName)
+                           ) {
+                            SimpleInventory = OwnSimpleInventory.New(
+                                Namespace.New(
+                                    Request.NamespaceName
+                                ),
+                                Request.InventoryName
+                            );
+                        }
                         Fetched = true;
                     }
                 }
@@ -82,6 +94,10 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Fetcher
     {
         private IConsumeActionsFetcher _fetcher;
 
+        public new void Start() {
+
+        }
+        
         public void Awake()
         {
             _fetcher = GetComponent<IConsumeActionsFetcher>() ?? GetComponentInParent<IConsumeActionsFetcher>();

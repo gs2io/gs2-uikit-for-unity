@@ -25,6 +25,7 @@
 #pragma warning disable CS0472
 
 using Gs2.Unity.Gs2Inbox.ScriptableObject;
+using Gs2.Unity.UiKit.Core;
 using UnityEngine;
 
 namespace Gs2.Unity.UiKit.Gs2Inbox.Context
@@ -38,7 +39,7 @@ namespace Gs2.Unity.UiKit.Gs2Inbox.Context
     {
         public void Start() {
             if (Message == null) {
-                Debug.LogError("Message is not set in Gs2InboxOwnMessageContext.");
+                Debug.LogError($"{gameObject.GetFullPath()}: Message is not set in Gs2InboxOwnMessageContext.");
             }
         }
 

@@ -68,18 +68,31 @@ namespace Gs2.Unity.UiKit.Gs2Inventory
 
         public void Awake()
         {
+            if (prefab == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2InventorySimpleItemModelContext Prefab.");
+                enabled = false;
+                return;
+            }
+
             _fetcher = GetComponent<Gs2InventorySimpleItemModelListFetcher>() ?? GetComponentInParent<Gs2InventorySimpleItemModelListFetcher>();
 
             if (_fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2InventorySimpleItemModelListFetcher.");
                 enabled = false;
+                return;
+            }
+            var context = GetComponent<Gs2InventorySimpleInventoryModelContext>() ?? GetComponentInParent<Gs2InventorySimpleInventoryModelContext>(true);
+            if (context == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2InventorySimpleItemModelListFetcher::Context.");
+                enabled = false;
+                return;
             }
 
             _children = new List<Gs2InventorySimpleItemModelContext>();
             for (var i = 0; i < this.maximumItems; i++) {
                 var node = Instantiate(this.prefab, transform);
                 node.SimpleItemModel = SimpleItemModel.New(
-                    _fetcher.Context.SimpleInventoryModel,
+                    context.SimpleInventoryModel,
                     ""
                 );
                 node.gameObject.SetActive(false);

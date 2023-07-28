@@ -25,6 +25,7 @@
 #pragma warning disable CS0472
 
 using Gs2.Unity.Gs2Money.ScriptableObject;
+using Gs2.Unity.UiKit.Core;
 using UnityEngine;
 
 namespace Gs2.Unity.UiKit.Gs2Money.Context
@@ -38,7 +39,7 @@ namespace Gs2.Unity.UiKit.Gs2Money.Context
     {
         public void Start() {
             if (User == null) {
-                Debug.LogError("User is not set in Gs2MoneyUserContext.");
+                Debug.LogError($"{gameObject.GetFullPath()}: User is not set in Gs2MoneyUserContext.");
             }
         }
 

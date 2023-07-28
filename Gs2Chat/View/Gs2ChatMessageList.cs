@@ -68,18 +68,31 @@ namespace Gs2.Unity.UiKit.Gs2Chat
 
         public void Awake()
         {
+            if (prefab == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ChatMessageContext Prefab.");
+                enabled = false;
+                return;
+            }
+
             _fetcher = GetComponent<Gs2ChatMessageListFetcher>() ?? GetComponentInParent<Gs2ChatMessageListFetcher>();
 
             if (_fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ChatMessageListFetcher.");
                 enabled = false;
+                return;
+            }
+            var context = GetComponent<Gs2ChatRoomContext>() ?? GetComponentInParent<Gs2ChatRoomContext>(true);
+            if (context == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ChatMessageListFetcher::Context.");
+                enabled = false;
+                return;
             }
 
             _children = new List<Gs2ChatMessageContext>();
             for (var i = 0; i < this.maximumItems; i++) {
                 var node = Instantiate(this.prefab, transform);
                 node.Message = Message.New(
-                    _fetcher.Context.Room,
+                    context.Room,
                     ""
                 );
                 node.gameObject.SetActive(false);

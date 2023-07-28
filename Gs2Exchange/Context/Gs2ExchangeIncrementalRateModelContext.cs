@@ -25,6 +25,7 @@
 #pragma warning disable CS0472
 
 using Gs2.Unity.Gs2Exchange.ScriptableObject;
+using Gs2.Unity.UiKit.Core;
 using UnityEngine;
 
 namespace Gs2.Unity.UiKit.Gs2Exchange.Context
@@ -38,7 +39,7 @@ namespace Gs2.Unity.UiKit.Gs2Exchange.Context
     {
         public void Start() {
             if (IncrementalRateModel == null) {
-                Debug.LogError("IncrementalRateModel is not set in Gs2ExchangeIncrementalRateModelContext.");
+                Debug.LogError($"{gameObject.GetFullPath()}: IncrementalRateModel is not set in Gs2ExchangeIncrementalRateModelContext.");
             }
         }
 

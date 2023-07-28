@@ -25,6 +25,7 @@
 #pragma warning disable CS0472
 
 using Gs2.Unity.Gs2Friend.ScriptableObject;
+using Gs2.Unity.UiKit.Core;
 using UnityEngine;
 
 namespace Gs2.Unity.UiKit.Gs2Friend.Context
@@ -38,7 +39,7 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Context
     {
         public void Start() {
             if (FollowUser == null) {
-                Debug.LogError("FollowUser is not set in Gs2FriendOwnFollowUserContext.");
+                Debug.LogError($"{gameObject.GetFullPath()}: FollowUser is not set in Gs2FriendOwnFollowUserContext.");
             }
         }
 

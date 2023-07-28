@@ -18,6 +18,7 @@
 
 using System.Collections.Generic;
 using Gs2.Unity.Gs2Showcase.ScriptableObject;
+using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Showcase.Context;
 using Gs2.Unity.UiKit.Gs2Showcase.Fetcher;
 using UnityEngine;
@@ -58,13 +59,32 @@ namespace Gs2.Unity.UiKit.Gs2Showcase
 
         public void Awake()
         {
+            if (prefab == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ShowcaseDisplayItemContext Prefab.");
+                enabled = false;
+                return;
+            }
+
             _fetcher = GetComponentInParent<Gs2ShowcaseShowcaseFetcher>();
+
+            if (_fetcher == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ShowcaseShowcaseFetcher.");
+                enabled = false;
+                return;
+            }
+
+            var context = GetComponentInParent<Gs2ShowcaseShowcaseContext>();
+            if (context == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ShowcaseShowcaseFetcher::Context.");
+                enabled = false;
+                return;
+            }
 
             _children = new List<Gs2ShowcaseDisplayItemContext>();
             for (var i = 0; i < this.maximumItems; i++) {
                 var node = Instantiate(this.prefab, transform);
                 node.DisplayItem = DisplayItem.New(
-                    _fetcher.Context.Showcase,
+                    context.Showcase,
                     ""
                 );
                 node.gameObject.SetActive(false);

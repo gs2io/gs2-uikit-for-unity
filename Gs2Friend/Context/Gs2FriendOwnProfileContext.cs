@@ -25,6 +25,7 @@
 #pragma warning disable CS0472
 
 using Gs2.Unity.Gs2Friend.ScriptableObject;
+using Gs2.Unity.UiKit.Core;
 using UnityEngine;
 
 namespace Gs2.Unity.UiKit.Gs2Friend.Context
@@ -38,7 +39,7 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Context
     {
         public void Start() {
             if (Profile == null) {
-                Debug.LogError("Profile is not set in Gs2FriendOwnProfileContext.");
+                Debug.LogError($"{gameObject.GetFullPath()}: Profile is not set in Gs2FriendOwnProfileContext.");
             }
         }
 

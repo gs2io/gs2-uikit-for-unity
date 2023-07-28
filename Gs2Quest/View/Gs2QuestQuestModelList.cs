@@ -68,18 +68,31 @@ namespace Gs2.Unity.UiKit.Gs2Quest
 
         public void Awake()
         {
+            if (prefab == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2QuestQuestModelContext Prefab.");
+                enabled = false;
+                return;
+            }
+
             _fetcher = GetComponent<Gs2QuestQuestModelListFetcher>() ?? GetComponentInParent<Gs2QuestQuestModelListFetcher>();
 
             if (_fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2QuestQuestModelListFetcher.");
                 enabled = false;
+                return;
+            }
+            var context = GetComponent<Gs2QuestQuestGroupModelContext>() ?? GetComponentInParent<Gs2QuestQuestGroupModelContext>(true);
+            if (context == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2QuestQuestModelListFetcher::Context.");
+                enabled = false;
+                return;
             }
 
             _children = new List<Gs2QuestQuestModelContext>();
             for (var i = 0; i < this.maximumItems; i++) {
                 var node = Instantiate(this.prefab, transform);
                 node.QuestModel = QuestModel.New(
-                    _fetcher.Context.QuestGroupModel,
+                    context.QuestGroupModel,
                     ""
                 );
                 node.gameObject.SetActive(false);

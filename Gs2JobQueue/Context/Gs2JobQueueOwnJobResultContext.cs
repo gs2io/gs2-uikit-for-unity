@@ -25,6 +25,7 @@
 #pragma warning disable CS0472
 
 using Gs2.Unity.Gs2JobQueue.ScriptableObject;
+using Gs2.Unity.UiKit.Core;
 using UnityEngine;
 
 namespace Gs2.Unity.UiKit.Gs2JobQueue.Context
@@ -38,7 +39,7 @@ namespace Gs2.Unity.UiKit.Gs2JobQueue.Context
     {
         public void Start() {
             if (JobResult == null) {
-                Debug.LogError("JobResult is not set in Gs2JobQueueOwnJobResultContext.");
+                Debug.LogError($"{gameObject.GetFullPath()}: JobResult is not set in Gs2JobQueueOwnJobResultContext.");
             }
         }
 

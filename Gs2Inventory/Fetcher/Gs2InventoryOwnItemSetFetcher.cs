@@ -17,6 +17,14 @@
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
+// ReSharper disable RedundantNameQualifier
+// ReSharper disable RedundantAssignment
+// ReSharper disable NotAccessedVariable
+// ReSharper disable RedundantUsingDirective
+// ReSharper disable Unity.NoNullPropagation
+// ReSharper disable InconsistentNaming
+
+#pragma warning disable CS0472
 
 using System;
 using System.Collections;
@@ -51,18 +59,18 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Fetcher
             {
                 if (_gameSessionHolder != null && _gameSessionHolder.Initialized &&
                     _clientHolder != null && _clientHolder.Initialized &&
-                    _context != null && this._context.ItemModel != null)
+                    Context != null && this.Context.ItemSet != null)
                 {
                     
                     var domain = this._clientHolder.Gs2.Inventory.Namespace(
-                        this._context.ItemModel.NamespaceName
+                        this.Context.ItemSet.NamespaceName
                     ).Me(
                         this._gameSessionHolder.GameSession
                     ).Inventory(
-                        this._context.ItemModel.InventoryName
+                        this.Context.ItemSet.InventoryName
                     ).ItemSet(
-                        this._context.ItemModel.ItemName,
-                        this._context.itemSetName
+                        this.Context.ItemSet.ItemName,
+                        this.Context.ItemSet.ItemSetName
                     );
                     var future = domain.Model();
                     yield return future;
@@ -111,20 +119,29 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Fetcher
 
     public partial class Gs2InventoryOwnItemSetFetcher
     {
-        private Gs2ClientHolder _clientHolder;
-        private Gs2GameSessionHolder _gameSessionHolder;
-        private Gs2InventoryOwnItemSetContext _context;
+        protected Gs2ClientHolder _clientHolder;
+        protected Gs2GameSessionHolder _gameSessionHolder;
+        public Gs2InventoryOwnItemSetContext Context { get; private set; }
 
         public void Awake()
         {
             _clientHolder = Gs2ClientHolder.Instance;
             _gameSessionHolder = Gs2GameSessionHolder.Instance;
-            _context = GetComponentInParent<Gs2InventoryOwnItemSetContext>();
+            Context = GetComponent<Gs2InventoryOwnItemSetContext>() ?? GetComponentInParent<Gs2InventoryOwnItemSetContext>();
 
-            if (_context == null) {
+            if (Context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2InventoryOwnItemSetContext.");
                 enabled = false;
             }
+        }
+
+        public bool HasError()
+        {
+            Context = GetComponent<Gs2InventoryOwnItemSetContext>() ?? GetComponentInParent<Gs2InventoryOwnItemSetContext>(true);
+            if (Context == null) {
+                return true;
+            }
+            return false;
         }
     }
 
@@ -134,8 +151,8 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Fetcher
 
     public partial class Gs2InventoryOwnItemSetFetcher
     {
-        public List<Gs2.Unity.Gs2Inventory.Model.EzItemSet> ItemSet { get; private set; }
-        public bool Fetched { get; private set; }
+        public List<Gs2.Unity.Gs2Inventory.Model.EzItemSet> ItemSet { get; protected set; }
+        public bool Fetched { get; protected set; }
     }
 
     /// <summary>

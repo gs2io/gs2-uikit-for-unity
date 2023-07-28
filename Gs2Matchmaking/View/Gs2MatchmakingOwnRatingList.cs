@@ -69,6 +69,12 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking
 
         public void Awake()
         {
+            if (prefab == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MatchmakingOwnRatingContext Prefab.");
+                enabled = false;
+                return;
+            }
+
             _fetcher = GetComponent<Gs2MatchmakingOwnRatingListFetcher>() ?? GetComponentInParent<Gs2MatchmakingOwnRatingListFetcher>();
 
             if (_fetcher == null) {
@@ -76,15 +82,22 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking
                 enabled = false;
             }
 
+            var context = GetComponent<Gs2MatchmakingNamespaceContext>() ?? GetComponentInParent<Gs2MatchmakingNamespaceContext>(true);
+            if (context == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MatchmakingOwnRatingListFetcher::Context.");
+                enabled = false;
+                return;
+            }
+
             _children = new List<Gs2MatchmakingOwnRatingContext>();
             for (var i = 0; i < this.maximumItems; i++) {
                 var node = Instantiate(this.prefab, transform);
                 node.RatingModel = RatingModel.New(
-                    _fetcher.Context.Namespace,
+                    context.Namespace,
                     ""
                 );
                 node.Rating = OwnRating.New(
-                    _fetcher.Context.Namespace,
+                    context.Namespace,
                     ""
                 );
                 node.gameObject.SetActive(false);

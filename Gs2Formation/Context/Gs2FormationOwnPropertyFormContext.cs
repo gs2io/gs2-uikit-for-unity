@@ -25,6 +25,7 @@
 #pragma warning disable CS0472
 
 using Gs2.Unity.Gs2Formation.ScriptableObject;
+using Gs2.Unity.UiKit.Core;
 using UnityEngine;
 
 namespace Gs2.Unity.UiKit.Gs2Formation.Context
@@ -38,7 +39,7 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Context
     {
         public void Start() {
             if (PropertyForm == null) {
-                Debug.LogError("PropertyForm is not set in Gs2FormationOwnPropertyFormContext.");
+                Debug.LogError($"{gameObject.GetFullPath()}: PropertyForm is not set in Gs2FormationOwnPropertyFormContext.");
             }
         }
 

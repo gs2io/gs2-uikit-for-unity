@@ -30,8 +30,10 @@ using System.Collections.Generic;
 using System.Linq;
 using Gs2.Core.Exception;
 using Gs2.Gs2Experience.Request;
+using Gs2.Unity.Gs2Experience.ScriptableObject;
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Core.Fetcher;
+using Gs2.Unity.UiKit.Gs2Experience.Context;
 using Gs2.Unity.UiKit.Gs2Experience.Fetcher;
 using Gs2.Unity.Util;
 using Gs2.Util.LitJson;
@@ -45,7 +47,7 @@ namespace Gs2.Unity.UiKit.Gs2Experience.Fetcher
     /// </summary>
 
 	[AddComponentMenu("GS2 UIKit/Experience/Status/Fetcher/Acquire/Gs2ExperienceSetRankCapByUserIdFetcher")]
-    public partial class Gs2ExperienceSetRankCapByUserIdFetcher : MonoBehaviour
+    public partial class Gs2ExperienceSetRankCapByUserIdFetcher : Gs2ExperienceOwnStatusContext
     {
         private IEnumerator Fetch()
         {
@@ -55,6 +57,19 @@ namespace Gs2.Unity.UiKit.Gs2Experience.Fetcher
                     var action = _fetcher.AcquireActions().FirstOrDefault(v => v.Action == "Gs2Experience:SetRankCapByUserId");
                     if (action != null) {
                         Request = SetRankCapByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
+                        if (Status == null || (
+                                Status.NamespaceName == Request.NamespaceName &&
+                                Status.ExperienceName == Request.ExperienceName &&
+                                Status.PropertyId == Request.PropertyId)
+                           ) {
+                            Status = OwnStatus.New(
+                                Namespace.New(
+                                    Request.NamespaceName
+                                ),
+                                Request.ExperienceName,
+                                Request.PropertyId
+                            );
+                        }
                         Fetched = true;
                     }
                 }
@@ -81,6 +96,10 @@ namespace Gs2.Unity.UiKit.Gs2Experience.Fetcher
     public partial class Gs2ExperienceSetRankCapByUserIdFetcher
     {
         private IAcquireActionsFetcher _fetcher;
+
+        public new void Start() {
+
+        }
 
         public void Awake()
         {

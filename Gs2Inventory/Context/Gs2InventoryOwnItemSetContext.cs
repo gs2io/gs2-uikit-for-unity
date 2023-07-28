@@ -12,8 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
- * deny overwrite
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
@@ -27,6 +25,7 @@
 #pragma warning disable CS0472
 
 using Gs2.Unity.Gs2Inventory.ScriptableObject;
+using Gs2.Unity.UiKit.Core;
 using UnityEngine;
 
 namespace Gs2.Unity.UiKit.Gs2Inventory.Context
@@ -39,14 +38,19 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Context
     public partial class Gs2InventoryOwnItemSetContext : Gs2InventoryItemModelContext
     {
         public void Start() {
-            if (ItemModel == null) {
-                Debug.LogError("ItemModel is not set in Gs2InventoryOwnItemSetContext.");
+            if (ItemSet == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: ItemSet is not set in Gs2InventoryOwnItemSetContext.");
             }
         }
 
         public bool HasError() {
-            if (ItemModel == null) {
-                return true;
+            if (ItemSet == null) {
+                if (GetComponentInParent<Gs2InventoryOwnItemSetList>(true) != null) {
+                    return false;
+                }
+                else {
+                    return true;
+                }
             }
             return false;
         }
@@ -76,17 +80,10 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Context
 
     public partial class Gs2InventoryOwnItemSetContext
     {
-        public string itemSetName;
+        public OwnItemSet ItemSet;
 
         public void SetOwnItemSet(OwnItemSet ItemSet) {
-            this.ItemModel = ItemModel.New(
-                InventoryModel.New(
-                    ItemSet.Inventory.Namespace,
-                    ItemSet.InventoryName
-                ), 
-                ItemSet.ItemName
-            );
-            this.itemSetName = ItemSet.itemSetName;
+            this.ItemSet = ItemSet;
         }
     }
 

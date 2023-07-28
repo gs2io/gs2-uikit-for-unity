@@ -68,6 +68,12 @@ namespace Gs2.Unity.UiKit.Gs2Version
 
         public void Awake()
         {
+            if (prefab == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2VersionOwnAcceptVersionContext Prefab.");
+                enabled = false;
+                return;
+            }
+
             _fetcher = GetComponent<Gs2VersionOwnAcceptVersionListFetcher>() ?? GetComponentInParent<Gs2VersionOwnAcceptVersionListFetcher>();
 
             if (_fetcher == null) {
@@ -75,11 +81,18 @@ namespace Gs2.Unity.UiKit.Gs2Version
                 enabled = false;
             }
 
+            var context = GetComponent<Gs2VersionNamespaceContext>() ?? GetComponentInParent<Gs2VersionNamespaceContext>(true);
+            if (context == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2VersionOwnAcceptVersionListFetcher::Context.");
+                enabled = false;
+                return;
+            }
+
             _children = new List<Gs2VersionOwnAcceptVersionContext>();
             for (var i = 0; i < this.maximumItems; i++) {
                 var node = Instantiate(this.prefab, transform);
                 node.AcceptVersion = OwnAcceptVersion.New(
-                    _fetcher.Context.Namespace,
+                    context.Namespace,
                     ""
                 );
                 node.gameObject.SetActive(false);

@@ -30,8 +30,10 @@ using System.Collections.Generic;
 using System.Linq;
 using Gs2.Core.Exception;
 using Gs2.Gs2JobQueue.Request;
+using Gs2.Unity.Gs2JobQueue.ScriptableObject;
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Core.Fetcher;
+using Gs2.Unity.UiKit.Gs2JobQueue.Context;
 using Gs2.Unity.UiKit.Gs2JobQueue.Fetcher;
 using Gs2.Unity.Util;
 using Gs2.Util.LitJson;
@@ -45,7 +47,7 @@ namespace Gs2.Unity.UiKit.Gs2JobQueue.Fetcher
     /// </summary>
 
 	[AddComponentMenu("GS2 UIKit/JobQueue/Job/Fetcher/Acquire/Gs2JobQueuePushByUserIdFetcher")]
-    public partial class Gs2JobQueuePushByUserIdFetcher : MonoBehaviour
+    public partial class Gs2JobQueuePushByUserIdFetcher : Gs2JobQueueNamespaceContext
     {
         private IEnumerator Fetch()
         {
@@ -55,6 +57,13 @@ namespace Gs2.Unity.UiKit.Gs2JobQueue.Fetcher
                     var action = _fetcher.AcquireActions().FirstOrDefault(v => v.Action == "Gs2JobQueue:PushByUserId");
                     if (action != null) {
                         Request = PushByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
+                        if (Namespace == null || (
+                                Namespace.NamespaceName == Request.NamespaceName)
+                           ) {
+                            Namespace = Namespace.New(
+                                Request.NamespaceName
+                            );
+                        }
                         Fetched = true;
                     }
                 }
@@ -81,6 +90,10 @@ namespace Gs2.Unity.UiKit.Gs2JobQueue.Fetcher
     public partial class Gs2JobQueuePushByUserIdFetcher
     {
         private IAcquireActionsFetcher _fetcher;
+
+        public new void Start() {
+
+        }
 
         public void Awake()
         {

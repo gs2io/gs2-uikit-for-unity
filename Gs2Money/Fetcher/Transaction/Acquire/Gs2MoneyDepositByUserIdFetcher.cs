@@ -30,8 +30,10 @@ using System.Collections.Generic;
 using System.Linq;
 using Gs2.Core.Exception;
 using Gs2.Gs2Money.Request;
+using Gs2.Unity.Gs2Money.ScriptableObject;
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Core.Fetcher;
+using Gs2.Unity.UiKit.Gs2Money.Context;
 using Gs2.Unity.UiKit.Gs2Money.Fetcher;
 using Gs2.Unity.Util;
 using Gs2.Util.LitJson;
@@ -45,7 +47,7 @@ namespace Gs2.Unity.UiKit.Gs2Money.Fetcher
     /// </summary>
 
 	[AddComponentMenu("GS2 UIKit/Money/Wallet/Fetcher/Acquire/Gs2MoneyDepositByUserIdFetcher")]
-    public partial class Gs2MoneyDepositByUserIdFetcher : MonoBehaviour
+    public partial class Gs2MoneyDepositByUserIdFetcher : Gs2MoneyOwnWalletContext
     {
         private IEnumerator Fetch()
         {
@@ -55,6 +57,17 @@ namespace Gs2.Unity.UiKit.Gs2Money.Fetcher
                     var action = _fetcher.AcquireActions().FirstOrDefault(v => v.Action == "Gs2Money:DepositByUserId");
                     if (action != null) {
                         Request = DepositByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
+                        if (Wallet == null || (
+                                Wallet.NamespaceName == Request.NamespaceName &&
+                                Wallet.Slot == Request.Slot)
+                           ) {
+                            Wallet = OwnWallet.New(
+                                Namespace.New(
+                                    Request.NamespaceName
+                                ),
+                                Request.Slot.Value
+                            );
+                        }
                         Fetched = true;
                     }
                 }
@@ -81,6 +94,10 @@ namespace Gs2.Unity.UiKit.Gs2Money.Fetcher
     public partial class Gs2MoneyDepositByUserIdFetcher
     {
         private IAcquireActionsFetcher _fetcher;
+
+        public new void Start() {
+
+        }
 
         public void Awake()
         {

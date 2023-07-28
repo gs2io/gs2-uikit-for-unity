@@ -30,8 +30,10 @@ using System.Collections.Generic;
 using System.Linq;
 using Gs2.Core.Exception;
 using Gs2.Gs2Inventory.Request;
+using Gs2.Unity.Gs2Inventory.ScriptableObject;
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Core.Fetcher;
+using Gs2.Unity.UiKit.Gs2Inventory.Context;
 using Gs2.Unity.UiKit.Gs2Inventory.Fetcher;
 using Gs2.Unity.Util;
 using Gs2.Util.LitJson;
@@ -45,7 +47,7 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Fetcher
     /// </summary>
 
 	[AddComponentMenu("GS2 UIKit/Inventory/ReferenceOf/Fetcher/Acquire/Gs2InventoryAddReferenceOfByUserIdFetcher")]
-    public partial class Gs2InventoryAddReferenceOfByUserIdFetcher : MonoBehaviour
+    public partial class Gs2InventoryAddReferenceOfByUserIdFetcher : Gs2InventoryOwnItemSetContext
     {
         private IEnumerator Fetch()
         {
@@ -55,6 +57,23 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Fetcher
                     var action = _fetcher.AcquireActions().FirstOrDefault(v => v.Action == "Gs2Inventory:AddReferenceOfByUserId");
                     if (action != null) {
                         Request = AddReferenceOfByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
+                        if (ItemSet == null || (
+                                ItemSet.NamespaceName == Request.NamespaceName &&
+                                ItemSet.InventoryName == Request.InventoryName &&
+                                ItemSet.ItemName == Request.ItemName &&
+                                ItemSet.ItemSetName == Request.ItemSetName)
+                           ) {
+                            ItemSet = OwnItemSet.New(
+                                OwnInventory.New(
+                                    Namespace.New(
+                                        Request.NamespaceName
+                                    ),
+                                    Request.InventoryName
+                                ),
+                                Request.ItemName,
+                                Request.ItemSetName
+                            );
+                        }
                         Fetched = true;
                     }
                 }
@@ -81,6 +100,10 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Fetcher
     public partial class Gs2InventoryAddReferenceOfByUserIdFetcher
     {
         private IAcquireActionsFetcher _fetcher;
+
+        public new void Start() {
+
+        }
 
         public void Awake()
         {

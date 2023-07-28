@@ -25,6 +25,7 @@
 #pragma warning disable CS0472
 
 using Gs2.Unity.Gs2Ranking.ScriptableObject;
+using Gs2.Unity.UiKit.Core;
 using UnityEngine;
 
 namespace Gs2.Unity.UiKit.Gs2Ranking.Context
@@ -38,7 +39,7 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Context
     {
         public void Start() {
             if (Ranking == null) {
-                Debug.LogError("Ranking is not set in Gs2RankingRankingContext.");
+                Debug.LogError($"{gameObject.GetFullPath()}: Ranking is not set in Gs2RankingRankingContext.");
             }
         }
 

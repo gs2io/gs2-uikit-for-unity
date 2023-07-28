@@ -68,18 +68,31 @@ namespace Gs2.Unity.UiKit.Gs2Version
 
         public void Awake()
         {
+            if (prefab == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2VersionVersionModelContext Prefab.");
+                enabled = false;
+                return;
+            }
+
             _fetcher = GetComponent<Gs2VersionVersionModelListFetcher>() ?? GetComponentInParent<Gs2VersionVersionModelListFetcher>();
 
             if (_fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2VersionVersionModelListFetcher.");
                 enabled = false;
+                return;
+            }
+            var context = GetComponent<Gs2VersionNamespaceContext>() ?? GetComponentInParent<Gs2VersionNamespaceContext>(true);
+            if (context == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2VersionVersionModelListFetcher::Context.");
+                enabled = false;
+                return;
             }
 
             _children = new List<Gs2VersionVersionModelContext>();
             for (var i = 0; i < this.maximumItems; i++) {
                 var node = Instantiate(this.prefab, transform);
                 node.VersionModel = VersionModel.New(
-                    _fetcher.Context.Namespace,
+                    context.Namespace,
                     ""
                 );
                 node.gameObject.SetActive(false);

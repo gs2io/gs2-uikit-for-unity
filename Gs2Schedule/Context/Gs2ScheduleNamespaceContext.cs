@@ -25,6 +25,7 @@
 #pragma warning disable CS0472
 
 using Gs2.Unity.Gs2Schedule.ScriptableObject;
+using Gs2.Unity.UiKit.Core;
 using UnityEngine;
 using Event = Gs2.Unity.Gs2Schedule.ScriptableObject.Event;
 
@@ -39,7 +40,7 @@ namespace Gs2.Unity.UiKit.Gs2Schedule.Context
     {
         public void Start() {
             if (Namespace == null) {
-                Debug.LogError("Namespace is not set in Gs2ScheduleNamespaceContext.");
+                Debug.LogError($"{gameObject.GetFullPath()}: Namespace is not set in Gs2ScheduleNamespaceContext.");
             }
         }
 

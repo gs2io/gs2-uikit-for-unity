@@ -25,6 +25,7 @@
 #pragma warning disable CS0472
 
 using Gs2.Unity.Gs2Limit.ScriptableObject;
+using Gs2.Unity.UiKit.Core;
 using UnityEngine;
 
 namespace Gs2.Unity.UiKit.Gs2Limit.Context
@@ -38,7 +39,7 @@ namespace Gs2.Unity.UiKit.Gs2Limit.Context
     {
         public void Start() {
             if (LimitModel == null) {
-                Debug.LogError("LimitModel is not set in Gs2LimitLimitModelContext.");
+                Debug.LogError($"{gameObject.GetFullPath()}: LimitModel is not set in Gs2LimitLimitModelContext.");
             }
         }
 

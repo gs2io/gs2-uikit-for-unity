@@ -25,6 +25,7 @@
 #pragma warning disable CS0472
 
 using Gs2.Unity.Gs2Quest.ScriptableObject;
+using Gs2.Unity.UiKit.Core;
 using UnityEngine;
 
 namespace Gs2.Unity.UiKit.Gs2Quest.Context
@@ -38,7 +39,7 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Context
     {
         public void Start() {
             if (QuestGroupModel == null) {
-                Debug.LogError("QuestGroupModel is not set in Gs2QuestQuestGroupModelContext.");
+                Debug.LogError($"{gameObject.GetFullPath()}: QuestGroupModel is not set in Gs2QuestQuestGroupModelContext.");
             }
         }
 

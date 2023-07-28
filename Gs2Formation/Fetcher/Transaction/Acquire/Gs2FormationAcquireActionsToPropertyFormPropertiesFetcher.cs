@@ -30,8 +30,10 @@ using System.Collections.Generic;
 using System.Linq;
 using Gs2.Core.Exception;
 using Gs2.Gs2Formation.Request;
+using Gs2.Unity.Gs2Formation.ScriptableObject;
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Core.Fetcher;
+using Gs2.Unity.UiKit.Gs2Formation.Context;
 using Gs2.Unity.UiKit.Gs2Formation.Fetcher;
 using Gs2.Unity.Util;
 using Gs2.Util.LitJson;
@@ -45,7 +47,7 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Fetcher
     /// </summary>
 
 	[AddComponentMenu("GS2 UIKit/Formation/PropertyForm/Fetcher/Acquire/Gs2FormationAcquireActionsToPropertyFormPropertiesFetcher")]
-    public partial class Gs2FormationAcquireActionsToPropertyFormPropertiesFetcher : MonoBehaviour
+    public partial class Gs2FormationAcquireActionsToPropertyFormPropertiesFetcher : Gs2FormationOwnPropertyFormContext
     {
         private IEnumerator Fetch()
         {
@@ -55,6 +57,19 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Fetcher
                     var action = _fetcher.AcquireActions().FirstOrDefault(v => v.Action == "Gs2Formation:AcquireActionsToPropertyFormProperties");
                     if (action != null) {
                         Request = AcquireActionsToPropertyFormPropertiesRequest.FromJson(JsonMapper.ToObject(action.Request));
+                        if (PropertyForm == null || (
+                                PropertyForm.NamespaceName == Request.NamespaceName &&
+                                PropertyForm.FormModelName == Request.FormModelName &&
+                                PropertyForm.PropertyId == Request.PropertyId)
+                           ) {
+                            PropertyForm = OwnPropertyForm.New(
+                                Namespace.New(
+                                    Request.NamespaceName
+                                ),
+                                Request.FormModelName,
+                                Request.PropertyId
+                            );
+                        }
                         Fetched = true;
                     }
                 }
@@ -81,6 +96,10 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Fetcher
     public partial class Gs2FormationAcquireActionsToPropertyFormPropertiesFetcher
     {
         private IAcquireActionsFetcher _fetcher;
+
+        public new void Start() {
+
+        }
 
         public void Awake()
         {

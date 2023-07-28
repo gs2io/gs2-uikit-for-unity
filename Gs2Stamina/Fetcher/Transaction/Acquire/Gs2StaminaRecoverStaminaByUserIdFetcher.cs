@@ -30,8 +30,10 @@ using System.Collections.Generic;
 using System.Linq;
 using Gs2.Core.Exception;
 using Gs2.Gs2Stamina.Request;
+using Gs2.Unity.Gs2Stamina.ScriptableObject;
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Core.Fetcher;
+using Gs2.Unity.UiKit.Gs2Stamina.Context;
 using Gs2.Unity.UiKit.Gs2Stamina.Fetcher;
 using Gs2.Unity.Util;
 using Gs2.Util.LitJson;
@@ -45,7 +47,7 @@ namespace Gs2.Unity.UiKit.Gs2Stamina.Fetcher
     /// </summary>
 
 	[AddComponentMenu("GS2 UIKit/Stamina/Stamina/Fetcher/Acquire/Gs2StaminaRecoverStaminaByUserIdFetcher")]
-    public partial class Gs2StaminaRecoverStaminaByUserIdFetcher : MonoBehaviour
+    public partial class Gs2StaminaRecoverStaminaByUserIdFetcher : Gs2StaminaOwnStaminaContext
     {
         private IEnumerator Fetch()
         {
@@ -55,6 +57,17 @@ namespace Gs2.Unity.UiKit.Gs2Stamina.Fetcher
                     var action = _fetcher.AcquireActions().FirstOrDefault(v => v.Action == "Gs2Stamina:RecoverStaminaByUserId");
                     if (action != null) {
                         Request = RecoverStaminaByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
+                        if (Stamina == null || (
+                                Stamina.NamespaceName == Request.NamespaceName &&
+                                Stamina.StaminaName == Request.StaminaName)
+                           ) {
+                            Stamina = OwnStamina.New(
+                                Namespace.New(
+                                    Request.NamespaceName
+                                ),
+                                Request.StaminaName
+                            );
+                        }
                         Fetched = true;
                     }
                 }
@@ -81,6 +94,10 @@ namespace Gs2.Unity.UiKit.Gs2Stamina.Fetcher
     public partial class Gs2StaminaRecoverStaminaByUserIdFetcher
     {
         private IAcquireActionsFetcher _fetcher;
+
+        public new void Start() {
+
+        }
 
         public void Awake()
         {

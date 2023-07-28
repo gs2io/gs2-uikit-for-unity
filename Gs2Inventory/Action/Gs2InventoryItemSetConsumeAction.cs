@@ -54,7 +54,7 @@ namespace Gs2.Unity.UiKit.Gs2Inventory
                 this._context.ItemModel.InventoryName
             ).ItemSet(
                 this._context.ItemModel.ItemName,
-                this._context.itemSetName
+                this._context.ItemSet.ItemSetName
             );
             var future = domain.Consume(
                 ConsumeCount

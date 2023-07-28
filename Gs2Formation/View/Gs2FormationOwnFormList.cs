@@ -68,6 +68,12 @@ namespace Gs2.Unity.UiKit.Gs2Formation
 
         public void Awake()
         {
+            if (prefab == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2FormationOwnFormContext Prefab.");
+                enabled = false;
+                return;
+            }
+
             _fetcher = GetComponent<Gs2FormationOwnFormListFetcher>() ?? GetComponentInParent<Gs2FormationOwnFormListFetcher>();
 
             if (_fetcher == null) {
@@ -75,11 +81,18 @@ namespace Gs2.Unity.UiKit.Gs2Formation
                 enabled = false;
             }
 
+            var context = GetComponent<Gs2FormationOwnMoldContext>() ?? GetComponentInParent<Gs2FormationOwnMoldContext>(true);
+            if (context == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2FormationOwnFormListFetcher::Context.");
+                enabled = false;
+                return;
+            }
+
             _children = new List<Gs2FormationOwnFormContext>();
             for (var i = 0; i < this.maximumItems; i++) {
                 var node = Instantiate(this.prefab, transform);
                 node.Form = OwnForm.New(
-                    _fetcher.Context.Mold,
+                    context.Mold,
                     0
                 );
                 node.gameObject.SetActive(false);

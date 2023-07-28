@@ -25,6 +25,7 @@
 #pragma warning disable CS0472
 
 using Gs2.Unity.Gs2Showcase.ScriptableObject;
+using Gs2.Unity.UiKit.Core;
 using UnityEngine;
 
 namespace Gs2.Unity.UiKit.Gs2Showcase.Context
@@ -38,7 +39,7 @@ namespace Gs2.Unity.UiKit.Gs2Showcase.Context
     {
         public void Start() {
             if (Namespace == null) {
-                Debug.LogError("Namespace is not set in Gs2ShowcaseNamespaceContext.");
+                Debug.LogError($"{gameObject.GetFullPath()}: Namespace is not set in Gs2ShowcaseNamespaceContext.");
             }
         }
 

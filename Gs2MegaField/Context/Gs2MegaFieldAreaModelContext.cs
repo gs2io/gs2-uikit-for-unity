@@ -25,6 +25,7 @@
 #pragma warning disable CS0472
 
 using Gs2.Unity.Gs2MegaField.ScriptableObject;
+using Gs2.Unity.UiKit.Core;
 using UnityEngine;
 
 namespace Gs2.Unity.UiKit.Gs2MegaField.Context
@@ -38,7 +39,7 @@ namespace Gs2.Unity.UiKit.Gs2MegaField.Context
     {
         public void Start() {
             if (AreaModel == null) {
-                Debug.LogError("AreaModel is not set in Gs2MegaFieldAreaModelContext.");
+                Debug.LogError($"{gameObject.GetFullPath()}: AreaModel is not set in Gs2MegaFieldAreaModelContext.");
             }
         }
 

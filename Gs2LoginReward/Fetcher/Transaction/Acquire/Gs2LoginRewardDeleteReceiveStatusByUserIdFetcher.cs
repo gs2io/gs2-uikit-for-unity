@@ -30,8 +30,10 @@ using System.Collections.Generic;
 using System.Linq;
 using Gs2.Core.Exception;
 using Gs2.Gs2LoginReward.Request;
+using Gs2.Unity.Gs2LoginReward.ScriptableObject;
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Core.Fetcher;
+using Gs2.Unity.UiKit.Gs2LoginReward.Context;
 using Gs2.Unity.UiKit.Gs2LoginReward.Fetcher;
 using Gs2.Unity.Util;
 using Gs2.Util.LitJson;
@@ -45,7 +47,7 @@ namespace Gs2.Unity.UiKit.Gs2LoginReward.Fetcher
     /// </summary>
 
 	[AddComponentMenu("GS2 UIKit/LoginReward/ReceiveStatus/Fetcher/Acquire/Gs2LoginRewardDeleteReceiveStatusByUserIdFetcher")]
-    public partial class Gs2LoginRewardDeleteReceiveStatusByUserIdFetcher : MonoBehaviour
+    public partial class Gs2LoginRewardDeleteReceiveStatusByUserIdFetcher : Gs2LoginRewardOwnReceiveStatusContext
     {
         private IEnumerator Fetch()
         {
@@ -55,6 +57,17 @@ namespace Gs2.Unity.UiKit.Gs2LoginReward.Fetcher
                     var action = _fetcher.AcquireActions().FirstOrDefault(v => v.Action == "Gs2LoginReward:DeleteReceiveStatusByUserId");
                     if (action != null) {
                         Request = DeleteReceiveStatusByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
+                        if (ReceiveStatus == null || (
+                                ReceiveStatus.NamespaceName == Request.NamespaceName &&
+                                ReceiveStatus.BonusModelName == Request.BonusModelName)
+                           ) {
+                            ReceiveStatus = OwnReceiveStatus.New(
+                                Namespace.New(
+                                    Request.NamespaceName
+                                ),
+                                Request.BonusModelName
+                            );
+                        }
                         Fetched = true;
                     }
                 }
@@ -81,6 +94,10 @@ namespace Gs2.Unity.UiKit.Gs2LoginReward.Fetcher
     public partial class Gs2LoginRewardDeleteReceiveStatusByUserIdFetcher
     {
         private IAcquireActionsFetcher _fetcher;
+
+        public new void Start() {
+
+        }
 
         public void Awake()
         {

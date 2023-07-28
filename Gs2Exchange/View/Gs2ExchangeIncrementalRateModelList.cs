@@ -68,18 +68,31 @@ namespace Gs2.Unity.UiKit.Gs2Exchange
 
         public void Awake()
         {
+            if (prefab == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ExchangeIncrementalRateModelContext Prefab.");
+                enabled = false;
+                return;
+            }
+
             _fetcher = GetComponent<Gs2ExchangeIncrementalRateModelListFetcher>() ?? GetComponentInParent<Gs2ExchangeIncrementalRateModelListFetcher>();
 
             if (_fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ExchangeIncrementalRateModelListFetcher.");
                 enabled = false;
+                return;
+            }
+            var context = GetComponent<Gs2ExchangeNamespaceContext>() ?? GetComponentInParent<Gs2ExchangeNamespaceContext>(true);
+            if (context == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ExchangeIncrementalRateModelListFetcher::Context.");
+                enabled = false;
+                return;
             }
 
             _children = new List<Gs2ExchangeIncrementalRateModelContext>();
             for (var i = 0; i < this.maximumItems; i++) {
                 var node = Instantiate(this.prefab, transform);
                 node.IncrementalRateModel = IncrementalRateModel.New(
-                    _fetcher.Context.Namespace,
+                    context.Namespace,
                     ""
                 );
                 node.gameObject.SetActive(false);

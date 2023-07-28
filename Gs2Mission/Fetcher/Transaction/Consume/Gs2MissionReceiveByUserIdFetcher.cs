@@ -30,9 +30,10 @@ using System.Collections.Generic;
 using System.Linq;
 using Gs2.Core.Exception;
 using Gs2.Gs2Mission.Request;
+using Gs2.Unity.Gs2Mission.ScriptableObject;
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Core.Fetcher;
-using Gs2.Unity.UiKit.Gs2Mission.Fetcher;
+using Gs2.Unity.UiKit.Gs2Mission.Context;
 using Gs2.Unity.Util;
 using Gs2.Util.LitJson;
 using UnityEngine;
@@ -45,7 +46,7 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Fetcher
     /// </summary>
 
 	[AddComponentMenu("GS2 UIKit/Mission/Complete/Fetcher/Consume/Gs2MissionReceiveByUserIdFetcher")]
-    public partial class Gs2MissionReceiveByUserIdFetcher : MonoBehaviour
+    public partial class Gs2MissionReceiveByUserIdFetcher : Gs2MissionOwnCompleteContext
     {
         private IEnumerator Fetch()
         {
@@ -55,6 +56,17 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Fetcher
                     var action = _fetcher.ConsumeActions().FirstOrDefault(v => v.Action == "Gs2Mission:ReceiveByUserId");
                     if (action != null) {
                         Request = ReceiveByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
+                        if (Complete == null || (
+                                Complete.NamespaceName == Request.NamespaceName &&
+                                Complete.MissionGroupName == Request.MissionGroupName)
+                           ) {
+                            Complete = OwnComplete.New(
+                                Namespace.New(
+                                    Request.NamespaceName
+                                ),
+                                Request.MissionGroupName
+                            );
+                        }
                         Fetched = true;
                     }
                 }
@@ -82,6 +94,10 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Fetcher
     {
         private IConsumeActionsFetcher _fetcher;
 
+        public new void Start() {
+
+        }
+        
         public void Awake()
         {
             _fetcher = GetComponent<IConsumeActionsFetcher>() ?? GetComponentInParent<IConsumeActionsFetcher>();

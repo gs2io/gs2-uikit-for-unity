@@ -68,18 +68,31 @@ namespace Gs2.Unity.UiKit.Gs2Limit
 
         public void Awake()
         {
+            if (prefab == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2LimitLimitModelContext Prefab.");
+                enabled = false;
+                return;
+            }
+
             _fetcher = GetComponent<Gs2LimitLimitModelListFetcher>() ?? GetComponentInParent<Gs2LimitLimitModelListFetcher>();
 
             if (_fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2LimitLimitModelListFetcher.");
                 enabled = false;
+                return;
+            }
+            var context = GetComponent<Gs2LimitNamespaceContext>() ?? GetComponentInParent<Gs2LimitNamespaceContext>(true);
+            if (context == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2LimitLimitModelListFetcher::Context.");
+                enabled = false;
+                return;
             }
 
             _children = new List<Gs2LimitLimitModelContext>();
             for (var i = 0; i < this.maximumItems; i++) {
                 var node = Instantiate(this.prefab, transform);
                 node.LimitModel = LimitModel.New(
-                    _fetcher.Context.Namespace,
+                    context.Namespace,
                     ""
                 );
                 node.gameObject.SetActive(false);
