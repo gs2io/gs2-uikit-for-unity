@@ -25,42 +25,43 @@
 #pragma warning disable CS0472
 
 using Gs2.Unity.Gs2Stamina.ScriptableObject;
-using Gs2.Unity.UiKit.Gs2Stamina.Context;
 using Gs2.Unity.UiKit.Gs2Stamina.Fetcher;
 using UnityEditor;
 using UnityEngine;
 
 namespace Gs2.Unity.UiKit.Gs2Stamina.Editor
 {
-    [CustomEditor(typeof(Gs2StaminaOwnStaminaContext))]
-    public class Gs2StaminaOwnStaminaContextEditorExtension : UnityEditor.Editor
+    [CustomEditor(typeof(Gs2StaminaOwnStaminaList))]
+    public class Gs2StaminaOwnStaminaListEditorExtension : UnityEditor.Editor
     {
         public override void OnInspectorGUI() {
-            var original = target as Gs2StaminaOwnStaminaContext;
+            var original = target as Gs2StaminaOwnStaminaList;
 
             if (original == null) return;
 
-            serializedObject.Update();
-
-            if (original.Stamina == null) {
-                if (original.GetComponentInParent<Gs2StaminaOwnStaminaList>(true) != null) {
-                    EditorGUILayout.HelpBox("OwnStamina is auto assign from Gs2StaminaOwnStaminaList.", MessageType.Info);
-                }
-                else {
-                    EditorGUILayout.HelpBox("OwnStamina not assigned.", MessageType.Error);
-                    EditorGUILayout.PropertyField(serializedObject.FindProperty("Stamina"), true);
+            var fetcher = original.GetComponent<Gs2StaminaOwnStaminaListFetcher>() ?? original.GetComponentInParent<Gs2StaminaOwnStaminaListFetcher>(true);
+            if (fetcher == null) {
+                EditorGUILayout.HelpBox("Gs2StaminaOwnStaminaListFetcher not found.", MessageType.Error);
+                if (GUILayout.Button("Add ListFetcher")) {
+                    original.gameObject.AddComponent<Gs2StaminaOwnStaminaListFetcher>();
                 }
             }
             else {
-                original.Stamina = EditorGUILayout.ObjectField("OwnStamina", original.Stamina, typeof(OwnStamina), false) as OwnStamina;
                 EditorGUI.BeginDisabledGroup(true);
+                EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2StaminaOwnStaminaListFetcher), false);
                 EditorGUI.indentLevel++;
-                EditorGUILayout.TextField("NamespaceName", original.Stamina?.NamespaceName.ToString());
-                EditorGUILayout.TextField("StaminaName", original.Stamina?.StaminaName.ToString());
+                if (fetcher.Context != null) {
+                    fetcher.Context.Namespace = EditorGUILayout.ObjectField("Namespace", fetcher.Context.Namespace, typeof(Namespace), false) as Namespace;
+                    EditorGUI.indentLevel++;
+                    EditorGUI.indentLevel--;
+                }
                 EditorGUI.indentLevel--;
                 EditorGUI.EndDisabledGroup();
             }
 
+            serializedObject.Update();
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("prefab"), true);
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("maximumItems"), true);
             serializedObject.ApplyModifiedProperties();
         }
     }

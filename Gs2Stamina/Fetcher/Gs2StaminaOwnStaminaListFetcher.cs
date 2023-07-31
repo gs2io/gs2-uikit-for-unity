@@ -34,7 +34,6 @@ using Gs2.Unity.Gs2Stamina.Model;
 using Gs2.Unity.Gs2Stamina.ScriptableObject;
 using Gs2.Unity.Util;
 using Gs2.Unity.UiKit.Core;
-using Gs2.Unity.UiKit.Gs2Core.Fetcher;
 using Gs2.Unity.UiKit.Gs2Stamina.Context;
 using UnityEngine;
 using UnityEngine.Events;
@@ -45,8 +44,8 @@ namespace Gs2.Unity.UiKit.Gs2Stamina.Fetcher
     /// Main
     /// </summary>
 
-	[AddComponentMenu("GS2 UIKit/Stamina/StaminaModel/Fetcher/Gs2StaminaStaminaModelFetcher")]
-    public partial class Gs2StaminaStaminaModelFetcher : MonoBehaviour
+	[AddComponentMenu("GS2 UIKit/Stamina/Stamina/Fetcher/Gs2StaminaOwnStaminaListFetcher")]
+    public partial class Gs2StaminaOwnStaminaListFetcher : MonoBehaviour
     {
         private IEnumerator Fetch()
         {
@@ -56,36 +55,46 @@ namespace Gs2.Unity.UiKit.Gs2Stamina.Fetcher
             {
                 if (_gameSessionHolder != null && _gameSessionHolder.Initialized &&
                     _clientHolder != null && _clientHolder.Initialized &&
-                    Context != null && this.Context.StaminaModel != null)
+                    Context != null)
                 {
                     
                     var domain = this._clientHolder.Gs2.Stamina.Namespace(
-                        this.Context.StaminaModel.NamespaceName
-                    ).StaminaModel(
-                        this.Context.StaminaModel.StaminaName
+                        this.Context.Namespace.NamespaceName
+                    ).Me(
+                        this._gameSessionHolder.GameSession
                     );
-                    var future = domain.Model();
-                    yield return future;
-                    if (future.Error != null)
+                    var it = domain.Staminas();
+                    var items = new List<Gs2.Unity.Gs2Stamina.Model.EzStamina>();
+                    while (it.HasNext())
                     {
-                        if (future.Error is BadRequestException || future.Error is NotFoundException)
+                        yield return it.Next();
+                        if (it.Error != null)
                         {
-                            onError.Invoke(e = future.Error, null);
-                            Debug.LogError($"{gameObject.GetFullPath()}: {future.Error.Message}");
-                            break;
+                            if (it.Error is BadRequestException || it.Error is NotFoundException)
+                            {
+                                onError.Invoke(e = it.Error, null);
+                                Debug.LogError($"{gameObject.GetFullPath()}: {it.Error.Message}");
+                                break;
+                            }
+                            else {
+                                onError.Invoke(new CanIgnoreException(it.Error), null);
+                            }
+                            yield return new WaitForSeconds(retryWaitSecond);
+                            retryWaitSecond *= 2;
                         }
                         else {
-                            onError.Invoke(new CanIgnoreException(future.Error), null);
+                            if (it.Current != null)
+                            {
+                                items.Add(it.Current);
+                            } else {
+                                break;
+                            }
                         }
-                        yield return new WaitForSeconds(retryWaitSecond);
-                        retryWaitSecond *= 2;
                     }
-                    else
-                    {
-                        retryWaitSecond = 1;
-                        StaminaModel = future.Result;
-                        Fetched = true;
-                    }
+
+                    retryWaitSecond = 1;
+                    Staminas = items;
+                    Fetched = true;
                 }
                 else {
                     yield return new WaitForSeconds(0.1f);
@@ -109,27 +118,27 @@ namespace Gs2.Unity.UiKit.Gs2Stamina.Fetcher
     /// Dependent components
     /// </summary>
 
-    public partial class Gs2StaminaStaminaModelFetcher
+    public partial class Gs2StaminaOwnStaminaListFetcher
     {
-        protected Gs2ClientHolder _clientHolder;
-        protected Gs2GameSessionHolder _gameSessionHolder;
-        public Gs2StaminaStaminaModelContext Context { get; private set; }
+        private Gs2ClientHolder _clientHolder;
+        private Gs2GameSessionHolder _gameSessionHolder;
+        public Gs2StaminaNamespaceContext Context;
 
         public void Awake()
         {
             _clientHolder = Gs2ClientHolder.Instance;
             _gameSessionHolder = Gs2GameSessionHolder.Instance;
-            Context = GetComponent<Gs2StaminaStaminaModelContext>() ?? GetComponentInParent<Gs2StaminaStaminaModelContext>();
+            Context = GetComponent<Gs2StaminaNamespaceContext>() ?? GetComponentInParent<Gs2StaminaNamespaceContext>();
 
             if (Context == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2StaminaStaminaModelContext.");
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2StaminaNamespaceContext.");
                 enabled = false;
             }
         }
 
         public bool HasError()
         {
-            Context = GetComponent<Gs2StaminaStaminaModelContext>() ?? GetComponentInParent<Gs2StaminaStaminaModelContext>(true);
+            Context = GetComponent<Gs2StaminaNamespaceContext>() ?? GetComponentInParent<Gs2StaminaNamespaceContext>(true);
             if (Context == null) {
                 return true;
             }
@@ -140,18 +149,18 @@ namespace Gs2.Unity.UiKit.Gs2Stamina.Fetcher
     /// <summary>
     /// Public properties
     /// </summary>
-
-    public partial class Gs2StaminaStaminaModelFetcher
+    
+    public partial class Gs2StaminaOwnStaminaListFetcher
     {
-        public Gs2.Unity.Gs2Stamina.Model.EzStaminaModel StaminaModel { get; protected set; }
-        public bool Fetched { get; protected set; }
+        public List<Gs2.Unity.Gs2Stamina.Model.EzStamina> Staminas { get; private set; }
+        public bool Fetched { get; private set; }
     }
 
     /// <summary>
     /// Parameters for Inspector
     /// </summary>
-
-    public partial class Gs2StaminaStaminaModelFetcher
+    
+    public partial class Gs2StaminaOwnStaminaListFetcher
     {
 
     }
@@ -159,11 +168,11 @@ namespace Gs2.Unity.UiKit.Gs2Stamina.Fetcher
     /// <summary>
     /// Event handlers
     /// </summary>
-    public partial class Gs2StaminaStaminaModelFetcher
+    public partial class Gs2StaminaOwnStaminaListFetcher
     {
         [SerializeField]
         internal ErrorEvent onError = new ErrorEvent();
-
+        
         public event UnityAction<Gs2Exception, Func<IEnumerator>> OnError
         {
             add => onError.AddListener(value);

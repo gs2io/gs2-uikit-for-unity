@@ -32,35 +32,35 @@ using UnityEngine;
 
 namespace Gs2.Unity.UiKit.Gs2Stamina.Editor
 {
-    [CustomEditor(typeof(Gs2StaminaOwnStaminaContext))]
-    public class Gs2StaminaOwnStaminaContextEditorExtension : UnityEditor.Editor
+    [CustomEditor(typeof(Gs2StaminaOwnStaminaListFetcher))]
+    public class Gs2StaminaOwnStaminaListFetcherEditorExtension : UnityEditor.Editor
     {
         public override void OnInspectorGUI() {
-            var original = target as Gs2StaminaOwnStaminaContext;
+            var original = target as Gs2StaminaOwnStaminaListFetcher;
 
             if (original == null) return;
 
-            serializedObject.Update();
-
-            if (original.Stamina == null) {
-                if (original.GetComponentInParent<Gs2StaminaOwnStaminaList>(true) != null) {
-                    EditorGUILayout.HelpBox("OwnStamina is auto assign from Gs2StaminaOwnStaminaList.", MessageType.Info);
-                }
-                else {
-                    EditorGUILayout.HelpBox("OwnStamina not assigned.", MessageType.Error);
-                    EditorGUILayout.PropertyField(serializedObject.FindProperty("Stamina"), true);
+            var context = original.GetComponent<Gs2StaminaNamespaceContext>() ?? original.GetComponentInParent<Gs2StaminaNamespaceContext>(true);
+            if (context == null) {
+                EditorGUILayout.HelpBox("Gs2StaminaNamespaceContext not found.", MessageType.Error);
+                if (GUILayout.Button("Add Context")) {
+                    original.gameObject.AddComponent<Gs2StaminaNamespaceContext>();
                 }
             }
             else {
-                original.Stamina = EditorGUILayout.ObjectField("OwnStamina", original.Stamina, typeof(OwnStamina), false) as OwnStamina;
                 EditorGUI.BeginDisabledGroup(true);
+                EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2StaminaNamespaceContext), false);
                 EditorGUI.indentLevel++;
-                EditorGUILayout.TextField("NamespaceName", original.Stamina?.NamespaceName.ToString());
-                EditorGUILayout.TextField("StaminaName", original.Stamina?.StaminaName.ToString());
+                context.Namespace = EditorGUILayout.ObjectField("Namespace", context.Namespace, typeof(Namespace), false) as Namespace;
+                EditorGUI.indentLevel++;
+                EditorGUILayout.TextField("NamespaceName", context.Namespace?.NamespaceName.ToString());
+                EditorGUI.indentLevel--;
                 EditorGUI.indentLevel--;
                 EditorGUI.EndDisabledGroup();
             }
 
+            serializedObject.Update();
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("onError"), true);
             serializedObject.ApplyModifiedProperties();
         }
     }

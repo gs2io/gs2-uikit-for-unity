@@ -45,7 +45,12 @@ namespace Gs2.Unity.UiKit.Gs2Stamina.Context
 
         public bool HasError() {
             if (Stamina == null) {
-                return true;
+                if (GetComponentInParent<Gs2StaminaOwnStaminaList>(true) != null) {
+                    return false;
+                }
+                else {
+                    return true;
+                }
             }
             return false;
         }

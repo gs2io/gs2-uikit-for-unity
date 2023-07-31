@@ -70,7 +70,7 @@ namespace Gs2.Unity.UiKit.Gs2Stamina.Fetcher
                         Fetched = true;
                     }
                 }
-                yield return new WaitForSeconds(1);
+                yield return new WaitForSeconds(0.1f);
             }
             // ReSharper disable once IteratorNeverReturns
         }
@@ -97,7 +97,7 @@ namespace Gs2.Unity.UiKit.Gs2Stamina.Fetcher
         public new void Start() {
 
         }
-        
+
         public void Awake()
         {
             _fetcher = GetComponent<IConsumeActionsFetcher>() ?? GetComponentInParent<IConsumeActionsFetcher>();

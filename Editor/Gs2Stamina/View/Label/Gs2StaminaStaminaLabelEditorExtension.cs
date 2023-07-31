@@ -48,16 +48,26 @@ namespace Gs2.Unity.UiKit.Gs2Stamina.Editor
                 }
             }
             else {
-                EditorGUI.BeginDisabledGroup(true);
-                EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2StaminaOwnStaminaFetcher), false);
-                EditorGUI.indentLevel++;
-                fetcher.Context.Stamina = EditorGUILayout.ObjectField("Stamina", fetcher.Context.Stamina, typeof(OwnStamina), false) as OwnStamina;
-                EditorGUI.indentLevel++;
-                EditorGUILayout.TextField("NamespaceName", fetcher.Context.Stamina?.NamespaceName.ToString());
-                EditorGUILayout.TextField("StaminaName", fetcher.Context.Stamina?.StaminaName.ToString());
-                EditorGUI.indentLevel--;
-                EditorGUI.indentLevel--;
-                EditorGUI.EndDisabledGroup();
+                if (fetcher.gameObject.GetComponentInParent<Gs2StaminaOwnStaminaList>(true) != null) {
+                    EditorGUI.BeginDisabledGroup(true);
+                    EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2StaminaOwnStaminaFetcher), false);
+                    EditorGUI.EndDisabledGroup();
+                    EditorGUILayout.HelpBox("Stamina is auto assign from Gs2StaminaOwnStaminaList.", MessageType.Info);
+                }
+                else {
+                    EditorGUI.BeginDisabledGroup(true);
+                    EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2StaminaOwnStaminaFetcher), false);
+                    EditorGUI.indentLevel++;
+                    if (fetcher.Context != null) {
+                        fetcher.Context.Stamina = EditorGUILayout.ObjectField("Stamina", fetcher.Context.Stamina, typeof(OwnStamina), false) as OwnStamina;
+                        EditorGUI.indentLevel++;
+                        EditorGUILayout.TextField("NamespaceName", fetcher.Context.Stamina?.NamespaceName.ToString());
+                        EditorGUILayout.TextField("StaminaName", fetcher.Context.Stamina?.StaminaName.ToString());
+                        EditorGUI.indentLevel--;
+                    }
+                    EditorGUI.indentLevel--;
+                    EditorGUI.EndDisabledGroup();
+                }
             }
 
             serializedObject.Update();
