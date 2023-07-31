@@ -70,13 +70,9 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Editor
             }
 
             serializedObject.Update();
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("Slots"), true);
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("KeyId"), true);
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("onChangeSlots"), true);
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("onChangeKeyId"), true);
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("onSetPropertyFormComplete"), true);
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("onError"), true);
             serializedObject.ApplyModifiedProperties();
+
+            DrawDefaultInspector();
         }
     }
 }

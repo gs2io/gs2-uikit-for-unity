@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
@@ -43,8 +45,13 @@ namespace Gs2.Unity.UiKit.Gs2Chat.Editor
             serializedObject.Update();
 
             if (original.Message == null) {
-                EditorGUILayout.HelpBox("Message not assigned.", MessageType.Error);
-                EditorGUILayout.PropertyField(serializedObject.FindProperty("Message"), true);
+                if (original.GetComponentInParent<Gs2ChatMessageList>(true) != null) {
+                    EditorGUILayout.HelpBox("Message is auto assign from Gs2ChatMessageList.", MessageType.Info);
+                }
+                else {
+                    EditorGUILayout.HelpBox("Message not assigned.", MessageType.Error);
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("Message"), true);
+                }
             }
             else {
                 original.Message = EditorGUILayout.ObjectField("Message", original.Message, typeof(Message), false) as Message;

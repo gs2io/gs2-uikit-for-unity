@@ -69,9 +69,9 @@ namespace Gs2.Unity.UiKit.Gs2Datastore.Editor
             }
 
             serializedObject.Update();
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("onPrepareDownloadOwnDataComplete"), true);
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("onError"), true);
             serializedObject.ApplyModifiedProperties();
+
+            DrawDefaultInspector();
         }
     }
 }

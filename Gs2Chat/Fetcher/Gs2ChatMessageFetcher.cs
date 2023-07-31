@@ -89,7 +89,7 @@ namespace Gs2.Unity.UiKit.Gs2Chat.Fetcher
                     }
                 }
                 else {
-                    yield return new WaitForSeconds(1);
+                    yield return new WaitForSeconds(0.1f);
                 }
             }
             // ReSharper disable once IteratorNeverReturns

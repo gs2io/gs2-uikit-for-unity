@@ -60,23 +60,9 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking.Editor
             }
 
             serializedObject.Update();
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("NamespaceName"), true);
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("Player"), true);
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("AttributeRanges"), true);
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("CapacityOfRoles"), true);
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("AllowUserIds"), true);
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("ExpiresAt"), true);
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("ExpiresAtTimeSpan"), true);
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("onChangeNamespaceName"), true);
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("onChangePlayer"), true);
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("onChangeAttributeRanges"), true);
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("onChangeCapacityOfRoles"), true);
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("onChangeAllowUserIds"), true);
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("onChangeExpiresAt"), true);
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("onChangeExpiresAtTimeSpan"), true);
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("onCreateGatheringComplete"), true);
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("onError"), true);
             serializedObject.ApplyModifiedProperties();
+
+            DrawDefaultInspector();
         }
     }
 }

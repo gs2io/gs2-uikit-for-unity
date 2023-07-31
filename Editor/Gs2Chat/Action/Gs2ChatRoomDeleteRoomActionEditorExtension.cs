@@ -61,9 +61,9 @@ namespace Gs2.Unity.UiKit.Gs2Chat.Editor
             }
 
             serializedObject.Update();
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("onDeleteRoomComplete"), true);
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("onError"), true);
             serializedObject.ApplyModifiedProperties();
+
+            DrawDefaultInspector();
         }
     }
 }

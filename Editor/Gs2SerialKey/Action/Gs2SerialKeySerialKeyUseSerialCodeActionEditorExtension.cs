@@ -61,11 +61,9 @@ namespace Gs2.Unity.UiKit.Gs2SerialKey.Editor
             }
 
             serializedObject.Update();
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("Code"), true);
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("onChangeCode"), true);
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("onUseSerialCodeComplete"), true);
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("onError"), true);
             serializedObject.ApplyModifiedProperties();
+
+            DrawDefaultInspector();
         }
     }
 }

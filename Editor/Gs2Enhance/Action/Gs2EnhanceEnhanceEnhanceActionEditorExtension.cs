@@ -60,17 +60,9 @@ namespace Gs2.Unity.UiKit.Gs2Enhance.Editor
             }
 
             serializedObject.Update();
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("RateName"), true);
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("TargetItemSetId"), true);
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("Materials"), true);
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("Config"), true);
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("onChangeRateName"), true);
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("onChangeTargetItemSetId"), true);
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("onChangeMaterials"), true);
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("onChangeConfig"), true);
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("onEnhanceComplete"), true);
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("onError"), true);
             serializedObject.ApplyModifiedProperties();
+
+            DrawDefaultInspector();
         }
     }
 }

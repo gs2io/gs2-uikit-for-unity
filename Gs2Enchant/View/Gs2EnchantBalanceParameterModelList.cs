@@ -68,18 +68,31 @@ namespace Gs2.Unity.UiKit.Gs2Enchant
 
         public void Awake()
         {
+            if (prefab == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2EnchantBalanceParameterModelContext Prefab.");
+                enabled = false;
+                return;
+            }
+
             _fetcher = GetComponent<Gs2EnchantBalanceParameterModelListFetcher>() ?? GetComponentInParent<Gs2EnchantBalanceParameterModelListFetcher>();
 
             if (_fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2EnchantBalanceParameterModelListFetcher.");
                 enabled = false;
+                return;
+            }
+            var context = GetComponent<Gs2EnchantNamespaceContext>() ?? GetComponentInParent<Gs2EnchantNamespaceContext>(true);
+            if (context == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2EnchantBalanceParameterModelListFetcher::Context.");
+                enabled = false;
+                return;
             }
 
             _children = new List<Gs2EnchantBalanceParameterModelContext>();
             for (var i = 0; i < this.maximumItems; i++) {
                 var node = Instantiate(this.prefab, transform);
                 node.BalanceParameterModel = BalanceParameterModel.New(
-                    _fetcher.Context.Namespace,
+                    context.Namespace,
                     ""
                 );
                 node.gameObject.SetActive(false);

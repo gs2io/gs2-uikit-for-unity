@@ -60,13 +60,9 @@ namespace Gs2.Unity.UiKit.Gs2Account.Editor
             }
 
             serializedObject.Update();
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("KeyId"), true);
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("Password"), true);
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("onChangeKeyId"), true);
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("onChangePassword"), true);
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("onAuthenticationComplete"), true);
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("onError"), true);
             serializedObject.ApplyModifiedProperties();
+
+            DrawDefaultInspector();
         }
     }
 }

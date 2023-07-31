@@ -25,6 +25,7 @@
 #pragma warning disable CS0472
 
 using Gs2.Unity.Gs2Enchant.ScriptableObject;
+using Gs2.Unity.UiKit.Core;
 using UnityEngine;
 
 namespace Gs2.Unity.UiKit.Gs2Enchant.Context
@@ -38,7 +39,7 @@ namespace Gs2.Unity.UiKit.Gs2Enchant.Context
     {
         public void Start() {
             if (BalanceParameterModel == null) {
-                Debug.LogError("BalanceParameterModel is not set in Gs2EnchantBalanceParameterModelContext.");
+                Debug.LogError($"{gameObject.GetFullPath()}: BalanceParameterModel is not set in Gs2EnchantBalanceParameterModelContext.");
             }
         }
 

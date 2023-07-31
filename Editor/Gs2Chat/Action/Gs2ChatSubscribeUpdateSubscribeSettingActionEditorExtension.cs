@@ -69,11 +69,9 @@ namespace Gs2.Unity.UiKit.Gs2Chat.Editor
             }
 
             serializedObject.Update();
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("NotificationTypes"), true);
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("onChangeNotificationTypes"), true);
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("onUpdateSubscribeSettingComplete"), true);
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("onError"), true);
             serializedObject.ApplyModifiedProperties();
+
+            DrawDefaultInspector();
         }
     }
 }

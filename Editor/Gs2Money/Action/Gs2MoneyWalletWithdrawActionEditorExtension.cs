@@ -61,13 +61,9 @@ namespace Gs2.Unity.UiKit.Gs2Money.Editor
             }
 
             serializedObject.Update();
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("Count"), true);
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("PaidOnly"), true);
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("onChangeCount"), true);
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("onChangePaidOnly"), true);
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("onWithdrawComplete"), true);
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("onError"), true);
             serializedObject.ApplyModifiedProperties();
+
+            DrawDefaultInspector();
         }
     }
 }

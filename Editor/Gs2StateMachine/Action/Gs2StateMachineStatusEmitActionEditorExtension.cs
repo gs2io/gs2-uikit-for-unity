@@ -69,13 +69,9 @@ namespace Gs2.Unity.UiKit.Gs2StateMachine.Editor
             }
 
             serializedObject.Update();
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("EventName"), true);
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("Args"), true);
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("onChangeEventName"), true);
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("onChangeArgs"), true);
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("onEmitComplete"), true);
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("onError"), true);
             serializedObject.ApplyModifiedProperties();
+
+            DrawDefaultInspector();
         }
     }
 }

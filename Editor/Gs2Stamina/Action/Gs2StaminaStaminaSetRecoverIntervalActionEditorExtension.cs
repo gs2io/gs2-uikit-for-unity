@@ -69,15 +69,9 @@ namespace Gs2.Unity.UiKit.Gs2Stamina.Editor
             }
 
             serializedObject.Update();
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("KeyId"), true);
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("SignedStatusBody"), true);
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("SignedStatusSignature"), true);
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("onChangeKeyId"), true);
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("onChangeSignedStatusBody"), true);
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("onChangeSignedStatusSignature"), true);
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("onSetRecoverIntervalComplete"), true);
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("onError"), true);
             serializedObject.ApplyModifiedProperties();
+
+            DrawDefaultInspector();
         }
     }
 }

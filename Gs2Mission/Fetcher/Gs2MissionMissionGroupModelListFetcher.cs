@@ -95,7 +95,7 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Fetcher
                     Fetched = true;
                 }
                 else {
-                    yield return new WaitForSeconds(1);
+                    yield return new WaitForSeconds(0.1f);
                 }
             }
             // ReSharper disable once IteratorNeverReturns

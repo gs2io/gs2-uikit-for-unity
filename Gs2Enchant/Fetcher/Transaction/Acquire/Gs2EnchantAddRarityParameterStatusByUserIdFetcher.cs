@@ -30,8 +30,10 @@ using System.Collections.Generic;
 using System.Linq;
 using Gs2.Core.Exception;
 using Gs2.Gs2Enchant.Request;
+using Gs2.Unity.Gs2Enchant.ScriptableObject;
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Core.Fetcher;
+using Gs2.Unity.UiKit.Gs2Enchant.Context;
 using Gs2.Unity.UiKit.Gs2Enchant.Fetcher;
 using Gs2.Unity.Util;
 using Gs2.Util.LitJson;
@@ -45,7 +47,7 @@ namespace Gs2.Unity.UiKit.Gs2Enchant.Fetcher
     /// </summary>
 
 	[AddComponentMenu("GS2 UIKit/Enchant/RarityParameterStatus/Fetcher/Acquire/Gs2EnchantAddRarityParameterStatusByUserIdFetcher")]
-    public partial class Gs2EnchantAddRarityParameterStatusByUserIdFetcher : MonoBehaviour
+    public partial class Gs2EnchantAddRarityParameterStatusByUserIdFetcher : Gs2EnchantOwnRarityParameterStatusContext
     {
         private IEnumerator Fetch()
         {
@@ -55,10 +57,23 @@ namespace Gs2.Unity.UiKit.Gs2Enchant.Fetcher
                     var action = _fetcher.AcquireActions().FirstOrDefault(v => v.Action == "Gs2Enchant:AddRarityParameterStatusByUserId");
                     if (action != null) {
                         Request = AddRarityParameterStatusByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
+                        if (RarityParameterStatus == null || (
+                                RarityParameterStatus.NamespaceName == Request.NamespaceName &&
+                                RarityParameterStatus.ParameterName == Request.ParameterName &&
+                                RarityParameterStatus.PropertyId == Request.PropertyId)
+                           ) {
+                            RarityParameterStatus = OwnRarityParameterStatus.New(
+                                Namespace.New(
+                                    Request.NamespaceName
+                                ),
+                                Request.ParameterName,
+                                Request.PropertyId
+                            );
+                        }
                         Fetched = true;
                     }
                 }
-                yield return new WaitForSeconds(1);
+                yield return new WaitForSeconds(0.1f);
             }
             // ReSharper disable once IteratorNeverReturns
         }
@@ -81,6 +96,10 @@ namespace Gs2.Unity.UiKit.Gs2Enchant.Fetcher
     public partial class Gs2EnchantAddRarityParameterStatusByUserIdFetcher
     {
         private IAcquireActionsFetcher _fetcher;
+
+        public new void Start() {
+
+        }
 
         public void Awake()
         {

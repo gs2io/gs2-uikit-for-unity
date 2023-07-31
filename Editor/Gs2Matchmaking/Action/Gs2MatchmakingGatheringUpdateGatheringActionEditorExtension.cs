@@ -61,11 +61,9 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking.Editor
             }
 
             serializedObject.Update();
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("AttributeRanges"), true);
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("onChangeAttributeRanges"), true);
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("onUpdateGatheringComplete"), true);
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("onError"), true);
             serializedObject.ApplyModifiedProperties();
+
+            DrawDefaultInspector();
         }
     }
 }

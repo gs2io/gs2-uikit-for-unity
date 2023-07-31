@@ -69,11 +69,9 @@ namespace Gs2.Unity.UiKit.Gs2Stamina.Editor
             }
 
             serializedObject.Update();
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("ConsumeValue"), true);
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("onChangeConsumeValue"), true);
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("onConsumeComplete"), true);
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("onError"), true);
             serializedObject.ApplyModifiedProperties();
+
+            DrawDefaultInspector();
         }
     }
 }

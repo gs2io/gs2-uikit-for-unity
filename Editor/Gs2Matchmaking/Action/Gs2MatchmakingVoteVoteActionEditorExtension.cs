@@ -62,17 +62,9 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking.Editor
             }
 
             serializedObject.Update();
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("BallotBody"), true);
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("BallotSignature"), true);
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("GameResults"), true);
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("KeyId"), true);
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("onChangeBallotBody"), true);
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("onChangeBallotSignature"), true);
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("onChangeGameResults"), true);
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("onChangeKeyId"), true);
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("onVoteComplete"), true);
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("onError"), true);
             serializedObject.ApplyModifiedProperties();
+
+            DrawDefaultInspector();
         }
     }
 }

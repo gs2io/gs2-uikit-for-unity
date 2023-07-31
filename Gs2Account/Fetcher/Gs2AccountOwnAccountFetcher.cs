@@ -80,7 +80,7 @@ namespace Gs2.Unity.UiKit.Gs2Account.Fetcher
                     }
                 }
 
-                yield return new WaitForSeconds(1);
+                yield return new WaitForSeconds(0.1f);
             }
 
             var transform1 = transform;

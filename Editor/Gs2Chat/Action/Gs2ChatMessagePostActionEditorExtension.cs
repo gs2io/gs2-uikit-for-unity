@@ -71,17 +71,9 @@ namespace Gs2.Unity.UiKit.Gs2Chat.Editor
             }
 
             serializedObject.Update();
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("RoomName"), true);
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("Category"), true);
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("Metadata"), true);
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("Password"), true);
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("onChangeRoomName"), true);
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("onChangeCategory"), true);
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("onChangeMetadata"), true);
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("onChangePassword"), true);
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("onPostComplete"), true);
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("onError"), true);
             serializedObject.ApplyModifiedProperties();
+            
+            DrawDefaultInspector();
         }
     }
 }

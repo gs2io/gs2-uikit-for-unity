@@ -70,13 +70,9 @@ namespace Gs2.Unity.UiKit.Gs2Limit.Editor
             }
 
             serializedObject.Update();
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("CountUpValue"), true);
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("MaxValue"), true);
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("onChangeCountUpValue"), true);
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("onChangeMaxValue"), true);
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("onCountUpComplete"), true);
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("onError"), true);
             serializedObject.ApplyModifiedProperties();
+
+            DrawDefaultInspector();
         }
     }
 }

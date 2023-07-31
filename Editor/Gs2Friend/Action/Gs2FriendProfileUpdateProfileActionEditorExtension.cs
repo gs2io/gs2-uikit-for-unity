@@ -60,15 +60,9 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Editor
             }
 
             serializedObject.Update();
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("PublicProfile"), true);
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("FollowerProfile"), true);
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("FriendProfile"), true);
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("onChangePublicProfile"), true);
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("onChangeFollowerProfile"), true);
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("onChangeFriendProfile"), true);
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("onUpdateProfileComplete"), true);
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("onError"), true);
             serializedObject.ApplyModifiedProperties();
+
+            DrawDefaultInspector();
         }
     }
 }

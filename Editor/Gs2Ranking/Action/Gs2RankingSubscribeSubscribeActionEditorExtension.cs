@@ -61,11 +61,9 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Editor
             }
 
             serializedObject.Update();
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("TargetUserId"), true);
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("onChangeTargetUserId"), true);
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("onSubscribeComplete"), true);
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("onError"), true);
             serializedObject.ApplyModifiedProperties();
+
+            DrawDefaultInspector();
         }
     }
 }

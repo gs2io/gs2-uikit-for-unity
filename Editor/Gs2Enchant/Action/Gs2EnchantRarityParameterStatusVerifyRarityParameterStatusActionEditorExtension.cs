@@ -70,15 +70,9 @@ namespace Gs2.Unity.UiKit.Gs2Enchant.Editor
             }
 
             serializedObject.Update();
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("VerifyType"), true);
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("ParameterValueName"), true);
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("ParameterCount"), true);
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("onChangeVerifyType"), true);
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("onChangeParameterValueName"), true);
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("onChangeParameterCount"), true);
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("onVerifyRarityParameterStatusComplete"), true);
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("onError"), true);
             serializedObject.ApplyModifiedProperties();
+
+            DrawDefaultInspector();
         }
     }
 }

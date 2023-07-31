@@ -61,11 +61,9 @@ namespace Gs2.Unity.UiKit.Gs2Gateway.Editor
             }
 
             serializedObject.Update();
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("AllowConcurrentAccess"), true);
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("onChangeAllowConcurrentAccess"), true);
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("onSetUserIdComplete"), true);
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("onError"), true);
             serializedObject.ApplyModifiedProperties();
+
+            DrawDefaultInspector();
         }
     }
 }

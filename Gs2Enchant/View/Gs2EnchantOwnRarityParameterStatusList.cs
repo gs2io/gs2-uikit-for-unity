@@ -69,6 +69,12 @@ namespace Gs2.Unity.UiKit.Gs2Enchant
 
         public void Awake()
         {
+            if (prefab == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2EnchantOwnRarityParameterStatusContext Prefab.");
+                enabled = false;
+                return;
+            }
+
             _fetcher = GetComponent<Gs2EnchantOwnRarityParameterStatusListFetcher>() ?? GetComponentInParent<Gs2EnchantOwnRarityParameterStatusListFetcher>();
 
             if (_fetcher == null) {
@@ -76,11 +82,18 @@ namespace Gs2.Unity.UiKit.Gs2Enchant
                 enabled = false;
             }
 
+            var context = GetComponent<Gs2EnchantNamespaceContext>() ?? GetComponentInParent<Gs2EnchantNamespaceContext>(true);
+            if (context == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2EnchantOwnRarityParameterStatusListFetcher::Context.");
+                enabled = false;
+                return;
+            }
+
             _children = new List<Gs2EnchantOwnRarityParameterStatusContext>();
             for (var i = 0; i < this.maximumItems; i++) {
                 var node = Instantiate(this.prefab, transform);
                 node.RarityParameterStatus = OwnRarityParameterStatus.New(
-                    _fetcher.Context.Namespace,
+                    context.Namespace,
                     "",
                     ""
                 );

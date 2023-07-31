@@ -60,11 +60,9 @@ namespace Gs2.Unity.UiKit.Gs2Account.Editor
             }
 
             serializedObject.Update();
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("NamespaceName"), true);
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("onChangeNamespaceName"), true);
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("onCreateComplete"), true);
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("onError"), true);
             serializedObject.ApplyModifiedProperties();
+
+            DrawDefaultInspector();
         }
     }
 }

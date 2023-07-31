@@ -60,15 +60,9 @@ namespace Gs2.Unity.UiKit.Gs2LoginReward.Editor
             }
 
             serializedObject.Update();
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("BonusModelName"), true);
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("StepNumber"), true);
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("Config"), true);
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("onChangeBonusModelName"), true);
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("onChangeStepNumber"), true);
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("onChangeConfig"), true);
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("onMissedReceiveComplete"), true);
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("onError"), true);
             serializedObject.ApplyModifiedProperties();
+
+            DrawDefaultInspector();
         }
     }
 }

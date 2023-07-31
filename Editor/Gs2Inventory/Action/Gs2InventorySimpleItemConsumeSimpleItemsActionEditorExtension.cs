@@ -70,11 +70,9 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Editor
             }
 
             serializedObject.Update();
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("ConsumeCounts"), true);
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("onChangeConsumeCounts"), true);
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("onConsumeSimpleItemsComplete"), true);
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("onError"), true);
             serializedObject.ApplyModifiedProperties();
+
+            DrawDefaultInspector();
         }
     }
 }

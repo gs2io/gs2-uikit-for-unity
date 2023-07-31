@@ -68,11 +68,9 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Editor
             }
 
             serializedObject.Update();
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("TargetUserId"), true);
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("onChangeTargetUserId"), true);
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("onUnregisterBlackListComplete"), true);
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("onError"), true);
             serializedObject.ApplyModifiedProperties();
+
+            DrawDefaultInspector();
         }
     }
 }

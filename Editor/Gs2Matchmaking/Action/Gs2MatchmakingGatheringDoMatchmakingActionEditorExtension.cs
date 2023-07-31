@@ -61,13 +61,9 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking.Editor
             }
 
             serializedObject.Update();
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("Player"), true);
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("MatchmakingContextToken"), true);
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("onChangePlayer"), true);
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("onChangeMatchmakingContextToken"), true);
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("onDoMatchmakingComplete"), true);
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("onError"), true);
             serializedObject.ApplyModifiedProperties();
+
+            DrawDefaultInspector();
         }
     }
 }
