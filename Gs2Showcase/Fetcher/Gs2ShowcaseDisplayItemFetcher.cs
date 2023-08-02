@@ -44,7 +44,7 @@ namespace Gs2.Unity.UiKit.Gs2Showcase.Fetcher
     /// </summary>
 
 	[AddComponentMenu("GS2 UIKit/Showcase/DisplayItem/Fetcher/Gs2ShowcaseDisplayItemFetcher")]
-    public partial class Gs2ShowcaseDisplayItemFetcher : MonoBehaviour, IAcquireActionsFetcher, IConsumeActionsFetcher
+    public partial class Gs2ShowcaseDisplayItemFetcher : Gs2ShowcaseSalesItemFetcher, IAcquireActionsFetcher, IConsumeActionsFetcher
     {
         private IEnumerator Fetch()
         {
@@ -81,6 +81,9 @@ namespace Gs2.Unity.UiKit.Gs2Showcase.Fetcher
                             v => v.DisplayItemId == Context.DisplayItem.DisplayItemId
                         );
                         Fetched = true;
+                        
+                        base.SalesItem = DisplayItem?.SalesItem;
+                        base.Fetched = true;
                     }
                 }
                 else {

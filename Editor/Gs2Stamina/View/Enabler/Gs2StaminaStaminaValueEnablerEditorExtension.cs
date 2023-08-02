@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
@@ -72,6 +74,7 @@ namespace Gs2.Unity.UiKit.Gs2Stamina.Editor
 
             if (original.expression == Gs2StaminaStaminaValueEnabler.Expression.In || original.expression == Gs2StaminaStaminaValueEnabler.Expression.NotIn) {
                 EditorGUILayout.PropertyField(serializedObject.FindProperty("enableValues"), true);
+            } else if (original.expression == Gs2StaminaStaminaValueEnabler.Expression.ReachMax || original.expression == Gs2StaminaStaminaValueEnabler.Expression.NotReachMax) {
             } else {
                 EditorGUILayout.PropertyField(serializedObject.FindProperty("enableValue"), true);
             }
