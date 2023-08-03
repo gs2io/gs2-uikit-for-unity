@@ -88,6 +88,11 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Editor
                 GUI.FocusControl("");
                 EditorUtility.SetDirty(original);
             }
+            if (GUILayout.Button("TargetResetType")) {
+                original.format += "{targetResetType}";
+                GUI.FocusControl("");
+                EditorUtility.SetDirty(original);
+            }
             if (GUILayout.Button("TargetValue")) {
                 original.format += "{targetValue}";
                 GUI.FocusControl("");

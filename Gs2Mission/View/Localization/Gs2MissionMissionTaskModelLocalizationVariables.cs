@@ -53,6 +53,9 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Localization
                 target.StringReference["counterName"] = new StringVariable {
                     Value = _fetcher?.MissionTaskModel?.CounterName ?? "",
                 };
+                target.StringReference["targetResetType"] = new StringVariable {
+                    Value = _fetcher?.MissionTaskModel?.TargetResetType ?? "",
+                };
                 target.StringReference["targetValue"] = new LongVariable {
                     Value = _fetcher?.MissionTaskModel?.TargetValue ?? 0,
                 };

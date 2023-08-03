@@ -24,45 +24,43 @@
 
 #pragma warning disable CS0472
 
-using System;
-using Gs2.Core.Util;
+using System.Collections.Generic;
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Mission.Fetcher;
 using UnityEngine;
-using UnityEngine.Events;
 
-namespace Gs2.Unity.UiKit.Gs2Mission
+namespace Gs2.Unity.UiKit.Gs2Mission.Enabler
 {
     /// <summary>
     /// Main
     /// </summary>
 
-	[AddComponentMenu("GS2 UIKit/Mission/MissionTaskModel/View/Label/Gs2MissionMissionTaskModelLabel")]
-    public partial class Gs2MissionMissionTaskModelLabel : MonoBehaviour
+	[AddComponentMenu("GS2 UIKit/Mission/MissionTaskModel/View/Enabler/Properties/TargetResetType/Gs2MissionMissionTaskModelTargetResetTypeEnabler")]
+    public partial class Gs2MissionMissionTaskModelTargetResetTypeEnabler : MonoBehaviour
     {
         public void Update()
         {
             if (_fetcher.Fetched && _fetcher.MissionTaskModel != null)
             {
-                onUpdate?.Invoke(
-                    format.Replace(
-                        "{name}", $"{_fetcher?.MissionTaskModel?.Name}"
-                    ).Replace(
-                        "{metadata}", $"{_fetcher?.MissionTaskModel?.Metadata}"
-                    ).Replace(
-                        "{counterName}", $"{_fetcher?.MissionTaskModel?.CounterName}"
-                    ).Replace(
-                        "{targetResetType}", $"{_fetcher?.MissionTaskModel?.TargetResetType}"
-                    ).Replace(
-                        "{targetValue}", $"{_fetcher?.MissionTaskModel?.TargetValue}"
-                    ).Replace(
-                        "{completeAcquireActions}", $"{_fetcher?.MissionTaskModel?.CompleteAcquireActions}"
-                    ).Replace(
-                        "{challengePeriodEventId}", $"{_fetcher?.MissionTaskModel?.ChallengePeriodEventId}"
-                    ).Replace(
-                        "{premiseMissionTaskName}", $"{_fetcher?.MissionTaskModel?.PremiseMissionTaskName}"
-                    )
-                );
+                switch(expression)
+                {
+                    case Expression.In:
+                        target.SetActive(enableTargetResetTypes.Contains(_fetcher.MissionTaskModel.TargetResetType));
+                        break;
+                    case Expression.NotIn:
+                        target.SetActive(!enableTargetResetTypes.Contains(_fetcher.MissionTaskModel.TargetResetType));
+                        break;
+                    case Expression.StartsWith:
+                        target.SetActive(enableTargetResetType.StartsWith(_fetcher.MissionTaskModel.TargetResetType));
+                        break;
+                    case Expression.EndsWith:
+                        target.SetActive(enableTargetResetType.EndsWith(_fetcher.MissionTaskModel.TargetResetType));
+                        break;
+                }
+            }
+            else
+            {
+                target.SetActive(false);
             }
         }
     }
@@ -71,7 +69,7 @@ namespace Gs2.Unity.UiKit.Gs2Mission
     /// Dependent components
     /// </summary>
 
-    public partial class Gs2MissionMissionTaskModelLabel
+    public partial class Gs2MissionMissionTaskModelTargetResetTypeEnabler
     {
         private Gs2MissionMissionTaskModelFetcher _fetcher;
 
@@ -83,14 +81,19 @@ namespace Gs2.Unity.UiKit.Gs2Mission
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MissionMissionTaskModelFetcher.");
                 enabled = false;
             }
-
-            Update();
+            if (target == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: target is not set.");
+                enabled = false;
+            }
         }
 
         public bool HasError()
         {
             _fetcher = GetComponent<Gs2MissionMissionTaskModelFetcher>() ?? GetComponentInParent<Gs2MissionMissionTaskModelFetcher>(true);
             if (_fetcher == null) {
+                return true;
+            }
+            if (target == null) {
                 return true;
             }
             return false;
@@ -101,7 +104,7 @@ namespace Gs2.Unity.UiKit.Gs2Mission
     /// Public properties
     /// </summary>
 
-    public partial class Gs2MissionMissionTaskModelLabel
+    public partial class Gs2MissionMissionTaskModelTargetResetTypeEnabler
     {
 
     }
@@ -110,29 +113,29 @@ namespace Gs2.Unity.UiKit.Gs2Mission
     /// Parameters for Inspector
     /// </summary>
 
-    public partial class Gs2MissionMissionTaskModelLabel
+    public partial class Gs2MissionMissionTaskModelTargetResetTypeEnabler
     {
-        public string format;
+        public enum Expression {
+            In,
+            NotIn,
+            StartsWith,
+            EndsWith,
+        }
+
+        public Expression expression;
+
+        public List<string> enableTargetResetTypes;
+
+        public string enableTargetResetType;
+
+        public GameObject target;
     }
 
     /// <summary>
     /// Event handlers
     /// </summary>
-    public partial class Gs2MissionMissionTaskModelLabel
+    public partial class Gs2MissionMissionTaskModelTargetResetTypeEnabler
     {
-        [Serializable]
-        private class UpdateEvent : UnityEvent<string>
-        {
-
-        }
-
-        [SerializeField]
-        private UpdateEvent onUpdate = new UpdateEvent();
-
-        public event UnityAction<string> OnUpdate
-        {
-            add => onUpdate.AddListener(value);
-            remove => onUpdate.RemoveListener(value);
-        }
+        
     }
 }

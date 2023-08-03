@@ -57,6 +57,8 @@ namespace Gs2.Unity.UiKit.Gs2Experience
                         "{maxRankCap}", $"{_fetcher?.ExperienceModel?.MaxRankCap}"
                     ).Replace(
                         "{rankThreshold}", $"{_fetcher?.ExperienceModel?.RankThreshold}"
+                    ).Replace(
+                        "{acquireActionRates}", $"{_fetcher?.ExperienceModel?.AcquireActionRates}"
                     )
                 );
             }
