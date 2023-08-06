@@ -64,8 +64,8 @@ namespace Gs2.Unity.UiKit.Gs2Experience.Localization.Editor
                     EditorGUI.indentLevel++;
                     context.ExperienceModel = EditorGUILayout.ObjectField("ExperienceModel", context.ExperienceModel, typeof(ExperienceModel), false) as ExperienceModel;
                     EditorGUI.indentLevel++;
-                    EditorGUILayout.TextField("NamespaceName", context.ExperienceModel?.NamespaceName.ToString());
-                    EditorGUILayout.TextField("ExperienceName", context.ExperienceModel?.ExperienceName.ToString());
+                    EditorGUILayout.TextField("NamespaceName", context.ExperienceModel?.NamespaceName?.ToString());
+                    EditorGUILayout.TextField("ExperienceName", context.ExperienceModel?.ExperienceName?.ToString());
                     EditorGUI.indentLevel--;
                     EditorGUI.indentLevel--;
                     EditorGUI.EndDisabledGroup();

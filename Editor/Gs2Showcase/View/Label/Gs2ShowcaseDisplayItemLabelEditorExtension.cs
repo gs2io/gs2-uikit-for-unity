@@ -40,23 +40,25 @@ namespace Gs2.Unity.UiKit.Gs2Showcase.Editor
 
             if (original == null) return;
 
-            var fetcher = original.GetComponent<Gs2ShowcaseDisplayItemFetcher>() ?? original.GetComponentInParent<Gs2ShowcaseDisplayItemFetcher>(true);
+            var fetcher = original.GetComponent<Gs2ShowcaseOwnDisplayItemFetcher>() ?? original.GetComponentInParent<Gs2ShowcaseOwnDisplayItemFetcher>(true);
             if (fetcher == null) {
-                EditorGUILayout.HelpBox("Gs2ShowcaseDisplayItemFetcher not found.", MessageType.Error);
+                EditorGUILayout.HelpBox("Gs2ShowcaseOwnDisplayItemFetcher not found.", MessageType.Error);
                 if (GUILayout.Button("Add Fetcher")) {
-                    original.gameObject.AddComponent<Gs2ShowcaseDisplayItemFetcher>();
+                    original.gameObject.AddComponent<Gs2ShowcaseOwnDisplayItemFetcher>();
                 }
             }
             else {
                 EditorGUI.BeginDisabledGroup(true);
-                EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2ShowcaseDisplayItemFetcher), false);
+                EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2ShowcaseOwnDisplayItemFetcher), false);
                 EditorGUI.indentLevel++;
-                fetcher.Context.DisplayItem = EditorGUILayout.ObjectField("DisplayItem", fetcher.Context.DisplayItem, typeof(DisplayItem), false) as DisplayItem;
-                EditorGUI.indentLevel++;
-                EditorGUILayout.TextField("NamespaceName", fetcher.Context.DisplayItem?.NamespaceName.ToString());
-                EditorGUILayout.TextField("ShowcaseName", fetcher.Context.DisplayItem?.ShowcaseName.ToString());
-                EditorGUILayout.TextField("DisplayItemId", fetcher.Context.DisplayItem?.DisplayItemId.ToString());
-                EditorGUI.indentLevel--;
+                if (fetcher.Context != null) {
+                    fetcher.Context.DisplayItem = EditorGUILayout.ObjectField("DisplayItem", fetcher.Context.DisplayItem, typeof(OwnDisplayItem), false) as OwnDisplayItem;
+                    EditorGUI.indentLevel++;
+                    EditorGUILayout.TextField("NamespaceName", fetcher.Context.DisplayItem?.NamespaceName?.ToString());
+                    EditorGUILayout.TextField("ShowcaseName", fetcher.Context.DisplayItem?.ShowcaseName?.ToString());
+                    EditorGUILayout.TextField("DisplayItemId", fetcher.Context.DisplayItem?.DisplayItemId?.ToString());
+                    EditorGUI.indentLevel--;
+                }
                 EditorGUI.indentLevel--;
                 EditorGUI.EndDisabledGroup();
             }

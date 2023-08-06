@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
@@ -42,17 +44,17 @@ namespace Gs2.Unity.UiKit.Gs2Showcase
     {
         public void Update()
         {
-            if (_fetcher.Fetched && _fetcher.SalesItem != null)
+            if (_fetcher.Fetched && _fetcher.DisplayItem != null)
             {
                 onUpdate?.Invoke(
                     format.Replace(
-                        "{name}", $"{_fetcher?.SalesItem?.Name}"
+                        "{name}", $"{_fetcher?.DisplayItem?.SalesItem?.Name}"
                     ).Replace(
-                        "{metadata}", $"{_fetcher?.SalesItem?.Metadata}"
+                        "{metadata}", $"{_fetcher?.DisplayItem?.SalesItem?.Metadata}"
                     ).Replace(
-                        "{consumeActions}", $"{_fetcher?.SalesItem?.ConsumeActions}"
+                        "{consumeActions}", $"{_fetcher?.DisplayItem?.SalesItem?.ConsumeActions}"
                     ).Replace(
-                        "{acquireActions}", $"{_fetcher?.SalesItem?.AcquireActions}"
+                        "{acquireActions}", $"{_fetcher?.DisplayItem?.SalesItem?.AcquireActions}"
                     )
                 );
             }
@@ -65,14 +67,14 @@ namespace Gs2.Unity.UiKit.Gs2Showcase
 
     public partial class Gs2ShowcaseSalesItemLabel
     {
-        private Gs2ShowcaseSalesItemFetcher _fetcher;
+        private Gs2ShowcaseOwnDisplayItemFetcher _fetcher;
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2ShowcaseSalesItemFetcher>() ?? GetComponentInParent<Gs2ShowcaseSalesItemFetcher>();
+            _fetcher = GetComponent<Gs2ShowcaseOwnDisplayItemFetcher>() ?? GetComponentInParent<Gs2ShowcaseOwnDisplayItemFetcher>();
 
             if (_fetcher == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ShowcaseSalesItemFetcher.");
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ShowcaseOwnDisplayItemFetcher.");
                 enabled = false;
             }
 
@@ -81,7 +83,7 @@ namespace Gs2.Unity.UiKit.Gs2Showcase
 
         public bool HasError()
         {
-            _fetcher = GetComponent<Gs2ShowcaseSalesItemFetcher>() ?? GetComponentInParent<Gs2ShowcaseSalesItemFetcher>(true);
+            _fetcher = GetComponent<Gs2ShowcaseOwnDisplayItemFetcher>() ?? GetComponentInParent<Gs2ShowcaseOwnDisplayItemFetcher>(true);
             if (_fetcher == null) {
                 return true;
             }

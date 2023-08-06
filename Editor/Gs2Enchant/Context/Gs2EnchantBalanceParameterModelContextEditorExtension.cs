@@ -54,10 +54,12 @@ namespace Gs2.Unity.UiKit.Gs2Enchant.Editor
             else {
                 original.BalanceParameterModel = EditorGUILayout.ObjectField("BalanceParameterModel", original.BalanceParameterModel, typeof(BalanceParameterModel), false) as BalanceParameterModel;
                 EditorGUI.BeginDisabledGroup(true);
-                EditorGUI.indentLevel++;
-                EditorGUILayout.TextField("NamespaceName", original.BalanceParameterModel?.NamespaceName.ToString());
-                EditorGUILayout.TextField("ParameterName", original.BalanceParameterModel?.ParameterName.ToString());
-                EditorGUI.indentLevel--;
+                if (original.BalanceParameterModel != null) {
+                    EditorGUI.indentLevel++;
+                    EditorGUILayout.TextField("NamespaceName", original.BalanceParameterModel?.NamespaceName?.ToString());
+                    EditorGUILayout.TextField("ParameterName", original.BalanceParameterModel?.ParameterName?.ToString());
+                    EditorGUI.indentLevel--;
+                }
                 EditorGUI.EndDisabledGroup();
             }
 

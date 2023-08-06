@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
@@ -62,7 +64,7 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking.Fetcher
                     var domain = this._clientHolder.Gs2.Matchmaking.Namespace(
                         this.Context.Gathering.NamespaceName
                     ).User(
-                        this.Context.Gathering.UserId
+                        ""
                     ).Gathering(
                         this.Context.Gathering.GatheringName
                     );

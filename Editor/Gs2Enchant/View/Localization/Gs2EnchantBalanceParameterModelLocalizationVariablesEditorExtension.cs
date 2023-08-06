@@ -64,8 +64,8 @@ namespace Gs2.Unity.UiKit.Gs2Enchant.Localization.Editor
                     EditorGUI.indentLevel++;
                     context.BalanceParameterModel = EditorGUILayout.ObjectField("BalanceParameterModel", context.BalanceParameterModel, typeof(BalanceParameterModel), false) as BalanceParameterModel;
                     EditorGUI.indentLevel++;
-                    EditorGUILayout.TextField("NamespaceName", context.BalanceParameterModel?.NamespaceName.ToString());
-                    EditorGUILayout.TextField("ParameterName", context.BalanceParameterModel?.ParameterName.ToString());
+                    EditorGUILayout.TextField("NamespaceName", context.BalanceParameterModel?.NamespaceName?.ToString());
+                    EditorGUILayout.TextField("ParameterName", context.BalanceParameterModel?.ParameterName?.ToString());
                     EditorGUI.indentLevel--;
                     EditorGUI.indentLevel--;
                     EditorGUI.EndDisabledGroup();

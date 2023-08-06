@@ -62,8 +62,8 @@ namespace Gs2.Unity.UiKit.Gs2Schedule.Editor
                     if (fetcher.Context != null) {
                         fetcher.Context.Trigger = EditorGUILayout.ObjectField("Trigger", fetcher.Context.Trigger, typeof(OwnTrigger), false) as OwnTrigger;
                         EditorGUI.indentLevel++;
-                        EditorGUILayout.TextField("NamespaceName", fetcher.Context.Trigger?.NamespaceName.ToString());
-                        EditorGUILayout.TextField("TriggerName", fetcher.Context.Trigger?.TriggerName.ToString());
+                        EditorGUILayout.TextField("NamespaceName", fetcher.Context.Trigger?.NamespaceName?.ToString());
+                        EditorGUILayout.TextField("TriggerName", fetcher.Context.Trigger?.TriggerName?.ToString());
                         EditorGUI.indentLevel--;
                     }
                     EditorGUI.indentLevel--;

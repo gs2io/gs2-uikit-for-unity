@@ -64,8 +64,8 @@ namespace Gs2.Unity.UiKit.Gs2Version.Localization.Editor
                     EditorGUI.indentLevel++;
                     context.VersionModel = EditorGUILayout.ObjectField("VersionModel", context.VersionModel, typeof(VersionModel), false) as VersionModel;
                     EditorGUI.indentLevel++;
-                    EditorGUILayout.TextField("NamespaceName", context.VersionModel?.NamespaceName.ToString());
-                    EditorGUILayout.TextField("VersionName", context.VersionModel?.VersionName.ToString());
+                    EditorGUILayout.TextField("NamespaceName", context.VersionModel?.NamespaceName?.ToString());
+                    EditorGUILayout.TextField("VersionName", context.VersionModel?.VersionName?.ToString());
                     EditorGUI.indentLevel--;
                     EditorGUI.indentLevel--;
                     EditorGUI.EndDisabledGroup();

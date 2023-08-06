@@ -49,11 +49,13 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking.Editor
             else {
                 original.Vote = EditorGUILayout.ObjectField("Vote", original.Vote, typeof(Vote), false) as Vote;
                 EditorGUI.BeginDisabledGroup(true);
-                EditorGUI.indentLevel++;
-                EditorGUILayout.TextField("NamespaceName", original.Vote?.NamespaceName.ToString());
-                EditorGUILayout.TextField("RatingName", original.Vote?.RatingName.ToString());
-                EditorGUILayout.TextField("GatheringName", original.Vote?.GatheringName.ToString());
-                EditorGUI.indentLevel--;
+                if (original.Vote != null) {
+                    EditorGUI.indentLevel++;
+                    EditorGUILayout.TextField("NamespaceName", original.Vote?.NamespaceName?.ToString());
+                    EditorGUILayout.TextField("RatingName", original.Vote?.RatingName?.ToString());
+                    EditorGUILayout.TextField("GatheringName", original.Vote?.GatheringName?.ToString());
+                    EditorGUI.indentLevel--;
+                }
                 EditorGUI.EndDisabledGroup();
             }
 

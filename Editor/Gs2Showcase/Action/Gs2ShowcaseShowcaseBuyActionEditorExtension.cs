@@ -12,8 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
- * deny overwrite
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
@@ -42,37 +40,32 @@ namespace Gs2.Unity.UiKit.Gs2Showcase.Editor
 
             if (original == null) return;
 
-            var context = original.GetComponent<Gs2ShowcaseDisplayItemContext>() ?? original.GetComponentInParent<Gs2ShowcaseDisplayItemContext>(true);
+            var context = original.GetComponent<Gs2ShowcaseOwnShowcaseContext>() ?? original.GetComponentInParent<Gs2ShowcaseOwnShowcaseContext>(true);
             if (context == null) {
-                EditorGUILayout.HelpBox("Gs2ShowcaseDisplayItemContext not found.", MessageType.Error);
+                EditorGUILayout.HelpBox("Gs2ShowcaseOwnShowcaseContext not found.", MessageType.Error);
                 if (GUILayout.Button("Add Context")) {
-                    original.gameObject.AddComponent<Gs2ShowcaseDisplayItemContext>();
+                    original.gameObject.AddComponent<Gs2ShowcaseOwnShowcaseContext>();
                 }
             }
             else {
                 EditorGUI.BeginDisabledGroup(true);
-                EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2ShowcaseDisplayItemContext), false);
+                EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2ShowcaseOwnShowcaseContext), false);
                 EditorGUI.indentLevel++;
-                context.DisplayItem = EditorGUILayout.ObjectField("DisplayItem", context.DisplayItem, typeof(DisplayItem), false) as DisplayItem;
-                EditorGUI.indentLevel++;
-                if (context.DisplayItem != null) {
-                    EditorGUILayout.TextField("NamespaceName", context.DisplayItem.NamespaceName.ToString());
-                    EditorGUILayout.TextField("ShowcaseName", context.DisplayItem.ShowcaseName.ToString());
-                    EditorGUILayout.TextField("DisplayItemId", context.DisplayItem.DisplayItemId.ToString());
+                context.Showcase = EditorGUILayout.ObjectField("OwnShowcase", context.Showcase, typeof(OwnShowcase), false) as OwnShowcase;
+                if (context.Showcase != null) {
+                    EditorGUI.indentLevel++;
+                    EditorGUILayout.TextField("NamespaceName", context.Showcase?.NamespaceName?.ToString());
+                    EditorGUILayout.TextField("ShowcaseName", context.Showcase?.ShowcaseName?.ToString());
+                    EditorGUI.indentLevel--;
                 }
-                EditorGUI.indentLevel--;
                 EditorGUI.indentLevel--;
                 EditorGUI.EndDisabledGroup();
             }
 
             serializedObject.Update();
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("Quantity"), true);
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("Config"), true);
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("onChangeQuantity"), true);
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("onChangeConfig"), true);
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("onBuyComplete"), true);
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("onError"), true);
             serializedObject.ApplyModifiedProperties();
+
+            DrawDefaultInspector();
         }
     }
 }

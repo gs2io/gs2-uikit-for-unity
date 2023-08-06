@@ -51,12 +51,14 @@ namespace Gs2.Unity.UiKit.Gs2Chat.Editor
                 EditorGUI.BeginDisabledGroup(true);
                 EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2ChatMessageFetcher), false);
                 EditorGUI.indentLevel++;
-                fetcher.Context.Message = EditorGUILayout.ObjectField("Message", fetcher.Context.Message, typeof(Message), false) as Message;
-                EditorGUI.indentLevel++;
-                EditorGUILayout.TextField("NamespaceName", fetcher.Context.Message?.NamespaceName.ToString());
-                EditorGUILayout.TextField("RoomName", fetcher.Context.Message?.RoomName.ToString());
-                EditorGUILayout.TextField("MessageName", fetcher.Context.Message?.MessageName.ToString());
-                EditorGUI.indentLevel--;
+                if (fetcher.Context != null) {
+                    fetcher.Context.Message = EditorGUILayout.ObjectField("Message", fetcher.Context.Message, typeof(Message), false) as Message;
+                    EditorGUI.indentLevel++;
+                    EditorGUILayout.TextField("NamespaceName", fetcher.Context.Message?.NamespaceName?.ToString());
+                    EditorGUILayout.TextField("RoomName", fetcher.Context.Message?.RoomName?.ToString());
+                    EditorGUILayout.TextField("MessageName", fetcher.Context.Message?.MessageName?.ToString());
+                    EditorGUI.indentLevel--;
+                }
                 EditorGUI.indentLevel--;
                 EditorGUI.EndDisabledGroup();
             }

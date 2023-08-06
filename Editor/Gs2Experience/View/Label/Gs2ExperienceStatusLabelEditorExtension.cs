@@ -61,9 +61,9 @@ namespace Gs2.Unity.UiKit.Gs2Experience.Editor
                     if (fetcher.Context != null) {
                         fetcher.Context.Status = EditorGUILayout.ObjectField("Status", fetcher.Context.Status, typeof(OwnStatus), false) as OwnStatus;
                         EditorGUI.indentLevel++;
-                        EditorGUILayout.TextField("NamespaceName", fetcher.Context.Status?.NamespaceName.ToString());
-                        EditorGUILayout.TextField("ExperienceName", fetcher.Context.Status?.ExperienceName.ToString());
-                        EditorGUILayout.TextField("PropertyId", fetcher.Context.Status?.PropertyId.ToString());
+                        EditorGUILayout.TextField("NamespaceName", fetcher.Context.Status?.NamespaceName?.ToString());
+                        EditorGUILayout.TextField("ExperienceName", fetcher.Context.Status?.ExperienceName?.ToString());
+                        EditorGUILayout.TextField("PropertyId", fetcher.Context.Status?.PropertyId?.ToString());
                         EditorGUI.indentLevel--;
                     }
                     EditorGUI.indentLevel--;
@@ -97,6 +97,11 @@ namespace Gs2.Unity.UiKit.Gs2Experience.Editor
             }
             if (GUILayout.Button("RankCapValue")) {
                 original.format += "{rankCapValue}";
+                GUI.FocusControl("");
+                EditorUtility.SetDirty(original);
+            }
+            if (GUILayout.Button("NextRankUpExperienceValue")) {
+                original.format += "{nextRankUpExperienceValue}";
                 GUI.FocusControl("");
                 EditorUtility.SetDirty(original);
             }

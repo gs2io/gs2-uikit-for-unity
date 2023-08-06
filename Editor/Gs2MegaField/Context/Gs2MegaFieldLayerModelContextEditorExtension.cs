@@ -54,9 +54,11 @@ namespace Gs2.Unity.UiKit.Gs2MegaField.Editor
             else {
                 original.LayerModel = EditorGUILayout.ObjectField("LayerModel", original.LayerModel, typeof(LayerModel), false) as LayerModel;
                 EditorGUI.BeginDisabledGroup(true);
-                EditorGUI.indentLevel++;
-                EditorGUILayout.TextField("LayerModelName", original.LayerModel?.LayerModelName.ToString());
-                EditorGUI.indentLevel--;
+                if (original.LayerModel != null) {
+                    EditorGUI.indentLevel++;
+                    EditorGUILayout.TextField("LayerModelName", original.LayerModel?.LayerModelName?.ToString());
+                    EditorGUI.indentLevel--;
+                }
                 EditorGUI.EndDisabledGroup();
             }
 

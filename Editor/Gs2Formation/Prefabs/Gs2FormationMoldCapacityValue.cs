@@ -5,7 +5,7 @@ namespace Editor.Gs2Formation.Prefabs
 {
     public static class Gs2FormationMoldCapacityValue
     {
-        [MenuItem("GameObject/UI/Game Server Services/Formation/Mold/MoldCapacityValue", priority = 0)]
+        [MenuItem("GameObject/UI/Game Server Services/Formation/Namespace/User/Mold/Label/CapacityValue", priority = 0)]
         private static void CreateButton()
         {
             var prefab = AssetDatabase.LoadAssetAtPath<GameObject>(

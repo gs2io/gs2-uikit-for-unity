@@ -53,7 +53,7 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Editor
                 if (fetcher.Context != null) {
                     fetcher.Context.QuestGroupModel = EditorGUILayout.ObjectField("QuestGroupModel", fetcher.Context.QuestGroupModel, typeof(QuestGroupModel), false) as QuestGroupModel;
                     EditorGUI.indentLevel++;
-                    EditorGUILayout.TextField("NamespaceName", fetcher.Context.QuestGroupModel?.NamespaceName.ToString());
+                    EditorGUILayout.TextField("NamespaceName", fetcher.Context.QuestGroupModel?.NamespaceName?.ToString());
                     EditorGUI.indentLevel--;
                 }
                 EditorGUI.indentLevel--;

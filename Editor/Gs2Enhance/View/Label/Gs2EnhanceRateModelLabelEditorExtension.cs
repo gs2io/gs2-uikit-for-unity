@@ -61,8 +61,8 @@ namespace Gs2.Unity.UiKit.Gs2Enhance.Editor
                     if (fetcher.Context != null) {
                         fetcher.Context.RateModel = EditorGUILayout.ObjectField("RateModel", fetcher.Context.RateModel, typeof(RateModel), false) as RateModel;
                         EditorGUI.indentLevel++;
-                        EditorGUILayout.TextField("NamespaceName", fetcher.Context.RateModel?.NamespaceName.ToString());
-                        EditorGUILayout.TextField("RateName", fetcher.Context.RateModel?.RateName.ToString());
+                        EditorGUILayout.TextField("NamespaceName", fetcher.Context.RateModel?.NamespaceName?.ToString());
+                        EditorGUILayout.TextField("RateName", fetcher.Context.RateModel?.RateName?.ToString());
                         EditorGUI.indentLevel--;
                     }
                     EditorGUI.indentLevel--;

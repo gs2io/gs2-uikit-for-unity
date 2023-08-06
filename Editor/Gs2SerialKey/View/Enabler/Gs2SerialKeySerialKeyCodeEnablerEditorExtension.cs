@@ -39,21 +39,21 @@ namespace Gs2.Unity.UiKit.Gs2SerialKey.Enabler.Editor
 
             if (original == null) return;
 
-            var context = original.GetComponent<Gs2SerialKeySerialKeyContext>() ?? original.GetComponentInParent<Gs2SerialKeySerialKeyContext>(true);
+            var context = original.GetComponent<Gs2SerialKeyOwnSerialKeyContext>() ?? original.GetComponentInParent<Gs2SerialKeyOwnSerialKeyContext>(true);
             if (context == null) {
-                EditorGUILayout.HelpBox("Gs2SerialKeySerialKeyContext not found.", MessageType.Error);
+                EditorGUILayout.HelpBox("Gs2SerialKeyOwnSerialKeyContext not found.", MessageType.Error);
                 if (GUILayout.Button("Add Context")) {
-                    original.gameObject.AddComponent<Gs2SerialKeySerialKeyContext>();
+                    original.gameObject.AddComponent<Gs2SerialKeyOwnSerialKeyContext>();
                 }
             }
             else {
                 EditorGUI.BeginDisabledGroup(true);
-                EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2SerialKeySerialKeyContext), false);
+                EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2SerialKeyOwnSerialKeyContext), false);
                 EditorGUI.indentLevel++;
-                context.SerialKey = EditorGUILayout.ObjectField("SerialKey", context.SerialKey, typeof(SerialKey), false) as SerialKey;
+                context.SerialKey = EditorGUILayout.ObjectField("SerialKey", context.SerialKey, typeof(OwnSerialKey), false) as OwnSerialKey;
                 EditorGUI.indentLevel++;
-                EditorGUILayout.TextField("NamespaceName", context.SerialKey?.NamespaceName.ToString());
-                EditorGUILayout.TextField("SerialKeyCode", context.SerialKey?.SerialKeyCode.ToString());
+                EditorGUILayout.TextField("NamespaceName", context.SerialKey?.NamespaceName?.ToString());
+                EditorGUILayout.TextField("SerialKeyCode", context.SerialKey?.SerialKeyCode?.ToString());
                 EditorGUI.indentLevel--;
                 EditorGUI.indentLevel--;
                 EditorGUI.EndDisabledGroup();

@@ -68,7 +68,9 @@ namespace Gs2.Unity.UiKit.Gs2Account
             for (var i = 0; i < this.maximumItems; i++) {
                 var node = Instantiate(this.prefab, transform);
                 node.TakeOver = OwnTakeOver.New(
-                    _context.Account,
+                    OwnAccount.New(
+                        _context.Account.Namespace
+                    ),
                     0
                 );
                 node.gameObject.SetActive(false);

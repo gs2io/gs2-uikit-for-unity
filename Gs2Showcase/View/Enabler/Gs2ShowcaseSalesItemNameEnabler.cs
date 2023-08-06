@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
@@ -40,21 +42,21 @@ namespace Gs2.Unity.UiKit.Gs2Showcase.Enabler
     {
         public void Update()
         {
-            if (_fetcher.Fetched && _fetcher.SalesItem != null)
+            if (_fetcher.Fetched && _fetcher.DisplayItem != null)
             {
                 switch(expression)
                 {
                     case Expression.In:
-                        target.SetActive(enableNames.Contains(_fetcher.SalesItem.Name));
+                        target.SetActive(enableNames.Contains(_fetcher.DisplayItem.SalesItem.Name));
                         break;
                     case Expression.NotIn:
-                        target.SetActive(!enableNames.Contains(_fetcher.SalesItem.Name));
+                        target.SetActive(!enableNames.Contains(_fetcher.DisplayItem.SalesItem.Name));
                         break;
                     case Expression.StartsWith:
-                        target.SetActive(enableName.StartsWith(_fetcher.SalesItem.Name));
+                        target.SetActive(enableName.StartsWith(_fetcher.DisplayItem.SalesItem.Name));
                         break;
                     case Expression.EndsWith:
-                        target.SetActive(enableName.EndsWith(_fetcher.SalesItem.Name));
+                        target.SetActive(enableName.EndsWith(_fetcher.DisplayItem.SalesItem.Name));
                         break;
                 }
             }
@@ -71,14 +73,14 @@ namespace Gs2.Unity.UiKit.Gs2Showcase.Enabler
 
     public partial class Gs2ShowcaseSalesItemNameEnabler
     {
-        private Gs2ShowcaseSalesItemFetcher _fetcher;
+        private Gs2ShowcaseOwnDisplayItemFetcher _fetcher;
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2ShowcaseSalesItemFetcher>() ?? GetComponentInParent<Gs2ShowcaseSalesItemFetcher>();
+            _fetcher = GetComponent<Gs2ShowcaseOwnDisplayItemFetcher>() ?? GetComponentInParent<Gs2ShowcaseOwnDisplayItemFetcher>();
 
             if (_fetcher == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ShowcaseSalesItemFetcher.");
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ShowcaseOwnDisplayItemFetcher.");
                 enabled = false;
             }
             if (target == null) {
@@ -89,7 +91,7 @@ namespace Gs2.Unity.UiKit.Gs2Showcase.Enabler
 
         public bool HasError()
         {
-            _fetcher = GetComponent<Gs2ShowcaseSalesItemFetcher>() ?? GetComponentInParent<Gs2ShowcaseSalesItemFetcher>(true);
+            _fetcher = GetComponent<Gs2ShowcaseOwnDisplayItemFetcher>() ?? GetComponentInParent<Gs2ShowcaseOwnDisplayItemFetcher>(true);
             if (_fetcher == null) {
                 return true;
             }

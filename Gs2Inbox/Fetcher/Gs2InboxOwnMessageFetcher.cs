@@ -28,13 +28,13 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
-using System.Text;
 using Gs2.Core.Exception;
 using Gs2.Unity.Core.Exception;
 using Gs2.Unity.Gs2Inbox.Model;
 using Gs2.Unity.Gs2Inbox.ScriptableObject;
 using Gs2.Unity.Util;
 using Gs2.Unity.UiKit.Core;
+using Gs2.Unity.UiKit.Gs2Core.Fetcher;
 using Gs2.Unity.UiKit.Gs2Inbox.Context;
 using UnityEngine;
 using UnityEngine.Events;
@@ -46,7 +46,7 @@ namespace Gs2.Unity.UiKit.Gs2Inbox.Fetcher
     /// </summary>
 
 	[AddComponentMenu("GS2 UIKit/Inbox/Message/Fetcher/Gs2InboxOwnMessageFetcher")]
-    public partial class Gs2InboxOwnMessageFetcher : MonoBehaviour
+    public partial class Gs2InboxOwnMessageFetcher : MonoBehaviour, IAcquireActionsFetcher
     {
         private IEnumerator Fetch()
         {
@@ -104,6 +104,13 @@ namespace Gs2.Unity.UiKit.Gs2Inbox.Fetcher
         public void OnDisable()
         {
             StopCoroutine(nameof(Fetch));
+        }
+
+        public List<Unity.Core.Model.EzAcquireAction> AcquireActions(string context = "default") {
+            if (!Fetched) {
+                return new List<Unity.Core.Model.EzAcquireAction>();
+            }
+            return Message.ReadAcquireActions;
         }
     }
 

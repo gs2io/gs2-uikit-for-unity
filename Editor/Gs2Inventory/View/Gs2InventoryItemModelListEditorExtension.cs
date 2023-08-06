@@ -53,7 +53,7 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Editor
                 if (fetcher.Context != null) {
                     fetcher.Context.InventoryModel = EditorGUILayout.ObjectField("InventoryModel", fetcher.Context.InventoryModel, typeof(InventoryModel), false) as InventoryModel;
                     EditorGUI.indentLevel++;
-                    EditorGUILayout.TextField("NamespaceName", fetcher.Context.InventoryModel?.NamespaceName.ToString());
+                    EditorGUILayout.TextField("NamespaceName", fetcher.Context.InventoryModel?.NamespaceName?.ToString());
                     EditorGUI.indentLevel--;
                 }
                 EditorGUI.indentLevel--;

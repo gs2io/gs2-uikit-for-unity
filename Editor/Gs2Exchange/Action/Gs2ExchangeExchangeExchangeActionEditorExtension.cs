@@ -54,22 +54,20 @@ namespace Gs2.Unity.UiKit.Gs2Exchange.Editor
                 EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2ExchangeRateModelContext), false);
                 EditorGUI.indentLevel++;
                 context.RateModel = EditorGUILayout.ObjectField("RateModel", context.RateModel, typeof(RateModel), false) as RateModel;
-                EditorGUI.indentLevel++;
-                EditorGUILayout.TextField("NamespaceName", context.RateModel.NamespaceName.ToString());
-                EditorGUILayout.TextField("RateName", context.RateModel.RateName.ToString());
-                EditorGUI.indentLevel--;
+                if (context.RateModel != null) {
+                    EditorGUI.indentLevel++;
+                    EditorGUILayout.TextField("NamespaceName", context.RateModel.NamespaceName.ToString());
+                    EditorGUILayout.TextField("RateName", context.RateModel.RateName.ToString());
+                    EditorGUI.indentLevel--;
+                }
                 EditorGUI.indentLevel--;
                 EditorGUI.EndDisabledGroup();
             }
 
             serializedObject.Update();
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("Count"), true);
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("Config"), true);
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("onChangeCount"), true);
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("onChangeConfig"), true);
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("onExchangeComplete"), true);
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("onError"), true);
             serializedObject.ApplyModifiedProperties();
+
+            DrawDefaultInspector();
         }
     }
 }

@@ -54,10 +54,12 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Editor
             else {
                 original.InventoryModel = EditorGUILayout.ObjectField("InventoryModel", original.InventoryModel, typeof(InventoryModel), false) as InventoryModel;
                 EditorGUI.BeginDisabledGroup(true);
-                EditorGUI.indentLevel++;
-                EditorGUILayout.TextField("NamespaceName", original.InventoryModel?.NamespaceName.ToString());
-                EditorGUILayout.TextField("InventoryName", original.InventoryModel?.InventoryName.ToString());
-                EditorGUI.indentLevel--;
+                if (original.InventoryModel != null) {
+                    EditorGUI.indentLevel++;
+                    EditorGUILayout.TextField("NamespaceName", original.InventoryModel?.NamespaceName?.ToString());
+                    EditorGUILayout.TextField("InventoryName", original.InventoryModel?.InventoryName?.ToString());
+                    EditorGUI.indentLevel--;
+                }
                 EditorGUI.EndDisabledGroup();
             }
 

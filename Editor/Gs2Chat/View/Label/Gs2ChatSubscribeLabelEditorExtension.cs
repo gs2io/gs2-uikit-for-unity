@@ -61,8 +61,8 @@ namespace Gs2.Unity.UiKit.Gs2Chat.Editor
                     if (fetcher.Context != null) {
                         fetcher.Context.Subscribe = EditorGUILayout.ObjectField("Subscribe", fetcher.Context.Subscribe, typeof(OwnSubscribe), false) as OwnSubscribe;
                         EditorGUI.indentLevel++;
-                        EditorGUILayout.TextField("NamespaceName", fetcher.Context.Subscribe?.NamespaceName.ToString());
-                        EditorGUILayout.TextField("RoomName", fetcher.Context.Subscribe?.RoomName.ToString());
+                        EditorGUILayout.TextField("NamespaceName", fetcher.Context.Subscribe?.NamespaceName?.ToString());
+                        EditorGUILayout.TextField("RoomName", fetcher.Context.Subscribe?.RoomName?.ToString());
                         EditorGUI.indentLevel--;
                     }
                     EditorGUI.indentLevel--;

@@ -61,14 +61,14 @@ namespace Gs2.Unity.UiKit.Gs2Ranking
 
     public partial class Gs2RankingSubscribeUserLabel
     {
-        private Gs2RankingSubscribeUserFetcher _fetcher;
+        private Gs2RankingOwnSubscribeUserFetcher _fetcher;
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2RankingSubscribeUserFetcher>() ?? GetComponentInParent<Gs2RankingSubscribeUserFetcher>();
+            _fetcher = GetComponent<Gs2RankingOwnSubscribeUserFetcher>() ?? GetComponentInParent<Gs2RankingOwnSubscribeUserFetcher>();
 
             if (_fetcher == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2RankingSubscribeUserFetcher.");
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2RankingOwnSubscribeUserFetcher.");
                 enabled = false;
             }
 
@@ -77,7 +77,7 @@ namespace Gs2.Unity.UiKit.Gs2Ranking
 
         public bool HasError()
         {
-            _fetcher = GetComponent<Gs2RankingSubscribeUserFetcher>() ?? GetComponentInParent<Gs2RankingSubscribeUserFetcher>(true);
+            _fetcher = GetComponent<Gs2RankingOwnSubscribeUserFetcher>() ?? GetComponentInParent<Gs2RankingOwnSubscribeUserFetcher>(true);
             if (_fetcher == null) {
                 return true;
             }

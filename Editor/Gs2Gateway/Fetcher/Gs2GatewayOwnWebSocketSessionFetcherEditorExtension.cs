@@ -53,8 +53,8 @@ namespace Gs2.Unity.UiKit.Gs2Gateway.Editor
                 EditorGUI.indentLevel++;
                 context.WebSocketSession = EditorGUILayout.ObjectField("WebSocketSession", context.WebSocketSession, typeof(OwnWebSocketSession), false) as OwnWebSocketSession;
                 EditorGUI.indentLevel++;
-                EditorGUILayout.TextField("NamespaceName", context.WebSocketSession?.NamespaceName.ToString());
-                EditorGUILayout.TextField("ConnectionId", context.WebSocketSession?.ConnectionId.ToString());
+                EditorGUILayout.TextField("NamespaceName", context.WebSocketSession?.NamespaceName?.ToString());
+                EditorGUILayout.TextField("ConnectionId", context.WebSocketSession?.ConnectionId?.ToString());
                 EditorGUI.indentLevel--;
                 EditorGUI.indentLevel--;
                 EditorGUI.EndDisabledGroup();

@@ -57,8 +57,8 @@ namespace Gs2.Unity.UiKit.Gs2Chat.Localization.Editor
                 EditorGUI.indentLevel++;
                 context.Room = EditorGUILayout.ObjectField("Room", context.Room, typeof(Room), false) as Room;
                 EditorGUI.indentLevel++;
-                EditorGUILayout.TextField("NamespaceName", context.Room?.NamespaceName.ToString());
-                EditorGUILayout.TextField("RoomName", context.Room?.RoomName.ToString());
+                EditorGUILayout.TextField("NamespaceName", context.Room?.NamespaceName?.ToString());
+                EditorGUILayout.TextField("RoomName", context.Room?.RoomName?.ToString());
                 EditorGUI.indentLevel--;
                 EditorGUI.indentLevel--;
                 EditorGUI.EndDisabledGroup();

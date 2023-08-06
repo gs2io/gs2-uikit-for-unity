@@ -64,7 +64,7 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Localization.Editor
                     EditorGUI.indentLevel++;
                     context.BlackList = EditorGUILayout.ObjectField("BlackList", context.BlackList, typeof(OwnBlackList), false) as OwnBlackList;
                     EditorGUI.indentLevel++;
-                    EditorGUILayout.TextField("NamespaceName", context.BlackList?.NamespaceName.ToString());
+                    EditorGUILayout.TextField("NamespaceName", context.BlackList?.NamespaceName?.ToString());
                     EditorGUI.indentLevel--;
                     EditorGUI.indentLevel--;
                     EditorGUI.EndDisabledGroup();

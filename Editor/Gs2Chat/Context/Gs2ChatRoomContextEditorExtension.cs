@@ -49,10 +49,12 @@ namespace Gs2.Unity.UiKit.Gs2Chat.Editor
             else {
                 original.Room = EditorGUILayout.ObjectField("Room", original.Room, typeof(Room), false) as Room;
                 EditorGUI.BeginDisabledGroup(true);
-                EditorGUI.indentLevel++;
-                EditorGUILayout.TextField("NamespaceName", original.Room?.NamespaceName.ToString());
-                EditorGUILayout.TextField("RoomName", original.Room?.RoomName.ToString());
-                EditorGUI.indentLevel--;
+                if (original.Room != null) {
+                    EditorGUI.indentLevel++;
+                    EditorGUILayout.TextField("NamespaceName", original.Room?.NamespaceName?.ToString());
+                    EditorGUILayout.TextField("RoomName", original.Room?.RoomName?.ToString());
+                    EditorGUI.indentLevel--;
+                }
                 EditorGUI.EndDisabledGroup();
             }
 

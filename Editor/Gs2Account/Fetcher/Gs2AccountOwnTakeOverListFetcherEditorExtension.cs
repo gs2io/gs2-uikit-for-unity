@@ -40,20 +40,20 @@ namespace Gs2.Unity.UiKit.Gs2Account.Editor
 
             if (original == null) return;
 
-            var context = original.GetComponent<Gs2AccountOwnAccountContext>() ?? original.GetComponentInParent<Gs2AccountOwnAccountContext>(true);
+            var context = original.GetComponent<Gs2AccountAccountContext>() ?? original.GetComponentInParent<Gs2AccountAccountContext>(true);
             if (context == null) {
-                EditorGUILayout.HelpBox("Gs2AccountOwnAccountContext not found.", MessageType.Error);
+                EditorGUILayout.HelpBox("Gs2AccountAccountContext not found.", MessageType.Error);
                 if (GUILayout.Button("Add Context")) {
-                    original.gameObject.AddComponent<Gs2AccountOwnAccountContext>();
+                    original.gameObject.AddComponent<Gs2AccountAccountContext>();
                 }
             }
             else {
                 EditorGUI.BeginDisabledGroup(true);
-                EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2AccountOwnAccountContext), false);
+                EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2AccountAccountContext), false);
                 EditorGUI.indentLevel++;
-                context.Account = EditorGUILayout.ObjectField("OwnAccount", context.Account, typeof(OwnAccount), false) as OwnAccount;
+                context.Account = EditorGUILayout.ObjectField("Account", context.Account, typeof(Account), false) as Account;
                 EditorGUI.indentLevel++;
-                EditorGUILayout.TextField("NamespaceName", context.Account?.NamespaceName.ToString());
+                EditorGUILayout.TextField("NamespaceName", context.Account?.NamespaceName?.ToString());
                 EditorGUI.indentLevel--;
                 EditorGUI.indentLevel--;
                 EditorGUI.EndDisabledGroup();

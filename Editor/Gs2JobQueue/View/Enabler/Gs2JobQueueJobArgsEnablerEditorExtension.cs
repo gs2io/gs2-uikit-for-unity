@@ -52,8 +52,8 @@ namespace Gs2.Unity.UiKit.Gs2JobQueue.Enabler.Editor
                 EditorGUI.indentLevel++;
                 context.Job = EditorGUILayout.ObjectField("Job", context.Job, typeof(OwnJob), false) as OwnJob;
                 EditorGUI.indentLevel++;
-                EditorGUILayout.TextField("NamespaceName", context.Job?.NamespaceName.ToString());
-                EditorGUILayout.TextField("JobName", context.Job?.JobName.ToString());
+                EditorGUILayout.TextField("NamespaceName", context.Job?.NamespaceName?.ToString());
+                EditorGUILayout.TextField("JobName", context.Job?.JobName?.ToString());
                 EditorGUI.indentLevel--;
                 EditorGUI.indentLevel--;
                 EditorGUI.EndDisabledGroup();

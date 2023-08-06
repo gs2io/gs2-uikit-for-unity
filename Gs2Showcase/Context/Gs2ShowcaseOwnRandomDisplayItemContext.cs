@@ -12,8 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
- * deny overwrtite
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
@@ -27,8 +25,8 @@
 #pragma warning disable CS0472
 
 using Gs2.Unity.Gs2Showcase.ScriptableObject;
+using Gs2.Unity.UiKit.Core;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace Gs2.Unity.UiKit.Gs2Showcase.Context
 {
@@ -36,18 +34,23 @@ namespace Gs2.Unity.UiKit.Gs2Showcase.Context
     /// Main
     /// </summary>
 
-	[AddComponentMenu("GS2 UIKit/Showcase/RandomDisplayItem/Context/Gs2ShowcaseRandomDisplayItemContext")]
+	[AddComponentMenu("GS2 UIKit/Showcase/RandomDisplayItem/Context/Gs2ShowcaseOwnRandomDisplayItemContext")]
     public partial class Gs2ShowcaseOwnRandomDisplayItemContext : MonoBehaviour
     {
         public void Start() {
-            if (this.ownRandomDisplayItem == null) {
-                Debug.LogError("RandomDisplayItem is not set in Gs2ShowcaseRandomDisplayItemContext.");
+            if (RandomDisplayItem == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: RandomDisplayItem is not set in Gs2ShowcaseOwnRandomDisplayItemContext.");
             }
         }
 
         public bool HasError() {
-            if (this.ownRandomDisplayItem == null) {
-                return true;
+            if (RandomDisplayItem == null) {
+                if (GetComponentInParent<Gs2ShowcaseOwnRandomDisplayItemList>(true) != null) {
+                    return false;
+                }
+                else {
+                    return true;
+                }
             }
             return false;
         }
@@ -77,12 +80,10 @@ namespace Gs2.Unity.UiKit.Gs2Showcase.Context
 
     public partial class Gs2ShowcaseOwnRandomDisplayItemContext
     {
-        [FormerlySerializedAs("RandomDisplayItem")] public OwnRandomDisplayItem ownRandomDisplayItem;
+        public OwnRandomDisplayItem RandomDisplayItem;
 
-        public OwnRandomDisplayItem RandomDisplayItem => this.ownRandomDisplayItem;
-        
-        public void SetRandomDisplayItem(OwnRandomDisplayItem ownRandomDisplayItem) {
-            this.ownRandomDisplayItem = ownRandomDisplayItem;
+        public void SetOwnRandomDisplayItem(OwnRandomDisplayItem RandomDisplayItem) {
+            this.RandomDisplayItem = RandomDisplayItem;
         }
     }
 

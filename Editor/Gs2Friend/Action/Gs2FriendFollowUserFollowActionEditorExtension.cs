@@ -59,9 +59,12 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Editor
                     EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2FriendOwnFollowUserContext), false);
                     EditorGUI.indentLevel++;
                     context.FollowUser = EditorGUILayout.ObjectField("OwnFollowUser", context.FollowUser, typeof(OwnFollowUser), false) as OwnFollowUser;
-                    EditorGUI.indentLevel++;
-                    EditorGUILayout.TextField("NamespaceName", context.FollowUser?.NamespaceName.ToString());
-                    EditorGUI.indentLevel--;
+                    if (context.FollowUser != null) {
+                        EditorGUI.indentLevel++;
+                        EditorGUILayout.TextField("NamespaceName", context.FollowUser?.NamespaceName?.ToString());
+                        EditorGUILayout.TextField("TargetUserId", context.FollowUser?.TargetUserId?.ToString());
+                        EditorGUI.indentLevel--;
+                    }
                     EditorGUI.indentLevel--;
                     EditorGUI.EndDisabledGroup();
                 }

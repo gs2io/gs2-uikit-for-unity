@@ -108,6 +108,11 @@ namespace Gs2.Unity.UiKit.Gs2Experience.Label.Editor
                     GUI.FocusControl("");
                     EditorUtility.SetDirty(original);
                 }
+                if (GUILayout.Button("UserData:NextRankUpExperienceValue")) {
+                    original.format += "{userData:nextRankUpExperienceValue}";
+                    GUI.FocusControl("");
+                    EditorUtility.SetDirty(original);
+                }
             }
             EditorGUILayout.PropertyField(serializedObject.FindProperty("onUpdate"), true);
             serializedObject.ApplyModifiedProperties();

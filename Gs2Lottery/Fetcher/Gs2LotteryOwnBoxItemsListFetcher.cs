@@ -55,51 +55,41 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.Fetcher
             Gs2Exception e;
             while (true)
             {
-                if (_gameSessionHolder != null && _gameSessionHolder.Initialized && 
+                if (_gameSessionHolder != null && _gameSessionHolder.Initialized &&
                     _clientHolder != null && _clientHolder.Initialized &&
                     Context != null)
                 {
                     
                     var domain = this._clientHolder.Gs2.Lottery.Namespace(
-                        this.Context.Namespace.NamespaceName
+                        this.Context.PrizeTable.NamespaceName
                     ).Me(
                         this._gameSessionHolder.GameSession
+                    ).BoxItems(
+                        this.Context.PrizeTable.PrizeTableName
                     );
-                    var it = domain.Boxes();
-                    var items = new List<Gs2.Unity.Gs2Lottery.Model.EzBoxItems>();
-                    while (it.HasNext())
+                    var future = domain.Model();
+                    yield return future;
+                    if (future.Error != null)
                     {
-                        yield return it.Next();
-                        if (it.Error != null)
+                        if (future.Error is BadRequestException || future.Error is NotFoundException)
                         {
-                            if (it.Error is BadRequestException || it.Error is NotFoundException)
-                            {
-                                onError.Invoke(e = it.Error, null);
-                                Debug.LogError($"{gameObject.GetFullPath()}: {it.Error.Message}");
-                                break;
-                            }
-                            else {
-                                onError.Invoke(new CanIgnoreException(it.Error), null);
-                            }
-                            yield return new WaitForSeconds(retryWaitSecond);
-                            retryWaitSecond *= 2;
+                            onError.Invoke(e = future.Error, null);
+                            Debug.LogError($"{gameObject.GetFullPath()}: {future.Error.Message}");
+                            break;
                         }
                         else {
-                            if (it.Current != null)
-                            {
-                                items.Add(it.Current);
-                            } else {
-                                break;
-                            }
+                            onError.Invoke(new CanIgnoreException(future.Error), null);
                         }
+                        yield return new WaitForSeconds(retryWaitSecond);
+                        retryWaitSecond *= 2;
                     }
 
                     retryWaitSecond = 1;
-                    BoxItemses = items;
+                    BoxItems = future.Result.Items;
                     Fetched = true;
                 }
                 else {
-                    yield return new WaitForSeconds(1);
+                    yield return new WaitForSeconds(0.1f);
                 }
             }
             // ReSharper disable once IteratorNeverReturns
@@ -119,28 +109,28 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.Fetcher
     /// <summary>
     /// Dependent components
     /// </summary>
-    
+
     public partial class Gs2LotteryOwnBoxItemsListFetcher
     {
         private Gs2ClientHolder _clientHolder;
         private Gs2GameSessionHolder _gameSessionHolder;
-        public Gs2LotteryNamespaceContext Context;
+        public Gs2LotteryPrizeTableContext Context;
 
         public void Awake()
         {
             _clientHolder = Gs2ClientHolder.Instance;
             _gameSessionHolder = Gs2GameSessionHolder.Instance;
-            Context = GetComponent<Gs2LotteryNamespaceContext>() ?? GetComponentInParent<Gs2LotteryNamespaceContext>();
+            Context = GetComponent<Gs2LotteryPrizeTableContext>() ?? GetComponentInParent<Gs2LotteryPrizeTableContext>();
 
             if (Context == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2LotteryNamespaceContext.");
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2LotteryPrizeTableContext.");
                 enabled = false;
             }
         }
 
         public bool HasError()
         {
-            Context = GetComponent<Gs2LotteryNamespaceContext>() ?? GetComponentInParent<Gs2LotteryNamespaceContext>(true);
+            Context = GetComponent<Gs2LotteryPrizeTableContext>() ?? GetComponentInParent<Gs2LotteryPrizeTableContext>(true);
             if (Context == null) {
                 return true;
             }
@@ -154,7 +144,7 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.Fetcher
     
     public partial class Gs2LotteryOwnBoxItemsListFetcher
     {
-        public List<Gs2.Unity.Gs2Lottery.Model.EzBoxItems> BoxItemses { get; private set; }
+        public List<Gs2.Unity.Gs2Lottery.Model.EzBoxItem> BoxItems { get; private set; }
         public bool Fetched { get; private set; }
     }
 

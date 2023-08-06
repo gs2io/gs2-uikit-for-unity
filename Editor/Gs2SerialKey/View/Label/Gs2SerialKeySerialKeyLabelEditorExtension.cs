@@ -40,22 +40,24 @@ namespace Gs2.Unity.UiKit.Gs2SerialKey.Editor
 
             if (original == null) return;
 
-            var fetcher = original.GetComponent<Gs2SerialKeySerialKeyFetcher>() ?? original.GetComponentInParent<Gs2SerialKeySerialKeyFetcher>(true);
+            var fetcher = original.GetComponent<Gs2SerialKeyOwnSerialKeyFetcher>() ?? original.GetComponentInParent<Gs2SerialKeyOwnSerialKeyFetcher>(true);
             if (fetcher == null) {
-                EditorGUILayout.HelpBox("Gs2SerialKeySerialKeyFetcher not found.", MessageType.Error);
+                EditorGUILayout.HelpBox("Gs2SerialKeyOwnSerialKeyFetcher not found.", MessageType.Error);
                 if (GUILayout.Button("Add Fetcher")) {
-                    original.gameObject.AddComponent<Gs2SerialKeySerialKeyFetcher>();
+                    original.gameObject.AddComponent<Gs2SerialKeyOwnSerialKeyFetcher>();
                 }
             }
             else {
                 EditorGUI.BeginDisabledGroup(true);
-                EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2SerialKeySerialKeyFetcher), false);
+                EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2SerialKeyOwnSerialKeyFetcher), false);
                 EditorGUI.indentLevel++;
-                fetcher.Context.SerialKey = EditorGUILayout.ObjectField("SerialKey", fetcher.Context.SerialKey, typeof(SerialKey), false) as SerialKey;
-                EditorGUI.indentLevel++;
-                EditorGUILayout.TextField("NamespaceName", fetcher.Context.SerialKey?.NamespaceName.ToString());
-                EditorGUILayout.TextField("SerialKeyCode", fetcher.Context.SerialKey?.SerialKeyCode.ToString());
-                EditorGUI.indentLevel--;
+                if (fetcher.Context != null) {
+                    fetcher.Context.SerialKey = EditorGUILayout.ObjectField("SerialKey", fetcher.Context.SerialKey, typeof(OwnSerialKey), false) as OwnSerialKey;
+                    EditorGUI.indentLevel++;
+                    EditorGUILayout.TextField("NamespaceName", fetcher.Context.SerialKey?.NamespaceName?.ToString());
+                    EditorGUILayout.TextField("SerialKeyCode", fetcher.Context.SerialKey?.SerialKeyCode?.ToString());
+                    EditorGUI.indentLevel--;
+                }
                 EditorGUI.indentLevel--;
                 EditorGUI.EndDisabledGroup();
             }

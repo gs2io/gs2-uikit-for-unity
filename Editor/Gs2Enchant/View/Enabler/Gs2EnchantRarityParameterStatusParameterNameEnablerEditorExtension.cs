@@ -59,9 +59,9 @@ namespace Gs2.Unity.UiKit.Gs2Enchant.Enabler.Editor
                     EditorGUI.indentLevel++;
                     context.RarityParameterStatus = EditorGUILayout.ObjectField("RarityParameterStatus", context.RarityParameterStatus, typeof(OwnRarityParameterStatus), false) as OwnRarityParameterStatus;
                     EditorGUI.indentLevel++;
-                    EditorGUILayout.TextField("NamespaceName", context.RarityParameterStatus?.NamespaceName.ToString());
-                    EditorGUILayout.TextField("ParameterName", context.RarityParameterStatus?.ParameterName.ToString());
-                    EditorGUILayout.TextField("PropertyId", context.RarityParameterStatus?.PropertyId.ToString());
+                    EditorGUILayout.TextField("NamespaceName", context.RarityParameterStatus?.NamespaceName?.ToString());
+                    EditorGUILayout.TextField("ParameterName", context.RarityParameterStatus?.ParameterName?.ToString());
+                    EditorGUILayout.TextField("PropertyId", context.RarityParameterStatus?.PropertyId?.ToString());
                     EditorGUI.indentLevel--;
                     EditorGUI.indentLevel--;
                     EditorGUI.EndDisabledGroup();

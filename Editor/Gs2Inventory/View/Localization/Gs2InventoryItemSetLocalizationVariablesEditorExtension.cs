@@ -69,7 +69,7 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Localization.Editor
                     EditorGUILayout.TextField("NamespaceName", context.ItemModel?.NamespaceName.ToString());
                     EditorGUILayout.TextField("InventoryName", context.ItemModel?.InventoryName.ToString());
                     EditorGUILayout.TextField("ItemName", context.ItemModel?.ItemName.ToString());
-                    EditorGUILayout.TextField("ItemSetName", context.itemSetName?.ToString());
+                    EditorGUILayout.TextField("ItemSetName", context.ItemSet.ItemSetName?.ToString());
                     EditorGUI.indentLevel--;
                     EditorGUI.indentLevel--;
                     EditorGUI.EndDisabledGroup();

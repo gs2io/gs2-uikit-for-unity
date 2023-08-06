@@ -51,12 +51,14 @@ namespace Gs2.Unity.UiKit.Gs2JobQueue.Editor
                 EditorGUI.BeginDisabledGroup(true);
                 EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2JobQueueOwnJobResultFetcher), false);
                 EditorGUI.indentLevel++;
-                fetcher.Context.JobResult = EditorGUILayout.ObjectField("JobResult", fetcher.Context.JobResult, typeof(OwnJobResult), false) as OwnJobResult;
-                EditorGUI.indentLevel++;
-                EditorGUILayout.TextField("NamespaceName", fetcher.Context.JobResult?.NamespaceName.ToString());
-                EditorGUILayout.TextField("JobName", fetcher.Context.JobResult?.JobName.ToString());
-                EditorGUILayout.TextField("TryNumber", fetcher.Context.JobResult?.TryNumber.ToString());
-                EditorGUI.indentLevel--;
+                if (fetcher.Context != null) {
+                    fetcher.Context.JobResult = EditorGUILayout.ObjectField("JobResult", fetcher.Context.JobResult, typeof(OwnJobResult), false) as OwnJobResult;
+                    EditorGUI.indentLevel++;
+                    EditorGUILayout.TextField("NamespaceName", fetcher.Context.JobResult?.NamespaceName?.ToString());
+                    EditorGUILayout.TextField("JobName", fetcher.Context.JobResult?.JobName?.ToString());
+                    EditorGUILayout.TextField("TryNumber", fetcher.Context.JobResult?.TryNumber.ToString());
+                    EditorGUI.indentLevel--;
+                }
                 EditorGUI.indentLevel--;
                 EditorGUI.EndDisabledGroup();
             }

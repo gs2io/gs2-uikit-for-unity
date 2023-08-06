@@ -53,7 +53,7 @@ namespace Gs2.Unity.UiKit.Gs2Stamina.Editor
                 EditorGUI.indentLevel++;
                 context.Namespace = EditorGUILayout.ObjectField("Namespace", context.Namespace, typeof(Namespace), false) as Namespace;
                 EditorGUI.indentLevel++;
-                EditorGUILayout.TextField("NamespaceName", context.Namespace?.NamespaceName.ToString());
+                EditorGUILayout.TextField("NamespaceName", context.Namespace?.NamespaceName?.ToString());
                 EditorGUI.indentLevel--;
                 EditorGUI.indentLevel--;
                 EditorGUI.EndDisabledGroup();

@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
@@ -43,10 +45,10 @@ namespace Gs2.Unity.UiKit.Gs2Lottery
         private List<Gs2LotteryOwnBoxItemsContext> _children;
 
         public void Update() {
-            if (_fetcher.Fetched && this._fetcher.BoxItemses != null) {
+            if (_fetcher.Fetched && this._fetcher.BoxItems != null) {
                 for (var i = 0; i < this.maximumItems; i++) {
-                    if (i < this._fetcher.BoxItemses.Count) {
-                        _children[i].BoxItems.prizeTableName = this._fetcher.BoxItemses[i].PrizeTableName;
+                    if (i < this._fetcher.BoxItems.Count) {
+                        _children[i].BoxItems.prizeTableName = this._fetcher.Context.PrizeTable.PrizeTableName;
                         _children[i].gameObject.SetActive(true);
                     }
                     else {
@@ -64,7 +66,7 @@ namespace Gs2.Unity.UiKit.Gs2Lottery
     public partial class Gs2LotteryOwnBoxItemsList
     {
         private Gs2LotteryOwnBoxItemsListFetcher _fetcher;
-        private Gs2LotteryNamespaceContext Context => _fetcher.Context;
+        private Gs2LotteryPrizeTableContext Context => _fetcher.Context;
 
         public void Awake()
         {
@@ -81,7 +83,7 @@ namespace Gs2.Unity.UiKit.Gs2Lottery
                 enabled = false;
             }
 
-            var context = GetComponent<Gs2LotteryNamespaceContext>() ?? GetComponentInParent<Gs2LotteryNamespaceContext>(true);
+            var context = GetComponent<Gs2LotteryPrizeTableContext>() ?? GetComponentInParent<Gs2LotteryPrizeTableContext>(true);
             if (context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2LotteryOwnBoxItemsListFetcher::Context.");
                 enabled = false;
@@ -92,8 +94,8 @@ namespace Gs2.Unity.UiKit.Gs2Lottery
             for (var i = 0; i < this.maximumItems; i++) {
                 var node = Instantiate(this.prefab, transform);
                 node.BoxItems = OwnBoxItems.New(
-                    context.Namespace,
-                    ""
+                    context.PrizeTable.Namespace,
+                    context.PrizeTable.PrizeTableName
                 );
                 node.gameObject.SetActive(false);
                 _children.Add(node);

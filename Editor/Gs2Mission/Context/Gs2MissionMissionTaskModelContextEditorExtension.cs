@@ -54,9 +54,11 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Editor
             else {
                 original.MissionTaskModel = EditorGUILayout.ObjectField("MissionTaskModel", original.MissionTaskModel, typeof(MissionTaskModel), false) as MissionTaskModel;
                 EditorGUI.BeginDisabledGroup(true);
-                EditorGUI.indentLevel++;
-                EditorGUILayout.TextField("MissionTaskName", original.MissionTaskModel?.MissionTaskName.ToString());
-                EditorGUI.indentLevel--;
+                if (original.MissionTaskModel != null) {
+                    EditorGUI.indentLevel++;
+                    EditorGUILayout.TextField("MissionTaskName", original.MissionTaskModel?.MissionTaskName?.ToString());
+                    EditorGUI.indentLevel--;
+                }
                 EditorGUI.EndDisabledGroup();
             }
 

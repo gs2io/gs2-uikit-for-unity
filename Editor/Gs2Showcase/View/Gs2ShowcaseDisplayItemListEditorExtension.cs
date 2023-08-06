@@ -31,27 +31,27 @@ using UnityEngine;
 
 namespace Gs2.Unity.UiKit.Gs2Showcase.Editor
 {
-    [CustomEditor(typeof(Gs2ShowcaseDisplayItemList))]
+    [CustomEditor(typeof(Gs2ShowcaseOwnDisplayItemList))]
     public class Gs2ShowcaseDisplayItemListEditorExtension : UnityEditor.Editor
     {
         public override void OnInspectorGUI() {
-            var original = target as Gs2ShowcaseDisplayItemList;
+            var original = target as Gs2ShowcaseOwnDisplayItemList;
 
             if (original == null) return;
 
-            var fetcher = original.GetComponent<Gs2ShowcaseShowcaseFetcher>() ?? original.GetComponentInParent<Gs2ShowcaseShowcaseFetcher>(true);
+            var fetcher = original.GetComponent<Gs2ShowcaseOwnShowcaseFetcher>() ?? original.GetComponentInParent<Gs2ShowcaseOwnShowcaseFetcher>(true);
             if (fetcher == null) {
-                EditorGUILayout.HelpBox("Gs2ShowcaseShowcaseFetcher not found.", MessageType.Error);
+                EditorGUILayout.HelpBox("Gs2ShowcaseOwnShowcaseFetcher not found.", MessageType.Error);
                 if (GUILayout.Button("Add ListFetcher")) {
-                    original.gameObject.AddComponent<Gs2ShowcaseShowcaseFetcher>();
+                    original.gameObject.AddComponent<Gs2ShowcaseOwnShowcaseFetcher>();
                 }
             }
             else {
                 EditorGUI.BeginDisabledGroup(true);
-                EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2ShowcaseShowcaseFetcher), false);
+                EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2ShowcaseOwnShowcaseFetcher), false);
                 EditorGUI.indentLevel++;
                 if (fetcher.Context != null) {
-                    fetcher.Context.Showcase = EditorGUILayout.ObjectField("Showcase", fetcher.Context.Showcase, typeof(Showcase), false) as Showcase;
+                    fetcher.Context.Showcase = EditorGUILayout.ObjectField("Showcase", fetcher.Context.Showcase, typeof(OwnShowcase), false) as OwnShowcase;
                     EditorGUI.indentLevel++;
                     EditorGUI.indentLevel--;
                 }

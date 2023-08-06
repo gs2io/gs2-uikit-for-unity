@@ -49,10 +49,12 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking.Editor
             else {
                 original.Gathering = EditorGUILayout.ObjectField("Gathering", original.Gathering, typeof(Gathering), false) as Gathering;
                 EditorGUI.BeginDisabledGroup(true);
-                EditorGUI.indentLevel++;
-                EditorGUILayout.TextField("NamespaceName", original.Gathering?.NamespaceName.ToString());
-                EditorGUILayout.TextField("GatheringName", original.Gathering?.GatheringName.ToString());
-                EditorGUI.indentLevel--;
+                if (original.Gathering != null) {
+                    EditorGUI.indentLevel++;
+                    EditorGUILayout.TextField("NamespaceName", original.Gathering?.NamespaceName?.ToString());
+                    EditorGUILayout.TextField("GatheringName", original.Gathering?.GatheringName?.ToString());
+                    EditorGUI.indentLevel--;
+                }
                 EditorGUI.EndDisabledGroup();
             }
 

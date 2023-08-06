@@ -32,12 +32,16 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Gs2.Core.Exception;
+using Gs2.Gs2Money.Request;
 using Gs2.Unity.Gs2Showcase.Model;
 using Gs2.Unity.Util;
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Showcase.Context;
+using Gs2.Unity.UiKit.Gs2Showcase.Fetcher;
+using Gs2.Util.LitJson;
 using UnityEngine;
 using UnityEngine.Events;
+using RandomDisplayItem = Gs2.Unity.Gs2Showcase.ScriptableObject.OwnRandomDisplayItem;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -52,18 +56,43 @@ namespace Gs2.Unity.UiKit.Gs2Showcase
             yield return new WaitUntil(() => this._clientHolder.Initialized);
             yield return new WaitUntil(() => this._gameSessionHolder.Initialized);
             
+            var config = new List<Gs2.Unity.Gs2Showcase.Model.EzConfig>(Config);
+
+#if GS2_ENABLE_PURCHASING
+
+            PurchaseParameters purchaseParameters = null;
+            var needReceipt = this._fetcher.RandomDisplayItem.ConsumeActions.FirstOrDefault(
+                v => v.Action == "Gs2Money:RecordReceipt"
+            );
+            if (needReceipt != null) {
+                var request = RecordReceiptRequest.FromJson(JsonMapper.ToObject(needReceipt.Request));
+                var iapFuture = new IAPUtil().BuyFuture(request.ContentsId);
+                yield return iapFuture;
+                if (iapFuture.Error != null) {
+                    this.onError.Invoke(iapFuture.Error, Process);
+                    yield break;
+                }
+                purchaseParameters = iapFuture.Result;
+                config.Add(new EzConfig {
+                    Key = "receipt",
+                    Value = purchaseParameters.receipt,
+                });
+            }
+
+#endif
+
             var domain = this._clientHolder.Gs2.Showcase.Namespace(
-                this._context.RandomDisplayItem.NamespaceName
+                this._fetcher.Context.RandomDisplayItem.NamespaceName
             ).Me(
                 this._gameSessionHolder.GameSession
             ).RandomShowcase(
-                this._context.RandomDisplayItem.ShowcaseName
+                this._fetcher.Context.RandomDisplayItem.ShowcaseName
             ).RandomDisplayItem(
-                this._context.RandomDisplayItem.DisplayItemName
+                this._fetcher.Context.RandomDisplayItem.DisplayItemName
             );
             var future = domain.RandomShowcaseBuy(
                 Quantity,
-                Config.ToArray()
+                config.ToArray()
             );
             yield return future;
             if (future.Error != null)
@@ -82,6 +111,12 @@ namespace Gs2.Unity.UiKit.Gs2Showcase
                         this.onRandomShowcaseBuyComplete.Invoke(future.Result.TransactionId);
                     }
 
+#if GS2_ENABLE_PURCHASING
+                    if (purchaseParameters != null) {
+                        purchaseParameters.controller.ConfirmPendingPurchase(purchaseParameters.product);
+                    }
+#endif
+
                     this.onError.Invoke(future.Error, Retry);
                     yield break;
                 }
@@ -89,6 +124,13 @@ namespace Gs2.Unity.UiKit.Gs2Showcase
                 this.onError.Invoke(future.Error, null);
                 yield break;
             }
+            
+#if GS2_ENABLE_PURCHASING
+            if (purchaseParameters != null) {
+                purchaseParameters.controller.ConfirmPendingPurchase(purchaseParameters.product);
+            }
+#endif
+
             this.onRandomShowcaseBuyComplete.Invoke(future.Result.TransactionId);
         }
 
@@ -111,24 +153,24 @@ namespace Gs2.Unity.UiKit.Gs2Showcase
     {
         private Gs2ClientHolder _clientHolder;
         private Gs2GameSessionHolder _gameSessionHolder;
-        private Gs2ShowcaseOwnRandomDisplayItemContext _context;
+        private Gs2ShowcaseOwnRandomDisplayItemFetcher _fetcher;
 
         public void Awake()
         {
             this._clientHolder = Gs2ClientHolder.Instance;
             this._gameSessionHolder = Gs2GameSessionHolder.Instance;
-            this._context = GetComponent<Gs2ShowcaseOwnRandomDisplayItemContext>() ?? GetComponentInParent<Gs2ShowcaseOwnRandomDisplayItemContext>();
+            this._fetcher = GetComponent<Gs2ShowcaseOwnRandomDisplayItemFetcher>() ?? GetComponentInParent<Gs2ShowcaseOwnRandomDisplayItemFetcher>();
 
-            if (_context == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ShowcaseOwnRandomDisplayItemContext.");
+            if (_fetcher == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ShowcaseOwnRandomDisplayItemFetcher.");
                 enabled = false;
             }
         }
 
         public bool HasError()
         {
-            this._context = GetComponent<Gs2ShowcaseOwnRandomDisplayItemContext>() ?? GetComponentInParent<Gs2ShowcaseOwnRandomDisplayItemContext>(true);
-            if (_context == null) {
+            this._fetcher = GetComponent<Gs2ShowcaseOwnRandomDisplayItemFetcher>() ?? GetComponentInParent<Gs2ShowcaseOwnRandomDisplayItemFetcher>(true);
+            if (_fetcher == null) {
                 return true;
             }
             return false;

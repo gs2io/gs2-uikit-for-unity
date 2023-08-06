@@ -54,10 +54,12 @@ namespace Gs2.Unity.UiKit.Gs2Version.Editor
             else {
                 original.VersionModel = EditorGUILayout.ObjectField("VersionModel", original.VersionModel, typeof(VersionModel), false) as VersionModel;
                 EditorGUI.BeginDisabledGroup(true);
-                EditorGUI.indentLevel++;
-                EditorGUILayout.TextField("NamespaceName", original.VersionModel?.NamespaceName.ToString());
-                EditorGUILayout.TextField("VersionName", original.VersionModel?.VersionName.ToString());
-                EditorGUI.indentLevel--;
+                if (original.VersionModel != null) {
+                    EditorGUI.indentLevel++;
+                    EditorGUILayout.TextField("NamespaceName", original.VersionModel?.NamespaceName?.ToString());
+                    EditorGUILayout.TextField("VersionName", original.VersionModel?.VersionName?.ToString());
+                    EditorGUI.indentLevel--;
+                }
                 EditorGUI.EndDisabledGroup();
             }
 

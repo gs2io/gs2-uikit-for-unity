@@ -60,8 +60,8 @@ namespace Gs2.Unity.UiKit.Gs2Exchange.Editor
                     EditorGUI.indentLevel++;
                     context.RateModel = EditorGUILayout.ObjectField("RateModel", context.RateModel, typeof(RateModel), false) as RateModel;
                     EditorGUI.indentLevel++;
-                    EditorGUILayout.TextField("NamespaceName", context.RateModel?.NamespaceName.ToString());
-                    EditorGUILayout.TextField("RateName", context.RateModel?.RateName.ToString());
+                    EditorGUILayout.TextField("NamespaceName", context.RateModel?.NamespaceName?.ToString());
+                    EditorGUILayout.TextField("RateName", context.RateModel?.RateName?.ToString());
                     EditorGUI.indentLevel--;
                     EditorGUI.indentLevel--;
                     EditorGUI.EndDisabledGroup();

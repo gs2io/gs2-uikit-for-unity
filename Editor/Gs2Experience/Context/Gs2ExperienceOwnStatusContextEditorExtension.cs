@@ -55,9 +55,9 @@ namespace Gs2.Unity.UiKit.Gs2Experience.Editor
                 original.Status = EditorGUILayout.ObjectField("OwnStatus", original.Status, typeof(OwnStatus), false) as OwnStatus;
                 EditorGUI.BeginDisabledGroup(true);
                 EditorGUI.indentLevel++;
-                EditorGUILayout.TextField("NamespaceName", original.Status?.NamespaceName.ToString());
-                EditorGUILayout.TextField("ExperienceName", original.Status?.ExperienceName.ToString());
-                EditorGUILayout.TextField("PropertyId", original.Status?.PropertyId.ToString());
+                EditorGUILayout.TextField("NamespaceName", original.Status?.NamespaceName?.ToString());
+                EditorGUILayout.TextField("ExperienceName", original.Status?.ExperienceName?.ToString());
+                EditorGUILayout.TextField("PropertyId", original.Status?.PropertyId?.ToString());
                 EditorGUI.indentLevel--;
                 EditorGUI.EndDisabledGroup();
             }

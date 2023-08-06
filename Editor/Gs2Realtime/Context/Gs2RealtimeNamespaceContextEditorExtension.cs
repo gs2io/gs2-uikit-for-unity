@@ -49,9 +49,11 @@ namespace Gs2.Unity.UiKit.Gs2Realtime.Editor
             else {
                 original.Namespace = EditorGUILayout.ObjectField("Namespace", original.Namespace, typeof(Namespace), false) as Namespace;
                 EditorGUI.BeginDisabledGroup(true);
-                EditorGUI.indentLevel++;
-                EditorGUILayout.TextField("NamespaceName", original.Namespace?.NamespaceName.ToString());
-                EditorGUI.indentLevel--;
+                if (original.Namespace != null) {
+                    EditorGUI.indentLevel++;
+                    EditorGUILayout.TextField("NamespaceName", original.Namespace?.NamespaceName?.ToString());
+                    EditorGUI.indentLevel--;
+                }
                 EditorGUI.EndDisabledGroup();
             }
 

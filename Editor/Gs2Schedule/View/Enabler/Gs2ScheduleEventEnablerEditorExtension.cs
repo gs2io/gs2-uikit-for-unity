@@ -43,11 +43,11 @@ namespace Gs2.Unity.UiKit.Gs2Schedule.Editor
 
             serializedObject.Update();
 
-            var fetcher = original.GetComponent<Gs2ScheduleEventFetcher>() ?? original.GetComponentInParent<Gs2ScheduleEventFetcher>(true);
+            var fetcher = original.GetComponent<Gs2ScheduleOwnEventFetcher>() ?? original.GetComponentInParent<Gs2ScheduleOwnEventFetcher>(true);
             if (fetcher == null) {
                 EditorGUILayout.HelpBox("EventFetcher not assigned.", MessageType.Error);
                 if (GUILayout.Button("Add Fetcher")) {
-                    original.gameObject.AddComponent<Gs2ScheduleEventFetcher>();
+                    original.gameObject.AddComponent<Gs2ScheduleOwnEventFetcher>();
                 }
             }
             else {

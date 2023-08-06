@@ -39,21 +39,21 @@ namespace Gs2.Unity.UiKit.Gs2Showcase.Enabler.Editor
 
             if (original == null) return;
 
-            var context = original.GetComponent<Gs2ShowcaseShowcaseContext>() ?? original.GetComponentInParent<Gs2ShowcaseShowcaseContext>(true);
+            var context = original.GetComponent<Gs2ShowcaseOwnShowcaseContext>() ?? original.GetComponentInParent<Gs2ShowcaseOwnShowcaseContext>(true);
             if (context == null) {
-                EditorGUILayout.HelpBox("Gs2ShowcaseShowcaseContext not found.", MessageType.Error);
+                EditorGUILayout.HelpBox("Gs2ShowcaseOwnShowcaseContext not found.", MessageType.Error);
                 if (GUILayout.Button("Add Context")) {
-                    original.gameObject.AddComponent<Gs2ShowcaseShowcaseContext>();
+                    original.gameObject.AddComponent<Gs2ShowcaseOwnShowcaseContext>();
                 }
             }
             else {
                 EditorGUI.BeginDisabledGroup(true);
-                EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2ShowcaseShowcaseContext), false);
+                EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2ShowcaseOwnShowcaseContext), false);
                 EditorGUI.indentLevel++;
-                context.Showcase = EditorGUILayout.ObjectField("Showcase", context.Showcase, typeof(Showcase), false) as Showcase;
+                context.Showcase = EditorGUILayout.ObjectField("Showcase", context.Showcase, typeof(OwnShowcase), false) as OwnShowcase;
                 EditorGUI.indentLevel++;
-                EditorGUILayout.TextField("NamespaceName", context.Showcase?.NamespaceName.ToString());
-                EditorGUILayout.TextField("ShowcaseName", context.Showcase?.ShowcaseName.ToString());
+                EditorGUILayout.TextField("NamespaceName", context.Showcase?.NamespaceName?.ToString());
+                EditorGUILayout.TextField("ShowcaseName", context.Showcase?.ShowcaseName?.ToString());
                 EditorGUI.indentLevel--;
                 EditorGUI.indentLevel--;
                 EditorGUI.EndDisabledGroup();

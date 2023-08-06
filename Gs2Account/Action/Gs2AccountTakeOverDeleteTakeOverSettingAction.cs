@@ -36,7 +36,7 @@ using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Account.Context;
 using UnityEngine;
 using UnityEngine.Events;
-using TakeOver = Gs2.Unity.Gs2Account.ScriptableObject.TakeOver;
+using TakeOver = Gs2.Unity.Gs2Account.ScriptableObject.OwnTakeOver;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -122,23 +122,23 @@ namespace Gs2.Unity.UiKit.Gs2Account
     {
         private Gs2ClientHolder _clientHolder;
         private Gs2GameSessionHolder _gameSessionHolder;
-        private Gs2AccountTakeOverContext _context;
+        private Gs2AccountOwnTakeOverContext _context;
 
         public void Awake()
         {
             this._clientHolder = Gs2ClientHolder.Instance;
             this._gameSessionHolder = Gs2GameSessionHolder.Instance;
-            this._context = GetComponent<Gs2AccountTakeOverContext>() ?? GetComponentInParent<Gs2AccountTakeOverContext>();
+            this._context = GetComponent<Gs2AccountOwnTakeOverContext>() ?? GetComponentInParent<Gs2AccountOwnTakeOverContext>();
 
             if (_context == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2AccountTakeOverContext.");
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2AccountOwnTakeOverContext.");
                 enabled = false;
             }
         }
 
         public bool HasError()
         {
-            this._context = GetComponent<Gs2AccountTakeOverContext>() ?? GetComponentInParent<Gs2AccountTakeOverContext>(true);
+            this._context = GetComponent<Gs2AccountOwnTakeOverContext>() ?? GetComponentInParent<Gs2AccountOwnTakeOverContext>(true);
             if (_context == null) {
                 return true;
             }

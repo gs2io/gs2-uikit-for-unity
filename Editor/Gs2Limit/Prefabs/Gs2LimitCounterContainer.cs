@@ -5,7 +5,7 @@ namespace Editor.Gs2Limit.Prefabs
 {
     public static class Gs2LimitCounterContainer
     {
-        [MenuItem("GameObject/UI/Game Server Services/Limit/Counter/CounterContainer", priority = 0)]
+        [MenuItem("GameObject/UI/Game Server Services/Limit/Namespace/User/CounterContainer", priority = 0)]
         private static void CreateButton()
         {
             var prefab = AssetDatabase.LoadAssetAtPath<GameObject>(

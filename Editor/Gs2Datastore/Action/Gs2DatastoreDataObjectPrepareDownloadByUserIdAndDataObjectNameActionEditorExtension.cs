@@ -40,22 +40,24 @@ namespace Gs2.Unity.UiKit.Gs2Datastore.Editor
 
             if (original == null) return;
 
-            var context = original.GetComponent<Gs2DatastoreDataObjectContext>() ?? original.GetComponentInParent<Gs2DatastoreDataObjectContext>(true);
+            var context = original.GetComponent<Gs2DatastoreOwnDataObjectContext>() ?? original.GetComponentInParent<Gs2DatastoreOwnDataObjectContext>(true);
             if (context == null) {
-                EditorGUILayout.HelpBox("Gs2DatastoreDataObjectContext not found.", MessageType.Error);
+                EditorGUILayout.HelpBox("Gs2DatastoreOwnDataObjectContext not found.", MessageType.Error);
                 if (GUILayout.Button("Add Context")) {
-                    original.gameObject.AddComponent<Gs2DatastoreDataObjectContext>();
+                    original.gameObject.AddComponent<Gs2DatastoreOwnDataObjectContext>();
                 }
             }
             else {
                 EditorGUI.BeginDisabledGroup(true);
-                EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2DatastoreDataObjectContext), false);
+                EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2DatastoreOwnDataObjectContext), false);
                 EditorGUI.indentLevel++;
-                context.DataObject = EditorGUILayout.ObjectField("DataObject", context.DataObject, typeof(DataObject), false) as DataObject;
-                EditorGUI.indentLevel++;
-                EditorGUILayout.TextField("NamespaceName", context.DataObject?.NamespaceName.ToString());
-                EditorGUILayout.TextField("DataObjectName", context.DataObject?.DataObjectName.ToString());
-                EditorGUI.indentLevel--;
+                context.DataObject = EditorGUILayout.ObjectField("OwnDataObject", context.DataObject, typeof(OwnDataObject), false) as OwnDataObject;
+                if (context.DataObject != null) {
+                    EditorGUI.indentLevel++;
+                    EditorGUILayout.TextField("NamespaceName", context.DataObject?.NamespaceName?.ToString());
+                    EditorGUILayout.TextField("DataObjectName", context.DataObject?.DataObjectName?.ToString());
+                    EditorGUI.indentLevel--;
+                }
                 EditorGUI.indentLevel--;
                 EditorGUI.EndDisabledGroup();
             }

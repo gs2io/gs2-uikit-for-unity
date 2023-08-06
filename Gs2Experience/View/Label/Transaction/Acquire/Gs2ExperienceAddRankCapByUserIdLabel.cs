@@ -81,6 +81,9 @@ namespace Gs2.Unity.UiKit.Gs2Experience.Label
                         ).Replace(
                             "{userData:rankCapValue:changed}",
                             $"{_userDataFetcher.Status.RankCapValue + _fetcher.Request.RankCapValue}"
+                        ).Replace(
+                            "{userData:nextRankUpExperienceValue}",
+                            $"{_userDataFetcher.Status.NextRankUpExperienceValue}"
                         )
                     );
                 }

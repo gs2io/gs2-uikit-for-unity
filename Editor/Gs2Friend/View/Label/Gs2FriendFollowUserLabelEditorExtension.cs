@@ -61,7 +61,7 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Editor
                     if (fetcher.Context != null) {
                         fetcher.Context.FollowUser = EditorGUILayout.ObjectField("FollowUser", fetcher.Context.FollowUser, typeof(OwnFollowUser), false) as OwnFollowUser;
                         EditorGUI.indentLevel++;
-                        EditorGUILayout.TextField("NamespaceName", fetcher.Context.FollowUser?.NamespaceName.ToString());
+                        EditorGUILayout.TextField("NamespaceName", fetcher.Context.FollowUser?.NamespaceName?.ToString());
                         EditorGUI.indentLevel--;
                     }
                     EditorGUI.indentLevel--;

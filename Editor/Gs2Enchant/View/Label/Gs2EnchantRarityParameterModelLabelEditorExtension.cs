@@ -61,8 +61,8 @@ namespace Gs2.Unity.UiKit.Gs2Enchant.Editor
                     if (fetcher.Context != null) {
                         fetcher.Context.RarityParameterModel = EditorGUILayout.ObjectField("RarityParameterModel", fetcher.Context.RarityParameterModel, typeof(RarityParameterModel), false) as RarityParameterModel;
                         EditorGUI.indentLevel++;
-                        EditorGUILayout.TextField("NamespaceName", fetcher.Context.RarityParameterModel?.NamespaceName.ToString());
-                        EditorGUILayout.TextField("ParameterName", fetcher.Context.RarityParameterModel?.ParameterName.ToString());
+                        EditorGUILayout.TextField("NamespaceName", fetcher.Context.RarityParameterModel?.NamespaceName?.ToString());
+                        EditorGUILayout.TextField("ParameterName", fetcher.Context.RarityParameterModel?.ParameterName?.ToString());
                         EditorGUI.indentLevel--;
                     }
                     EditorGUI.indentLevel--;

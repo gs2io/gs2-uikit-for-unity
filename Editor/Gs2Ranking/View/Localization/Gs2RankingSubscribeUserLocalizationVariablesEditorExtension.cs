@@ -43,25 +43,33 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Localization.Editor
 
             if (original == null) return;
 
-            var fetcher = original.GetComponent<Gs2RankingSubscribeUserFetcher>() ?? original.GetComponentInParent<Gs2RankingSubscribeUserFetcher>(true);
+            var fetcher = original.GetComponent<Gs2RankingOwnSubscribeUserFetcher>() ?? original.GetComponentInParent<Gs2RankingOwnSubscribeUserFetcher>(true);
             if (fetcher == null) {
-                EditorGUILayout.HelpBox("Gs2RankingSubscribeUserFetcher not found.", MessageType.Error);
+                EditorGUILayout.HelpBox("Gs2RankingOwnSubscribeUserFetcher not found.", MessageType.Error);
                 if (GUILayout.Button("Add Fetcher")) {
-                    original.gameObject.AddComponent<Gs2RankingSubscribeUserFetcher>();
+                    original.gameObject.AddComponent<Gs2RankingOwnSubscribeUserFetcher>();
                 }
             }
             else {
-                var context = original.GetComponent<Gs2RankingSubscribeUserContext>() ?? original.GetComponentInParent<Gs2RankingSubscribeUserContext>(true);
-                EditorGUI.BeginDisabledGroup(true);
-                EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2RankingSubscribeUserFetcher), false);
-                EditorGUI.indentLevel++;
-                context.SubscribeUser = EditorGUILayout.ObjectField("SubscribeUser", context.SubscribeUser, typeof(SubscribeUser), false) as SubscribeUser;
-                EditorGUI.indentLevel++;
-                EditorGUILayout.TextField("CategoryName", context.SubscribeUser?.CategoryName.ToString());
-                EditorGUILayout.TextField("TargetUserId", context.SubscribeUser?.TargetUserId.ToString());
-                EditorGUI.indentLevel--;
-                EditorGUI.indentLevel--;
-                EditorGUI.EndDisabledGroup();
+                if (fetcher.gameObject.GetComponentInParent<Gs2RankingOwnSubscribeUserList>(true) != null) {
+                    EditorGUI.BeginDisabledGroup(true);
+                    EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2RankingOwnSubscribeUserFetcher), false);
+                    EditorGUI.EndDisabledGroup();
+                    EditorGUILayout.HelpBox("SubscribeUser is auto assign from Gs2RankingOwnSubscribeUserList.", MessageType.Info);
+                }
+                else {
+                    var context = original.GetComponent<Gs2RankingOwnSubscribeUserContext>() ?? original.GetComponentInParent<Gs2RankingOwnSubscribeUserContext>(true);
+                    EditorGUI.BeginDisabledGroup(true);
+                    EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2RankingOwnSubscribeUserFetcher), false);
+                    EditorGUI.indentLevel++;
+                    context.SubscribeUser = EditorGUILayout.ObjectField("SubscribeUser", context.SubscribeUser, typeof(OwnSubscribeUser), false) as OwnSubscribeUser;
+                    EditorGUI.indentLevel++;
+                    EditorGUILayout.TextField("CategoryName", context.SubscribeUser?.CategoryName?.ToString());
+                    EditorGUILayout.TextField("TargetUserId", context.SubscribeUser?.TargetUserId?.ToString());
+                    EditorGUI.indentLevel--;
+                    EditorGUI.indentLevel--;
+                    EditorGUI.EndDisabledGroup();
+                }
             }
 
             serializedObject.Update();

@@ -52,7 +52,7 @@ namespace Gs2.Unity.UiKit.Gs2Money.Editor
                 EditorGUI.indentLevel++;
                 context.Wallet = EditorGUILayout.ObjectField("Wallet", context.Wallet, typeof(OwnWallet), false) as OwnWallet;
                 EditorGUI.indentLevel++;
-                EditorGUILayout.TextField("NamespaceName", context.Wallet?.NamespaceName.ToString());
+                EditorGUILayout.TextField("NamespaceName", context.Wallet?.NamespaceName?.ToString());
                 EditorGUILayout.TextField("Slot", context.Wallet?.Slot.ToString());
                 EditorGUI.indentLevel--;
                 EditorGUI.indentLevel--;

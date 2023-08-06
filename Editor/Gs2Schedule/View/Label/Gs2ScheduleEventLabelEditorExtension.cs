@@ -41,24 +41,34 @@ namespace Gs2.Unity.UiKit.Gs2Schedule.Editor
 
             if (original == null) return;
 
-            var fetcher = original.GetComponent<Gs2ScheduleEventFetcher>() ?? original.GetComponentInParent<Gs2ScheduleEventFetcher>(true);
+            var fetcher = original.GetComponent<Gs2ScheduleOwnEventFetcher>() ?? original.GetComponentInParent<Gs2ScheduleOwnEventFetcher>(true);
             if (fetcher == null) {
-                EditorGUILayout.HelpBox("Gs2ScheduleEventFetcher not found.", MessageType.Error);
+                EditorGUILayout.HelpBox("Gs2ScheduleOwnEventFetcher not found.", MessageType.Error);
                 if (GUILayout.Button("Add Fetcher")) {
-                    original.gameObject.AddComponent<Gs2ScheduleEventFetcher>();
+                    original.gameObject.AddComponent<Gs2ScheduleOwnEventFetcher>();
                 }
             }
             else {
-                EditorGUI.BeginDisabledGroup(true);
-                EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2ScheduleEventFetcher), false);
-                EditorGUI.indentLevel++;
-                fetcher.Context.Event_ = EditorGUILayout.ObjectField("Event", fetcher.Context.Event_, typeof(Event), false) as Event;
-                EditorGUI.indentLevel++;
-                EditorGUILayout.TextField("NamespaceName", fetcher.Context.Event_?.NamespaceName.ToString());
-                EditorGUILayout.TextField("EventName", fetcher.Context.Event_?.EventName.ToString());
-                EditorGUI.indentLevel--;
-                EditorGUI.indentLevel--;
-                EditorGUI.EndDisabledGroup();
+                if (fetcher.gameObject.GetComponentInParent<Gs2ScheduleOwnEventList>(true) != null) {
+                    EditorGUI.BeginDisabledGroup(true);
+                    EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2ScheduleOwnEventFetcher), false);
+                    EditorGUI.EndDisabledGroup();
+                    EditorGUILayout.HelpBox("Event is auto assign from Gs2ScheduleOwnEventList.", MessageType.Info);
+                }
+                else {
+                    EditorGUI.BeginDisabledGroup(true);
+                    EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2ScheduleOwnEventFetcher), false);
+                    EditorGUI.indentLevel++;
+                    if (fetcher.Context != null) {
+                        fetcher.Context.Event_ = EditorGUILayout.ObjectField("Event", fetcher.Context.Event_, typeof(OwnEvent), false) as OwnEvent;
+                        EditorGUI.indentLevel++;
+                        EditorGUILayout.TextField("NamespaceName", fetcher.Context.Event_?.NamespaceName?.ToString());
+                        EditorGUILayout.TextField("EventName", fetcher.Context.Event_?.EventName?.ToString());
+                        EditorGUI.indentLevel--;
+                    }
+                    EditorGUI.indentLevel--;
+                    EditorGUI.EndDisabledGroup();
+                }
             }
 
             serializedObject.Update();

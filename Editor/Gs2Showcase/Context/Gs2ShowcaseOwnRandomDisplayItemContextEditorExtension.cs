@@ -42,17 +42,21 @@ namespace Gs2.Unity.UiKit.Gs2Showcase.Editor
 
             serializedObject.Update();
 
-            if (original.ownRandomDisplayItem == null) {
-                EditorGUILayout.HelpBox("RandomDisplayItem not assigned.", MessageType.Error);
-                EditorGUILayout.PropertyField(serializedObject.FindProperty("RandomDisplayItem"), true);
+            if (original.RandomDisplayItem == null) {
+                if (original.GetComponentInParent<Gs2ShowcaseOwnRandomDisplayItemList>(true) != null) {
+                    EditorGUILayout.HelpBox("OwnRandomDisplayItem is auto assign from Gs2ShowcaseOwnRandomDisplayItemList.", MessageType.Info);
+                }
+                else {
+                    EditorGUILayout.HelpBox("OwnRandomDisplayItem not assigned.", MessageType.Error);
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("RandomDisplayItem"), true);
+                }
             }
             else {
-                original.ownRandomDisplayItem = EditorGUILayout.ObjectField("RandomDisplayItem", original.ownRandomDisplayItem, typeof(OwnRandomDisplayItem), false) as OwnRandomDisplayItem;
+                original.RandomDisplayItem = EditorGUILayout.ObjectField("OwnRandomDisplayItem", original.RandomDisplayItem, typeof(OwnRandomDisplayItem), false) as OwnRandomDisplayItem;
                 EditorGUI.BeginDisabledGroup(true);
                 EditorGUI.indentLevel++;
-                EditorGUILayout.TextField("NamespaceName", original.ownRandomDisplayItem?.NamespaceName.ToString());
-                EditorGUILayout.TextField("ShowcaseName", original.ownRandomDisplayItem?.ShowcaseName.ToString());
-                EditorGUILayout.TextField("DisplayItemName", original.ownRandomDisplayItem?.DisplayItemName.ToString());
+                EditorGUILayout.TextField("NamespaceName", original.RandomDisplayItem?.NamespaceName?.ToString());
+                EditorGUILayout.TextField("ShowcaseName", original.RandomDisplayItem?.ShowcaseName?.ToString());
                 EditorGUI.indentLevel--;
                 EditorGUI.EndDisabledGroup();
             }

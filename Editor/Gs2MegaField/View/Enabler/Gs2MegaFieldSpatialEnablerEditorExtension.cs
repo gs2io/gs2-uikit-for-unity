@@ -42,11 +42,11 @@ namespace Gs2.Unity.UiKit.Gs2MegaField.Editor
 
             serializedObject.Update();
 
-            var fetcher = original.GetComponent<Gs2MegaFieldSpatialFetcher>() ?? original.GetComponentInParent<Gs2MegaFieldSpatialFetcher>(true);
+            var fetcher = original.GetComponent<Gs2MegaFieldOwnSpatialFetcher>() ?? original.GetComponentInParent<Gs2MegaFieldOwnSpatialFetcher>(true);
             if (fetcher == null) {
                 EditorGUILayout.HelpBox("SpatialFetcher not assigned.", MessageType.Error);
                 if (GUILayout.Button("Add Fetcher")) {
-                    original.gameObject.AddComponent<Gs2MegaFieldSpatialFetcher>();
+                    original.gameObject.AddComponent<Gs2MegaFieldOwnSpatialFetcher>();
                 }
             }
             else {

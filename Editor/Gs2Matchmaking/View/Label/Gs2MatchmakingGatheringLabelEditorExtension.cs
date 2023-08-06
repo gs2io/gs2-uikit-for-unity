@@ -51,11 +51,13 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking.Editor
                 EditorGUI.BeginDisabledGroup(true);
                 EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2MatchmakingGatheringFetcher), false);
                 EditorGUI.indentLevel++;
-                fetcher.Context.Gathering = EditorGUILayout.ObjectField("Gathering", fetcher.Context.Gathering, typeof(Gathering), false) as Gathering;
-                EditorGUI.indentLevel++;
-                EditorGUILayout.TextField("NamespaceName", fetcher.Context.Gathering?.NamespaceName.ToString());
-                EditorGUILayout.TextField("GatheringName", fetcher.Context.Gathering?.GatheringName.ToString());
-                EditorGUI.indentLevel--;
+                if (fetcher.Context != null) {
+                    fetcher.Context.Gathering = EditorGUILayout.ObjectField("Gathering", fetcher.Context.Gathering, typeof(Gathering), false) as Gathering;
+                    EditorGUI.indentLevel++;
+                    EditorGUILayout.TextField("NamespaceName", fetcher.Context.Gathering?.NamespaceName?.ToString());
+                    EditorGUILayout.TextField("GatheringName", fetcher.Context.Gathering?.GatheringName?.ToString());
+                    EditorGUI.indentLevel--;
+                }
                 EditorGUI.indentLevel--;
                 EditorGUI.EndDisabledGroup();
             }

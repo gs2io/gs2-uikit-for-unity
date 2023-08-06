@@ -61,8 +61,8 @@ namespace Gs2.Unity.UiKit.Gs2StateMachine.Editor
                     if (fetcher.Context != null) {
                         fetcher.Context.Status = EditorGUILayout.ObjectField("Status", fetcher.Context.Status, typeof(OwnStatus), false) as OwnStatus;
                         EditorGUI.indentLevel++;
-                        EditorGUILayout.TextField("NamespaceName", fetcher.Context.Status?.NamespaceName.ToString());
-                        EditorGUILayout.TextField("StatusName", fetcher.Context.Status?.StatusName.ToString());
+                        EditorGUILayout.TextField("NamespaceName", fetcher.Context.Status?.NamespaceName?.ToString());
+                        EditorGUILayout.TextField("StatusName", fetcher.Context.Status?.StatusName?.ToString());
                         EditorGUI.indentLevel--;
                     }
                     EditorGUI.indentLevel--;

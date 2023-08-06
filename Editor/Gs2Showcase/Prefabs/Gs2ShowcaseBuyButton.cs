@@ -3,13 +3,13 @@ using UnityEngine;
 
 namespace Editor.Gs2Showcase.Prefabs
 {
-    public static class Gs2ShowcaseBuyButton
+    public static class Gs2ShowcaseShowcaseBuyButton
     {
-        [MenuItem("GameObject/UI/Game Server Services/Showcase/DisplayItem/BuyButton", priority = 0)]
+        [MenuItem("GameObject/UI/Game Server Services/Showcase/Namespace/User/Showcase/Action/Buy", priority = 0)]
         private static void CreateButton()
         {
             var prefab = AssetDatabase.LoadAssetAtPath<GameObject>(
-                "Packages/io.gs2.unity.sdk.uikit/Editor/Gs2Showcase/Prefabs/BuyButton.prefab"
+                "Packages/io.gs2.unity.sdk.uikit/Editor/Gs2Showcase/Prefabs/ShowcaseBuyButton.prefab"
             );
 
             var instance = GameObject.Instantiate(prefab, Selection.activeTransform);

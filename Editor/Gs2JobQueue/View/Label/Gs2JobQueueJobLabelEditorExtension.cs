@@ -51,11 +51,13 @@ namespace Gs2.Unity.UiKit.Gs2JobQueue.Editor
                 EditorGUI.BeginDisabledGroup(true);
                 EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2JobQueueOwnJobFetcher), false);
                 EditorGUI.indentLevel++;
-                fetcher.Context.Job = EditorGUILayout.ObjectField("Job", fetcher.Context.Job, typeof(OwnJob), false) as OwnJob;
-                EditorGUI.indentLevel++;
-                EditorGUILayout.TextField("NamespaceName", fetcher.Context.Job?.NamespaceName.ToString());
-                EditorGUILayout.TextField("JobName", fetcher.Context.Job?.JobName.ToString());
-                EditorGUI.indentLevel--;
+                if (fetcher.Context != null) {
+                    fetcher.Context.Job = EditorGUILayout.ObjectField("Job", fetcher.Context.Job, typeof(OwnJob), false) as OwnJob;
+                    EditorGUI.indentLevel++;
+                    EditorGUILayout.TextField("NamespaceName", fetcher.Context.Job?.NamespaceName?.ToString());
+                    EditorGUILayout.TextField("JobName", fetcher.Context.Job?.JobName?.ToString());
+                    EditorGUI.indentLevel--;
+                }
                 EditorGUI.indentLevel--;
                 EditorGUI.EndDisabledGroup();
             }

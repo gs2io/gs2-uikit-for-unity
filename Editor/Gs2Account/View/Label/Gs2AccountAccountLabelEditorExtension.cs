@@ -51,10 +51,12 @@ namespace Gs2.Unity.UiKit.Gs2Account.Editor
                 EditorGUI.BeginDisabledGroup(true);
                 EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2AccountOwnAccountFetcher), false);
                 EditorGUI.indentLevel++;
-                fetcher.Context.Account = EditorGUILayout.ObjectField("Account", fetcher.Context.Account, typeof(OwnAccount), false) as OwnAccount;
-                EditorGUI.indentLevel++;
-                EditorGUILayout.TextField("NamespaceName", fetcher.Context.Account?.NamespaceName.ToString());
-                EditorGUI.indentLevel--;
+                if (fetcher.Context != null) {
+                    fetcher.Context.Account = EditorGUILayout.ObjectField("Account", fetcher.Context.Account, typeof(OwnAccount), false) as OwnAccount;
+                    EditorGUI.indentLevel++;
+                    EditorGUILayout.TextField("NamespaceName", fetcher.Context.Account?.NamespaceName?.ToString());
+                    EditorGUI.indentLevel--;
+                }
                 EditorGUI.indentLevel--;
                 EditorGUI.EndDisabledGroup();
             }

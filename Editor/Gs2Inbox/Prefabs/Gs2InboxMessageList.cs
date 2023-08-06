@@ -5,7 +5,7 @@ namespace Editor.Gs2Inbox.Prefabs
 {
     public static class Gs2InboxMessageList
     {
-        [MenuItem("GameObject/UI/Game Server Services/Inbox/MessageList", priority = 0)]
+        [MenuItem("GameObject/UI/Game Server Services/Inbox/Namespace/User/MessageList", priority = 0)]
         private static void CreateButton()
         {
             var prefab = AssetDatabase.LoadAssetAtPath<GameObject>(

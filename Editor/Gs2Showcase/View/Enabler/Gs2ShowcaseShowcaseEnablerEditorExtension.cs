@@ -42,11 +42,11 @@ namespace Gs2.Unity.UiKit.Gs2Showcase.Editor
 
             serializedObject.Update();
 
-            var fetcher = original.GetComponent<Gs2ShowcaseShowcaseFetcher>() ?? original.GetComponentInParent<Gs2ShowcaseShowcaseFetcher>(true);
+            var fetcher = original.GetComponent<Gs2ShowcaseOwnShowcaseFetcher>() ?? original.GetComponentInParent<Gs2ShowcaseOwnShowcaseFetcher>(true);
             if (fetcher == null) {
                 EditorGUILayout.HelpBox("ShowcaseFetcher not assigned.", MessageType.Error);
                 if (GUILayout.Button("Add Fetcher")) {
-                    original.gameObject.AddComponent<Gs2ShowcaseShowcaseFetcher>();
+                    original.gameObject.AddComponent<Gs2ShowcaseOwnShowcaseFetcher>();
                 }
             }
             else {

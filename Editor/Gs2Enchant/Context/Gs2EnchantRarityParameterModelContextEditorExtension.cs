@@ -54,10 +54,12 @@ namespace Gs2.Unity.UiKit.Gs2Enchant.Editor
             else {
                 original.RarityParameterModel = EditorGUILayout.ObjectField("RarityParameterModel", original.RarityParameterModel, typeof(RarityParameterModel), false) as RarityParameterModel;
                 EditorGUI.BeginDisabledGroup(true);
-                EditorGUI.indentLevel++;
-                EditorGUILayout.TextField("NamespaceName", original.RarityParameterModel?.NamespaceName.ToString());
-                EditorGUILayout.TextField("ParameterName", original.RarityParameterModel?.ParameterName.ToString());
-                EditorGUI.indentLevel--;
+                if (original.RarityParameterModel != null) {
+                    EditorGUI.indentLevel++;
+                    EditorGUILayout.TextField("NamespaceName", original.RarityParameterModel?.NamespaceName?.ToString());
+                    EditorGUILayout.TextField("ParameterName", original.RarityParameterModel?.ParameterName?.ToString());
+                    EditorGUI.indentLevel--;
+                }
                 EditorGUI.EndDisabledGroup();
             }
 

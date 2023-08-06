@@ -5,7 +5,7 @@ namespace Editor.Gs2Experience.Prefabs
 {
     public static class Gs2ExperienceStatusContainer
     {
-        [MenuItem("GameObject/UI/Game Server Services/Experience/Experience/StatusContainer", priority = 0)]
+        [MenuItem("GameObject/UI/Game Server Services/Experience/Namespace/User/StatusContainer", priority = 0)]
         private static void CreateButton()
         {
             var prefab = AssetDatabase.LoadAssetAtPath<GameObject>(

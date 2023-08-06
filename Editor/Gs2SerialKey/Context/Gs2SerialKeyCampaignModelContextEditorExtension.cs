@@ -49,10 +49,12 @@ namespace Gs2.Unity.UiKit.Gs2SerialKey.Editor
             else {
                 original.CampaignModel = EditorGUILayout.ObjectField("CampaignModel", original.CampaignModel, typeof(CampaignModel), false) as CampaignModel;
                 EditorGUI.BeginDisabledGroup(true);
-                EditorGUI.indentLevel++;
-                EditorGUILayout.TextField("NamespaceName", original.CampaignModel?.NamespaceName.ToString());
-                EditorGUILayout.TextField("CampaignModelName", original.CampaignModel?.CampaignModelName.ToString());
-                EditorGUI.indentLevel--;
+                if (original.CampaignModel != null) {
+                    EditorGUI.indentLevel++;
+                    EditorGUILayout.TextField("NamespaceName", original.CampaignModel?.NamespaceName?.ToString());
+                    EditorGUILayout.TextField("CampaignModelName", original.CampaignModel?.CampaignModelName?.ToString());
+                    EditorGUI.indentLevel--;
+                }
                 EditorGUI.EndDisabledGroup();
             }
 

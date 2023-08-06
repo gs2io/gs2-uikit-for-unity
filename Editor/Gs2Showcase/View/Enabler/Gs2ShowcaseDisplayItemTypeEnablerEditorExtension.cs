@@ -39,22 +39,22 @@ namespace Gs2.Unity.UiKit.Gs2Showcase.Enabler.Editor
 
             if (original == null) return;
 
-            var context = original.GetComponent<Gs2ShowcaseDisplayItemContext>() ?? original.GetComponentInParent<Gs2ShowcaseDisplayItemContext>(true);
+            var context = original.GetComponent<Gs2ShowcaseOwnDisplayItemContext>() ?? original.GetComponentInParent<Gs2ShowcaseOwnDisplayItemContext>(true);
             if (context == null) {
-                EditorGUILayout.HelpBox("Gs2ShowcaseDisplayItemContext not found.", MessageType.Error);
+                EditorGUILayout.HelpBox("Gs2ShowcaseOwnDisplayItemContext not found.", MessageType.Error);
                 if (GUILayout.Button("Add Context")) {
-                    original.gameObject.AddComponent<Gs2ShowcaseDisplayItemContext>();
+                    original.gameObject.AddComponent<Gs2ShowcaseOwnDisplayItemContext>();
                 }
             }
             else {
                 EditorGUI.BeginDisabledGroup(true);
-                EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2ShowcaseDisplayItemContext), false);
+                EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2ShowcaseOwnDisplayItemContext), false);
                 EditorGUI.indentLevel++;
-                context.DisplayItem = EditorGUILayout.ObjectField("DisplayItem", context.DisplayItem, typeof(DisplayItem), false) as DisplayItem;
+                context.DisplayItem = EditorGUILayout.ObjectField("DisplayItem", context.DisplayItem, typeof(OwnDisplayItem), false) as OwnDisplayItem;
                 EditorGUI.indentLevel++;
-                EditorGUILayout.TextField("NamespaceName", context.DisplayItem?.NamespaceName.ToString());
-                EditorGUILayout.TextField("ShowcaseName", context.DisplayItem?.ShowcaseName.ToString());
-                EditorGUILayout.TextField("DisplayItemId", context.DisplayItem?.DisplayItemId.ToString());
+                EditorGUILayout.TextField("NamespaceName", context.DisplayItem?.NamespaceName?.ToString());
+                EditorGUILayout.TextField("ShowcaseName", context.DisplayItem?.ShowcaseName?.ToString());
+                EditorGUILayout.TextField("DisplayItemId", context.DisplayItem?.DisplayItemId?.ToString());
                 EditorGUI.indentLevel--;
                 EditorGUI.indentLevel--;
                 EditorGUI.EndDisabledGroup();

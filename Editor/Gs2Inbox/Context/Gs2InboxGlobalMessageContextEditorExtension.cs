@@ -49,10 +49,12 @@ namespace Gs2.Unity.UiKit.Gs2Inbox.Editor
             else {
                 original.GlobalMessage = EditorGUILayout.ObjectField("GlobalMessage", original.GlobalMessage, typeof(GlobalMessage), false) as GlobalMessage;
                 EditorGUI.BeginDisabledGroup(true);
-                EditorGUI.indentLevel++;
-                EditorGUILayout.TextField("NamespaceName", original.GlobalMessage?.NamespaceName.ToString());
-                EditorGUILayout.TextField("GlobalMessageName", original.GlobalMessage?.GlobalMessageName.ToString());
-                EditorGUI.indentLevel--;
+                if (original.GlobalMessage != null) {
+                    EditorGUI.indentLevel++;
+                    EditorGUILayout.TextField("NamespaceName", original.GlobalMessage?.NamespaceName?.ToString());
+                    EditorGUILayout.TextField("GlobalMessageName", original.GlobalMessage?.GlobalMessageName?.ToString());
+                    EditorGUI.indentLevel--;
+                }
                 EditorGUI.EndDisabledGroup();
             }
 

@@ -48,12 +48,13 @@ namespace Gs2.Unity.UiKit.Gs2Datastore.Fetcher
     {
         private IEnumerator Fetch()
         {
+            var retryWaitSecond = 1;
             Gs2Exception e;
             while (true)
             {
                 if (_gameSessionHolder != null && _gameSessionHolder.Initialized &&
                     _clientHolder != null && _clientHolder.Initialized &&
-                    Context != null)
+                    Context != null && this.Context.DataObjectHistory != null)
                 {
                     
                     var domain = this._clientHolder.Gs2.Datastore.Namespace(
@@ -72,34 +73,25 @@ namespace Gs2.Unity.UiKit.Gs2Datastore.Fetcher
                         if (future.Error is BadRequestException || future.Error is NotFoundException)
                         {
                             onError.Invoke(e = future.Error, null);
-                            break;
                         }
-
-                        onError.Invoke(new CanIgnoreException(future.Error), null);
+                        else {
+                            onError.Invoke(new CanIgnoreException(future.Error), null);
+                        }
+                        yield return new WaitForSeconds(retryWaitSecond);
+                        retryWaitSecond *= 2;
                     }
                     else
                     {
+                        retryWaitSecond = 1;
                         DataObjectHistory = future.Result;
                         Fetched = true;
                     }
                 }
-
-                yield return new WaitForSeconds(0.1f);
+                else {
+                    yield return new WaitForSeconds(0.1f);
+                }
             }
-
-            var transform1 = transform;
-            var builder = new StringBuilder(transform1.name);
-            var current = transform1.parent;
-
-            while (current != null)
-            {
-                builder.Insert(0, current.name + "/");
-                current = current.parent;
-            }
-
-            Debug.LogError(e);
-            Debug.LogError($"{GetType()} の自動更新が停止されました。 {builder}");
-            Debug.LogError($"Automatic update of {GetType()} has been stopped. {builder}");
+            // ReSharper disable once IteratorNeverReturns
         }
 
         public void OnEnable()

@@ -55,9 +55,9 @@ namespace Gs2.Unity.UiKit.Gs2Enchant.Editor
                 original.BalanceParameterStatus = EditorGUILayout.ObjectField("OwnBalanceParameterStatus", original.BalanceParameterStatus, typeof(OwnBalanceParameterStatus), false) as OwnBalanceParameterStatus;
                 EditorGUI.BeginDisabledGroup(true);
                 EditorGUI.indentLevel++;
-                EditorGUILayout.TextField("NamespaceName", original.BalanceParameterStatus?.NamespaceName.ToString());
-                EditorGUILayout.TextField("ParameterName", original.BalanceParameterStatus?.ParameterName.ToString());
-                EditorGUILayout.TextField("PropertyId", original.BalanceParameterStatus?.PropertyId.ToString());
+                EditorGUILayout.TextField("NamespaceName", original.BalanceParameterStatus?.NamespaceName?.ToString());
+                EditorGUILayout.TextField("ParameterName", original.BalanceParameterStatus?.ParameterName?.ToString());
+                EditorGUILayout.TextField("PropertyId", original.BalanceParameterStatus?.PropertyId?.ToString());
                 EditorGUI.indentLevel--;
                 EditorGUI.EndDisabledGroup();
             }

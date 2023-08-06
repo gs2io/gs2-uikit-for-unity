@@ -61,7 +61,7 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Editor
                     if (fetcher.Context != null) {
                         fetcher.Context.MissionTaskModel = EditorGUILayout.ObjectField("MissionTaskModel", fetcher.Context.MissionTaskModel, typeof(MissionTaskModel), false) as MissionTaskModel;
                         EditorGUI.indentLevel++;
-                        EditorGUILayout.TextField("MissionTaskName", fetcher.Context.MissionTaskModel?.MissionTaskName.ToString());
+                        EditorGUILayout.TextField("MissionTaskName", fetcher.Context.MissionTaskModel?.MissionTaskName?.ToString());
                         EditorGUI.indentLevel--;
                     }
                     EditorGUI.indentLevel--;

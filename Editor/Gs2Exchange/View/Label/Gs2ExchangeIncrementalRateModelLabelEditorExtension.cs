@@ -61,8 +61,8 @@ namespace Gs2.Unity.UiKit.Gs2Exchange.Editor
                     if (fetcher.Context != null) {
                         fetcher.Context.IncrementalRateModel = EditorGUILayout.ObjectField("IncrementalRateModel", fetcher.Context.IncrementalRateModel, typeof(IncrementalRateModel), false) as IncrementalRateModel;
                         EditorGUI.indentLevel++;
-                        EditorGUILayout.TextField("NamespaceName", fetcher.Context.IncrementalRateModel?.NamespaceName.ToString());
-                        EditorGUILayout.TextField("RateName", fetcher.Context.IncrementalRateModel?.RateName.ToString());
+                        EditorGUILayout.TextField("NamespaceName", fetcher.Context.IncrementalRateModel?.NamespaceName?.ToString());
+                        EditorGUILayout.TextField("RateName", fetcher.Context.IncrementalRateModel?.RateName?.ToString());
                         EditorGUI.indentLevel--;
                     }
                     EditorGUI.indentLevel--;

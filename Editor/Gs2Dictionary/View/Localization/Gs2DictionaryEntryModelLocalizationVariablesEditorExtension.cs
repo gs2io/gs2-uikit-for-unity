@@ -70,8 +70,8 @@ namespace Gs2.Unity.UiKit.Gs2Dictionary.Localization.Editor
                     EditorGUI.indentLevel++;
                     context.EntryModel = EditorGUILayout.ObjectField("EntryModel", context.EntryModel, typeof(EntryModel), false) as EntryModel;
                     EditorGUI.indentLevel++;
-                    EditorGUILayout.TextField("NamespaceName", context.EntryModel?.NamespaceName.ToString());
-                    EditorGUILayout.TextField("EntryName", context.EntryModel?.EntryName.ToString());
+                    EditorGUILayout.TextField("NamespaceName", context.EntryModel?.NamespaceName?.ToString());
+                    EditorGUILayout.TextField("EntryName", context.EntryModel?.EntryName?.ToString());
                     EditorGUI.indentLevel--;
                     EditorGUI.indentLevel--;
                     EditorGUI.EndDisabledGroup();

@@ -51,10 +51,12 @@ namespace Gs2.Unity.UiKit.Gs2Enhance.Editor
                 EditorGUI.BeginDisabledGroup(true);
                 EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2EnhanceOwnProgressFetcher), false);
                 EditorGUI.indentLevel++;
-                fetcher.Context.Progress = EditorGUILayout.ObjectField("Progress", fetcher.Context.Progress, typeof(OwnProgress), false) as OwnProgress;
-                EditorGUI.indentLevel++;
-                EditorGUILayout.TextField("NamespaceName", fetcher.Context.Progress?.NamespaceName.ToString());
-                EditorGUI.indentLevel--;
+                if (fetcher.Context != null) {
+                    fetcher.Context.Progress = EditorGUILayout.ObjectField("Progress", fetcher.Context.Progress, typeof(OwnProgress), false) as OwnProgress;
+                    EditorGUI.indentLevel++;
+                    EditorGUILayout.TextField("NamespaceName", fetcher.Context.Progress?.NamespaceName?.ToString());
+                    EditorGUI.indentLevel--;
+                }
                 EditorGUI.indentLevel--;
                 EditorGUI.EndDisabledGroup();
             }

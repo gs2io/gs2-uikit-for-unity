@@ -54,9 +54,11 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Editor
             else {
                 original.QuestModel = EditorGUILayout.ObjectField("QuestModel", original.QuestModel, typeof(QuestModel), false) as QuestModel;
                 EditorGUI.BeginDisabledGroup(true);
-                EditorGUI.indentLevel++;
-                EditorGUILayout.TextField("QuestName", original.QuestModel?.QuestName.ToString());
-                EditorGUI.indentLevel--;
+                if (original.QuestModel != null) {
+                    EditorGUI.indentLevel++;
+                    EditorGUILayout.TextField("QuestName", original.QuestModel?.QuestName?.ToString());
+                    EditorGUI.indentLevel--;
+                }
                 EditorGUI.EndDisabledGroup();
             }
 

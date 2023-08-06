@@ -61,10 +61,10 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Editor
                     if (fetcher.Context != null) {
                         fetcher.Context.Score = EditorGUILayout.ObjectField("Score", fetcher.Context.Score, typeof(OwnScore), false) as OwnScore;
                         EditorGUI.indentLevel++;
-                        EditorGUILayout.TextField("NamespaceName", fetcher.Context.Score?.NamespaceName.ToString());
-                        EditorGUILayout.TextField("CategoryName", fetcher.Context.Score?.CategoryName.ToString());
-                        EditorGUILayout.TextField("ScorerUserId", fetcher.Context.Score?.ScorerUserId.ToString());
-                        EditorGUILayout.TextField("UniqueId", fetcher.Context.Score?.UniqueId.ToString());
+                        EditorGUILayout.TextField("NamespaceName", fetcher.Context.Score?.NamespaceName?.ToString());
+                        EditorGUILayout.TextField("CategoryName", fetcher.Context.Score?.CategoryName?.ToString());
+                        EditorGUILayout.TextField("ScorerUserId", fetcher.Context.Score?.ScorerUserId?.ToString());
+                        EditorGUILayout.TextField("UniqueId", fetcher.Context.Score?.UniqueId?.ToString());
                         EditorGUI.indentLevel--;
                     }
                     EditorGUI.indentLevel--;

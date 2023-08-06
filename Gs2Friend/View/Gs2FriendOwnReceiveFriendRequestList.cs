@@ -69,7 +69,8 @@ namespace Gs2.Unity.UiKit.Gs2Friend
                 var node = Instantiate(this.prefab, transform);
                 node.FriendUser = OwnFriendUser.New(
                     _context.Namespace,
-                    ""
+                    "",
+                    false
                 );
                 node.gameObject.SetActive(false);
                 _children.Add(node);

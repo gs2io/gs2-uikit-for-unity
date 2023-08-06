@@ -65,14 +65,14 @@ namespace Gs2.Unity.UiKit.Gs2Showcase
 
     public partial class Gs2ShowcaseDisplayItemLabel
     {
-        private Gs2ShowcaseDisplayItemFetcher _fetcher;
+        private Gs2ShowcaseOwnDisplayItemFetcher _fetcher;
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2ShowcaseDisplayItemFetcher>() ?? GetComponentInParent<Gs2ShowcaseDisplayItemFetcher>();
+            _fetcher = GetComponent<Gs2ShowcaseOwnDisplayItemFetcher>() ?? GetComponentInParent<Gs2ShowcaseOwnDisplayItemFetcher>();
 
             if (_fetcher == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ShowcaseDisplayItemFetcher.");
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ShowcaseOwnDisplayItemFetcher.");
                 enabled = false;
             }
 
@@ -81,7 +81,7 @@ namespace Gs2.Unity.UiKit.Gs2Showcase
 
         public bool HasError()
         {
-            _fetcher = GetComponent<Gs2ShowcaseDisplayItemFetcher>() ?? GetComponentInParent<Gs2ShowcaseDisplayItemFetcher>(true);
+            _fetcher = GetComponent<Gs2ShowcaseOwnDisplayItemFetcher>() ?? GetComponentInParent<Gs2ShowcaseOwnDisplayItemFetcher>(true);
             if (_fetcher == null) {
                 return true;
             }

@@ -52,7 +52,7 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Enabler.Editor
                 EditorGUI.indentLevel++;
                 context.FriendUser = EditorGUILayout.ObjectField("FriendUser", context.FriendUser, typeof(OwnFriendUser), false) as OwnFriendUser;
                 EditorGUI.indentLevel++;
-                EditorGUILayout.TextField("NamespaceName", context.FriendUser?.NamespaceName.ToString());
+                EditorGUILayout.TextField("NamespaceName", context.FriendUser?.NamespaceName?.ToString());
                 EditorGUI.indentLevel--;
                 EditorGUI.indentLevel--;
                 EditorGUI.EndDisabledGroup();

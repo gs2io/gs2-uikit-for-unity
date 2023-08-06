@@ -36,7 +36,7 @@ using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2SerialKey.Context;
 using UnityEngine;
 using UnityEngine.Events;
-using SerialKey = Gs2.Unity.Gs2SerialKey.ScriptableObject.SerialKey;
+using SerialKey = Gs2.Unity.Gs2SerialKey.ScriptableObject.OwnSerialKey;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -123,23 +123,23 @@ namespace Gs2.Unity.UiKit.Gs2SerialKey
     {
         private Gs2ClientHolder _clientHolder;
         private Gs2GameSessionHolder _gameSessionHolder;
-        private Gs2SerialKeySerialKeyContext _context;
+        private Gs2SerialKeyOwnSerialKeyContext _context;
 
         public void Awake()
         {
             this._clientHolder = Gs2ClientHolder.Instance;
             this._gameSessionHolder = Gs2GameSessionHolder.Instance;
-            this._context = GetComponent<Gs2SerialKeySerialKeyContext>() ?? GetComponentInParent<Gs2SerialKeySerialKeyContext>();
+            this._context = GetComponent<Gs2SerialKeyOwnSerialKeyContext>() ?? GetComponentInParent<Gs2SerialKeyOwnSerialKeyContext>();
 
             if (_context == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2SerialKeySerialKeyContext.");
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2SerialKeyOwnSerialKeyContext.");
                 enabled = false;
             }
         }
 
         public bool HasError()
         {
-            this._context = GetComponent<Gs2SerialKeySerialKeyContext>() ?? GetComponentInParent<Gs2SerialKeySerialKeyContext>(true);
+            this._context = GetComponent<Gs2SerialKeyOwnSerialKeyContext>() ?? GetComponentInParent<Gs2SerialKeyOwnSerialKeyContext>(true);
             if (_context == null) {
                 return true;
             }

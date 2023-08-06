@@ -5,7 +5,7 @@ namespace Editor.Gs2Idle.Prefabs
 {
     public static class Gs2IdleStatusContainer
     {
-        [MenuItem("GameObject/UI/Game Server Services/Idle/Status/StatusContainer", priority = 0)]
+        [MenuItem("GameObject/UI/Game Server Services/Idle/Namespace/User/StatusContainer", priority = 0)]
         private static void CreateButton()
         {
             var prefab = AssetDatabase.LoadAssetAtPath<GameObject>(

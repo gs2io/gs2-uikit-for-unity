@@ -12,11 +12,17 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
- * deny overwrite
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
+// ReSharper disable RedundantNameQualifier
+// ReSharper disable RedundantAssignment
+// ReSharper disable NotAccessedVariable
+// ReSharper disable RedundantUsingDirective
+// ReSharper disable Unity.NoNullPropagation
+// ReSharper disable InconsistentNaming
+
+#pragma warning disable CS0472
 
 using UnityEditor;
 using UnityEngine;
@@ -36,6 +42,11 @@ namespace Gs2.Unity.UiKit.Gs2Showcase.Editor
             original.format = EditorGUILayout.TextField("Format", original.format);
 
             GUILayout.Label("Add Format Parameter");
+            if (GUILayout.Button("DisplayItemId")) {
+                original.format += "{displayItemId}";
+                GUI.FocusControl("");
+                EditorUtility.SetDirty(original);
+            }
             if (GUILayout.Button("Quantity")) {
                 original.format += "{quantity}";
                 GUI.FocusControl("");

@@ -54,10 +54,12 @@ namespace Gs2.Unity.UiKit.Gs2MegaField.Editor
             else {
                 original.AreaModel = EditorGUILayout.ObjectField("AreaModel", original.AreaModel, typeof(AreaModel), false) as AreaModel;
                 EditorGUI.BeginDisabledGroup(true);
-                EditorGUI.indentLevel++;
-                EditorGUILayout.TextField("NamespaceName", original.AreaModel?.NamespaceName.ToString());
-                EditorGUILayout.TextField("AreaModelName", original.AreaModel?.AreaModelName.ToString());
-                EditorGUI.indentLevel--;
+                if (original.AreaModel != null) {
+                    EditorGUI.indentLevel++;
+                    EditorGUILayout.TextField("NamespaceName", original.AreaModel?.NamespaceName?.ToString());
+                    EditorGUILayout.TextField("AreaModelName", original.AreaModel?.AreaModelName?.ToString());
+                    EditorGUI.indentLevel--;
+                }
                 EditorGUI.EndDisabledGroup();
             }
 

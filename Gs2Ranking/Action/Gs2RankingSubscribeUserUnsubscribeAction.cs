@@ -36,7 +36,7 @@ using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Ranking.Context;
 using UnityEngine;
 using UnityEngine.Events;
-using SubscribeUser = Gs2.Unity.Gs2Ranking.ScriptableObject.SubscribeUser;
+using SubscribeUser = Gs2.Unity.Gs2Ranking.ScriptableObject.OwnSubscribeUser;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -123,23 +123,23 @@ namespace Gs2.Unity.UiKit.Gs2Ranking
     {
         private Gs2ClientHolder _clientHolder;
         private Gs2GameSessionHolder _gameSessionHolder;
-        private Gs2RankingSubscribeUserContext _context;
+        private Gs2RankingOwnSubscribeUserContext _context;
 
         public void Awake()
         {
             this._clientHolder = Gs2ClientHolder.Instance;
             this._gameSessionHolder = Gs2GameSessionHolder.Instance;
-            this._context = GetComponent<Gs2RankingSubscribeUserContext>() ?? GetComponentInParent<Gs2RankingSubscribeUserContext>();
+            this._context = GetComponent<Gs2RankingOwnSubscribeUserContext>() ?? GetComponentInParent<Gs2RankingOwnSubscribeUserContext>();
 
             if (_context == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2RankingSubscribeUserContext.");
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2RankingOwnSubscribeUserContext.");
                 enabled = false;
             }
         }
 
         public bool HasError()
         {
-            this._context = GetComponent<Gs2RankingSubscribeUserContext>() ?? GetComponentInParent<Gs2RankingSubscribeUserContext>(true);
+            this._context = GetComponent<Gs2RankingOwnSubscribeUserContext>() ?? GetComponentInParent<Gs2RankingOwnSubscribeUserContext>(true);
             if (_context == null) {
                 return true;
             }

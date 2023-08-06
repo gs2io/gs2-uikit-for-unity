@@ -12,8 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
- * deny overwrite
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
@@ -44,32 +42,36 @@ namespace Gs2.Unity.UiKit.Gs2Showcase.Editor
 
             var context = original.GetComponent<Gs2ShowcaseOwnRandomDisplayItemContext>() ?? original.GetComponentInParent<Gs2ShowcaseOwnRandomDisplayItemContext>(true);
             if (context == null) {
-                EditorGUILayout.HelpBox("Gs2ShowcaseRandomDisplayItemContext not found.", MessageType.Error);
+                EditorGUILayout.HelpBox("Gs2ShowcaseOwnRandomDisplayItemContext not found.", MessageType.Error);
                 if (GUILayout.Button("Add Context")) {
                     original.gameObject.AddComponent<Gs2ShowcaseOwnRandomDisplayItemContext>();
                 }
             }
             else {
-                EditorGUI.BeginDisabledGroup(true);
-                EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2ShowcaseOwnRandomDisplayItemContext), false);
-                EditorGUI.indentLevel++;
-                context.ownRandomDisplayItem = EditorGUILayout.ObjectField("RandomDisplayItem", context.ownRandomDisplayItem, typeof(OwnRandomDisplayItem), false) as OwnRandomDisplayItem;
-                EditorGUI.indentLevel++;
-                EditorGUILayout.TextField("NamespaceName", context.ownRandomDisplayItem?.NamespaceName.ToString());
-                EditorGUILayout.TextField("ShowcaseName", context.ownRandomDisplayItem?.ShowcaseName.ToString());
-                EditorGUI.indentLevel--;
-                EditorGUI.indentLevel--;
-                EditorGUI.EndDisabledGroup();
+                if (context.transform.GetComponentInParent<Gs2ShowcaseOwnRandomDisplayItemList>(true) != null) {
+                    EditorGUI.BeginDisabledGroup(true);
+                    EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2ShowcaseOwnRandomDisplayItemContext), false);
+                    EditorGUI.EndDisabledGroup();
+                    EditorGUILayout.HelpBox("RandomDisplayItem is auto assign from Gs2ShowcaseRandomDisplayItemList.", MessageType.Info);
+                }
+                else {
+                    EditorGUI.BeginDisabledGroup(true);
+                    EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2ShowcaseOwnRandomDisplayItemContext), false);
+                    EditorGUI.indentLevel++;
+                    context.RandomDisplayItem = EditorGUILayout.ObjectField("OwnRandomDisplayItem", context.RandomDisplayItem, typeof(OwnRandomDisplayItem), false) as OwnRandomDisplayItem;
+                    if (context.RandomDisplayItem != null) {
+                        EditorGUI.indentLevel++;
+                        EditorGUI.indentLevel--;
+                    }
+                    EditorGUI.indentLevel--;
+                    EditorGUI.EndDisabledGroup();
+                }
             }
 
             serializedObject.Update();
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("Quantity"), true);
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("Config"), true);
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("onChangeQuantity"), true);
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("onChangeConfig"), true);
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("onRandomShowcaseBuyComplete"), true);
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("onError"), true);
             serializedObject.ApplyModifiedProperties();
+
+            DrawDefaultInspector();
         }
     }
 }

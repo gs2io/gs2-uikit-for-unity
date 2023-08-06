@@ -12,11 +12,17 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
- * deny overwrite
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
+// ReSharper disable RedundantNameQualifier
+// ReSharper disable RedundantAssignment
+// ReSharper disable NotAccessedVariable
+// ReSharper disable RedundantUsingDirective
+// ReSharper disable Unity.NoNullPropagation
+// ReSharper disable InconsistentNaming
+
+#pragma warning disable CS0472
 
 using System;
 using System.Collections;
@@ -42,21 +48,22 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Fetcher
     {
         private IEnumerator Fetch()
         {
+            var retryWaitSecond = 1;
             Gs2Exception e;
             while (true)
             {
                 if (_gameSessionHolder != null && _gameSessionHolder.Initialized &&
                     _clientHolder != null && _clientHolder.Initialized &&
-                    _context != null)
+                    Context != null && this.Context.SubscribeUser != null)
                 {
                     
                     var domain = this._clientHolder.Gs2.Ranking.Namespace(
-                        this._context.Subscribe.NamespaceName
+                        this.Context.SubscribeUser.NamespaceName
                     ).Me(
                         this._gameSessionHolder.GameSession
                     ).SubscribeUser(
-                        this._context.Subscribe.CategoryName,
-                        this._context.Subscribe.TargetUserId
+                        this.Context.SubscribeUser.CategoryName,
+                        this.Context.SubscribeUser.TargetUserId
                     );
                     var future = domain.Model();
                     yield return future;
@@ -65,34 +72,25 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Fetcher
                         if (future.Error is BadRequestException || future.Error is NotFoundException)
                         {
                             onError.Invoke(e = future.Error, null);
-                            break;
                         }
-
-                        onError.Invoke(new CanIgnoreException(future.Error), null);
+                        else {
+                            onError.Invoke(new CanIgnoreException(future.Error), null);
+                        }
+                        yield return new WaitForSeconds(retryWaitSecond);
+                        retryWaitSecond *= 2;
                     }
                     else
                     {
+                        retryWaitSecond = 1;
                         SubscribeUser = future.Result;
                         Fetched = true;
                     }
                 }
-
-                yield return new WaitForSeconds(1);
+                else {
+                    yield return new WaitForSeconds(0.1f);
+                }
             }
-
-            var transform1 = transform;
-            var builder = new StringBuilder(transform1.name);
-            var current = transform1.parent;
-
-            while (current != null)
-            {
-                builder.Insert(0, current.name + "/");
-                current = current.parent;
-            }
-
-            Debug.LogError(e);
-            Debug.LogError($"{GetType()} の自動更新が停止されました。 {builder}");
-            Debug.LogError($"Automatic update of {GetType()} has been stopped. {builder}");
+            // ReSharper disable once IteratorNeverReturns
         }
 
         public void OnEnable()
@@ -114,18 +112,27 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Fetcher
     {
         protected Gs2ClientHolder _clientHolder;
         protected Gs2GameSessionHolder _gameSessionHolder;
-        private Gs2RankingOwnSubscribeContext _context;
+        public Gs2RankingOwnSubscribeUserContext Context { get; private set; }
 
         public void Awake()
         {
             _clientHolder = Gs2ClientHolder.Instance;
             _gameSessionHolder = Gs2GameSessionHolder.Instance;
-            _context = GetComponentInParent<Gs2RankingOwnSubscribeContext>();
+            Context = GetComponent<Gs2RankingOwnSubscribeUserContext>() ?? GetComponentInParent<Gs2RankingOwnSubscribeUserContext>();
 
-            if (_context == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2RankingOwnSubscribeContext.");
+            if (Context == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2RankingOwnSubscribeUserContext.");
                 enabled = false;
             }
+        }
+
+        public bool HasError()
+        {
+            Context = GetComponent<Gs2RankingOwnSubscribeUserContext>() ?? GetComponentInParent<Gs2RankingOwnSubscribeUserContext>(true);
+            if (Context == null) {
+                return true;
+            }
+            return false;
         }
     }
 

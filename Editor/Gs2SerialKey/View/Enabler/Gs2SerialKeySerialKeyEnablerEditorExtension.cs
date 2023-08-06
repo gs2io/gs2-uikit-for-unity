@@ -42,11 +42,11 @@ namespace Gs2.Unity.UiKit.Gs2SerialKey.Editor
 
             serializedObject.Update();
 
-            var fetcher = original.GetComponent<Gs2SerialKeySerialKeyFetcher>() ?? original.GetComponentInParent<Gs2SerialKeySerialKeyFetcher>(true);
+            var fetcher = original.GetComponent<Gs2SerialKeyOwnSerialKeyFetcher>() ?? original.GetComponentInParent<Gs2SerialKeyOwnSerialKeyFetcher>(true);
             if (fetcher == null) {
                 EditorGUILayout.HelpBox("SerialKeyFetcher not assigned.", MessageType.Error);
                 if (GUILayout.Button("Add Fetcher")) {
-                    original.gameObject.AddComponent<Gs2SerialKeySerialKeyFetcher>();
+                    original.gameObject.AddComponent<Gs2SerialKeyOwnSerialKeyFetcher>();
                 }
             }
             else {

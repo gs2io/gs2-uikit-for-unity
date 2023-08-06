@@ -5,7 +5,7 @@ namespace Editor.Gs2Formation.Prefabs
 {
     public static class Gs2FormationFormIndexValue
     {
-        [MenuItem("GameObject/UI/Game Server Services/Formation/Mold/Form/FormIndexValue", priority = 0)]
+        [MenuItem("GameObject/UI/Game Server Services/Formation/Namespace/User/Mold/Form/Label/IndexValue", priority = 0)]
         private static void CreateButton()
         {
             var prefab = AssetDatabase.LoadAssetAtPath<GameObject>(

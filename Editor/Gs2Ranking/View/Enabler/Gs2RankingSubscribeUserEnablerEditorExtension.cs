@@ -42,11 +42,11 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Editor
 
             serializedObject.Update();
 
-            var fetcher = original.GetComponent<Gs2RankingSubscribeUserFetcher>() ?? original.GetComponentInParent<Gs2RankingSubscribeUserFetcher>(true);
+            var fetcher = original.GetComponent<Gs2RankingOwnSubscribeUserFetcher>() ?? original.GetComponentInParent<Gs2RankingOwnSubscribeUserFetcher>(true);
             if (fetcher == null) {
                 EditorGUILayout.HelpBox("SubscribeUserFetcher not assigned.", MessageType.Error);
                 if (GUILayout.Button("Add Fetcher")) {
-                    original.gameObject.AddComponent<Gs2RankingSubscribeUserFetcher>();
+                    original.gameObject.AddComponent<Gs2RankingOwnSubscribeUserFetcher>();
                 }
             }
             else {

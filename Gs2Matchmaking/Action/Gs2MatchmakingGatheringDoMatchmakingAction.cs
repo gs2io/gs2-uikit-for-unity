@@ -18,6 +18,14 @@
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable UnusedAutoPropertyAccessor.Local
 // ReSharper disable CheckNamespace
+// ReSharper disable RedundantNameQualifier
+// ReSharper disable RedundantAssignment
+// ReSharper disable NotAccessedVariable
+// ReSharper disable RedundantUsingDirective
+// ReSharper disable Unity.NoNullPropagation
+// ReSharper disable InconsistentNaming
+
+#pragma warning disable CS0472
 
 using System;
 using System.Collections;
@@ -26,6 +34,7 @@ using System.Linq;
 using Gs2.Core.Exception;
 using Gs2.Unity.Gs2Matchmaking.Model;
 using Gs2.Unity.Util;
+using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Matchmaking.Context;
 using UnityEngine;
 using UnityEngine.Events;
@@ -45,7 +54,7 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking
             yield return new WaitUntil(() => this._gameSessionHolder.Initialized);
             
             var domain = this._clientHolder.Gs2.Matchmaking.Namespace(
-                this._context.Namespace.NamespaceName
+                this._context.Gathering.NamespaceName
             ).Me(
                 this._gameSessionHolder.GameSession
             );
@@ -75,13 +84,27 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking
     {
         private Gs2ClientHolder _clientHolder;
         private Gs2GameSessionHolder _gameSessionHolder;
-        private Gs2MatchmakingNamespaceContext _context;
+        private Gs2MatchmakingGatheringContext _context;
 
         public void Awake()
         {
             this._clientHolder = Gs2ClientHolder.Instance;
             this._gameSessionHolder = Gs2GameSessionHolder.Instance;
-            this._context = GetComponentInParent<Gs2MatchmakingNamespaceContext>();
+            this._context = GetComponent<Gs2MatchmakingGatheringContext>() ?? GetComponentInParent<Gs2MatchmakingGatheringContext>();
+
+            if (_context == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MatchmakingGatheringContext.");
+                enabled = false;
+            }
+        }
+
+        public bool HasError()
+        {
+            this._context = GetComponent<Gs2MatchmakingGatheringContext>() ?? GetComponentInParent<Gs2MatchmakingGatheringContext>(true);
+            if (_context == null) {
+                return true;
+            }
+            return false;
         }
     }
 
@@ -104,10 +127,12 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking
 
         public void SetPlayer(Gs2.Unity.Gs2Matchmaking.Model.EzPlayer value) {
             Player = value;
+            this.onChangePlayer.Invoke(Player);
         }
 
         public void SetMatchmakingContextToken(string value) {
             MatchmakingContextToken = value;
+            this.onChangeMatchmakingContextToken.Invoke(MatchmakingContextToken);
         }
     }
 
@@ -116,6 +141,35 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking
     /// </summary>
     public partial class Gs2MatchmakingGatheringDoMatchmakingAction
     {
+
+        [Serializable]
+        private class ChangePlayerEvent : UnityEvent<Gs2.Unity.Gs2Matchmaking.Model.EzPlayer>
+        {
+
+        }
+
+        [SerializeField]
+        private ChangePlayerEvent onChangePlayer = new ChangePlayerEvent();
+        public event UnityAction<Gs2.Unity.Gs2Matchmaking.Model.EzPlayer> OnChangePlayer
+        {
+            add => this.onChangePlayer.AddListener(value);
+            remove => this.onChangePlayer.RemoveListener(value);
+        }
+
+        [Serializable]
+        private class ChangeMatchmakingContextTokenEvent : UnityEvent<string>
+        {
+
+        }
+
+        [SerializeField]
+        private ChangeMatchmakingContextTokenEvent onChangeMatchmakingContextToken = new ChangeMatchmakingContextTokenEvent();
+        public event UnityAction<string> OnChangeMatchmakingContextToken
+        {
+            add => this.onChangeMatchmakingContextToken.AddListener(value);
+            remove => this.onChangeMatchmakingContextToken.RemoveListener(value);
+        }
+
         [Serializable]
         private class DoMatchmakingCompleteEvent : UnityEvent<EzGathering>
         {

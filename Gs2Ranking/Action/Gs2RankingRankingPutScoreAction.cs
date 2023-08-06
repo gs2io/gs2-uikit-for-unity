@@ -52,11 +52,11 @@ namespace Gs2.Unity.UiKit.Gs2Ranking
             yield return new WaitUntil(() => this._gameSessionHolder.Initialized);
             
             var domain = this._clientHolder.Gs2.Ranking.Namespace(
-                this._context.CategoryModel.NamespaceName
+                this._context.Ranking.NamespaceName
             ).Me(
                 this._gameSessionHolder.GameSession
             ).Ranking(
-                this._context.CategoryModel.CategoryName
+                this._context.Ranking.CategoryName
             );
             var future = domain.PutScore(
                 Score,
@@ -124,23 +124,23 @@ namespace Gs2.Unity.UiKit.Gs2Ranking
     {
         private Gs2ClientHolder _clientHolder;
         private Gs2GameSessionHolder _gameSessionHolder;
-        private Gs2RankingCategoryModelContext _context;
+        private Gs2RankingRankingContext _context;
 
         public void Awake()
         {
             this._clientHolder = Gs2ClientHolder.Instance;
             this._gameSessionHolder = Gs2GameSessionHolder.Instance;
-            this._context = GetComponent<Gs2RankingCategoryModelContext>() ?? GetComponentInParent<Gs2RankingCategoryModelContext>();
+            this._context = GetComponent<Gs2RankingRankingContext>() ?? GetComponentInParent<Gs2RankingRankingContext>();
 
             if (_context == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2RankingCategoryModelContext.");
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2RankingRankingContext.");
                 enabled = false;
             }
         }
 
         public bool HasError()
         {
-            this._context = GetComponent<Gs2RankingCategoryModelContext>() ?? GetComponentInParent<Gs2RankingCategoryModelContext>(true);
+            this._context = GetComponent<Gs2RankingRankingContext>() ?? GetComponentInParent<Gs2RankingRankingContext>(true);
             if (_context == null) {
                 return true;
             }

@@ -59,8 +59,8 @@ namespace Gs2.Unity.UiKit.Gs2Stamina.Editor
                     EditorGUI.indentLevel++;
                     context.Stamina = EditorGUILayout.ObjectField("Stamina", context.Stamina, typeof(OwnStamina), false) as OwnStamina;
                     EditorGUI.indentLevel++;
-                    EditorGUILayout.TextField("NamespaceName", context.Stamina?.NamespaceName.ToString());
-                    EditorGUILayout.TextField("StaminaName", context.Stamina?.StaminaName.ToString());
+                    EditorGUILayout.TextField("NamespaceName", context.Stamina?.NamespaceName?.ToString());
+                    EditorGUILayout.TextField("StaminaName", context.Stamina?.StaminaName?.ToString());
                     EditorGUI.indentLevel--;
                     EditorGUI.indentLevel--;
                     EditorGUI.EndDisabledGroup();

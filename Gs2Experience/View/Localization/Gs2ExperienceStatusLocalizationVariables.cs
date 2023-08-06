@@ -59,6 +59,9 @@ namespace Gs2.Unity.UiKit.Gs2Experience.Localization
                 target.StringReference["rankCapValue"] = new LongVariable {
                     Value = _fetcher?.Status?.RankCapValue ?? 0,
                 };
+                target.StringReference["nextRankUpExperienceValue"] = new LongVariable {
+                    Value = _fetcher?.Status?.NextRankUpExperienceValue ?? 0,
+                };
                 enabled = false;
                 target.enabled = true;
             }

@@ -63,14 +63,14 @@ namespace Gs2.Unity.UiKit.Gs2SerialKey
 
     public partial class Gs2SerialKeySerialKeyEnabler
     {
-        private Gs2SerialKeySerialKeyFetcher _fetcher;
+        private Gs2SerialKeyOwnSerialKeyFetcher _fetcher;
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2SerialKeySerialKeyFetcher>() ?? GetComponentInParent<Gs2SerialKeySerialKeyFetcher>();
+            _fetcher = GetComponent<Gs2SerialKeyOwnSerialKeyFetcher>() ?? GetComponentInParent<Gs2SerialKeyOwnSerialKeyFetcher>();
 
             if (_fetcher == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2SerialKeySerialKeyFetcher.");
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2SerialKeyOwnSerialKeyFetcher.");
                 enabled = false;
             }
             if (target == null) {
@@ -81,7 +81,7 @@ namespace Gs2.Unity.UiKit.Gs2SerialKey
 
         public bool HasError()
         {
-            _fetcher = GetComponent<Gs2SerialKeySerialKeyFetcher>() ?? GetComponentInParent<Gs2SerialKeySerialKeyFetcher>(true);
+            _fetcher = GetComponent<Gs2SerialKeyOwnSerialKeyFetcher>() ?? GetComponentInParent<Gs2SerialKeyOwnSerialKeyFetcher>(true);
             if (_fetcher == null) {
                 return true;
             }

@@ -64,8 +64,8 @@ namespace Gs2.Unity.UiKit.Gs2Dictionary.Localization.Editor
                     EditorGUI.indentLevel++;
                     context.Entry = EditorGUILayout.ObjectField("Entry", context.Entry, typeof(OwnEntry), false) as OwnEntry;
                     EditorGUI.indentLevel++;
-                    EditorGUILayout.TextField("NamespaceName", context.Entry?.NamespaceName.ToString());
-                    EditorGUILayout.TextField("EntryModelName", context.Entry?.EntryModelName.ToString());
+                    EditorGUILayout.TextField("NamespaceName", context.Entry?.NamespaceName?.ToString());
+                    EditorGUILayout.TextField("EntryName", context.Entry?.EntryName?.ToString());
                     EditorGUI.indentLevel--;
                     EditorGUI.indentLevel--;
                     EditorGUI.EndDisabledGroup();

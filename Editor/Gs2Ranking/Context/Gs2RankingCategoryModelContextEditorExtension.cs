@@ -54,10 +54,12 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Editor
             else {
                 original.CategoryModel = EditorGUILayout.ObjectField("CategoryModel", original.CategoryModel, typeof(CategoryModel), false) as CategoryModel;
                 EditorGUI.BeginDisabledGroup(true);
-                EditorGUI.indentLevel++;
-                EditorGUILayout.TextField("NamespaceName", original.CategoryModel?.NamespaceName.ToString());
-                EditorGUILayout.TextField("CategoryName", original.CategoryModel?.CategoryName.ToString());
-                EditorGUI.indentLevel--;
+                if (original.CategoryModel != null) {
+                    EditorGUI.indentLevel++;
+                    EditorGUILayout.TextField("NamespaceName", original.CategoryModel?.NamespaceName?.ToString());
+                    EditorGUILayout.TextField("CategoryName", original.CategoryModel?.CategoryName?.ToString());
+                    EditorGUI.indentLevel--;
+                }
                 EditorGUI.EndDisabledGroup();
             }
 

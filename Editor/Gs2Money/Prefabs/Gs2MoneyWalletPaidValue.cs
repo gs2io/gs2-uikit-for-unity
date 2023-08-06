@@ -5,11 +5,11 @@ namespace Editor.Gs2Money.Prefabs
 {
     public static class Gs2MoneyWalletPaidValue
     {
-        [MenuItem("GameObject/UI/Game Server Services/Money/Wallet/WalletPaidValue", priority = 0)]
+        [MenuItem("GameObject/UI/Game Server Services/Money/Namespace/User/Wallet/Label/PaidValue", priority = 0)]
         private static void CreateButton()
         {
             var prefab = AssetDatabase.LoadAssetAtPath<GameObject>(
-                "Packages/io.gs2.unity.sdk.uikit/Editor/Gs2Money/Prefabs/MoneyWalletPaidValue.prefab"
+                "Packages/io.gs2.unity.sdk.uikit/Editor/Gs2Money/Prefabs/WalletPaidValue.prefab"
             );
 
             var instance = GameObject.Instantiate(prefab, Selection.activeTransform);

@@ -5,7 +5,7 @@ namespace Editor.Gs2Stamina.Prefabs
 {
     public static class Gs2StaminaStaminaList
     {
-        [MenuItem("GameObject/UI/Game Server Services/Stamina/StaminaList", priority = 0)]
+        [MenuItem("GameObject/UI/Game Server Services/Stamina/Namespace/User/StaminaList", priority = 0)]
         private static void CreateButton()
         {
             var prefab = AssetDatabase.LoadAssetAtPath<GameObject>(

@@ -54,10 +54,12 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Editor
             else {
                 original.CounterModel = EditorGUILayout.ObjectField("CounterModel", original.CounterModel, typeof(CounterModel), false) as CounterModel;
                 EditorGUI.BeginDisabledGroup(true);
-                EditorGUI.indentLevel++;
-                EditorGUILayout.TextField("NamespaceName", original.CounterModel?.NamespaceName.ToString());
-                EditorGUILayout.TextField("CounterName", original.CounterModel?.CounterName.ToString());
-                EditorGUI.indentLevel--;
+                if (original.CounterModel != null) {
+                    EditorGUI.indentLevel++;
+                    EditorGUILayout.TextField("NamespaceName", original.CounterModel?.NamespaceName?.ToString());
+                    EditorGUILayout.TextField("CounterName", original.CounterModel?.CounterName?.ToString());
+                    EditorGUI.indentLevel--;
+                }
                 EditorGUI.EndDisabledGroup();
             }
 

@@ -43,22 +43,22 @@ namespace Gs2.Unity.UiKit.Gs2Showcase.Localization.Editor
 
             if (original == null) return;
 
-            var fetcher = original.GetComponent<Gs2ShowcaseShowcaseFetcher>() ?? original.GetComponentInParent<Gs2ShowcaseShowcaseFetcher>(true);
+            var fetcher = original.GetComponent<Gs2ShowcaseOwnShowcaseFetcher>() ?? original.GetComponentInParent<Gs2ShowcaseOwnShowcaseFetcher>(true);
             if (fetcher == null) {
-                EditorGUILayout.HelpBox("Gs2ShowcaseShowcaseFetcher not found.", MessageType.Error);
+                EditorGUILayout.HelpBox("Gs2ShowcaseOwnShowcaseFetcher not found.", MessageType.Error);
                 if (GUILayout.Button("Add Fetcher")) {
-                    original.gameObject.AddComponent<Gs2ShowcaseShowcaseFetcher>();
+                    original.gameObject.AddComponent<Gs2ShowcaseOwnShowcaseFetcher>();
                 }
             }
             else {
-                var context = original.GetComponent<Gs2ShowcaseShowcaseContext>() ?? original.GetComponentInParent<Gs2ShowcaseShowcaseContext>(true);
+                var context = original.GetComponent<Gs2ShowcaseOwnShowcaseContext>() ?? original.GetComponentInParent<Gs2ShowcaseOwnShowcaseContext>(true);
                 EditorGUI.BeginDisabledGroup(true);
-                EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2ShowcaseShowcaseFetcher), false);
+                EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2ShowcaseOwnShowcaseFetcher), false);
                 EditorGUI.indentLevel++;
-                context.Showcase = EditorGUILayout.ObjectField("Showcase", context.Showcase, typeof(Showcase), false) as Showcase;
+                context.Showcase = EditorGUILayout.ObjectField("Showcase", context.Showcase, typeof(OwnShowcase), false) as OwnShowcase;
                 EditorGUI.indentLevel++;
-                EditorGUILayout.TextField("NamespaceName", context.Showcase?.NamespaceName.ToString());
-                EditorGUILayout.TextField("ShowcaseName", context.Showcase?.ShowcaseName.ToString());
+                EditorGUILayout.TextField("NamespaceName", context.Showcase?.NamespaceName?.ToString());
+                EditorGUILayout.TextField("ShowcaseName", context.Showcase?.ShowcaseName?.ToString());
                 EditorGUI.indentLevel--;
                 EditorGUI.indentLevel--;
                 EditorGUI.EndDisabledGroup();

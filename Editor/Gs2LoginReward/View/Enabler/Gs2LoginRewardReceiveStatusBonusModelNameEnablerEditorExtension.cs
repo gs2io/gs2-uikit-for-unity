@@ -59,8 +59,8 @@ namespace Gs2.Unity.UiKit.Gs2LoginReward.Enabler.Editor
                     EditorGUI.indentLevel++;
                     context.ReceiveStatus = EditorGUILayout.ObjectField("ReceiveStatus", context.ReceiveStatus, typeof(OwnReceiveStatus), false) as OwnReceiveStatus;
                     EditorGUI.indentLevel++;
-                    EditorGUILayout.TextField("NamespaceName", context.ReceiveStatus?.NamespaceName.ToString());
-                    EditorGUILayout.TextField("BonusModelName", context.ReceiveStatus?.BonusModelName.ToString());
+                    EditorGUILayout.TextField("NamespaceName", context.ReceiveStatus?.NamespaceName?.ToString());
+                    EditorGUILayout.TextField("BonusModelName", context.ReceiveStatus?.BonusModelName?.ToString());
                     EditorGUI.indentLevel--;
                     EditorGUI.indentLevel--;
                     EditorGUI.EndDisabledGroup();

@@ -55,8 +55,8 @@ namespace Gs2.Unity.UiKit.Gs2StateMachine.Editor
                 original.Status = EditorGUILayout.ObjectField("OwnStatus", original.Status, typeof(OwnStatus), false) as OwnStatus;
                 EditorGUI.BeginDisabledGroup(true);
                 EditorGUI.indentLevel++;
-                EditorGUILayout.TextField("NamespaceName", original.Status?.NamespaceName.ToString());
-                EditorGUILayout.TextField("StatusName", original.Status?.StatusName.ToString());
+                EditorGUILayout.TextField("NamespaceName", original.Status?.NamespaceName?.ToString());
+                EditorGUILayout.TextField("StatusName", original.Status?.StatusName?.ToString());
                 EditorGUI.indentLevel--;
                 EditorGUI.EndDisabledGroup();
             }

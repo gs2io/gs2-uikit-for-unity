@@ -61,8 +61,8 @@ namespace Gs2.Unity.UiKit.Gs2Exchange.Editor
                     if (fetcher.Context != null) {
                         fetcher.Context.Await_ = EditorGUILayout.ObjectField("Await", fetcher.Context.Await_, typeof(OwnAwait), false) as OwnAwait;
                         EditorGUI.indentLevel++;
-                        EditorGUILayout.TextField("NamespaceName", fetcher.Context.Await_?.NamespaceName.ToString());
-                        EditorGUILayout.TextField("AwaitName", fetcher.Context.Await_?.AwaitName.ToString());
+                        EditorGUILayout.TextField("NamespaceName", fetcher.Context.Await_?.NamespaceName?.ToString());
+                        EditorGUILayout.TextField("AwaitName", fetcher.Context.Await_?.AwaitName?.ToString());
                         EditorGUI.indentLevel--;
                     }
                     EditorGUI.indentLevel--;

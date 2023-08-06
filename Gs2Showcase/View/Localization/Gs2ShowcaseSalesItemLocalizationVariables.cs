@@ -62,11 +62,11 @@ namespace Gs2.Unity.UiKit.Gs2Showcase.Localization
 
     public partial class Gs2ShowcaseSalesItemLocalizationVariables
     {
-        private Gs2ShowcaseSalesItemFetcher _fetcher;
+        private Gs2ShowcaseOwnSalesItemFetcher _fetcher;
 
         public void Awake() {
             target.enabled = false;
-            _fetcher = GetComponent<Gs2ShowcaseSalesItemFetcher>() ?? GetComponentInParent<Gs2ShowcaseSalesItemFetcher>();
+            _fetcher = GetComponent<Gs2ShowcaseOwnSalesItemFetcher>() ?? GetComponentInParent<Gs2ShowcaseOwnSalesItemFetcher>();
 
             if (_fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ShowcaseSalesItemFetcher.");
@@ -76,7 +76,7 @@ namespace Gs2.Unity.UiKit.Gs2Showcase.Localization
 
         public bool HasError()
         {
-            _fetcher = GetComponent<Gs2ShowcaseSalesItemFetcher>() ?? GetComponentInParent<Gs2ShowcaseSalesItemFetcher>(true);
+            _fetcher = GetComponent<Gs2ShowcaseOwnSalesItemFetcher>() ?? GetComponentInParent<Gs2ShowcaseOwnSalesItemFetcher>(true);
             if (_fetcher == null) {
                 return true;
             }

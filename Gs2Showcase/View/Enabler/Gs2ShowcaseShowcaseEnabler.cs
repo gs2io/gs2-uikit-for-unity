@@ -63,14 +63,14 @@ namespace Gs2.Unity.UiKit.Gs2Showcase
 
     public partial class Gs2ShowcaseShowcaseEnabler
     {
-        private Gs2ShowcaseShowcaseFetcher _fetcher;
+        private Gs2ShowcaseOwnShowcaseFetcher _fetcher;
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2ShowcaseShowcaseFetcher>() ?? GetComponentInParent<Gs2ShowcaseShowcaseFetcher>();
+            _fetcher = GetComponent<Gs2ShowcaseOwnShowcaseFetcher>() ?? GetComponentInParent<Gs2ShowcaseOwnShowcaseFetcher>();
 
             if (_fetcher == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ShowcaseShowcaseFetcher.");
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ShowcaseOwnShowcaseFetcher.");
                 enabled = false;
             }
             if (target == null) {
@@ -81,7 +81,7 @@ namespace Gs2.Unity.UiKit.Gs2Showcase
 
         public bool HasError()
         {
-            _fetcher = GetComponent<Gs2ShowcaseShowcaseFetcher>() ?? GetComponentInParent<Gs2ShowcaseShowcaseFetcher>(true);
+            _fetcher = GetComponent<Gs2ShowcaseOwnShowcaseFetcher>() ?? GetComponentInParent<Gs2ShowcaseOwnShowcaseFetcher>(true);
             if (_fetcher == null) {
                 return true;
             }

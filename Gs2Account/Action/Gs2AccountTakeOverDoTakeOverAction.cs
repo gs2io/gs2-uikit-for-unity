@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable UnusedAutoPropertyAccessor.Local
@@ -36,7 +38,7 @@ using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Account.Context;
 using UnityEngine;
 using UnityEngine.Events;
-using TakeOver = Gs2.Unity.Gs2Account.ScriptableObject.TakeOver;
+using TakeOver = Gs2.Unity.Gs2Account.ScriptableObject.OwnTakeOver;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -55,7 +57,7 @@ namespace Gs2.Unity.UiKit.Gs2Account
             );
             var future = domain.DoTakeOver(
                 this._context.TakeOver.Type,
-                this._context.TakeOver.UserIdentifier,
+                UserIdentifier,
                 Password
             );
             yield return future;
@@ -120,23 +122,23 @@ namespace Gs2.Unity.UiKit.Gs2Account
     {
         private Gs2ClientHolder _clientHolder;
         private Gs2GameSessionHolder _gameSessionHolder;
-        private Gs2AccountTakeOverContext _context;
+        private Gs2AccountOwnTakeOverContext _context;
 
         public void Awake()
         {
             this._clientHolder = Gs2ClientHolder.Instance;
             this._gameSessionHolder = Gs2GameSessionHolder.Instance;
-            this._context = GetComponent<Gs2AccountTakeOverContext>() ?? GetComponentInParent<Gs2AccountTakeOverContext>();
+            this._context = GetComponent<Gs2AccountOwnTakeOverContext>() ?? GetComponentInParent<Gs2AccountOwnTakeOverContext>();
 
             if (_context == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2AccountTakeOverContext.");
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2AccountOwnTakeOverContext.");
                 enabled = false;
             }
         }
 
         public bool HasError()
         {
-            this._context = GetComponent<Gs2AccountTakeOverContext>() ?? GetComponentInParent<Gs2AccountTakeOverContext>(true);
+            this._context = GetComponent<Gs2AccountOwnTakeOverContext>() ?? GetComponentInParent<Gs2AccountOwnTakeOverContext>(true);
             if (_context == null) {
                 return true;
             }
@@ -158,8 +160,14 @@ namespace Gs2.Unity.UiKit.Gs2Account
     /// </summary>
     public partial class Gs2AccountTakeOverDoTakeOverAction
     {
+        public string UserIdentifier;
         public string Password;
 
+        public void SetUserIdentifier(string value) {
+            UserIdentifier = value;
+            this.onChangeUserIdentifier.Invoke(UserIdentifier);
+        }
+        
         public void SetPassword(string value) {
             Password = value;
             this.onChangePassword.Invoke(Password);
@@ -171,6 +179,20 @@ namespace Gs2.Unity.UiKit.Gs2Account
     /// </summary>
     public partial class Gs2AccountTakeOverDoTakeOverAction
     {
+
+        [Serializable]
+        private class ChangeUserIdentifierEvent : UnityEvent<string>
+        {
+
+        }
+
+        [SerializeField]
+        private ChangeUserIdentifierEvent onChangeUserIdentifier = new ChangeUserIdentifierEvent();
+        public event UnityAction<string> OnChangeUserIdentifier
+        {
+            add => this.onChangeUserIdentifier.AddListener(value);
+            remove => this.onChangeUserIdentifier.RemoveListener(value);
+        }
 
         [Serializable]
         private class ChangePasswordEvent : UnityEvent<string>

@@ -5,7 +5,7 @@ namespace Editor.Gs2Inventory.Prefabs
 {
     public static class Gs2InventoryInventoryList
     {
-        [MenuItem("GameObject/UI/Game Server Services/Inventory/InventoryList", priority = 0)]
+        [MenuItem("GameObject/UI/Game Server Services/Inventory/Namespace/User/InventoryList", priority = 0)]
         private static void CreateButton()
         {
             var prefab = AssetDatabase.LoadAssetAtPath<GameObject>(

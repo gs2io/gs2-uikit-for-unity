@@ -12,6 +12,56 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
- * deny overwrite
  */
+// ReSharper disable UnusedAutoPropertyAccessor.Global
+// ReSharper disable CheckNamespace
+// ReSharper disable RedundantNameQualifier
+// ReSharper disable RedundantAssignment
+// ReSharper disable NotAccessedVariable
+// ReSharper disable RedundantUsingDirective
+// ReSharper disable Unity.NoNullPropagation
+// ReSharper disable InconsistentNaming
+
+#pragma warning disable CS0472
+
+using Gs2.Unity.Gs2Dictionary.ScriptableObject;
+using Gs2.Unity.UiKit.Gs2Dictionary.Context;
+using Gs2.Unity.UiKit.Gs2Dictionary.Fetcher;
+using UnityEditor;
+using UnityEngine;
+
+namespace Gs2.Unity.UiKit.Gs2Dictionary.Editor
+{
+    [CustomEditor(typeof(Gs2DictionaryOwnEntryContext))]
+    public class Gs2DictionaryOwnEntryContextEditorExtension : UnityEditor.Editor
+    {
+        public override void OnInspectorGUI() {
+            var original = target as Gs2DictionaryOwnEntryContext;
+
+            if (original == null) return;
+
+            serializedObject.Update();
+
+            if (original.Entry == null) {
+                if (original.GetComponentInParent<Gs2DictionaryOwnEntryList>(true) != null) {
+                    EditorGUILayout.HelpBox("OwnEntry is auto assign from Gs2DictionaryOwnEntryList.", MessageType.Info);
+                }
+                else {
+                    EditorGUILayout.HelpBox("OwnEntry not assigned.", MessageType.Error);
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("Entry"), true);
+                }
+            }
+            else {
+                original.Entry = EditorGUILayout.ObjectField("OwnEntry", original.Entry, typeof(OwnEntry), false) as OwnEntry;
+                EditorGUI.BeginDisabledGroup(true);
+                EditorGUI.indentLevel++;
+                EditorGUILayout.TextField("NamespaceName", original.Entry?.NamespaceName?.ToString());
+                EditorGUILayout.TextField("EntryName", original.Entry?.EntryName?.ToString());
+                EditorGUI.indentLevel--;
+                EditorGUI.EndDisabledGroup();
+            }
+
+            serializedObject.ApplyModifiedProperties();
+        }
+    }
+}

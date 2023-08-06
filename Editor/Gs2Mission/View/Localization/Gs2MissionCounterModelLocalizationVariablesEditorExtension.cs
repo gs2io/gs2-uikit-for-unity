@@ -70,8 +70,8 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Localization.Editor
                     EditorGUI.indentLevel++;
                     context.CounterModel = EditorGUILayout.ObjectField("CounterModel", context.CounterModel, typeof(CounterModel), false) as CounterModel;
                     EditorGUI.indentLevel++;
-                    EditorGUILayout.TextField("NamespaceName", context.CounterModel?.NamespaceName.ToString());
-                    EditorGUILayout.TextField("CounterName", context.CounterModel?.CounterName.ToString());
+                    EditorGUILayout.TextField("NamespaceName", context.CounterModel?.NamespaceName?.ToString());
+                    EditorGUILayout.TextField("CounterName", context.CounterModel?.CounterName?.ToString());
                     EditorGUI.indentLevel--;
                     EditorGUI.indentLevel--;
                     EditorGUI.EndDisabledGroup();

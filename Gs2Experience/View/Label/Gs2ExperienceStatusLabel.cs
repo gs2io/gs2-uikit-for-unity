@@ -55,6 +55,8 @@ namespace Gs2.Unity.UiKit.Gs2Experience
                         "{rankValue}", $"{_fetcher?.Status?.RankValue}"
                     ).Replace(
                         "{rankCapValue}", $"{_fetcher?.Status?.RankCapValue}"
+                    ).Replace(
+                        "{nextRankUpExperienceValue}", $"{_fetcher?.Status?.NextRankUpExperienceValue}"
                     )
                 );
             }

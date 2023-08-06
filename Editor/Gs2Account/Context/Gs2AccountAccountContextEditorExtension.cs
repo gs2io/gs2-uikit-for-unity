@@ -49,10 +49,12 @@ namespace Gs2.Unity.UiKit.Gs2Account.Editor
             else {
                 original.Account = EditorGUILayout.ObjectField("Account", original.Account, typeof(Account), false) as Account;
                 EditorGUI.BeginDisabledGroup(true);
-                EditorGUI.indentLevel++;
-                EditorGUILayout.TextField("NamespaceName", original.Account?.NamespaceName.ToString());
-                EditorGUILayout.TextField("UserId", original.Account?.UserId.ToString());
-                EditorGUI.indentLevel--;
+                if (original.Account != null) {
+                    EditorGUI.indentLevel++;
+                    EditorGUILayout.TextField("NamespaceName", original.Account?.NamespaceName?.ToString());
+                    EditorGUILayout.TextField("UserId", original.Account?.UserId?.ToString());
+                    EditorGUI.indentLevel--;
+                }
                 EditorGUI.EndDisabledGroup();
             }
 

@@ -61,8 +61,8 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.Editor
                     if (fetcher.Context != null) {
                         fetcher.Context.LotteryModel = EditorGUILayout.ObjectField("LotteryModel", fetcher.Context.LotteryModel, typeof(LotteryModel), false) as LotteryModel;
                         EditorGUI.indentLevel++;
-                        EditorGUILayout.TextField("NamespaceName", fetcher.Context.LotteryModel?.NamespaceName.ToString());
-                        EditorGUILayout.TextField("LotteryName", fetcher.Context.LotteryModel?.LotteryName.ToString());
+                        EditorGUILayout.TextField("NamespaceName", fetcher.Context.LotteryModel?.NamespaceName?.ToString());
+                        EditorGUILayout.TextField("LotteryName", fetcher.Context.LotteryModel?.LotteryName?.ToString());
                         EditorGUI.indentLevel--;
                     }
                     EditorGUI.indentLevel--;

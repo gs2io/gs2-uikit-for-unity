@@ -52,9 +52,11 @@ namespace Gs2.Unity.UiKit.Gs2Enhance.Editor
                 EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2EnhanceNamespaceContext), false);
                 EditorGUI.indentLevel++;
                 context.Namespace = EditorGUILayout.ObjectField("Namespace", context.Namespace, typeof(Namespace), false) as Namespace;
-                EditorGUI.indentLevel++;
-                EditorGUILayout.TextField("NamespaceName", context.Namespace?.NamespaceName.ToString());
-                EditorGUI.indentLevel--;
+                if (context.Namespace != null) {
+                    EditorGUI.indentLevel++;
+                    EditorGUILayout.TextField("NamespaceName", context.Namespace?.NamespaceName?.ToString());
+                    EditorGUI.indentLevel--;
+                }
                 EditorGUI.indentLevel--;
                 EditorGUI.EndDisabledGroup();
             }

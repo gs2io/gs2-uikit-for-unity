@@ -49,10 +49,12 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.Editor
             else {
                 original.PrizeTable = EditorGUILayout.ObjectField("PrizeTable", original.PrizeTable, typeof(PrizeTable), false) as PrizeTable;
                 EditorGUI.BeginDisabledGroup(true);
-                EditorGUI.indentLevel++;
-                EditorGUILayout.TextField("NamespaceName", original.PrizeTable?.NamespaceName.ToString());
-                EditorGUILayout.TextField("PrizeTableName", original.PrizeTable?.PrizeTableName.ToString());
-                EditorGUI.indentLevel--;
+                if (original.PrizeTable != null) {
+                    EditorGUI.indentLevel++;
+                    EditorGUILayout.TextField("NamespaceName", original.PrizeTable?.NamespaceName?.ToString());
+                    EditorGUILayout.TextField("PrizeTableName", original.PrizeTable?.PrizeTableName?.ToString());
+                    EditorGUI.indentLevel--;
+                }
                 EditorGUI.EndDisabledGroup();
             }
 
