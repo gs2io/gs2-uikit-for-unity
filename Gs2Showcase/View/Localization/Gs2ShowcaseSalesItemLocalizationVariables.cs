@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
@@ -45,10 +47,10 @@ namespace Gs2.Unity.UiKit.Gs2Showcase.Localization
         {
             if (_fetcher.Fetched) {
                 target.StringReference["name"] = new StringVariable {
-                    Value = _fetcher?.SalesItem?.Name ?? "",
+                    Value = _fetcher?.DisplayItem?.SalesItem?.Name ?? "",
                 };
                 target.StringReference["metadata"] = new StringVariable {
-                    Value = _fetcher?.SalesItem?.Metadata ?? "",
+                    Value = _fetcher?.DisplayItem?.SalesItem?.Metadata ?? "",
                 };
                 enabled = false;
                 target.enabled = true;
@@ -62,21 +64,21 @@ namespace Gs2.Unity.UiKit.Gs2Showcase.Localization
 
     public partial class Gs2ShowcaseSalesItemLocalizationVariables
     {
-        private Gs2ShowcaseOwnSalesItemFetcher _fetcher;
+        private Gs2ShowcaseOwnDisplayItemFetcher _fetcher;
 
         public void Awake() {
             target.enabled = false;
-            _fetcher = GetComponent<Gs2ShowcaseOwnSalesItemFetcher>() ?? GetComponentInParent<Gs2ShowcaseOwnSalesItemFetcher>();
+            _fetcher = GetComponent<Gs2ShowcaseOwnDisplayItemFetcher>() ?? GetComponentInParent<Gs2ShowcaseOwnDisplayItemFetcher>();
 
             if (_fetcher == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ShowcaseSalesItemFetcher.");
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ShowcaseOwnDisplayItemFetcher.");
                 enabled = false;
             }
         }
 
         public bool HasError()
         {
-            _fetcher = GetComponent<Gs2ShowcaseOwnSalesItemFetcher>() ?? GetComponentInParent<Gs2ShowcaseOwnSalesItemFetcher>(true);
+            _fetcher = GetComponent<Gs2ShowcaseOwnDisplayItemFetcher>() ?? GetComponentInParent<Gs2ShowcaseOwnDisplayItemFetcher>(true);
             if (_fetcher == null) {
                 return true;
             }

@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
@@ -43,21 +45,22 @@ namespace Gs2.Unity.UiKit.Gs2Showcase.Localization.Editor
 
             if (original == null) return;
 
-            var fetcher = original.GetComponent<Gs2ShowcaseOwnSalesItemFetcher>() ?? original.GetComponentInParent<Gs2ShowcaseOwnSalesItemFetcher>(true);
+            var fetcher = original.GetComponent<Gs2ShowcaseOwnDisplayItemFetcher>() ?? original.GetComponentInParent<Gs2ShowcaseOwnDisplayItemFetcher>(true);
             if (fetcher == null) {
-                EditorGUILayout.HelpBox("Gs2ShowcaseOwnSalesItemFetcher not found.", MessageType.Error);
+                EditorGUILayout.HelpBox("Gs2ShowcaseOwnDisplayItemFetcher not found.", MessageType.Error);
                 if (GUILayout.Button("Add Fetcher")) {
-                    original.gameObject.AddComponent<Gs2ShowcaseOwnSalesItemFetcher>();
+                    original.gameObject.AddComponent<Gs2ShowcaseOwnDisplayItemFetcher>();
                 }
             }
             else {
-                var context = original.GetComponent<Gs2ShowcaseOwnSalesItemContext>() ?? original.GetComponentInParent<Gs2ShowcaseOwnSalesItemContext>(true);
+                var context = original.GetComponent<Gs2ShowcaseOwnDisplayItemContext>() ?? original.GetComponentInParent<Gs2ShowcaseOwnDisplayItemContext>(true);
                 EditorGUI.BeginDisabledGroup(true);
-                EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2ShowcaseOwnSalesItemFetcher), false);
+                EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2ShowcaseOwnDisplayItemFetcher), false);
                 EditorGUI.indentLevel++;
-                context.SalesItem = EditorGUILayout.ObjectField("SalesItem", context.SalesItem, typeof(OwnSalesItem), false) as OwnSalesItem;
+                context.DisplayItem = EditorGUILayout.ObjectField("DisplayItem", context.DisplayItem, typeof(OwnDisplayItem), false) as OwnDisplayItem;
                 EditorGUI.indentLevel++;
-                EditorGUILayout.TextField("NamespaceName", context.SalesItem?.NamespaceName?.ToString());
+                EditorGUILayout.TextField("NamespaceName", context.DisplayItem?.NamespaceName?.ToString());
+                EditorGUILayout.TextField("DisplayItemId", context.DisplayItem?.DisplayItemId?.ToString());
                 EditorGUI.indentLevel--;
                 EditorGUI.indentLevel--;
                 EditorGUI.EndDisabledGroup();
