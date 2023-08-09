@@ -58,9 +58,11 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Enabler.Editor
                     EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2FriendOwnBlackListContext), false);
                     EditorGUI.indentLevel++;
                     context.BlackList = EditorGUILayout.ObjectField("BlackList", context.BlackList, typeof(OwnBlackList), false) as OwnBlackList;
-                    EditorGUI.indentLevel++;
-                    EditorGUILayout.TextField("NamespaceName", context.BlackList?.NamespaceName?.ToString());
-                    EditorGUI.indentLevel--;
+                    if (context.BlackList != null) {
+                        EditorGUI.indentLevel++;
+                        EditorGUILayout.TextField("NamespaceName", context.BlackList?.NamespaceName?.ToString());
+                        EditorGUI.indentLevel--;
+                    }
                     EditorGUI.indentLevel--;
                     EditorGUI.EndDisabledGroup();
                 }

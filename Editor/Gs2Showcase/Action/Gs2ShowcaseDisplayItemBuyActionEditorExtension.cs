@@ -54,9 +54,9 @@ namespace Gs2.Unity.UiKit.Gs2Showcase.Editor
                 context.DisplayItem = EditorGUILayout.ObjectField("OwnDisplayItem", context.DisplayItem, typeof(OwnDisplayItem), false) as OwnDisplayItem;
                 if (context.DisplayItem != null) {
                     EditorGUI.indentLevel++;
-                    EditorGUILayout.TextField("NamespaceName", context.DisplayItem?.NamespaceName?.ToString());
-                    EditorGUILayout.TextField("ShowcaseName", context.DisplayItem?.ShowcaseName?.ToString());
-                    EditorGUILayout.TextField("DisplayItemId", context.DisplayItem?.DisplayItemId?.ToString());
+                        EditorGUILayout.TextField("NamespaceName", context.DisplayItem?.NamespaceName?.ToString());
+                        EditorGUILayout.TextField("ShowcaseName", context.DisplayItem?.ShowcaseName?.ToString());
+                        EditorGUILayout.TextField("DisplayItemId", context.DisplayItem?.DisplayItemId?.ToString());
                     EditorGUI.indentLevel--;
                 }
                 EditorGUI.indentLevel--;

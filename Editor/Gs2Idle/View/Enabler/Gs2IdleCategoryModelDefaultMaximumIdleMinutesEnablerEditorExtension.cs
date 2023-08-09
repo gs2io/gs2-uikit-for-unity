@@ -58,10 +58,12 @@ namespace Gs2.Unity.UiKit.Gs2Idle.Editor
                     EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2IdleCategoryModelContext), false);
                     EditorGUI.indentLevel++;
                     context.CategoryModel = EditorGUILayout.ObjectField("CategoryModel", context.CategoryModel, typeof(CategoryModel), false) as CategoryModel;
-                    EditorGUI.indentLevel++;
-                    EditorGUILayout.TextField("NamespaceName", context.CategoryModel?.NamespaceName?.ToString());
-                    EditorGUILayout.TextField("CategoryName", context.CategoryModel?.CategoryName?.ToString());
-                    EditorGUI.indentLevel--;
+                    if (context.CategoryModel != null) {
+                        EditorGUI.indentLevel++;
+                        EditorGUILayout.TextField("NamespaceName", context.CategoryModel?.NamespaceName?.ToString());
+                        EditorGUILayout.TextField("CategoryName", context.CategoryModel?.CategoryName?.ToString());
+                        EditorGUI.indentLevel--;
+                    }
                     EditorGUI.indentLevel--;
                     EditorGUI.EndDisabledGroup();
                 }

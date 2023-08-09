@@ -55,7 +55,6 @@ namespace Gs2.Unity.UiKit.Gs2MegaField.Editor
                     fetcher.Context.Spatial = EditorGUILayout.ObjectField("Spatial", fetcher.Context.Spatial, typeof(Spatial), false) as Spatial;
                     EditorGUI.indentLevel++;
                     EditorGUILayout.TextField("NamespaceName", fetcher.Context.Spatial?.NamespaceName?.ToString());
-                    EditorGUILayout.TextField("UserId", fetcher.Context.Spatial?.UserId?.ToString());
                     EditorGUILayout.TextField("AreaModelName", fetcher.Context.Spatial?.AreaModelName?.ToString());
                     EditorGUILayout.TextField("LayerModelName", fetcher.Context.Spatial?.LayerModelName?.ToString());
                     EditorGUI.indentLevel--;

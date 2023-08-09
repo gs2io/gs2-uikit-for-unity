@@ -54,9 +54,9 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking.Editor
                 context.Vote = EditorGUILayout.ObjectField("Vote", context.Vote, typeof(Vote), false) as Vote;
                 if (context.Vote != null) {
                     EditorGUI.indentLevel++;
-                    EditorGUILayout.TextField("NamespaceName", context.Vote?.NamespaceName?.ToString());
-                    EditorGUILayout.TextField("RatingName", context.Vote?.RatingName?.ToString());
-                    EditorGUILayout.TextField("GatheringName", context.Vote?.GatheringName?.ToString());
+                        EditorGUILayout.TextField("NamespaceName", context.Vote?.NamespaceName?.ToString());
+                        EditorGUILayout.TextField("RatingName", context.Vote?.RatingName?.ToString());
+                        EditorGUILayout.TextField("GatheringName", context.Vote?.GatheringName?.ToString());
                     EditorGUI.indentLevel--;
                 }
                 EditorGUI.indentLevel--;

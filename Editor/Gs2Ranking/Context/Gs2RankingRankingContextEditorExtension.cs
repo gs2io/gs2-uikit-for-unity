@@ -56,7 +56,6 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Editor
                 EditorGUI.BeginDisabledGroup(true);
                 if (original.Ranking != null) {
                     EditorGUI.indentLevel++;
-                    EditorGUILayout.TextField("NamespaceName", original.Ranking?.NamespaceName?.ToString());
                     EditorGUI.indentLevel--;
                 }
                 EditorGUI.EndDisabledGroup();

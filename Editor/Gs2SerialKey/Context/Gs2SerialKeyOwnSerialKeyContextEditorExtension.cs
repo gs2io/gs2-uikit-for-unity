@@ -49,10 +49,12 @@ namespace Gs2.Unity.UiKit.Gs2SerialKey.Editor
             else {
                 original.SerialKey = EditorGUILayout.ObjectField("OwnSerialKey", original.SerialKey, typeof(OwnSerialKey), false) as OwnSerialKey;
                 EditorGUI.BeginDisabledGroup(true);
-                EditorGUI.indentLevel++;
-                EditorGUILayout.TextField("NamespaceName", original.SerialKey?.NamespaceName?.ToString());
-                EditorGUILayout.TextField("SerialKeyCode", original.SerialKey?.SerialKeyCode?.ToString());
-                EditorGUI.indentLevel--;
+                if (original.SerialKey != null) {
+                    EditorGUI.indentLevel++;
+                    EditorGUILayout.TextField("NamespaceName", original.SerialKey?.NamespaceName?.ToString());
+                    EditorGUILayout.TextField("SerialKeyCode", original.SerialKey?.SerialKeyCode?.ToString());
+                    EditorGUI.indentLevel--;
+                }
                 EditorGUI.EndDisabledGroup();
             }
 

@@ -54,10 +54,12 @@ namespace Gs2.Unity.UiKit.Gs2Showcase.Editor
             else {
                 original.RandomDisplayItem = EditorGUILayout.ObjectField("OwnRandomDisplayItem", original.RandomDisplayItem, typeof(OwnRandomDisplayItem), false) as OwnRandomDisplayItem;
                 EditorGUI.BeginDisabledGroup(true);
-                EditorGUI.indentLevel++;
-                EditorGUILayout.TextField("NamespaceName", original.RandomDisplayItem?.NamespaceName?.ToString());
-                EditorGUILayout.TextField("ShowcaseName", original.RandomDisplayItem?.ShowcaseName?.ToString());
-                EditorGUI.indentLevel--;
+                if (original.RandomDisplayItem != null) {
+                    EditorGUI.indentLevel++;
+                    EditorGUILayout.TextField("NamespaceName", original.RandomDisplayItem?.NamespaceName?.ToString());
+                    EditorGUILayout.TextField("ShowcaseName", original.RandomDisplayItem?.ShowcaseName?.ToString());
+                    EditorGUI.indentLevel--;
+                }
                 EditorGUI.EndDisabledGroup();
             }
 

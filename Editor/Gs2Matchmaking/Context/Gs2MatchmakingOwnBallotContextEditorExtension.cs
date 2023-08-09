@@ -49,9 +49,10 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking.Editor
             else {
                 original.Ballot = EditorGUILayout.ObjectField("OwnBallot", original.Ballot, typeof(OwnBallot), false) as OwnBallot;
                 EditorGUI.BeginDisabledGroup(true);
-                EditorGUI.indentLevel++;
-                EditorGUILayout.TextField("NamespaceName", original.Ballot?.NamespaceName?.ToString());
-                EditorGUI.indentLevel--;
+                if (original.Ballot != null) {
+                    EditorGUI.indentLevel++;
+                    EditorGUI.indentLevel--;
+                }
                 EditorGUI.EndDisabledGroup();
             }
 

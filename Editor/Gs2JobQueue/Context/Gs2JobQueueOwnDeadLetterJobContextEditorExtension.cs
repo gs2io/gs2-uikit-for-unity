@@ -49,10 +49,12 @@ namespace Gs2.Unity.UiKit.Gs2JobQueue.Editor
             else {
                 original.DeadLetterJob = EditorGUILayout.ObjectField("OwnDeadLetterJob", original.DeadLetterJob, typeof(OwnDeadLetterJob), false) as OwnDeadLetterJob;
                 EditorGUI.BeginDisabledGroup(true);
-                EditorGUI.indentLevel++;
-                EditorGUILayout.TextField("NamespaceName", original.DeadLetterJob?.NamespaceName?.ToString());
-                EditorGUILayout.TextField("DeadLetterJobName", original.DeadLetterJob?.DeadLetterJobName?.ToString());
-                EditorGUI.indentLevel--;
+                if (original.DeadLetterJob != null) {
+                    EditorGUI.indentLevel++;
+                    EditorGUILayout.TextField("NamespaceName", original.DeadLetterJob?.NamespaceName?.ToString());
+                    EditorGUILayout.TextField("DeadLetterJobName", original.DeadLetterJob?.DeadLetterJobName?.ToString());
+                    EditorGUI.indentLevel--;
+                }
                 EditorGUI.EndDisabledGroup();
             }
 

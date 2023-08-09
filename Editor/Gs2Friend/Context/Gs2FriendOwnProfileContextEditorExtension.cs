@@ -49,9 +49,11 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Editor
             else {
                 original.Profile = EditorGUILayout.ObjectField("OwnProfile", original.Profile, typeof(OwnProfile), false) as OwnProfile;
                 EditorGUI.BeginDisabledGroup(true);
-                EditorGUI.indentLevel++;
-                EditorGUILayout.TextField("NamespaceName", original.Profile?.NamespaceName?.ToString());
-                EditorGUI.indentLevel--;
+                if (original.Profile != null) {
+                    EditorGUI.indentLevel++;
+                    EditorGUILayout.TextField("NamespaceName", original.Profile?.NamespaceName?.ToString());
+                    EditorGUI.indentLevel--;
+                }
                 EditorGUI.EndDisabledGroup();
             }
 

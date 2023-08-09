@@ -49,12 +49,14 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Editor
             else {
                 original.ReferenceOf = EditorGUILayout.ObjectField("OwnReferenceOf", original.ReferenceOf, typeof(OwnReferenceOf), false) as OwnReferenceOf;
                 EditorGUI.BeginDisabledGroup(true);
-                EditorGUI.indentLevel++;
-                EditorGUILayout.TextField("NamespaceName", original.ReferenceOf?.NamespaceName?.ToString());
-                EditorGUILayout.TextField("InventoryName", original.ReferenceOf?.InventoryName?.ToString());
-                EditorGUILayout.TextField("ItemName", original.ReferenceOf?.ItemName?.ToString());
-                EditorGUILayout.TextField("ItemSetName", original.ReferenceOf?.ItemSetName?.ToString());
-                EditorGUI.indentLevel--;
+                if (original.ReferenceOf != null) {
+                    EditorGUI.indentLevel++;
+                    EditorGUILayout.TextField("NamespaceName", original.ReferenceOf?.NamespaceName?.ToString());
+                    EditorGUILayout.TextField("InventoryName", original.ReferenceOf?.InventoryName?.ToString());
+                    EditorGUILayout.TextField("ItemName", original.ReferenceOf?.ItemName?.ToString());
+                    EditorGUILayout.TextField("ItemSetName", original.ReferenceOf?.ItemSetName?.ToString());
+                    EditorGUI.indentLevel--;
+                }
                 EditorGUI.EndDisabledGroup();
             }
 

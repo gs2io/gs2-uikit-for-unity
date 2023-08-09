@@ -58,10 +58,12 @@ namespace Gs2.Unity.UiKit.Gs2Datastore.Enabler.Editor
                     EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2DatastoreOwnDataObjectContext), false);
                     EditorGUI.indentLevel++;
                     context.DataObject = EditorGUILayout.ObjectField("DataObject", context.DataObject, typeof(OwnDataObject), false) as OwnDataObject;
-                    EditorGUI.indentLevel++;
-                    EditorGUILayout.TextField("NamespaceName", context.DataObject?.NamespaceName?.ToString());
-                    EditorGUILayout.TextField("DataObjectName", context.DataObject?.DataObjectName?.ToString());
-                    EditorGUI.indentLevel--;
+                    if (context.DataObject != null) {
+                        EditorGUI.indentLevel++;
+                        EditorGUILayout.TextField("NamespaceName", context.DataObject?.NamespaceName?.ToString());
+                        EditorGUILayout.TextField("DataObjectName", context.DataObject?.DataObjectName?.ToString());
+                        EditorGUI.indentLevel--;
+                    }
                     EditorGUI.indentLevel--;
                     EditorGUI.EndDisabledGroup();
                 }

@@ -54,9 +54,10 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.Editor
             else {
                 original.Probability = EditorGUILayout.ObjectField("OwnProbability", original.Probability, typeof(OwnProbability), false) as OwnProbability;
                 EditorGUI.BeginDisabledGroup(true);
-                EditorGUI.indentLevel++;
-                EditorGUILayout.TextField("NamespaceName", original.Probability?.NamespaceName?.ToString());
-                EditorGUI.indentLevel--;
+                if (original.Probability != null) {
+                    EditorGUI.indentLevel++;
+                    EditorGUI.indentLevel--;
+                }
                 EditorGUI.EndDisabledGroup();
             }
 

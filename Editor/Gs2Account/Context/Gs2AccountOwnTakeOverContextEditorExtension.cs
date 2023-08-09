@@ -12,8 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
- * deny overwrite
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
@@ -56,10 +54,12 @@ namespace Gs2.Unity.UiKit.Gs2Account.Editor
             else {
                 original.TakeOver = EditorGUILayout.ObjectField("OwnTakeOver", original.TakeOver, typeof(OwnTakeOver), false) as OwnTakeOver;
                 EditorGUI.BeginDisabledGroup(true);
-                EditorGUI.indentLevel++;
-                EditorGUILayout.TextField("NamespaceName", original.TakeOver?.NamespaceName.ToString());
-                EditorGUILayout.TextField("Type", original.TakeOver?.Type.ToString());
-                EditorGUI.indentLevel--;
+                if (original.TakeOver != null) {
+                    EditorGUI.indentLevel++;
+                    EditorGUILayout.TextField("NamespaceName", original.TakeOver?.NamespaceName?.ToString());
+                    EditorGUILayout.TextField("Type", original.TakeOver?.Type.ToString());
+                    EditorGUI.indentLevel--;
+                }
                 EditorGUI.EndDisabledGroup();
             }
 

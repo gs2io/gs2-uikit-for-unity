@@ -58,11 +58,13 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Editor
                     EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2InventoryOwnSimpleItemContext), false);
                     EditorGUI.indentLevel++;
                     context.SimpleItem = EditorGUILayout.ObjectField("SimpleItem", context.SimpleItem, typeof(OwnSimpleItem), false) as OwnSimpleItem;
-                    EditorGUI.indentLevel++;
-                    EditorGUILayout.TextField("NamespaceName", context.SimpleItem?.NamespaceName?.ToString());
-                    EditorGUILayout.TextField("InventoryName", context.SimpleItem?.InventoryName?.ToString());
-                    EditorGUILayout.TextField("ItemName", context.SimpleItem?.ItemName?.ToString());
-                    EditorGUI.indentLevel--;
+                    if (context.SimpleItem != null) {
+                        EditorGUI.indentLevel++;
+                        EditorGUILayout.TextField("NamespaceName", context.SimpleItem?.NamespaceName?.ToString());
+                        EditorGUILayout.TextField("InventoryName", context.SimpleItem?.InventoryName?.ToString());
+                        EditorGUILayout.TextField("ItemName", context.SimpleItem?.ItemName?.ToString());
+                        EditorGUI.indentLevel--;
+                    }
                     EditorGUI.indentLevel--;
                     EditorGUI.EndDisabledGroup();
                 }

@@ -54,10 +54,12 @@ namespace Gs2.Unity.UiKit.Gs2Chat.Editor
             else {
                 original.Subscribe = EditorGUILayout.ObjectField("OwnSubscribe", original.Subscribe, typeof(OwnSubscribe), false) as OwnSubscribe;
                 EditorGUI.BeginDisabledGroup(true);
-                EditorGUI.indentLevel++;
-                EditorGUILayout.TextField("NamespaceName", original.Subscribe?.NamespaceName?.ToString());
-                EditorGUILayout.TextField("RoomName", original.Subscribe?.RoomName?.ToString());
-                EditorGUI.indentLevel--;
+                if (original.Subscribe != null) {
+                    EditorGUI.indentLevel++;
+                    EditorGUILayout.TextField("NamespaceName", original.Subscribe?.NamespaceName?.ToString());
+                    EditorGUILayout.TextField("RoomName", original.Subscribe?.RoomName?.ToString());
+                    EditorGUI.indentLevel--;
+                }
                 EditorGUI.EndDisabledGroup();
             }
 

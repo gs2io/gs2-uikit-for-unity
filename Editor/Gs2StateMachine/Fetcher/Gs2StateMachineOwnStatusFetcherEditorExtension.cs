@@ -59,10 +59,12 @@ namespace Gs2.Unity.UiKit.Gs2StateMachine.Editor
                     EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2StateMachineOwnStatusContext), false);
                     EditorGUI.indentLevel++;
                     context.Status = EditorGUILayout.ObjectField("Status", context.Status, typeof(OwnStatus), false) as OwnStatus;
-                    EditorGUI.indentLevel++;
-                    EditorGUILayout.TextField("NamespaceName", context.Status?.NamespaceName?.ToString());
-                    EditorGUILayout.TextField("StatusName", context.Status?.StatusName?.ToString());
-                    EditorGUI.indentLevel--;
+                    if (context.Status != null) {
+                        EditorGUI.indentLevel++;
+                        EditorGUILayout.TextField("NamespaceName", context.Status?.NamespaceName?.ToString());
+                        EditorGUILayout.TextField("StatusName", context.Status?.StatusName?.ToString());
+                        EditorGUI.indentLevel--;
+                    }
                     EditorGUI.indentLevel--;
                     EditorGUI.EndDisabledGroup();
                 }

@@ -49,10 +49,12 @@ namespace Gs2.Unity.UiKit.Gs2Gateway.Editor
             else {
                 original.WebSocketSession = EditorGUILayout.ObjectField("OwnWebSocketSession", original.WebSocketSession, typeof(OwnWebSocketSession), false) as OwnWebSocketSession;
                 EditorGUI.BeginDisabledGroup(true);
-                EditorGUI.indentLevel++;
-                EditorGUILayout.TextField("NamespaceName", original.WebSocketSession?.NamespaceName?.ToString());
-                EditorGUILayout.TextField("ConnectionId", original.WebSocketSession?.ConnectionId?.ToString());
-                EditorGUI.indentLevel--;
+                if (original.WebSocketSession != null) {
+                    EditorGUI.indentLevel++;
+                    EditorGUILayout.TextField("NamespaceName", original.WebSocketSession?.NamespaceName?.ToString());
+                    EditorGUILayout.TextField("ConnectionId", original.WebSocketSession?.ConnectionId?.ToString());
+                    EditorGUI.indentLevel--;
+                }
                 EditorGUI.EndDisabledGroup();
             }
 

@@ -61,6 +61,8 @@ namespace Gs2.Unity.UiKit.Gs2Showcase.Editor
                     context.RandomDisplayItem = EditorGUILayout.ObjectField("OwnRandomDisplayItem", context.RandomDisplayItem, typeof(OwnRandomDisplayItem), false) as OwnRandomDisplayItem;
                     if (context.RandomDisplayItem != null) {
                         EditorGUI.indentLevel++;
+                        EditorGUILayout.TextField("NamespaceName", context.RandomDisplayItem?.NamespaceName?.ToString());
+                        EditorGUILayout.TextField("ShowcaseName", context.RandomDisplayItem?.ShowcaseName?.ToString());
                         EditorGUI.indentLevel--;
                     }
                     EditorGUI.indentLevel--;

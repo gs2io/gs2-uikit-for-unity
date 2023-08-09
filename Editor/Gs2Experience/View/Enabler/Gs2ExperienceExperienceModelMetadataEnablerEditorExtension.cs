@@ -58,10 +58,12 @@ namespace Gs2.Unity.UiKit.Gs2Experience.Enabler.Editor
                     EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2ExperienceExperienceModelContext), false);
                     EditorGUI.indentLevel++;
                     context.ExperienceModel = EditorGUILayout.ObjectField("ExperienceModel", context.ExperienceModel, typeof(ExperienceModel), false) as ExperienceModel;
-                    EditorGUI.indentLevel++;
-                    EditorGUILayout.TextField("NamespaceName", context.ExperienceModel?.NamespaceName?.ToString());
-                    EditorGUILayout.TextField("ExperienceName", context.ExperienceModel?.ExperienceName?.ToString());
-                    EditorGUI.indentLevel--;
+                    if (context.ExperienceModel != null) {
+                        EditorGUI.indentLevel++;
+                        EditorGUILayout.TextField("NamespaceName", context.ExperienceModel?.NamespaceName?.ToString());
+                        EditorGUILayout.TextField("ExperienceName", context.ExperienceModel?.ExperienceName?.ToString());
+                        EditorGUI.indentLevel--;
+                    }
                     EditorGUI.indentLevel--;
                     EditorGUI.EndDisabledGroup();
                 }

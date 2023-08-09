@@ -12,8 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
- * deny overwrite
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
@@ -30,13 +28,13 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
-using System.Text;
 using Gs2.Core.Exception;
 using Gs2.Unity.Core.Exception;
 using Gs2.Unity.Gs2Quest.Model;
 using Gs2.Unity.Gs2Quest.ScriptableObject;
 using Gs2.Unity.Util;
 using Gs2.Unity.UiKit.Core;
+using Gs2.Unity.UiKit.Gs2Core.Fetcher;
 using Gs2.Unity.UiKit.Gs2Quest.Context;
 using UnityEngine;
 using UnityEngine.Events;
@@ -58,11 +56,11 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Fetcher
             {
                 if (_gameSessionHolder != null && _gameSessionHolder.Initialized &&
                     _clientHolder != null && _clientHolder.Initialized &&
-                    Context != null && this.Context.QuestGroupModel != null)
+                    Context != null && this.Context.Progress != null)
                 {
                     
                     var domain = this._clientHolder.Gs2.Quest.Namespace(
-                        this.Context.QuestGroupModel.NamespaceName
+                        this.Context.Progress.NamespaceName
                     ).Me(
                         this._gameSessionHolder.GameSession
                     ).Progress(
@@ -91,7 +89,7 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Fetcher
                     }
                 }
                 else {
-                    yield return new WaitForSeconds(1);
+                    yield return new WaitForSeconds(0.1f);
                 }
             }
             // ReSharper disable once IteratorNeverReturns
@@ -116,23 +114,23 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Fetcher
     {
         protected Gs2ClientHolder _clientHolder;
         protected Gs2GameSessionHolder _gameSessionHolder;
-        public Gs2QuestQuestGroupModelContext Context { get; private set; }
+        public Gs2QuestOwnProgressContext Context { get; private set; }
 
         public void Awake()
         {
             _clientHolder = Gs2ClientHolder.Instance;
             _gameSessionHolder = Gs2GameSessionHolder.Instance;
-            Context = GetComponent<Gs2QuestQuestGroupModelContext>() ?? GetComponentInParent<Gs2QuestQuestGroupModelContext>();
+            Context = GetComponent<Gs2QuestOwnProgressContext>() ?? GetComponentInParent<Gs2QuestOwnProgressContext>();
 
             if (Context == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2QuestQuestGroupModelContext.");
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2QuestOwnProgressContext.");
                 enabled = false;
             }
         }
 
         public bool HasError()
         {
-            Context = GetComponent<Gs2QuestQuestGroupModelContext>() ?? GetComponentInParent<Gs2QuestQuestGroupModelContext>(true);
+            Context = GetComponent<Gs2QuestOwnProgressContext>() ?? GetComponentInParent<Gs2QuestOwnProgressContext>(true);
             if (Context == null) {
                 return true;
             }

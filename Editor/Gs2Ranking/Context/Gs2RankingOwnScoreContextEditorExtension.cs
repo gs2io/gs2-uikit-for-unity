@@ -54,12 +54,14 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Editor
             else {
                 original.Score = EditorGUILayout.ObjectField("OwnScore", original.Score, typeof(OwnScore), false) as OwnScore;
                 EditorGUI.BeginDisabledGroup(true);
-                EditorGUI.indentLevel++;
-                EditorGUILayout.TextField("NamespaceName", original.Score?.NamespaceName?.ToString());
-                EditorGUILayout.TextField("CategoryName", original.Score?.CategoryName?.ToString());
-                EditorGUILayout.TextField("ScorerUserId", original.Score?.ScorerUserId?.ToString());
-                EditorGUILayout.TextField("UniqueId", original.Score?.UniqueId?.ToString());
-                EditorGUI.indentLevel--;
+                if (original.Score != null) {
+                    EditorGUI.indentLevel++;
+                    EditorGUILayout.TextField("NamespaceName", original.Score?.NamespaceName?.ToString());
+                    EditorGUILayout.TextField("CategoryName", original.Score?.CategoryName?.ToString());
+                    EditorGUILayout.TextField("ScorerUserId", original.Score?.ScorerUserId?.ToString());
+                    EditorGUILayout.TextField("UniqueId", original.Score?.UniqueId?.ToString());
+                    EditorGUI.indentLevel--;
+                }
                 EditorGUI.EndDisabledGroup();
             }
 

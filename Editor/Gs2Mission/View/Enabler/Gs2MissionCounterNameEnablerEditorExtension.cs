@@ -58,10 +58,12 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Enabler.Editor
                     EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2MissionOwnCounterContext), false);
                     EditorGUI.indentLevel++;
                     context.Counter = EditorGUILayout.ObjectField("Counter", context.Counter, typeof(OwnCounter), false) as OwnCounter;
-                    EditorGUI.indentLevel++;
-                    EditorGUILayout.TextField("NamespaceName", context.Counter?.NamespaceName?.ToString());
-                    EditorGUILayout.TextField("CounterName", context.Counter?.CounterName?.ToString());
-                    EditorGUI.indentLevel--;
+                    if (context.Counter != null) {
+                        EditorGUI.indentLevel++;
+                        EditorGUILayout.TextField("NamespaceName", context.Counter?.NamespaceName?.ToString());
+                        EditorGUILayout.TextField("CounterName", context.Counter?.CounterName?.ToString());
+                        EditorGUI.indentLevel--;
+                    }
                     EditorGUI.indentLevel--;
                     EditorGUI.EndDisabledGroup();
                 }

@@ -54,8 +54,8 @@ namespace Gs2.Unity.UiKit.Gs2SerialKey.Editor
                 context.SerialKey = EditorGUILayout.ObjectField("OwnSerialKey", context.SerialKey, typeof(OwnSerialKey), false) as OwnSerialKey;
                 if (context.SerialKey != null) {
                     EditorGUI.indentLevel++;
-                    EditorGUILayout.TextField("NamespaceName", context.SerialKey?.NamespaceName?.ToString());
-                    EditorGUILayout.TextField("SerialKeyCode", context.SerialKey?.SerialKeyCode?.ToString());
+                        EditorGUILayout.TextField("NamespaceName", context.SerialKey?.NamespaceName?.ToString());
+                        EditorGUILayout.TextField("SerialKeyCode", context.SerialKey?.SerialKeyCode?.ToString());
                     EditorGUI.indentLevel--;
                 }
                 EditorGUI.indentLevel--;

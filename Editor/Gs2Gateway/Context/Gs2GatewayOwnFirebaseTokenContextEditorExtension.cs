@@ -49,9 +49,11 @@ namespace Gs2.Unity.UiKit.Gs2Gateway.Editor
             else {
                 original.FirebaseToken = EditorGUILayout.ObjectField("OwnFirebaseToken", original.FirebaseToken, typeof(OwnFirebaseToken), false) as OwnFirebaseToken;
                 EditorGUI.BeginDisabledGroup(true);
-                EditorGUI.indentLevel++;
-                EditorGUILayout.TextField("NamespaceName", original.FirebaseToken?.NamespaceName?.ToString());
-                EditorGUI.indentLevel--;
+                if (original.FirebaseToken != null) {
+                    EditorGUI.indentLevel++;
+                    EditorGUILayout.TextField("NamespaceName", original.FirebaseToken?.NamespaceName?.ToString());
+                    EditorGUI.indentLevel--;
+                }
                 EditorGUI.EndDisabledGroup();
             }
 

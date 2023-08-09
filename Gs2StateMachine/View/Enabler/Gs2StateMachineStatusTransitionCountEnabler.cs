@@ -87,12 +87,19 @@ namespace Gs2.Unity.UiKit.Gs2StateMachine
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2StateMachineOwnStatusFetcher.");
                 enabled = false;
             }
+            if (target == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: target is not set.");
+                enabled = false;
+            }
         }
 
         public bool HasError()
         {
             _fetcher = GetComponent<Gs2StateMachineOwnStatusFetcher>() ?? GetComponentInParent<Gs2StateMachineOwnStatusFetcher>(true);
             if (_fetcher == null) {
+                return true;
+            }
+            if (target == null) {
                 return true;
             }
             return false;

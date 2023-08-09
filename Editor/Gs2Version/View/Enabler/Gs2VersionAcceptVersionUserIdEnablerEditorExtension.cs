@@ -58,10 +58,12 @@ namespace Gs2.Unity.UiKit.Gs2Version.Enabler.Editor
                     EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2VersionOwnAcceptVersionContext), false);
                     EditorGUI.indentLevel++;
                     context.AcceptVersion = EditorGUILayout.ObjectField("AcceptVersion", context.AcceptVersion, typeof(OwnAcceptVersion), false) as OwnAcceptVersion;
-                    EditorGUI.indentLevel++;
-                    EditorGUILayout.TextField("NamespaceName", context.AcceptVersion?.NamespaceName?.ToString());
-                    EditorGUILayout.TextField("VersionName", context.AcceptVersion?.VersionName?.ToString());
-                    EditorGUI.indentLevel--;
+                    if (context.AcceptVersion != null) {
+                        EditorGUI.indentLevel++;
+                        EditorGUILayout.TextField("NamespaceName", context.AcceptVersion?.NamespaceName?.ToString());
+                        EditorGUILayout.TextField("VersionName", context.AcceptVersion?.VersionName?.ToString());
+                        EditorGUI.indentLevel--;
+                    }
                     EditorGUI.indentLevel--;
                     EditorGUI.EndDisabledGroup();
                 }

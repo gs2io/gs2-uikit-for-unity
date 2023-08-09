@@ -55,7 +55,7 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Fetcher
             Gs2Exception e;
             while (true)
             {
-                if (_gameSessionHolder != null && _gameSessionHolder.Initialized && 
+                if (_gameSessionHolder != null && _gameSessionHolder.Initialized &&
                     _clientHolder != null && _clientHolder.Initialized &&
                     Context != null)
                 {
@@ -99,7 +99,7 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Fetcher
                     Fetched = true;
                 }
                 else {
-                    yield return new WaitForSeconds(1);
+                    yield return new WaitForSeconds(0.1f);
                 }
             }
             // ReSharper disable once IteratorNeverReturns
@@ -119,7 +119,7 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Fetcher
     /// <summary>
     /// Dependent components
     /// </summary>
-    
+
     public partial class Gs2QuestOwnCompletedQuestListListFetcher
     {
         private Gs2ClientHolder _clientHolder;

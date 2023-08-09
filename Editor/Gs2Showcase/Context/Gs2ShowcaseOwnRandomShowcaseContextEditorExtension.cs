@@ -49,10 +49,12 @@ namespace Gs2.Unity.UiKit.Gs2Showcase.Editor
             else {
                 original.RandomShowcase = EditorGUILayout.ObjectField("OwnRandomShowcase", original.RandomShowcase, typeof(OwnRandomShowcase), false) as OwnRandomShowcase;
                 EditorGUI.BeginDisabledGroup(true);
-                EditorGUI.indentLevel++;
-                EditorGUILayout.TextField("NamespaceName", original.RandomShowcase?.NamespaceName?.ToString());
-                EditorGUILayout.TextField("ShowcaseName", original.RandomShowcase?.ShowcaseName?.ToString());
-                EditorGUI.indentLevel--;
+                if (original.RandomShowcase != null) {
+                    EditorGUI.indentLevel++;
+                    EditorGUILayout.TextField("NamespaceName", original.RandomShowcase?.NamespaceName?.ToString());
+                    EditorGUILayout.TextField("ShowcaseName", original.RandomShowcase?.ShowcaseName?.ToString());
+                    EditorGUI.indentLevel--;
+                }
                 EditorGUI.EndDisabledGroup();
             }
 

@@ -49,9 +49,11 @@ namespace Gs2.Unity.UiKit.Gs2Inbox.Editor
             else {
                 original.Received = EditorGUILayout.ObjectField("OwnReceived", original.Received, typeof(OwnReceived), false) as OwnReceived;
                 EditorGUI.BeginDisabledGroup(true);
-                EditorGUI.indentLevel++;
-                EditorGUILayout.TextField("NamespaceName", original.Received?.NamespaceName?.ToString());
-                EditorGUI.indentLevel--;
+                if (original.Received != null) {
+                    EditorGUI.indentLevel++;
+                    EditorGUILayout.TextField("NamespaceName", original.Received?.NamespaceName?.ToString());
+                    EditorGUI.indentLevel--;
+                }
                 EditorGUI.EndDisabledGroup();
             }
 

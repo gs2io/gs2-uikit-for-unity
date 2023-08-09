@@ -40,25 +40,25 @@ namespace Gs2.Unity.UiKit.Gs2Account.Editor
 
             if (original == null) return;
 
-            var context = original.GetComponent<Gs2AccountAccountContext>() ?? original.GetComponentInParent<Gs2AccountAccountContext>(true);
+            var context = original.GetComponent<Gs2AccountOwnAccountContext>() ?? original.GetComponentInParent<Gs2AccountOwnAccountContext>(true);
             if (context == null) {
-                EditorGUILayout.HelpBox("Gs2AccountAccountContext not found.", MessageType.Error);
+                EditorGUILayout.HelpBox("Gs2AccountOwnAccountContext not found.", MessageType.Error);
                 if (GUILayout.Button("Add Context")) {
-                    original.gameObject.AddComponent<Gs2AccountAccountContext>();
+                    original.gameObject.AddComponent<Gs2AccountOwnAccountContext>();
                 }
             }
             else {
                 if (context.transform.GetComponentInParent<Gs2AccountOwnTakeOverList>(true) != null) {
                     EditorGUI.BeginDisabledGroup(true);
-                    EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2AccountAccountContext), false);
+                    EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2AccountOwnAccountContext), false);
                     EditorGUI.EndDisabledGroup();
                     EditorGUILayout.HelpBox("TakeOver is auto assign from Gs2AccountTakeOverList.", MessageType.Info);
                 }
                 else {
                     EditorGUI.BeginDisabledGroup(true);
-                    EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2AccountAccountContext), false);
+                    EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2AccountOwnAccountContext), false);
                     EditorGUI.indentLevel++;
-                    context.Account = EditorGUILayout.ObjectField("Account", context.Account, typeof(Account), false) as Account;
+                    context.Account = EditorGUILayout.ObjectField("OwnAccount", context.Account, typeof(OwnAccount), false) as OwnAccount;
                     if (context.Account != null) {
                         EditorGUI.indentLevel++;
                         EditorGUILayout.TextField("NamespaceName", context.Account?.NamespaceName?.ToString());

@@ -54,11 +54,13 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Editor
             else {
                 original.Form = EditorGUILayout.ObjectField("OwnForm", original.Form, typeof(OwnForm), false) as OwnForm;
                 EditorGUI.BeginDisabledGroup(true);
-                EditorGUI.indentLevel++;
-                EditorGUILayout.TextField("NamespaceName", original.Form?.NamespaceName?.ToString());
-                EditorGUILayout.TextField("MoldName", original.Form?.MoldName?.ToString());
-                EditorGUILayout.TextField("Index", original.Form?.Index.ToString());
-                EditorGUI.indentLevel--;
+                if (original.Form != null) {
+                    EditorGUI.indentLevel++;
+                    EditorGUILayout.TextField("NamespaceName", original.Form?.NamespaceName?.ToString());
+                    EditorGUILayout.TextField("MoldName", original.Form?.MoldName?.ToString());
+                    EditorGUILayout.TextField("Index", original.Form?.Index.ToString());
+                    EditorGUI.indentLevel--;
+                }
                 EditorGUI.EndDisabledGroup();
             }
 

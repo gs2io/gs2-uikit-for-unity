@@ -54,9 +54,7 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Editor
                 context.FriendUser = EditorGUILayout.ObjectField("OwnFriendUser", context.FriendUser, typeof(OwnFriendUser), false) as OwnFriendUser;
                 if (context.FriendUser != null) {
                     EditorGUI.indentLevel++;
-                    EditorGUILayout.TextField("NamespaceName", context.FriendUser?.NamespaceName?.ToString());
-                    EditorGUILayout.TextField("WithProfile", context.FriendUser?.WithProfile.ToString());
-                    EditorGUILayout.TextField("TargetUserId", context.FriendUser?.TargetUserId?.ToString());
+                        EditorGUILayout.TextField("NamespaceName", context.FriendUser?.NamespaceName?.ToString());
                     EditorGUI.indentLevel--;
                 }
                 EditorGUI.indentLevel--;

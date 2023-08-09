@@ -54,7 +54,7 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking.Editor
                 context.Namespace = EditorGUILayout.ObjectField("Namespace", context.Namespace, typeof(Namespace), false) as Namespace;
                 if (context.Namespace != null) {
                     EditorGUI.indentLevel++;
-                    EditorGUILayout.TextField("NamespaceName", context.Namespace?.NamespaceName?.ToString());
+                        EditorGUILayout.TextField("NamespaceName", context.Namespace?.NamespaceName?.ToString());
                     EditorGUI.indentLevel--;
                 }
                 EditorGUI.indentLevel--;

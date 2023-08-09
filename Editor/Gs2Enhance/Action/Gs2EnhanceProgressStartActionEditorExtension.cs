@@ -54,7 +54,7 @@ namespace Gs2.Unity.UiKit.Gs2Enhance.Editor
                 context.Progress = EditorGUILayout.ObjectField("OwnProgress", context.Progress, typeof(OwnProgress), false) as OwnProgress;
                 if (context.Progress != null) {
                     EditorGUI.indentLevel++;
-                    EditorGUILayout.TextField("NamespaceName", context.Progress?.NamespaceName?.ToString());
+                        EditorGUILayout.TextField("NamespaceName", context.Progress?.NamespaceName?.ToString());
                     EditorGUI.indentLevel--;
                 }
                 EditorGUI.indentLevel--;

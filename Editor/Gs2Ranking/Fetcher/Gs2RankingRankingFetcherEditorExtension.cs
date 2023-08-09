@@ -59,10 +59,10 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Editor
                     EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2RankingRankingContext), false);
                     EditorGUI.indentLevel++;
                     context.Ranking = EditorGUILayout.ObjectField("Ranking", context.Ranking, typeof(Ranking), false) as Ranking;
-                    EditorGUI.indentLevel++;
-                    EditorGUILayout.TextField("NamespaceName", context.Ranking?.NamespaceName?.ToString());
-                    EditorGUILayout.TextField("CategoryName", context.Ranking?.CategoryName?.ToString());
-                    EditorGUI.indentLevel--;
+                    if (context.Ranking != null) {
+                        EditorGUI.indentLevel++;
+                        EditorGUI.indentLevel--;
+                    }
                     EditorGUI.indentLevel--;
                     EditorGUI.EndDisabledGroup();
                 }

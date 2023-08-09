@@ -54,8 +54,11 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Editor
             else {
                 original.FollowUser = EditorGUILayout.ObjectField("OwnFollowUser", original.FollowUser, typeof(OwnFollowUser), false) as OwnFollowUser;
                 EditorGUI.BeginDisabledGroup(true);
-                EditorGUI.indentLevel++;
-                EditorGUI.indentLevel--;
+                if (original.FollowUser != null) {
+                    EditorGUI.indentLevel++;
+                    EditorGUILayout.TextField("NamespaceName", original.FollowUser?.NamespaceName?.ToString());
+                    EditorGUI.indentLevel--;
+                }
                 EditorGUI.EndDisabledGroup();
             }
 

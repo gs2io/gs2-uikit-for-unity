@@ -55,10 +55,12 @@ namespace Gs2.Unity.UiKit.Gs2Schedule.Editor
             else {
                 original.Event_ = EditorGUILayout.ObjectField("OwnEvent", original.Event_, typeof(OwnEvent), false) as OwnEvent;
                 EditorGUI.BeginDisabledGroup(true);
-                EditorGUI.indentLevel++;
-                EditorGUILayout.TextField("NamespaceName", original.Event_?.NamespaceName?.ToString());
-                EditorGUILayout.TextField("EventName", original.Event_?.EventName?.ToString());
-                EditorGUI.indentLevel--;
+                if (original.Event_ != null) {
+                    EditorGUI.indentLevel++;
+                    EditorGUILayout.TextField("NamespaceName", original.Event_?.NamespaceName?.ToString());
+                    EditorGUILayout.TextField("EventName", original.Event_?.EventName?.ToString());
+                    EditorGUI.indentLevel--;
+                }
                 EditorGUI.EndDisabledGroup();
             }
 

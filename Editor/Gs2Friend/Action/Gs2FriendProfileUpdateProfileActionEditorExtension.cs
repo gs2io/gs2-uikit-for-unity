@@ -54,7 +54,7 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Editor
                 context.Profile = EditorGUILayout.ObjectField("OwnProfile", context.Profile, typeof(OwnProfile), false) as OwnProfile;
                 if (context.Profile != null) {
                     EditorGUI.indentLevel++;
-                    EditorGUILayout.TextField("NamespaceName", context.Profile?.NamespaceName?.ToString());
+                        EditorGUILayout.TextField("NamespaceName", context.Profile?.NamespaceName?.ToString());
                     EditorGUI.indentLevel--;
                 }
                 EditorGUI.indentLevel--;

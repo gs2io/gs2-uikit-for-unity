@@ -12,8 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
- * deny overwrite
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
@@ -42,13 +40,13 @@ namespace Gs2.Unity.UiKit.Gs2Quest
     [AddComponentMenu("GS2 UIKit/Quest/CompletedQuestList/View/Gs2QuestOwnCompletedQuestListList")]
     public partial class Gs2QuestOwnCompletedQuestListList : MonoBehaviour
     {
-        private List<Gs2QuestQuestGroupModelContext> _children;
+        private List<Gs2QuestOwnCompletedQuestListContext> _children;
 
         public void Update() {
             if (_fetcher.Fetched && this._fetcher.CompletedQuestList != null) {
                 for (var i = 0; i < this.maximumItems; i++) {
                     if (i < this._fetcher.CompletedQuestList.Count) {
-                        _children[i].QuestGroupModel.questGroupName = this._fetcher.CompletedQuestList[i].QuestGroupName;
+                        _children[i].CompletedQuestList.questGroupName = this._fetcher.CompletedQuestList[i].QuestGroupName;
                         _children[i].gameObject.SetActive(true);
                     }
                     else {
@@ -70,6 +68,12 @@ namespace Gs2.Unity.UiKit.Gs2Quest
 
         public void Awake()
         {
+            if (prefab == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2QuestOwnCompletedQuestListContext Prefab.");
+                enabled = false;
+                return;
+            }
+
             _fetcher = GetComponent<Gs2QuestOwnCompletedQuestListListFetcher>() ?? GetComponentInParent<Gs2QuestOwnCompletedQuestListListFetcher>();
 
             if (_fetcher == null) {
@@ -77,11 +81,18 @@ namespace Gs2.Unity.UiKit.Gs2Quest
                 enabled = false;
             }
 
-            _children = new List<Gs2QuestQuestGroupModelContext>();
+            var context = GetComponent<Gs2QuestNamespaceContext>() ?? GetComponentInParent<Gs2QuestNamespaceContext>(true);
+            if (context == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2QuestOwnCompletedQuestListListFetcher::Context.");
+                enabled = false;
+                return;
+            }
+
+            _children = new List<Gs2QuestOwnCompletedQuestListContext>();
             for (var i = 0; i < this.maximumItems; i++) {
                 var node = Instantiate(this.prefab, transform);
-                node.QuestGroupModel = QuestGroupModel.New(
-                    _fetcher.Context.Namespace,
+                node.CompletedQuestList = OwnCompletedQuestList.New(
+                    context.Namespace,
                     ""
                 );
                 node.gameObject.SetActive(false);
@@ -115,7 +126,7 @@ namespace Gs2.Unity.UiKit.Gs2Quest
 
     public partial class Gs2QuestOwnCompletedQuestListList
     {
-        public Gs2QuestQuestGroupModelContext prefab;
+        public Gs2QuestOwnCompletedQuestListContext prefab;
         public int maximumItems;
     }
 

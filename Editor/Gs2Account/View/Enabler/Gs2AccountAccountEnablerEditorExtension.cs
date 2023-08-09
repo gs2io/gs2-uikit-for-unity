@@ -42,11 +42,11 @@ namespace Gs2.Unity.UiKit.Gs2Account.Editor
 
             serializedObject.Update();
 
-            var fetcher = original.GetComponent<Gs2AccountAccountFetcher>() ?? original.GetComponentInParent<Gs2AccountAccountFetcher>(true);
+            var fetcher = original.GetComponent<Gs2AccountOwnAccountFetcher>() ?? original.GetComponentInParent<Gs2AccountOwnAccountFetcher>(true);
             if (fetcher == null) {
                 EditorGUILayout.HelpBox("AccountFetcher not assigned.", MessageType.Error);
                 if (GUILayout.Button("Add Fetcher")) {
-                    original.gameObject.AddComponent<Gs2AccountAccountFetcher>();
+                    original.gameObject.AddComponent<Gs2AccountOwnAccountFetcher>();
                 }
             }
             else {

@@ -54,8 +54,8 @@ namespace Gs2.Unity.UiKit.Gs2Gateway.Editor
                 context.WebSocketSession = EditorGUILayout.ObjectField("OwnWebSocketSession", context.WebSocketSession, typeof(OwnWebSocketSession), false) as OwnWebSocketSession;
                 if (context.WebSocketSession != null) {
                     EditorGUI.indentLevel++;
-                    EditorGUILayout.TextField("NamespaceName", context.WebSocketSession?.NamespaceName?.ToString());
-                    EditorGUILayout.TextField("ConnectionId", context.WebSocketSession?.ConnectionId?.ToString());
+                        EditorGUILayout.TextField("NamespaceName", context.WebSocketSession?.NamespaceName?.ToString());
+                        EditorGUILayout.TextField("ConnectionId", context.WebSocketSession?.ConnectionId?.ToString());
                     EditorGUI.indentLevel--;
                 }
                 EditorGUI.indentLevel--;

@@ -54,9 +54,8 @@ namespace Gs2.Unity.UiKit.Gs2Chat.Editor
                 context.Room = EditorGUILayout.ObjectField("Room", context.Room, typeof(Room), false) as Room;
                 if (context.Room != null) {
                     EditorGUI.indentLevel++;
-                    EditorGUILayout.TextField("NamespaceName", context.Room?.NamespaceName?.ToString());
-                    EditorGUILayout.TextField("RoomName", context.Room?.RoomName?.ToString());
-                    EditorGUILayout.TextField("Password", context.Room?.Password?.ToString());
+                        EditorGUILayout.TextField("NamespaceName", context.Room?.NamespaceName?.ToString());
+                        EditorGUILayout.TextField("RoomName", context.Room?.RoomName?.ToString());
                     EditorGUI.indentLevel--;
                 }
                 EditorGUI.indentLevel--;

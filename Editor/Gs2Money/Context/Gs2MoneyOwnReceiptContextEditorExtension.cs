@@ -49,10 +49,12 @@ namespace Gs2.Unity.UiKit.Gs2Money.Editor
             else {
                 original.Receipt = EditorGUILayout.ObjectField("OwnReceipt", original.Receipt, typeof(OwnReceipt), false) as OwnReceipt;
                 EditorGUI.BeginDisabledGroup(true);
-                EditorGUI.indentLevel++;
-                EditorGUILayout.TextField("NamespaceName", original.Receipt?.NamespaceName?.ToString());
-                EditorGUILayout.TextField("TransactionId", original.Receipt?.TransactionId?.ToString());
-                EditorGUI.indentLevel--;
+                if (original.Receipt != null) {
+                    EditorGUI.indentLevel++;
+                    EditorGUILayout.TextField("NamespaceName", original.Receipt?.NamespaceName?.ToString());
+                    EditorGUILayout.TextField("TransactionId", original.Receipt?.TransactionId?.ToString());
+                    EditorGUI.indentLevel--;
+                }
                 EditorGUI.EndDisabledGroup();
             }
 

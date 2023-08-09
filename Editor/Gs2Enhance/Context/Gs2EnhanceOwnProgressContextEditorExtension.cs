@@ -49,9 +49,11 @@ namespace Gs2.Unity.UiKit.Gs2Enhance.Editor
             else {
                 original.Progress = EditorGUILayout.ObjectField("OwnProgress", original.Progress, typeof(OwnProgress), false) as OwnProgress;
                 EditorGUI.BeginDisabledGroup(true);
-                EditorGUI.indentLevel++;
-                EditorGUILayout.TextField("NamespaceName", original.Progress?.NamespaceName?.ToString());
-                EditorGUI.indentLevel--;
+                if (original.Progress != null) {
+                    EditorGUI.indentLevel++;
+                    EditorGUILayout.TextField("NamespaceName", original.Progress?.NamespaceName?.ToString());
+                    EditorGUI.indentLevel--;
+                }
                 EditorGUI.EndDisabledGroup();
             }
 

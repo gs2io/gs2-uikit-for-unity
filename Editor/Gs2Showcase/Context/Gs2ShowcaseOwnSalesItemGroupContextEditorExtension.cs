@@ -49,8 +49,11 @@ namespace Gs2.Unity.UiKit.Gs2Showcase.Editor
             else {
                 original.SalesItemGroup = EditorGUILayout.ObjectField("OwnSalesItemGroup", original.SalesItemGroup, typeof(OwnSalesItemGroup), false) as OwnSalesItemGroup;
                 EditorGUI.BeginDisabledGroup(true);
-                EditorGUI.indentLevel++;
-                EditorGUI.indentLevel--;
+                if (original.SalesItemGroup != null) {
+                    EditorGUI.indentLevel++;
+                    EditorGUILayout.TextField("NamespaceName", original.SalesItemGroup?.NamespaceName?.ToString());
+                    EditorGUI.indentLevel--;
+                }
                 EditorGUI.EndDisabledGroup();
             }
 

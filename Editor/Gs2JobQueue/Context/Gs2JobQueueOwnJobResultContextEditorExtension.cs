@@ -49,11 +49,13 @@ namespace Gs2.Unity.UiKit.Gs2JobQueue.Editor
             else {
                 original.JobResult = EditorGUILayout.ObjectField("OwnJobResult", original.JobResult, typeof(OwnJobResult), false) as OwnJobResult;
                 EditorGUI.BeginDisabledGroup(true);
-                EditorGUI.indentLevel++;
-                EditorGUILayout.TextField("NamespaceName", original.JobResult?.NamespaceName?.ToString());
-                EditorGUILayout.TextField("JobName", original.JobResult?.JobName?.ToString());
-                EditorGUILayout.TextField("TryNumber", original.JobResult?.TryNumber.ToString());
-                EditorGUI.indentLevel--;
+                if (original.JobResult != null) {
+                    EditorGUI.indentLevel++;
+                    EditorGUILayout.TextField("NamespaceName", original.JobResult?.NamespaceName?.ToString());
+                    EditorGUILayout.TextField("JobName", original.JobResult?.JobName?.ToString());
+                    EditorGUILayout.TextField("TryNumber", original.JobResult?.TryNumber.ToString());
+                    EditorGUI.indentLevel--;
+                }
                 EditorGUI.EndDisabledGroup();
             }
 

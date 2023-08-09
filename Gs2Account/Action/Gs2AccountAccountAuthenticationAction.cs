@@ -36,7 +36,7 @@ using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Account.Context;
 using UnityEngine;
 using UnityEngine.Events;
-using Account = Gs2.Unity.Gs2Account.ScriptableObject.Account;
+using Account = Gs2.Unity.Gs2Account.ScriptableObject.OwnAccount;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -54,7 +54,7 @@ namespace Gs2.Unity.UiKit.Gs2Account
             var domain = this._clientHolder.Gs2.Account.Namespace(
                 this._context.Account.NamespaceName
             ).Account(
-                this._context.Account.UserId
+                UserId
             );
             var future = domain.Authentication(
                 KeyId,
@@ -122,23 +122,23 @@ namespace Gs2.Unity.UiKit.Gs2Account
     {
         private Gs2ClientHolder _clientHolder;
         private Gs2GameSessionHolder _gameSessionHolder;
-        private Gs2AccountAccountContext _context;
+        private Gs2AccountOwnAccountContext _context;
 
         public void Awake()
         {
             this._clientHolder = Gs2ClientHolder.Instance;
             this._gameSessionHolder = Gs2GameSessionHolder.Instance;
-            this._context = GetComponent<Gs2AccountAccountContext>() ?? GetComponentInParent<Gs2AccountAccountContext>();
+            this._context = GetComponent<Gs2AccountOwnAccountContext>() ?? GetComponentInParent<Gs2AccountOwnAccountContext>();
 
             if (_context == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2AccountAccountContext.");
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2AccountOwnAccountContext.");
                 enabled = false;
             }
         }
 
         public bool HasError()
         {
-            this._context = GetComponent<Gs2AccountAccountContext>() ?? GetComponentInParent<Gs2AccountAccountContext>(true);
+            this._context = GetComponent<Gs2AccountOwnAccountContext>() ?? GetComponentInParent<Gs2AccountOwnAccountContext>(true);
             if (_context == null) {
                 return true;
             }
@@ -162,6 +162,7 @@ namespace Gs2.Unity.UiKit.Gs2Account
     {
         public string KeyId;
         public string Password;
+        public string UserId;
 
         public void SetKeyId(string value) {
             KeyId = value;
@@ -171,6 +172,10 @@ namespace Gs2.Unity.UiKit.Gs2Account
         public void SetPassword(string value) {
             Password = value;
             this.onChangePassword.Invoke(Password);
+        }
+        public void SetUserId(string value) {
+            UserId = value;
+            this.onChangeUserId.Invoke(UserId);
         }
     }
 
@@ -206,6 +211,20 @@ namespace Gs2.Unity.UiKit.Gs2Account
         {
             add => this.onChangePassword.AddListener(value);
             remove => this.onChangePassword.RemoveListener(value);
+        }
+
+        [Serializable]
+        private class ChangeUserIdEvent : UnityEvent<string>
+        {
+
+        }
+
+        [SerializeField]
+        private ChangeUserIdEvent onChangeUserId = new ChangeUserIdEvent();
+        public event UnityAction<string> OnChangeUserId
+        {
+            add => this.onChangeUserId.AddListener(value);
+            remove => this.onChangeUserId.RemoveListener(value);
         }
 
         [Serializable]

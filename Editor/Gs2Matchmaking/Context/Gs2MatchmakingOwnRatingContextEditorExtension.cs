@@ -54,10 +54,12 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking.Editor
             else {
                 original.Rating = EditorGUILayout.ObjectField("OwnRating", original.Rating, typeof(OwnRating), false) as OwnRating;
                 EditorGUI.BeginDisabledGroup(true);
-                EditorGUI.indentLevel++;
-                EditorGUILayout.TextField("NamespaceName", original.Rating?.NamespaceName?.ToString());
-                EditorGUILayout.TextField("RatingName", original.Rating?.RatingName?.ToString());
-                EditorGUI.indentLevel--;
+                if (original.Rating != null) {
+                    EditorGUI.indentLevel++;
+                    EditorGUILayout.TextField("NamespaceName", original.Rating?.NamespaceName?.ToString());
+                    EditorGUILayout.TextField("RatingName", original.Rating?.RatingName?.ToString());
+                    EditorGUI.indentLevel--;
+                }
                 EditorGUI.EndDisabledGroup();
             }
 

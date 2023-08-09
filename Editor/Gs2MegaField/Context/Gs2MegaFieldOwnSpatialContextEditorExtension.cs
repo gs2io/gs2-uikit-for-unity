@@ -49,11 +49,13 @@ namespace Gs2.Unity.UiKit.Gs2MegaField.Editor
             else {
                 original.Spatial = EditorGUILayout.ObjectField("OwnSpatial", original.Spatial, typeof(OwnSpatial), false) as OwnSpatial;
                 EditorGUI.BeginDisabledGroup(true);
-                EditorGUI.indentLevel++;
-                EditorGUILayout.TextField("NamespaceName", original.Spatial?.NamespaceName?.ToString());
-                EditorGUILayout.TextField("AreaModelName", original.Spatial?.AreaModelName?.ToString());
-                EditorGUILayout.TextField("LayerModelName", original.Spatial?.LayerModelName?.ToString());
-                EditorGUI.indentLevel--;
+                if (original.Spatial != null) {
+                    EditorGUI.indentLevel++;
+                    EditorGUILayout.TextField("NamespaceName", original.Spatial?.NamespaceName?.ToString());
+                    EditorGUILayout.TextField("AreaModelName", original.Spatial?.AreaModelName?.ToString());
+                    EditorGUILayout.TextField("LayerModelName", original.Spatial?.LayerModelName?.ToString());
+                    EditorGUI.indentLevel--;
+                }
                 EditorGUI.EndDisabledGroup();
             }
 

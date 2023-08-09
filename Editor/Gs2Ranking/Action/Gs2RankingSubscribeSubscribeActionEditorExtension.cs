@@ -54,8 +54,8 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Editor
                 context.Subscribe = EditorGUILayout.ObjectField("OwnSubscribe", context.Subscribe, typeof(OwnSubscribe), false) as OwnSubscribe;
                 if (context.Subscribe != null) {
                     EditorGUI.indentLevel++;
-                    EditorGUILayout.TextField("NamespaceName", context.Subscribe?.NamespaceName?.ToString());
-                    EditorGUILayout.TextField("CategoryName", context.Subscribe?.CategoryName?.ToString());
+                        EditorGUILayout.TextField("NamespaceName", context.Subscribe?.NamespaceName?.ToString());
+                        EditorGUILayout.TextField("CategoryName", context.Subscribe?.CategoryName?.ToString());
                     EditorGUI.indentLevel--;
                 }
                 EditorGUI.indentLevel--;

@@ -12,8 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
- * deny overwrite
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
@@ -53,9 +51,9 @@ namespace Gs2.Unity.UiKit.Gs2Account.Editor
                 EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2AccountOwnTakeOverListFetcher), false);
                 EditorGUI.indentLevel++;
                 if (fetcher.Context != null) {
-                    fetcher.Context.Account = EditorGUILayout.ObjectField("Account", fetcher.Context.Account, typeof(OwnAccount), false) as OwnAccount;
+                    fetcher.Context.Account = EditorGUILayout.ObjectField("OwnAccount", fetcher.Context.Account, typeof(OwnAccount), false) as OwnAccount;
                     EditorGUI.indentLevel++;
-                    EditorGUILayout.TextField("NamespaceName", fetcher.Context.Account?.NamespaceName.ToString());
+                    EditorGUILayout.TextField("NamespaceName", fetcher.Context.Account?.NamespaceName?.ToString());
                     EditorGUI.indentLevel--;
                 }
                 EditorGUI.indentLevel--;

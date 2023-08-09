@@ -49,10 +49,12 @@ namespace Gs2.Unity.UiKit.Gs2Money.Editor
             else {
                 original.Wallet = EditorGUILayout.ObjectField("OwnWallet", original.Wallet, typeof(OwnWallet), false) as OwnWallet;
                 EditorGUI.BeginDisabledGroup(true);
-                EditorGUI.indentLevel++;
-                EditorGUILayout.TextField("NamespaceName", original.Wallet?.NamespaceName?.ToString());
-                EditorGUILayout.TextField("Slot", original.Wallet?.Slot.ToString());
-                EditorGUI.indentLevel--;
+                if (original.Wallet != null) {
+                    EditorGUI.indentLevel++;
+                    EditorGUILayout.TextField("NamespaceName", original.Wallet?.NamespaceName?.ToString());
+                    EditorGUILayout.TextField("Slot", original.Wallet?.Slot.ToString());
+                    EditorGUI.indentLevel--;
+                }
                 EditorGUI.EndDisabledGroup();
             }
 

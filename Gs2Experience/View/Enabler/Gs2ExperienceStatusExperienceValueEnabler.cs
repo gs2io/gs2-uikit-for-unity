@@ -87,12 +87,19 @@ namespace Gs2.Unity.UiKit.Gs2Experience
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ExperienceOwnStatusFetcher.");
                 enabled = false;
             }
+            if (target == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: target is not set.");
+                enabled = false;
+            }
         }
 
         public bool HasError()
         {
             _fetcher = GetComponent<Gs2ExperienceOwnStatusFetcher>() ?? GetComponentInParent<Gs2ExperienceOwnStatusFetcher>(true);
             if (_fetcher == null) {
+                return true;
+            }
+            if (target == null) {
                 return true;
             }
             return false;
