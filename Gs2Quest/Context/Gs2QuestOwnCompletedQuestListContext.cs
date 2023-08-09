@@ -42,8 +42,7 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Context
                 Debug.LogError($"{gameObject.GetFullPath()}: CompletedQuestList is not set in Gs2QuestOwnCompletedQuestListContext.");
             }
         }
-
-        public bool HasError() {
+        public virtual bool HasError() {
             if (CompletedQuestList == null) {
                 if (GetComponentInParent<Gs2QuestOwnCompletedQuestListList>(true) != null) {
                     return false;
@@ -82,8 +81,8 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Context
     {
         public OwnCompletedQuestList CompletedQuestList;
 
-        public void SetOwnCompletedQuestList(OwnCompletedQuestList CompletedQuestList) {
-            this.CompletedQuestList = CompletedQuestList;
+        public void SetOwnCompletedQuestList(OwnCompletedQuestList completedQuestList) {
+            this.CompletedQuestList = completedQuestList;
         }
     }
 

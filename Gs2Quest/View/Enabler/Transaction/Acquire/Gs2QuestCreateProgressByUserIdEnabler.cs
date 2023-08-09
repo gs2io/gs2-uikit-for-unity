@@ -78,7 +78,7 @@ namespace Gs2.Unity.UiKit.Gs2Quest
             Update();
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
             _fetcher = GetComponent<IAcquireActionsFetcher>() ?? GetComponentInParent<IAcquireActionsFetcher>(true);
             if (_fetcher == null) {

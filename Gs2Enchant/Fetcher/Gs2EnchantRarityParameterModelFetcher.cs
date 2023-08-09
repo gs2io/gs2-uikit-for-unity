@@ -127,7 +127,7 @@ namespace Gs2.Unity.UiKit.Gs2Enchant.Fetcher
             }
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
             Context = GetComponent<Gs2EnchantRarityParameterModelContext>() ?? GetComponentInParent<Gs2EnchantRarityParameterModelContext>(true);
             if (Context == null) {

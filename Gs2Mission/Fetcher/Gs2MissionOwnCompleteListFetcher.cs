@@ -136,7 +136,7 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Fetcher
             }
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
             Context = GetComponent<Gs2MissionNamespaceContext>() ?? GetComponentInParent<Gs2MissionNamespaceContext>(true);
             if (Context == null) {

@@ -86,7 +86,7 @@ namespace Gs2.Unity.UiKit.Gs2Enhance.Localization
             }
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
             _fetcher = GetComponent<Gs2EnhanceRateModelFetcher>() ?? GetComponentInParent<Gs2EnhanceRateModelFetcher>(true);
             if (_fetcher == null) {

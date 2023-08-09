@@ -106,7 +106,7 @@ namespace Gs2.Unity.UiKit.Gs2Formation
             this.prefab.gameObject.SetActive(false);
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
             _fetcher = GetComponent<Gs2FormationOwnMoldListFetcher>() ?? GetComponentInParent<Gs2FormationOwnMoldListFetcher>(true);
             if (_fetcher == null) {

@@ -42,8 +42,7 @@ namespace Gs2.Unity.UiKit.Gs2Enchant.Context
                 Debug.LogError($"{gameObject.GetFullPath()}: BalanceParameterStatus is not set in Gs2EnchantOwnBalanceParameterStatusContext.");
             }
         }
-
-        public bool HasError() {
+        public virtual bool HasError() {
             if (BalanceParameterStatus == null) {
                 if (GetComponentInParent<Gs2EnchantOwnBalanceParameterStatusList>(true) != null) {
                     return false;
@@ -82,8 +81,8 @@ namespace Gs2.Unity.UiKit.Gs2Enchant.Context
     {
         public OwnBalanceParameterStatus BalanceParameterStatus;
 
-        public void SetOwnBalanceParameterStatus(OwnBalanceParameterStatus BalanceParameterStatus) {
-            this.BalanceParameterStatus = BalanceParameterStatus;
+        public void SetOwnBalanceParameterStatus(OwnBalanceParameterStatus balanceParameterStatus) {
+            this.BalanceParameterStatus = balanceParameterStatus;
         }
     }
 

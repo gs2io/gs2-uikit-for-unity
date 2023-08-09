@@ -69,7 +69,7 @@ namespace Gs2.Unity.UiKit.Gs2Chat
             }
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
             _fetcher = GetComponent<Gs2ChatMessageFetcher>() ?? GetComponentInParent<Gs2ChatMessageFetcher>(true);
             if (_fetcher == null) {

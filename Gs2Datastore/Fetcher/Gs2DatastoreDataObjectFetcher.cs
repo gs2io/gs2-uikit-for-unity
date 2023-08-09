@@ -125,7 +125,7 @@ namespace Gs2.Unity.UiKit.Gs2Datastore.Fetcher
             }
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
             Context = GetComponent<Gs2DatastoreDataObjectContext>() ?? GetComponentInParent<Gs2DatastoreDataObjectContext>(true);
             if (Context == null) {

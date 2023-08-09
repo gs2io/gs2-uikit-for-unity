@@ -120,7 +120,7 @@ namespace Gs2.Unity.UiKit.Gs2Lottery
             }
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
             this._context = GetComponent<Gs2LotteryOwnBoxItemsContext>() ?? GetComponentInParent<Gs2LotteryOwnBoxItemsContext>(true);
             if (_context == null) {

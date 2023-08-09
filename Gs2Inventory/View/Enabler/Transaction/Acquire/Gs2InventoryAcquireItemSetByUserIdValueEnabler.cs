@@ -99,7 +99,7 @@ namespace Gs2.Unity.UiKit.Gs2Inventory
             Update();
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
             _fetcher = GetComponent<Gs2InventoryAcquireItemSetByUserIdFetcher>() ?? GetComponentInParent<Gs2InventoryAcquireItemSetByUserIdFetcher>(true);
             if (_fetcher == null) {

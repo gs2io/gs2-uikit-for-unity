@@ -80,7 +80,7 @@ namespace Gs2.Unity.UiKit.Gs2Friend.SpriteSwitcher
             }
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
             _fetcher = GetComponent<Gs2FriendPublicProfileFetcher>() ?? GetComponentInParent<Gs2FriendPublicProfileFetcher>(true);
             if (_fetcher == null) {

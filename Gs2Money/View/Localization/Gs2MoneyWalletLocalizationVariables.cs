@@ -80,7 +80,7 @@ namespace Gs2.Unity.UiKit.Gs2Money.Localization
             }
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
             _fetcher = GetComponent<Gs2MoneyOwnWalletFetcher>() ?? GetComponentInParent<Gs2MoneyOwnWalletFetcher>(true);
             if (_fetcher == null) {

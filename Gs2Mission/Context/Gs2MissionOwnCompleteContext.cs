@@ -42,8 +42,7 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Context
                 Debug.LogError($"{gameObject.GetFullPath()}: Complete is not set in Gs2MissionOwnCompleteContext.");
             }
         }
-
-        public bool HasError() {
+        public virtual bool HasError() {
             if (Complete == null) {
                 if (GetComponentInParent<Gs2MissionOwnCompleteList>(true) != null) {
                     return false;
@@ -82,8 +81,8 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Context
     {
         public OwnComplete Complete;
 
-        public void SetOwnComplete(OwnComplete Complete) {
-            this.Complete = Complete;
+        public void SetOwnComplete(OwnComplete complete) {
+            this.Complete = complete;
         }
     }
 

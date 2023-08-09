@@ -42,8 +42,7 @@ namespace Gs2.Unity.UiKit.Gs2Money.Context
                 Debug.LogError($"{gameObject.GetFullPath()}: Receipt is not set in Gs2MoneyOwnReceiptContext.");
             }
         }
-
-        public bool HasError() {
+        public virtual bool HasError() {
             if (Receipt == null) {
                 return true;
             }
@@ -77,8 +76,8 @@ namespace Gs2.Unity.UiKit.Gs2Money.Context
     {
         public OwnReceipt Receipt;
 
-        public void SetOwnReceipt(OwnReceipt Receipt) {
-            this.Receipt = Receipt;
+        public void SetOwnReceipt(OwnReceipt receipt) {
+            this.Receipt = receipt;
         }
     }
 

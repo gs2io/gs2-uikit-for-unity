@@ -87,7 +87,7 @@ namespace Gs2.Unity.UiKit.Gs2Enchant.Enabler
             }
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
             _fetcher = GetComponent<Gs2EnchantRarityParameterModelFetcher>() ?? GetComponentInParent<Gs2EnchantRarityParameterModelFetcher>(true);
             if (_fetcher == null) {

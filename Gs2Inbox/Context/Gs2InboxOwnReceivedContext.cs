@@ -42,8 +42,7 @@ namespace Gs2.Unity.UiKit.Gs2Inbox.Context
                 Debug.LogError($"{gameObject.GetFullPath()}: Received is not set in Gs2InboxOwnReceivedContext.");
             }
         }
-
-        public bool HasError() {
+        public virtual bool HasError() {
             if (Received == null) {
                 return true;
             }
@@ -77,8 +76,8 @@ namespace Gs2.Unity.UiKit.Gs2Inbox.Context
     {
         public OwnReceived Received;
 
-        public void SetOwnReceived(OwnReceived Received) {
-            this.Received = Received;
+        public void SetOwnReceived(OwnReceived received) {
+            this.Received = received;
         }
     }
 

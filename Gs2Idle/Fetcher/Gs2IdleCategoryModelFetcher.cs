@@ -127,7 +127,7 @@ namespace Gs2.Unity.UiKit.Gs2Idle.Fetcher
             }
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
             Context = GetComponent<Gs2IdleCategoryModelContext>() ?? GetComponentInParent<Gs2IdleCategoryModelContext>(true);
             if (Context == null) {

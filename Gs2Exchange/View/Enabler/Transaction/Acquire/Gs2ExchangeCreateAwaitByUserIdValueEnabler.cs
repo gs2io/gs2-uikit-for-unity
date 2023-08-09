@@ -99,7 +99,7 @@ namespace Gs2.Unity.UiKit.Gs2Exchange
             Update();
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
             _fetcher = GetComponent<Gs2ExchangeCreateAwaitByUserIdFetcher>() ?? GetComponentInParent<Gs2ExchangeCreateAwaitByUserIdFetcher>(true);
             if (_fetcher == null) {

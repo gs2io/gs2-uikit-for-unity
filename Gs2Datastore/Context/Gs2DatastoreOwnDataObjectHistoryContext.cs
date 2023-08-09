@@ -42,8 +42,7 @@ namespace Gs2.Unity.UiKit.Gs2Datastore.Context
                 Debug.LogError($"{gameObject.GetFullPath()}: DataObjectHistory is not set in Gs2DatastoreOwnDataObjectHistoryContext.");
             }
         }
-
-        public bool HasError() {
+        public virtual bool HasError() {
             if (DataObjectHistory == null) {
                 if (GetComponentInParent<Gs2DatastoreOwnDataObjectHistoryList>(true) != null) {
                     return false;
@@ -82,8 +81,8 @@ namespace Gs2.Unity.UiKit.Gs2Datastore.Context
     {
         public OwnDataObjectHistory DataObjectHistory;
 
-        public void SetOwnDataObjectHistory(OwnDataObjectHistory DataObjectHistory) {
-            this.DataObjectHistory = DataObjectHistory;
+        public void SetOwnDataObjectHistory(OwnDataObjectHistory dataObjectHistory) {
+            this.DataObjectHistory = dataObjectHistory;
         }
     }
 

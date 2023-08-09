@@ -43,7 +43,7 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Context
             }
         }
 
-        public bool HasError() {
+        public virtual bool HasError() {
             if (MoldModel == null) {
                 if (GetComponentInParent<Gs2FormationMoldModelList>(true) != null) {
                     return false;

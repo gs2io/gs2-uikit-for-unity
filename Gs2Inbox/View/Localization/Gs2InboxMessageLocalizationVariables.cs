@@ -89,7 +89,7 @@ namespace Gs2.Unity.UiKit.Gs2Inbox.Localization
             }
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
             _fetcher = GetComponent<Gs2InboxOwnMessageFetcher>() ?? GetComponentInParent<Gs2InboxOwnMessageFetcher>(true);
             if (_fetcher == null) {

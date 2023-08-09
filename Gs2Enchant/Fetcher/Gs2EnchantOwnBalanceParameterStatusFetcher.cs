@@ -130,7 +130,7 @@ namespace Gs2.Unity.UiKit.Gs2Enchant.Fetcher
             }
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
             Context = GetComponent<Gs2EnchantOwnBalanceParameterStatusContext>() ?? GetComponentInParent<Gs2EnchantOwnBalanceParameterStatusContext>(true);
             if (Context == null) {

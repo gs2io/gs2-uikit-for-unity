@@ -127,7 +127,7 @@ namespace Gs2.Unity.UiKit.Gs2Stamina.Fetcher
             }
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
             Context = GetComponent<Gs2StaminaStaminaModelContext>() ?? GetComponentInParent<Gs2StaminaStaminaModelContext>(true);
             if (Context == null) {

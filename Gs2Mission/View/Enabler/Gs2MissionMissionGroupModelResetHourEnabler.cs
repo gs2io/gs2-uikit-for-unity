@@ -93,7 +93,7 @@ namespace Gs2.Unity.UiKit.Gs2Mission
             }
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
             _fetcher = GetComponent<Gs2MissionMissionGroupModelFetcher>() ?? GetComponentInParent<Gs2MissionMissionGroupModelFetcher>(true);
             if (_fetcher == null) {

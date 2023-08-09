@@ -110,7 +110,7 @@ namespace Gs2.Unity.UiKit.Gs2Enhance.Label
             Update();
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
             _fetcher = GetComponent<Gs2EnhanceDeleteProgressByUserIdFetcher>() ?? GetComponentInParent<Gs2EnhanceDeleteProgressByUserIdFetcher>(true);
             _userDataFetcher = GetComponent<Gs2EnhanceOwnProgressFetcher>() ?? GetComponentInParent<Gs2EnhanceOwnProgressFetcher>(true);

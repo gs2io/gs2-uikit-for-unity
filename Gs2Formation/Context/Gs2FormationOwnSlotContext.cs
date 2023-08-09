@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
@@ -36,13 +38,17 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Context
 	[AddComponentMenu("GS2 UIKit/Formation/Slot/Context/Gs2FormationOwnSlotContext")]
     public partial class Gs2FormationOwnSlotContext : Gs2FormationFormModelContext
     {
-        public void Start() {
+        public new void Start() {
+            base.Start();
             if (Slot == null) {
                 Debug.LogError("Slot is not set in Gs2FormationOwnSlotContext.");
             }
         }
 
-        public bool HasError() {
+        public override bool HasError() {
+            if (!base.HasError()) {
+                return false;
+            }
             if (Slot == null) {
                 if (GetComponentInParent<Gs2FormationOwnSlotList>(true) != null) {
                     return false;

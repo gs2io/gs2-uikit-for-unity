@@ -79,7 +79,7 @@ namespace Gs2.Unity.UiKit.Gs2Formation
             }
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
             _fetcher = GetComponent<Gs2FormationOwnPropertyFormFetcher>() ?? GetComponentInParent<Gs2FormationOwnPropertyFormFetcher>(true);
             if (_fetcher == null) {

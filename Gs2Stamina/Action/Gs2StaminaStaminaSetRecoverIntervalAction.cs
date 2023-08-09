@@ -139,7 +139,7 @@ namespace Gs2.Unity.UiKit.Gs2Stamina
             }
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
             this._context = GetComponent<Gs2StaminaOwnStaminaContext>() ?? GetComponentInParent<Gs2StaminaOwnStaminaContext>(true);
             if (_context == null) {

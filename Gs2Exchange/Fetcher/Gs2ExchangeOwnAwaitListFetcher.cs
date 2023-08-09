@@ -136,7 +136,7 @@ namespace Gs2.Unity.UiKit.Gs2Exchange.Fetcher
             }
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
             Context = GetComponent<Gs2ExchangeNamespaceContext>() ?? GetComponentInParent<Gs2ExchangeNamespaceContext>(true);
             if (Context == null) {

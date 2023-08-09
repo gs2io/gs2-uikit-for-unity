@@ -42,8 +42,7 @@ namespace Gs2.Unity.UiKit.Gs2Schedule.Context
                 Debug.LogError($"{gameObject.GetFullPath()}: Event_ is not set in Gs2ScheduleOwnEventContext.");
             }
         }
-
-        public bool HasError() {
+        public virtual bool HasError() {
             if (Event_ == null) {
                 if (GetComponentInParent<Gs2ScheduleOwnEventList>(true) != null) {
                     return false;
@@ -82,8 +81,8 @@ namespace Gs2.Unity.UiKit.Gs2Schedule.Context
     {
         public OwnEvent Event_;
 
-        public void SetOwnEvent(OwnEvent Event_) {
-            this.Event_ = Event_;
+        public void SetOwnEvent(OwnEvent event_) {
+            this.Event_ = event_;
         }
     }
 

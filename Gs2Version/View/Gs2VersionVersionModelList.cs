@@ -101,7 +101,7 @@ namespace Gs2.Unity.UiKit.Gs2Version
             this.prefab.gameObject.SetActive(false);
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
             _fetcher = GetComponent<Gs2VersionVersionModelListFetcher>() ?? GetComponentInParent<Gs2VersionVersionModelListFetcher>(true);
             if (_fetcher == null) {

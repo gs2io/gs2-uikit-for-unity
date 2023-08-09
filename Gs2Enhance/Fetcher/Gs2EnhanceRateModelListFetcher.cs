@@ -134,7 +134,7 @@ namespace Gs2.Unity.UiKit.Gs2Enhance.Fetcher
             }
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
             Context = GetComponent<Gs2EnhanceNamespaceContext>() ?? GetComponentInParent<Gs2EnhanceNamespaceContext>(true);
             if (Context == null) {

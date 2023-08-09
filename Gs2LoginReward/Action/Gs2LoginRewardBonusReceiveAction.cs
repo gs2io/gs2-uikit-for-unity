@@ -121,7 +121,7 @@ namespace Gs2.Unity.UiKit.Gs2LoginReward
             }
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
             this._context = GetComponent<Gs2LoginRewardNamespaceContext>() ?? GetComponentInParent<Gs2LoginRewardNamespaceContext>(true);
             if (_context == null) {

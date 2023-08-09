@@ -108,8 +108,11 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Fetcher
             }
         }
 
-        public bool HasError()
+        public override bool HasError()
         {
+            if (!base.HasError()) {
+                return false;
+            }
             _fetcher = GetComponent<IConsumeActionsFetcher>() ?? GetComponentInParent<IConsumeActionsFetcher>(true);
             if (_fetcher == null) {
                 return true;

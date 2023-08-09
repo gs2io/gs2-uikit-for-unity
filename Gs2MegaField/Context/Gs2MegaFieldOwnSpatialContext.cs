@@ -42,8 +42,7 @@ namespace Gs2.Unity.UiKit.Gs2MegaField.Context
                 Debug.LogError($"{gameObject.GetFullPath()}: Spatial is not set in Gs2MegaFieldOwnSpatialContext.");
             }
         }
-
-        public bool HasError() {
+        public virtual bool HasError() {
             if (Spatial == null) {
                 return true;
             }
@@ -77,8 +76,8 @@ namespace Gs2.Unity.UiKit.Gs2MegaField.Context
     {
         public OwnSpatial Spatial;
 
-        public void SetOwnSpatial(OwnSpatial Spatial) {
-            this.Spatial = Spatial;
+        public void SetOwnSpatial(OwnSpatial spatial) {
+            this.Spatial = spatial;
         }
     }
 

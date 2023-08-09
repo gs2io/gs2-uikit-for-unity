@@ -43,7 +43,7 @@ namespace Gs2.Unity.UiKit.Gs2Realtime.Context
             }
         }
 
-        public bool HasError() {
+        public virtual bool HasError() {
             if (Namespace == null) {
                 return true;
             }

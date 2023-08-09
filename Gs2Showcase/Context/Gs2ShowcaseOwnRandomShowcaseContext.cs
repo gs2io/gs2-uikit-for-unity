@@ -42,8 +42,7 @@ namespace Gs2.Unity.UiKit.Gs2Showcase.Context
                 Debug.LogError($"{gameObject.GetFullPath()}: RandomShowcase is not set in Gs2ShowcaseOwnRandomShowcaseContext.");
             }
         }
-
-        public bool HasError() {
+        public virtual bool HasError() {
             if (RandomShowcase == null) {
                 return true;
             }
@@ -77,8 +76,8 @@ namespace Gs2.Unity.UiKit.Gs2Showcase.Context
     {
         public OwnRandomShowcase RandomShowcase;
 
-        public void SetOwnRandomShowcase(OwnRandomShowcase RandomShowcase) {
-            this.RandomShowcase = RandomShowcase;
+        public void SetOwnRandomShowcase(OwnRandomShowcase randomShowcase) {
+            this.RandomShowcase = randomShowcase;
         }
     }
 

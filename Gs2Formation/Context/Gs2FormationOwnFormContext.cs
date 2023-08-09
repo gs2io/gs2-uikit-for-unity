@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
@@ -37,13 +39,15 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Context
 	[AddComponentMenu("GS2 UIKit/Formation/Form/Context/Gs2FormationOwnFormContext")]
     public partial class Gs2FormationOwnFormContext : Gs2FormationFormModelContext
     {
-        public void Start() {
+        public new void Start() {
             if (Form == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Form is not set in Gs2FormationOwnFormContext.");
             }
         }
-
-        public bool HasError() {
+        public override bool HasError() {
+            if (!base.HasError()) {
+                return false;
+            }
             if (Form == null) {
                 if (GetComponentInParent<Gs2FormationOwnFormList>(true) != null) {
                     return false;
@@ -82,8 +86,14 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Context
     {
         public OwnForm Form;
 
-        public void SetOwnForm(OwnForm Form) {
-            this.Form = Form;
+        public void SetOwnForm(OwnForm form) {
+            this.FormModel = FormModel.New(
+                Namespace.New(
+                    Form.NamespaceName
+                ),
+                Form.MoldName
+            );
+            this.Form = form;
         }
     }
 

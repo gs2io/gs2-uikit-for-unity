@@ -43,7 +43,7 @@ namespace Gs2.Unity.UiKit.Gs2Exchange.Context
             }
         }
 
-        public bool HasError() {
+        public virtual bool HasError() {
             if (RateModel == null) {
                 if (GetComponentInParent<Gs2ExchangeRateModelList>(true) != null) {
                     return false;

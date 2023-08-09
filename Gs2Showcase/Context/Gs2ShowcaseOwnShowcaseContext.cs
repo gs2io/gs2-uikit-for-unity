@@ -42,8 +42,7 @@ namespace Gs2.Unity.UiKit.Gs2Showcase.Context
                 Debug.LogError($"{gameObject.GetFullPath()}: Showcase is not set in Gs2ShowcaseOwnShowcaseContext.");
             }
         }
-
-        public bool HasError() {
+        public virtual bool HasError() {
             if (Showcase == null) {
                 return true;
             }
@@ -77,8 +76,8 @@ namespace Gs2.Unity.UiKit.Gs2Showcase.Context
     {
         public OwnShowcase Showcase;
 
-        public void SetOwnShowcase(OwnShowcase Showcase) {
-            this.Showcase = Showcase;
+        public void SetOwnShowcase(OwnShowcase showcase) {
+            this.Showcase = showcase;
         }
     }
 

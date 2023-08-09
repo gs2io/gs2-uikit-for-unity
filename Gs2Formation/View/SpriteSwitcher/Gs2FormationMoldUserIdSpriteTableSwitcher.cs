@@ -80,7 +80,7 @@ namespace Gs2.Unity.UiKit.Gs2Formation.SpriteSwitcher
             }
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
             _fetcher = GetComponent<Gs2FormationOwnMoldFetcher>() ?? GetComponentInParent<Gs2FormationOwnMoldFetcher>(true);
             if (_fetcher == null) {

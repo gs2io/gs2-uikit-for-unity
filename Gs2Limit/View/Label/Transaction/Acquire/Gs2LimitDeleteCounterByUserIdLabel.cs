@@ -125,7 +125,7 @@ namespace Gs2.Unity.UiKit.Gs2Limit.Label
             Update();
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
             _fetcher = GetComponent<Gs2LimitDeleteCounterByUserIdFetcher>() ?? GetComponentInParent<Gs2LimitDeleteCounterByUserIdFetcher>(true);
             _userDataFetcher = GetComponent<Gs2LimitOwnCounterFetcher>() ?? GetComponentInParent<Gs2LimitOwnCounterFetcher>(true);

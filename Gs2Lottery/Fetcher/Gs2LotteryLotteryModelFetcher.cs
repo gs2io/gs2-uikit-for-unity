@@ -127,7 +127,7 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.Fetcher
             }
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
             Context = GetComponent<Gs2LotteryLotteryModelContext>() ?? GetComponentInParent<Gs2LotteryLotteryModelContext>(true);
             if (Context == null) {

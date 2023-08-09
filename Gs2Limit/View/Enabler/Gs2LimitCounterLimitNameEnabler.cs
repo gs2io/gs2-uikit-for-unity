@@ -87,7 +87,7 @@ namespace Gs2.Unity.UiKit.Gs2Limit.Enabler
             }
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
             _fetcher = GetComponent<Gs2LimitOwnCounterFetcher>() ?? GetComponentInParent<Gs2LimitOwnCounterFetcher>(true);
             if (_fetcher == null) {

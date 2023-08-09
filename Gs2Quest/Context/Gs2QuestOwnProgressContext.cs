@@ -42,8 +42,7 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Context
                 Debug.LogError($"{gameObject.GetFullPath()}: Progress is not set in Gs2QuestOwnProgressContext.");
             }
         }
-
-        public bool HasError() {
+        public virtual bool HasError() {
             if (Progress == null) {
                 return true;
             }
@@ -77,8 +76,8 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Context
     {
         public OwnProgress Progress;
 
-        public void SetOwnProgress(OwnProgress Progress) {
-            this.Progress = Progress;
+        public void SetOwnProgress(OwnProgress progress) {
+            this.Progress = progress;
         }
     }
 

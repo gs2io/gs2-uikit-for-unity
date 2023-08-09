@@ -116,7 +116,7 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Label
             Update();
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
             _fetcher = GetComponent<Gs2MissionReceiveByUserIdFetcher>() ?? GetComponentInParent<Gs2MissionReceiveByUserIdFetcher>(true);
             _userDataFetcher = GetComponent<Gs2MissionOwnCompleteFetcher>() ?? GetComponentInParent<Gs2MissionOwnCompleteFetcher>(true);

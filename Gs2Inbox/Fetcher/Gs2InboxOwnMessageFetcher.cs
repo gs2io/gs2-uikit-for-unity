@@ -136,7 +136,7 @@ namespace Gs2.Unity.UiKit.Gs2Inbox.Fetcher
             }
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
             Context = GetComponent<Gs2InboxOwnMessageContext>() ?? GetComponentInParent<Gs2InboxOwnMessageContext>(true);
             if (Context == null) {

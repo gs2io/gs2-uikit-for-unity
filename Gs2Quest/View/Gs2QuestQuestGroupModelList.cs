@@ -101,7 +101,7 @@ namespace Gs2.Unity.UiKit.Gs2Quest
             this.prefab.gameObject.SetActive(false);
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
             _fetcher = GetComponent<Gs2QuestQuestGroupModelListFetcher>() ?? GetComponentInParent<Gs2QuestQuestGroupModelListFetcher>(true);
             if (_fetcher == null) {

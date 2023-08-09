@@ -42,8 +42,7 @@ namespace Gs2.Unity.UiKit.Gs2Account.Context
                 Debug.LogError($"{gameObject.GetFullPath()}: TakeOver is not set in Gs2AccountOwnTakeOverContext.");
             }
         }
-
-        public bool HasError() {
+        public virtual bool HasError() {
             if (TakeOver == null) {
                 if (GetComponentInParent<Gs2AccountOwnTakeOverList>(true) != null) {
                     return false;
@@ -82,8 +81,8 @@ namespace Gs2.Unity.UiKit.Gs2Account.Context
     {
         public OwnTakeOver TakeOver;
 
-        public void SetOwnTakeOver(OwnTakeOver TakeOver) {
-            this.TakeOver = TakeOver;
+        public void SetOwnTakeOver(OwnTakeOver takeOver) {
+            this.TakeOver = takeOver;
         }
     }
 

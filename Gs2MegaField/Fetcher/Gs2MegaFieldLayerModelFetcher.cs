@@ -129,7 +129,7 @@ namespace Gs2.Unity.UiKit.Gs2MegaField.Fetcher
             }
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
             Context = GetComponent<Gs2MegaFieldLayerModelContext>() ?? GetComponentInParent<Gs2MegaFieldLayerModelContext>(true);
             if (Context == null) {

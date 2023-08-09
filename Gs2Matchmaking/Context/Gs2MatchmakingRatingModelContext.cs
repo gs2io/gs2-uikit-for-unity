@@ -43,7 +43,7 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking.Context
             }
         }
 
-        public bool HasError() {
+        public virtual bool HasError() {
             if (RatingModel == null) {
                 if (GetComponentInParent<Gs2MatchmakingRatingModelList>(true) != null) {
                     return false;

@@ -123,7 +123,7 @@ namespace Gs2.Unity.UiKit.Gs2Account.Fetcher
             }
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
             Context = GetComponent<Gs2AccountAccountContext>() ?? GetComponentInParent<Gs2AccountAccountContext>(true);
             if (Context == null) {

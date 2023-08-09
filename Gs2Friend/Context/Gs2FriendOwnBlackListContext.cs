@@ -42,8 +42,7 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Context
                 Debug.LogError($"{gameObject.GetFullPath()}: BlackList is not set in Gs2FriendOwnBlackListContext.");
             }
         }
-
-        public bool HasError() {
+        public virtual bool HasError() {
             if (BlackList == null) {
                 if (GetComponentInParent<Gs2FriendOwnBlackListList>(true) != null) {
                     return false;
@@ -82,8 +81,8 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Context
     {
         public OwnBlackList BlackList;
 
-        public void SetOwnBlackList(OwnBlackList BlackList) {
-            this.BlackList = BlackList;
+        public void SetOwnBlackList(OwnBlackList blackList) {
+            this.BlackList = blackList;
         }
     }
 

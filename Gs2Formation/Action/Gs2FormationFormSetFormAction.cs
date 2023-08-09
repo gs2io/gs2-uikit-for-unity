@@ -140,7 +140,7 @@ namespace Gs2.Unity.UiKit.Gs2Formation
             }
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
             this._context = GetComponent<Gs2FormationOwnFormContext>() ?? GetComponentInParent<Gs2FormationOwnFormContext>(true);
             if (_context == null) {

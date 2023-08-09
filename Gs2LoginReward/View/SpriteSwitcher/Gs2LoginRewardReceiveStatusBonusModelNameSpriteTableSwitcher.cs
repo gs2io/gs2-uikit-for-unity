@@ -80,7 +80,7 @@ namespace Gs2.Unity.UiKit.Gs2LoginReward.SpriteSwitcher
             }
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
             _fetcher = GetComponent<Gs2LoginRewardOwnReceiveStatusFetcher>() ?? GetComponentInParent<Gs2LoginRewardOwnReceiveStatusFetcher>(true);
             if (_fetcher == null) {

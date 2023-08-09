@@ -43,7 +43,7 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Context
             }
         }
 
-        public bool HasError() {
+        public virtual bool HasError() {
             if (MissionGroupModel == null) {
                 if (GetComponentInParent<Gs2MissionMissionGroupModelList>(true) != null) {
                     return false;

@@ -127,7 +127,7 @@ namespace Gs2.Unity.UiKit.Gs2Realtime.Fetcher
             }
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
             Context = GetComponent<Gs2RealtimeRoomContext>() ?? GetComponentInParent<Gs2RealtimeRoomContext>(true);
             if (Context == null) {

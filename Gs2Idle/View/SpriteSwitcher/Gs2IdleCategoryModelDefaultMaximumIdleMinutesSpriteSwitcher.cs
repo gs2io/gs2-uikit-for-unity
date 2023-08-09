@@ -103,7 +103,7 @@ namespace Gs2.Unity.UiKit.Gs2Idle
             }
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
             _fetcher = GetComponent<Gs2IdleCategoryModelFetcher>() ?? GetComponentInParent<Gs2IdleCategoryModelFetcher>(true);
             if (_fetcher == null) {

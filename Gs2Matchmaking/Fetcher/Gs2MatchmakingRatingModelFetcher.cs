@@ -127,7 +127,7 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking.Fetcher
             }
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
             Context = GetComponent<Gs2MatchmakingRatingModelContext>() ?? GetComponentInParent<Gs2MatchmakingRatingModelContext>(true);
             if (Context == null) {

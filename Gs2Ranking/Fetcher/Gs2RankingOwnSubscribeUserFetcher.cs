@@ -126,7 +126,7 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Fetcher
             }
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
             Context = GetComponent<Gs2RankingOwnSubscribeUserContext>() ?? GetComponentInParent<Gs2RankingOwnSubscribeUserContext>(true);
             if (Context == null) {

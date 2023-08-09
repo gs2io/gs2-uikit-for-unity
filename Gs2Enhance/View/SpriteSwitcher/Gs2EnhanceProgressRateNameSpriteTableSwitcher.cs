@@ -80,7 +80,7 @@ namespace Gs2.Unity.UiKit.Gs2Enhance.SpriteSwitcher
             }
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
             _fetcher = GetComponent<Gs2EnhanceOwnProgressFetcher>() ?? GetComponentInParent<Gs2EnhanceOwnProgressFetcher>(true);
             if (_fetcher == null) {

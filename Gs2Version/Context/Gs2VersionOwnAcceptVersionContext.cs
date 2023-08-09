@@ -42,8 +42,7 @@ namespace Gs2.Unity.UiKit.Gs2Version.Context
                 Debug.LogError($"{gameObject.GetFullPath()}: AcceptVersion is not set in Gs2VersionOwnAcceptVersionContext.");
             }
         }
-
-        public bool HasError() {
+        public virtual bool HasError() {
             if (AcceptVersion == null) {
                 if (GetComponentInParent<Gs2VersionOwnAcceptVersionList>(true) != null) {
                     return false;
@@ -82,8 +81,8 @@ namespace Gs2.Unity.UiKit.Gs2Version.Context
     {
         public OwnAcceptVersion AcceptVersion;
 
-        public void SetOwnAcceptVersion(OwnAcceptVersion AcceptVersion) {
-            this.AcceptVersion = AcceptVersion;
+        public void SetOwnAcceptVersion(OwnAcceptVersion acceptVersion) {
+            this.AcceptVersion = acceptVersion;
         }
     }
 

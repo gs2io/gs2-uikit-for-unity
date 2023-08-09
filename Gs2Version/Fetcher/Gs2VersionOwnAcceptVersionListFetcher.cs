@@ -136,7 +136,7 @@ namespace Gs2.Unity.UiKit.Gs2Version.Fetcher
             }
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
             Context = GetComponent<Gs2VersionNamespaceContext>() ?? GetComponentInParent<Gs2VersionNamespaceContext>(true);
             if (Context == null) {

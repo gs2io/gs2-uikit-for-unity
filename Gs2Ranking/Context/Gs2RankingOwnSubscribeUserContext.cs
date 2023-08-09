@@ -42,8 +42,7 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Context
                 Debug.LogError($"{gameObject.GetFullPath()}: SubscribeUser is not set in Gs2RankingOwnSubscribeUserContext.");
             }
         }
-
-        public bool HasError() {
+        public virtual bool HasError() {
             if (SubscribeUser == null) {
                 if (GetComponentInParent<Gs2RankingOwnSubscribeUserList>(true) != null) {
                     return false;
@@ -82,8 +81,8 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Context
     {
         public OwnSubscribeUser SubscribeUser;
 
-        public void SetOwnSubscribeUser(OwnSubscribeUser SubscribeUser) {
-            this.SubscribeUser = SubscribeUser;
+        public void SetOwnSubscribeUser(OwnSubscribeUser subscribeUser) {
+            this.SubscribeUser = subscribeUser;
         }
     }
 

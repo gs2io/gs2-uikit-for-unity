@@ -128,7 +128,7 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Fetcher
             }
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
             Context = GetComponent<Gs2FriendOwnProfileContext>() ?? GetComponentInParent<Gs2FriendOwnProfileContext>(true);
             if (Context == null) {

@@ -99,7 +99,7 @@ namespace Gs2.Unity.UiKit.Gs2Friend
             this.prefab.gameObject.SetActive(false);
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
             _fetcher = GetComponent<Gs2FriendOwnBlackListListFetcher>() ?? GetComponentInParent<Gs2FriendOwnBlackListListFetcher>(true);
             if (_fetcher == null) {

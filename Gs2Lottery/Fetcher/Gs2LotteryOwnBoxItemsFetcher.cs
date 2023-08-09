@@ -129,7 +129,7 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.Fetcher
             }
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
             Context = GetComponent<Gs2LotteryOwnBoxItemsContext>() ?? GetComponentInParent<Gs2LotteryOwnBoxItemsContext>(true);
             if (Context == null) {

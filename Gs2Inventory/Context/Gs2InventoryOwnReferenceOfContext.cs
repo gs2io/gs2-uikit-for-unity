@@ -42,8 +42,7 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Context
                 Debug.LogError($"{gameObject.GetFullPath()}: ReferenceOf is not set in Gs2InventoryOwnReferenceOfContext.");
             }
         }
-
-        public bool HasError() {
+        public virtual bool HasError() {
             if (ReferenceOf == null) {
                 return true;
             }
@@ -77,8 +76,8 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Context
     {
         public OwnReferenceOf ReferenceOf;
 
-        public void SetOwnReferenceOf(OwnReferenceOf ReferenceOf) {
-            this.ReferenceOf = ReferenceOf;
+        public void SetOwnReferenceOf(OwnReferenceOf referenceOf) {
+            this.ReferenceOf = referenceOf;
         }
     }
 

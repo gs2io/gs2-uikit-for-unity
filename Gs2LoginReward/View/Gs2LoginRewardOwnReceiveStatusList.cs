@@ -101,7 +101,7 @@ namespace Gs2.Unity.UiKit.Gs2LoginReward
             this.prefab.gameObject.SetActive(false);
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
             _fetcher = GetComponent<Gs2LoginRewardOwnReceiveStatusListFetcher>() ?? GetComponentInParent<Gs2LoginRewardOwnReceiveStatusListFetcher>(true);
             if (_fetcher == null) {

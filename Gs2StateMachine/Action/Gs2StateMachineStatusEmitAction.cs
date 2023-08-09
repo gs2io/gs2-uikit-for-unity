@@ -138,7 +138,7 @@ namespace Gs2.Unity.UiKit.Gs2StateMachine
             }
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
             this._context = GetComponent<Gs2StateMachineOwnStatusContext>() ?? GetComponentInParent<Gs2StateMachineOwnStatusContext>(true);
             if (_context == null) {

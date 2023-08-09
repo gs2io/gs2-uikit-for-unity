@@ -127,7 +127,7 @@ namespace Gs2.Unity.UiKit.Gs2Experience.Fetcher
             }
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
             Context = GetComponent<Gs2ExperienceExperienceModelContext>() ?? GetComponentInParent<Gs2ExperienceExperienceModelContext>(true);
             if (Context == null) {

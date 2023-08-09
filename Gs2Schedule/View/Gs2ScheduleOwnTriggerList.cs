@@ -101,7 +101,7 @@ namespace Gs2.Unity.UiKit.Gs2Schedule
             this.prefab.gameObject.SetActive(false);
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
             _fetcher = GetComponent<Gs2ScheduleOwnTriggerListFetcher>() ?? GetComponentInParent<Gs2ScheduleOwnTriggerListFetcher>(true);
             if (_fetcher == null) {

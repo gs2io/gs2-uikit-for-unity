@@ -42,8 +42,7 @@ namespace Gs2.Unity.UiKit.Gs2SerialKey.Context
                 Debug.LogError($"{gameObject.GetFullPath()}: SerialKey is not set in Gs2SerialKeyOwnSerialKeyContext.");
             }
         }
-
-        public bool HasError() {
+        public virtual bool HasError() {
             if (SerialKey == null) {
                 return true;
             }
@@ -77,8 +76,8 @@ namespace Gs2.Unity.UiKit.Gs2SerialKey.Context
     {
         public OwnSerialKey SerialKey;
 
-        public void SetOwnSerialKey(OwnSerialKey SerialKey) {
-            this.SerialKey = SerialKey;
+        public void SetOwnSerialKey(OwnSerialKey serialKey) {
+            this.SerialKey = serialKey;
         }
     }
 

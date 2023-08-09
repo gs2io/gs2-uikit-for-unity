@@ -42,8 +42,7 @@ namespace Gs2.Unity.UiKit.Gs2Showcase.Context
                 Debug.LogError($"{gameObject.GetFullPath()}: SalesItemGroup is not set in Gs2ShowcaseOwnSalesItemGroupContext.");
             }
         }
-
-        public bool HasError() {
+        public virtual bool HasError() {
             if (SalesItemGroup == null) {
                 return true;
             }
@@ -77,8 +76,8 @@ namespace Gs2.Unity.UiKit.Gs2Showcase.Context
     {
         public OwnSalesItemGroup SalesItemGroup;
 
-        public void SetOwnSalesItemGroup(OwnSalesItemGroup SalesItemGroup) {
-            this.SalesItemGroup = SalesItemGroup;
+        public void SetOwnSalesItemGroup(OwnSalesItemGroup salesItemGroup) {
+            this.SalesItemGroup = salesItemGroup;
         }
     }
 

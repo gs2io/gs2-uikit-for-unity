@@ -103,7 +103,7 @@ namespace Gs2.Unity.UiKit.Gs2Experience
             this.prefab.gameObject.SetActive(false);
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
             _fetcher = GetComponent<Gs2ExperienceOwnStatusListFetcher>() ?? GetComponentInParent<Gs2ExperienceOwnStatusListFetcher>(true);
             if (_fetcher == null) {

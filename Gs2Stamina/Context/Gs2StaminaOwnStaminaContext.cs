@@ -37,13 +37,15 @@ namespace Gs2.Unity.UiKit.Gs2Stamina.Context
 	[AddComponentMenu("GS2 UIKit/Stamina/Stamina/Context/Gs2StaminaOwnStaminaContext")]
     public partial class Gs2StaminaOwnStaminaContext : Gs2StaminaStaminaModelContext
     {
-        public void Start() {
+        public new void Start() {
             if (Stamina == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Stamina is not set in Gs2StaminaOwnStaminaContext.");
             }
         }
-
-        public bool HasError() {
+        public override bool HasError() {
+            if (!base.HasError()) {
+                return false;
+            }
             if (Stamina == null) {
                 if (GetComponentInParent<Gs2StaminaOwnStaminaList>(true) != null) {
                     return false;
@@ -82,8 +84,14 @@ namespace Gs2.Unity.UiKit.Gs2Stamina.Context
     {
         public OwnStamina Stamina;
 
-        public void SetOwnStamina(OwnStamina Stamina) {
-            this.Stamina = Stamina;
+        public void SetOwnStamina(OwnStamina stamina) {
+            this.StaminaModel = StaminaModel.New(
+                Namespace.New(
+                    Stamina.NamespaceName
+                ),
+                Stamina.StaminaName
+            );
+            this.Stamina = stamina;
         }
     }
 

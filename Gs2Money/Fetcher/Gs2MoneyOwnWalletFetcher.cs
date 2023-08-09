@@ -129,7 +129,7 @@ namespace Gs2.Unity.UiKit.Gs2Money.Fetcher
             }
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
             Context = GetComponent<Gs2MoneyOwnWalletContext>() ?? GetComponentInParent<Gs2MoneyOwnWalletContext>(true);
             if (Context == null) {

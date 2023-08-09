@@ -42,8 +42,7 @@ namespace Gs2.Unity.UiKit.Gs2Chat.Context
                 Debug.LogError($"{gameObject.GetFullPath()}: Subscribe is not set in Gs2ChatOwnSubscribeContext.");
             }
         }
-
-        public bool HasError() {
+        public virtual bool HasError() {
             if (Subscribe == null) {
                 if (GetComponentInParent<Gs2ChatOwnSubscribeList>(true) != null) {
                     return false;
@@ -82,8 +81,8 @@ namespace Gs2.Unity.UiKit.Gs2Chat.Context
     {
         public OwnSubscribe Subscribe;
 
-        public void SetOwnSubscribe(OwnSubscribe Subscribe) {
-            this.Subscribe = Subscribe;
+        public void SetOwnSubscribe(OwnSubscribe subscribe) {
+            this.Subscribe = subscribe;
         }
     }
 

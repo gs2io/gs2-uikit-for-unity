@@ -128,7 +128,7 @@ namespace Gs2.Unity.UiKit.Gs2StateMachine.Label
             Update();
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
             _fetcher = GetComponent<Gs2StateMachineStartStateMachineByUserIdFetcher>() ?? GetComponentInParent<Gs2StateMachineStartStateMachineByUserIdFetcher>(true);
             _userDataFetcher = GetComponent<Gs2StateMachineOwnStatusFetcher>() ?? GetComponentInParent<Gs2StateMachineOwnStatusFetcher>(true);

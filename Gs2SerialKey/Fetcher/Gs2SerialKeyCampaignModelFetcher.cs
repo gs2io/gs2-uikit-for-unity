@@ -127,7 +127,7 @@ namespace Gs2.Unity.UiKit.Gs2SerialKey.Fetcher
             }
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
             Context = GetComponent<Gs2SerialKeyCampaignModelContext>() ?? GetComponentInParent<Gs2SerialKeyCampaignModelContext>(true);
             if (Context == null) {

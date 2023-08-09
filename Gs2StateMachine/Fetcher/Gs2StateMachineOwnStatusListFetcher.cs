@@ -136,7 +136,7 @@ namespace Gs2.Unity.UiKit.Gs2StateMachine.Fetcher
             }
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
             Context = GetComponent<Gs2StateMachineNamespaceContext>() ?? GetComponentInParent<Gs2StateMachineNamespaceContext>(true);
             if (Context == null) {

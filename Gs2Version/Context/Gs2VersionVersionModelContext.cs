@@ -43,7 +43,7 @@ namespace Gs2.Unity.UiKit.Gs2Version.Context
             }
         }
 
-        public bool HasError() {
+        public virtual bool HasError() {
             if (VersionModel == null) {
                 if (GetComponentInParent<Gs2VersionVersionModelList>(true) != null) {
                     return false;

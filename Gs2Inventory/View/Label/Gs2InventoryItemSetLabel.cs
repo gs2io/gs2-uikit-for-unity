@@ -12,11 +12,17 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
- * deny overwrite
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
+// ReSharper disable RedundantNameQualifier
+// ReSharper disable RedundantAssignment
+// ReSharper disable NotAccessedVariable
+// ReSharper disable RedundantUsingDirective
+// ReSharper disable Unity.NoNullPropagation
+// ReSharper disable InconsistentNaming
+
+#pragma warning disable CS0472
 
 using System;
 using Gs2.Core.Util;
@@ -31,122 +37,51 @@ namespace Gs2.Unity.UiKit.Gs2Inventory
     /// Main
     /// </summary>
 
-	[AddComponentMenu("GS2 UIKit/Inventory/ItemSet/View/Gs2InventoryItemSetLabel")]
+	[AddComponentMenu("GS2 UIKit/Inventory/ItemSet/View/Label/Gs2InventoryItemSetLabel")]
     public partial class Gs2InventoryItemSetLabel : MonoBehaviour
     {
         public void Update()
         {
             if (_fetcher.Fetched && _fetcher.ItemSet != null)
             {
-                if (index < _fetcher.ItemSet.Count) {
-                    var expiresAt = _fetcher.ItemSet[index].ExpiresAt == null
-                        ? DateTime.Now
-                        : UnixTime.FromUnixTime(_fetcher.ItemSet[index].ExpiresAt).ToLocalTime();
-                    onUpdate?.Invoke(
-                        format.Replace(
-                            "{itemSetId}",
-                            $"{_fetcher?.ItemSet?[index].ItemSetId}"
-                        ).Replace(
-                            "{name}",
-                            $"{_fetcher?.ItemSet?[index].Name}"
-                        ).Replace(
-                            "{inventoryName}",
-                            $"{_fetcher?.ItemSet?[index].InventoryName}"
-                        ).Replace(
-                            "{itemName}",
-                            $"{_fetcher?.ItemSet?[index].ItemName}"
-                        ).Replace(
-                            "{count}",
-                            $"{_fetcher?.ItemSet?[index].Count}"
-                        ).Replace(
-                            "{sortValue}",
-                            $"{_fetcher?.ItemSet?[index].SortValue}"
-                        ).Replace(
-                            "{expiresAt:yyyy}",
-                            expiresAt.ToString("yyyy")
-                        ).Replace(
-                            "{expiresAt:yy}",
-                            expiresAt.ToString("yy")
-                        ).Replace(
-                            "{expiresAt:MM}",
-                            expiresAt.ToString("MM")
-                        ).Replace(
-                            "{expiresAt:MMM}",
-                            expiresAt.ToString("MMM")
-                        ).Replace(
-                            "{expiresAt:dd}",
-                            expiresAt.ToString("dd")
-                        ).Replace(
-                            "{expiresAt:hh}",
-                            expiresAt.ToString("hh")
-                        ).Replace(
-                            "{expiresAt:HH}",
-                            expiresAt.ToString("HH")
-                        ).Replace(
-                            "{expiresAt:tt}",
-                            expiresAt.ToString("tt")
-                        ).Replace(
-                            "{expiresAt:mm}",
-                            expiresAt.ToString("mm")
-                        ).Replace(
-                            "{expiresAt:ss}",
-                            expiresAt.ToString("ss")
-                        )
-                    );
-                }
-                else {
-                    onUpdate?.Invoke(
-                        format.Replace(
-                            "{itemSetId}",
-                            ""
-                        ).Replace(
-                            "{name}",
-                            ""
-                        ).Replace(
-                            "{inventoryName}",
-                            ""
-                        ).Replace(
-                            "{itemName}",
-                            ""
-                        ).Replace(
-                            "{count}",
-                            "0"
-                        ).Replace(
-                            "{sortValue}",
-                            "0"
-                        ).Replace(
-                            "{expiresAt:yyyy}",
-                            "0000"
-                        ).Replace(
-                            "{expiresAt:yy}",
-                            "00"
-                        ).Replace(
-                            "{expiresAt:MM}",
-                            "00"
-                        ).Replace(
-                            "{expiresAt:MMM}",
-                            "NaN"
-                        ).Replace(
-                            "{expiresAt:dd}",
-                            "00"
-                        ).Replace(
-                            "{expiresAt:hh}",
-                            "00"
-                        ).Replace(
-                            "{expiresAt:HH}",
-                            "00"
-                        ).Replace(
-                            "{expiresAt:tt}",
-                            "00"
-                        ).Replace(
-                            "{expiresAt:mm}",
-                            "00"
-                        ).Replace(
-                            "{expiresAt:ss}",
-                            "00"
-                        )
-                    );
-                }
+                var expiresAt = _fetcher.ItemSet[index].ExpiresAt == null ? DateTime.Now : UnixTime.FromUnixTime(_fetcher.ItemSet[index].ExpiresAt).ToLocalTime();
+                onUpdate?.Invoke(
+                    format.Replace(
+                        "{itemSetId}", $"{_fetcher?.ItemSet?[index].ItemSetId}"
+                    ).Replace(
+                        "{name}", $"{_fetcher?.ItemSet?[index].Name}"
+                    ).Replace(
+                        "{inventoryName}", $"{_fetcher?.ItemSet?[index].InventoryName}"
+                    ).Replace(
+                        "{itemName}", $"{_fetcher?.ItemSet?[index].ItemName}"
+                    ).Replace(
+                        "{count}", $"{_fetcher?.ItemSet?[index].Count}"
+                    ).Replace(
+                        "{sortValue}", $"{_fetcher?.ItemSet?[index].SortValue}"
+                    ).Replace(
+                        "{expiresAt:yyyy}", expiresAt.ToString("yyyy")
+                    ).Replace(
+                        "{expiresAt:yy}", expiresAt.ToString("yy")
+                    ).Replace(
+                        "{expiresAt:MM}", expiresAt.ToString("MM")
+                    ).Replace(
+                        "{expiresAt:MMM}", expiresAt.ToString("MMM")
+                    ).Replace(
+                        "{expiresAt:dd}", expiresAt.ToString("dd")
+                    ).Replace(
+                        "{expiresAt:hh}", expiresAt.ToString("hh")
+                    ).Replace(
+                        "{expiresAt:HH}", expiresAt.ToString("HH")
+                    ).Replace(
+                        "{expiresAt:tt}", expiresAt.ToString("tt")
+                    ).Replace(
+                        "{expiresAt:mm}", expiresAt.ToString("mm")
+                    ).Replace(
+                        "{expiresAt:ss}", expiresAt.ToString("ss")
+                    ).Replace(
+                        "{referenceOf}", $"{_fetcher?.ItemSet?[index].ReferenceOf}"
+                    )
+                );
             }
         }
     }
@@ -161,7 +96,7 @@ namespace Gs2.Unity.UiKit.Gs2Inventory
 
         public void Awake()
         {
-            _fetcher = GetComponentInParent<Gs2InventoryOwnItemSetFetcher>();
+            _fetcher = GetComponent<Gs2InventoryOwnItemSetFetcher>() ?? GetComponentInParent<Gs2InventoryOwnItemSetFetcher>();
 
             if (_fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2InventoryOwnItemSetFetcher.");
@@ -169,6 +104,15 @@ namespace Gs2.Unity.UiKit.Gs2Inventory
             }
 
             Update();
+        }
+
+        public virtual bool HasError()
+        {
+            _fetcher = GetComponent<Gs2InventoryOwnItemSetFetcher>() ?? GetComponentInParent<Gs2InventoryOwnItemSetFetcher>(true);
+            if (_fetcher == null) {
+                return true;
+            }
+            return false;
         }
     }
 

@@ -87,7 +87,7 @@ namespace Gs2.Unity.UiKit.Gs2Showcase.Enabler
             }
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
             _fetcher = GetComponent<Gs2ShowcaseOwnShowcaseFetcher>() ?? GetComponentInParent<Gs2ShowcaseOwnShowcaseFetcher>(true);
             if (_fetcher == null) {

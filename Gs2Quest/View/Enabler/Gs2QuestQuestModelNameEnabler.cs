@@ -87,7 +87,7 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Enabler
             }
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
             _fetcher = GetComponent<Gs2QuestQuestModelFetcher>() ?? GetComponentInParent<Gs2QuestQuestModelFetcher>(true);
             if (_fetcher == null) {

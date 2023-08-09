@@ -116,7 +116,7 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Label
             Update();
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
             _fetcher = GetComponent<Gs2FormationSetMoldCapacityByUserIdFetcher>() ?? GetComponentInParent<Gs2FormationSetMoldCapacityByUserIdFetcher>(true);
             _userDataFetcher = GetComponent<Gs2FormationOwnMoldFetcher>() ?? GetComponentInParent<Gs2FormationOwnMoldFetcher>(true);

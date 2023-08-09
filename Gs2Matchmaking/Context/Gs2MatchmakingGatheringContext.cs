@@ -43,7 +43,7 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking.Context
             }
         }
 
-        public bool HasError() {
+        public virtual bool HasError() {
             if (Gathering == null) {
                 return true;
             }

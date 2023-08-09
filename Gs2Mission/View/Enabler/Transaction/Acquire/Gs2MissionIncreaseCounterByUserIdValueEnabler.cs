@@ -99,7 +99,7 @@ namespace Gs2.Unity.UiKit.Gs2Mission
             Update();
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
             _fetcher = GetComponent<Gs2MissionIncreaseCounterByUserIdFetcher>() ?? GetComponentInParent<Gs2MissionIncreaseCounterByUserIdFetcher>(true);
             if (_fetcher == null) {

@@ -51,11 +51,9 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Fetcher
     {
         private IEnumerator Fetch()
         {
-            var retryWaitSecond = 1;
-            Gs2Exception e;
             while (true)
             {
-                if (_gameSessionHolder != null && _gameSessionHolder.Initialized && 
+                if (_gameSessionHolder != null && _gameSessionHolder.Initialized &&
                     _clientHolder != null && _clientHolder.Initialized &&
                     Context != null)
                 {
@@ -78,7 +76,7 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Fetcher
                     Fetched = true;
                 }
                 else {
-                    yield return new WaitForSeconds(1);
+                    yield return new WaitForSeconds(0.1f);
                 }
             }
             // ReSharper disable once IteratorNeverReturns
@@ -98,7 +96,7 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Fetcher
     /// <summary>
     /// Dependent components
     /// </summary>
-    
+
     public partial class Gs2FriendOwnBlackListListFetcher
     {
         private Gs2ClientHolder _clientHolder;
@@ -117,7 +115,7 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Fetcher
             }
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
             Context = GetComponent<Gs2FriendNamespaceContext>() ?? GetComponentInParent<Gs2FriendNamespaceContext>(true);
             if (Context == null) {

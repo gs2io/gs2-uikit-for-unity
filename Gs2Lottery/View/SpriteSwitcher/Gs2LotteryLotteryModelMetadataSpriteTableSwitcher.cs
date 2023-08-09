@@ -80,7 +80,7 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.SpriteSwitcher
             }
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
             _fetcher = GetComponent<Gs2LotteryLotteryModelFetcher>() ?? GetComponentInParent<Gs2LotteryLotteryModelFetcher>(true);
             if (_fetcher == null) {

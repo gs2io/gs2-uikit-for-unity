@@ -42,8 +42,7 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Context
                 Debug.LogError($"{gameObject.GetFullPath()}: Profile is not set in Gs2FriendOwnProfileContext.");
             }
         }
-
-        public bool HasError() {
+        public virtual bool HasError() {
             if (Profile == null) {
                 return true;
             }
@@ -77,8 +76,8 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Context
     {
         public OwnProfile Profile;
 
-        public void SetOwnProfile(OwnProfile Profile) {
-            this.Profile = Profile;
+        public void SetOwnProfile(OwnProfile profile) {
+            this.Profile = profile;
         }
     }
 

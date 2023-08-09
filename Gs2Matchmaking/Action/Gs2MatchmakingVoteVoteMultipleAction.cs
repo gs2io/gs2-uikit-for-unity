@@ -134,7 +134,7 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking
             }
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
             this._context = GetComponent<Gs2MatchmakingVoteContext>() ?? GetComponentInParent<Gs2MatchmakingVoteContext>(true);
             if (_context == null) {

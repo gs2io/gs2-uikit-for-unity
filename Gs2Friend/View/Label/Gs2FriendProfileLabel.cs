@@ -79,7 +79,7 @@ namespace Gs2.Unity.UiKit.Gs2Friend
             Update();
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
             _fetcher = GetComponent<Gs2FriendOwnProfileFetcher>() ?? GetComponentInParent<Gs2FriendOwnProfileFetcher>(true);
             if (_fetcher == null) {

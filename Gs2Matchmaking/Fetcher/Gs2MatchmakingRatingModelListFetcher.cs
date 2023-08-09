@@ -134,7 +134,7 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking.Fetcher
             }
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
             Context = GetComponent<Gs2MatchmakingNamespaceContext>() ?? GetComponentInParent<Gs2MatchmakingNamespaceContext>(true);
             if (Context == null) {

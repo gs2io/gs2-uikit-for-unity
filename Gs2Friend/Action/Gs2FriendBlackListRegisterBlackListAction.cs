@@ -136,7 +136,7 @@ namespace Gs2.Unity.UiKit.Gs2Friend
             }
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
             this._context = GetComponent<Gs2FriendOwnBlackListContext>() ?? GetComponentInParent<Gs2FriendOwnBlackListContext>(true);
             if (_context == null) {

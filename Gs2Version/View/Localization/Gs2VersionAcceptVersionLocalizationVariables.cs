@@ -74,7 +74,7 @@ namespace Gs2.Unity.UiKit.Gs2Version.Localization
             }
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
             _fetcher = GetComponent<Gs2VersionOwnAcceptVersionFetcher>() ?? GetComponentInParent<Gs2VersionOwnAcceptVersionFetcher>(true);
             if (_fetcher == null) {

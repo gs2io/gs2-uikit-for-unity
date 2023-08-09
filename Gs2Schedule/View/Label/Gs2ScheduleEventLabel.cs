@@ -135,7 +135,7 @@ namespace Gs2.Unity.UiKit.Gs2Schedule
             Update();
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
             _fetcher = GetComponent<Gs2ScheduleOwnEventFetcher>() ?? GetComponentInParent<Gs2ScheduleOwnEventFetcher>(true);
             if (_fetcher == null) {

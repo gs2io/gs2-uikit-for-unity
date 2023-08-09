@@ -80,7 +80,7 @@ namespace Gs2.Unity.UiKit.Gs2MegaField.SpriteSwitcher
             }
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
             _fetcher = GetComponent<Gs2MegaFieldAreaModelFetcher>() ?? GetComponentInParent<Gs2MegaFieldAreaModelFetcher>(true);
             if (_fetcher == null) {

@@ -128,7 +128,7 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Label
             Update();
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
             _fetcher = GetComponent<Gs2QuestCreateProgressByUserIdFetcher>() ?? GetComponentInParent<Gs2QuestCreateProgressByUserIdFetcher>(true);
             _userDataFetcher = GetComponent<Gs2QuestOwnProgressFetcher>() ?? GetComponentInParent<Gs2QuestOwnProgressFetcher>(true);

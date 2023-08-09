@@ -43,7 +43,7 @@ namespace Gs2.Unity.UiKit.Gs2Inbox.Context
             }
         }
 
-        public bool HasError() {
+        public virtual bool HasError() {
             if (GlobalMessage == null) {
                 return true;
             }

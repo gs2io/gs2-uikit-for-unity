@@ -43,7 +43,7 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Context
             }
         }
 
-        public bool HasError() {
+        public virtual bool HasError() {
             if (SimpleItemModel == null) {
                 if (GetComponentInParent<Gs2InventorySimpleItemModelList>(true) != null) {
                     return false;

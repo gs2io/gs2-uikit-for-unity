@@ -42,8 +42,7 @@ namespace Gs2.Unity.UiKit.Gs2Account.Context
                 Debug.LogError($"{gameObject.GetFullPath()}: DataOwner is not set in Gs2AccountOwnDataOwnerContext.");
             }
         }
-
-        public bool HasError() {
+        public virtual bool HasError() {
             if (DataOwner == null) {
                 return true;
             }
@@ -77,8 +76,8 @@ namespace Gs2.Unity.UiKit.Gs2Account.Context
     {
         public OwnDataOwner DataOwner;
 
-        public void SetOwnDataOwner(OwnDataOwner DataOwner) {
-            this.DataOwner = DataOwner;
+        public void SetOwnDataOwner(OwnDataOwner dataOwner) {
+            this.DataOwner = dataOwner;
         }
     }
 

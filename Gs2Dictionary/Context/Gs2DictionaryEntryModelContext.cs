@@ -43,7 +43,7 @@ namespace Gs2.Unity.UiKit.Gs2Dictionary.Context
             }
         }
 
-        public bool HasError() {
+        public virtual bool HasError() {
             if (EntryModel == null) {
                 if (GetComponentInParent<Gs2DictionaryEntryModelList>(true) != null) {
                     return false;

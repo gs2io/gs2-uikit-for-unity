@@ -101,7 +101,7 @@ namespace Gs2.Unity.UiKit.Gs2Idle
             this.prefab.gameObject.SetActive(false);
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
             _fetcher = GetComponent<Gs2IdleOwnStatusListFetcher>() ?? GetComponentInParent<Gs2IdleOwnStatusListFetcher>(true);
             if (_fetcher == null) {

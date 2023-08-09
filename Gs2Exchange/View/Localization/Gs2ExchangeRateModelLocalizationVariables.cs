@@ -80,7 +80,7 @@ namespace Gs2.Unity.UiKit.Gs2Exchange.Localization
             }
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
             _fetcher = GetComponent<Gs2ExchangeRateModelFetcher>() ?? GetComponentInParent<Gs2ExchangeRateModelFetcher>(true);
             if (_fetcher == null) {

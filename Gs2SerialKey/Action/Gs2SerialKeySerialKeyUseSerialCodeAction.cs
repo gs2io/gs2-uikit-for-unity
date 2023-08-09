@@ -137,7 +137,7 @@ namespace Gs2.Unity.UiKit.Gs2SerialKey
             }
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
             this._context = GetComponent<Gs2SerialKeyOwnSerialKeyContext>() ?? GetComponentInParent<Gs2SerialKeyOwnSerialKeyContext>(true);
             if (_context == null) {

@@ -127,7 +127,7 @@ namespace Gs2.Unity.UiKit.Gs2Enhance.Fetcher
             }
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
             Context = GetComponent<Gs2EnhanceRateModelContext>() ?? GetComponentInParent<Gs2EnhanceRateModelContext>(true);
             if (Context == null) {

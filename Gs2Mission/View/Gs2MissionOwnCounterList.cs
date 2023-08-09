@@ -106,7 +106,7 @@ namespace Gs2.Unity.UiKit.Gs2Mission
             this.prefab.gameObject.SetActive(false);
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
             _fetcher = GetComponent<Gs2MissionOwnCounterListFetcher>() ?? GetComponentInParent<Gs2MissionOwnCounterListFetcher>(true);
             if (_fetcher == null) {

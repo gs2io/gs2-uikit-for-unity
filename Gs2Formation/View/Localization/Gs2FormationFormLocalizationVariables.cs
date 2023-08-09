@@ -74,7 +74,7 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Localization
             }
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
             _fetcher = GetComponent<Gs2FormationOwnFormFetcher>() ?? GetComponentInParent<Gs2FormationOwnFormFetcher>(true);
             if (_fetcher == null) {

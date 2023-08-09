@@ -101,7 +101,7 @@ namespace Gs2.Unity.UiKit.Gs2Enchant
             this.prefab.gameObject.SetActive(false);
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
             _fetcher = GetComponent<Gs2EnchantRarityParameterModelListFetcher>() ?? GetComponentInParent<Gs2EnchantRarityParameterModelListFetcher>(true);
             if (_fetcher == null) {

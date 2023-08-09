@@ -134,7 +134,7 @@ namespace Gs2.Unity.UiKit.Gs2Limit.Fetcher
             }
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
             Context = GetComponent<Gs2LimitNamespaceContext>() ?? GetComponentInParent<Gs2LimitNamespaceContext>(true);
             if (Context == null) {

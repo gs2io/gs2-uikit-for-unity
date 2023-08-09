@@ -78,7 +78,7 @@ namespace Gs2.Unity.UiKit.Gs2Mission
             Update();
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
             _fetcher = GetComponent<IConsumeActionsFetcher>() ?? GetComponentInParent<IConsumeActionsFetcher>(true);
             if (_fetcher == null) {

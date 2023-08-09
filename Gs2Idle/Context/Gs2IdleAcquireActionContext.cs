@@ -43,7 +43,7 @@ namespace Gs2.Unity.UiKit.Gs2Idle.Context
             }
         }
 
-        public bool HasError() {
+        public virtual bool HasError() {
             if (AcquireAction == null) {
                 return true;
             }

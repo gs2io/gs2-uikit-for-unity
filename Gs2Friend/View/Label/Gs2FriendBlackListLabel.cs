@@ -75,7 +75,7 @@ namespace Gs2.Unity.UiKit.Gs2Friend
             Update();
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
             _fetcher = GetComponent<Gs2FriendOwnBlackListFetcher>() ?? GetComponentInParent<Gs2FriendOwnBlackListFetcher>(true);
             if (_fetcher == null) {

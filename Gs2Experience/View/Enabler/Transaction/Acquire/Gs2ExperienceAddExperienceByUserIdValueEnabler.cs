@@ -99,7 +99,7 @@ namespace Gs2.Unity.UiKit.Gs2Experience
             Update();
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
             _fetcher = GetComponent<Gs2ExperienceAddExperienceByUserIdFetcher>() ?? GetComponentInParent<Gs2ExperienceAddExperienceByUserIdFetcher>(true);
             if (_fetcher == null) {

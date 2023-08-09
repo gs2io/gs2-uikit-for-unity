@@ -138,7 +138,7 @@ namespace Gs2.Unity.UiKit.Gs2Showcase.Fetcher
             }
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
             Context = GetComponent<Gs2ShowcaseOwnRandomShowcaseContext>() ?? GetComponentInParent<Gs2ShowcaseOwnRandomShowcaseContext>(true);
             if (Context == null) {

@@ -136,7 +136,7 @@ namespace Gs2.Unity.UiKit.Gs2Schedule.Fetcher
             }
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
             Context = GetComponent<Gs2ScheduleNamespaceContext>() ?? GetComponentInParent<Gs2ScheduleNamespaceContext>(true);
             if (Context == null) {

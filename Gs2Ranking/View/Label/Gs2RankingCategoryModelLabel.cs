@@ -79,7 +79,7 @@ namespace Gs2.Unity.UiKit.Gs2Ranking
             Update();
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
             _fetcher = GetComponent<Gs2RankingCategoryModelFetcher>() ?? GetComponentInParent<Gs2RankingCategoryModelFetcher>(true);
             if (_fetcher == null) {

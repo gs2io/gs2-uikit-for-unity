@@ -128,7 +128,7 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Fetcher
             }
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
             Context = GetComponent<Gs2QuestOwnProgressContext>() ?? GetComponentInParent<Gs2QuestOwnProgressContext>(true);
             if (Context == null) {

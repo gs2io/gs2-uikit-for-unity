@@ -129,7 +129,7 @@ namespace Gs2.Unity.UiKit.Gs2Schedule.Fetcher
             }
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
             Context = GetComponent<Gs2ScheduleOwnTriggerContext>() ?? GetComponentInParent<Gs2ScheduleOwnTriggerContext>(true);
             if (Context == null) {

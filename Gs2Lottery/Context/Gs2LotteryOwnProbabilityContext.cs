@@ -42,8 +42,7 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.Context
                 Debug.LogError($"{gameObject.GetFullPath()}: Probability is not set in Gs2LotteryOwnProbabilityContext.");
             }
         }
-
-        public bool HasError() {
+        public virtual bool HasError() {
             if (Probability == null) {
                 if (GetComponentInParent<Gs2LotteryOwnProbabilityList>(true) != null) {
                     return false;
@@ -82,8 +81,8 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.Context
     {
         public OwnProbability Probability;
 
-        public void SetOwnProbability(OwnProbability Probability) {
-            this.Probability = Probability;
+        public void SetOwnProbability(OwnProbability probability) {
+            this.Probability = probability;
         }
     }
 

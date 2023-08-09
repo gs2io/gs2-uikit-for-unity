@@ -42,8 +42,7 @@ namespace Gs2.Unity.UiKit.Gs2Enchant.Context
                 Debug.LogError($"{gameObject.GetFullPath()}: RarityParameterStatus is not set in Gs2EnchantOwnRarityParameterStatusContext.");
             }
         }
-
-        public bool HasError() {
+        public virtual bool HasError() {
             if (RarityParameterStatus == null) {
                 if (GetComponentInParent<Gs2EnchantOwnRarityParameterStatusList>(true) != null) {
                     return false;
@@ -82,8 +81,8 @@ namespace Gs2.Unity.UiKit.Gs2Enchant.Context
     {
         public OwnRarityParameterStatus RarityParameterStatus;
 
-        public void SetOwnRarityParameterStatus(OwnRarityParameterStatus RarityParameterStatus) {
-            this.RarityParameterStatus = RarityParameterStatus;
+        public void SetOwnRarityParameterStatus(OwnRarityParameterStatus rarityParameterStatus) {
+            this.RarityParameterStatus = rarityParameterStatus;
         }
     }
 

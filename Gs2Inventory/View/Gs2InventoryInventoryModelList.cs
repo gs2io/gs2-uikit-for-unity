@@ -101,7 +101,7 @@ namespace Gs2.Unity.UiKit.Gs2Inventory
             this.prefab.gameObject.SetActive(false);
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
             _fetcher = GetComponent<Gs2InventoryInventoryModelListFetcher>() ?? GetComponentInParent<Gs2InventoryInventoryModelListFetcher>(true);
             if (_fetcher == null) {

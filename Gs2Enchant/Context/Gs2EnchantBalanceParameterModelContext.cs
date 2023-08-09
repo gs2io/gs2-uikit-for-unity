@@ -43,7 +43,7 @@ namespace Gs2.Unity.UiKit.Gs2Enchant.Context
             }
         }
 
-        public bool HasError() {
+        public virtual bool HasError() {
             if (BalanceParameterModel == null) {
                 if (GetComponentInParent<Gs2EnchantBalanceParameterModelList>(true) != null) {
                     return false;

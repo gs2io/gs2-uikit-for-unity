@@ -80,7 +80,7 @@ namespace Gs2.Unity.UiKit.Gs2Enchant.SpriteSwitcher
             }
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
             _fetcher = GetComponent<Gs2EnchantOwnRarityParameterStatusFetcher>() ?? GetComponentInParent<Gs2EnchantOwnRarityParameterStatusFetcher>(true);
             if (_fetcher == null) {

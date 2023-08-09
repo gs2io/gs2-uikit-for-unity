@@ -120,7 +120,7 @@ namespace Gs2.Unity.UiKit.Gs2Inbox
             }
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
             this._context = GetComponent<Gs2InboxOwnMessageContext>() ?? GetComponentInParent<Gs2InboxOwnMessageContext>(true);
             if (_context == null) {

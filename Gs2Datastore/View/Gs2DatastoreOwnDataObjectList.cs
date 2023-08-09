@@ -101,7 +101,7 @@ namespace Gs2.Unity.UiKit.Gs2Datastore
             this.prefab.gameObject.SetActive(false);
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
             _fetcher = GetComponent<Gs2DatastoreOwnDataObjectListFetcher>() ?? GetComponentInParent<Gs2DatastoreOwnDataObjectListFetcher>(true);
             if (_fetcher == null) {

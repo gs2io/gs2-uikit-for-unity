@@ -42,8 +42,7 @@ namespace Gs2.Unity.UiKit.Gs2JobQueue.Context
                 Debug.LogError($"{gameObject.GetFullPath()}: JobResult is not set in Gs2JobQueueOwnJobResultContext.");
             }
         }
-
-        public bool HasError() {
+        public virtual bool HasError() {
             if (JobResult == null) {
                 return true;
             }
@@ -77,8 +76,8 @@ namespace Gs2.Unity.UiKit.Gs2JobQueue.Context
     {
         public OwnJobResult JobResult;
 
-        public void SetOwnJobResult(OwnJobResult JobResult) {
-            this.JobResult = JobResult;
+        public void SetOwnJobResult(OwnJobResult jobResult) {
+            this.JobResult = jobResult;
         }
     }
 

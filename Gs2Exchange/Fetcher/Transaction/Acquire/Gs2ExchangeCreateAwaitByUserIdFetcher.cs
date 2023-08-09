@@ -105,8 +105,11 @@ namespace Gs2.Unity.UiKit.Gs2Exchange.Fetcher
             }
         }
 
-        public bool HasError()
+        public override bool HasError()
         {
+            if (!base.HasError()) {
+                return false;
+            }
             _fetcher = GetComponent<IAcquireActionsFetcher>() ?? GetComponentInParent<IAcquireActionsFetcher>(true);
             if (_fetcher == null) {
                 return true;

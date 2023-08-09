@@ -42,8 +42,7 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.Context
                 Debug.LogError($"{gameObject.GetFullPath()}: BoxItems is not set in Gs2LotteryOwnBoxItemsContext.");
             }
         }
-
-        public bool HasError() {
+        public virtual bool HasError() {
             if (BoxItems == null) {
                 if (GetComponentInParent<Gs2LotteryOwnBoxItemsList>(true) != null) {
                     return false;
@@ -82,8 +81,8 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.Context
     {
         public OwnBoxItems BoxItems;
 
-        public void SetOwnBoxItems(OwnBoxItems BoxItems) {
-            this.BoxItems = BoxItems;
+        public void SetOwnBoxItems(OwnBoxItems boxItems) {
+            this.BoxItems = boxItems;
         }
     }
 

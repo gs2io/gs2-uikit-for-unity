@@ -130,7 +130,7 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Fetcher
             }
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
             Context = GetComponent<Gs2FormationOwnPropertyFormContext>() ?? GetComponentInParent<Gs2FormationOwnPropertyFormContext>(true);
             if (Context == null) {

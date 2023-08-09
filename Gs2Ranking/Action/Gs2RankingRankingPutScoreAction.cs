@@ -138,7 +138,7 @@ namespace Gs2.Unity.UiKit.Gs2Ranking
             }
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
             this._context = GetComponent<Gs2RankingRankingContext>() ?? GetComponentInParent<Gs2RankingRankingContext>(true);
             if (_context == null) {

@@ -134,7 +134,7 @@ namespace Gs2.Unity.UiKit.Gs2Enchant.Label
             Update();
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
             _fetcher = GetComponent<Gs2EnchantVerifyRarityParameterStatusByUserIdFetcher>() ?? GetComponentInParent<Gs2EnchantVerifyRarityParameterStatusByUserIdFetcher>(true);
             _userDataFetcher = GetComponent<Gs2EnchantOwnRarityParameterStatusFetcher>() ?? GetComponentInParent<Gs2EnchantOwnRarityParameterStatusFetcher>(true);

@@ -99,7 +99,7 @@ namespace Gs2.Unity.UiKit.Gs2Stamina
             Update();
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
             _fetcher = GetComponent<Gs2StaminaRaiseMaxValueByUserIdFetcher>() ?? GetComponentInParent<Gs2StaminaRaiseMaxValueByUserIdFetcher>(true);
             if (_fetcher == null) {

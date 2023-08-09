@@ -42,8 +42,7 @@ namespace Gs2.Unity.UiKit.Gs2Inbox.Context
                 Debug.LogError($"{gameObject.GetFullPath()}: Message is not set in Gs2InboxOwnMessageContext.");
             }
         }
-
-        public bool HasError() {
+        public virtual bool HasError() {
             if (Message == null) {
                 if (GetComponentInParent<Gs2InboxOwnMessageList>(true) != null) {
                     return false;
@@ -82,8 +81,8 @@ namespace Gs2.Unity.UiKit.Gs2Inbox.Context
     {
         public OwnMessage Message;
 
-        public void SetOwnMessage(OwnMessage Message) {
-            this.Message = Message;
+        public void SetOwnMessage(OwnMessage message) {
+            this.Message = message;
         }
     }
 

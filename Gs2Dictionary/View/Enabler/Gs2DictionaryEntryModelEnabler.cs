@@ -79,7 +79,7 @@ namespace Gs2.Unity.UiKit.Gs2Dictionary
             }
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
             _fetcher = GetComponent<Gs2DictionaryEntryModelFetcher>() ?? GetComponentInParent<Gs2DictionaryEntryModelFetcher>(true);
             if (_fetcher == null) {

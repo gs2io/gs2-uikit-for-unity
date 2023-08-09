@@ -127,7 +127,7 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Fetcher
             }
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
             Context = GetComponent<Gs2FormationMoldModelContext>() ?? GetComponentInParent<Gs2FormationMoldModelContext>(true);
             if (Context == null) {

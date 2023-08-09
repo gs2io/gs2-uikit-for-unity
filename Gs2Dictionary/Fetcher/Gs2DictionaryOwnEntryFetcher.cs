@@ -12,8 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
- * deny overwrite
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
@@ -30,13 +28,13 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
-using System.Text;
 using Gs2.Core.Exception;
 using Gs2.Unity.Core.Exception;
 using Gs2.Unity.Gs2Dictionary.Model;
 using Gs2.Unity.Gs2Dictionary.ScriptableObject;
 using Gs2.Unity.Util;
 using Gs2.Unity.UiKit.Core;
+using Gs2.Unity.UiKit.Gs2Core.Fetcher;
 using Gs2.Unity.UiKit.Gs2Dictionary.Context;
 using UnityEngine;
 using UnityEngine.Events;
@@ -58,15 +56,15 @@ namespace Gs2.Unity.UiKit.Gs2Dictionary.Fetcher
             {
                 if (_gameSessionHolder != null && _gameSessionHolder.Initialized &&
                     _clientHolder != null && _clientHolder.Initialized &&
-                    Context != null && this.Context.EntryModel != null)
+                    Context != null && this.Context.Entry != null)
                 {
                     
                     var domain = this._clientHolder.Gs2.Dictionary.Namespace(
-                        this.Context.EntryModel.NamespaceName
+                        this.Context.Entry.NamespaceName
                     ).Me(
                         this._gameSessionHolder.GameSession
                     ).Entry(
-                        this.Context.EntryModel.EntryName
+                        this.Context.Entry.EntryName
                     );
                     var future = domain.Model();
                     yield return future;
@@ -92,7 +90,7 @@ namespace Gs2.Unity.UiKit.Gs2Dictionary.Fetcher
                     }
                 }
                 else {
-                    yield return new WaitForSeconds(1);
+                    yield return new WaitForSeconds(0.1f);
                 }
             }
             // ReSharper disable once IteratorNeverReturns
@@ -117,23 +115,23 @@ namespace Gs2.Unity.UiKit.Gs2Dictionary.Fetcher
     {
         protected Gs2ClientHolder _clientHolder;
         protected Gs2GameSessionHolder _gameSessionHolder;
-        public Gs2DictionaryEntryModelContext Context { get; private set; }
+        public Gs2DictionaryOwnEntryContext Context { get; private set; }
 
         public void Awake()
         {
             _clientHolder = Gs2ClientHolder.Instance;
             _gameSessionHolder = Gs2GameSessionHolder.Instance;
-            Context = GetComponent<Gs2DictionaryEntryModelContext>() ?? GetComponentInParent<Gs2DictionaryEntryModelContext>();
+            Context = GetComponent<Gs2DictionaryOwnEntryContext>() ?? GetComponentInParent<Gs2DictionaryOwnEntryContext>();
 
             if (Context == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2DictionaryEntryModelContext.");
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2DictionaryOwnEntryContext.");
                 enabled = false;
             }
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
-            Context = GetComponent<Gs2DictionaryEntryModelContext>() ?? GetComponentInParent<Gs2DictionaryEntryModelContext>(true);
+            Context = GetComponent<Gs2DictionaryOwnEntryContext>() ?? GetComponentInParent<Gs2DictionaryOwnEntryContext>(true);
             if (Context == null) {
                 return true;
             }

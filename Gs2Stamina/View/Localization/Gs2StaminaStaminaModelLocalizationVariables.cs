@@ -89,7 +89,7 @@ namespace Gs2.Unity.UiKit.Gs2Stamina.Localization
             }
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
             _fetcher = GetComponent<Gs2StaminaStaminaModelFetcher>() ?? GetComponentInParent<Gs2StaminaStaminaModelFetcher>(true);
             if (_fetcher == null) {

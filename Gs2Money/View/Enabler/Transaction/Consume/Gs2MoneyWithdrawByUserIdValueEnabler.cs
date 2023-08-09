@@ -99,7 +99,7 @@ namespace Gs2.Unity.UiKit.Gs2Money.Enabler
             Update();
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
             _fetcher = GetComponent<Gs2MoneyWithdrawByUserIdFetcher>() ?? GetComponentInParent<Gs2MoneyWithdrawByUserIdFetcher>(true);
             if (_fetcher == null) {

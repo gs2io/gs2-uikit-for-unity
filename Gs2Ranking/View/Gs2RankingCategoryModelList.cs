@@ -101,7 +101,7 @@ namespace Gs2.Unity.UiKit.Gs2Ranking
             this.prefab.gameObject.SetActive(false);
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
             _fetcher = GetComponent<Gs2RankingCategoryModelListFetcher>() ?? GetComponentInParent<Gs2RankingCategoryModelListFetcher>(true);
             if (_fetcher == null) {

@@ -143,7 +143,7 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Fetcher
             }
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
             Context = GetComponent<Gs2QuestQuestModelContext>() ?? GetComponentInParent<Gs2QuestQuestModelContext>(true);
             if (Context == null) {

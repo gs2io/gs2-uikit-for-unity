@@ -116,7 +116,7 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Label
             Update();
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
             _fetcher = GetComponent<Gs2InventoryAcquireSimpleItemsByUserIdFetcher>() ?? GetComponentInParent<Gs2InventoryAcquireSimpleItemsByUserIdFetcher>(true);
             _userDataFetcher = GetComponent<Gs2InventoryOwnSimpleItemFetcher>() ?? GetComponentInParent<Gs2InventoryOwnSimpleItemFetcher>(true);

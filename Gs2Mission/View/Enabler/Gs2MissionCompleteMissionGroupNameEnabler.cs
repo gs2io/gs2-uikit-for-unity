@@ -87,7 +87,7 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Enabler
             }
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
             _fetcher = GetComponent<Gs2MissionOwnCompleteFetcher>() ?? GetComponentInParent<Gs2MissionOwnCompleteFetcher>(true);
             if (_fetcher == null) {

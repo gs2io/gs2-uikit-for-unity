@@ -138,7 +138,7 @@ namespace Gs2.Unity.UiKit.Gs2Money
             }
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
             this._context = GetComponent<Gs2MoneyOwnWalletContext>() ?? GetComponentInParent<Gs2MoneyOwnWalletContext>(true);
             if (_context == null) {

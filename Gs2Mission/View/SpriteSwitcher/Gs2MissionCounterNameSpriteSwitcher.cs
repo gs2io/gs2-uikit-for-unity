@@ -93,7 +93,7 @@ namespace Gs2.Unity.UiKit.Gs2Mission.SpriteSwitcher
             }
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
             _fetcher = GetComponent<Gs2MissionOwnCounterFetcher>() ?? GetComponentInParent<Gs2MissionOwnCounterFetcher>(true);
             if (_fetcher == null) {

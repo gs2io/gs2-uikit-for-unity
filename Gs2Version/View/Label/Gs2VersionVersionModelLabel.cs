@@ -85,7 +85,7 @@ namespace Gs2.Unity.UiKit.Gs2Version
             Update();
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
             _fetcher = GetComponent<Gs2VersionVersionModelFetcher>() ?? GetComponentInParent<Gs2VersionVersionModelFetcher>(true);
             if (_fetcher == null) {

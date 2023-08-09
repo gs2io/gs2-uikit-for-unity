@@ -134,7 +134,7 @@ namespace Gs2.Unity.UiKit.Gs2Exchange.Fetcher
             }
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
             Context = GetComponent<Gs2ExchangeIncrementalRateModelContext>() ?? GetComponentInParent<Gs2ExchangeIncrementalRateModelContext>(true);
             if (Context == null) {

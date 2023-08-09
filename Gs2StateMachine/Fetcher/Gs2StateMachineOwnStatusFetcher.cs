@@ -129,7 +129,7 @@ namespace Gs2.Unity.UiKit.Gs2StateMachine.Fetcher
             }
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
             Context = GetComponent<Gs2StateMachineOwnStatusContext>() ?? GetComponentInParent<Gs2StateMachineOwnStatusContext>(true);
             if (Context == null) {

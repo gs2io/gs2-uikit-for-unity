@@ -37,13 +37,15 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Context
 	[AddComponentMenu("GS2 UIKit/Mission/Counter/Context/Gs2MissionOwnCounterContext")]
     public partial class Gs2MissionOwnCounterContext : Gs2MissionCounterModelContext
     {
-        public void Start() {
+        public new void Start() {
             if (Counter == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Counter is not set in Gs2MissionOwnCounterContext.");
             }
         }
-
-        public bool HasError() {
+        public override bool HasError() {
+            if (!base.HasError()) {
+                return false;
+            }
             if (Counter == null) {
                 if (GetComponentInParent<Gs2MissionOwnCounterList>(true) != null) {
                     return false;
@@ -82,8 +84,14 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Context
     {
         public OwnCounter Counter;
 
-        public void SetOwnCounter(OwnCounter Counter) {
-            this.Counter = Counter;
+        public void SetOwnCounter(OwnCounter counter) {
+            this.CounterModel = CounterModel.New(
+                Namespace.New(
+                    Counter.NamespaceName
+                ),
+                Counter.CounterName
+            );
+            this.Counter = counter;
         }
     }
 

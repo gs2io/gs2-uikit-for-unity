@@ -42,8 +42,7 @@ namespace Gs2.Unity.UiKit.Gs2Account.Context
                 Debug.LogError($"{gameObject.GetFullPath()}: Account is not set in Gs2AccountOwnAccountContext.");
             }
         }
-
-        public bool HasError() {
+        public virtual bool HasError() {
             if (Account == null) {
                 return true;
             }
@@ -77,8 +76,8 @@ namespace Gs2.Unity.UiKit.Gs2Account.Context
     {
         public OwnAccount Account;
 
-        public void SetOwnAccount(OwnAccount Account) {
-            this.Account = Account;
+        public void SetOwnAccount(OwnAccount account) {
+            this.Account = account;
         }
     }
 

@@ -43,7 +43,7 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Context
             }
         }
 
-        public bool HasError() {
+        public virtual bool HasError() {
             if (Ranking == null) {
                 if (GetComponentInParent<Gs2RankingRankingList>(true) != null) {
                     return false;

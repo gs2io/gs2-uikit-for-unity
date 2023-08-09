@@ -93,7 +93,7 @@ namespace Gs2.Unity.UiKit.Gs2SerialKey.SpriteSwitcher
             }
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
             _fetcher = GetComponent<Gs2SerialKeyCampaignModelFetcher>() ?? GetComponentInParent<Gs2SerialKeyCampaignModelFetcher>(true);
             if (_fetcher == null) {

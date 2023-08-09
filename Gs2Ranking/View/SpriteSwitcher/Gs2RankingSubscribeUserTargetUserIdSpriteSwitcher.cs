@@ -93,7 +93,7 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.SpriteSwitcher
             }
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
             _fetcher = GetComponent<Gs2RankingOwnSubscribeUserFetcher>() ?? GetComponentInParent<Gs2RankingOwnSubscribeUserFetcher>(true);
             if (_fetcher == null) {

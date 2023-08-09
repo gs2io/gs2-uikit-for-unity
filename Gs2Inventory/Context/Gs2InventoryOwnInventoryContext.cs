@@ -37,13 +37,15 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Context
 	[AddComponentMenu("GS2 UIKit/Inventory/Inventory/Context/Gs2InventoryOwnInventoryContext")]
     public partial class Gs2InventoryOwnInventoryContext : Gs2InventoryInventoryModelContext
     {
-        public void Start() {
+        public new void Start() {
             if (Inventory == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Inventory is not set in Gs2InventoryOwnInventoryContext.");
             }
         }
-
-        public bool HasError() {
+        public override bool HasError() {
+            if (!base.HasError()) {
+                return false;
+            }
             if (Inventory == null) {
                 if (GetComponentInParent<Gs2InventoryOwnInventoryList>(true) != null) {
                     return false;
@@ -82,8 +84,14 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Context
     {
         public OwnInventory Inventory;
 
-        public void SetOwnInventory(OwnInventory Inventory) {
-            this.Inventory = Inventory;
+        public void SetOwnInventory(OwnInventory inventory) {
+            this.InventoryModel = InventoryModel.New(
+                Namespace.New(
+                    Inventory.NamespaceName
+                ),
+                Inventory.InventoryName
+            );
+            this.Inventory = inventory;
         }
     }
 

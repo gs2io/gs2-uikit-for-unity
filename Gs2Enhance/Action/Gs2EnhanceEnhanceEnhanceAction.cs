@@ -123,7 +123,7 @@ namespace Gs2.Unity.UiKit.Gs2Enhance
             }
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
             this._context = GetComponent<Gs2EnhanceNamespaceContext>() ?? GetComponentInParent<Gs2EnhanceNamespaceContext>(true);
             if (_context == null) {

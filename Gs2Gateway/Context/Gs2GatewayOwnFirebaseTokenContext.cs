@@ -42,8 +42,7 @@ namespace Gs2.Unity.UiKit.Gs2Gateway.Context
                 Debug.LogError($"{gameObject.GetFullPath()}: FirebaseToken is not set in Gs2GatewayOwnFirebaseTokenContext.");
             }
         }
-
-        public bool HasError() {
+        public virtual bool HasError() {
             if (FirebaseToken == null) {
                 return true;
             }
@@ -77,8 +76,8 @@ namespace Gs2.Unity.UiKit.Gs2Gateway.Context
     {
         public OwnFirebaseToken FirebaseToken;
 
-        public void SetOwnFirebaseToken(OwnFirebaseToken FirebaseToken) {
-            this.FirebaseToken = FirebaseToken;
+        public void SetOwnFirebaseToken(OwnFirebaseToken firebaseToken) {
+            this.FirebaseToken = firebaseToken;
         }
     }
 

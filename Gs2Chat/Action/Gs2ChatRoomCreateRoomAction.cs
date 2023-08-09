@@ -138,7 +138,7 @@ namespace Gs2.Unity.UiKit.Gs2Chat
             }
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
             this._context = GetComponent<Gs2ChatNamespaceContext>() ?? GetComponentInParent<Gs2ChatNamespaceContext>(true);
             if (_context == null) {

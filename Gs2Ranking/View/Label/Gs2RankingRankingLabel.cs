@@ -36,7 +36,7 @@ namespace Gs2.Unity.UiKit.Gs2Ranking
         {
             if (_fetcher.Fetched && _fetcher.Ranking != null)
             {
-                var createdAt = _fetcher.Ranking.CreatedAt == null ? DateTime.Now : UnixTime.FromUnixTime(_fetcher.Ranking.CreatedAt).ToLocalTime();
+                var createdAt = UnixTime.FromUnixTime(_fetcher.Ranking.CreatedAt).ToLocalTime();
                 onUpdate?.Invoke(
                     format.Replace(
                         "{rank}", $"{_fetcher?.Ranking?.Rank}"

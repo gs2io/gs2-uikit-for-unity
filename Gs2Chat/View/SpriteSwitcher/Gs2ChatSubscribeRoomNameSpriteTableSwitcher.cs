@@ -80,7 +80,7 @@ namespace Gs2.Unity.UiKit.Gs2Chat.SpriteSwitcher
             }
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
             _fetcher = GetComponent<Gs2ChatOwnSubscribeFetcher>() ?? GetComponentInParent<Gs2ChatOwnSubscribeFetcher>(true);
             if (_fetcher == null) {

@@ -43,7 +43,7 @@ namespace Gs2.Unity.UiKit.Gs2Experience.Context
             }
         }
 
-        public bool HasError() {
+        public virtual bool HasError() {
             if (ExperienceModel == null) {
                 if (GetComponentInParent<Gs2ExperienceExperienceModelList>(true) != null) {
                     return false;

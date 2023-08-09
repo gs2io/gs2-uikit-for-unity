@@ -74,7 +74,7 @@ namespace Gs2.Unity.UiKit.Gs2Chat.Localization
             }
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
             _fetcher = GetComponent<Gs2ChatRoomFetcher>() ?? GetComponentInParent<Gs2ChatRoomFetcher>(true);
             if (_fetcher == null) {

@@ -103,7 +103,7 @@ namespace Gs2.Unity.UiKit.Gs2LoginReward
             }
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
             _fetcher = GetComponent<Gs2LoginRewardBonusModelFetcher>() ?? GetComponentInParent<Gs2LoginRewardBonusModelFetcher>(true);
             if (_fetcher == null) {

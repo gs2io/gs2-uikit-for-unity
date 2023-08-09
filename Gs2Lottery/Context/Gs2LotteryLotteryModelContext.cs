@@ -43,7 +43,7 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.Context
             }
         }
 
-        public bool HasError() {
+        public virtual bool HasError() {
             if (LotteryModel == null) {
                 if (GetComponentInParent<Gs2LotteryLotteryModelList>(true) != null) {
                     return false;

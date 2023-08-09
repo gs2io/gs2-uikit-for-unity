@@ -37,13 +37,15 @@ namespace Gs2.Unity.UiKit.Gs2Dictionary.Context
 	[AddComponentMenu("GS2 UIKit/Dictionary/Entry/Context/Gs2DictionaryOwnEntryContext")]
     public partial class Gs2DictionaryOwnEntryContext : Gs2DictionaryEntryModelContext
     {
-        public void Start() {
+        public new void Start() {
             if (Entry == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Entry is not set in Gs2DictionaryOwnEntryContext.");
             }
         }
-
-        public bool HasError() {
+        public override bool HasError() {
+            if (!base.HasError()) {
+                return false;
+            }
             if (Entry == null) {
                 if (GetComponentInParent<Gs2DictionaryOwnEntryList>(true) != null) {
                     return false;
@@ -82,8 +84,14 @@ namespace Gs2.Unity.UiKit.Gs2Dictionary.Context
     {
         public OwnEntry Entry;
 
-        public void SetOwnEntry(OwnEntry Entry) {
-            this.Entry = Entry;
+        public void SetOwnEntry(OwnEntry entry) {
+            this.EntryModel = EntryModel.New(
+                Namespace.New(
+                    Entry.NamespaceName
+                ),
+                Entry.EntryName
+            );
+            this.Entry = entry;
         }
     }
 

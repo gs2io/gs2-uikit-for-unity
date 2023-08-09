@@ -42,8 +42,7 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking.Context
                 Debug.LogError($"{gameObject.GetFullPath()}: Ballot is not set in Gs2MatchmakingOwnBallotContext.");
             }
         }
-
-        public bool HasError() {
+        public virtual bool HasError() {
             if (Ballot == null) {
                 return true;
             }
@@ -77,8 +76,8 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking.Context
     {
         public OwnBallot Ballot;
 
-        public void SetOwnBallot(OwnBallot Ballot) {
-            this.Ballot = Ballot;
+        public void SetOwnBallot(OwnBallot ballot) {
+            this.Ballot = ballot;
         }
     }
 

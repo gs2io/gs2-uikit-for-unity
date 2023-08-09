@@ -42,8 +42,7 @@ namespace Gs2.Unity.UiKit.Gs2Experience.Context
                 Debug.LogError($"{gameObject.GetFullPath()}: Status is not set in Gs2ExperienceOwnStatusContext.");
             }
         }
-
-        public bool HasError() {
+        public virtual bool HasError() {
             if (Status == null) {
                 if (GetComponentInParent<Gs2ExperienceOwnStatusList>(true) != null) {
                     return false;
@@ -82,8 +81,8 @@ namespace Gs2.Unity.UiKit.Gs2Experience.Context
     {
         public OwnStatus Status;
 
-        public void SetOwnStatus(OwnStatus Status) {
-            this.Status = Status;
+        public void SetOwnStatus(OwnStatus status) {
+            this.Status = status;
         }
     }
 

@@ -128,7 +128,7 @@ namespace Gs2.Unity.UiKit.Gs2Chat.Fetcher
             }
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
             Context = GetComponent<Gs2ChatMessageContext>() ?? GetComponentInParent<Gs2ChatMessageContext>(true);
             if (Context == null) {

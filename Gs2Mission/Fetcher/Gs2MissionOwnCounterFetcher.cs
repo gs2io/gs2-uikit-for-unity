@@ -12,8 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
- * deny overwrite
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
@@ -30,13 +28,13 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
-using System.Text;
 using Gs2.Core.Exception;
 using Gs2.Unity.Core.Exception;
 using Gs2.Unity.Gs2Mission.Model;
 using Gs2.Unity.Gs2Mission.ScriptableObject;
 using Gs2.Unity.Util;
 using Gs2.Unity.UiKit.Core;
+using Gs2.Unity.UiKit.Gs2Core.Fetcher;
 using Gs2.Unity.UiKit.Gs2Mission.Context;
 using UnityEngine;
 using UnityEngine.Events;
@@ -58,72 +56,15 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Fetcher
             {
                 if (_gameSessionHolder != null && _gameSessionHolder.Initialized &&
                     _clientHolder != null && _clientHolder.Initialized &&
-                    _context != null && this._context.Counter != null)
+                    Context != null && this.Context.Counter != null)
                 {
                     
                     var domain = this._clientHolder.Gs2.Mission.Namespace(
-                        this._context.Counter.NamespaceName
+                        this.Context.Counter.NamespaceName
                     ).Me(
                         this._gameSessionHolder.GameSession
                     ).Counter(
-                        this._context.Counter.CounterName
-                    );
-                    var future = domain.Model();
-                    yield return future;
-                    if (future.Error != null)
-                    {
-                        if (future.Error is BadRequestException || future.Error is NotFoundException)
-                        {
-                            onError.Invoke(e = future.Error, null);
-                            Debug.LogError($"{gameObject.GetFullPath()}: {future.Error.Message}");
-                            break;
-                        }
-                        else {
-                            onError.Invoke(new CanIgnoreException(future.Error), null);
-                        }
-                        yield return new WaitForSeconds(retryWaitSecond);
-                        retryWaitSecond *= 2;
-                    }
-                    else
-                    {
-                        retryWaitSecond = 1;
-                        Counter = future.Result;
-                        Fetched = true;
-                    }
-                }
-                else if (_gameSessionHolder != null && _gameSessionHolder.Initialized &&
-                    _clientHolder != null && _clientHolder.Initialized &&
-                    _context2 != null && this._context2.MissionTaskModel != null) {
-                    
-                    var future2 = this._clientHolder.Gs2.Mission.Namespace(
-                        this._context2.MissionTaskModel.NamespaceName
-                    ).MissionGroupModel(
-                        this._context2.MissionTaskModel.MissionGroupName
-                    ).MissionTaskModel(
-                        this._context2.MissionTaskModel.MissionTaskName
-                    ).Model();
-                    yield return future2;
-                    if (future2.Error != null)
-                    {
-                        if (future2.Error is BadRequestException || future2.Error is NotFoundException)
-                        {
-                            onError.Invoke(e = future2.Error, null);
-                            Debug.LogError($"{gameObject.GetFullPath()}: {future2.Error.Message}");
-                            break;
-                        }
-                        else {
-                            onError.Invoke(new CanIgnoreException(future2.Error), null);
-                        }
-                        yield return new WaitForSeconds(retryWaitSecond);
-                        retryWaitSecond *= 2;
-                    }
-                    
-                    var domain = this._clientHolder.Gs2.Mission.Namespace(
-                        this._context2.MissionTaskModel.NamespaceName
-                    ).Me(
-                        this._gameSessionHolder.GameSession
-                    ).Counter(
-                        future2.Result.CounterName
+                        this.Context.Counter.CounterName
                     );
                     var future = domain.Model();
                     yield return future;
@@ -149,7 +90,7 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Fetcher
                     }
                 }
                 else {
-                    yield return new WaitForSeconds(1);
+                    yield return new WaitForSeconds(0.1f);
                 }
             }
             // ReSharper disable once IteratorNeverReturns
@@ -172,29 +113,26 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Fetcher
 
     public partial class Gs2MissionOwnCounterFetcher
     {
-        private Gs2ClientHolder _clientHolder;
-        private Gs2GameSessionHolder _gameSessionHolder;
-        private Gs2MissionOwnCounterContext _context;
-        private Gs2MissionMissionTaskModelContext _context2;
+        protected Gs2ClientHolder _clientHolder;
+        protected Gs2GameSessionHolder _gameSessionHolder;
+        public Gs2MissionOwnCounterContext Context { get; private set; }
 
         public void Awake()
         {
             _clientHolder = Gs2ClientHolder.Instance;
             _gameSessionHolder = Gs2GameSessionHolder.Instance;
-            _context = GetComponent<Gs2MissionOwnCounterContext>() ?? GetComponentInParent<Gs2MissionOwnCounterContext>();
-            _context2 = GetComponent<Gs2MissionMissionTaskModelContext>() ?? GetComponentInParent<Gs2MissionMissionTaskModelContext>();
+            Context = GetComponent<Gs2MissionOwnCounterContext>() ?? GetComponentInParent<Gs2MissionOwnCounterContext>();
 
-            if (_context == null && _context2 == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MissionOwnCounterContext/Gs2MissionMissionTaskModelContext.");
+            if (Context == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MissionOwnCounterContext.");
                 enabled = false;
             }
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
-            _context = GetComponent<Gs2MissionOwnCounterContext>() ?? GetComponentInParent<Gs2MissionOwnCounterContext>(true);
-            _context2 = GetComponent<Gs2MissionMissionTaskModelContext>() ?? GetComponentInParent<Gs2MissionMissionTaskModelContext>();
-            if (_context == null && _context2 == null) {
+            Context = GetComponent<Gs2MissionOwnCounterContext>() ?? GetComponentInParent<Gs2MissionOwnCounterContext>(true);
+            if (Context == null) {
                 return true;
             }
             return false;
@@ -207,8 +145,8 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Fetcher
 
     public partial class Gs2MissionOwnCounterFetcher
     {
-        public Gs2.Unity.Gs2Mission.Model.EzCounter Counter { get; private set; }
-        public bool Fetched { get; private set; }
+        public Gs2.Unity.Gs2Mission.Model.EzCounter Counter { get; protected set; }
+        public bool Fetched { get; protected set; }
     }
 
     /// <summary>

@@ -37,13 +37,15 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Context
 	[AddComponentMenu("GS2 UIKit/Inventory/SimpleInventory/Context/Gs2InventoryOwnSimpleInventoryContext")]
     public partial class Gs2InventoryOwnSimpleInventoryContext : Gs2InventorySimpleInventoryModelContext
     {
-        public void Start() {
+        public new void Start() {
             if (SimpleInventory == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: SimpleInventory is not set in Gs2InventoryOwnSimpleInventoryContext.");
             }
         }
-
-        public bool HasError() {
+        public override bool HasError() {
+            if (!base.HasError()) {
+                return false;
+            }
             if (SimpleInventory == null) {
                 return true;
             }
@@ -77,8 +79,14 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Context
     {
         public OwnSimpleInventory SimpleInventory;
 
-        public void SetOwnSimpleInventory(OwnSimpleInventory SimpleInventory) {
-            this.SimpleInventory = SimpleInventory;
+        public void SetOwnSimpleInventory(OwnSimpleInventory simpleInventory) {
+            this.SimpleInventoryModel = SimpleInventoryModel.New(
+                Namespace.New(
+                    SimpleInventory.NamespaceName
+                ),
+                SimpleInventory.InventoryName
+            );
+            this.SimpleInventory = simpleInventory;
         }
     }
 

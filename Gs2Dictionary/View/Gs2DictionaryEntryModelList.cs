@@ -101,7 +101,7 @@ namespace Gs2.Unity.UiKit.Gs2Dictionary
             this.prefab.gameObject.SetActive(false);
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
             _fetcher = GetComponent<Gs2DictionaryEntryModelListFetcher>() ?? GetComponentInParent<Gs2DictionaryEntryModelListFetcher>(true);
             if (_fetcher == null) {

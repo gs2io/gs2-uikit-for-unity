@@ -122,7 +122,7 @@ namespace Gs2.Unity.UiKit.Gs2Enchant.Label
             Update();
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
             _fetcher = GetComponent<Gs2EnchantSetBalanceParameterStatusByUserIdFetcher>() ?? GetComponentInParent<Gs2EnchantSetBalanceParameterStatusByUserIdFetcher>(true);
             _userDataFetcher = GetComponent<Gs2EnchantOwnBalanceParameterStatusFetcher>() ?? GetComponentInParent<Gs2EnchantOwnBalanceParameterStatusFetcher>(true);

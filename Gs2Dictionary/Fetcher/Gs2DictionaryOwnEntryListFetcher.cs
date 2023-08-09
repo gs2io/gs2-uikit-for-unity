@@ -136,7 +136,7 @@ namespace Gs2.Unity.UiKit.Gs2Dictionary.Fetcher
             }
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
             Context = GetComponent<Gs2DictionaryNamespaceContext>() ?? GetComponentInParent<Gs2DictionaryNamespaceContext>(true);
             if (Context == null) {

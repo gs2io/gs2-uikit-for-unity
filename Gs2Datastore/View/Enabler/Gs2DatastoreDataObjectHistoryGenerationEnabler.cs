@@ -87,7 +87,7 @@ namespace Gs2.Unity.UiKit.Gs2Datastore.Enabler
             }
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
             _fetcher = GetComponent<Gs2DatastoreOwnDataObjectHistoryFetcher>() ?? GetComponentInParent<Gs2DatastoreOwnDataObjectHistoryFetcher>(true);
             if (_fetcher == null) {

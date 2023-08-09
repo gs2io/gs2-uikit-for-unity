@@ -127,7 +127,7 @@ namespace Gs2.Unity.UiKit.Gs2Limit.Fetcher
             }
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
             Context = GetComponent<Gs2LimitLimitModelContext>() ?? GetComponentInParent<Gs2LimitLimitModelContext>(true);
             if (Context == null) {

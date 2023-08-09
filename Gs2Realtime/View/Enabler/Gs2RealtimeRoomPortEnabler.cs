@@ -93,7 +93,7 @@ namespace Gs2.Unity.UiKit.Gs2Realtime
             }
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
             _fetcher = GetComponent<Gs2RealtimeRoomFetcher>() ?? GetComponentInParent<Gs2RealtimeRoomFetcher>(true);
             if (_fetcher == null) {

@@ -81,7 +81,7 @@ namespace Gs2.Unity.UiKit.Gs2Inventory
             }
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
             _fetcher = GetComponent<Gs2InventoryItemModelFetcher>() ?? GetComponentInParent<Gs2InventoryItemModelFetcher>(true);
             if (_fetcher == null) {

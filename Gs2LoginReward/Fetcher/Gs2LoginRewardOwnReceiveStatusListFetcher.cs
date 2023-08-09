@@ -136,7 +136,7 @@ namespace Gs2.Unity.UiKit.Gs2LoginReward.Fetcher
             }
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
             Context = GetComponent<Gs2LoginRewardNamespaceContext>() ?? GetComponentInParent<Gs2LoginRewardNamespaceContext>(true);
             if (Context == null) {

@@ -110,7 +110,7 @@ namespace Gs2.Unity.UiKit.Gs2LoginReward.Label
             Update();
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
             _fetcher = GetComponent<Gs2LoginRewardDeleteReceiveStatusByUserIdFetcher>() ?? GetComponentInParent<Gs2LoginRewardDeleteReceiveStatusByUserIdFetcher>(true);
             _userDataFetcher = GetComponent<Gs2LoginRewardOwnReceiveStatusFetcher>() ?? GetComponentInParent<Gs2LoginRewardOwnReceiveStatusFetcher>(true);

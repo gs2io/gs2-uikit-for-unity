@@ -80,7 +80,7 @@ namespace Gs2.Unity.UiKit.Gs2Exchange.SpriteSwitcher
             }
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
             _fetcher = GetComponent<Gs2ExchangeIncrementalRateModelFetcher>() ?? GetComponentInParent<Gs2ExchangeIncrementalRateModelFetcher>(true);
             if (_fetcher == null) {

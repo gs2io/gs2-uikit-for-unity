@@ -37,13 +37,15 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Context
 	[AddComponentMenu("GS2 UIKit/Inventory/ItemSet/Context/Gs2InventoryOwnItemSetContext")]
     public partial class Gs2InventoryOwnItemSetContext : Gs2InventoryItemModelContext
     {
-        public void Start() {
+        public new void Start() {
             if (ItemSet == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: ItemSet is not set in Gs2InventoryOwnItemSetContext.");
             }
         }
-
-        public bool HasError() {
+        public override bool HasError() {
+            if (!base.HasError()) {
+                return false;
+            }
             if (ItemSet == null) {
                 if (GetComponentInParent<Gs2InventoryOwnItemSetList>(true) != null) {
                     return false;
@@ -82,8 +84,17 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Context
     {
         public OwnItemSet ItemSet;
 
-        public void SetOwnItemSet(OwnItemSet ItemSet) {
-            this.ItemSet = ItemSet;
+        public void SetOwnItemSet(OwnItemSet itemSet) {
+            this.ItemModel = ItemModel.New(
+                InventoryModel.New(
+                    Namespace.New(
+                        ItemSet.NamespaceName
+                    ),
+                    ItemSet.InventoryName
+                ),
+                ItemSet.ItemName
+            );
+            this.ItemSet = itemSet;
         }
     }
 

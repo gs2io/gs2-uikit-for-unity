@@ -101,7 +101,7 @@ namespace Gs2.Unity.UiKit.Gs2Formation
             this.prefab.gameObject.SetActive(false);
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
             _fetcher = GetComponent<Gs2FormationOwnFormListFetcher>() ?? GetComponentInParent<Gs2FormationOwnFormListFetcher>(true);
             if (_fetcher == null) {

@@ -42,8 +42,7 @@ namespace Gs2.Unity.UiKit.Gs2Schedule.Context
                 Debug.LogError($"{gameObject.GetFullPath()}: Trigger is not set in Gs2ScheduleOwnTriggerContext.");
             }
         }
-
-        public bool HasError() {
+        public virtual bool HasError() {
             if (Trigger == null) {
                 if (GetComponentInParent<Gs2ScheduleOwnTriggerList>(true) != null) {
                     return false;
@@ -82,8 +81,8 @@ namespace Gs2.Unity.UiKit.Gs2Schedule.Context
     {
         public OwnTrigger Trigger;
 
-        public void SetOwnTrigger(OwnTrigger Trigger) {
-            this.Trigger = Trigger;
+        public void SetOwnTrigger(OwnTrigger trigger) {
+            this.Trigger = trigger;
         }
     }
 

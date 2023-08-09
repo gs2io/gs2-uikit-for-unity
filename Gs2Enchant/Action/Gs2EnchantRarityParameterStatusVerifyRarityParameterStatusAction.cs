@@ -140,7 +140,7 @@ namespace Gs2.Unity.UiKit.Gs2Enchant
             }
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
             this._context = GetComponent<Gs2EnchantOwnRarityParameterStatusContext>() ?? GetComponentInParent<Gs2EnchantOwnRarityParameterStatusContext>(true);
             if (_context == null) {

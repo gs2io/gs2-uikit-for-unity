@@ -43,7 +43,7 @@ namespace Gs2.Unity.UiKit.Gs2SerialKey.Context
             }
         }
 
-        public bool HasError() {
+        public virtual bool HasError() {
             if (IssueJob == null) {
                 return true;
             }

@@ -69,7 +69,7 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking
             }
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
             _fetcher = GetComponent<Gs2MatchmakingGatheringFetcher>() ?? GetComponentInParent<Gs2MatchmakingGatheringFetcher>(true);
             if (_fetcher == null) {

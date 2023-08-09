@@ -93,7 +93,7 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking.SpriteSwitcher
             }
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
             _fetcher = GetComponent<Gs2MatchmakingOwnRatingFetcher>() ?? GetComponentInParent<Gs2MatchmakingOwnRatingFetcher>(true);
             if (_fetcher == null) {

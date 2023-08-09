@@ -81,7 +81,7 @@ namespace Gs2.Unity.UiKit.Gs2Formation
             Update();
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
             _fetcher = GetComponent<Gs2FormationMoldModelFetcher>() ?? GetComponentInParent<Gs2FormationMoldModelFetcher>(true);
             if (_fetcher == null) {

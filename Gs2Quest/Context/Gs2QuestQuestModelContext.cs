@@ -43,7 +43,7 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Context
             }
         }
 
-        public bool HasError() {
+        public virtual bool HasError() {
             if (QuestModel == null) {
                 if (GetComponentInParent<Gs2QuestQuestModelList>(true) != null) {
                     return false;

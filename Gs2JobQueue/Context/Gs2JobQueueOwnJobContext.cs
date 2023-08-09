@@ -42,8 +42,7 @@ namespace Gs2.Unity.UiKit.Gs2JobQueue.Context
                 Debug.LogError($"{gameObject.GetFullPath()}: Job is not set in Gs2JobQueueOwnJobContext.");
             }
         }
-
-        public bool HasError() {
+        public virtual bool HasError() {
             if (Job == null) {
                 return true;
             }
@@ -77,8 +76,8 @@ namespace Gs2.Unity.UiKit.Gs2JobQueue.Context
     {
         public OwnJob Job;
 
-        public void SetOwnJob(OwnJob Job) {
-            this.Job = Job;
+        public void SetOwnJob(OwnJob job) {
+            this.Job = job;
         }
     }
 

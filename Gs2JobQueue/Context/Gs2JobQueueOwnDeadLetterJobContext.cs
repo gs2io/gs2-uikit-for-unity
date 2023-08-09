@@ -42,8 +42,7 @@ namespace Gs2.Unity.UiKit.Gs2JobQueue.Context
                 Debug.LogError($"{gameObject.GetFullPath()}: DeadLetterJob is not set in Gs2JobQueueOwnDeadLetterJobContext.");
             }
         }
-
-        public bool HasError() {
+        public virtual bool HasError() {
             if (DeadLetterJob == null) {
                 return true;
             }
@@ -77,8 +76,8 @@ namespace Gs2.Unity.UiKit.Gs2JobQueue.Context
     {
         public OwnDeadLetterJob DeadLetterJob;
 
-        public void SetOwnDeadLetterJob(OwnDeadLetterJob DeadLetterJob) {
-            this.DeadLetterJob = DeadLetterJob;
+        public void SetOwnDeadLetterJob(OwnDeadLetterJob deadLetterJob) {
+            this.DeadLetterJob = deadLetterJob;
         }
     }
 

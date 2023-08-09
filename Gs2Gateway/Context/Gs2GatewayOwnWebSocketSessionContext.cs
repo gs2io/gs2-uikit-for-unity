@@ -42,8 +42,7 @@ namespace Gs2.Unity.UiKit.Gs2Gateway.Context
                 Debug.LogError($"{gameObject.GetFullPath()}: WebSocketSession is not set in Gs2GatewayOwnWebSocketSessionContext.");
             }
         }
-
-        public bool HasError() {
+        public virtual bool HasError() {
             if (WebSocketSession == null) {
                 return true;
             }
@@ -77,8 +76,8 @@ namespace Gs2.Unity.UiKit.Gs2Gateway.Context
     {
         public OwnWebSocketSession WebSocketSession;
 
-        public void SetOwnWebSocketSession(OwnWebSocketSession WebSocketSession) {
-            this.WebSocketSession = WebSocketSession;
+        public void SetOwnWebSocketSession(OwnWebSocketSession webSocketSession) {
+            this.WebSocketSession = webSocketSession;
         }
     }
 

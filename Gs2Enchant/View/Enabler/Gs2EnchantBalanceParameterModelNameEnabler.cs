@@ -87,7 +87,7 @@ namespace Gs2.Unity.UiKit.Gs2Enchant.Enabler
             }
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
             _fetcher = GetComponent<Gs2EnchantBalanceParameterModelFetcher>() ?? GetComponentInParent<Gs2EnchantBalanceParameterModelFetcher>(true);
             if (_fetcher == null) {

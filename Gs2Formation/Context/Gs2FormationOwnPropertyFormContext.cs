@@ -42,8 +42,7 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Context
                 Debug.LogError($"{gameObject.GetFullPath()}: PropertyForm is not set in Gs2FormationOwnPropertyFormContext.");
             }
         }
-
-        public bool HasError() {
+        public virtual bool HasError() {
             if (PropertyForm == null) {
                 if (GetComponentInParent<Gs2FormationOwnPropertyFormList>(true) != null) {
                     return false;
@@ -82,8 +81,8 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Context
     {
         public OwnPropertyForm PropertyForm;
 
-        public void SetOwnPropertyForm(OwnPropertyForm PropertyForm) {
-            this.PropertyForm = PropertyForm;
+        public void SetOwnPropertyForm(OwnPropertyForm propertyForm) {
+            this.PropertyForm = propertyForm;
         }
     }
 

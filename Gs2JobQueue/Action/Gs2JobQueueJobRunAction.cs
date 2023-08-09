@@ -134,7 +134,7 @@ namespace Gs2.Unity.UiKit.Gs2JobQueue
             }
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
             this._context = GetComponent<Gs2JobQueueOwnJobContext>() ?? GetComponentInParent<Gs2JobQueueOwnJobContext>(true);
             if (_context == null) {

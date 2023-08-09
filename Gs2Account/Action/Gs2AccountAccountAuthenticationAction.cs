@@ -136,7 +136,7 @@ namespace Gs2.Unity.UiKit.Gs2Account
             }
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
             this._context = GetComponent<Gs2AccountOwnAccountContext>() ?? GetComponentInParent<Gs2AccountOwnAccountContext>(true);
             if (_context == null) {

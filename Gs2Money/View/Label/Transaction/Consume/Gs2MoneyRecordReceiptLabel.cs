@@ -86,7 +86,7 @@ namespace Gs2.Unity.UiKit.Gs2Money.Label
             Update();
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
             _fetcher = GetComponent<Gs2MoneyRecordReceiptFetcher>() ?? GetComponentInParent<Gs2MoneyRecordReceiptFetcher>(true);
             if (_fetcher == null) {

@@ -127,7 +127,7 @@ namespace Gs2.Unity.UiKit.Gs2MegaField.Fetcher
             }
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
             Context = GetComponent<Gs2MegaFieldAreaModelContext>() ?? GetComponentInParent<Gs2MegaFieldAreaModelContext>(true);
             if (Context == null) {

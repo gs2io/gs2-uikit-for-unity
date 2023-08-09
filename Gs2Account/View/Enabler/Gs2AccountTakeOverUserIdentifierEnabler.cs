@@ -87,7 +87,7 @@ namespace Gs2.Unity.UiKit.Gs2Account.Enabler
             }
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
             _fetcher = GetComponent<Gs2AccountOwnTakeOverFetcher>() ?? GetComponentInParent<Gs2AccountOwnTakeOverFetcher>(true);
             if (_fetcher == null) {

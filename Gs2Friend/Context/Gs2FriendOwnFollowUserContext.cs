@@ -42,8 +42,7 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Context
                 Debug.LogError($"{gameObject.GetFullPath()}: FollowUser is not set in Gs2FriendOwnFollowUserContext.");
             }
         }
-
-        public bool HasError() {
+        public virtual bool HasError() {
             if (FollowUser == null) {
                 if (GetComponentInParent<Gs2FriendOwnFollowUserList>(true) != null) {
                     return false;
@@ -82,8 +81,8 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Context
     {
         public OwnFollowUser FollowUser;
 
-        public void SetOwnFollowUser(OwnFollowUser FollowUser) {
-            this.FollowUser = FollowUser;
+        public void SetOwnFollowUser(OwnFollowUser followUser) {
+            this.FollowUser = followUser;
         }
     }
 

@@ -136,7 +136,7 @@ namespace Gs2.Unity.UiKit.Gs2Gateway
             }
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
             this._context = GetComponent<Gs2GatewayOwnWebSocketSessionContext>() ?? GetComponentInParent<Gs2GatewayOwnWebSocketSessionContext>(true);
             if (_context == null) {

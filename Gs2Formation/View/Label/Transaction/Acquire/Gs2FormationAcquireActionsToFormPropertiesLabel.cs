@@ -128,7 +128,7 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Label
             Update();
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
             _fetcher = GetComponent<Gs2FormationAcquireActionsToFormPropertiesFetcher>() ?? GetComponentInParent<Gs2FormationAcquireActionsToFormPropertiesFetcher>(true);
             _userDataFetcher = GetComponent<Gs2FormationOwnFormFetcher>() ?? GetComponentInParent<Gs2FormationOwnFormFetcher>(true);

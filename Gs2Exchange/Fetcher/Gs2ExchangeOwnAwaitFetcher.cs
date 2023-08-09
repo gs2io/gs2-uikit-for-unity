@@ -129,7 +129,7 @@ namespace Gs2.Unity.UiKit.Gs2Exchange.Fetcher
             }
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
             Context = GetComponent<Gs2ExchangeOwnAwaitContext>() ?? GetComponentInParent<Gs2ExchangeOwnAwaitContext>(true);
             if (Context == null) {

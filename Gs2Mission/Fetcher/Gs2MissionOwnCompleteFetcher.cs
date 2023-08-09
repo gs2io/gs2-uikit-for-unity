@@ -129,7 +129,7 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Fetcher
             }
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
             Context = GetComponent<Gs2MissionOwnCompleteContext>() ?? GetComponentInParent<Gs2MissionOwnCompleteContext>(true);
             if (Context == null) {

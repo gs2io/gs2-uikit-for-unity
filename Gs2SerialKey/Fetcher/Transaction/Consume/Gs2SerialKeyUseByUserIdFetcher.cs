@@ -72,7 +72,7 @@ namespace Gs2.Unity.UiKit.Gs2SerialKey.Fetcher
                         Fetched = true;
                     }
                 }
-                yield return new WaitForSeconds(1);
+                yield return new WaitForSeconds(0.1f);
             }
             // ReSharper disable once IteratorNeverReturns
         }
@@ -96,6 +96,10 @@ namespace Gs2.Unity.UiKit.Gs2SerialKey.Fetcher
     {
         private IConsumeActionsFetcher _fetcher;
 
+        public new void Start() {
+
+        }
+
         public void Awake()
         {
             _fetcher = GetComponent<IConsumeActionsFetcher>() ?? GetComponentInParent<IConsumeActionsFetcher>();
@@ -106,8 +110,11 @@ namespace Gs2.Unity.UiKit.Gs2SerialKey.Fetcher
             }
         }
 
-        public bool HasError()
+        public override bool HasError()
         {
+            if (!base.HasError()) {
+                return false;
+            }
             _fetcher = GetComponent<IConsumeActionsFetcher>() ?? GetComponentInParent<IConsumeActionsFetcher>(true);
             if (_fetcher == null) {
                 return true;

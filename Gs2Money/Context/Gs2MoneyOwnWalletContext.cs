@@ -42,8 +42,7 @@ namespace Gs2.Unity.UiKit.Gs2Money.Context
                 Debug.LogError($"{gameObject.GetFullPath()}: Wallet is not set in Gs2MoneyOwnWalletContext.");
             }
         }
-
-        public bool HasError() {
+        public virtual bool HasError() {
             if (Wallet == null) {
                 return true;
             }
@@ -77,8 +76,8 @@ namespace Gs2.Unity.UiKit.Gs2Money.Context
     {
         public OwnWallet Wallet;
 
-        public void SetOwnWallet(OwnWallet Wallet) {
-            this.Wallet = Wallet;
+        public void SetOwnWallet(OwnWallet wallet) {
+            this.Wallet = wallet;
         }
     }
 
