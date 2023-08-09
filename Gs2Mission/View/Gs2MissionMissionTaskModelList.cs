@@ -46,7 +46,12 @@ namespace Gs2.Unity.UiKit.Gs2Mission
             if (_fetcher.Fetched && this._fetcher.MissionTaskModels != null) {
                 for (var i = 0; i < this.maximumItems; i++) {
                     if (i < this._fetcher.MissionTaskModels.Count) {
-                        _children[i].MissionTaskModel.missionTaskName = this._fetcher.MissionTaskModels[i].Name;
+                        _children[i].SetMissionTaskModel(
+                            MissionTaskModel.New(
+                                this._fetcher.Context.MissionGroupModel,
+                                this._fetcher.MissionTaskModels[i].Name
+                            )
+                        );
                         _children[i].gameObject.SetActive(true);
                     }
                     else {

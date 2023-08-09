@@ -46,7 +46,12 @@ namespace Gs2.Unity.UiKit.Gs2Inventory
             if (_fetcher.Fetched && this._fetcher.SimpleInventoryModels != null) {
                 for (var i = 0; i < this.maximumItems; i++) {
                     if (i < this._fetcher.SimpleInventoryModels.Count) {
-                        _children[i].SimpleInventoryModel.inventoryName = this._fetcher.SimpleInventoryModels[i].Name;
+                        _children[i].SetSimpleInventoryModel(
+                            SimpleInventoryModel.New(
+                                this._fetcher.Context.Namespace,
+                                this._fetcher.SimpleInventoryModels[i].Name
+                            )
+                        );
                         _children[i].gameObject.SetActive(true);
                     }
                     else {

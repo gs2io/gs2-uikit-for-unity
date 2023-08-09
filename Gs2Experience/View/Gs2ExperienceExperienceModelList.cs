@@ -46,7 +46,12 @@ namespace Gs2.Unity.UiKit.Gs2Experience
             if (_fetcher.Fetched && this._fetcher.ExperienceModels != null) {
                 for (var i = 0; i < this.maximumItems; i++) {
                     if (i < this._fetcher.ExperienceModels.Count) {
-                        _children[i].ExperienceModel.experienceName = this._fetcher.ExperienceModels[i].Name;
+                        _children[i].SetExperienceModel(
+                            ExperienceModel.New(
+                                this._fetcher.Context.Namespace,
+                                this._fetcher.ExperienceModels[i].Name
+                            )
+                        );
                         _children[i].gameObject.SetActive(true);
                     }
                     else {

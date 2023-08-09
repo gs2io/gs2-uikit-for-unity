@@ -46,7 +46,12 @@ namespace Gs2.Unity.UiKit.Gs2Enchant
             if (_fetcher.Fetched && this._fetcher.RarityParameterModels != null) {
                 for (var i = 0; i < this.maximumItems; i++) {
                     if (i < this._fetcher.RarityParameterModels.Count) {
-                        _children[i].RarityParameterModel.parameterName = this._fetcher.RarityParameterModels[i].Name;
+                        _children[i].SetRarityParameterModel(
+                            RarityParameterModel.New(
+                                this._fetcher.Context.Namespace,
+                                this._fetcher.RarityParameterModels[i].Name
+                            )
+                        );
                         _children[i].gameObject.SetActive(true);
                     }
                     else {

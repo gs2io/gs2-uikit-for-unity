@@ -46,7 +46,12 @@ namespace Gs2.Unity.UiKit.Gs2MegaField
             if (_fetcher.Fetched && this._fetcher.LayerModels != null) {
                 for (var i = 0; i < this.maximumItems; i++) {
                     if (i < this._fetcher.LayerModels.Count) {
-                        _children[i].LayerModel.layerModelName = this._fetcher.LayerModels[i].Name;
+                        _children[i].SetLayerModel(
+                            LayerModel.New(
+                                this._fetcher.Context.AreaModel,
+                                this._fetcher.LayerModels[i].Name
+                            )
+                        );
                         _children[i].gameObject.SetActive(true);
                     }
                     else {

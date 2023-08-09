@@ -46,7 +46,12 @@ namespace Gs2.Unity.UiKit.Gs2Chat
             if (_fetcher.Fetched && this._fetcher.Messages != null) {
                 for (var i = 0; i < this.maximumItems; i++) {
                     if (i < this._fetcher.Messages.Count) {
-                        _children[i].Message.messageName = this._fetcher.Messages[i].Name;
+                        _children[i].SetMessage(
+                            Message.New(
+                                this._fetcher.Context.Room,
+                                this._fetcher.Messages[i].Name
+                            )
+                        );
                         _children[i].gameObject.SetActive(true);
                     }
                     else {

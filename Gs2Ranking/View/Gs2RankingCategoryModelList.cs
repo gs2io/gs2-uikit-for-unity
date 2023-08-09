@@ -46,7 +46,12 @@ namespace Gs2.Unity.UiKit.Gs2Ranking
             if (_fetcher.Fetched && this._fetcher.CategoryModels != null) {
                 for (var i = 0; i < this.maximumItems; i++) {
                     if (i < this._fetcher.CategoryModels.Count) {
-                        _children[i].CategoryModel.categoryName = this._fetcher.CategoryModels[i].Name;
+                        _children[i].SetCategoryModel(
+                            CategoryModel.New(
+                                this._fetcher.Context.Namespace,
+                                this._fetcher.CategoryModels[i].Name
+                            )
+                        );
                         _children[i].gameObject.SetActive(true);
                     }
                     else {

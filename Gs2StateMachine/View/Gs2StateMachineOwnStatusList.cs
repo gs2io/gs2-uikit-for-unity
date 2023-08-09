@@ -46,7 +46,12 @@ namespace Gs2.Unity.UiKit.Gs2StateMachine
             if (_fetcher.Fetched && this._fetcher.Statuses != null) {
                 for (var i = 0; i < this.maximumItems; i++) {
                     if (i < this._fetcher.Statuses.Count) {
-                        _children[i].Status.statusName = this._fetcher.Statuses[i].Name;
+                        _children[i].SetOwnStatus(
+                            OwnStatus.New(
+                                this._fetcher.Context.Namespace,
+                                this._fetcher.Statuses[i].Name
+                            )
+                        );
                         _children[i].gameObject.SetActive(true);
                     }
                     else {

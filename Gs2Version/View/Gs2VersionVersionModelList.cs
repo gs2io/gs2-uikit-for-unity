@@ -46,7 +46,12 @@ namespace Gs2.Unity.UiKit.Gs2Version
             if (_fetcher.Fetched && this._fetcher.VersionModels != null) {
                 for (var i = 0; i < this.maximumItems; i++) {
                     if (i < this._fetcher.VersionModels.Count) {
-                        _children[i].VersionModel.versionName = this._fetcher.VersionModels[i].Name;
+                        _children[i].SetVersionModel(
+                            VersionModel.New(
+                                this._fetcher.Context.Namespace,
+                                this._fetcher.VersionModels[i].Name
+                            )
+                        );
                         _children[i].gameObject.SetActive(true);
                     }
                     else {

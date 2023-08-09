@@ -46,7 +46,12 @@ namespace Gs2.Unity.UiKit.Gs2Stamina
             if (_fetcher.Fetched && this._fetcher.StaminaModels != null) {
                 for (var i = 0; i < this.maximumItems; i++) {
                     if (i < this._fetcher.StaminaModels.Count) {
-                        _children[i].StaminaModel.staminaName = this._fetcher.StaminaModels[i].Name;
+                        _children[i].SetStaminaModel(
+                            StaminaModel.New(
+                                this._fetcher.Context.Namespace,
+                                this._fetcher.StaminaModels[i].Name
+                            )
+                        );
                         _children[i].gameObject.SetActive(true);
                     }
                     else {

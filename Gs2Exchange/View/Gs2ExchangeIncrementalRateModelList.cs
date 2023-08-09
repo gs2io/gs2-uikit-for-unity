@@ -46,7 +46,12 @@ namespace Gs2.Unity.UiKit.Gs2Exchange
             if (_fetcher.Fetched && this._fetcher.IncrementalRateModels != null) {
                 for (var i = 0; i < this.maximumItems; i++) {
                     if (i < this._fetcher.IncrementalRateModels.Count) {
-                        _children[i].IncrementalRateModel.rateName = this._fetcher.IncrementalRateModels[i].Name;
+                        _children[i].SetIncrementalRateModel(
+                            IncrementalRateModel.New(
+                                this._fetcher.Context.Namespace,
+                                this._fetcher.IncrementalRateModels[i].Name
+                            )
+                        );
                         _children[i].gameObject.SetActive(true);
                     }
                     else {

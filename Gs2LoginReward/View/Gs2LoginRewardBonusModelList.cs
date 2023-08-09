@@ -46,7 +46,12 @@ namespace Gs2.Unity.UiKit.Gs2LoginReward
             if (_fetcher.Fetched && this._fetcher.BonusModels != null) {
                 for (var i = 0; i < this.maximumItems; i++) {
                     if (i < this._fetcher.BonusModels.Count) {
-                        _children[i].BonusModel.bonusModelName = this._fetcher.BonusModels[i].Name;
+                        _children[i].SetBonusModel(
+                            BonusModel.New(
+                                this._fetcher.Context.Namespace,
+                                this._fetcher.BonusModels[i].Name
+                            )
+                        );
                         _children[i].gameObject.SetActive(true);
                     }
                     else {

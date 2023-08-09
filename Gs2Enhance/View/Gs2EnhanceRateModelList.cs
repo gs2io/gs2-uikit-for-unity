@@ -46,7 +46,12 @@ namespace Gs2.Unity.UiKit.Gs2Enhance
             if (_fetcher.Fetched && this._fetcher.RateModels != null) {
                 for (var i = 0; i < this.maximumItems; i++) {
                     if (i < this._fetcher.RateModels.Count) {
-                        _children[i].RateModel.rateName = this._fetcher.RateModels[i].Name;
+                        _children[i].SetRateModel(
+                            RateModel.New(
+                                this._fetcher.Context.Namespace,
+                                this._fetcher.RateModels[i].Name
+                            )
+                        );
                         _children[i].gameObject.SetActive(true);
                     }
                     else {

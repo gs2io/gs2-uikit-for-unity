@@ -46,7 +46,12 @@ namespace Gs2.Unity.UiKit.Gs2Datastore
             if (_fetcher.Fetched && this._fetcher.DataObjectHistories != null) {
                 for (var i = 0; i < this.maximumItems; i++) {
                     if (i < this._fetcher.DataObjectHistories.Count) {
-                        _children[i].DataObjectHistory.generation = this._fetcher.DataObjectHistories[i].Generation;
+                        _children[i].SetOwnDataObjectHistory(
+                            OwnDataObjectHistory.New(
+                                this._fetcher.Context.DataObject,
+                                this._fetcher.DataObjectHistories[i].Generation
+                            )
+                        );
                         _children[i].gameObject.SetActive(true);
                     }
                     else {

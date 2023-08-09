@@ -46,8 +46,13 @@ namespace Gs2.Unity.UiKit.Gs2Experience
             if (_fetcher.Fetched && this._fetcher.Statuses != null) {
                 for (var i = 0; i < this.maximumItems; i++) {
                     if (i < this._fetcher.Statuses.Count) {
-                        _children[i].Status.experienceName = this._fetcher.Statuses[i].ExperienceName;
-                        _children[i].Status.propertyId = this._fetcher.Statuses[i].PropertyId;
+                        _children[i].SetOwnStatus(
+                            OwnStatus.New(
+                                this._fetcher.Context.Namespace,
+                                this._fetcher.Statuses[i].ExperienceName,
+                                this._fetcher.Statuses[i].PropertyId
+                            )
+                        );
                         _children[i].gameObject.SetActive(true);
                     }
                     else {

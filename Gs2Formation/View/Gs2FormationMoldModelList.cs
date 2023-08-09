@@ -46,7 +46,12 @@ namespace Gs2.Unity.UiKit.Gs2Formation
             if (_fetcher.Fetched && this._fetcher.MoldModels != null) {
                 for (var i = 0; i < this.maximumItems; i++) {
                     if (i < this._fetcher.MoldModels.Count) {
-                        _children[i].MoldModel.moldName = this._fetcher.MoldModels[i].Name;
+                        _children[i].SetMoldModel(
+                            MoldModel.New(
+                                this._fetcher.Context.Namespace,
+                                this._fetcher.MoldModels[i].Name
+                            )
+                        );
                         _children[i].gameObject.SetActive(true);
                     }
                     else {

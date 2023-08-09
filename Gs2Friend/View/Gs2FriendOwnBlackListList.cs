@@ -46,6 +46,11 @@ namespace Gs2.Unity.UiKit.Gs2Friend
             if (_fetcher.Fetched && this._fetcher.BlackList != null) {
                 for (var i = 0; i < this.maximumItems; i++) {
                     if (i < this._fetcher.BlackList.Count) {
+                        _children[i].SetOwnBlackList(
+                            OwnBlackList.New(
+                                this._fetcher.Context.Namespace
+                            )
+                        );
                         _children[i].gameObject.SetActive(true);
                     }
                     else {

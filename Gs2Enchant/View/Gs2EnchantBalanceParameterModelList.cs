@@ -46,7 +46,12 @@ namespace Gs2.Unity.UiKit.Gs2Enchant
             if (_fetcher.Fetched && this._fetcher.BalanceParameterModels != null) {
                 for (var i = 0; i < this.maximumItems; i++) {
                     if (i < this._fetcher.BalanceParameterModels.Count) {
-                        _children[i].BalanceParameterModel.parameterName = this._fetcher.BalanceParameterModels[i].Name;
+                        _children[i].SetBalanceParameterModel(
+                            BalanceParameterModel.New(
+                                this._fetcher.Context.Namespace,
+                                this._fetcher.BalanceParameterModels[i].Name
+                            )
+                        );
                         _children[i].gameObject.SetActive(true);
                     }
                     else {

@@ -46,7 +46,12 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking
             if (_fetcher.Fetched && this._fetcher.RatingModels != null) {
                 for (var i = 0; i < this.maximumItems; i++) {
                     if (i < this._fetcher.RatingModels.Count) {
-                        _children[i].RatingModel.ratingName = this._fetcher.RatingModels[i].Name;
+                        _children[i].SetRatingModel(
+                            RatingModel.New(
+                                this._fetcher.Context.Namespace,
+                                this._fetcher.RatingModels[i].Name
+                            )
+                        );
                         _children[i].gameObject.SetActive(true);
                     }
                     else {

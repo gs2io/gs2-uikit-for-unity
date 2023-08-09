@@ -46,7 +46,12 @@ namespace Gs2.Unity.UiKit.Gs2Dictionary
             if (_fetcher.Fetched && this._fetcher.EntryModels != null) {
                 for (var i = 0; i < this.maximumItems; i++) {
                     if (i < this._fetcher.EntryModels.Count) {
-                        _children[i].EntryModel.entryName = this._fetcher.EntryModels[i].Name;
+                        _children[i].SetEntryModel(
+                            EntryModel.New(
+                                this._fetcher.Context.Namespace,
+                                this._fetcher.EntryModels[i].Name
+                            )
+                        );
                         _children[i].gameObject.SetActive(true);
                     }
                     else {

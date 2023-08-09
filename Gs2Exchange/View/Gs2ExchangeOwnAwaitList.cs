@@ -46,7 +46,12 @@ namespace Gs2.Unity.UiKit.Gs2Exchange
             if (_fetcher.Fetched && this._fetcher.Awaits != null) {
                 for (var i = 0; i < this.maximumItems; i++) {
                     if (i < this._fetcher.Awaits.Count) {
-                        _children[i].Await_.awaitName = this._fetcher.Awaits[i].Name;
+                        _children[i].SetOwnAwait(
+                            OwnAwait.New(
+                                this._fetcher.Context.Namespace,
+                                this._fetcher.Awaits[i].Name
+                            )
+                        );
                         _children[i].gameObject.SetActive(true);
                     }
                     else {

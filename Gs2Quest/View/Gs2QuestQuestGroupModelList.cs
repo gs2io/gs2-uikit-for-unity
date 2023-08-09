@@ -46,7 +46,12 @@ namespace Gs2.Unity.UiKit.Gs2Quest
             if (_fetcher.Fetched && this._fetcher.QuestGroupModels != null) {
                 for (var i = 0; i < this.maximumItems; i++) {
                     if (i < this._fetcher.QuestGroupModels.Count) {
-                        _children[i].QuestGroupModel.questGroupName = this._fetcher.QuestGroupModels[i].Name;
+                        _children[i].SetQuestGroupModel(
+                            QuestGroupModel.New(
+                                this._fetcher.Context.Namespace,
+                                this._fetcher.QuestGroupModels[i].Name
+                            )
+                        );
                         _children[i].gameObject.SetActive(true);
                     }
                     else {

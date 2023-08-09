@@ -46,7 +46,12 @@ namespace Gs2.Unity.UiKit.Gs2Limit
             if (_fetcher.Fetched && this._fetcher.LimitModels != null) {
                 for (var i = 0; i < this.maximumItems; i++) {
                     if (i < this._fetcher.LimitModels.Count) {
-                        _children[i].LimitModel.limitName = this._fetcher.LimitModels[i].Name;
+                        _children[i].SetLimitModel(
+                            LimitModel.New(
+                                this._fetcher.Context.Namespace,
+                                this._fetcher.LimitModels[i].Name
+                            )
+                        );
                         _children[i].gameObject.SetActive(true);
                     }
                     else {

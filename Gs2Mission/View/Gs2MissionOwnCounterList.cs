@@ -46,8 +46,12 @@ namespace Gs2.Unity.UiKit.Gs2Mission
             if (_fetcher.Fetched && this._fetcher.Counters != null) {
                 for (var i = 0; i < this.maximumItems; i++) {
                     if (i < this._fetcher.Counters.Count) {
-                        _children[i].CounterModel.counterName = this._fetcher.Counters[i].Name;
-                        _children[i].Counter.counterName = this._fetcher.Counters[i].Name;
+                        _children[i].SetOwnCounter(
+                            OwnCounter.New(
+                                this._fetcher.Context.Namespace,
+                                this._fetcher.Counters[i].Name
+                            )
+                        );
                         _children[i].gameObject.SetActive(true);
                     }
                     else {

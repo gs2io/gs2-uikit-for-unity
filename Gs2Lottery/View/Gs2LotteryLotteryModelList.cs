@@ -46,7 +46,12 @@ namespace Gs2.Unity.UiKit.Gs2Lottery
             if (_fetcher.Fetched && this._fetcher.LotteryModels != null) {
                 for (var i = 0; i < this.maximumItems; i++) {
                     if (i < this._fetcher.LotteryModels.Count) {
-                        _children[i].LotteryModel.lotteryName = this._fetcher.LotteryModels[i].Name;
+                        _children[i].SetLotteryModel(
+                            LotteryModel.New(
+                                this._fetcher.Context.Namespace,
+                                this._fetcher.LotteryModels[i].Name
+                            )
+                        );
                         _children[i].gameObject.SetActive(true);
                     }
                     else {

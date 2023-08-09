@@ -46,7 +46,12 @@ namespace Gs2.Unity.UiKit.Gs2Schedule
             if (_fetcher.Fetched && this._fetcher.Events != null) {
                 for (var i = 0; i < this.maximumItems; i++) {
                     if (i < this._fetcher.Events.Count) {
-                        _children[i].Event_.eventName = this._fetcher.Events[i].Name;
+                        _children[i].SetOwnEvent(
+                            OwnEvent.New(
+                                this._fetcher.Context.Namespace,
+                                this._fetcher.Events[i].Name
+                            )
+                        );
                         _children[i].gameObject.SetActive(true);
                     }
                     else {
