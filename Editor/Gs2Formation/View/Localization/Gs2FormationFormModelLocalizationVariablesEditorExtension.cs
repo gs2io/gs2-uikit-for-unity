@@ -69,10 +69,12 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Localization.Editor
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2FormationFormModelFetcher), false);
                     EditorGUI.indentLevel++;
                     context.FormModel = EditorGUILayout.ObjectField("FormModel", context.FormModel, typeof(FormModel), false) as FormModel;
-                    EditorGUI.indentLevel++;
-                    EditorGUILayout.TextField("NamespaceName", context.FormModel?.NamespaceName?.ToString());
-                    EditorGUILayout.TextField("FormModelName", context.FormModel?.FormModelName?.ToString());
-                    EditorGUI.indentLevel--;
+                    if (context.FormModel != null) {
+                        EditorGUI.indentLevel++;
+                        EditorGUILayout.TextField("NamespaceName", context.FormModel?.NamespaceName?.ToString());
+                        EditorGUILayout.TextField("FormModelName", context.FormModel?.FormModelName?.ToString());
+                        EditorGUI.indentLevel--;
+                    }
                     EditorGUI.indentLevel--;
                     EditorGUI.EndDisabledGroup();
                 }

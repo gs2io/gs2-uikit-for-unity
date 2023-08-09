@@ -63,10 +63,12 @@ namespace Gs2.Unity.UiKit.Gs2Stamina.Localization.Editor
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2StaminaStaminaModelFetcher), false);
                     EditorGUI.indentLevel++;
                     context.StaminaModel = EditorGUILayout.ObjectField("StaminaModel", context.StaminaModel, typeof(StaminaModel), false) as StaminaModel;
-                    EditorGUI.indentLevel++;
-                    EditorGUILayout.TextField("NamespaceName", context.StaminaModel?.NamespaceName?.ToString());
-                    EditorGUILayout.TextField("StaminaName", context.StaminaModel?.StaminaName?.ToString());
-                    EditorGUI.indentLevel--;
+                    if (context.StaminaModel != null) {
+                        EditorGUI.indentLevel++;
+                        EditorGUILayout.TextField("NamespaceName", context.StaminaModel?.NamespaceName?.ToString());
+                        EditorGUILayout.TextField("StaminaName", context.StaminaModel?.StaminaName?.ToString());
+                        EditorGUI.indentLevel--;
+                    }
                     EditorGUI.indentLevel--;
                     EditorGUI.EndDisabledGroup();
                 }

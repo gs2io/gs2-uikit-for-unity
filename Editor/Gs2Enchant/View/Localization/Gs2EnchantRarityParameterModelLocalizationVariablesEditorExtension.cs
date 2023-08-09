@@ -63,10 +63,12 @@ namespace Gs2.Unity.UiKit.Gs2Enchant.Localization.Editor
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2EnchantRarityParameterModelFetcher), false);
                     EditorGUI.indentLevel++;
                     context.RarityParameterModel = EditorGUILayout.ObjectField("RarityParameterModel", context.RarityParameterModel, typeof(RarityParameterModel), false) as RarityParameterModel;
-                    EditorGUI.indentLevel++;
-                    EditorGUILayout.TextField("NamespaceName", context.RarityParameterModel?.NamespaceName?.ToString());
-                    EditorGUILayout.TextField("ParameterName", context.RarityParameterModel?.ParameterName?.ToString());
-                    EditorGUI.indentLevel--;
+                    if (context.RarityParameterModel != null) {
+                        EditorGUI.indentLevel++;
+                        EditorGUILayout.TextField("NamespaceName", context.RarityParameterModel?.NamespaceName?.ToString());
+                        EditorGUILayout.TextField("ParameterName", context.RarityParameterModel?.ParameterName?.ToString());
+                        EditorGUI.indentLevel--;
+                    }
                     EditorGUI.indentLevel--;
                     EditorGUI.EndDisabledGroup();
                 }

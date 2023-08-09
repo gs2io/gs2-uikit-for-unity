@@ -63,10 +63,12 @@ namespace Gs2.Unity.UiKit.Gs2LoginReward.Localization.Editor
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2LoginRewardOwnReceiveStatusFetcher), false);
                     EditorGUI.indentLevel++;
                     context.ReceiveStatus = EditorGUILayout.ObjectField("ReceiveStatus", context.ReceiveStatus, typeof(OwnReceiveStatus), false) as OwnReceiveStatus;
-                    EditorGUI.indentLevel++;
-                    EditorGUILayout.TextField("NamespaceName", context.ReceiveStatus?.NamespaceName?.ToString());
-                    EditorGUILayout.TextField("BonusModelName", context.ReceiveStatus?.BonusModelName?.ToString());
-                    EditorGUI.indentLevel--;
+                    if (context.ReceiveStatus != null) {
+                        EditorGUI.indentLevel++;
+                        EditorGUILayout.TextField("NamespaceName", context.ReceiveStatus?.NamespaceName?.ToString());
+                        EditorGUILayout.TextField("BonusModelName", context.ReceiveStatus?.BonusModelName?.ToString());
+                        EditorGUI.indentLevel--;
+                    }
                     EditorGUI.indentLevel--;
                     EditorGUI.EndDisabledGroup();
                 }

@@ -63,10 +63,12 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Localization.Editor
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2RankingOwnSubscribeUserFetcher), false);
                     EditorGUI.indentLevel++;
                     context.SubscribeUser = EditorGUILayout.ObjectField("SubscribeUser", context.SubscribeUser, typeof(OwnSubscribeUser), false) as OwnSubscribeUser;
-                    EditorGUI.indentLevel++;
-                    EditorGUILayout.TextField("CategoryName", context.SubscribeUser?.CategoryName?.ToString());
-                    EditorGUILayout.TextField("TargetUserId", context.SubscribeUser?.TargetUserId?.ToString());
-                    EditorGUI.indentLevel--;
+                    if (context.SubscribeUser != null) {
+                        EditorGUI.indentLevel++;
+                        EditorGUILayout.TextField("CategoryName", context.SubscribeUser?.CategoryName?.ToString());
+                        EditorGUILayout.TextField("TargetUserId", context.SubscribeUser?.TargetUserId?.ToString());
+                        EditorGUI.indentLevel--;
+                    }
                     EditorGUI.indentLevel--;
                     EditorGUI.EndDisabledGroup();
                 }

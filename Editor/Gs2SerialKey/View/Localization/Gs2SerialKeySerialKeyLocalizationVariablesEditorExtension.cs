@@ -56,10 +56,12 @@ namespace Gs2.Unity.UiKit.Gs2SerialKey.Localization.Editor
                 EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2SerialKeyOwnSerialKeyFetcher), false);
                 EditorGUI.indentLevel++;
                 context.SerialKey = EditorGUILayout.ObjectField("SerialKey", context.SerialKey, typeof(OwnSerialKey), false) as OwnSerialKey;
-                EditorGUI.indentLevel++;
-                EditorGUILayout.TextField("NamespaceName", context.SerialKey?.NamespaceName?.ToString());
-                EditorGUILayout.TextField("SerialKeyCode", context.SerialKey?.SerialKeyCode?.ToString());
-                EditorGUI.indentLevel--;
+                if (context.SerialKey != null) {
+                    EditorGUI.indentLevel++;
+                    EditorGUILayout.TextField("NamespaceName", context.SerialKey?.NamespaceName?.ToString());
+                    EditorGUILayout.TextField("SerialKeyCode", context.SerialKey?.SerialKeyCode?.ToString());
+                    EditorGUI.indentLevel--;
+                }
                 EditorGUI.indentLevel--;
                 EditorGUI.EndDisabledGroup();
             }

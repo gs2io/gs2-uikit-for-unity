@@ -87,9 +87,9 @@ namespace Gs2.Unity.UiKit.Gs2Stamina.Context
         public void SetOwnStamina(OwnStamina stamina) {
             this.StaminaModel = StaminaModel.New(
                 Namespace.New(
-                    Stamina.NamespaceName
+                    stamina.NamespaceName
                 ),
-                Stamina.StaminaName
+                stamina.StaminaName
             );
             this.Stamina = stamina;
         }

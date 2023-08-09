@@ -63,9 +63,11 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Localization.Editor
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2FriendOwnFollowUserFetcher), false);
                     EditorGUI.indentLevel++;
                     context.FollowUser = EditorGUILayout.ObjectField("FollowUser", context.FollowUser, typeof(OwnFollowUser), false) as OwnFollowUser;
-                    EditorGUI.indentLevel++;
-                    EditorGUILayout.TextField("NamespaceName", context.FollowUser?.NamespaceName?.ToString());
-                    EditorGUI.indentLevel--;
+                    if (context.FollowUser != null) {
+                        EditorGUI.indentLevel++;
+                        EditorGUILayout.TextField("NamespaceName", context.FollowUser?.NamespaceName?.ToString());
+                        EditorGUI.indentLevel--;
+                    }
                     EditorGUI.indentLevel--;
                     EditorGUI.EndDisabledGroup();
                 }

@@ -63,9 +63,11 @@ namespace Gs2.Unity.UiKit.Gs2MegaField.Localization.Editor
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2MegaFieldLayerModelFetcher), false);
                     EditorGUI.indentLevel++;
                     context.LayerModel = EditorGUILayout.ObjectField("LayerModel", context.LayerModel, typeof(LayerModel), false) as LayerModel;
-                    EditorGUI.indentLevel++;
-                    EditorGUILayout.TextField("LayerModelName", context.LayerModel?.LayerModelName?.ToString());
-                    EditorGUI.indentLevel--;
+                    if (context.LayerModel != null) {
+                        EditorGUI.indentLevel++;
+                        EditorGUILayout.TextField("LayerModelName", context.LayerModel?.LayerModelName?.ToString());
+                        EditorGUI.indentLevel--;
+                    }
                     EditorGUI.indentLevel--;
                     EditorGUI.EndDisabledGroup();
                 }

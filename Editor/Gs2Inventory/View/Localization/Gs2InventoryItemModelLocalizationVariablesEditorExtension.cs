@@ -69,9 +69,11 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Localization.Editor
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2InventoryItemModelFetcher), false);
                     EditorGUI.indentLevel++;
                     context.ItemModel = EditorGUILayout.ObjectField("ItemModel", context.ItemModel, typeof(ItemModel), false) as ItemModel;
-                    EditorGUI.indentLevel++;
-                    EditorGUILayout.TextField("ItemName", context.ItemModel?.ItemName?.ToString());
-                    EditorGUI.indentLevel--;
+                    if (context.ItemModel != null) {
+                        EditorGUI.indentLevel++;
+                        EditorGUILayout.TextField("ItemName", context.ItemModel?.ItemName?.ToString());
+                        EditorGUI.indentLevel--;
+                    }
                     EditorGUI.indentLevel--;
                     EditorGUI.EndDisabledGroup();
                 }

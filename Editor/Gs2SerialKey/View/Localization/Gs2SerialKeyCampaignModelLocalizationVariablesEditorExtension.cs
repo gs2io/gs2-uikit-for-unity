@@ -56,10 +56,12 @@ namespace Gs2.Unity.UiKit.Gs2SerialKey.Localization.Editor
                 EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2SerialKeyCampaignModelFetcher), false);
                 EditorGUI.indentLevel++;
                 context.CampaignModel = EditorGUILayout.ObjectField("CampaignModel", context.CampaignModel, typeof(CampaignModel), false) as CampaignModel;
-                EditorGUI.indentLevel++;
-                EditorGUILayout.TextField("NamespaceName", context.CampaignModel?.NamespaceName?.ToString());
-                EditorGUILayout.TextField("CampaignModelName", context.CampaignModel?.CampaignModelName?.ToString());
-                EditorGUI.indentLevel--;
+                if (context.CampaignModel != null) {
+                    EditorGUI.indentLevel++;
+                    EditorGUILayout.TextField("NamespaceName", context.CampaignModel?.NamespaceName?.ToString());
+                    EditorGUILayout.TextField("CampaignModelName", context.CampaignModel?.CampaignModelName?.ToString());
+                    EditorGUI.indentLevel--;
+                }
                 EditorGUI.indentLevel--;
                 EditorGUI.EndDisabledGroup();
             }

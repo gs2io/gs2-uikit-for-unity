@@ -63,10 +63,12 @@ namespace Gs2.Unity.UiKit.Gs2Enchant.Localization.Editor
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2EnchantBalanceParameterModelFetcher), false);
                     EditorGUI.indentLevel++;
                     context.BalanceParameterModel = EditorGUILayout.ObjectField("BalanceParameterModel", context.BalanceParameterModel, typeof(BalanceParameterModel), false) as BalanceParameterModel;
-                    EditorGUI.indentLevel++;
-                    EditorGUILayout.TextField("NamespaceName", context.BalanceParameterModel?.NamespaceName?.ToString());
-                    EditorGUILayout.TextField("ParameterName", context.BalanceParameterModel?.ParameterName?.ToString());
-                    EditorGUI.indentLevel--;
+                    if (context.BalanceParameterModel != null) {
+                        EditorGUI.indentLevel++;
+                        EditorGUILayout.TextField("NamespaceName", context.BalanceParameterModel?.NamespaceName?.ToString());
+                        EditorGUILayout.TextField("ParameterName", context.BalanceParameterModel?.ParameterName?.ToString());
+                        EditorGUI.indentLevel--;
+                    }
                     EditorGUI.indentLevel--;
                     EditorGUI.EndDisabledGroup();
                 }

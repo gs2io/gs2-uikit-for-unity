@@ -43,13 +43,8 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Editor
             serializedObject.Update();
 
             if (original.SimpleInventory == null) {
-                if (original.GetComponent<Gs2InventoryConvertSimpleInventoryModelToOwnSimpleInventory>() != null) {
-                    EditorGUILayout.HelpBox("OwnSimpleInventory is auto assign from Gs2InventoryConvertSimpleInventoryModelToOwnSimpleInventory.", MessageType.Info);
-                }
-                else {
-                    EditorGUILayout.HelpBox("OwnSimpleInventory not assigned.", MessageType.Error);
-                    EditorGUILayout.PropertyField(serializedObject.FindProperty("SimpleInventory"), true);
-                }
+                EditorGUILayout.HelpBox("OwnSimpleInventory not assigned.", MessageType.Error);
+                EditorGUILayout.PropertyField(serializedObject.FindProperty("SimpleInventory"), true);
             }
             else {
                 original.SimpleInventory = EditorGUILayout.ObjectField("OwnSimpleInventory", original.SimpleInventory, typeof(OwnSimpleInventory), false) as OwnSimpleInventory;

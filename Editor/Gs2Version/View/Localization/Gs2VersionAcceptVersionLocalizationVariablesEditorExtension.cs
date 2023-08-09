@@ -63,10 +63,12 @@ namespace Gs2.Unity.UiKit.Gs2Version.Localization.Editor
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2VersionOwnAcceptVersionFetcher), false);
                     EditorGUI.indentLevel++;
                     context.AcceptVersion = EditorGUILayout.ObjectField("AcceptVersion", context.AcceptVersion, typeof(OwnAcceptVersion), false) as OwnAcceptVersion;
-                    EditorGUI.indentLevel++;
-                    EditorGUILayout.TextField("NamespaceName", context.AcceptVersion?.NamespaceName?.ToString());
-                    EditorGUILayout.TextField("VersionName", context.AcceptVersion?.VersionName?.ToString());
-                    EditorGUI.indentLevel--;
+                    if (context.AcceptVersion != null) {
+                        EditorGUI.indentLevel++;
+                        EditorGUILayout.TextField("NamespaceName", context.AcceptVersion?.NamespaceName?.ToString());
+                        EditorGUILayout.TextField("VersionName", context.AcceptVersion?.VersionName?.ToString());
+                        EditorGUI.indentLevel--;
+                    }
                     EditorGUI.indentLevel--;
                     EditorGUI.EndDisabledGroup();
                 }

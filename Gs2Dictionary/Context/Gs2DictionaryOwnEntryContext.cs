@@ -87,9 +87,9 @@ namespace Gs2.Unity.UiKit.Gs2Dictionary.Context
         public void SetOwnEntry(OwnEntry entry) {
             this.EntryModel = EntryModel.New(
                 Namespace.New(
-                    Entry.NamespaceName
+                    entry.NamespaceName
                 ),
-                Entry.EntryName
+                entry.EntryName
             );
             this.Entry = entry;
         }

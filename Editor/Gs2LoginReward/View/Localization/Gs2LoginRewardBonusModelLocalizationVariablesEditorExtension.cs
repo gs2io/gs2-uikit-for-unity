@@ -63,10 +63,12 @@ namespace Gs2.Unity.UiKit.Gs2LoginReward.Localization.Editor
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2LoginRewardBonusModelFetcher), false);
                     EditorGUI.indentLevel++;
                     context.BonusModel = EditorGUILayout.ObjectField("BonusModel", context.BonusModel, typeof(BonusModel), false) as BonusModel;
-                    EditorGUI.indentLevel++;
-                    EditorGUILayout.TextField("NamespaceName", context.BonusModel?.NamespaceName?.ToString());
-                    EditorGUILayout.TextField("BonusModelName", context.BonusModel?.BonusModelName?.ToString());
-                    EditorGUI.indentLevel--;
+                    if (context.BonusModel != null) {
+                        EditorGUI.indentLevel++;
+                        EditorGUILayout.TextField("NamespaceName", context.BonusModel?.NamespaceName?.ToString());
+                        EditorGUILayout.TextField("BonusModelName", context.BonusModel?.BonusModelName?.ToString());
+                        EditorGUI.indentLevel--;
+                    }
                     EditorGUI.indentLevel--;
                     EditorGUI.EndDisabledGroup();
                 }

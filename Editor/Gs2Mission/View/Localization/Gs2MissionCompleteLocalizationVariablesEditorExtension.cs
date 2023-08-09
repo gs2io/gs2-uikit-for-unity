@@ -63,10 +63,12 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Localization.Editor
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2MissionOwnCompleteFetcher), false);
                     EditorGUI.indentLevel++;
                     context.Complete = EditorGUILayout.ObjectField("Complete", context.Complete, typeof(OwnComplete), false) as OwnComplete;
-                    EditorGUI.indentLevel++;
-                    EditorGUILayout.TextField("NamespaceName", context.Complete?.NamespaceName?.ToString());
-                    EditorGUILayout.TextField("MissionGroupName", context.Complete?.MissionGroupName?.ToString());
-                    EditorGUI.indentLevel--;
+                    if (context.Complete != null) {
+                        EditorGUI.indentLevel++;
+                        EditorGUILayout.TextField("NamespaceName", context.Complete?.NamespaceName?.ToString());
+                        EditorGUILayout.TextField("MissionGroupName", context.Complete?.MissionGroupName?.ToString());
+                        EditorGUI.indentLevel--;
+                    }
                     EditorGUI.indentLevel--;
                     EditorGUI.EndDisabledGroup();
                 }

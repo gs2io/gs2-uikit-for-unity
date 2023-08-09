@@ -63,9 +63,11 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Localization.Editor
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2MissionMissionTaskModelFetcher), false);
                     EditorGUI.indentLevel++;
                     context.MissionTaskModel = EditorGUILayout.ObjectField("MissionTaskModel", context.MissionTaskModel, typeof(MissionTaskModel), false) as MissionTaskModel;
-                    EditorGUI.indentLevel++;
-                    EditorGUILayout.TextField("MissionTaskName", context.MissionTaskModel?.MissionTaskName?.ToString());
-                    EditorGUI.indentLevel--;
+                    if (context.MissionTaskModel != null) {
+                        EditorGUI.indentLevel++;
+                        EditorGUILayout.TextField("MissionTaskName", context.MissionTaskModel?.MissionTaskName?.ToString());
+                        EditorGUI.indentLevel--;
+                    }
                     EditorGUI.indentLevel--;
                     EditorGUI.EndDisabledGroup();
                 }

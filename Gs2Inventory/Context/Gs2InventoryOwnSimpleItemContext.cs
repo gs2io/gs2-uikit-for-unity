@@ -88,11 +88,11 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Context
             this.SimpleItemModel = SimpleItemModel.New(
                 SimpleInventoryModel.New(
                     Namespace.New(
-                        SimpleItem.NamespaceName
+                        simpleItem.NamespaceName
                     ),
-                    SimpleItem.InventoryName
+                    simpleItem.InventoryName
                 ),
-                SimpleItem.ItemName
+                simpleItem.ItemName
             );
             this.SimpleItem = simpleItem;
         }

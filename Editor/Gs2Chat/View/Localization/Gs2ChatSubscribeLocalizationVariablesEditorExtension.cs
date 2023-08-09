@@ -63,10 +63,12 @@ namespace Gs2.Unity.UiKit.Gs2Chat.Localization.Editor
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2ChatOwnSubscribeFetcher), false);
                     EditorGUI.indentLevel++;
                     context.Subscribe = EditorGUILayout.ObjectField("Subscribe", context.Subscribe, typeof(OwnSubscribe), false) as OwnSubscribe;
-                    EditorGUI.indentLevel++;
-                    EditorGUILayout.TextField("NamespaceName", context.Subscribe?.NamespaceName?.ToString());
-                    EditorGUILayout.TextField("RoomName", context.Subscribe?.RoomName?.ToString());
-                    EditorGUI.indentLevel--;
+                    if (context.Subscribe != null) {
+                        EditorGUI.indentLevel++;
+                        EditorGUILayout.TextField("NamespaceName", context.Subscribe?.NamespaceName?.ToString());
+                        EditorGUILayout.TextField("RoomName", context.Subscribe?.RoomName?.ToString());
+                        EditorGUI.indentLevel--;
+                    }
                     EditorGUI.indentLevel--;
                     EditorGUI.EndDisabledGroup();
                 }

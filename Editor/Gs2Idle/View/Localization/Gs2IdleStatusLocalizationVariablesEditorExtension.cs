@@ -63,10 +63,12 @@ namespace Gs2.Unity.UiKit.Gs2Idle.Localization.Editor
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2IdleOwnStatusFetcher), false);
                     EditorGUI.indentLevel++;
                     context.Status = EditorGUILayout.ObjectField("Status", context.Status, typeof(OwnStatus), false) as OwnStatus;
-                    EditorGUI.indentLevel++;
-                    EditorGUILayout.TextField("NamespaceName", context.Status?.NamespaceName?.ToString());
-                    EditorGUILayout.TextField("CategoryName", context.Status?.CategoryName?.ToString());
-                    EditorGUI.indentLevel--;
+                    if (context.Status != null) {
+                        EditorGUI.indentLevel++;
+                        EditorGUILayout.TextField("NamespaceName", context.Status?.NamespaceName?.ToString());
+                        EditorGUILayout.TextField("CategoryName", context.Status?.CategoryName?.ToString());
+                        EditorGUI.indentLevel--;
+                    }
                     EditorGUI.indentLevel--;
                     EditorGUI.EndDisabledGroup();
                 }

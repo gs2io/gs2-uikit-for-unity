@@ -56,9 +56,11 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Localization.Editor
                 EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2FriendOwnProfileFetcher), false);
                 EditorGUI.indentLevel++;
                 context.Profile = EditorGUILayout.ObjectField("Profile", context.Profile, typeof(OwnProfile), false) as OwnProfile;
-                EditorGUI.indentLevel++;
-                EditorGUILayout.TextField("NamespaceName", context.Profile?.NamespaceName?.ToString());
-                EditorGUI.indentLevel--;
+                if (context.Profile != null) {
+                    EditorGUI.indentLevel++;
+                    EditorGUILayout.TextField("NamespaceName", context.Profile?.NamespaceName?.ToString());
+                    EditorGUI.indentLevel--;
+                }
                 EditorGUI.indentLevel--;
                 EditorGUI.EndDisabledGroup();
             }

@@ -63,10 +63,12 @@ namespace Gs2.Unity.UiKit.Gs2Exchange.Localization.Editor
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2ExchangeIncrementalRateModelFetcher), false);
                     EditorGUI.indentLevel++;
                     context.IncrementalRateModel = EditorGUILayout.ObjectField("IncrementalRateModel", context.IncrementalRateModel, typeof(IncrementalRateModel), false) as IncrementalRateModel;
-                    EditorGUI.indentLevel++;
-                    EditorGUILayout.TextField("NamespaceName", context.IncrementalRateModel?.NamespaceName?.ToString());
-                    EditorGUILayout.TextField("RateName", context.IncrementalRateModel?.RateName?.ToString());
-                    EditorGUI.indentLevel--;
+                    if (context.IncrementalRateModel != null) {
+                        EditorGUI.indentLevel++;
+                        EditorGUILayout.TextField("NamespaceName", context.IncrementalRateModel?.NamespaceName?.ToString());
+                        EditorGUILayout.TextField("RateName", context.IncrementalRateModel?.RateName?.ToString());
+                        EditorGUI.indentLevel--;
+                    }
                     EditorGUI.indentLevel--;
                     EditorGUI.EndDisabledGroup();
                 }

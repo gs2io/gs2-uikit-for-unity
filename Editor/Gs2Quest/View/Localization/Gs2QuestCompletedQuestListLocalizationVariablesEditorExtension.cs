@@ -63,10 +63,12 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Localization.Editor
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2QuestOwnCompletedQuestListFetcher), false);
                     EditorGUI.indentLevel++;
                     context.CompletedQuestList = EditorGUILayout.ObjectField("CompletedQuestList", context.CompletedQuestList, typeof(OwnCompletedQuestList), false) as OwnCompletedQuestList;
-                    EditorGUI.indentLevel++;
-                    EditorGUILayout.TextField("NamespaceName", context.CompletedQuestList?.NamespaceName?.ToString());
-                    EditorGUILayout.TextField("QuestGroupName", context.CompletedQuestList?.QuestGroupName?.ToString());
-                    EditorGUI.indentLevel--;
+                    if (context.CompletedQuestList != null) {
+                        EditorGUI.indentLevel++;
+                        EditorGUILayout.TextField("NamespaceName", context.CompletedQuestList?.NamespaceName?.ToString());
+                        EditorGUILayout.TextField("QuestGroupName", context.CompletedQuestList?.QuestGroupName?.ToString());
+                        EditorGUI.indentLevel--;
+                    }
                     EditorGUI.indentLevel--;
                     EditorGUI.EndDisabledGroup();
                 }

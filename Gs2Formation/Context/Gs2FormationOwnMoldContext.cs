@@ -87,9 +87,9 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Context
         public void SetOwnMold(OwnMold mold) {
             this.MoldModel = MoldModel.New(
                 Namespace.New(
-                    Mold.NamespaceName
+                    mold.NamespaceName
                 ),
-                Mold.MoldName
+                mold.MoldName
             );
             this.Mold = mold;
         }

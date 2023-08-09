@@ -63,11 +63,13 @@ namespace Gs2.Unity.UiKit.Gs2Enchant.Localization.Editor
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2EnchantOwnRarityParameterStatusFetcher), false);
                     EditorGUI.indentLevel++;
                     context.RarityParameterStatus = EditorGUILayout.ObjectField("RarityParameterStatus", context.RarityParameterStatus, typeof(OwnRarityParameterStatus), false) as OwnRarityParameterStatus;
-                    EditorGUI.indentLevel++;
-                    EditorGUILayout.TextField("NamespaceName", context.RarityParameterStatus?.NamespaceName?.ToString());
-                    EditorGUILayout.TextField("ParameterName", context.RarityParameterStatus?.ParameterName?.ToString());
-                    EditorGUILayout.TextField("PropertyId", context.RarityParameterStatus?.PropertyId?.ToString());
-                    EditorGUI.indentLevel--;
+                    if (context.RarityParameterStatus != null) {
+                        EditorGUI.indentLevel++;
+                        EditorGUILayout.TextField("NamespaceName", context.RarityParameterStatus?.NamespaceName?.ToString());
+                        EditorGUILayout.TextField("ParameterName", context.RarityParameterStatus?.ParameterName?.ToString());
+                        EditorGUILayout.TextField("PropertyId", context.RarityParameterStatus?.PropertyId?.ToString());
+                        EditorGUI.indentLevel--;
+                    }
                     EditorGUI.indentLevel--;
                     EditorGUI.EndDisabledGroup();
                 }

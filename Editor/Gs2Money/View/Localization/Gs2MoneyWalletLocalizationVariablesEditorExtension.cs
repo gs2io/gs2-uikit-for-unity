@@ -56,10 +56,12 @@ namespace Gs2.Unity.UiKit.Gs2Money.Localization.Editor
                 EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2MoneyOwnWalletFetcher), false);
                 EditorGUI.indentLevel++;
                 context.Wallet = EditorGUILayout.ObjectField("Wallet", context.Wallet, typeof(OwnWallet), false) as OwnWallet;
-                EditorGUI.indentLevel++;
-                EditorGUILayout.TextField("NamespaceName", context.Wallet?.NamespaceName?.ToString());
-                EditorGUILayout.TextField("Slot", context.Wallet?.Slot.ToString());
-                EditorGUI.indentLevel--;
+                if (context.Wallet != null) {
+                    EditorGUI.indentLevel++;
+                    EditorGUILayout.TextField("NamespaceName", context.Wallet?.NamespaceName?.ToString());
+                    EditorGUILayout.TextField("Slot", context.Wallet?.Slot.ToString());
+                    EditorGUI.indentLevel--;
+                }
                 EditorGUI.indentLevel--;
                 EditorGUI.EndDisabledGroup();
             }
