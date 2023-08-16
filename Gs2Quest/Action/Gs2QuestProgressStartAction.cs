@@ -86,6 +86,11 @@ namespace Gs2.Unity.UiKit.Gs2Quest
                 this.onError.Invoke(future.Error, null);
                 yield break;
             }
+            if (this.WaitAsyncProcessComplete) {
+                var transaction = future.Result;
+                var future2 = transaction.Wait();
+                yield return future2;
+            }
             this.onStartComplete.Invoke(future.Result.TransactionId);
         }
 
@@ -146,6 +151,7 @@ namespace Gs2.Unity.UiKit.Gs2Quest
     /// </summary>
     public partial class Gs2QuestProgressStartAction
     {
+        public bool WaitAsyncProcessComplete;
         public string QuestGroupName;
         public string QuestName;
         public bool Force;

@@ -162,6 +162,7 @@ namespace Gs2.Unity.UiKit.Gs2Account
     /// </summary>
     public partial class Gs2AccountTakeOverUpdateTakeOverSettingAction
     {
+        public bool WaitAsyncProcessComplete;
         public string OldPassword;
         public string Password;
 

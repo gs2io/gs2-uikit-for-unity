@@ -160,6 +160,7 @@ namespace Gs2.Unity.UiKit.Gs2Account
     /// </summary>
     public partial class Gs2AccountAccountAuthenticationAction
     {
+        public bool WaitAsyncProcessComplete;
         public string KeyId;
         public string Password;
         public string UserId;

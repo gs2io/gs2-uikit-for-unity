@@ -161,6 +161,7 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking
     /// </summary>
     public partial class Gs2MatchmakingGatheringUpdateGatheringAction
     {
+        public bool WaitAsyncProcessComplete;
         public List<Gs2.Unity.Gs2Matchmaking.Model.EzAttributeRange> AttributeRanges;
 
         public void SetAttributeRanges(List<Gs2.Unity.Gs2Matchmaking.Model.EzAttributeRange> value) {

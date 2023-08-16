@@ -86,6 +86,11 @@ namespace Gs2.Unity.UiKit.Gs2LoginReward
                 this.onError.Invoke(future.Error, null);
                 yield break;
             }
+            if (this.WaitAsyncProcessComplete) {
+                var transaction = future.Result;
+                var future2 = transaction.Wait();
+                yield return future2;
+            }
             this.onMissedReceiveComplete.Invoke(future.Result.TransactionId);
         }
 
@@ -146,6 +151,7 @@ namespace Gs2.Unity.UiKit.Gs2LoginReward
     /// </summary>
     public partial class Gs2LoginRewardBonusMissedReceiveAction
     {
+        public bool WaitAsyncProcessComplete;
         public string BonusModelName;
         public int StepNumber;
         public List<Gs2.Unity.Gs2LoginReward.Model.EzConfig> Config;

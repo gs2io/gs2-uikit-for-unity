@@ -158,6 +158,7 @@ namespace Gs2.Unity.UiKit.Gs2JobQueue
     /// </summary>
     public partial class Gs2JobQueueJobRunAction
     {
+        public bool WaitAsyncProcessComplete;
     }
 
     /// <summary>

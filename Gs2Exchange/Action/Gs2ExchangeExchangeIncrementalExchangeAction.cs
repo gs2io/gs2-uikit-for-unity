@@ -86,6 +86,11 @@ namespace Gs2.Unity.UiKit.Gs2Exchange
                 this.onError.Invoke(future.Error, null);
                 yield break;
             }
+            if (this.WaitAsyncProcessComplete) {
+                var transaction = future.Result;
+                var future2 = transaction.Wait();
+                yield return future2;
+            }
             this.onIncrementalExchangeComplete.Invoke(future.Result.TransactionId);
         }
 
@@ -146,6 +151,7 @@ namespace Gs2.Unity.UiKit.Gs2Exchange
     /// </summary>
     public partial class Gs2ExchangeExchangeIncrementalExchangeAction
     {
+        public bool WaitAsyncProcessComplete;
         public string RateName;
         public int Count;
         public List<Gs2.Unity.Gs2Exchange.Model.EzConfig> Config;

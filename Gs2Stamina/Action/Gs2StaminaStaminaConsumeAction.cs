@@ -161,6 +161,7 @@ namespace Gs2.Unity.UiKit.Gs2Stamina
     /// </summary>
     public partial class Gs2StaminaStaminaConsumeAction
     {
+        public bool WaitAsyncProcessComplete;
         public int ConsumeValue;
 
         public void SetConsumeValue(int value) {

@@ -163,6 +163,7 @@ namespace Gs2.Unity.UiKit.Gs2Limit
     /// </summary>
     public partial class Gs2LimitCounterCountUpAction
     {
+        public bool WaitAsyncProcessComplete;
         public int CountUpValue;
         public int MaxValue;
 

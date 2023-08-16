@@ -164,6 +164,7 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking
     /// </summary>
     public partial class Gs2MatchmakingGatheringCreateGatheringAction
     {
+        public bool WaitAsyncProcessComplete;
         public Gs2.Unity.Gs2Matchmaking.Model.EzPlayer Player;
         public List<Gs2.Unity.Gs2Matchmaking.Model.EzAttributeRange> AttributeRanges;
         public List<Gs2.Unity.Gs2Matchmaking.Model.EzCapacityOfRole> CapacityOfRoles;

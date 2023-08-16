@@ -161,6 +161,7 @@ namespace Gs2.Unity.UiKit.Gs2Chat
     /// </summary>
     public partial class Gs2ChatSubscribeSubscribeAction
     {
+        public bool WaitAsyncProcessComplete;
         public List<Gs2.Unity.Gs2Chat.Model.EzNotificationType> NotificationTypes;
 
         public void SetNotificationTypes(List<Gs2.Unity.Gs2Chat.Model.EzNotificationType> value) {

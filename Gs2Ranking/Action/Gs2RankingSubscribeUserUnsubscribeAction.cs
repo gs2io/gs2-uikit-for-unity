@@ -161,6 +161,7 @@ namespace Gs2.Unity.UiKit.Gs2Ranking
     /// </summary>
     public partial class Gs2RankingSubscribeUserUnsubscribeAction
     {
+        public bool WaitAsyncProcessComplete;
     }
 
     /// <summary>

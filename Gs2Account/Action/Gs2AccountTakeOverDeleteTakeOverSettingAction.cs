@@ -160,6 +160,7 @@ namespace Gs2.Unity.UiKit.Gs2Account
     /// </summary>
     public partial class Gs2AccountTakeOverDeleteTakeOverSettingAction
     {
+        public bool WaitAsyncProcessComplete;
     }
 
     /// <summary>

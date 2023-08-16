@@ -161,6 +161,7 @@ namespace Gs2.Unity.UiKit.Gs2Friend
     /// </summary>
     public partial class Gs2FriendFollowUserUnfollowAction
     {
+        public bool WaitAsyncProcessComplete;
     }
 
     /// <summary>

@@ -161,6 +161,7 @@ namespace Gs2.Unity.UiKit.Gs2Chat
     /// </summary>
     public partial class Gs2ChatRoomDeleteRoomAction
     {
+        public bool WaitAsyncProcessComplete;
     }
 
     /// <summary>

@@ -160,6 +160,7 @@ namespace Gs2.Unity.UiKit.Gs2StateMachine
     /// </summary>
     public partial class Gs2StateMachineStatusExitAction
     {
+        public bool WaitAsyncProcessComplete;
     }
 
     /// <summary>

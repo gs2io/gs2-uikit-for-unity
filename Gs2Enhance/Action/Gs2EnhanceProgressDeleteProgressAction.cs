@@ -159,6 +159,7 @@ namespace Gs2.Unity.UiKit.Gs2Enhance
     /// </summary>
     public partial class Gs2EnhanceProgressDeleteProgressAction
     {
+        public bool WaitAsyncProcessComplete;
     }
 
     /// <summary>

@@ -88,6 +88,11 @@ namespace Gs2.Unity.UiKit.Gs2Enhance
                 this.onError.Invoke(future.Error, null);
                 yield break;
             }
+            if (this.WaitAsyncProcessComplete) {
+                var transaction = future.Result;
+                var future2 = transaction.Wait();
+                yield return future2;
+            }
             this.onStartComplete.Invoke(future.Result.TransactionId);
         }
 
@@ -148,6 +153,7 @@ namespace Gs2.Unity.UiKit.Gs2Enhance
     /// </summary>
     public partial class Gs2EnhanceProgressStartAction
     {
+        public bool WaitAsyncProcessComplete;
         public string RateName;
         public string TargetItemSetId;
         public List<Gs2.Unity.Gs2Enhance.Model.EzMaterial> Materials;

@@ -163,6 +163,7 @@ namespace Gs2.Unity.UiKit.Gs2Stamina
     /// </summary>
     public partial class Gs2StaminaStaminaSetRecoverValueAction
     {
+        public bool WaitAsyncProcessComplete;
         public string KeyId;
         public string SignedStatusBody;
         public string SignedStatusSignature;

@@ -150,6 +150,7 @@ namespace Gs2.Unity.UiKit.Gs2Version
     /// </summary>
     public partial class Gs2VersionCheckerCheckVersionAction
     {
+        public bool WaitAsyncProcessComplete;
         public List<Gs2.Unity.Gs2Version.Model.EzTargetVersion> TargetVersions;
 
         public void SetTargetVersions(List<Gs2.Unity.Gs2Version.Model.EzTargetVersion> value) {

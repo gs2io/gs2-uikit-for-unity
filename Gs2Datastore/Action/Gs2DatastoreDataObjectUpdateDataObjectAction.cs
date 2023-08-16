@@ -162,6 +162,7 @@ namespace Gs2.Unity.UiKit.Gs2Datastore
     /// </summary>
     public partial class Gs2DatastoreDataObjectUpdateDataObjectAction
     {
+        public bool WaitAsyncProcessComplete;
         public string Scope;
         public List<string> AllowUserIds;
 

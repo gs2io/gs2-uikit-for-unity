@@ -162,6 +162,7 @@ namespace Gs2.Unity.UiKit.Gs2Ranking
     /// </summary>
     public partial class Gs2RankingRankingPutScoreAction
     {
+        public bool WaitAsyncProcessComplete;
         public long Score;
         public string Metadata;
 

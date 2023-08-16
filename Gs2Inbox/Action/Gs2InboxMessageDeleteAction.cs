@@ -160,6 +160,7 @@ namespace Gs2.Unity.UiKit.Gs2Inbox
     /// </summary>
     public partial class Gs2InboxMessageDeleteAction
     {
+        public bool WaitAsyncProcessComplete;
     }
 
     /// <summary>

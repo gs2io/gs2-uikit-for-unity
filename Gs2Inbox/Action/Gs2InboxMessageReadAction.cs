@@ -84,6 +84,11 @@ namespace Gs2.Unity.UiKit.Gs2Inbox
                 this.onError.Invoke(future.Error, null);
                 yield break;
             }
+            if (this.WaitAsyncProcessComplete) {
+                var transaction = future.Result;
+                var future2 = transaction.Wait();
+                yield return future2;
+            }
             this.onReadComplete.Invoke(future.Result.TransactionId);
         }
 
@@ -144,6 +149,7 @@ namespace Gs2.Unity.UiKit.Gs2Inbox
     /// </summary>
     public partial class Gs2InboxMessageReadAction
     {
+        public bool WaitAsyncProcessComplete;
     }
 
     /// <summary>

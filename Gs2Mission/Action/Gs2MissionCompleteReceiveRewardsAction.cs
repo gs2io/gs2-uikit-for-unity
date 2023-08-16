@@ -85,6 +85,11 @@ namespace Gs2.Unity.UiKit.Gs2Mission
                 this.onError.Invoke(future.Error, null);
                 yield break;
             }
+            if (this.WaitAsyncProcessComplete) {
+                var transaction = future.Result;
+                var future2 = transaction.Wait();
+                yield return future2;
+            }
             this.onReceiveRewardsComplete.Invoke(future.Result.TransactionId);
         }
 
@@ -145,6 +150,7 @@ namespace Gs2.Unity.UiKit.Gs2Mission
     /// </summary>
     public partial class Gs2MissionCompleteReceiveRewardsAction
     {
+        public bool WaitAsyncProcessComplete;
         public string MissionTaskName;
 
         public void SetMissionTaskName(string value) {

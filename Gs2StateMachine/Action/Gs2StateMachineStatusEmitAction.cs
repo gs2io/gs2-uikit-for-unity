@@ -162,6 +162,7 @@ namespace Gs2.Unity.UiKit.Gs2StateMachine
     /// </summary>
     public partial class Gs2StateMachineStatusEmitAction
     {
+        public bool WaitAsyncProcessComplete;
         public string EventName;
         public string Args;
 

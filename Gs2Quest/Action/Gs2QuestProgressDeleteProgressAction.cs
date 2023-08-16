@@ -159,6 +159,7 @@ namespace Gs2.Unity.UiKit.Gs2Quest
     /// </summary>
     public partial class Gs2QuestProgressDeleteProgressAction
     {
+        public bool WaitAsyncProcessComplete;
     }
 
     /// <summary>

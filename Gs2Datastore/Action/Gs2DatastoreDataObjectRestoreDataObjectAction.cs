@@ -156,6 +156,7 @@ namespace Gs2.Unity.UiKit.Gs2Datastore
     /// </summary>
     public partial class Gs2DatastoreDataObjectRestoreDataObjectAction
     {
+        public bool WaitAsyncProcessComplete;
         public string DataObjectId;
 
         public void SetDataObjectId(string value) {

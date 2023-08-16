@@ -164,6 +164,7 @@ namespace Gs2.Unity.UiKit.Gs2Enchant
     /// </summary>
     public partial class Gs2EnchantRarityParameterStatusVerifyRarityParameterStatusAction
     {
+        public bool WaitAsyncProcessComplete;
         public string VerifyType;
         public string ParameterValueName;
         public int ParameterCount;

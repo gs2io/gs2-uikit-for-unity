@@ -164,6 +164,7 @@ namespace Gs2.Unity.UiKit.Gs2Formation
     /// </summary>
     public partial class Gs2FormationFormSetFormAction
     {
+        public bool WaitAsyncProcessComplete;
         public List<Gs2.Unity.Gs2Formation.Model.EzSlotWithSignature> Slots;
         public string KeyId;
 

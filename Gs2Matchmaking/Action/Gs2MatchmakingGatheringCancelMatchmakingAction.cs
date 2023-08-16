@@ -160,6 +160,7 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking
     /// </summary>
     public partial class Gs2MatchmakingGatheringCancelMatchmakingAction
     {
+        public bool WaitAsyncProcessComplete;
     }
 
     /// <summary>

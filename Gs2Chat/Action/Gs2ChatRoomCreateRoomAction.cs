@@ -162,6 +162,7 @@ namespace Gs2.Unity.UiKit.Gs2Chat
     /// </summary>
     public partial class Gs2ChatRoomCreateRoomAction
     {
+        public bool WaitAsyncProcessComplete;
         public string Name;
         public string Metadata;
         public string Password;

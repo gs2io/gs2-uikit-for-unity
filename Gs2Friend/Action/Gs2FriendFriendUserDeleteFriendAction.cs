@@ -162,6 +162,7 @@ namespace Gs2.Unity.UiKit.Gs2Friend
     /// </summary>
     public partial class Gs2FriendFriendUserDeleteFriendAction
     {
+        public bool WaitAsyncProcessComplete;
     }
 
     /// <summary>

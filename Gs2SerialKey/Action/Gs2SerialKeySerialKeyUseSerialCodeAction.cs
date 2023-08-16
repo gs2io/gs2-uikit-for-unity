@@ -161,6 +161,7 @@ namespace Gs2.Unity.UiKit.Gs2SerialKey
     /// </summary>
     public partial class Gs2SerialKeySerialKeyUseSerialCodeAction
     {
+        public bool WaitAsyncProcessComplete;
         public string Code;
 
         public void SetCode(string value) {

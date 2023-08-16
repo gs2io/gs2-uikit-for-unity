@@ -18,6 +18,14 @@
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable UnusedAutoPropertyAccessor.Local
 // ReSharper disable CheckNamespace
+// ReSharper disable RedundantNameQualifier
+// ReSharper disable RedundantAssignment
+// ReSharper disable NotAccessedVariable
+// ReSharper disable RedundantUsingDirective
+// ReSharper disable Unity.NoNullPropagation
+// ReSharper disable InconsistentNaming
+
+#pragma warning disable CS0472
 
 using System;
 using System.Collections;
@@ -80,6 +88,11 @@ namespace Gs2.Unity.UiKit.Gs2Exchange
                 this.onError.Invoke(future.Error, null);
                 yield break;
             }
+            if (this.WaitAsyncProcessComplete) {
+                var transaction = future.Result;
+                var future2 = transaction.Wait();
+                yield return future2;
+            }
             this.onExchangeComplete.Invoke(future.Result.TransactionId);
         }
 
@@ -115,6 +128,15 @@ namespace Gs2.Unity.UiKit.Gs2Exchange
                 enabled = false;
             }
         }
+
+        public virtual bool HasError()
+        {
+            this._context = GetComponent<Gs2ExchangeRateModelContext>() ?? GetComponentInParent<Gs2ExchangeRateModelContext>(true);
+            if (_context == null) {
+                return true;
+            }
+            return false;
+        }
     }
 
     /// <summary>
@@ -131,6 +153,7 @@ namespace Gs2.Unity.UiKit.Gs2Exchange
     /// </summary>
     public partial class Gs2ExchangeExchangeExchangeAction
     {
+        public bool WaitAsyncProcessComplete;
         public int Count;
         public List<Gs2.Unity.Gs2Exchange.Model.EzConfig> Config;
 

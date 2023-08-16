@@ -162,6 +162,7 @@ namespace Gs2.Unity.UiKit.Gs2Friend
     /// </summary>
     public partial class Gs2FriendProfileUpdateProfileAction
     {
+        public bool WaitAsyncProcessComplete;
         public string PublicProfile;
         public string FollowerProfile;
         public string FriendProfile;

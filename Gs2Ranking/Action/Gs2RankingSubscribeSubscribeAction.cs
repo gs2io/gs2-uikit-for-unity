@@ -160,6 +160,7 @@ namespace Gs2.Unity.UiKit.Gs2Ranking
     /// </summary>
     public partial class Gs2RankingSubscribeSubscribeAction
     {
+        public bool WaitAsyncProcessComplete;
         public string TargetUserId;
 
         public void SetTargetUserId(string value) {

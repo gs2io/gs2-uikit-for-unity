@@ -144,6 +144,7 @@ namespace Gs2.Unity.UiKit.Gs2Lottery
     /// </summary>
     public partial class Gs2LotteryBoxItemsResetBoxAction
     {
+        public bool WaitAsyncProcessComplete;
     }
 
     /// <summary>

@@ -162,6 +162,7 @@ namespace Gs2.Unity.UiKit.Gs2Money
     /// </summary>
     public partial class Gs2MoneyWalletWithdrawAction
     {
+        public bool WaitAsyncProcessComplete;
         public int Count;
         public bool PaidOnly;
 

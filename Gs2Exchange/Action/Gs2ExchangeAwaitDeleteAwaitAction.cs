@@ -160,6 +160,7 @@ namespace Gs2.Unity.UiKit.Gs2Exchange
     /// </summary>
     public partial class Gs2ExchangeAwaitDeleteAwaitAction
     {
+        public bool WaitAsyncProcessComplete;
     }
 
     /// <summary>

@@ -160,6 +160,7 @@ namespace Gs2.Unity.UiKit.Gs2Version
     /// </summary>
     public partial class Gs2VersionAcceptVersionAcceptAction
     {
+        public bool WaitAsyncProcessComplete;
     }
 
     /// <summary>

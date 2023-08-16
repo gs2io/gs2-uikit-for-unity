@@ -155,6 +155,7 @@ namespace Gs2.Unity.UiKit.Gs2Account
     /// </summary>
     public partial class Gs2AccountAccountCreateAction
     {
+        public bool WaitAsyncProcessComplete;
     }
 
     /// <summary>

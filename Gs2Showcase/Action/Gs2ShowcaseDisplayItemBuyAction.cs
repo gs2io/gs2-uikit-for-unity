@@ -41,6 +41,7 @@ using Gs2.Unity.UiKit.Gs2Showcase.Fetcher;
 using Gs2.Util.LitJson;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Serialization;
 using DisplayItem = Gs2.Unity.Gs2Showcase.ScriptableObject.OwnDisplayItem;
 
 #if UNITY_EDITOR
@@ -131,6 +132,12 @@ namespace Gs2.Unity.UiKit.Gs2Showcase
             }
 #endif
 
+            if (this.WaitAsyncProcessComplete) {
+                var transaction = future.Result;
+                var future2 = transaction.Wait();
+                yield return future2;
+            }
+            
             this.onBuyComplete.Invoke(future.Result.TransactionId);
         }
 
@@ -191,6 +198,7 @@ namespace Gs2.Unity.UiKit.Gs2Showcase
     /// </summary>
     public partial class Gs2ShowcaseDisplayItemBuyAction
     {
+        public bool WaitAsyncProcessComplete;
         public int Quantity;
         public List<Gs2.Unity.Gs2Showcase.Model.EzConfig> Config;
 

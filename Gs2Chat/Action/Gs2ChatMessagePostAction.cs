@@ -163,6 +163,7 @@ namespace Gs2.Unity.UiKit.Gs2Chat
     /// </summary>
     public partial class Gs2ChatMessagePostAction
     {
+        public bool WaitAsyncProcessComplete;
         public int Category;
         public string Metadata;
 

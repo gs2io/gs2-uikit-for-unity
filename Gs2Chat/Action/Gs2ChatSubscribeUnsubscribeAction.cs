@@ -160,6 +160,7 @@ namespace Gs2.Unity.UiKit.Gs2Chat
     /// </summary>
     public partial class Gs2ChatSubscribeUnsubscribeAction
     {
+        public bool WaitAsyncProcessComplete;
     }
 
     /// <summary>

@@ -161,6 +161,7 @@ namespace Gs2.Unity.UiKit.Gs2Datastore
     /// </summary>
     public partial class Gs2DatastoreDataObjectPrepareReUploadAction
     {
+        public bool WaitAsyncProcessComplete;
         public string ContentType;
 
         public void SetContentType(string value) {

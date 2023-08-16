@@ -158,6 +158,7 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking
     /// </summary>
     public partial class Gs2MatchmakingVoteVoteMultipleAction
     {
+        public bool WaitAsyncProcessComplete;
         public List<Gs2.Unity.Gs2Matchmaking.Model.EzSignedBallot> SignedBallots;
         public List<Gs2.Unity.Gs2Matchmaking.Model.EzGameResult> GameResults;
         public string KeyId;

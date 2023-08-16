@@ -160,6 +160,7 @@ namespace Gs2.Unity.UiKit.Gs2Gateway
     /// </summary>
     public partial class Gs2GatewayWebSocketSessionSetUserIdAction
     {
+        public bool WaitAsyncProcessComplete;
         public bool AllowConcurrentAccess;
 
         public void SetAllowConcurrentAccess(bool value) {
