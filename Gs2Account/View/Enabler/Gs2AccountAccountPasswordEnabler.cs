@@ -51,10 +51,10 @@ namespace Gs2.Unity.UiKit.Gs2Account.Enabler
                         target.SetActive(!enablePasswords.Contains(_fetcher.Account.Password));
                         break;
                     case Expression.StartsWith:
-                        target.SetActive(enablePassword.StartsWith(_fetcher.Account.Password));
+                        target.SetActive(_fetcher.Account.Password.StartsWith(enablePassword));
                         break;
                     case Expression.EndsWith:
-                        target.SetActive(enablePassword.EndsWith(_fetcher.Account.Password));
+                        target.SetActive(_fetcher.Account.Password.EndsWith(enablePassword));
                         break;
                 }
             }

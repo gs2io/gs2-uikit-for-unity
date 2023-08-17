@@ -51,10 +51,10 @@ namespace Gs2.Unity.UiKit.Gs2MegaField.Enabler
                         target.SetActive(!enableNames.Contains(_fetcher.LayerModel.Name));
                         break;
                     case Expression.StartsWith:
-                        target.SetActive(enableName.StartsWith(_fetcher.LayerModel.Name));
+                        target.SetActive(_fetcher.LayerModel.Name.StartsWith(enableName));
                         break;
                     case Expression.EndsWith:
-                        target.SetActive(enableName.EndsWith(_fetcher.LayerModel.Name));
+                        target.SetActive(_fetcher.LayerModel.Name.EndsWith(enableName));
                         break;
                 }
             }

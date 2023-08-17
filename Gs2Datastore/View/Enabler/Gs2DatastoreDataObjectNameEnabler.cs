@@ -51,10 +51,10 @@ namespace Gs2.Unity.UiKit.Gs2Datastore.Enabler
                         target.SetActive(!enableNames.Contains(_fetcher.DataObject.Name));
                         break;
                     case Expression.StartsWith:
-                        target.SetActive(enableName.StartsWith(_fetcher.DataObject.Name));
+                        target.SetActive(_fetcher.DataObject.Name.StartsWith(enableName));
                         break;
                     case Expression.EndsWith:
-                        target.SetActive(enableName.EndsWith(_fetcher.DataObject.Name));
+                        target.SetActive(_fetcher.DataObject.Name.EndsWith(enableName));
                         break;
                 }
             }

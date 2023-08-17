@@ -57,12 +57,12 @@ namespace Gs2.Unity.UiKit.Gs2Schedule.SpriteSwitcher
                         }
                         break;
                     case Expression.StartsWith:
-                        if (applyRepeatType.StartsWith(_fetcher.Event.RepeatType)) {
+                        if (_fetcher.Event.RepeatType.StartsWith(applyRepeatType)) {
                             this.onUpdate.Invoke(this.sprite);
                         }
                         break;
                     case Expression.EndsWith:
-                        if (applyRepeatType.EndsWith(_fetcher.Event.RepeatType)) {
+                        if (_fetcher.Event.RepeatType.EndsWith(applyRepeatType)) {
                             this.onUpdate.Invoke(this.sprite);
                         }
                         break;

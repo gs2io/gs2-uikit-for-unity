@@ -57,12 +57,12 @@ namespace Gs2.Unity.UiKit.Gs2Account.SpriteSwitcher
                         }
                         break;
                     case Expression.StartsWith:
-                        if (applyUserId.StartsWith(_fetcher.Account.UserId)) {
+                        if (_fetcher.Account.UserId.StartsWith(applyUserId)) {
                             this.onUpdate.Invoke(this.sprite);
                         }
                         break;
                     case Expression.EndsWith:
-                        if (applyUserId.EndsWith(_fetcher.Account.UserId)) {
+                        if (_fetcher.Account.UserId.EndsWith(applyUserId)) {
                             this.onUpdate.Invoke(this.sprite);
                         }
                         break;

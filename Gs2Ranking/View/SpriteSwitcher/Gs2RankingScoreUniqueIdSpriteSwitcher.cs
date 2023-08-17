@@ -57,12 +57,12 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.SpriteSwitcher
                         }
                         break;
                     case Expression.StartsWith:
-                        if (applyUniqueId.StartsWith(_fetcher.Score.UniqueId)) {
+                        if (_fetcher.Score.UniqueId.StartsWith(applyUniqueId)) {
                             this.onUpdate.Invoke(this.sprite);
                         }
                         break;
                     case Expression.EndsWith:
-                        if (applyUniqueId.EndsWith(_fetcher.Score.UniqueId)) {
+                        if (_fetcher.Score.UniqueId.EndsWith(applyUniqueId)) {
                             this.onUpdate.Invoke(this.sprite);
                         }
                         break;

@@ -57,12 +57,12 @@ namespace Gs2.Unity.UiKit.Gs2SerialKey.SpriteSwitcher
                         }
                         break;
                     case Expression.StartsWith:
-                        if (applyMetadata.StartsWith(_fetcher.CampaignModel.Metadata)) {
+                        if (_fetcher.CampaignModel.Metadata.StartsWith(applyMetadata)) {
                             this.onUpdate.Invoke(this.sprite);
                         }
                         break;
                     case Expression.EndsWith:
-                        if (applyMetadata.EndsWith(_fetcher.CampaignModel.Metadata)) {
+                        if (_fetcher.CampaignModel.Metadata.EndsWith(applyMetadata)) {
                             this.onUpdate.Invoke(this.sprite);
                         }
                         break;

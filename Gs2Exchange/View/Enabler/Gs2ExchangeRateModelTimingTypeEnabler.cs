@@ -51,10 +51,10 @@ namespace Gs2.Unity.UiKit.Gs2Exchange.Enabler
                         target.SetActive(!enableTimingTypes.Contains(_fetcher.RateModel.TimingType));
                         break;
                     case Expression.StartsWith:
-                        target.SetActive(enableTimingType.StartsWith(_fetcher.RateModel.TimingType));
+                        target.SetActive(_fetcher.RateModel.TimingType.StartsWith(enableTimingType));
                         break;
                     case Expression.EndsWith:
-                        target.SetActive(enableTimingType.EndsWith(_fetcher.RateModel.TimingType));
+                        target.SetActive(_fetcher.RateModel.TimingType.EndsWith(enableTimingType));
                         break;
                 }
             }

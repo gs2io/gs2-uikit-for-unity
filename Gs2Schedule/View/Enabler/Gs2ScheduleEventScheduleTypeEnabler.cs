@@ -51,10 +51,10 @@ namespace Gs2.Unity.UiKit.Gs2Schedule.Enabler
                         target.SetActive(!enableScheduleTypes.Contains(_fetcher.Event.ScheduleType));
                         break;
                     case Expression.StartsWith:
-                        target.SetActive(enableScheduleType.StartsWith(_fetcher.Event.ScheduleType));
+                        target.SetActive(_fetcher.Event.ScheduleType.StartsWith(enableScheduleType));
                         break;
                     case Expression.EndsWith:
-                        target.SetActive(enableScheduleType.EndsWith(_fetcher.Event.ScheduleType));
+                        target.SetActive(_fetcher.Event.ScheduleType.EndsWith(enableScheduleType));
                         break;
                 }
             }

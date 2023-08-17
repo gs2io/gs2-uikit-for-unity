@@ -51,10 +51,10 @@ namespace Gs2.Unity.UiKit.Gs2Inbox.Enabler
                         target.SetActive(!enableNames.Contains(_fetcher.Message.Name));
                         break;
                     case Expression.StartsWith:
-                        target.SetActive(enableName.StartsWith(_fetcher.Message.Name));
+                        target.SetActive(_fetcher.Message.Name.StartsWith(enableName));
                         break;
                     case Expression.EndsWith:
-                        target.SetActive(enableName.EndsWith(_fetcher.Message.Name));
+                        target.SetActive(_fetcher.Message.Name.EndsWith(enableName));
                         break;
                 }
             }

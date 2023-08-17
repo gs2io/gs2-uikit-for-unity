@@ -51,10 +51,10 @@ namespace Gs2.Unity.UiKit.Gs2Realtime.Enabler
                         target.SetActive(!enableIpAddresses.Contains(_fetcher.Room.IpAddress));
                         break;
                     case Expression.StartsWith:
-                        target.SetActive(enableIpAddress.StartsWith(_fetcher.Room.IpAddress));
+                        target.SetActive(_fetcher.Room.IpAddress.StartsWith(enableIpAddress));
                         break;
                     case Expression.EndsWith:
-                        target.SetActive(enableIpAddress.EndsWith(_fetcher.Room.IpAddress));
+                        target.SetActive(_fetcher.Room.IpAddress.EndsWith(enableIpAddress));
                         break;
                 }
             }

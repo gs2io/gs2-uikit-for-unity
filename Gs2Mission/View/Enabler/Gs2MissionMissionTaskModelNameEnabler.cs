@@ -51,10 +51,10 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Enabler
                         target.SetActive(!enableNames.Contains(_fetcher.MissionTaskModel.Name));
                         break;
                     case Expression.StartsWith:
-                        target.SetActive(enableName.StartsWith(_fetcher.MissionTaskModel.Name));
+                        target.SetActive(_fetcher.MissionTaskModel.Name.StartsWith(enableName));
                         break;
                     case Expression.EndsWith:
-                        target.SetActive(enableName.EndsWith(_fetcher.MissionTaskModel.Name));
+                        target.SetActive(_fetcher.MissionTaskModel.Name.EndsWith(enableName));
                         break;
                 }
             }

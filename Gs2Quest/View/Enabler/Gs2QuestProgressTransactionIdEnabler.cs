@@ -51,10 +51,10 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Enabler
                         target.SetActive(!enableTransactionIds.Contains(_fetcher.Progress.TransactionId));
                         break;
                     case Expression.StartsWith:
-                        target.SetActive(enableTransactionId.StartsWith(_fetcher.Progress.TransactionId));
+                        target.SetActive(_fetcher.Progress.TransactionId.StartsWith(enableTransactionId));
                         break;
                     case Expression.EndsWith:
-                        target.SetActive(enableTransactionId.EndsWith(_fetcher.Progress.TransactionId));
+                        target.SetActive(_fetcher.Progress.TransactionId.EndsWith(enableTransactionId));
                         break;
                 }
             }

@@ -57,12 +57,12 @@ namespace Gs2.Unity.UiKit.Gs2Enhance.SpriteSwitcher
                         }
                         break;
                     case Expression.StartsWith:
-                        if (applyPropertyId.StartsWith(_fetcher.Progress.PropertyId)) {
+                        if (_fetcher.Progress.PropertyId.StartsWith(applyPropertyId)) {
                             this.onUpdate.Invoke(this.sprite);
                         }
                         break;
                     case Expression.EndsWith:
-                        if (applyPropertyId.EndsWith(_fetcher.Progress.PropertyId)) {
+                        if (_fetcher.Progress.PropertyId.EndsWith(applyPropertyId)) {
                             this.onUpdate.Invoke(this.sprite);
                         }
                         break;

@@ -51,10 +51,10 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Enabler
                         target.SetActive(!enableResetTypes.Contains(_fetcher.MissionGroupModel.ResetType));
                         break;
                     case Expression.StartsWith:
-                        target.SetActive(enableResetType.StartsWith(_fetcher.MissionGroupModel.ResetType));
+                        target.SetActive(_fetcher.MissionGroupModel.ResetType.StartsWith(enableResetType));
                         break;
                     case Expression.EndsWith:
-                        target.SetActive(enableResetType.EndsWith(_fetcher.MissionGroupModel.ResetType));
+                        target.SetActive(_fetcher.MissionGroupModel.ResetType.EndsWith(enableResetType));
                         break;
                 }
             }

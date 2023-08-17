@@ -57,12 +57,12 @@ namespace Gs2.Unity.UiKit.Gs2Showcase.SpriteSwitcher
                         }
                         break;
                     case Expression.StartsWith:
-                        if (applyType.StartsWith(_fetcher.DisplayItem.Type)) {
+                        if (_fetcher.DisplayItem.Type.StartsWith(applyType)) {
                             this.onUpdate.Invoke(this.sprite);
                         }
                         break;
                     case Expression.EndsWith:
-                        if (applyType.EndsWith(_fetcher.DisplayItem.Type)) {
+                        if (_fetcher.DisplayItem.Type.EndsWith(applyType)) {
                             this.onUpdate.Invoke(this.sprite);
                         }
                         break;

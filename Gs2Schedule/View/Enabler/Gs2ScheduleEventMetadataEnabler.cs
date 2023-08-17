@@ -51,10 +51,10 @@ namespace Gs2.Unity.UiKit.Gs2Schedule.Enabler
                         target.SetActive(!enableMetadatas.Contains(_fetcher.Event.Metadata));
                         break;
                     case Expression.StartsWith:
-                        target.SetActive(enableMetadata.StartsWith(_fetcher.Event.Metadata));
+                        target.SetActive(_fetcher.Event.Metadata.StartsWith(enableMetadata));
                         break;
                     case Expression.EndsWith:
-                        target.SetActive(enableMetadata.EndsWith(_fetcher.Event.Metadata));
+                        target.SetActive(_fetcher.Event.Metadata.EndsWith(enableMetadata));
                         break;
                 }
             }

@@ -51,10 +51,10 @@ namespace Gs2.Unity.UiKit.Gs2Schedule.Enabler
                         target.SetActive(!enableNames.Contains(_fetcher.Trigger.Name));
                         break;
                     case Expression.StartsWith:
-                        target.SetActive(enableName.StartsWith(_fetcher.Trigger.Name));
+                        target.SetActive(_fetcher.Trigger.Name.StartsWith(enableName));
                         break;
                     case Expression.EndsWith:
-                        target.SetActive(enableName.EndsWith(_fetcher.Trigger.Name));
+                        target.SetActive(_fetcher.Trigger.Name.EndsWith(enableName));
                         break;
                 }
             }

@@ -51,10 +51,10 @@ namespace Gs2.Unity.UiKit.Gs2Limit.Enabler
                         target.SetActive(!enableLimitNames.Contains(_fetcher.Counter.LimitName));
                         break;
                     case Expression.StartsWith:
-                        target.SetActive(enableLimitName.StartsWith(_fetcher.Counter.LimitName));
+                        target.SetActive(_fetcher.Counter.LimitName.StartsWith(enableLimitName));
                         break;
                     case Expression.EndsWith:
-                        target.SetActive(enableLimitName.EndsWith(_fetcher.Counter.LimitName));
+                        target.SetActive(_fetcher.Counter.LimitName.EndsWith(enableLimitName));
                         break;
                 }
             }

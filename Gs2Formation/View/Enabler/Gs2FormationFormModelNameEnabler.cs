@@ -51,10 +51,10 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Enabler
                         target.SetActive(!enableNames.Contains(_fetcher.FormModel.Name));
                         break;
                     case Expression.StartsWith:
-                        target.SetActive(enableName.StartsWith(_fetcher.FormModel.Name));
+                        target.SetActive(_fetcher.FormModel.Name.StartsWith(enableName));
                         break;
                     case Expression.EndsWith:
-                        target.SetActive(enableName.EndsWith(_fetcher.FormModel.Name));
+                        target.SetActive(_fetcher.FormModel.Name.EndsWith(enableName));
                         break;
                 }
             }

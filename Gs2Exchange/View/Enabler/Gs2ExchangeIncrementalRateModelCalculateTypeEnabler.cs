@@ -51,10 +51,10 @@ namespace Gs2.Unity.UiKit.Gs2Exchange.Enabler
                         target.SetActive(!enableCalculateTypes.Contains(_fetcher.IncrementalRateModel.CalculateType));
                         break;
                     case Expression.StartsWith:
-                        target.SetActive(enableCalculateType.StartsWith(_fetcher.IncrementalRateModel.CalculateType));
+                        target.SetActive(_fetcher.IncrementalRateModel.CalculateType.StartsWith(enableCalculateType));
                         break;
                     case Expression.EndsWith:
-                        target.SetActive(enableCalculateType.EndsWith(_fetcher.IncrementalRateModel.CalculateType));
+                        target.SetActive(_fetcher.IncrementalRateModel.CalculateType.EndsWith(enableCalculateType));
                         break;
                 }
             }

@@ -51,10 +51,10 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking.Enabler
                         target.SetActive(!enableMetadatas.Contains(_fetcher.RatingModel.Metadata));
                         break;
                     case Expression.StartsWith:
-                        target.SetActive(enableMetadata.StartsWith(_fetcher.RatingModel.Metadata));
+                        target.SetActive(_fetcher.RatingModel.Metadata.StartsWith(enableMetadata));
                         break;
                     case Expression.EndsWith:
-                        target.SetActive(enableMetadata.EndsWith(_fetcher.RatingModel.Metadata));
+                        target.SetActive(_fetcher.RatingModel.Metadata.EndsWith(enableMetadata));
                         break;
                 }
             }

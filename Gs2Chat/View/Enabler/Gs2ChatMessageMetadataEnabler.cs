@@ -51,10 +51,10 @@ namespace Gs2.Unity.UiKit.Gs2Chat.Enabler
                         target.SetActive(!enableMetadatas.Contains(_fetcher.Message.Metadata));
                         break;
                     case Expression.StartsWith:
-                        target.SetActive(enableMetadata.StartsWith(_fetcher.Message.Metadata));
+                        target.SetActive(_fetcher.Message.Metadata.StartsWith(enableMetadata));
                         break;
                     case Expression.EndsWith:
-                        target.SetActive(enableMetadata.EndsWith(_fetcher.Message.Metadata));
+                        target.SetActive(_fetcher.Message.Metadata.EndsWith(enableMetadata));
                         break;
                 }
             }

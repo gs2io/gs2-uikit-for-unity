@@ -51,10 +51,10 @@ namespace Gs2.Unity.UiKit.Gs2Chat.Enabler
                         target.SetActive(!enableRoomNames.Contains(_fetcher.Message.RoomName));
                         break;
                     case Expression.StartsWith:
-                        target.SetActive(enableRoomName.StartsWith(_fetcher.Message.RoomName));
+                        target.SetActive(_fetcher.Message.RoomName.StartsWith(enableRoomName));
                         break;
                     case Expression.EndsWith:
-                        target.SetActive(enableRoomName.EndsWith(_fetcher.Message.RoomName));
+                        target.SetActive(_fetcher.Message.RoomName.EndsWith(enableRoomName));
                         break;
                 }
             }

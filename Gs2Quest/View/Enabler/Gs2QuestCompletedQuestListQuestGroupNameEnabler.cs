@@ -51,10 +51,10 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Enabler
                         target.SetActive(!enableQuestGroupNames.Contains(_fetcher.CompletedQuestList.QuestGroupName));
                         break;
                     case Expression.StartsWith:
-                        target.SetActive(enableQuestGroupName.StartsWith(_fetcher.CompletedQuestList.QuestGroupName));
+                        target.SetActive(_fetcher.CompletedQuestList.QuestGroupName.StartsWith(enableQuestGroupName));
                         break;
                     case Expression.EndsWith:
-                        target.SetActive(enableQuestGroupName.EndsWith(_fetcher.CompletedQuestList.QuestGroupName));
+                        target.SetActive(_fetcher.CompletedQuestList.QuestGroupName.EndsWith(enableQuestGroupName));
                         break;
                 }
             }

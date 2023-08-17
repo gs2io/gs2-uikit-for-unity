@@ -57,12 +57,12 @@ namespace Gs2.Unity.UiKit.Gs2Quest.SpriteSwitcher
                         }
                         break;
                     case Expression.StartsWith:
-                        if (applyQuestGroupName.StartsWith(_fetcher.CompletedQuestList.QuestGroupName)) {
+                        if (_fetcher.CompletedQuestList.QuestGroupName.StartsWith(applyQuestGroupName)) {
                             this.onUpdate.Invoke(this.sprite);
                         }
                         break;
                     case Expression.EndsWith:
-                        if (applyQuestGroupName.EndsWith(_fetcher.CompletedQuestList.QuestGroupName)) {
+                        if (_fetcher.CompletedQuestList.QuestGroupName.EndsWith(applyQuestGroupName)) {
                             this.onUpdate.Invoke(this.sprite);
                         }
                         break;

@@ -57,12 +57,12 @@ namespace Gs2.Unity.UiKit.Gs2Schedule.SpriteSwitcher
                         }
                         break;
                     case Expression.StartsWith:
-                        if (applyRepeatBeginDayOfWeek.StartsWith(_fetcher.Event.RepeatBeginDayOfWeek)) {
+                        if (_fetcher.Event.RepeatBeginDayOfWeek.StartsWith(applyRepeatBeginDayOfWeek)) {
                             this.onUpdate.Invoke(this.sprite);
                         }
                         break;
                     case Expression.EndsWith:
-                        if (applyRepeatBeginDayOfWeek.EndsWith(_fetcher.Event.RepeatBeginDayOfWeek)) {
+                        if (_fetcher.Event.RepeatBeginDayOfWeek.EndsWith(applyRepeatBeginDayOfWeek)) {
                             this.onUpdate.Invoke(this.sprite);
                         }
                         break;

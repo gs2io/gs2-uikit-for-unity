@@ -57,12 +57,12 @@ namespace Gs2.Unity.UiKit.Gs2Enchant.SpriteSwitcher
                         }
                         break;
                     case Expression.StartsWith:
-                        if (applyName.StartsWith(_fetcher.RarityParameterModel.Name)) {
+                        if (_fetcher.RarityParameterModel.Name.StartsWith(applyName)) {
                             this.onUpdate.Invoke(this.sprite);
                         }
                         break;
                     case Expression.EndsWith:
-                        if (applyName.EndsWith(_fetcher.RarityParameterModel.Name)) {
+                        if (_fetcher.RarityParameterModel.Name.EndsWith(applyName)) {
                             this.onUpdate.Invoke(this.sprite);
                         }
                         break;

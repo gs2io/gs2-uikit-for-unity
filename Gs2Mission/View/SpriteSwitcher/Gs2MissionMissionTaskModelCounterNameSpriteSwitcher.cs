@@ -57,12 +57,12 @@ namespace Gs2.Unity.UiKit.Gs2Mission.SpriteSwitcher
                         }
                         break;
                     case Expression.StartsWith:
-                        if (applyCounterName.StartsWith(_fetcher.MissionTaskModel.CounterName)) {
+                        if (_fetcher.MissionTaskModel.CounterName.StartsWith(applyCounterName)) {
                             this.onUpdate.Invoke(this.sprite);
                         }
                         break;
                     case Expression.EndsWith:
-                        if (applyCounterName.EndsWith(_fetcher.MissionTaskModel.CounterName)) {
+                        if (_fetcher.MissionTaskModel.CounterName.EndsWith(applyCounterName)) {
                             this.onUpdate.Invoke(this.sprite);
                         }
                         break;

@@ -57,12 +57,12 @@ namespace Gs2.Unity.UiKit.Gs2Enhance.SpriteSwitcher
                         }
                         break;
                     case Expression.StartsWith:
-                        if (applyName.StartsWith(_fetcher.RateModel.Name)) {
+                        if (_fetcher.RateModel.Name.StartsWith(applyName)) {
                             this.onUpdate.Invoke(this.sprite);
                         }
                         break;
                     case Expression.EndsWith:
-                        if (applyName.EndsWith(_fetcher.RateModel.Name)) {
+                        if (_fetcher.RateModel.Name.EndsWith(applyName)) {
                             this.onUpdate.Invoke(this.sprite);
                         }
                         break;

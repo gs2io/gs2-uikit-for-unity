@@ -57,12 +57,12 @@ namespace Gs2.Unity.UiKit.Gs2JobQueue.SpriteSwitcher
                         }
                         break;
                     case Expression.StartsWith:
-                        if (applyArgs.StartsWith(_fetcher.Job.Args)) {
+                        if (_fetcher.Job.Args.StartsWith(applyArgs)) {
                             this.onUpdate.Invoke(this.sprite);
                         }
                         break;
                     case Expression.EndsWith:
-                        if (applyArgs.EndsWith(_fetcher.Job.Args)) {
+                        if (_fetcher.Job.Args.EndsWith(applyArgs)) {
                             this.onUpdate.Invoke(this.sprite);
                         }
                         break;

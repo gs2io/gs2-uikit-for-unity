@@ -57,12 +57,12 @@ namespace Gs2.Unity.UiKit.Gs2Enchant.SpriteSwitcher
                         }
                         break;
                     case Expression.StartsWith:
-                        if (applyInitialValueStrategy.StartsWith(_fetcher.BalanceParameterModel.InitialValueStrategy)) {
+                        if (_fetcher.BalanceParameterModel.InitialValueStrategy.StartsWith(applyInitialValueStrategy)) {
                             this.onUpdate.Invoke(this.sprite);
                         }
                         break;
                     case Expression.EndsWith:
-                        if (applyInitialValueStrategy.EndsWith(_fetcher.BalanceParameterModel.InitialValueStrategy)) {
+                        if (_fetcher.BalanceParameterModel.InitialValueStrategy.EndsWith(applyInitialValueStrategy)) {
                             this.onUpdate.Invoke(this.sprite);
                         }
                         break;

@@ -51,10 +51,10 @@ namespace Gs2.Unity.UiKit.Gs2MegaField.Enabler
                         target.SetActive(!enableUserIds.Contains(_fetcher.Spatial.UserId));
                         break;
                     case Expression.StartsWith:
-                        target.SetActive(enableUserId.StartsWith(_fetcher.Spatial.UserId));
+                        target.SetActive(_fetcher.Spatial.UserId.StartsWith(enableUserId));
                         break;
                     case Expression.EndsWith:
-                        target.SetActive(enableUserId.EndsWith(_fetcher.Spatial.UserId));
+                        target.SetActive(_fetcher.Spatial.UserId.EndsWith(enableUserId));
                         break;
                 }
             }

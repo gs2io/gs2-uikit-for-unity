@@ -51,10 +51,10 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Enabler
                         target.SetActive(!enableUniqueIds.Contains(_fetcher.Score.UniqueId));
                         break;
                     case Expression.StartsWith:
-                        target.SetActive(enableUniqueId.StartsWith(_fetcher.Score.UniqueId));
+                        target.SetActive(_fetcher.Score.UniqueId.StartsWith(enableUniqueId));
                         break;
                     case Expression.EndsWith:
-                        target.SetActive(enableUniqueId.EndsWith(_fetcher.Score.UniqueId));
+                        target.SetActive(_fetcher.Score.UniqueId.EndsWith(enableUniqueId));
                         break;
                 }
             }

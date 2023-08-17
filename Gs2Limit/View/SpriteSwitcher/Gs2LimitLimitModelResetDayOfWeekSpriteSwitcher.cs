@@ -57,12 +57,12 @@ namespace Gs2.Unity.UiKit.Gs2Limit.SpriteSwitcher
                         }
                         break;
                     case Expression.StartsWith:
-                        if (applyResetDayOfWeek.StartsWith(_fetcher.LimitModel.ResetDayOfWeek)) {
+                        if (_fetcher.LimitModel.ResetDayOfWeek.StartsWith(applyResetDayOfWeek)) {
                             this.onUpdate.Invoke(this.sprite);
                         }
                         break;
                     case Expression.EndsWith:
-                        if (applyResetDayOfWeek.EndsWith(_fetcher.LimitModel.ResetDayOfWeek)) {
+                        if (_fetcher.LimitModel.ResetDayOfWeek.EndsWith(applyResetDayOfWeek)) {
                             this.onUpdate.Invoke(this.sprite);
                         }
                         break;

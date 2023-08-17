@@ -51,10 +51,10 @@ namespace Gs2.Unity.UiKit.Gs2Stamina.Enabler
                         target.SetActive(!enableMetadatas.Contains(_fetcher.StaminaModel.Metadata));
                         break;
                     case Expression.StartsWith:
-                        target.SetActive(enableMetadata.StartsWith(_fetcher.StaminaModel.Metadata));
+                        target.SetActive(_fetcher.StaminaModel.Metadata.StartsWith(enableMetadata));
                         break;
                     case Expression.EndsWith:
-                        target.SetActive(enableMetadata.EndsWith(_fetcher.StaminaModel.Metadata));
+                        target.SetActive(_fetcher.StaminaModel.Metadata.EndsWith(enableMetadata));
                         break;
                 }
             }

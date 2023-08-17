@@ -51,10 +51,10 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Enabler
                         target.SetActive(!enablePremiseMissionTaskNames.Contains(_fetcher.MissionTaskModel.PremiseMissionTaskName));
                         break;
                     case Expression.StartsWith:
-                        target.SetActive(enablePremiseMissionTaskName.StartsWith(_fetcher.MissionTaskModel.PremiseMissionTaskName));
+                        target.SetActive(_fetcher.MissionTaskModel.PremiseMissionTaskName.StartsWith(enablePremiseMissionTaskName));
                         break;
                     case Expression.EndsWith:
-                        target.SetActive(enablePremiseMissionTaskName.EndsWith(_fetcher.MissionTaskModel.PremiseMissionTaskName));
+                        target.SetActive(_fetcher.MissionTaskModel.PremiseMissionTaskName.EndsWith(enablePremiseMissionTaskName));
                         break;
                 }
             }

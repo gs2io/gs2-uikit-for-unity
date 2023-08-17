@@ -57,12 +57,12 @@ namespace Gs2.Unity.UiKit.Gs2Limit.SpriteSwitcher
                         }
                         break;
                     case Expression.StartsWith:
-                        if (applyLimitName.StartsWith(_fetcher.Counter.LimitName)) {
+                        if (_fetcher.Counter.LimitName.StartsWith(applyLimitName)) {
                             this.onUpdate.Invoke(this.sprite);
                         }
                         break;
                     case Expression.EndsWith:
-                        if (applyLimitName.EndsWith(_fetcher.Counter.LimitName)) {
+                        if (_fetcher.Counter.LimitName.EndsWith(applyLimitName)) {
                             this.onUpdate.Invoke(this.sprite);
                         }
                         break;

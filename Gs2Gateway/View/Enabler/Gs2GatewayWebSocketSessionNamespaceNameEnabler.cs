@@ -51,10 +51,10 @@ namespace Gs2.Unity.UiKit.Gs2Gateway.Enabler
                         target.SetActive(!enableNamespaceNames.Contains(_fetcher.WebSocketSession.NamespaceName));
                         break;
                     case Expression.StartsWith:
-                        target.SetActive(enableNamespaceName.StartsWith(_fetcher.WebSocketSession.NamespaceName));
+                        target.SetActive(_fetcher.WebSocketSession.NamespaceName.StartsWith(enableNamespaceName));
                         break;
                     case Expression.EndsWith:
-                        target.SetActive(enableNamespaceName.EndsWith(_fetcher.WebSocketSession.NamespaceName));
+                        target.SetActive(_fetcher.WebSocketSession.NamespaceName.EndsWith(enableNamespaceName));
                         break;
                 }
             }

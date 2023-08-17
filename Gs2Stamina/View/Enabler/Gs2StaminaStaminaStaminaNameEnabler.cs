@@ -51,10 +51,10 @@ namespace Gs2.Unity.UiKit.Gs2Stamina.Enabler
                         target.SetActive(!enableStaminaNames.Contains(_fetcher.Stamina.StaminaName));
                         break;
                     case Expression.StartsWith:
-                        target.SetActive(enableStaminaName.StartsWith(_fetcher.Stamina.StaminaName));
+                        target.SetActive(_fetcher.Stamina.StaminaName.StartsWith(enableStaminaName));
                         break;
                     case Expression.EndsWith:
-                        target.SetActive(enableStaminaName.EndsWith(_fetcher.Stamina.StaminaName));
+                        target.SetActive(_fetcher.Stamina.StaminaName.EndsWith(enableStaminaName));
                         break;
                 }
             }

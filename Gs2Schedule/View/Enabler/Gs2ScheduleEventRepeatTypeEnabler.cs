@@ -51,10 +51,10 @@ namespace Gs2.Unity.UiKit.Gs2Schedule.Enabler
                         target.SetActive(!enableRepeatTypes.Contains(_fetcher.Event.RepeatType));
                         break;
                     case Expression.StartsWith:
-                        target.SetActive(enableRepeatType.StartsWith(_fetcher.Event.RepeatType));
+                        target.SetActive(_fetcher.Event.RepeatType.StartsWith(enableRepeatType));
                         break;
                     case Expression.EndsWith:
-                        target.SetActive(enableRepeatType.EndsWith(_fetcher.Event.RepeatType));
+                        target.SetActive(_fetcher.Event.RepeatType.EndsWith(enableRepeatType));
                         break;
                 }
             }

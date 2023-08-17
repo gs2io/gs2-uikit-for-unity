@@ -51,10 +51,10 @@ namespace Gs2.Unity.UiKit.Gs2Enchant.Enabler
                         target.SetActive(!enableParameterNames.Contains(_fetcher.RarityParameterStatus.ParameterName));
                         break;
                     case Expression.StartsWith:
-                        target.SetActive(enableParameterName.StartsWith(_fetcher.RarityParameterStatus.ParameterName));
+                        target.SetActive(_fetcher.RarityParameterStatus.ParameterName.StartsWith(enableParameterName));
                         break;
                     case Expression.EndsWith:
-                        target.SetActive(enableParameterName.EndsWith(_fetcher.RarityParameterStatus.ParameterName));
+                        target.SetActive(_fetcher.RarityParameterStatus.ParameterName.EndsWith(enableParameterName));
                         break;
                 }
             }

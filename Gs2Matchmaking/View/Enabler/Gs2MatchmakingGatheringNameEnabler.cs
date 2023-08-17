@@ -51,10 +51,10 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking.Enabler
                         target.SetActive(!enableNames.Contains(_fetcher.Gathering.Name));
                         break;
                     case Expression.StartsWith:
-                        target.SetActive(enableName.StartsWith(_fetcher.Gathering.Name));
+                        target.SetActive(_fetcher.Gathering.Name.StartsWith(enableName));
                         break;
                     case Expression.EndsWith:
-                        target.SetActive(enableName.EndsWith(_fetcher.Gathering.Name));
+                        target.SetActive(_fetcher.Gathering.Name.EndsWith(enableName));
                         break;
                 }
             }

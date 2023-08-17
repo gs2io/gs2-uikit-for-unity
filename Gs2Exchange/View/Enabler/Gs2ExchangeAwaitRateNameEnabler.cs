@@ -51,10 +51,10 @@ namespace Gs2.Unity.UiKit.Gs2Exchange.Enabler
                         target.SetActive(!enableRateNames.Contains(_fetcher.Await.RateName));
                         break;
                     case Expression.StartsWith:
-                        target.SetActive(enableRateName.StartsWith(_fetcher.Await.RateName));
+                        target.SetActive(_fetcher.Await.RateName.StartsWith(enableRateName));
                         break;
                     case Expression.EndsWith:
-                        target.SetActive(enableRateName.EndsWith(_fetcher.Await.RateName));
+                        target.SetActive(_fetcher.Await.RateName.EndsWith(enableRateName));
                         break;
                 }
             }

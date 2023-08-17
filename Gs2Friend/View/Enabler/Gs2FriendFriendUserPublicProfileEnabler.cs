@@ -51,10 +51,10 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Enabler
                         target.SetActive(!enablePublicProfiles.Contains(_fetcher.FriendUser.PublicProfile));
                         break;
                     case Expression.StartsWith:
-                        target.SetActive(enablePublicProfile.StartsWith(_fetcher.FriendUser.PublicProfile));
+                        target.SetActive(_fetcher.FriendUser.PublicProfile.StartsWith(enablePublicProfile));
                         break;
                     case Expression.EndsWith:
-                        target.SetActive(enablePublicProfile.EndsWith(_fetcher.FriendUser.PublicProfile));
+                        target.SetActive(_fetcher.FriendUser.PublicProfile.EndsWith(enablePublicProfile));
                         break;
                 }
             }

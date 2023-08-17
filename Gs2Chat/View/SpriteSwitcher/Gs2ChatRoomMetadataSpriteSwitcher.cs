@@ -57,12 +57,12 @@ namespace Gs2.Unity.UiKit.Gs2Chat.SpriteSwitcher
                         }
                         break;
                     case Expression.StartsWith:
-                        if (applyMetadata.StartsWith(_fetcher.Room.Metadata)) {
+                        if (_fetcher.Room.Metadata.StartsWith(applyMetadata)) {
                             this.onUpdate.Invoke(this.sprite);
                         }
                         break;
                     case Expression.EndsWith:
-                        if (applyMetadata.EndsWith(_fetcher.Room.Metadata)) {
+                        if (_fetcher.Room.Metadata.EndsWith(applyMetadata)) {
                             this.onUpdate.Invoke(this.sprite);
                         }
                         break;

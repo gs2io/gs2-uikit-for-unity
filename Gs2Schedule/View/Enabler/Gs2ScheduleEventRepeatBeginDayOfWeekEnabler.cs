@@ -51,10 +51,10 @@ namespace Gs2.Unity.UiKit.Gs2Schedule.Enabler
                         target.SetActive(!enableRepeatBeginDayOfWeeks.Contains(_fetcher.Event.RepeatBeginDayOfWeek));
                         break;
                     case Expression.StartsWith:
-                        target.SetActive(enableRepeatBeginDayOfWeek.StartsWith(_fetcher.Event.RepeatBeginDayOfWeek));
+                        target.SetActive(_fetcher.Event.RepeatBeginDayOfWeek.StartsWith(enableRepeatBeginDayOfWeek));
                         break;
                     case Expression.EndsWith:
-                        target.SetActive(enableRepeatBeginDayOfWeek.EndsWith(_fetcher.Event.RepeatBeginDayOfWeek));
+                        target.SetActive(_fetcher.Event.RepeatBeginDayOfWeek.EndsWith(enableRepeatBeginDayOfWeek));
                         break;
                 }
             }

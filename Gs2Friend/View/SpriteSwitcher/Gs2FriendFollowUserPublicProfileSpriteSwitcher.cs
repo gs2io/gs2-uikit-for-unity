@@ -57,12 +57,12 @@ namespace Gs2.Unity.UiKit.Gs2Friend.SpriteSwitcher
                         }
                         break;
                     case Expression.StartsWith:
-                        if (applyPublicProfile.StartsWith(_fetcher.FollowUser.PublicProfile)) {
+                        if (_fetcher.FollowUser.PublicProfile.StartsWith(applyPublicProfile)) {
                             this.onUpdate.Invoke(this.sprite);
                         }
                         break;
                     case Expression.EndsWith:
-                        if (applyPublicProfile.EndsWith(_fetcher.FollowUser.PublicProfile)) {
+                        if (_fetcher.FollowUser.PublicProfile.EndsWith(applyPublicProfile)) {
                             this.onUpdate.Invoke(this.sprite);
                         }
                         break;

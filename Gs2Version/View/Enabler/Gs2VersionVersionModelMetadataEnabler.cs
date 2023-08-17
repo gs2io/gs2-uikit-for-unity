@@ -51,10 +51,10 @@ namespace Gs2.Unity.UiKit.Gs2Version.Enabler
                         target.SetActive(!enableMetadatas.Contains(_fetcher.VersionModel.Metadata));
                         break;
                     case Expression.StartsWith:
-                        target.SetActive(enableMetadata.StartsWith(_fetcher.VersionModel.Metadata));
+                        target.SetActive(_fetcher.VersionModel.Metadata.StartsWith(enableMetadata));
                         break;
                     case Expression.EndsWith:
-                        target.SetActive(enableMetadata.EndsWith(_fetcher.VersionModel.Metadata));
+                        target.SetActive(_fetcher.VersionModel.Metadata.EndsWith(enableMetadata));
                         break;
                 }
             }

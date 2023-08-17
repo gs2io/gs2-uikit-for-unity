@@ -57,12 +57,12 @@ namespace Gs2.Unity.UiKit.Gs2Version.SpriteSwitcher
                         }
                         break;
                     case Expression.StartsWith:
-                        if (applyScope.StartsWith(_fetcher.VersionModel.Scope)) {
+                        if (_fetcher.VersionModel.Scope.StartsWith(applyScope)) {
                             this.onUpdate.Invoke(this.sprite);
                         }
                         break;
                     case Expression.EndsWith:
-                        if (applyScope.EndsWith(_fetcher.VersionModel.Scope)) {
+                        if (_fetcher.VersionModel.Scope.EndsWith(applyScope)) {
                             this.onUpdate.Invoke(this.sprite);
                         }
                         break;

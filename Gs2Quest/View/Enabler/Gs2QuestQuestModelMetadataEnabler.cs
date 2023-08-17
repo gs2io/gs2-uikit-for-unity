@@ -51,10 +51,10 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Enabler
                         target.SetActive(!enableMetadatas.Contains(_fetcher.QuestModel.Metadata));
                         break;
                     case Expression.StartsWith:
-                        target.SetActive(enableMetadata.StartsWith(_fetcher.QuestModel.Metadata));
+                        target.SetActive(_fetcher.QuestModel.Metadata.StartsWith(enableMetadata));
                         break;
                     case Expression.EndsWith:
-                        target.SetActive(enableMetadata.EndsWith(_fetcher.QuestModel.Metadata));
+                        target.SetActive(_fetcher.QuestModel.Metadata.EndsWith(enableMetadata));
                         break;
                 }
             }

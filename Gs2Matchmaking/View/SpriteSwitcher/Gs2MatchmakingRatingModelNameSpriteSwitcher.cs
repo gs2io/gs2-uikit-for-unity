@@ -57,12 +57,12 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking.SpriteSwitcher
                         }
                         break;
                     case Expression.StartsWith:
-                        if (applyName.StartsWith(_fetcher.RatingModel.Name)) {
+                        if (_fetcher.RatingModel.Name.StartsWith(applyName)) {
                             this.onUpdate.Invoke(this.sprite);
                         }
                         break;
                     case Expression.EndsWith:
-                        if (applyName.EndsWith(_fetcher.RatingModel.Name)) {
+                        if (_fetcher.RatingModel.Name.EndsWith(applyName)) {
                             this.onUpdate.Invoke(this.sprite);
                         }
                         break;

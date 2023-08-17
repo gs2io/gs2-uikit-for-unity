@@ -57,12 +57,12 @@ namespace Gs2.Unity.UiKit.Gs2MegaField.SpriteSwitcher
                         }
                         break;
                     case Expression.StartsWith:
-                        if (applyMetadata.StartsWith(_fetcher.LayerModel.Metadata)) {
+                        if (_fetcher.LayerModel.Metadata.StartsWith(applyMetadata)) {
                             this.onUpdate.Invoke(this.sprite);
                         }
                         break;
                     case Expression.EndsWith:
-                        if (applyMetadata.EndsWith(_fetcher.LayerModel.Metadata)) {
+                        if (_fetcher.LayerModel.Metadata.EndsWith(applyMetadata)) {
                             this.onUpdate.Invoke(this.sprite);
                         }
                         break;

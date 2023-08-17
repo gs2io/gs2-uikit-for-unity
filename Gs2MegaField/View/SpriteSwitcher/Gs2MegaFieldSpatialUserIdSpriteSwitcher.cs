@@ -57,12 +57,12 @@ namespace Gs2.Unity.UiKit.Gs2MegaField.SpriteSwitcher
                         }
                         break;
                     case Expression.StartsWith:
-                        if (applyUserId.StartsWith(_fetcher.Spatial.UserId)) {
+                        if (_fetcher.Spatial.UserId.StartsWith(applyUserId)) {
                             this.onUpdate.Invoke(this.sprite);
                         }
                         break;
                     case Expression.EndsWith:
-                        if (applyUserId.EndsWith(_fetcher.Spatial.UserId)) {
+                        if (_fetcher.Spatial.UserId.EndsWith(applyUserId)) {
                             this.onUpdate.Invoke(this.sprite);
                         }
                         break;

@@ -57,12 +57,12 @@ namespace Gs2.Unity.UiKit.Gs2Limit.SpriteSwitcher
                         }
                         break;
                     case Expression.StartsWith:
-                        if (applyResetType.StartsWith(_fetcher.LimitModel.ResetType)) {
+                        if (_fetcher.LimitModel.ResetType.StartsWith(applyResetType)) {
                             this.onUpdate.Invoke(this.sprite);
                         }
                         break;
                     case Expression.EndsWith:
-                        if (applyResetType.EndsWith(_fetcher.LimitModel.ResetType)) {
+                        if (_fetcher.LimitModel.ResetType.EndsWith(applyResetType)) {
                             this.onUpdate.Invoke(this.sprite);
                         }
                         break;

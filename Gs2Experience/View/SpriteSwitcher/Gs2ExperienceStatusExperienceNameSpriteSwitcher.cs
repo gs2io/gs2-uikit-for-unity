@@ -57,12 +57,12 @@ namespace Gs2.Unity.UiKit.Gs2Experience.SpriteSwitcher
                         }
                         break;
                     case Expression.StartsWith:
-                        if (applyExperienceName.StartsWith(_fetcher.Status.ExperienceName)) {
+                        if (_fetcher.Status.ExperienceName.StartsWith(applyExperienceName)) {
                             this.onUpdate.Invoke(this.sprite);
                         }
                         break;
                     case Expression.EndsWith:
-                        if (applyExperienceName.EndsWith(_fetcher.Status.ExperienceName)) {
+                        if (_fetcher.Status.ExperienceName.EndsWith(applyExperienceName)) {
                             this.onUpdate.Invoke(this.sprite);
                         }
                         break;

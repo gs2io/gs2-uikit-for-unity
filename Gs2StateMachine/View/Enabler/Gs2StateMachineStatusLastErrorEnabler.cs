@@ -51,10 +51,10 @@ namespace Gs2.Unity.UiKit.Gs2StateMachine.Enabler
                         target.SetActive(!enableLastErrors.Contains(_fetcher.Status.LastError));
                         break;
                     case Expression.StartsWith:
-                        target.SetActive(enableLastError.StartsWith(_fetcher.Status.LastError));
+                        target.SetActive(_fetcher.Status.LastError.StartsWith(enableLastError));
                         break;
                     case Expression.EndsWith:
-                        target.SetActive(enableLastError.EndsWith(_fetcher.Status.LastError));
+                        target.SetActive(_fetcher.Status.LastError.EndsWith(enableLastError));
                         break;
                 }
             }

@@ -51,10 +51,10 @@ namespace Gs2.Unity.UiKit.Gs2Account.Enabler
                         target.SetActive(!enableUserIds.Contains(_fetcher.Account.UserId));
                         break;
                     case Expression.StartsWith:
-                        target.SetActive(enableUserId.StartsWith(_fetcher.Account.UserId));
+                        target.SetActive(_fetcher.Account.UserId.StartsWith(enableUserId));
                         break;
                     case Expression.EndsWith:
-                        target.SetActive(enableUserId.EndsWith(_fetcher.Account.UserId));
+                        target.SetActive(_fetcher.Account.UserId.EndsWith(enableUserId));
                         break;
                 }
             }

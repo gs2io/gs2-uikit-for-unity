@@ -51,10 +51,10 @@ namespace Gs2.Unity.UiKit.Gs2Version.Enabler
                         target.SetActive(!enableVersionNames.Contains(_fetcher.AcceptVersion.VersionName));
                         break;
                     case Expression.StartsWith:
-                        target.SetActive(enableVersionName.StartsWith(_fetcher.AcceptVersion.VersionName));
+                        target.SetActive(_fetcher.AcceptVersion.VersionName.StartsWith(enableVersionName));
                         break;
                     case Expression.EndsWith:
-                        target.SetActive(enableVersionName.EndsWith(_fetcher.AcceptVersion.VersionName));
+                        target.SetActive(_fetcher.AcceptVersion.VersionName.EndsWith(enableVersionName));
                         break;
                 }
             }

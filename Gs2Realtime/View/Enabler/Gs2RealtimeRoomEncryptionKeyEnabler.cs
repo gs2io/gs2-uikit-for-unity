@@ -51,10 +51,10 @@ namespace Gs2.Unity.UiKit.Gs2Realtime.Enabler
                         target.SetActive(!enableEncryptionKeys.Contains(_fetcher.Room.EncryptionKey));
                         break;
                     case Expression.StartsWith:
-                        target.SetActive(enableEncryptionKey.StartsWith(_fetcher.Room.EncryptionKey));
+                        target.SetActive(_fetcher.Room.EncryptionKey.StartsWith(enableEncryptionKey));
                         break;
                     case Expression.EndsWith:
-                        target.SetActive(enableEncryptionKey.EndsWith(_fetcher.Room.EncryptionKey));
+                        target.SetActive(_fetcher.Room.EncryptionKey.EndsWith(enableEncryptionKey));
                         break;
                 }
             }

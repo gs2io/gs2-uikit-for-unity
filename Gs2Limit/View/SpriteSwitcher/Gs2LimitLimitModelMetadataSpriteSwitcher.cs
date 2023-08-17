@@ -57,12 +57,12 @@ namespace Gs2.Unity.UiKit.Gs2Limit.SpriteSwitcher
                         }
                         break;
                     case Expression.StartsWith:
-                        if (applyMetadata.StartsWith(_fetcher.LimitModel.Metadata)) {
+                        if (_fetcher.LimitModel.Metadata.StartsWith(applyMetadata)) {
                             this.onUpdate.Invoke(this.sprite);
                         }
                         break;
                     case Expression.EndsWith:
-                        if (applyMetadata.EndsWith(_fetcher.LimitModel.Metadata)) {
+                        if (_fetcher.LimitModel.Metadata.EndsWith(applyMetadata)) {
                             this.onUpdate.Invoke(this.sprite);
                         }
                         break;

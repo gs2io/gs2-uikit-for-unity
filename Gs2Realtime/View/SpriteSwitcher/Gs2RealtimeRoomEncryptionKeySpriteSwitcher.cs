@@ -57,12 +57,12 @@ namespace Gs2.Unity.UiKit.Gs2Realtime.SpriteSwitcher
                         }
                         break;
                     case Expression.StartsWith:
-                        if (applyEncryptionKey.StartsWith(_fetcher.Room.EncryptionKey)) {
+                        if (_fetcher.Room.EncryptionKey.StartsWith(applyEncryptionKey)) {
                             this.onUpdate.Invoke(this.sprite);
                         }
                         break;
                     case Expression.EndsWith:
-                        if (applyEncryptionKey.EndsWith(_fetcher.Room.EncryptionKey)) {
+                        if (_fetcher.Room.EncryptionKey.EndsWith(applyEncryptionKey)) {
                             this.onUpdate.Invoke(this.sprite);
                         }
                         break;

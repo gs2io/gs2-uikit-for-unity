@@ -57,12 +57,12 @@ namespace Gs2.Unity.UiKit.Gs2Formation.SpriteSwitcher
                         }
                         break;
                     case Expression.StartsWith:
-                        if (applyMetadata.StartsWith(_fetcher.FormModel.Metadata)) {
+                        if (_fetcher.FormModel.Metadata.StartsWith(applyMetadata)) {
                             this.onUpdate.Invoke(this.sprite);
                         }
                         break;
                     case Expression.EndsWith:
-                        if (applyMetadata.EndsWith(_fetcher.FormModel.Metadata)) {
+                        if (_fetcher.FormModel.Metadata.EndsWith(applyMetadata)) {
                             this.onUpdate.Invoke(this.sprite);
                         }
                         break;

@@ -57,12 +57,12 @@ namespace Gs2.Unity.UiKit.Gs2Stamina.SpriteSwitcher
                         }
                         break;
                     case Expression.StartsWith:
-                        if (applyStaminaName.StartsWith(_fetcher.Stamina.StaminaName)) {
+                        if (_fetcher.Stamina.StaminaName.StartsWith(applyStaminaName)) {
                             this.onUpdate.Invoke(this.sprite);
                         }
                         break;
                     case Expression.EndsWith:
-                        if (applyStaminaName.EndsWith(_fetcher.Stamina.StaminaName)) {
+                        if (_fetcher.Stamina.StaminaName.EndsWith(applyStaminaName)) {
                             this.onUpdate.Invoke(this.sprite);
                         }
                         break;

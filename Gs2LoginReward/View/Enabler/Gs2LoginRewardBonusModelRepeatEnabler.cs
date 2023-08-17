@@ -51,10 +51,10 @@ namespace Gs2.Unity.UiKit.Gs2LoginReward.Enabler
                         target.SetActive(!enableRepeats.Contains(_fetcher.BonusModel.Repeat));
                         break;
                     case Expression.StartsWith:
-                        target.SetActive(enableRepeat.StartsWith(_fetcher.BonusModel.Repeat));
+                        target.SetActive(_fetcher.BonusModel.Repeat.StartsWith(enableRepeat));
                         break;
                     case Expression.EndsWith:
-                        target.SetActive(enableRepeat.EndsWith(_fetcher.BonusModel.Repeat));
+                        target.SetActive(_fetcher.BonusModel.Repeat.EndsWith(enableRepeat));
                         break;
                 }
             }

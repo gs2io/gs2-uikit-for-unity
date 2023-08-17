@@ -51,10 +51,10 @@ namespace Gs2.Unity.UiKit.Gs2Showcase.Enabler
                         target.SetActive(!enableDisplayItemIds.Contains(_fetcher.DisplayItem.DisplayItemId));
                         break;
                     case Expression.StartsWith:
-                        target.SetActive(enableDisplayItemId.StartsWith(_fetcher.DisplayItem.DisplayItemId));
+                        target.SetActive(_fetcher.DisplayItem.DisplayItemId.StartsWith(enableDisplayItemId));
                         break;
                     case Expression.EndsWith:
-                        target.SetActive(enableDisplayItemId.EndsWith(_fetcher.DisplayItem.DisplayItemId));
+                        target.SetActive(_fetcher.DisplayItem.DisplayItemId.EndsWith(enableDisplayItemId));
                         break;
                 }
             }

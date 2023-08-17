@@ -51,10 +51,10 @@ namespace Gs2.Unity.UiKit.Gs2Exchange.Enabler
                         target.SetActive(!enableNames.Contains(_fetcher.Await.Name));
                         break;
                     case Expression.StartsWith:
-                        target.SetActive(enableName.StartsWith(_fetcher.Await.Name));
+                        target.SetActive(_fetcher.Await.Name.StartsWith(enableName));
                         break;
                     case Expression.EndsWith:
-                        target.SetActive(enableName.EndsWith(_fetcher.Await.Name));
+                        target.SetActive(_fetcher.Await.Name.EndsWith(enableName));
                         break;
                 }
             }

@@ -51,10 +51,10 @@ namespace Gs2.Unity.UiKit.Gs2Enhance.Enabler
                         target.SetActive(!enableNames.Contains(_fetcher.Progress.Name));
                         break;
                     case Expression.StartsWith:
-                        target.SetActive(enableName.StartsWith(_fetcher.Progress.Name));
+                        target.SetActive(_fetcher.Progress.Name.StartsWith(enableName));
                         break;
                     case Expression.EndsWith:
-                        target.SetActive(enableName.EndsWith(_fetcher.Progress.Name));
+                        target.SetActive(_fetcher.Progress.Name.EndsWith(enableName));
                         break;
                 }
             }

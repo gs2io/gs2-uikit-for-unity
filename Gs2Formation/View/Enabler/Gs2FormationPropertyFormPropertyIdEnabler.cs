@@ -51,10 +51,10 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Enabler
                         target.SetActive(!enablePropertyIds.Contains(_fetcher.PropertyForm.PropertyId));
                         break;
                     case Expression.StartsWith:
-                        target.SetActive(enablePropertyId.StartsWith(_fetcher.PropertyForm.PropertyId));
+                        target.SetActive(_fetcher.PropertyForm.PropertyId.StartsWith(enablePropertyId));
                         break;
                     case Expression.EndsWith:
-                        target.SetActive(enablePropertyId.EndsWith(_fetcher.PropertyForm.PropertyId));
+                        target.SetActive(_fetcher.PropertyForm.PropertyId.EndsWith(enablePropertyId));
                         break;
                 }
             }

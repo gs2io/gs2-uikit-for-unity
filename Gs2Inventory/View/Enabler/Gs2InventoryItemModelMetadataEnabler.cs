@@ -51,10 +51,10 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Enabler
                         target.SetActive(!enableMetadatas.Contains(_fetcher.ItemModel.Metadata));
                         break;
                     case Expression.StartsWith:
-                        target.SetActive(enableMetadata.StartsWith(_fetcher.ItemModel.Metadata));
+                        target.SetActive(_fetcher.ItemModel.Metadata.StartsWith(enableMetadata));
                         break;
                     case Expression.EndsWith:
-                        target.SetActive(enableMetadata.EndsWith(_fetcher.ItemModel.Metadata));
+                        target.SetActive(_fetcher.ItemModel.Metadata.EndsWith(enableMetadata));
                         break;
                 }
             }

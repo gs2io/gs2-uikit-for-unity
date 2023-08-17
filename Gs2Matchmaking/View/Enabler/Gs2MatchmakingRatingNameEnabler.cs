@@ -51,10 +51,10 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking.Enabler
                         target.SetActive(!enableNames.Contains(_fetcher.Rating.Name));
                         break;
                     case Expression.StartsWith:
-                        target.SetActive(enableName.StartsWith(_fetcher.Rating.Name));
+                        target.SetActive(_fetcher.Rating.Name.StartsWith(enableName));
                         break;
                     case Expression.EndsWith:
-                        target.SetActive(enableName.EndsWith(_fetcher.Rating.Name));
+                        target.SetActive(_fetcher.Rating.Name.EndsWith(enableName));
                         break;
                 }
             }

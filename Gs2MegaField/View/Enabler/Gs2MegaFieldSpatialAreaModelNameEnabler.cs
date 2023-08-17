@@ -51,10 +51,10 @@ namespace Gs2.Unity.UiKit.Gs2MegaField.Enabler
                         target.SetActive(!enableAreaModelNames.Contains(_fetcher.Spatial.AreaModelName));
                         break;
                     case Expression.StartsWith:
-                        target.SetActive(enableAreaModelName.StartsWith(_fetcher.Spatial.AreaModelName));
+                        target.SetActive(_fetcher.Spatial.AreaModelName.StartsWith(enableAreaModelName));
                         break;
                     case Expression.EndsWith:
-                        target.SetActive(enableAreaModelName.EndsWith(_fetcher.Spatial.AreaModelName));
+                        target.SetActive(_fetcher.Spatial.AreaModelName.EndsWith(enableAreaModelName));
                         break;
                 }
             }

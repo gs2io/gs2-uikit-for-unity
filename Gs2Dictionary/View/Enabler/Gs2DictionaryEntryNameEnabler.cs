@@ -51,10 +51,10 @@ namespace Gs2.Unity.UiKit.Gs2Dictionary.Enabler
                         target.SetActive(!enableNames.Contains(_fetcher.Entry.Name));
                         break;
                     case Expression.StartsWith:
-                        target.SetActive(enableName.StartsWith(_fetcher.Entry.Name));
+                        target.SetActive(_fetcher.Entry.Name.StartsWith(enableName));
                         break;
                     case Expression.EndsWith:
-                        target.SetActive(enableName.EndsWith(_fetcher.Entry.Name));
+                        target.SetActive(_fetcher.Entry.Name.EndsWith(enableName));
                         break;
                 }
             }

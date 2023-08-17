@@ -51,10 +51,10 @@ namespace Gs2.Unity.UiKit.Gs2SerialKey.Enabler
                         target.SetActive(!enableNames.Contains(_fetcher.CampaignModel.Name));
                         break;
                     case Expression.StartsWith:
-                        target.SetActive(enableName.StartsWith(_fetcher.CampaignModel.Name));
+                        target.SetActive(_fetcher.CampaignModel.Name.StartsWith(enableName));
                         break;
                     case Expression.EndsWith:
-                        target.SetActive(enableName.EndsWith(_fetcher.CampaignModel.Name));
+                        target.SetActive(_fetcher.CampaignModel.Name.EndsWith(enableName));
                         break;
                 }
             }

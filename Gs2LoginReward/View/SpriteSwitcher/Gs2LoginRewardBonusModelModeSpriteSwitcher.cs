@@ -57,12 +57,12 @@ namespace Gs2.Unity.UiKit.Gs2LoginReward.SpriteSwitcher
                         }
                         break;
                     case Expression.StartsWith:
-                        if (applyMode.StartsWith(_fetcher.BonusModel.Mode)) {
+                        if (_fetcher.BonusModel.Mode.StartsWith(applyMode)) {
                             this.onUpdate.Invoke(this.sprite);
                         }
                         break;
                     case Expression.EndsWith:
-                        if (applyMode.EndsWith(_fetcher.BonusModel.Mode)) {
+                        if (_fetcher.BonusModel.Mode.EndsWith(applyMode)) {
                             this.onUpdate.Invoke(this.sprite);
                         }
                         break;

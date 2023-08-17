@@ -51,10 +51,10 @@ namespace Gs2.Unity.UiKit.Gs2LoginReward.Enabler
                         target.SetActive(!enableMissedReceiveRelieves.Contains(_fetcher.BonusModel.MissedReceiveRelief));
                         break;
                     case Expression.StartsWith:
-                        target.SetActive(enableMissedReceiveRelief.StartsWith(_fetcher.BonusModel.MissedReceiveRelief));
+                        target.SetActive(_fetcher.BonusModel.MissedReceiveRelief.StartsWith(enableMissedReceiveRelief));
                         break;
                     case Expression.EndsWith:
-                        target.SetActive(enableMissedReceiveRelief.EndsWith(_fetcher.BonusModel.MissedReceiveRelief));
+                        target.SetActive(_fetcher.BonusModel.MissedReceiveRelief.EndsWith(enableMissedReceiveRelief));
                         break;
                 }
             }

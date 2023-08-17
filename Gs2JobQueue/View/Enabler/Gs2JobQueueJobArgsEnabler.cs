@@ -51,10 +51,10 @@ namespace Gs2.Unity.UiKit.Gs2JobQueue.Enabler
                         target.SetActive(!enableArgses.Contains(_fetcher.Job.Args));
                         break;
                     case Expression.StartsWith:
-                        target.SetActive(enableArgs.StartsWith(_fetcher.Job.Args));
+                        target.SetActive(_fetcher.Job.Args.StartsWith(enableArgs));
                         break;
                     case Expression.EndsWith:
-                        target.SetActive(enableArgs.EndsWith(_fetcher.Job.Args));
+                        target.SetActive(_fetcher.Job.Args.EndsWith(enableArgs));
                         break;
                 }
             }

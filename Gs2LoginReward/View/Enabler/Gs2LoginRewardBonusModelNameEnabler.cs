@@ -51,10 +51,10 @@ namespace Gs2.Unity.UiKit.Gs2LoginReward.Enabler
                         target.SetActive(!enableNames.Contains(_fetcher.BonusModel.Name));
                         break;
                     case Expression.StartsWith:
-                        target.SetActive(enableName.StartsWith(_fetcher.BonusModel.Name));
+                        target.SetActive(_fetcher.BonusModel.Name.StartsWith(enableName));
                         break;
                     case Expression.EndsWith:
-                        target.SetActive(enableName.EndsWith(_fetcher.BonusModel.Name));
+                        target.SetActive(_fetcher.BonusModel.Name.EndsWith(enableName));
                         break;
                 }
             }

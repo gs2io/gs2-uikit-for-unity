@@ -57,12 +57,12 @@ namespace Gs2.Unity.UiKit.Gs2Enchant.SpriteSwitcher
                         }
                         break;
                     case Expression.StartsWith:
-                        if (applyName.StartsWith(_fetcher.BalanceParameterModel.Name)) {
+                        if (_fetcher.BalanceParameterModel.Name.StartsWith(applyName)) {
                             this.onUpdate.Invoke(this.sprite);
                         }
                         break;
                     case Expression.EndsWith:
-                        if (applyName.EndsWith(_fetcher.BalanceParameterModel.Name)) {
+                        if (_fetcher.BalanceParameterModel.Name.EndsWith(applyName)) {
                             this.onUpdate.Invoke(this.sprite);
                         }
                         break;

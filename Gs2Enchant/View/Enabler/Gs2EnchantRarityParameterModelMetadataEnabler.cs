@@ -51,10 +51,10 @@ namespace Gs2.Unity.UiKit.Gs2Enchant.Enabler
                         target.SetActive(!enableMetadatas.Contains(_fetcher.RarityParameterModel.Metadata));
                         break;
                     case Expression.StartsWith:
-                        target.SetActive(enableMetadata.StartsWith(_fetcher.RarityParameterModel.Metadata));
+                        target.SetActive(_fetcher.RarityParameterModel.Metadata.StartsWith(enableMetadata));
                         break;
                     case Expression.EndsWith:
-                        target.SetActive(enableMetadata.EndsWith(_fetcher.RarityParameterModel.Metadata));
+                        target.SetActive(_fetcher.RarityParameterModel.Metadata.EndsWith(enableMetadata));
                         break;
                 }
             }

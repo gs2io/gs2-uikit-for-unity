@@ -57,12 +57,12 @@ namespace Gs2.Unity.UiKit.Gs2StateMachine.SpriteSwitcher
                         }
                         break;
                     case Expression.StartsWith:
-                        if (applyLastError.StartsWith(_fetcher.Status.LastError)) {
+                        if (_fetcher.Status.LastError.StartsWith(applyLastError)) {
                             this.onUpdate.Invoke(this.sprite);
                         }
                         break;
                     case Expression.EndsWith:
-                        if (applyLastError.EndsWith(_fetcher.Status.LastError)) {
+                        if (_fetcher.Status.LastError.EndsWith(applyLastError)) {
                             this.onUpdate.Invoke(this.sprite);
                         }
                         break;

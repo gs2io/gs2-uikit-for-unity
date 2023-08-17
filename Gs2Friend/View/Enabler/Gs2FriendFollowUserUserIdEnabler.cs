@@ -51,10 +51,10 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Enabler
                         target.SetActive(!enableUserIds.Contains(_fetcher.FollowUser.UserId));
                         break;
                     case Expression.StartsWith:
-                        target.SetActive(enableUserId.StartsWith(_fetcher.FollowUser.UserId));
+                        target.SetActive(_fetcher.FollowUser.UserId.StartsWith(enableUserId));
                         break;
                     case Expression.EndsWith:
-                        target.SetActive(enableUserId.EndsWith(_fetcher.FollowUser.UserId));
+                        target.SetActive(_fetcher.FollowUser.UserId.EndsWith(enableUserId));
                         break;
                 }
             }

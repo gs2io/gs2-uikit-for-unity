@@ -51,10 +51,10 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Enabler
                         target.SetActive(!enableResetDayOfWeeks.Contains(_fetcher.MissionGroupModel.ResetDayOfWeek));
                         break;
                     case Expression.StartsWith:
-                        target.SetActive(enableResetDayOfWeek.StartsWith(_fetcher.MissionGroupModel.ResetDayOfWeek));
+                        target.SetActive(_fetcher.MissionGroupModel.ResetDayOfWeek.StartsWith(enableResetDayOfWeek));
                         break;
                     case Expression.EndsWith:
-                        target.SetActive(enableResetDayOfWeek.EndsWith(_fetcher.MissionGroupModel.ResetDayOfWeek));
+                        target.SetActive(_fetcher.MissionGroupModel.ResetDayOfWeek.EndsWith(enableResetDayOfWeek));
                         break;
                 }
             }

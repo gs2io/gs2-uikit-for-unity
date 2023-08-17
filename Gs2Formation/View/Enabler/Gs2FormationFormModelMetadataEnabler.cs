@@ -51,10 +51,10 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Enabler
                         target.SetActive(!enableMetadatas.Contains(_fetcher.FormModel.Metadata));
                         break;
                     case Expression.StartsWith:
-                        target.SetActive(enableMetadata.StartsWith(_fetcher.FormModel.Metadata));
+                        target.SetActive(_fetcher.FormModel.Metadata.StartsWith(enableMetadata));
                         break;
                     case Expression.EndsWith:
-                        target.SetActive(enableMetadata.EndsWith(_fetcher.FormModel.Metadata));
+                        target.SetActive(_fetcher.FormModel.Metadata.EndsWith(enableMetadata));
                         break;
                 }
             }

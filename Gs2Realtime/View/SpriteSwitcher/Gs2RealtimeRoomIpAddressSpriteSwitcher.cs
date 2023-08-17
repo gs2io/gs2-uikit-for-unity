@@ -57,12 +57,12 @@ namespace Gs2.Unity.UiKit.Gs2Realtime.SpriteSwitcher
                         }
                         break;
                     case Expression.StartsWith:
-                        if (applyIpAddress.StartsWith(_fetcher.Room.IpAddress)) {
+                        if (_fetcher.Room.IpAddress.StartsWith(applyIpAddress)) {
                             this.onUpdate.Invoke(this.sprite);
                         }
                         break;
                     case Expression.EndsWith:
-                        if (applyIpAddress.EndsWith(_fetcher.Room.IpAddress)) {
+                        if (_fetcher.Room.IpAddress.EndsWith(applyIpAddress)) {
                             this.onUpdate.Invoke(this.sprite);
                         }
                         break;

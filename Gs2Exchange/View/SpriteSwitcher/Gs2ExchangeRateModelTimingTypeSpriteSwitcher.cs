@@ -57,12 +57,12 @@ namespace Gs2.Unity.UiKit.Gs2Exchange.SpriteSwitcher
                         }
                         break;
                     case Expression.StartsWith:
-                        if (applyTimingType.StartsWith(_fetcher.RateModel.TimingType)) {
+                        if (_fetcher.RateModel.TimingType.StartsWith(applyTimingType)) {
                             this.onUpdate.Invoke(this.sprite);
                         }
                         break;
                     case Expression.EndsWith:
-                        if (applyTimingType.EndsWith(_fetcher.RateModel.TimingType)) {
+                        if (_fetcher.RateModel.TimingType.EndsWith(applyTimingType)) {
                             this.onUpdate.Invoke(this.sprite);
                         }
                         break;

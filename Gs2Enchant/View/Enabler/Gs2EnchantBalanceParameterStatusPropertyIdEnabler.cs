@@ -51,10 +51,10 @@ namespace Gs2.Unity.UiKit.Gs2Enchant.Enabler
                         target.SetActive(!enablePropertyIds.Contains(_fetcher.BalanceParameterStatus.PropertyId));
                         break;
                     case Expression.StartsWith:
-                        target.SetActive(enablePropertyId.StartsWith(_fetcher.BalanceParameterStatus.PropertyId));
+                        target.SetActive(_fetcher.BalanceParameterStatus.PropertyId.StartsWith(enablePropertyId));
                         break;
                     case Expression.EndsWith:
-                        target.SetActive(enablePropertyId.EndsWith(_fetcher.BalanceParameterStatus.PropertyId));
+                        target.SetActive(_fetcher.BalanceParameterStatus.PropertyId.EndsWith(enablePropertyId));
                         break;
                 }
             }

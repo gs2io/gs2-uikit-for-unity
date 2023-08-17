@@ -51,10 +51,10 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Enabler
                         target.SetActive(!enableFollowerProfiles.Contains(_fetcher.FollowUser.FollowerProfile));
                         break;
                     case Expression.StartsWith:
-                        target.SetActive(enableFollowerProfile.StartsWith(_fetcher.FollowUser.FollowerProfile));
+                        target.SetActive(_fetcher.FollowUser.FollowerProfile.StartsWith(enableFollowerProfile));
                         break;
                     case Expression.EndsWith:
-                        target.SetActive(enableFollowerProfile.EndsWith(_fetcher.FollowUser.FollowerProfile));
+                        target.SetActive(_fetcher.FollowUser.FollowerProfile.EndsWith(enableFollowerProfile));
                         break;
                 }
             }

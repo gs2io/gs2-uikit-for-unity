@@ -51,10 +51,10 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Enabler
                         target.SetActive(!enableItemNames.Contains(_fetcher.SimpleItem.ItemName));
                         break;
                     case Expression.StartsWith:
-                        target.SetActive(enableItemName.StartsWith(_fetcher.SimpleItem.ItemName));
+                        target.SetActive(_fetcher.SimpleItem.ItemName.StartsWith(enableItemName));
                         break;
                     case Expression.EndsWith:
-                        target.SetActive(enableItemName.EndsWith(_fetcher.SimpleItem.ItemName));
+                        target.SetActive(_fetcher.SimpleItem.ItemName.EndsWith(enableItemName));
                         break;
                 }
             }

@@ -51,10 +51,10 @@ namespace Gs2.Unity.UiKit.Gs2Enchant.Enabler
                         target.SetActive(!enableInitialValueStrategies.Contains(_fetcher.BalanceParameterModel.InitialValueStrategy));
                         break;
                     case Expression.StartsWith:
-                        target.SetActive(enableInitialValueStrategy.StartsWith(_fetcher.BalanceParameterModel.InitialValueStrategy));
+                        target.SetActive(_fetcher.BalanceParameterModel.InitialValueStrategy.StartsWith(enableInitialValueStrategy));
                         break;
                     case Expression.EndsWith:
-                        target.SetActive(enableInitialValueStrategy.EndsWith(_fetcher.BalanceParameterModel.InitialValueStrategy));
+                        target.SetActive(_fetcher.BalanceParameterModel.InitialValueStrategy.EndsWith(enableInitialValueStrategy));
                         break;
                 }
             }

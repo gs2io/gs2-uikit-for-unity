@@ -57,12 +57,12 @@ namespace Gs2.Unity.UiKit.Gs2Gateway.SpriteSwitcher
                         }
                         break;
                     case Expression.StartsWith:
-                        if (applyNamespaceName.StartsWith(_fetcher.WebSocketSession.NamespaceName)) {
+                        if (_fetcher.WebSocketSession.NamespaceName.StartsWith(applyNamespaceName)) {
                             this.onUpdate.Invoke(this.sprite);
                         }
                         break;
                     case Expression.EndsWith:
-                        if (applyNamespaceName.EndsWith(_fetcher.WebSocketSession.NamespaceName)) {
+                        if (_fetcher.WebSocketSession.NamespaceName.EndsWith(applyNamespaceName)) {
                             this.onUpdate.Invoke(this.sprite);
                         }
                         break;

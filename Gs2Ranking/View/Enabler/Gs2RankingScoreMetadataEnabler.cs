@@ -51,10 +51,10 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Enabler
                         target.SetActive(!enableMetadatas.Contains(_fetcher.Score.Metadata));
                         break;
                     case Expression.StartsWith:
-                        target.SetActive(enableMetadata.StartsWith(_fetcher.Score.Metadata));
+                        target.SetActive(_fetcher.Score.Metadata.StartsWith(enableMetadata));
                         break;
                     case Expression.EndsWith:
-                        target.SetActive(enableMetadata.EndsWith(_fetcher.Score.Metadata));
+                        target.SetActive(_fetcher.Score.Metadata.EndsWith(enableMetadata));
                         break;
                 }
             }

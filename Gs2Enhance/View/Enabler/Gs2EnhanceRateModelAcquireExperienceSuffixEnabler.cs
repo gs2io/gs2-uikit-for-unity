@@ -51,10 +51,10 @@ namespace Gs2.Unity.UiKit.Gs2Enhance.Enabler
                         target.SetActive(!enableAcquireExperienceSuffixes.Contains(_fetcher.RateModel.AcquireExperienceSuffix));
                         break;
                     case Expression.StartsWith:
-                        target.SetActive(enableAcquireExperienceSuffix.StartsWith(_fetcher.RateModel.AcquireExperienceSuffix));
+                        target.SetActive(_fetcher.RateModel.AcquireExperienceSuffix.StartsWith(enableAcquireExperienceSuffix));
                         break;
                     case Expression.EndsWith:
-                        target.SetActive(enableAcquireExperienceSuffix.EndsWith(_fetcher.RateModel.AcquireExperienceSuffix));
+                        target.SetActive(_fetcher.RateModel.AcquireExperienceSuffix.EndsWith(enableAcquireExperienceSuffix));
                         break;
                 }
             }

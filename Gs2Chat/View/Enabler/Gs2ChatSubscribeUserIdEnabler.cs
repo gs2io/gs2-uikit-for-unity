@@ -51,10 +51,10 @@ namespace Gs2.Unity.UiKit.Gs2Chat.Enabler
                         target.SetActive(!enableUserIds.Contains(_fetcher.Subscribe.UserId));
                         break;
                     case Expression.StartsWith:
-                        target.SetActive(enableUserId.StartsWith(_fetcher.Subscribe.UserId));
+                        target.SetActive(_fetcher.Subscribe.UserId.StartsWith(enableUserId));
                         break;
                     case Expression.EndsWith:
-                        target.SetActive(enableUserId.EndsWith(_fetcher.Subscribe.UserId));
+                        target.SetActive(_fetcher.Subscribe.UserId.EndsWith(enableUserId));
                         break;
                 }
             }

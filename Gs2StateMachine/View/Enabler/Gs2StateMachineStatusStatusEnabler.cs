@@ -51,10 +51,10 @@ namespace Gs2.Unity.UiKit.Gs2StateMachine.Enabler
                         target.SetActive(!enableStatuses.Contains(_fetcher.Status.Status));
                         break;
                     case Expression.StartsWith:
-                        target.SetActive(enableStatus.StartsWith(_fetcher.Status.Status));
+                        target.SetActive(_fetcher.Status.Status.StartsWith(enableStatus));
                         break;
                     case Expression.EndsWith:
-                        target.SetActive(enableStatus.EndsWith(_fetcher.Status.Status));
+                        target.SetActive(_fetcher.Status.Status.EndsWith(enableStatus));
                         break;
                 }
             }

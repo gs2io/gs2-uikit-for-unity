@@ -51,10 +51,10 @@ namespace Gs2.Unity.UiKit.Gs2Gateway.Enabler
                         target.SetActive(!enableUserIds.Contains(_fetcher.WebSocketSession.UserId));
                         break;
                     case Expression.StartsWith:
-                        target.SetActive(enableUserId.StartsWith(_fetcher.WebSocketSession.UserId));
+                        target.SetActive(_fetcher.WebSocketSession.UserId.StartsWith(enableUserId));
                         break;
                     case Expression.EndsWith:
-                        target.SetActive(enableUserId.EndsWith(_fetcher.WebSocketSession.UserId));
+                        target.SetActive(_fetcher.WebSocketSession.UserId.EndsWith(enableUserId));
                         break;
                 }
             }
