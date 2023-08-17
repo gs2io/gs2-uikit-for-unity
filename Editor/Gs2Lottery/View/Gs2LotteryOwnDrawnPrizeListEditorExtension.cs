@@ -27,43 +27,43 @@
 #pragma warning disable CS0472
 
 using Gs2.Unity.Gs2Lottery.ScriptableObject;
-using Gs2.Unity.UiKit.Gs2Lottery.Context;
 using Gs2.Unity.UiKit.Gs2Lottery.Fetcher;
 using UnityEditor;
 using UnityEngine;
 
 namespace Gs2.Unity.UiKit.Gs2Lottery.Editor
 {
-    [CustomEditor(typeof(Gs2LotteryOwnProbabilityListFetcher))]
-    public class Gs2LotteryOwnProbabilityListFetcherEditorExtension : UnityEditor.Editor
+    [CustomEditor(typeof(Gs2LotteryOwnDrawnPrizeList))]
+    public class Gs2LotteryOwnDrawnPrizeListEditorExtension : UnityEditor.Editor
     {
         public override void OnInspectorGUI() {
-            var original = target as Gs2LotteryOwnProbabilityListFetcher;
+            var original = target as Gs2LotteryOwnDrawnPrizeList;
 
             if (original == null) return;
 
-            var context = original.GetComponent<Gs2LotteryLotteryModelContext>() ?? original.GetComponentInParent<Gs2LotteryLotteryModelContext>(true);
-            if (context == null) {
-                EditorGUILayout.HelpBox("Gs2LotteryLotteryModelContext not found.", MessageType.Error);
-                if (GUILayout.Button("Add Context")) {
-                    original.gameObject.AddComponent<Gs2LotteryLotteryModelContext>();
+            var fetcher = original.GetComponent<Gs2LotteryOwnDrawnPrizeListFetcher>() ?? original.GetComponentInParent<Gs2LotteryOwnDrawnPrizeListFetcher>(true);
+            if (fetcher == null) {
+                EditorGUILayout.HelpBox("Gs2LotteryOwnDrawnPrizeListFetcher not found.", MessageType.Error);
+                if (GUILayout.Button("Add ListFetcher")) {
+                    original.gameObject.AddComponent<Gs2LotteryOwnDrawnPrizeListFetcher>();
                 }
             }
             else {
                 EditorGUI.BeginDisabledGroup(true);
-                EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2LotteryLotteryModelContext), false);
+                EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2LotteryOwnDrawnPrizeListFetcher), false);
                 EditorGUI.indentLevel++;
-                context.LotteryModel = EditorGUILayout.ObjectField("LotteryModel", context.LotteryModel, typeof(LotteryModel), false) as LotteryModel;
-                EditorGUI.indentLevel++;
-                EditorGUILayout.TextField("NamespaceName", context.LotteryModel?.NamespaceName?.ToString());
-                EditorGUILayout.TextField("LotteryName", context.LotteryModel?.LotteryName?.ToString());
-                EditorGUI.indentLevel--;
+                if (fetcher.Context != null) {
+                    fetcher.Context.LotteryModel = EditorGUILayout.ObjectField("LotteryModel", fetcher.Context.LotteryModel, typeof(LotteryModel), false) as LotteryModel;
+                    EditorGUI.indentLevel++;
+                    EditorGUI.indentLevel--;
+                }
                 EditorGUI.indentLevel--;
                 EditorGUI.EndDisabledGroup();
             }
 
             serializedObject.Update();
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("onError"), true);
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("prefab"), true);
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("maximumItems"), true);
             serializedObject.ApplyModifiedProperties();
         }
     }

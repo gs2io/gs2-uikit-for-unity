@@ -12,8 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
- * deny overwrite
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
@@ -34,36 +32,37 @@ using UnityEngine;
 
 namespace Gs2.Unity.UiKit.Gs2Lottery.Editor
 {
-    [CustomEditor(typeof(Gs2LotteryOwnProbabilityListFetcher))]
-    public class Gs2LotteryOwnProbabilityListFetcherEditorExtension : UnityEditor.Editor
+    [CustomEditor(typeof(Gs2LotteryOwnDrawnPrizeContext))]
+    public class Gs2LotteryOwnDrawnPrizeContextEditorExtension : UnityEditor.Editor
     {
         public override void OnInspectorGUI() {
-            var original = target as Gs2LotteryOwnProbabilityListFetcher;
+            var original = target as Gs2LotteryOwnDrawnPrizeContext;
 
             if (original == null) return;
 
-            var context = original.GetComponent<Gs2LotteryLotteryModelContext>() ?? original.GetComponentInParent<Gs2LotteryLotteryModelContext>(true);
-            if (context == null) {
-                EditorGUILayout.HelpBox("Gs2LotteryLotteryModelContext not found.", MessageType.Error);
-                if (GUILayout.Button("Add Context")) {
-                    original.gameObject.AddComponent<Gs2LotteryLotteryModelContext>();
+            serializedObject.Update();
+
+            if (original.DrawnPrize == null) {
+                if (original.GetComponentInParent<Gs2LotteryOwnDrawnPrizeList>(true) != null) {
+                    EditorGUILayout.HelpBox("OwnDrawnPrize is auto assign from Gs2LotteryOwnDrawnPrizeList.", MessageType.Info);
+                }
+                else {
+                    EditorGUILayout.HelpBox("OwnDrawnPrize not assigned.", MessageType.Error);
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("DrawnPrize"), true);
                 }
             }
             else {
+                original.DrawnPrize = EditorGUILayout.ObjectField("OwnDrawnPrize", original.DrawnPrize, typeof(OwnDrawnPrize), false) as OwnDrawnPrize;
                 EditorGUI.BeginDisabledGroup(true);
-                EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2LotteryLotteryModelContext), false);
-                EditorGUI.indentLevel++;
-                context.LotteryModel = EditorGUILayout.ObjectField("LotteryModel", context.LotteryModel, typeof(LotteryModel), false) as LotteryModel;
-                EditorGUI.indentLevel++;
-                EditorGUILayout.TextField("NamespaceName", context.LotteryModel?.NamespaceName?.ToString());
-                EditorGUILayout.TextField("LotteryName", context.LotteryModel?.LotteryName?.ToString());
-                EditorGUI.indentLevel--;
-                EditorGUI.indentLevel--;
+                if (original.DrawnPrize != null) {
+                    EditorGUI.indentLevel++;
+                    EditorGUILayout.TextField("NamespaceName", original.DrawnPrize?.NamespaceName?.ToString());
+                    EditorGUILayout.TextField("PrizeId", (original.DrawnPrize?.Index ?? 0).ToString());
+                    EditorGUI.indentLevel--;
+                }
                 EditorGUI.EndDisabledGroup();
             }
 
-            serializedObject.Update();
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("onError"), true);
             serializedObject.ApplyModifiedProperties();
         }
     }

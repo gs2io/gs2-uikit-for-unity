@@ -51,10 +51,10 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.Enabler
                         target.SetActive(!enableModes.Contains(_fetcher.LotteryModel.Mode));
                         break;
                     case Expression.StartsWith:
-                        target.SetActive(enableMode.StartsWith(_fetcher.LotteryModel.Mode));
+                        target.SetActive(_fetcher.LotteryModel.Mode.StartsWith(enableMode));
                         break;
                     case Expression.EndsWith:
-                        target.SetActive(enableMode.EndsWith(_fetcher.LotteryModel.Mode));
+                        target.SetActive(_fetcher.LotteryModel.Mode.EndsWith(enableMode));
                         break;
                 }
             }

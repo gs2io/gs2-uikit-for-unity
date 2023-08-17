@@ -24,43 +24,49 @@
 
 #pragma warning disable CS0472
 
+using System;
 using System.Collections.Generic;
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Lottery.Fetcher;
 using UnityEngine;
+using UnityEngine.Events;
 
-namespace Gs2.Unity.UiKit.Gs2Lottery.Enabler
+namespace Gs2.Unity.UiKit.Gs2Lottery.SpriteSwitcher
 {
     /// <summary>
     /// Main
     /// </summary>
 
-	[AddComponentMenu("GS2 UIKit/Lottery/LotteryModel/View/Enabler/Properties/Name/Gs2LotteryLotteryModelNameEnabler")]
-    public partial class Gs2LotteryLotteryModelNameEnabler : MonoBehaviour
+	[AddComponentMenu("GS2 UIKit/Lottery/DrawnPrize/View/SpriteSwitcher/Properties/PrizeId/Gs2LotteryDrawnPrizePrizeIdSpriteSwitcher")]
+    public partial class Gs2LotteryDrawnPrizePrizeIdSpriteSwitcher : MonoBehaviour
     {
         public void Update()
         {
-            if (_fetcher.Fetched && _fetcher.LotteryModel != null)
+            if (_fetcher.Fetched && _fetcher.DrawnPrize != null)
             {
                 switch(expression)
                 {
                     case Expression.In:
-                        target.SetActive(enableNames.Contains(_fetcher.LotteryModel.Name));
+                        if (applyPrizeIds.Contains(_fetcher.DrawnPrize.PrizeId)) {
+                            this.onUpdate.Invoke(this.sprite);
+                        }
                         break;
                     case Expression.NotIn:
-                        target.SetActive(!enableNames.Contains(_fetcher.LotteryModel.Name));
+                        if (!applyPrizeIds.Contains(_fetcher.DrawnPrize.PrizeId)) {
+                            this.onUpdate.Invoke(this.sprite);
+                        }
                         break;
                     case Expression.StartsWith:
-                        target.SetActive(_fetcher.LotteryModel.Name.StartsWith(enableName));
+                        if (_fetcher.DrawnPrize.PrizeId.StartsWith(applyPrizeId)) {
+                            this.onUpdate.Invoke(this.sprite);
+                        }
                         break;
                     case Expression.EndsWith:
-                        target.SetActive(_fetcher.LotteryModel.Name.EndsWith(enableName));
+                        if (_fetcher.DrawnPrize.PrizeId.EndsWith(applyPrizeId)) {
+                            this.onUpdate.Invoke(this.sprite);
+                        }
                         break;
                 }
-            }
-            else
-            {
-                target.SetActive(false);
             }
         }
     }
@@ -69,31 +75,31 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.Enabler
     /// Dependent components
     /// </summary>
 
-    public partial class Gs2LotteryLotteryModelNameEnabler
+    public partial class Gs2LotteryDrawnPrizePrizeIdSpriteSwitcher
     {
-        private Gs2LotteryLotteryModelFetcher _fetcher;
+        private Gs2LotteryOwnDrawnPrizeFetcher _fetcher;
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2LotteryLotteryModelFetcher>() ?? GetComponentInParent<Gs2LotteryLotteryModelFetcher>();
+            _fetcher = GetComponent<Gs2LotteryOwnDrawnPrizeFetcher>() ?? GetComponentInParent<Gs2LotteryOwnDrawnPrizeFetcher>();
 
             if (_fetcher == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2LotteryLotteryModelFetcher.");
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2LotteryOwnDrawnPrizeFetcher.");
                 enabled = false;
             }
-            if (target == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: target is not set.");
+            if (sprite == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: sprite is not set.");
                 enabled = false;
             }
         }
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2LotteryLotteryModelFetcher>() ?? GetComponentInParent<Gs2LotteryLotteryModelFetcher>(true);
+            _fetcher = GetComponent<Gs2LotteryOwnDrawnPrizeFetcher>() ?? GetComponentInParent<Gs2LotteryOwnDrawnPrizeFetcher>(true);
             if (_fetcher == null) {
                 return true;
             }
-            if (target == null) {
+            if (sprite == null) {
                 return true;
             }
             return false;
@@ -104,7 +110,7 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.Enabler
     /// Public properties
     /// </summary>
 
-    public partial class Gs2LotteryLotteryModelNameEnabler
+    public partial class Gs2LotteryDrawnPrizePrizeIdSpriteSwitcher
     {
 
     }
@@ -113,7 +119,7 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.Enabler
     /// Parameters for Inspector
     /// </summary>
 
-    public partial class Gs2LotteryLotteryModelNameEnabler
+    public partial class Gs2LotteryDrawnPrizePrizeIdSpriteSwitcher
     {
         public enum Expression {
             In,
@@ -124,18 +130,31 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.Enabler
 
         public Expression expression;
 
-        public List<string> enableNames;
+        public List<string> applyPrizeIds;
 
-        public string enableName;
+        public string applyPrizeId;
 
-        public GameObject target;
+        public Sprite sprite;
     }
 
     /// <summary>
     /// Event handlers
     /// </summary>
-    public partial class Gs2LotteryLotteryModelNameEnabler
+    public partial class Gs2LotteryDrawnPrizePrizeIdSpriteSwitcher
     {
-        
+        [Serializable]
+        private class UpdateEvent : UnityEvent<Sprite>
+        {
+
+        }
+
+        [SerializeField]
+        private UpdateEvent onUpdate = new UpdateEvent();
+
+        public event UnityAction<Sprite> OnUpdate
+        {
+            add => onUpdate.AddListener(value);
+            remove => onUpdate.RemoveListener(value);
+        }
     }
 }

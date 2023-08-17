@@ -57,12 +57,12 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.SpriteSwitcher
                         }
                         break;
                     case Expression.StartsWith:
-                        if (applyMode.StartsWith(_fetcher.LotteryModel.Mode)) {
+                        if (_fetcher.LotteryModel.Mode.StartsWith(applyMode)) {
                             this.onUpdate.Invoke(this.sprite);
                         }
                         break;
                     case Expression.EndsWith:
-                        if (applyMode.EndsWith(_fetcher.LotteryModel.Mode)) {
+                        if (_fetcher.LotteryModel.Mode.EndsWith(applyMode)) {
                             this.onUpdate.Invoke(this.sprite);
                         }
                         break;

@@ -26,6 +26,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Lottery.Fetcher;
 using UnityEngine;
@@ -37,36 +38,22 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.SpriteSwitcher
     /// Main
     /// </summary>
 
-	[AddComponentMenu("GS2 UIKit/Lottery/BoxItems/View/SpriteSwitcher/Properties/PrizeTableName/Gs2LotteryBoxItemsPrizeTableNameSpriteSwitcher")]
-    public partial class Gs2LotteryBoxItemsPrizeTableNameSpriteSwitcher : MonoBehaviour
+	[AddComponentMenu("GS2 UIKit/Lottery/DrawnPrize/View/SpriteSwitcher/Properties/PrizeId/Gs2LotteryDrawnPrizePrizeIdSpriteTableSwitcher")]
+    public partial class Gs2LotteryDrawnPrizePrizeIdSpriteTableSwitcher : MonoBehaviour
     {
         public void Update()
         {
-            if (_fetcher.Fetched && _fetcher.BoxItems != null)
+            if (_fetcher.Fetched && _fetcher.DrawnPrize != null)
             {
-                switch(expression)
-                {
-                    case Expression.In:
-                        if (applyPrizeTableNames.Contains(_fetcher.BoxItems.PrizeTableName)) {
-                            this.onUpdate.Invoke(this.sprite);
-                        }
-                        break;
-                    case Expression.NotIn:
-                        if (!applyPrizeTableNames.Contains(_fetcher.BoxItems.PrizeTableName)) {
-                            this.onUpdate.Invoke(this.sprite);
-                        }
-                        break;
-                    case Expression.StartsWith:
-                        if (_fetcher.BoxItems.PrizeTableName.StartsWith(applyPrizeTableName)) {
-                            this.onUpdate.Invoke(this.sprite);
-                        }
-                        break;
-                    case Expression.EndsWith:
-                        if (_fetcher.BoxItems.PrizeTableName.EndsWith(applyPrizeTableName)) {
-                            this.onUpdate.Invoke(this.sprite);
-                        }
-                        break;
+                if (sprites.Count(v => v.value == _fetcher.DrawnPrize.PrizeId) > 0) {
+                    this.onUpdate.Invoke(sprites.Find(v => v.value == _fetcher.DrawnPrize.PrizeId).sprite);
                 }
+                else {
+                    this.onUpdate.Invoke(defaultSprite);
+                }
+            }
+            else {
+                this.onUpdate.Invoke(defaultSprite);
             }
         }
     }
@@ -75,19 +62,19 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.SpriteSwitcher
     /// Dependent components
     /// </summary>
 
-    public partial class Gs2LotteryBoxItemsPrizeTableNameSpriteSwitcher
+    public partial class Gs2LotteryDrawnPrizePrizeIdSpriteTableSwitcher
     {
-        private Gs2LotteryOwnBoxItemsFetcher _fetcher;
+        private Gs2LotteryOwnDrawnPrizeFetcher _fetcher;
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2LotteryOwnBoxItemsFetcher>() ?? GetComponentInParent<Gs2LotteryOwnBoxItemsFetcher>();
+            _fetcher = GetComponent<Gs2LotteryOwnDrawnPrizeFetcher>() ?? GetComponentInParent<Gs2LotteryOwnDrawnPrizeFetcher>();
 
             if (_fetcher == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2LotteryOwnBoxItemsFetcher.");
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2LotteryOwnDrawnPrizeFetcher.");
                 enabled = false;
             }
-            if (sprite == null) {
+            if (sprites == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: sprite is not set.");
                 enabled = false;
             }
@@ -95,11 +82,11 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.SpriteSwitcher
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2LotteryOwnBoxItemsFetcher>() ?? GetComponentInParent<Gs2LotteryOwnBoxItemsFetcher>(true);
+            _fetcher = GetComponent<Gs2LotteryOwnDrawnPrizeFetcher>() ?? GetComponentInParent<Gs2LotteryOwnDrawnPrizeFetcher>(true);
             if (_fetcher == null) {
                 return true;
             }
-            if (sprite == null) {
+            if (sprites == null) {
                 return true;
             }
             return false;
@@ -110,7 +97,7 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.SpriteSwitcher
     /// Public properties
     /// </summary>
 
-    public partial class Gs2LotteryBoxItemsPrizeTableNameSpriteSwitcher
+    public partial class Gs2LotteryDrawnPrizePrizeIdSpriteTableSwitcher
     {
 
     }
@@ -119,28 +106,23 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.SpriteSwitcher
     /// Parameters for Inspector
     /// </summary>
 
-    public partial class Gs2LotteryBoxItemsPrizeTableNameSpriteSwitcher
+    public partial class Gs2LotteryDrawnPrizePrizeIdSpriteTableSwitcher
     {
-        public enum Expression {
-            In,
-            NotIn,
-            StartsWith,
-            EndsWith,
+        [System.Serializable]
+        public class SpriteTableEntry
+        {
+            public string value;
+            public Sprite sprite;
         }
 
-        public Expression expression;
-
-        public List<string> applyPrizeTableNames;
-
-        public string applyPrizeTableName;
-
-        public Sprite sprite;
+        public List<SpriteTableEntry> sprites;
+        public Sprite defaultSprite;
     }
 
     /// <summary>
     /// Event handlers
     /// </summary>
-    public partial class Gs2LotteryBoxItemsPrizeTableNameSpriteSwitcher
+    public partial class Gs2LotteryDrawnPrizePrizeIdSpriteTableSwitcher
     {
         [Serializable]
         private class UpdateEvent : UnityEvent<Sprite>

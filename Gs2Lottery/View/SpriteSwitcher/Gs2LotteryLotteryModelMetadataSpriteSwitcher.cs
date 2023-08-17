@@ -57,12 +57,12 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.SpriteSwitcher
                         }
                         break;
                     case Expression.StartsWith:
-                        if (applyMetadata.StartsWith(_fetcher.LotteryModel.Metadata)) {
+                        if (_fetcher.LotteryModel.Metadata.StartsWith(applyMetadata)) {
                             this.onUpdate.Invoke(this.sprite);
                         }
                         break;
                     case Expression.EndsWith:
-                        if (applyMetadata.EndsWith(_fetcher.LotteryModel.Metadata)) {
+                        if (_fetcher.LotteryModel.Metadata.EndsWith(applyMetadata)) {
                             this.onUpdate.Invoke(this.sprite);
                         }
                         break;

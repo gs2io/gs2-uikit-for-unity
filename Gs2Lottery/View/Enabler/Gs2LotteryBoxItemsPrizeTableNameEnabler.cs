@@ -51,10 +51,10 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.Enabler
                         target.SetActive(!enablePrizeTableNames.Contains(_fetcher.BoxItems.PrizeTableName));
                         break;
                     case Expression.StartsWith:
-                        target.SetActive(enablePrizeTableName.StartsWith(_fetcher.BoxItems.PrizeTableName));
+                        target.SetActive(_fetcher.BoxItems.PrizeTableName.StartsWith(enablePrizeTableName));
                         break;
                     case Expression.EndsWith:
-                        target.SetActive(enablePrizeTableName.EndsWith(_fetcher.BoxItems.PrizeTableName));
+                        target.SetActive(_fetcher.BoxItems.PrizeTableName.EndsWith(enablePrizeTableName));
                         break;
                 }
             }

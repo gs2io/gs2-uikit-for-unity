@@ -51,10 +51,10 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.Enabler
                         target.SetActive(!enableMetadatas.Contains(_fetcher.LotteryModel.Metadata));
                         break;
                     case Expression.StartsWith:
-                        target.SetActive(enableMetadata.StartsWith(_fetcher.LotteryModel.Metadata));
+                        target.SetActive(_fetcher.LotteryModel.Metadata.StartsWith(enableMetadata));
                         break;
                     case Expression.EndsWith:
-                        target.SetActive(enableMetadata.EndsWith(_fetcher.LotteryModel.Metadata));
+                        target.SetActive(_fetcher.LotteryModel.Metadata.EndsWith(enableMetadata));
                         break;
                 }
             }

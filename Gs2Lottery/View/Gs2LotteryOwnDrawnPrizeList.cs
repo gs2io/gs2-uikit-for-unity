@@ -16,7 +16,7 @@
  * deny overwrite
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
-// ReSharper disable CheckNamespace
+// ReSharper disable CheckLotteryModel
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantAssignment
 // ReSharper disable NotAccessedVariable
@@ -39,16 +39,16 @@ namespace Gs2.Unity.UiKit.Gs2Lottery
     /// Main
     /// </summary>
 
-    [AddComponentMenu("GS2 UIKit/Lottery/Probability/View/Gs2LotteryOwnProbabilityList")]
-    public partial class Gs2LotteryOwnProbabilityList : MonoBehaviour
+    [AddComponentMenu("GS2 UIKit/Lottery/DrawnPrize/View/Gs2LotteryOwnDrawnPrizeList")]
+    public partial class Gs2LotteryOwnDrawnPrizeList : MonoBehaviour
     {
-        private List<Gs2LotteryOwnProbabilityContext> _children;
+        private List<Gs2LotteryOwnDrawnPrizeContext> _children;
 
         public void Update() {
-            if (_fetcher.Fetched && this._fetcher.Probabilities != null) {
+            if (_fetcher.Fetched && this._fetcher.DrawnPrizes != null) {
                 for (var i = 0; i < this.maximumItems; i++) {
-                    if (i < this._fetcher.Probabilities.Count) {
-                        _children[i].Probability.prizeId = this._fetcher.Probabilities[i].Prize.PrizeId;
+                    if (i < this._fetcher.DrawnPrizes.Count) {
+                        _children[i].DrawnPrize.index = i;
                         _children[i].gameObject.SetActive(true);
                     }
                     else {
@@ -63,39 +63,39 @@ namespace Gs2.Unity.UiKit.Gs2Lottery
     /// Dependent components
     /// </summary>
 
-    public partial class Gs2LotteryOwnProbabilityList
+    public partial class Gs2LotteryOwnDrawnPrizeList
     {
-        private Gs2LotteryOwnProbabilityListFetcher _fetcher;
+        private Gs2LotteryOwnDrawnPrizeListFetcher _fetcher;
         private Gs2LotteryLotteryModelContext Context => _fetcher.Context;
 
         public void Awake()
         {
             if (prefab == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2LotteryOwnProbabilityContext Prefab.");
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2LotteryOwnDrawnPrizeContext Prefab.");
                 enabled = false;
                 return;
             }
 
-            _fetcher = GetComponent<Gs2LotteryOwnProbabilityListFetcher>() ?? GetComponentInParent<Gs2LotteryOwnProbabilityListFetcher>();
+            _fetcher = GetComponent<Gs2LotteryOwnDrawnPrizeListFetcher>() ?? GetComponentInParent<Gs2LotteryOwnDrawnPrizeListFetcher>();
 
             if (_fetcher == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2LotteryOwnProbabilityListFetcher.");
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2LotteryOwnDrawnPrizeListFetcher.");
                 enabled = false;
             }
 
             var context = GetComponent<Gs2LotteryLotteryModelContext>() ?? GetComponentInParent<Gs2LotteryLotteryModelContext>(true);
             if (context == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2LotteryOwnProbabilityListFetcher::Context.");
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2LotteryOwnDrawnPrizeListFetcher::Context.");
                 enabled = false;
                 return;
             }
 
-            _children = new List<Gs2LotteryOwnProbabilityContext>();
+            _children = new List<Gs2LotteryOwnDrawnPrizeContext>();
             for (var i = 0; i < this.maximumItems; i++) {
                 var node = Instantiate(this.prefab, transform);
-                node.Probability = OwnProbability.New(
-                    context.LotteryModel,
-                    ""
+                node.DrawnPrize = OwnDrawnPrize.New(
+                    context.LotteryModel.Namespace,
+                    0
                 );
                 node.gameObject.SetActive(false);
                 _children.Add(node);
@@ -105,7 +105,7 @@ namespace Gs2.Unity.UiKit.Gs2Lottery
 
         public bool HasError()
         {
-            _fetcher = GetComponent<Gs2LotteryOwnProbabilityListFetcher>() ?? GetComponentInParent<Gs2LotteryOwnProbabilityListFetcher>(true);
+            _fetcher = GetComponent<Gs2LotteryOwnDrawnPrizeListFetcher>() ?? GetComponentInParent<Gs2LotteryOwnDrawnPrizeListFetcher>(true);
             if (_fetcher == null) {
                 return true;
             }
@@ -117,7 +117,7 @@ namespace Gs2.Unity.UiKit.Gs2Lottery
     /// Public properties
     /// </summary>
 
-    public partial class Gs2LotteryOwnProbabilityList
+    public partial class Gs2LotteryOwnDrawnPrizeList
     {
 
     }
@@ -126,16 +126,16 @@ namespace Gs2.Unity.UiKit.Gs2Lottery
     /// Parameters for Inspector
     /// </summary>
 
-    public partial class Gs2LotteryOwnProbabilityList
+    public partial class Gs2LotteryOwnDrawnPrizeList
     {
-        public Gs2LotteryOwnProbabilityContext prefab;
+        public Gs2LotteryOwnDrawnPrizeContext prefab;
         public int maximumItems;
     }
 
     /// <summary>
     /// Event handlers
     /// </summary>
-    public partial class Gs2LotteryOwnProbabilityList
+    public partial class Gs2LotteryOwnDrawnPrizeList
     {
 
     }

@@ -35,26 +35,26 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.Enabler
     /// Main
     /// </summary>
 
-	[AddComponentMenu("GS2 UIKit/Lottery/LotteryModel/View/Enabler/Properties/Name/Gs2LotteryLotteryModelNameEnabler")]
-    public partial class Gs2LotteryLotteryModelNameEnabler : MonoBehaviour
+	[AddComponentMenu("GS2 UIKit/Lottery/DrawnPrize/View/Enabler/Properties/PrizeId/Gs2LotteryDrawnPrizePrizeIdEnabler")]
+    public partial class Gs2LotteryDrawnPrizePrizeIdEnabler : MonoBehaviour
     {
         public void Update()
         {
-            if (_fetcher.Fetched && _fetcher.LotteryModel != null)
+            if (_fetcher.Fetched && _fetcher.DrawnPrize != null)
             {
                 switch(expression)
                 {
                     case Expression.In:
-                        target.SetActive(enableNames.Contains(_fetcher.LotteryModel.Name));
+                        target.SetActive(enablePrizeIds.Contains(_fetcher.DrawnPrize.PrizeId));
                         break;
                     case Expression.NotIn:
-                        target.SetActive(!enableNames.Contains(_fetcher.LotteryModel.Name));
+                        target.SetActive(!enablePrizeIds.Contains(_fetcher.DrawnPrize.PrizeId));
                         break;
                     case Expression.StartsWith:
-                        target.SetActive(_fetcher.LotteryModel.Name.StartsWith(enableName));
+                        target.SetActive(_fetcher.DrawnPrize.PrizeId.StartsWith(enablePrizeId));
                         break;
                     case Expression.EndsWith:
-                        target.SetActive(_fetcher.LotteryModel.Name.EndsWith(enableName));
+                        target.SetActive(_fetcher.DrawnPrize.PrizeId.EndsWith(enablePrizeId));
                         break;
                 }
             }
@@ -69,16 +69,16 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.Enabler
     /// Dependent components
     /// </summary>
 
-    public partial class Gs2LotteryLotteryModelNameEnabler
+    public partial class Gs2LotteryDrawnPrizePrizeIdEnabler
     {
-        private Gs2LotteryLotteryModelFetcher _fetcher;
+        private Gs2LotteryOwnDrawnPrizeFetcher _fetcher;
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2LotteryLotteryModelFetcher>() ?? GetComponentInParent<Gs2LotteryLotteryModelFetcher>();
+            _fetcher = GetComponent<Gs2LotteryOwnDrawnPrizeFetcher>() ?? GetComponentInParent<Gs2LotteryOwnDrawnPrizeFetcher>();
 
             if (_fetcher == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2LotteryLotteryModelFetcher.");
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2LotteryOwnDrawnPrizeFetcher.");
                 enabled = false;
             }
             if (target == null) {
@@ -89,7 +89,7 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.Enabler
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2LotteryLotteryModelFetcher>() ?? GetComponentInParent<Gs2LotteryLotteryModelFetcher>(true);
+            _fetcher = GetComponent<Gs2LotteryOwnDrawnPrizeFetcher>() ?? GetComponentInParent<Gs2LotteryOwnDrawnPrizeFetcher>(true);
             if (_fetcher == null) {
                 return true;
             }
@@ -104,7 +104,7 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.Enabler
     /// Public properties
     /// </summary>
 
-    public partial class Gs2LotteryLotteryModelNameEnabler
+    public partial class Gs2LotteryDrawnPrizePrizeIdEnabler
     {
 
     }
@@ -113,7 +113,7 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.Enabler
     /// Parameters for Inspector
     /// </summary>
 
-    public partial class Gs2LotteryLotteryModelNameEnabler
+    public partial class Gs2LotteryDrawnPrizePrizeIdEnabler
     {
         public enum Expression {
             In,
@@ -124,9 +124,9 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.Enabler
 
         public Expression expression;
 
-        public List<string> enableNames;
+        public List<string> enablePrizeIds;
 
-        public string enableName;
+        public string enablePrizeId;
 
         public GameObject target;
     }
@@ -134,7 +134,7 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.Enabler
     /// <summary>
     /// Event handlers
     /// </summary>
-    public partial class Gs2LotteryLotteryModelNameEnabler
+    public partial class Gs2LotteryDrawnPrizePrizeIdEnabler
     {
         
     }
