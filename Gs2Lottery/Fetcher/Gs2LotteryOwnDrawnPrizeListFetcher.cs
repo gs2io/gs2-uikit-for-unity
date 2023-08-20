@@ -16,7 +16,7 @@
  * deny overwrite
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
-// ReSharper disable CheckLotteryModel
+// ReSharper disable CheckNamespace
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantAssignment
 // ReSharper disable NotAccessedVariable
@@ -61,7 +61,7 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.Fetcher
                 {
                     
                     var domain = this._clientHolder.Gs2.Lottery.Namespace(
-                        this.Context.LotteryModel.NamespaceName
+                        this.Context.Namespace.NamespaceName
                     ).Me(
                         this._gameSessionHolder.GameSession
                     ).Lottery();
@@ -125,23 +125,23 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.Fetcher
     {
         private Gs2ClientHolder _clientHolder;
         private Gs2GameSessionHolder _gameSessionHolder;
-        public Gs2LotteryLotteryModelContext Context;
+        public Gs2LotteryNamespaceContext Context;
 
         public void Awake()
         {
             _clientHolder = Gs2ClientHolder.Instance;
             _gameSessionHolder = Gs2GameSessionHolder.Instance;
-            Context = GetComponent<Gs2LotteryLotteryModelContext>() ?? GetComponentInParent<Gs2LotteryLotteryModelContext>();
+            Context = GetComponent<Gs2LotteryNamespaceContext>() ?? GetComponentInParent<Gs2LotteryNamespaceContext>();
 
             if (Context == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2LotteryLotteryModelContext.");
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2LotteryNamespaceContext.");
                 enabled = false;
             }
         }
 
         public bool HasError()
         {
-            Context = GetComponent<Gs2LotteryLotteryModelContext>() ?? GetComponentInParent<Gs2LotteryLotteryModelContext>(true);
+            Context = GetComponent<Gs2LotteryNamespaceContext>() ?? GetComponentInParent<Gs2LotteryNamespaceContext>(true);
             if (Context == null) {
                 return true;
             }

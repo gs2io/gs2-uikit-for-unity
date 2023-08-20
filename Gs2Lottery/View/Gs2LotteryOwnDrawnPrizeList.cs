@@ -16,7 +16,7 @@
  * deny overwrite
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
-// ReSharper disable CheckLotteryModel
+// ReSharper disable CheckNamespace
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantAssignment
 // ReSharper disable NotAccessedVariable
@@ -66,7 +66,7 @@ namespace Gs2.Unity.UiKit.Gs2Lottery
     public partial class Gs2LotteryOwnDrawnPrizeList
     {
         private Gs2LotteryOwnDrawnPrizeListFetcher _fetcher;
-        private Gs2LotteryLotteryModelContext Context => _fetcher.Context;
+        private Gs2LotteryNamespaceContext Context => _fetcher.Context;
 
         public void Awake()
         {
@@ -83,7 +83,7 @@ namespace Gs2.Unity.UiKit.Gs2Lottery
                 enabled = false;
             }
 
-            var context = GetComponent<Gs2LotteryLotteryModelContext>() ?? GetComponentInParent<Gs2LotteryLotteryModelContext>(true);
+            var context = GetComponent<Gs2LotteryNamespaceContext>() ?? GetComponentInParent<Gs2LotteryNamespaceContext>(true);
             if (context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2LotteryOwnDrawnPrizeListFetcher::Context.");
                 enabled = false;
@@ -94,7 +94,7 @@ namespace Gs2.Unity.UiKit.Gs2Lottery
             for (var i = 0; i < this.maximumItems; i++) {
                 var node = Instantiate(this.prefab, transform);
                 node.DrawnPrize = OwnDrawnPrize.New(
-                    context.LotteryModel.Namespace,
+                    context.Namespace,
                     0
                 );
                 node.gameObject.SetActive(false);
