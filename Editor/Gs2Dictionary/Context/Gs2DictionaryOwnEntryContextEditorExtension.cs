@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
@@ -45,6 +47,9 @@ namespace Gs2.Unity.UiKit.Gs2Dictionary.Editor
             if (original.Entry == null) {
                 if (original.GetComponentInParent<Gs2DictionaryOwnEntryList>(true) != null) {
                     EditorGUILayout.HelpBox("OwnEntry is auto assign from Gs2DictionaryOwnEntryList.", MessageType.Info);
+                }
+                else if (original.GetComponentInParent<Gs2DictionaryEntryModelContext>(true) != null) {
+                    EditorGUILayout.HelpBox("OwnEntry is auto assign from Gs2DictionaryEntryModelContext.", MessageType.Info);
                 }
                 else {
                     EditorGUILayout.HelpBox("OwnEntry not assigned.", MessageType.Error);

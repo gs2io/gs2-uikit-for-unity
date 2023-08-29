@@ -68,11 +68,11 @@ namespace Gs2.Unity.UiKit.Gs2SerialKey.Localization
 
     public partial class Gs2SerialKeySerialKeyLocalizationVariables
     {
-        private Gs2SerialKeyOwnSerialKeyFetcher _fetcher;
+        private Gs2SerialKeySerialKeyFetcher _fetcher;
 
         public void Awake() {
             target.enabled = false;
-            _fetcher = GetComponent<Gs2SerialKeyOwnSerialKeyFetcher>() ?? GetComponentInParent<Gs2SerialKeyOwnSerialKeyFetcher>();
+            _fetcher = GetComponent<Gs2SerialKeySerialKeyFetcher>() ?? GetComponentInParent<Gs2SerialKeySerialKeyFetcher>();
 
             if (_fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2SerialKeySerialKeyFetcher.");
@@ -82,7 +82,7 @@ namespace Gs2.Unity.UiKit.Gs2SerialKey.Localization
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2SerialKeyOwnSerialKeyFetcher>() ?? GetComponentInParent<Gs2SerialKeyOwnSerialKeyFetcher>(true);
+            _fetcher = GetComponent<Gs2SerialKeySerialKeyFetcher>() ?? GetComponentInParent<Gs2SerialKeySerialKeyFetcher>(true);
             if (_fetcher == null) {
                 return true;
             }

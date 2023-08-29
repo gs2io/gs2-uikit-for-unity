@@ -47,8 +47,15 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Editor
                     EditorGUILayout.HelpBox("OwnSlot is auto assign from Gs2FormationOwnSlotList.", MessageType.Info);
                 }
                 else {
-                    EditorGUILayout.HelpBox("OwnSlot not assigned.", MessageType.Error);
-                    EditorGUILayout.PropertyField(serializedObject.FindProperty("Form"), true);
+                    var ownFormContext = original.GetComponentInParent<Gs2FormationOwnFormContext>(true);
+                    var slotModelContext = original.GetComponentInParent<Gs2FormationSlotModelContext>(true);
+                    if (ownFormContext != null && slotModelContext != null) {
+                        EditorGUILayout.HelpBox("OwnSlot is auto assign from Gs2FormationOwnFormContext and Gs2FormationSlotModelContext.", MessageType.Info);
+                    }
+                    else {
+                        EditorGUILayout.HelpBox("OwnSlot not assigned.", MessageType.Error);
+                        EditorGUILayout.PropertyField(serializedObject.FindProperty("Slot"), true);
+                    }
                 }
             }
             else {

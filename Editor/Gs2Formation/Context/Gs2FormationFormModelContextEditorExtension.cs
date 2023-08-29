@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
@@ -47,8 +49,14 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Editor
                     EditorGUILayout.HelpBox("FormModel is auto assign from Gs2FormationFormModelList.", MessageType.Info);
                 }
                 else {
-                    EditorGUILayout.HelpBox("FormModel not assigned.", MessageType.Error);
-                    EditorGUILayout.PropertyField(serializedObject.FindProperty("FormModel"), true);
+                    var own = original.GetComponentInParent<Gs2FormationOwnFormContext>(true);
+                    if (own != null && !own.HasError()) {
+                        EditorGUILayout.HelpBox("FormModel is auto assign from Gs2FormationOwnFormContext.", MessageType.Info);
+                    }
+                    else {
+                        EditorGUILayout.HelpBox("FormModel not assigned.", MessageType.Error);
+                        EditorGUILayout.PropertyField(serializedObject.FindProperty("FormModel"), true);
+                    }
                 }
             }
             else {

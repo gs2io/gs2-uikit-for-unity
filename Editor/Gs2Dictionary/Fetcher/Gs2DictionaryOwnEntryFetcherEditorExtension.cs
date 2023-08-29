@@ -12,8 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
- * deny overwrite
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
@@ -42,29 +40,31 @@ namespace Gs2.Unity.UiKit.Gs2Dictionary.Editor
 
             if (original == null) return;
 
-            var context = original.GetComponent<Gs2DictionaryEntryModelContext>() ?? original.GetComponentInParent<Gs2DictionaryEntryModelContext>(true);
+            var context = original.GetComponent<Gs2DictionaryOwnEntryContext>() ?? original.GetComponentInParent<Gs2DictionaryOwnEntryContext>(true);
             if (context == null) {
-                EditorGUILayout.HelpBox("Gs2DictionaryEntryModelContext not found.", MessageType.Error);
+                EditorGUILayout.HelpBox("Gs2DictionaryOwnEntryContext not found.", MessageType.Error);
                 if (GUILayout.Button("Add Context")) {
-                    original.gameObject.AddComponent<Gs2DictionaryEntryModelContext>();
+                    original.gameObject.AddComponent<Gs2DictionaryOwnEntryContext>();
                 }
             }
             else {
                 if (context.gameObject.GetComponentInParent<Gs2DictionaryOwnEntryList>(true) != null) {
                     EditorGUI.BeginDisabledGroup(true);
-                    EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2DictionaryEntryModelContext), false);
+                    EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2DictionaryOwnEntryContext), false);
                     EditorGUI.EndDisabledGroup();
-                    EditorGUILayout.HelpBox("Entry is auto assign from Gs2DictionaryEntryModelList.", MessageType.Info);
+                    EditorGUILayout.HelpBox("Entry is auto assign from Gs2DictionaryOwnEntryList.", MessageType.Info);
                 }
                 else {
                     EditorGUI.BeginDisabledGroup(true);
-                    EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2DictionaryEntryModelContext), false);
+                    EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2DictionaryOwnEntryContext), false);
                     EditorGUI.indentLevel++;
-                    context.EntryModel = EditorGUILayout.ObjectField("EntryModel", context.EntryModel, typeof(EntryModel), false) as EntryModel;
-                    EditorGUI.indentLevel++;
-                    EditorGUILayout.TextField("NamespaceName", context.EntryModel?.NamespaceName.ToString());
-                    EditorGUILayout.TextField("EntryModelName", context.EntryModel?.EntryName.ToString());
-                    EditorGUI.indentLevel--;
+                    context.Entry = EditorGUILayout.ObjectField("Entry", context.Entry, typeof(OwnEntry), false) as OwnEntry;
+                    if (context.Entry != null) {
+                        EditorGUI.indentLevel++;
+                        EditorGUILayout.TextField("NamespaceName", context.Entry?.NamespaceName?.ToString());
+                        EditorGUILayout.TextField("EntryName", context.Entry?.EntryName?.ToString());
+                        EditorGUI.indentLevel--;
+                    }
                     EditorGUI.indentLevel--;
                     EditorGUI.EndDisabledGroup();
                 }

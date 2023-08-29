@@ -39,18 +39,18 @@ namespace Gs2.Unity.UiKit.Gs2SerialKey.SpriteSwitcher.Editor
 
             if (original == null) return;
 
-            var context = original.GetComponent<Gs2SerialKeyOwnSerialKeyContext>() ?? original.GetComponentInParent<Gs2SerialKeyOwnSerialKeyContext>(true);
+            var context = original.GetComponent<Gs2SerialKeySerialKeyContext>() ?? original.GetComponentInParent<Gs2SerialKeySerialKeyContext>(true);
             if (context == null) {
-                EditorGUILayout.HelpBox("Gs2SerialKeyOwnSerialKeyContext not found.", MessageType.Error);
+                EditorGUILayout.HelpBox("Gs2SerialKeySerialKeyContext not found.", MessageType.Error);
                 if (GUILayout.Button("Add Context")) {
-                    original.gameObject.AddComponent<Gs2SerialKeyOwnSerialKeyContext>();
+                    original.gameObject.AddComponent<Gs2SerialKeySerialKeyContext>();
                 }
             }
             else {
                 EditorGUI.BeginDisabledGroup(true);
-                EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2SerialKeyOwnSerialKeyContext), false);
+                EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2SerialKeySerialKeyContext), false);
                 EditorGUI.indentLevel++;
-                context.SerialKey = EditorGUILayout.ObjectField("SerialKey", context.SerialKey, typeof(OwnSerialKey), false) as OwnSerialKey;
+                context.SerialKey = EditorGUILayout.ObjectField("SerialKey", context.SerialKey, typeof(SerialKey), false) as SerialKey;
                 if (context.SerialKey != null) {
                     EditorGUI.indentLevel++;
                     EditorGUILayout.TextField("NamespaceName", context.SerialKey?.NamespaceName?.ToString());

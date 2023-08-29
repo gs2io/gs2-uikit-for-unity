@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
@@ -38,10 +40,18 @@ namespace Gs2.Unity.UiKit.Gs2Dictionary.Context
     public partial class Gs2DictionaryOwnEntryContext : Gs2DictionaryEntryModelContext
     {
         public new void Start() {
+            var context = GetComponent<Gs2DictionaryEntryModelContext>() ?? GetComponentInParent<Gs2DictionaryEntryModelContext>(true);
+            if (context != null && this.Entry == null) {
+                this.Entry = OwnEntry.New(
+                    context.EntryModel.Namespace,
+                    context.EntryModel.EntryName
+                );
+            }
             if (Entry == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Entry is not set in Gs2DictionaryOwnEntryContext.");
             }
         }
+        
         public override bool HasError() {
             if (!base.HasError()) {
                 return false;

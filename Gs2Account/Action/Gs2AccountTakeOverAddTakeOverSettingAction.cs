@@ -117,13 +117,13 @@ namespace Gs2.Unity.UiKit.Gs2Account
     {
         private Gs2ClientHolder _clientHolder;
         private Gs2GameSessionHolder _gameSessionHolder;
-        private Gs2AccountAccountContext _context;
+        private Gs2AccountOwnAccountContext _context;
 
         public void Awake()
         {
             this._clientHolder = Gs2ClientHolder.Instance;
             this._gameSessionHolder = Gs2GameSessionHolder.Instance;
-            this._context = GetComponentInParent<Gs2AccountAccountContext>();
+            this._context = GetComponentInParent<Gs2AccountOwnAccountContext>();
         }
     }
 

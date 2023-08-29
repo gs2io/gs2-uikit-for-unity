@@ -41,7 +41,17 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Context
         public new void Start() {
             base.Start();
             if (Slot == null) {
-                Debug.LogError("Slot is not set in Gs2FormationOwnSlotContext.");
+                var ownFormContext = GetComponentInParent<Gs2FormationOwnFormContext>(true);
+                var slotModelContext = GetComponentInParent<Gs2FormationSlotModelContext>(true);
+                if (ownFormContext != null && slotModelContext != null) {
+                    this.Slot = OwnSlot.New(
+                        ownFormContext.Form,
+                        slotModelContext.SlotModel.SlotModelName
+                    );
+                }
+                else {
+                    Debug.LogError("Slot is not set in Gs2FormationOwnSlotContext.");
+                }
             }
         }
 
@@ -53,9 +63,12 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Context
                 if (GetComponentInParent<Gs2FormationOwnSlotList>(true) != null) {
                     return false;
                 }
-                else {
-                    return true;
+                var ownFormContext = GetComponentInParent<Gs2FormationOwnFormContext>(true);
+                var slotModelContext = GetComponentInParent<Gs2FormationSlotModelContext>(true);
+                if (ownFormContext != null && slotModelContext != null) {
+                    return false;
                 }
+                return true;
             }
             return false;
         }

@@ -43,19 +43,19 @@ namespace Gs2.Unity.UiKit.Gs2SerialKey.Localization.Editor
 
             if (original == null) return;
 
-            var fetcher = original.GetComponent<Gs2SerialKeyOwnSerialKeyFetcher>() ?? original.GetComponentInParent<Gs2SerialKeyOwnSerialKeyFetcher>(true);
+            var fetcher = original.GetComponent<Gs2SerialKeySerialKeyFetcher>() ?? original.GetComponentInParent<Gs2SerialKeySerialKeyFetcher>(true);
             if (fetcher == null) {
-                EditorGUILayout.HelpBox("Gs2SerialKeyOwnSerialKeyFetcher not found.", MessageType.Error);
+                EditorGUILayout.HelpBox("Gs2SerialKeySerialKeyFetcher not found.", MessageType.Error);
                 if (GUILayout.Button("Add Fetcher")) {
-                    original.gameObject.AddComponent<Gs2SerialKeyOwnSerialKeyFetcher>();
+                    original.gameObject.AddComponent<Gs2SerialKeySerialKeyFetcher>();
                 }
             }
             else {
-                var context = original.GetComponent<Gs2SerialKeyOwnSerialKeyContext>() ?? original.GetComponentInParent<Gs2SerialKeyOwnSerialKeyContext>(true);
+                var context = original.GetComponent<Gs2SerialKeySerialKeyContext>() ?? original.GetComponentInParent<Gs2SerialKeySerialKeyContext>(true);
                 EditorGUI.BeginDisabledGroup(true);
-                EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2SerialKeyOwnSerialKeyFetcher), false);
+                EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2SerialKeySerialKeyFetcher), false);
                 EditorGUI.indentLevel++;
-                context.SerialKey = EditorGUILayout.ObjectField("SerialKey", context.SerialKey, typeof(OwnSerialKey), false) as OwnSerialKey;
+                context.SerialKey = EditorGUILayout.ObjectField("SerialKey", context.SerialKey, typeof(SerialKey), false) as SerialKey;
                 if (context.SerialKey != null) {
                     EditorGUI.indentLevel++;
                     EditorGUILayout.TextField("NamespaceName", context.SerialKey?.NamespaceName?.ToString());
