@@ -29,42 +29,43 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Gs2.Core.Exception;
-using Gs2.Gs2Money.Request;
-using Gs2.Unity.Gs2Money.ScriptableObject;
+using Gs2.Gs2Schedule.Request;
+using Gs2.Unity.Gs2Schedule.ScriptableObject;
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Core.Fetcher;
-using Gs2.Unity.UiKit.Gs2Money.Context;
+using Gs2.Unity.UiKit.Gs2Schedule.Context;
+using Gs2.Unity.UiKit.Gs2Schedule.Fetcher;
 using Gs2.Unity.Util;
 using Gs2.Util.LitJson;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace Gs2.Unity.UiKit.Gs2Money.Fetcher
+namespace Gs2.Unity.UiKit.Gs2Schedule.Fetcher
 {
     /// <summary>
     /// Main
     /// </summary>
 
-	[AddComponentMenu("GS2 UIKit/Money/Wallet/Fetcher/Consume/Gs2MoneyWithdrawByUserIdFetcher")]
-    public partial class Gs2MoneyWithdrawByUserIdFetcher : Gs2MoneyOwnWalletContext
+	[AddComponentMenu("GS2 UIKit/Schedule/Trigger/Fetcher/Acquire/Gs2ScheduleTriggerByUserIdFetcher")]
+    public partial class Gs2ScheduleTriggerByUserIdFetcher : Gs2ScheduleOwnTriggerContext
     {
         private IEnumerator Fetch()
         {
             while (true)
             {
                 if (_fetcher != null) {
-                    var action = _fetcher.ConsumeActions().FirstOrDefault(v => v.Action == "Gs2Money:WithdrawByUserId");
+                    var action = _fetcher.AcquireActions().FirstOrDefault(v => v.Action == "Gs2Schedule:TriggerByUserId");
                     if (action != null) {
-                        Request = WithdrawByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
-                        if (Wallet == null || (
-                                Wallet.NamespaceName == Request.NamespaceName &&
-                                Wallet.Slot == Request.Slot)
+                        Request = TriggerByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
+                        if (Trigger == null || (
+                                Trigger.NamespaceName == Request.NamespaceName &&
+                                Trigger.TriggerName == Request.TriggerName)
                            ) {
-                            Wallet = OwnWallet.New(
+                            Trigger = OwnTrigger.New(
                                 Namespace.New(
                                     Request.NamespaceName
                                 ),
-                                Request.Slot.Value
+                                Request.TriggerName
                             );
                         }
                         Fetched = true;
@@ -90,9 +91,9 @@ namespace Gs2.Unity.UiKit.Gs2Money.Fetcher
     /// Dependent components
     /// </summary>
 
-    public partial class Gs2MoneyWithdrawByUserIdFetcher
+    public partial class Gs2ScheduleTriggerByUserIdFetcher
     {
-        private IConsumeActionsFetcher _fetcher;
+        private IAcquireActionsFetcher _fetcher;
 
         public new void Start() {
 
@@ -100,10 +101,10 @@ namespace Gs2.Unity.UiKit.Gs2Money.Fetcher
 
         public void Awake()
         {
-            _fetcher = GetComponent<IConsumeActionsFetcher>() ?? GetComponentInParent<IConsumeActionsFetcher>();
+            _fetcher = GetComponent<IAcquireActionsFetcher>() ?? GetComponentInParent<IAcquireActionsFetcher>();
 
             if (_fetcher == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the IConsumeActionFetcher.");
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the IAcquireActionFetcher.");
                 enabled = false;
             }
         }
@@ -113,7 +114,7 @@ namespace Gs2.Unity.UiKit.Gs2Money.Fetcher
             if (base.HasError()) {
                 return true;
             }
-            _fetcher = GetComponent<IConsumeActionsFetcher>() ?? GetComponentInParent<IConsumeActionsFetcher>(true);
+            _fetcher = GetComponent<IAcquireActionsFetcher>() ?? GetComponentInParent<IAcquireActionsFetcher>(true);
             if (_fetcher == null) {
                 return true;
             }
@@ -125,9 +126,9 @@ namespace Gs2.Unity.UiKit.Gs2Money.Fetcher
     /// Public properties
     /// </summary>
 
-    public partial class Gs2MoneyWithdrawByUserIdFetcher
+    public partial class Gs2ScheduleTriggerByUserIdFetcher
     {
-        public WithdrawByUserIdRequest Request { get; protected set; }
+        public TriggerByUserIdRequest Request { get; protected set; }
         public bool Fetched { get; protected set; }
     }
 
@@ -135,7 +136,7 @@ namespace Gs2.Unity.UiKit.Gs2Money.Fetcher
     /// Parameters for Inspector
     /// </summary>
 
-    public partial class Gs2MoneyWithdrawByUserIdFetcher
+    public partial class Gs2ScheduleTriggerByUserIdFetcher
     {
 
     }
@@ -143,7 +144,7 @@ namespace Gs2.Unity.UiKit.Gs2Money.Fetcher
     /// <summary>
     /// Event handlers
     /// </summary>
-    public partial class Gs2MoneyWithdrawByUserIdFetcher
+    public partial class Gs2ScheduleTriggerByUserIdFetcher
     {
         [SerializeField]
         internal ErrorEvent onError = new ErrorEvent();
