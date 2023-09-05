@@ -87,7 +87,7 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Context
         public OwnForm Form;
 
         public void SetOwnForm(OwnForm form) {
-            this.FormModel = FormModel.NewByMoldModelName(
+            this.FormModel = FormModel.New(
                 Namespace.New(
                     form.NamespaceName
                 ),

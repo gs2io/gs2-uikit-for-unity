@@ -37,7 +37,7 @@ namespace Gs2.Unity.UiKit.Gs2Formation.SpriteSwitcher
     /// Main
     /// </summary>
 
-	[AddComponentMenu("GS2 UIKit/Formation/Form/View/SpriteSwitcher/Properties/Name/Gs2FormationFormNameSpriteSwitcher")]
+	[AddComponentMenu("GS2 UIKit/Formation/Form/View/SpriteSwitcher/Properties/Name/Gs2FormationOwnFormNameSpriteSwitcher")]
     public partial class Gs2FormationOwnFormNameSpriteSwitcher : MonoBehaviour
     {
         public void Update()

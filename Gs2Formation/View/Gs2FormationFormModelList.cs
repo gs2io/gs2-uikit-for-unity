@@ -49,7 +49,7 @@ namespace Gs2.Unity.UiKit.Gs2Formation
                 for (var i = 0; i < this.maximumItems; i++) {
                     if (i < this._fetcher.FormModels.Count) {
                         _children[i].SetFormModel(
-                            FormModel.NewByFormModelName(
+                            FormModel.New(
                                 this._fetcher.Context.Namespace,
                                 this._fetcher.FormModels[i].Name
                             )
@@ -98,7 +98,7 @@ namespace Gs2.Unity.UiKit.Gs2Formation
             _children = new List<Gs2FormationFormModelContext>();
             for (var i = 0; i < this.maximumItems; i++) {
                 var node = Instantiate(this.prefab, transform);
-                node.FormModel = FormModel.NewByFormModelName(
+                node.FormModel = FormModel.New(
                     context.Namespace,
                     ""
                 );

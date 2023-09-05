@@ -43,8 +43,8 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Context
             }
         }
         public override bool HasError() {
-            if (!base.HasError()) {
-                return false;
+            if (base.HasError()) {
+                return true;
             }
             if (ItemSet == null) {
                 if (GetComponentInParent<Gs2InventoryOwnItemSetList>(true) != null) {

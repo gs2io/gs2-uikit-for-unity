@@ -43,8 +43,8 @@ namespace Gs2.Unity.UiKit.Gs2Stamina.Context
             }
         }
         public override bool HasError() {
-            if (!base.HasError()) {
-                return false;
+            if (base.HasError()) {
+                return true;
             }
             if (Stamina == null) {
                 if (GetComponentInParent<Gs2StaminaOwnStaminaList>(true) != null) {

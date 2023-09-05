@@ -43,8 +43,8 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Context
             }
         }
         public override bool HasError() {
-            if (!base.HasError()) {
-                return false;
+            if (base.HasError()) {
+                return true;
             }
             if (Mold == null) {
                 if (GetComponentInParent<Gs2FormationOwnMoldList>(true) != null) {

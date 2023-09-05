@@ -43,8 +43,8 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Context
             }
         }
         public override bool HasError() {
-            if (!base.HasError()) {
-                return false;
+            if (base.HasError()) {
+                return true;
             }
             if (Counter == null) {
                 if (GetComponentInParent<Gs2MissionOwnCounterList>(true) != null) {

@@ -55,7 +55,7 @@ namespace Gs2.Unity.UiKit.Gs2Idle.Fetcher
             {
                 if (_gameSessionHolder != null && _gameSessionHolder.Initialized && 
                     _clientHolder != null && _clientHolder.Initialized &&
-                    Context != null)
+                    Context != null && Context.Namespace != null)
                 {
                     
                     var domain = this._clientHolder.Gs2.Idle.Namespace(
