@@ -76,6 +76,9 @@ namespace Gs2.Unity.UiKit.Gs2Limit.Label
                             "{userData:count}",
                             $"{_userDataFetcher.Counter.Count}"
                         ).Replace(
+                            "{userData:count:changed}",
+                            $"{_userDataFetcher.Counter.Count + _fetcher.Request.CountDownValue}"
+                        ).Replace(
                             "{userData:createdAt}",
                             $"{_userDataFetcher.Counter.CreatedAt}"
                         ).Replace(
@@ -105,6 +108,13 @@ namespace Gs2.Unity.UiKit.Gs2Limit.Label
                         )
                     );
                 }
+            } else {
+                onUpdate?.Invoke(
+                    format.Replace(
+                        "{count}",
+                        "0"
+                    )
+                );
             }
         }
     }
