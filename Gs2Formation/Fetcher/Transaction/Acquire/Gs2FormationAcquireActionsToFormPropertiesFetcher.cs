@@ -59,7 +59,7 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Fetcher
                         Request = AcquireActionsToFormPropertiesRequest.FromJson(JsonMapper.ToObject(action.Request));
                         if (Form == null || (
                                 Form.NamespaceName == Request.NamespaceName &&
-                                Form.MoldName == Request.MoldName &&
+                                Form.MoldModelName == Request.MoldModelName &&
                                 Form.Index == Request.Index)
                            ) {
                             Form = OwnForm.New(
@@ -67,7 +67,7 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Fetcher
                                     Namespace.New(
                                         Request.NamespaceName
                                     ),
-                                    Request.MoldName
+                                    Request.MoldModelName
                                 ),
                                 Request.Index.Value
                             );

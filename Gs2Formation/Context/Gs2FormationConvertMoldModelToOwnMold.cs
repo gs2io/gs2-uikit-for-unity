@@ -68,7 +68,7 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Context
             _context.SetOwnMold(
                 OwnMold.New(
                     _originalContext.MoldModel.Namespace,
-                    _originalContext.MoldModel.moldName
+                    _originalContext.MoldModel.moldModelName
                 )
             );
             enabled = false;

@@ -44,8 +44,8 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Fetcher
     /// Main
     /// </summary>
 
-	[AddComponentMenu("GS2 UIKit/Formation/FormModel/Fetcher/Gs2FormationFormModelListFetcher")]
-    public partial class Gs2FormationFormModelListFetcher : MonoBehaviour
+	[AddComponentMenu("GS2 UIKit/Formation/PropertyFormModel/Fetcher/Gs2FormationPropertyFormModelListFetcher")]
+    public partial class Gs2FormationPropertyFormModelListFetcher : MonoBehaviour
     {
         private IEnumerator Fetch()
         {
@@ -61,8 +61,8 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Fetcher
                     var domain = this._clientHolder.Gs2.Formation.Namespace(
                         this.Context.Namespace.NamespaceName
                     );
-                    var it = domain.FormModels();
-                    var items = new List<Gs2.Unity.Gs2Formation.Model.EzFormModel>();
+                    var it = domain.PropertyFormModels();
+                    var items = new List<Gs2.Unity.Gs2Formation.Model.EzPropertyFormModel>();
                     while (it.HasNext())
                     {
                         yield return it.Next();
@@ -91,7 +91,7 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Fetcher
                     }
 
                     retryWaitSecond = 1;
-                    FormModels = items;
+                    PropertyFormModels = items;
                     Fetched = true;
                 }
                 else {
@@ -116,7 +116,7 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Fetcher
     /// Dependent components
     /// </summary>
     
-    public partial class Gs2FormationFormModelListFetcher
+    public partial class Gs2FormationPropertyFormModelListFetcher
     {
         private Gs2ClientHolder _clientHolder;
         private Gs2GameSessionHolder _gameSessionHolder;
@@ -148,9 +148,9 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Fetcher
     /// Public properties
     /// </summary>
     
-    public partial class Gs2FormationFormModelListFetcher
+    public partial class Gs2FormationPropertyFormModelListFetcher
     {
-        public List<Gs2.Unity.Gs2Formation.Model.EzFormModel> FormModels { get; private set; }
+        public List<Gs2.Unity.Gs2Formation.Model.EzPropertyFormModel> PropertyFormModels { get; private set; }
         public bool Fetched { get; private set; }
     }
 
@@ -158,7 +158,7 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Fetcher
     /// Parameters for Inspector
     /// </summary>
     
-    public partial class Gs2FormationFormModelListFetcher
+    public partial class Gs2FormationPropertyFormModelListFetcher
     {
 
     }
@@ -166,7 +166,7 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Fetcher
     /// <summary>
     /// Event handlers
     /// </summary>
-    public partial class Gs2FormationFormModelListFetcher
+    public partial class Gs2FormationPropertyFormModelListFetcher
     {
         [SerializeField]
         internal ErrorEvent onError = new ErrorEvent();

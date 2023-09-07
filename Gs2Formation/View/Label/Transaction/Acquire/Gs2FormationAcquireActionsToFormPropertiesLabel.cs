@@ -55,8 +55,8 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Label
                             "{userId}",
                             $"{_fetcher.Request.UserId}"
                         ).Replace(
-                            "{moldName}",
-                            $"{_fetcher.Request.MoldName}"
+                            "{moldModelName}",
+                            $"{_fetcher.Request.MoldModelName}"
                         ).Replace(
                             "{index}",
                             $"{_fetcher.Request.Index}"
@@ -88,8 +88,8 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Label
                             "{userId}",
                             $"{_fetcher.Request.UserId}"
                         ).Replace(
-                            "{moldName}",
-                            $"{_fetcher.Request.MoldName}"
+                            "{moldModelName}",
+                            $"{_fetcher.Request.MoldModelName}"
                         ).Replace(
                             "{index}",
                             $"{_fetcher.Request.Index}"

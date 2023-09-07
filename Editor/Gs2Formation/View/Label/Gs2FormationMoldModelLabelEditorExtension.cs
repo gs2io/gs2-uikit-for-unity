@@ -68,7 +68,7 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Editor
                         fetcher.Context.MoldModel = EditorGUILayout.ObjectField("MoldModel", fetcher.Context.MoldModel, typeof(MoldModel), false) as MoldModel;
                         EditorGUI.indentLevel++;
                         EditorGUILayout.TextField("NamespaceName", fetcher.Context.MoldModel?.NamespaceName?.ToString());
-                        EditorGUILayout.TextField("MoldName", fetcher.Context.MoldModel?.MoldName?.ToString());
+                        EditorGUILayout.TextField("MoldModelName", fetcher.Context.MoldModel?.MoldModelName?.ToString());
                         EditorGUI.indentLevel--;
                     }
                     EditorGUI.indentLevel--;

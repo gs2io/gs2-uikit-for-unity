@@ -56,7 +56,7 @@ namespace Gs2.Unity.UiKit.Gs2Formation
             ).Me(
                 this._gameSessionHolder.GameSession
             ).PropertyForm(
-                this._context.PropertyForm.FormModelName,
+                this._context.PropertyForm.PropertyFormModelName,
                 this._context.PropertyForm.PropertyId
             );
             var future = domain.SetPropertyForm(

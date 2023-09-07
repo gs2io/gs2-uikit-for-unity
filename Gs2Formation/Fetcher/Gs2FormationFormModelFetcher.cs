@@ -61,6 +61,8 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Fetcher
                     
                     var domain = this._clientHolder.Gs2.Formation.Namespace(
                         this.Context.FormModel.NamespaceName
+                    ).MoldModel(
+                        this.Context.FormModel.MoldModelName
                     ).FormModel(
                         this.Context.FormModel.FormModelName
                     );

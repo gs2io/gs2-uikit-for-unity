@@ -63,7 +63,7 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Editor
                 EditorGUI.BeginDisabledGroup(true);
                 EditorGUI.indentLevel++;
                 EditorGUILayout.TextField("NamespaceName", original.Slot?.NamespaceName.ToString());
-                EditorGUILayout.TextField("MoldName", original.Slot?.MoldName.ToString());
+                EditorGUILayout.TextField("MoldName", original.Slot?.MoldModelName.ToString());
                 EditorGUILayout.TextField("Index", original.Slot?.Index.ToString());
                 EditorGUILayout.TextField("SlotName", original.Slot?.SlotName.ToString());
                 EditorGUI.indentLevel--;

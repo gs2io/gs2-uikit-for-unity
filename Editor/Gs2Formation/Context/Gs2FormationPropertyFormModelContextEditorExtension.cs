@@ -32,35 +32,37 @@ using UnityEngine;
 
 namespace Gs2.Unity.UiKit.Gs2Formation.Editor
 {
-    [CustomEditor(typeof(Gs2FormationFormModelListFetcher))]
-    public class Gs2FormationFormModelListFetcherEditorExtension : UnityEditor.Editor
+    [CustomEditor(typeof(Gs2FormationPropertyFormModelContext))]
+    public class Gs2FormationPropertyFormModelContextEditorExtension : UnityEditor.Editor
     {
         public override void OnInspectorGUI() {
-            var original = target as Gs2FormationFormModelListFetcher;
+            var original = target as Gs2FormationPropertyFormModelContext;
 
             if (original == null) return;
 
-            var context = original.GetComponent<Gs2FormationNamespaceContext>() ?? original.GetComponentInParent<Gs2FormationNamespaceContext>(true);
-            if (context == null) {
-                EditorGUILayout.HelpBox("Gs2FormationNamespaceContext not found.", MessageType.Error);
-                if (GUILayout.Button("Add Context")) {
-                    original.gameObject.AddComponent<Gs2FormationNamespaceContext>();
+            serializedObject.Update();
+
+            if (original.PropertyFormModel == null) {
+                if (original.GetComponentInParent<Gs2FormationPropertyFormModelList>(true) != null) {
+                    EditorGUILayout.HelpBox("PropertyFormModel is auto assign from Gs2FormationPropertyFormModelList.", MessageType.Info);
+                }
+                else {
+                    EditorGUILayout.HelpBox("PropertyFormModel not assigned.", MessageType.Error);
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("PropertyFormModel"), true);
                 }
             }
             else {
+                original.PropertyFormModel = EditorGUILayout.ObjectField("PropertyFormModel", original.PropertyFormModel, typeof(PropertyFormModel), false) as PropertyFormModel;
                 EditorGUI.BeginDisabledGroup(true);
-                EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2FormationNamespaceContext), false);
-                EditorGUI.indentLevel++;
-                context.Namespace = EditorGUILayout.ObjectField("Namespace", context.Namespace, typeof(Namespace), false) as Namespace;
-                EditorGUI.indentLevel++;
-                EditorGUILayout.TextField("NamespaceName", context.Namespace?.NamespaceName?.ToString());
-                EditorGUI.indentLevel--;
-                EditorGUI.indentLevel--;
+                if (original.PropertyFormModel != null) {
+                    EditorGUI.indentLevel++;
+                    EditorGUILayout.TextField("NamespaceName", original.PropertyFormModel?.NamespaceName?.ToString());
+                    EditorGUILayout.TextField("PropertyFormModelName", original.PropertyFormModel?.PropertyFormModelName?.ToString());
+                    EditorGUI.indentLevel--;
+                }
                 EditorGUI.EndDisabledGroup();
             }
 
-            serializedObject.Update();
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("onError"), true);
             serializedObject.ApplyModifiedProperties();
         }
     }

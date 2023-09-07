@@ -64,7 +64,7 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Fetcher
                     ).Me(
                         this._gameSessionHolder.GameSession
                     ).Mold(
-                        this.Context.Form.MoldName
+                        this.Context.Form.MoldModelName
                     ).Form(
                         this.Context.Form.Index
                     );

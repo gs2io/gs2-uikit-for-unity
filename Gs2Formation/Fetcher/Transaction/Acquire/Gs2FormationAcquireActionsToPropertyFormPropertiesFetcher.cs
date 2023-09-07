@@ -59,14 +59,14 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Fetcher
                         Request = AcquireActionsToPropertyFormPropertiesRequest.FromJson(JsonMapper.ToObject(action.Request));
                         if (PropertyForm == null || (
                                 PropertyForm.NamespaceName == Request.NamespaceName &&
-                                PropertyForm.FormModelName == Request.FormModelName &&
+                                PropertyForm.PropertyFormModelName == Request.PropertyFormModelName &&
                                 PropertyForm.PropertyId == Request.PropertyId)
                            ) {
                             PropertyForm = OwnPropertyForm.New(
                                 Namespace.New(
                                     Request.NamespaceName
                                 ),
-                                Request.FormModelName,
+                                Request.PropertyFormModelName,
                                 Request.PropertyId
                             );
                         }

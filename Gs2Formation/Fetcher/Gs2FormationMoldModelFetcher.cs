@@ -62,7 +62,7 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Fetcher
                     var domain = this._clientHolder.Gs2.Formation.Namespace(
                         this.Context.MoldModel.NamespaceName
                     ).MoldModel(
-                        this.Context.MoldModel.MoldName
+                        this.Context.MoldModel.MoldModelName
                     );
                     var future = domain.Model();
                     yield return future;

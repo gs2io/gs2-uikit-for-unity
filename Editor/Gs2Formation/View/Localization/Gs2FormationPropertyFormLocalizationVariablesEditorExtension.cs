@@ -66,7 +66,7 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Localization.Editor
                     if (context.PropertyForm != null) {
                         EditorGUI.indentLevel++;
                         EditorGUILayout.TextField("NamespaceName", context.PropertyForm?.NamespaceName?.ToString());
-                        EditorGUILayout.TextField("FormModelName", context.PropertyForm?.FormModelName?.ToString());
+                        EditorGUILayout.TextField("PropertyFormModelName", context.PropertyForm?.PropertyFormModelName?.ToString());
                         EditorGUILayout.TextField("PropertyId", context.PropertyForm?.PropertyId?.ToString());
                         EditorGUI.indentLevel--;
                     }

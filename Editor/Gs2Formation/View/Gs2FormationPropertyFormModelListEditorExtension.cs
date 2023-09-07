@@ -31,24 +31,24 @@ using UnityEngine;
 
 namespace Gs2.Unity.UiKit.Gs2Formation.Editor
 {
-    [CustomEditor(typeof(Gs2FormationFormModelList))]
-    public class Gs2FormationFormModelListEditorExtension : UnityEditor.Editor
+    [CustomEditor(typeof(Gs2FormationPropertyFormModelList))]
+    public class Gs2FormationPropertyFormModelListEditorExtension : UnityEditor.Editor
     {
         public override void OnInspectorGUI() {
-            var original = target as Gs2FormationFormModelList;
+            var original = target as Gs2FormationPropertyFormModelList;
 
             if (original == null) return;
 
-            var fetcher = original.GetComponent<Gs2FormationFormModelListFetcher>() ?? original.GetComponentInParent<Gs2FormationFormModelListFetcher>(true);
+            var fetcher = original.GetComponent<Gs2FormationPropertyFormModelListFetcher>() ?? original.GetComponentInParent<Gs2FormationPropertyFormModelListFetcher>(true);
             if (fetcher == null) {
-                EditorGUILayout.HelpBox("Gs2FormationFormModelListFetcher not found.", MessageType.Error);
+                EditorGUILayout.HelpBox("Gs2FormationPropertyFormModelListFetcher not found.", MessageType.Error);
                 if (GUILayout.Button("Add ListFetcher")) {
-                    original.gameObject.AddComponent<Gs2FormationFormModelListFetcher>();
+                    original.gameObject.AddComponent<Gs2FormationPropertyFormModelListFetcher>();
                 }
             }
             else {
                 EditorGUI.BeginDisabledGroup(true);
-                EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2FormationFormModelListFetcher), false);
+                EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2FormationPropertyFormModelListFetcher), false);
                 EditorGUI.indentLevel++;
                 if (fetcher.Context != null) {
                     fetcher.Context.Namespace = EditorGUILayout.ObjectField("Namespace", fetcher.Context.Namespace, typeof(Namespace), false) as Namespace;

@@ -35,14 +35,17 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Context
     /// </summary>
 
 	[AddComponentMenu("GS2 UIKit/Formation/PropertyForm/Context/Gs2FormationOwnPropertyFormContext")]
-    public partial class Gs2FormationOwnPropertyFormContext : MonoBehaviour
+    public partial class Gs2FormationOwnPropertyFormContext : Gs2FormationPropertyFormModelContext
     {
-        public void Start() {
+        public new void Start() {
             if (PropertyForm == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: PropertyForm is not set in Gs2FormationOwnPropertyFormContext.");
             }
         }
-        public virtual bool HasError() {
+        public override bool HasError() {
+            if (base.HasError()) {
+                return true;
+            }
             if (PropertyForm == null) {
                 if (GetComponentInParent<Gs2FormationOwnPropertyFormList>(true) != null) {
                     return false;
@@ -82,6 +85,12 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Context
         public OwnPropertyForm PropertyForm;
 
         public void SetOwnPropertyForm(OwnPropertyForm propertyForm) {
+            this.PropertyFormModel = PropertyFormModel.New(
+                Namespace.New(
+                    propertyForm.NamespaceName
+                ),
+                propertyForm.PropertyFormModelName
+            );
             this.PropertyForm = propertyForm;
         }
     }

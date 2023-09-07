@@ -51,33 +51,20 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Localization.Editor
                 }
             }
             else {
-                if (fetcher.gameObject.GetComponentInParent<Gs2FormationFormModelList>(true) != null) {
-                    EditorGUI.BeginDisabledGroup(true);
-                    EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2FormationFormModelFetcher), false);
-                    EditorGUI.EndDisabledGroup();
-                    EditorGUILayout.HelpBox("FormModel is auto assign from Gs2FormationFormModelList.", MessageType.Info);
-                }
-                else if (fetcher.gameObject.GetComponentInParent<Gs2FormationOwnFormList>(true) != null) {
-                    EditorGUI.BeginDisabledGroup(true);
-                    EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2FormationOwnFormFetcher), false);
-                    EditorGUI.EndDisabledGroup();
-                    EditorGUILayout.HelpBox("FormModel is auto assign from Gs2FormationOwnFormList.", MessageType.Info);
-                }
-                else {
-                    var context = original.GetComponent<Gs2FormationFormModelContext>() ?? original.GetComponentInParent<Gs2FormationFormModelContext>(true);
-                    EditorGUI.BeginDisabledGroup(true);
-                    EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2FormationFormModelFetcher), false);
+                var context = original.GetComponent<Gs2FormationFormModelContext>() ?? original.GetComponentInParent<Gs2FormationFormModelContext>(true);
+                EditorGUI.BeginDisabledGroup(true);
+                EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2FormationFormModelFetcher), false);
+                EditorGUI.indentLevel++;
+                context.FormModel = EditorGUILayout.ObjectField("FormModel", context.FormModel, typeof(FormModel), false) as FormModel;
+                if (context.FormModel != null) {
                     EditorGUI.indentLevel++;
-                    context.FormModel = EditorGUILayout.ObjectField("FormModel", context.FormModel, typeof(FormModel), false) as FormModel;
-                    if (context.FormModel != null) {
-                        EditorGUI.indentLevel++;
-                        EditorGUILayout.TextField("NamespaceName", context.FormModel?.NamespaceName?.ToString());
-                        EditorGUILayout.TextField("FormModelName", context.FormModel?.FormModelName?.ToString());
-                        EditorGUI.indentLevel--;
-                    }
+                    EditorGUILayout.TextField("NamespaceName", context.FormModel?.NamespaceName?.ToString());
+                    EditorGUILayout.TextField("MoldModelName", context.FormModel?.MoldModelName?.ToString());
+                    EditorGUILayout.TextField("FormModelName", context.FormModel?.FormModelName?.ToString());
                     EditorGUI.indentLevel--;
-                    EditorGUI.EndDisabledGroup();
                 }
+                EditorGUI.indentLevel--;
+                EditorGUI.EndDisabledGroup();
             }
 
             serializedObject.Update();

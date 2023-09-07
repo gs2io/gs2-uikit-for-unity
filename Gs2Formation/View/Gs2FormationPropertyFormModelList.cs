@@ -12,8 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
- * deny overwrite
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
@@ -39,19 +37,19 @@ namespace Gs2.Unity.UiKit.Gs2Formation
     /// Main
     /// </summary>
 
-    [AddComponentMenu("GS2 UIKit/Formation/FormModel/View/Gs2FormationFormModelList")]
-    public partial class Gs2FormationFormModelList : MonoBehaviour
+    [AddComponentMenu("GS2 UIKit/Formation/PropertyFormModel/View/Gs2FormationPropertyFormModelList")]
+    public partial class Gs2FormationPropertyFormModelList : MonoBehaviour
     {
-        private List<Gs2FormationFormModelContext> _children;
+        private List<Gs2FormationPropertyFormModelContext> _children;
 
         public void Update() {
-            if (_fetcher.Fetched && this._fetcher.FormModels != null) {
+            if (_fetcher.Fetched && this._fetcher.PropertyFormModels != null) {
                 for (var i = 0; i < this.maximumItems; i++) {
-                    if (i < this._fetcher.FormModels.Count) {
-                        _children[i].SetFormModel(
-                            FormModel.New(
+                    if (i < this._fetcher.PropertyFormModels.Count) {
+                        _children[i].SetPropertyFormModel(
+                            PropertyFormModel.New(
                                 this._fetcher.Context.Namespace,
-                                this._fetcher.FormModels[i].Name
+                                this._fetcher.PropertyFormModels[i].Name
                             )
                         );
                         _children[i].gameObject.SetActive(true);
@@ -68,37 +66,37 @@ namespace Gs2.Unity.UiKit.Gs2Formation
     /// Dependent components
     /// </summary>
 
-    public partial class Gs2FormationFormModelList
+    public partial class Gs2FormationPropertyFormModelList
     {
-        private Gs2FormationFormModelListFetcher _fetcher;
+        private Gs2FormationPropertyFormModelListFetcher _fetcher;
         public Gs2FormationNamespaceContext Context => _fetcher.Context;
 
         public void Awake()
         {
             if (prefab == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2FormationFormModelContext Prefab.");
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2FormationPropertyFormModelContext Prefab.");
                 enabled = false;
                 return;
             }
 
-            _fetcher = GetComponent<Gs2FormationFormModelListFetcher>() ?? GetComponentInParent<Gs2FormationFormModelListFetcher>();
+            _fetcher = GetComponent<Gs2FormationPropertyFormModelListFetcher>() ?? GetComponentInParent<Gs2FormationPropertyFormModelListFetcher>();
 
             if (_fetcher == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2FormationFormModelListFetcher.");
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2FormationPropertyFormModelListFetcher.");
                 enabled = false;
                 return;
             }
             var context = GetComponent<Gs2FormationNamespaceContext>() ?? GetComponentInParent<Gs2FormationNamespaceContext>(true);
             if (context == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2FormationFormModelListFetcher::Context.");
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2FormationPropertyFormModelListFetcher::Context.");
                 enabled = false;
                 return;
             }
 
-            _children = new List<Gs2FormationFormModelContext>();
+            _children = new List<Gs2FormationPropertyFormModelContext>();
             for (var i = 0; i < this.maximumItems; i++) {
                 var node = Instantiate(this.prefab, transform);
-                node.FormModel = FormModel.New(
+                node.PropertyFormModel = PropertyFormModel.New(
                     context.Namespace,
                     ""
                 );
@@ -110,7 +108,7 @@ namespace Gs2.Unity.UiKit.Gs2Formation
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2FormationFormModelListFetcher>() ?? GetComponentInParent<Gs2FormationFormModelListFetcher>(true);
+            _fetcher = GetComponent<Gs2FormationPropertyFormModelListFetcher>() ?? GetComponentInParent<Gs2FormationPropertyFormModelListFetcher>(true);
             if (_fetcher == null) {
                 return true;
             }
@@ -122,7 +120,7 @@ namespace Gs2.Unity.UiKit.Gs2Formation
     /// Public properties
     /// </summary>
 
-    public partial class Gs2FormationFormModelList
+    public partial class Gs2FormationPropertyFormModelList
     {
 
     }
@@ -131,16 +129,16 @@ namespace Gs2.Unity.UiKit.Gs2Formation
     /// Parameters for Inspector
     /// </summary>
 
-    public partial class Gs2FormationFormModelList
+    public partial class Gs2FormationPropertyFormModelList
     {
-        public Gs2FormationFormModelContext prefab;
+        public Gs2FormationPropertyFormModelContext prefab;
         public int maximumItems;
     }
 
     /// <summary>
     /// Event handlers
     /// </summary>
-    public partial class Gs2FormationFormModelList
+    public partial class Gs2FormationPropertyFormModelList
     {
 
     }

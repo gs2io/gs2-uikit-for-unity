@@ -56,7 +56,7 @@ namespace Gs2.Unity.UiKit.Gs2Formation
             ).Me(
                 this._gameSessionHolder.GameSession
             ).Mold(
-                this._context.Form.MoldName
+                this._context.Form.MoldModelName
             ).Form(
                 this._context.Form.Index
             );

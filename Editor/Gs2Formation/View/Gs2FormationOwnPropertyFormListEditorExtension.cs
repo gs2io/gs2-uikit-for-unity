@@ -53,7 +53,7 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Editor
                 EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2FormationOwnPropertyFormListFetcher), false);
                 EditorGUI.indentLevel++;
                 if (fetcher.Context != null) {
-                    fetcher.Context.FormModel = EditorGUILayout.ObjectField("FormModel", fetcher.Context.FormModel, typeof(FormModel), false) as FormModel;
+                    fetcher.Context.PropertyFormModel = EditorGUILayout.ObjectField("PropertyFormModel", fetcher.Context.PropertyFormModel, typeof(PropertyFormModel), false) as PropertyFormModel;
                     EditorGUI.indentLevel++;
                     EditorGUI.indentLevel--;
                 }

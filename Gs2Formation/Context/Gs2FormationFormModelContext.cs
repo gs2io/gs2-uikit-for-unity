@@ -47,9 +47,6 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Context
 
         public virtual bool HasError() {
             if (FormModel == null) {
-                if (GetComponentInParent<Gs2FormationFormModelList>(true) != null) {
-                    return false;
-                }
                 var own = GetComponentInParent<Gs2FormationOwnFormContext>(true);
                 if (own != null) {
                     return false;

@@ -16,7 +16,7 @@
  * deny overwrite
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
-// ReSharper disable CheckNamespace
+// ReSharper disable CheckPropertyFormModel
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantAssignment
 // ReSharper disable NotAccessedVariable
@@ -55,18 +55,18 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Fetcher
             Gs2Exception e;
             while (true)
             {
-                if (_gameSessionHolder != null && _gameSessionHolder.Initialized && 
+                if (_gameSessionHolder != null && _gameSessionHolder.Initialized &&
                     _clientHolder != null && _clientHolder.Initialized &&
-                    Context != null)
+                    Context != null && Context.PropertyFormModel != null)
                 {
                     
                     var domain = this._clientHolder.Gs2.Formation.Namespace(
-                        this.Context.FormModel.NamespaceName
+                        this.Context.PropertyFormModel.PropertyFormModelName
                     ).Me(
                         this._gameSessionHolder.GameSession
                     );
                     var it = domain.PropertyForms(
-                        this.Context.FormModel.FormModelName
+                        this.Context.PropertyFormModel.PropertyFormModelName
                     );
                     var items = new List<Gs2.Unity.Gs2Formation.Model.EzPropertyForm>();
                     while (it.HasNext())
@@ -101,7 +101,7 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Fetcher
                     Fetched = true;
                 }
                 else {
-                    yield return new WaitForSeconds(1);
+                    yield return new WaitForSeconds(0.1f);
                 }
             }
             // ReSharper disable once IteratorNeverReturns
@@ -121,28 +121,28 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Fetcher
     /// <summary>
     /// Dependent components
     /// </summary>
-    
+
     public partial class Gs2FormationOwnPropertyFormListFetcher
     {
         private Gs2ClientHolder _clientHolder;
         private Gs2GameSessionHolder _gameSessionHolder;
-        public Gs2FormationFormModelContext Context { get; protected set; }
+        public Gs2FormationPropertyFormModelContext Context;
 
         public void Awake()
         {
             _clientHolder = Gs2ClientHolder.Instance;
             _gameSessionHolder = Gs2GameSessionHolder.Instance;
-            Context = GetComponent<Gs2FormationFormModelContext>() ?? GetComponentInParent<Gs2FormationFormModelContext>();
+            Context = GetComponent<Gs2FormationPropertyFormModelContext>() ?? GetComponentInParent<Gs2FormationPropertyFormModelContext>();
 
             if (Context == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2FormationFormModelContext.");
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2FormationPropertyFormModelContext.");
                 enabled = false;
             }
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
-            Context = GetComponent<Gs2FormationFormModelContext>() ?? GetComponentInParent<Gs2FormationFormModelContext>(true);
+            Context = GetComponent<Gs2FormationPropertyFormModelContext>() ?? GetComponentInParent<Gs2FormationPropertyFormModelContext>(true);
             if (Context == null) {
                 return true;
             }

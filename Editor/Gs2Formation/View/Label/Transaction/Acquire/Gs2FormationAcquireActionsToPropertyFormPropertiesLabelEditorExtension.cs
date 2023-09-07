@@ -67,8 +67,8 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Label.Editor
                 GUI.FocusControl("");
                 EditorUtility.SetDirty(original);
             }
-            if (GUILayout.Button("FormModelName")) {
-                original.format += "{formModelName}";
+            if (GUILayout.Button("PropertyFormModelName")) {
+                original.format += "{propertyFormModelName}";
                 GUI.FocusControl("");
                 EditorUtility.SetDirty(original);
             }

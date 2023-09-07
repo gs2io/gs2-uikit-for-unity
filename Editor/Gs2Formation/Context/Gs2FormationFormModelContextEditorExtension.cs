@@ -45,18 +45,13 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Editor
             serializedObject.Update();
 
             if (original.FormModel == null) {
-                if (original.GetComponentInParent<Gs2FormationFormModelList>(true) != null) {
-                    EditorGUILayout.HelpBox("FormModel is auto assign from Gs2FormationFormModelList.", MessageType.Info);
+                var own = original.GetComponentInParent<Gs2FormationOwnFormContext>(true);
+                if (own != null && !own.HasError()) {
+                    EditorGUILayout.HelpBox("FormModel is auto assign from Gs2FormationOwnFormContext.", MessageType.Info);
                 }
                 else {
-                    var own = original.GetComponentInParent<Gs2FormationOwnFormContext>(true);
-                    if (own != null && !own.HasError()) {
-                        EditorGUILayout.HelpBox("FormModel is auto assign from Gs2FormationOwnFormContext.", MessageType.Info);
-                    }
-                    else {
-                        EditorGUILayout.HelpBox("FormModel not assigned.", MessageType.Error);
-                        EditorGUILayout.PropertyField(serializedObject.FindProperty("FormModel"), true);
-                    }
+                    EditorGUILayout.HelpBox("FormModel not assigned.", MessageType.Error);
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("FormModel"), true);
                 }
             }
             else {
@@ -65,6 +60,7 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Editor
                 if (original.FormModel != null) {
                     EditorGUI.indentLevel++;
                     EditorGUILayout.TextField("NamespaceName", original.FormModel?.NamespaceName?.ToString());
+                    EditorGUILayout.TextField("MoldModelName", original.FormModel?.MoldModelName?.ToString());
                     EditorGUILayout.TextField("FormModelName", original.FormModel?.FormModelName?.ToString());
                     EditorGUI.indentLevel--;
                 }

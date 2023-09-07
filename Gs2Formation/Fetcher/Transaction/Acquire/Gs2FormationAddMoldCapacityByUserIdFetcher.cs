@@ -59,13 +59,13 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Fetcher
                         Request = AddMoldCapacityByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
                         if (Mold == null || (
                                 Mold.NamespaceName == Request.NamespaceName &&
-                                Mold.MoldName == Request.MoldName)
+                                Mold.MoldModelName == Request.MoldModelName)
                            ) {
                             Mold = OwnMold.New(
                                 Namespace.New(
                                     Request.NamespaceName
                                 ),
-                                Request.MoldName
+                                Request.MoldModelName
                             );
                         }
                         Fetched = true;

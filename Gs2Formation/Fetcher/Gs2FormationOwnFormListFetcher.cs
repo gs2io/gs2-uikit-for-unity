@@ -63,7 +63,7 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Fetcher
                     ).Me(
                         this._gameSessionHolder.GameSession
                     ).Mold(
-                        this.Context.Mold.MoldName
+                        this.Context.Mold.MoldModelName
                     );
                     var it = domain.Forms();
                     var items = new List<Gs2.Unity.Gs2Formation.Model.EzForm>();

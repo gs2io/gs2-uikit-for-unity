@@ -55,8 +55,8 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Label
                             "{userId}",
                             $"{_fetcher.Request.UserId}"
                         ).Replace(
-                            "{formModelName}",
-                            $"{_fetcher.Request.FormModelName}"
+                            "{propertyFormModelName}",
+                            $"{_fetcher.Request.PropertyFormModelName}"
                         ).Replace(
                             "{propertyId}",
                             $"{_fetcher.Request.PropertyId}"
@@ -88,8 +88,8 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Label
                             "{userId}",
                             $"{_fetcher.Request.UserId}"
                         ).Replace(
-                            "{formModelName}",
-                            $"{_fetcher.Request.FormModelName}"
+                            "{propertyFormModelName}",
+                            $"{_fetcher.Request.PropertyFormModelName}"
                         ).Replace(
                             "{propertyId}",
                             $"{_fetcher.Request.PropertyId}"

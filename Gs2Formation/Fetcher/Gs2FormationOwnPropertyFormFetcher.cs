@@ -64,7 +64,7 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Fetcher
                     ).Me(
                         this._gameSessionHolder.GameSession
                     ).PropertyForm(
-                        this.Context.PropertyForm.FormModelName,
+                        this.Context.PropertyForm.PropertyFormModelName,
                         this.Context.PropertyForm.PropertyId
                     );
                     var future = domain.Model();

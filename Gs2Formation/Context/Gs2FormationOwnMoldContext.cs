@@ -89,7 +89,7 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Context
                 Namespace.New(
                     mold.NamespaceName
                 ),
-                mold.MoldName
+                mold.MoldModelName
             );
             this.Mold = mold;
         }

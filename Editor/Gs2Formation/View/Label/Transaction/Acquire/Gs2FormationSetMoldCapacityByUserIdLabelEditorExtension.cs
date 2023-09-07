@@ -67,8 +67,8 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Label.Editor
                 GUI.FocusControl("");
                 EditorUtility.SetDirty(original);
             }
-            if (GUILayout.Button("MoldName")) {
-                original.format += "{moldName}";
+            if (GUILayout.Button("MoldModelName")) {
+                original.format += "{moldModelName}";
                 GUI.FocusControl("");
                 EditorUtility.SetDirty(original);
             }

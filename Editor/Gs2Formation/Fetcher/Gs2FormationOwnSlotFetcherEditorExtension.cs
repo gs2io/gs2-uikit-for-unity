@@ -61,7 +61,7 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Editor
                     context.Slot = EditorGUILayout.ObjectField("Slot", context.Slot, typeof(OwnSlot), false) as OwnSlot;
                     EditorGUI.indentLevel++;
                     EditorGUILayout.TextField("NamespaceName", context.Slot?.NamespaceName.ToString());
-                    EditorGUILayout.TextField("MoldName", context.Slot?.MoldName.ToString());
+                    EditorGUILayout.TextField("MoldName", context.Slot?.MoldModelName.ToString());
                     EditorGUILayout.TextField("Index", context.Slot?.Index.ToString());
                     EditorGUILayout.TextField("SlotName", context.Slot?.SlotName.ToString());
                     EditorGUI.indentLevel--;

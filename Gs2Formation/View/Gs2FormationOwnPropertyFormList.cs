@@ -16,7 +16,7 @@
  * deny overwrite
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
-// ReSharper disable CheckNamespace
+// ReSharper disable CheckPropertyFormModel
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantAssignment
 // ReSharper disable NotAccessedVariable
@@ -48,8 +48,13 @@ namespace Gs2.Unity.UiKit.Gs2Formation
             if (_fetcher.Fetched && this._fetcher.PropertyForms != null) {
                 for (var i = 0; i < this.maximumItems; i++) {
                     if (i < this._fetcher.PropertyForms.Count) {
-                        _children[i].PropertyForm.formModelName = this._fetcher.PropertyForms[i].Name;
-                        _children[i].PropertyForm.propertyId = this._fetcher.PropertyForms[i].PropertyId;
+                        _children[i].SetOwnPropertyForm(
+                            OwnPropertyForm.New(
+                                this._fetcher.Context.PropertyFormModel.Namespace,
+                                this._fetcher.PropertyForms[i].Name,
+                                this._fetcher.PropertyForms[i].PropertyId
+                            )
+                        );
                         _children[i].gameObject.SetActive(true);
                     }
                     else {
@@ -67,10 +72,16 @@ namespace Gs2.Unity.UiKit.Gs2Formation
     public partial class Gs2FormationOwnPropertyFormList
     {
         private Gs2FormationOwnPropertyFormListFetcher _fetcher;
-        private Gs2FormationFormModelContext Context => _fetcher.Context;
+        private Gs2FormationPropertyFormModelContext Context => _fetcher.Context;
 
         public void Awake()
         {
+            if (prefab == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2FormationOwnPropertyFormContext Prefab.");
+                enabled = false;
+                return;
+            }
+
             _fetcher = GetComponent<Gs2FormationOwnPropertyFormListFetcher>() ?? GetComponentInParent<Gs2FormationOwnPropertyFormListFetcher>();
 
             if (_fetcher == null) {
@@ -78,12 +89,23 @@ namespace Gs2.Unity.UiKit.Gs2Formation
                 enabled = false;
             }
 
+            var context = GetComponent<Gs2FormationPropertyFormModelContext>() ?? GetComponentInParent<Gs2FormationPropertyFormModelContext>(true);
+            if (context == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2FormationOwnPropertyFormListFetcher::Context.");
+                enabled = false;
+                return;
+            }
+
             _children = new List<Gs2FormationOwnPropertyFormContext>();
             for (var i = 0; i < this.maximumItems; i++) {
                 var node = Instantiate(this.prefab, transform);
+                node.PropertyFormModel = PropertyFormModel.New(
+                    context.PropertyFormModel.Namespace,
+                    ""
+                );
                 node.PropertyForm = OwnPropertyForm.New(
-                    _fetcher.Context.FormModel.Namespace,
-                    _fetcher.Context.FormModel.FormModelName,
+                    context.PropertyFormModel.Namespace,
+                    "",
                     ""
                 );
                 node.gameObject.SetActive(false);
@@ -92,7 +114,7 @@ namespace Gs2.Unity.UiKit.Gs2Formation
             this.prefab.gameObject.SetActive(false);
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
             _fetcher = GetComponent<Gs2FormationOwnPropertyFormListFetcher>() ?? GetComponentInParent<Gs2FormationOwnPropertyFormListFetcher>(true);
             if (_fetcher == null) {

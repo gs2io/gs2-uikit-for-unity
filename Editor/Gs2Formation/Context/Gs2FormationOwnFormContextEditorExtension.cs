@@ -57,7 +57,7 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Editor
                 if (original.Form != null) {
                     EditorGUI.indentLevel++;
                     EditorGUILayout.TextField("NamespaceName", original.Form?.NamespaceName?.ToString());
-                    EditorGUILayout.TextField("MoldName", original.Form?.MoldName?.ToString());
+                    EditorGUILayout.TextField("MoldModelName", original.Form?.MoldModelName?.ToString());
                     EditorGUILayout.TextField("Index", original.Form?.Index.ToString());
                     EditorGUI.indentLevel--;
                 }
