@@ -43,8 +43,8 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking.Context
             }
         }
         public override bool HasError() {
-            if (!base.HasError()) {
-                return false;
+            if (base.HasError()) {
+                return true;
             }
             if (Rating == null) {
                 if (GetComponentInParent<Gs2MatchmakingOwnRatingList>(true) != null) {

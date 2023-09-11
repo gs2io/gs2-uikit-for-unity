@@ -55,7 +55,7 @@ namespace Gs2.Unity.UiKit.Gs2Chat.Fetcher
             {
                 if (_gameSessionHolder != null && _gameSessionHolder.Initialized && 
                     _clientHolder != null && _clientHolder.Initialized &&
-                    Context != null)
+                    Context != null && Context.Room != null)
                 {
                     
                     var domain = this._clientHolder.Gs2.Chat.Namespace(
