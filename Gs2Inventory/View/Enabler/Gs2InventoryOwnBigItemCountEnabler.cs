@@ -25,6 +25,7 @@
 #pragma warning disable CS0472
 
 using System.Collections.Generic;
+using System.Numerics;
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Inventory.Fetcher;
 using UnityEngine;
@@ -51,16 +52,16 @@ namespace Gs2.Unity.UiKit.Gs2Inventory
                         target.SetActive(!enableCounts.Contains(_fetcher.BigItem.Count.ToString("0")));
                         break;
                     case Expression.Less:
-                        target.SetActive(decimal.Parse(enableCount) > _fetcher.BigItem.Count);
+                        target.SetActive(BigInteger.Parse(enableCount) > _fetcher.BigItem.Count);
                         break;
                     case Expression.LessEqual:
-                        target.SetActive(decimal.Parse(enableCount) >= _fetcher.BigItem.Count);
+                        target.SetActive(BigInteger.Parse(enableCount) >= _fetcher.BigItem.Count);
                         break;
                     case Expression.Greater:
-                        target.SetActive(decimal.Parse(enableCount) < _fetcher.BigItem.Count);
+                        target.SetActive(BigInteger.Parse(enableCount) < _fetcher.BigItem.Count);
                         break;
                     case Expression.GreaterEqual:
-                        target.SetActive(decimal.Parse(enableCount) <= _fetcher.BigItem.Count);
+                        target.SetActive(BigInteger.Parse(enableCount) <= _fetcher.BigItem.Count);
                         break;
                 }
             }

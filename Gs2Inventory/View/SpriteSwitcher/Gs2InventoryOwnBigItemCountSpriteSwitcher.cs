@@ -26,6 +26,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Numerics;
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Inventory.Fetcher;
 using UnityEngine;
@@ -57,22 +58,22 @@ namespace Gs2.Unity.UiKit.Gs2Inventory
                         }
                         break;
                     case Expression.Less:
-                        if (decimal.Parse(applyCount) > _fetcher.BigItem.Count) {
+                        if (BigInteger.Parse(applyCount) > _fetcher.BigItem.Count) {
                             this.onUpdate.Invoke(this.sprite);
                         }
                         break;
                     case Expression.LessEqual:
-                        if (decimal.Parse(applyCount) >= _fetcher.BigItem.Count) {
+                        if (BigInteger.Parse(applyCount) >= _fetcher.BigItem.Count) {
                             this.onUpdate.Invoke(this.sprite);
                         }
                         break;
                     case Expression.Greater:
-                        if (decimal.Parse(applyCount) < _fetcher.BigItem.Count) {
+                        if (BigInteger.Parse(applyCount) < _fetcher.BigItem.Count) {
                             this.onUpdate.Invoke(this.sprite);
                         }
                         break;
                     case Expression.GreaterEqual:
-                        if (decimal.Parse(applyCount) <= _fetcher.BigItem.Count) {
+                        if (BigInteger.Parse(applyCount) <= _fetcher.BigItem.Count) {
                             this.onUpdate.Invoke(this.sprite);
                         }
                         break;

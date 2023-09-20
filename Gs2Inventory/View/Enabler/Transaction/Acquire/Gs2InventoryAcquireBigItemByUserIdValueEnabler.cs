@@ -26,6 +26,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Numerics;
 using Gs2.Gs2Inventory.Request;
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Core.Fetcher;
@@ -55,16 +56,16 @@ namespace Gs2.Unity.UiKit.Gs2Inventory
                         target.SetActive(_fetcher.Request.AcquireCount != null && !enableAcquireCounts.Contains(_fetcher.Request.AcquireCount));
                         break;
                     case Expression.Less:
-                        target.SetActive(decimal.Parse(enableAcquireCount) > decimal.Parse(_fetcher.Request.AcquireCount));
+                        target.SetActive(BigInteger.Parse(enableAcquireCount) > BigInteger.Parse(_fetcher.Request.AcquireCount));
                         break;
                     case Expression.LessEqual:
-                        target.SetActive(decimal.Parse(enableAcquireCount) >= decimal.Parse(_fetcher.Request.AcquireCount));
+                        target.SetActive(BigInteger.Parse(enableAcquireCount) >= BigInteger.Parse(_fetcher.Request.AcquireCount));
                         break;
                     case Expression.Greater:
-                        target.SetActive(decimal.Parse(enableAcquireCount) < decimal.Parse(_fetcher.Request.AcquireCount));
+                        target.SetActive(BigInteger.Parse(enableAcquireCount) < BigInteger.Parse(_fetcher.Request.AcquireCount));
                         break;
                     case Expression.GreaterEqual:
-                        target.SetActive(decimal.Parse(enableAcquireCount) <= decimal.Parse(_fetcher.Request.AcquireCount));
+                        target.SetActive(BigInteger.Parse(enableAcquireCount) <= BigInteger.Parse(_fetcher.Request.AcquireCount));
                         break;
                 }
             }
