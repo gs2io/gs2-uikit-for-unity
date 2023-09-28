@@ -42,21 +42,19 @@ namespace Gs2.Unity.UiKit.Gs2Datastore
     {
         private List<Gs2DatastoreOwnDataObjectHistoryContext> _children;
 
-        public void Update() {
-            if (_fetcher.Fetched && this._fetcher.DataObjectHistories != null) {
-                for (var i = 0; i < this.maximumItems; i++) {
-                    if (i < this._fetcher.DataObjectHistories.Count) {
-                        _children[i].SetOwnDataObjectHistory(
-                            OwnDataObjectHistory.New(
+        public void OnFetched() {
+            for (var i = 0; i < this.maximumItems; i++) {
+                if (i < this._fetcher.DataObjectHistories.Count) {
+                    _children[i].SetOwnDataObjectHistory(
+                        OwnDataObjectHistory.New(
                                 this._fetcher.Context.DataObject,
                                 this._fetcher.DataObjectHistories[i].Generation
                             )
-                        );
-                        _children[i].gameObject.SetActive(true);
-                    }
-                    else {
-                        _children[i].gameObject.SetActive(false);
-                    }
+                    );
+                    _children[i].gameObject.SetActive(true);
+                }
+                else {
+                    _children[i].gameObject.SetActive(false);
                 }
             }
         }
@@ -69,7 +67,6 @@ namespace Gs2.Unity.UiKit.Gs2Datastore
     public partial class Gs2DatastoreOwnDataObjectHistoryList
     {
         private Gs2DatastoreOwnDataObjectHistoryListFetcher _fetcher;
-        private Gs2DatastoreOwnDataObjectContext Context => _fetcher.Context;
 
         public void Awake()
         {
@@ -80,7 +77,6 @@ namespace Gs2.Unity.UiKit.Gs2Datastore
             }
 
             _fetcher = GetComponent<Gs2DatastoreOwnDataObjectHistoryListFetcher>() ?? GetComponentInParent<Gs2DatastoreOwnDataObjectHistoryListFetcher>();
-
             if (_fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2DatastoreOwnDataObjectHistoryListFetcher.");
                 enabled = false;
@@ -122,6 +118,16 @@ namespace Gs2.Unity.UiKit.Gs2Datastore
 
     public partial class Gs2DatastoreOwnDataObjectHistoryList
     {
+
+        public void OnEnable()
+        {
+            _fetcher.OnFetched.AddListener(OnFetched);
+        }
+
+        public void OnDisable()
+        {
+            _fetcher.OnFetched.RemoveListener(OnFetched);
+        }
 
     }
 

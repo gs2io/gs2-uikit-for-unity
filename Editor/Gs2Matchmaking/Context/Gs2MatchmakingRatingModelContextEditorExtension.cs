@@ -48,7 +48,7 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking.Editor
                 }
                 else {
                     EditorGUILayout.HelpBox("RatingModel not assigned.", MessageType.Error);
-                    EditorGUILayout.PropertyField(serializedObject.FindProperty("RatingModel"), true);
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("_ratingModel"), true);
                 }
             }
             else {

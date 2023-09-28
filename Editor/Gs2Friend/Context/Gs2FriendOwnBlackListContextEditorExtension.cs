@@ -48,7 +48,7 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Editor
                 }
                 else {
                     EditorGUILayout.HelpBox("OwnBlackList not assigned.", MessageType.Error);
-                    EditorGUILayout.PropertyField(serializedObject.FindProperty("BlackList"), true);
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("_blackList"), true);
                 }
             }
             else {

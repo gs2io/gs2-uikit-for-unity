@@ -58,7 +58,7 @@ namespace Gs2.Unity.UiKit.Gs2LoginReward.Editor
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2LoginRewardBonusModelContext), false);
                     EditorGUI.indentLevel++;
-                    context.BonusModel = EditorGUILayout.ObjectField("BonusModel", context.BonusModel, typeof(BonusModel), false) as BonusModel;
+                    EditorGUILayout.ObjectField("BonusModel", context.BonusModel, typeof(BonusModel), false);
                     if (context.BonusModel != null) {
                         EditorGUI.indentLevel++;
                         EditorGUILayout.TextField("NamespaceName", context.BonusModel?.NamespaceName?.ToString());

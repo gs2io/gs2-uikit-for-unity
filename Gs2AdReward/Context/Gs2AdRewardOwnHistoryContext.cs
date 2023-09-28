@@ -27,6 +27,7 @@
 using Gs2.Unity.Gs2AdReward.ScriptableObject;
 using Gs2.Unity.UiKit.Core;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2AdReward.Context
 {
@@ -74,11 +75,21 @@ namespace Gs2.Unity.UiKit.Gs2AdReward.Context
 
     public partial class Gs2AdRewardOwnHistoryContext
     {
-        public OwnHistory History;
+        [SerializeField]
+        private OwnHistory _history;
+        public OwnHistory History
+        {
+            get => _history;
+            set => SetOwnHistory(value);
+        }
 
         public void SetOwnHistory(OwnHistory history) {
-            this.History = history;
+            this._history = history;
+
+            this.OnUpdate.Invoke();
         }
+
+        public UnityEvent OnUpdate = new UnityEvent();
     }
 
     /// <summary>

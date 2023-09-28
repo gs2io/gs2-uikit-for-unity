@@ -44,7 +44,7 @@ namespace Gs2.Unity.UiKit.Gs2SerialKey.Editor
 
             if (original.IssueJob == null) {
                 EditorGUILayout.HelpBox("IssueJob not assigned.", MessageType.Error);
-                EditorGUILayout.PropertyField(serializedObject.FindProperty("IssueJob"), true);
+                EditorGUILayout.PropertyField(serializedObject.FindProperty("_issueJob"), true);
             }
             else {
                 original.IssueJob = EditorGUILayout.ObjectField("IssueJob", original.IssueJob, typeof(IssueJob), false) as IssueJob;

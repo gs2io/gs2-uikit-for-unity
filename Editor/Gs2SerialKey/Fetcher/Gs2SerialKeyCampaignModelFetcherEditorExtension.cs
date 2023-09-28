@@ -51,7 +51,7 @@ namespace Gs2.Unity.UiKit.Gs2SerialKey.Editor
                 EditorGUI.BeginDisabledGroup(true);
                 EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2SerialKeyCampaignModelContext), false);
                 EditorGUI.indentLevel++;
-                context.CampaignModel = EditorGUILayout.ObjectField("CampaignModel", context.CampaignModel, typeof(CampaignModel), false) as CampaignModel;
+                EditorGUILayout.ObjectField("CampaignModel", context.CampaignModel, typeof(CampaignModel), false);
                 if (context.CampaignModel != null) {
                     EditorGUI.indentLevel++;
                     EditorGUILayout.TextField("NamespaceName", context.CampaignModel?.NamespaceName?.ToString());

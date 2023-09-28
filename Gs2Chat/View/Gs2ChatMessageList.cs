@@ -42,21 +42,19 @@ namespace Gs2.Unity.UiKit.Gs2Chat
     {
         private List<Gs2ChatMessageContext> _children;
 
-        public void Update() {
-            if (_fetcher.Fetched && this._fetcher.Messages != null) {
-                for (var i = 0; i < this.maximumItems; i++) {
-                    if (i < this._fetcher.Messages.Count) {
-                        _children[i].SetMessage(
-                            Message.New(
+        public void OnFetched() {
+            for (var i = 0; i < this.maximumItems; i++) {
+                if (i < this._fetcher.Messages.Count) {
+                    _children[i].SetMessage(
+                        Message.New(
                                 this._fetcher.Context.Room,
                                 this._fetcher.Messages[i].Name
                             )
-                        );
-                        _children[i].gameObject.SetActive(true);
-                    }
-                    else {
-                        _children[i].gameObject.SetActive(false);
-                    }
+                    );
+                    _children[i].gameObject.SetActive(true);
+                }
+                else {
+                    _children[i].gameObject.SetActive(false);
                 }
             }
         }
@@ -80,7 +78,6 @@ namespace Gs2.Unity.UiKit.Gs2Chat
             }
 
             _fetcher = GetComponent<Gs2ChatMessageListFetcher>() ?? GetComponentInParent<Gs2ChatMessageListFetcher>();
-
             if (_fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ChatMessageListFetcher.");
                 enabled = false;
@@ -122,7 +119,15 @@ namespace Gs2.Unity.UiKit.Gs2Chat
 
     public partial class Gs2ChatMessageList
     {
+        public void OnEnable()
+        {
+            _fetcher.OnFetched.AddListener(OnFetched);
+        }
 
+        public void OnDisable()
+        {
+            _fetcher.OnFetched.RemoveListener(OnFetched);
+        }
     }
 
     /// <summary>

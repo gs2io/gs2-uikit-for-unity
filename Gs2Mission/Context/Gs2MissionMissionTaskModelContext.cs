@@ -27,6 +27,7 @@
 using Gs2.Unity.Gs2Mission.ScriptableObject;
 using Gs2.Unity.UiKit.Core;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2Mission.Context
 {
@@ -80,11 +81,21 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Context
 
     public partial class Gs2MissionMissionTaskModelContext
     {
-        public MissionTaskModel MissionTaskModel;
+        [SerializeField]
+        private MissionTaskModel _missionTaskModel;
+        public MissionTaskModel MissionTaskModel
+        {
+            get => _missionTaskModel;
+            set => SetMissionTaskModel(value);
+        }
 
         public void SetMissionTaskModel(MissionTaskModel MissionTaskModel) {
-            this.MissionTaskModel = MissionTaskModel;
+            this._missionTaskModel = MissionTaskModel;
+
+            this.OnUpdate.Invoke();
         }
+
+        public UnityEvent OnUpdate = new UnityEvent();
     }
 
     /// <summary>

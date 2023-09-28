@@ -44,7 +44,7 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Editor
 
             if (original.Profile == null) {
                 EditorGUILayout.HelpBox("OwnProfile not assigned.", MessageType.Error);
-                EditorGUILayout.PropertyField(serializedObject.FindProperty("Profile"), true);
+                EditorGUILayout.PropertyField(serializedObject.FindProperty("_profile"), true);
             }
             else {
                 original.Profile = EditorGUILayout.ObjectField("OwnProfile", original.Profile, typeof(OwnProfile), false) as OwnProfile;

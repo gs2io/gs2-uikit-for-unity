@@ -58,7 +58,7 @@ namespace Gs2.Unity.UiKit.Gs2Chat.Editor
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2ChatOwnSubscribeContext), false);
                     EditorGUI.indentLevel++;
-                    context.Subscribe = EditorGUILayout.ObjectField("Subscribe", context.Subscribe, typeof(OwnSubscribe), false) as OwnSubscribe;
+                    EditorGUILayout.ObjectField("Subscribe", context.Subscribe, typeof(OwnSubscribe), false);
                     if (context.Subscribe != null) {
                         EditorGUI.indentLevel++;
                         EditorGUILayout.TextField("NamespaceName", context.Subscribe?.NamespaceName?.ToString());

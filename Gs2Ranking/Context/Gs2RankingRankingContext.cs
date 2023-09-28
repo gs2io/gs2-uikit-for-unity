@@ -27,6 +27,7 @@
 using Gs2.Unity.Gs2Ranking.ScriptableObject;
 using Gs2.Unity.UiKit.Core;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2Ranking.Context
 {
@@ -80,11 +81,21 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Context
 
     public partial class Gs2RankingRankingContext
     {
-        public Ranking Ranking;
+        [SerializeField]
+        private Ranking _ranking;
+        public Ranking Ranking
+        {
+            get => _ranking;
+            set => SetRanking(value);
+        }
 
         public void SetRanking(Ranking Ranking) {
-            this.Ranking = Ranking;
+            this._ranking = Ranking;
+
+            this.OnUpdate.Invoke();
         }
+
+        public UnityEvent OnUpdate = new UnityEvent();
     }
 
     /// <summary>

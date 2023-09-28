@@ -42,21 +42,19 @@ namespace Gs2.Unity.UiKit.Gs2Version
     {
         private List<Gs2VersionOwnAcceptVersionContext> _children;
 
-        public void Update() {
-            if (_fetcher.Fetched && this._fetcher.AcceptVersions != null) {
-                for (var i = 0; i < this.maximumItems; i++) {
-                    if (i < this._fetcher.AcceptVersions.Count) {
-                        _children[i].SetOwnAcceptVersion(
-                            OwnAcceptVersion.New(
+        public void OnFetched() {
+            for (var i = 0; i < this.maximumItems; i++) {
+                if (i < this._fetcher.AcceptVersions.Count) {
+                    _children[i].SetOwnAcceptVersion(
+                        OwnAcceptVersion.New(
                                 this._fetcher.Context.Namespace,
                                 this._fetcher.AcceptVersions[i].VersionName
                             )
-                        );
-                        _children[i].gameObject.SetActive(true);
-                    }
-                    else {
-                        _children[i].gameObject.SetActive(false);
-                    }
+                    );
+                    _children[i].gameObject.SetActive(true);
+                }
+                else {
+                    _children[i].gameObject.SetActive(false);
                 }
             }
         }
@@ -69,7 +67,6 @@ namespace Gs2.Unity.UiKit.Gs2Version
     public partial class Gs2VersionOwnAcceptVersionList
     {
         private Gs2VersionOwnAcceptVersionListFetcher _fetcher;
-        private Gs2VersionNamespaceContext Context => _fetcher.Context;
 
         public void Awake()
         {
@@ -80,7 +77,6 @@ namespace Gs2.Unity.UiKit.Gs2Version
             }
 
             _fetcher = GetComponent<Gs2VersionOwnAcceptVersionListFetcher>() ?? GetComponentInParent<Gs2VersionOwnAcceptVersionListFetcher>();
-
             if (_fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2VersionOwnAcceptVersionListFetcher.");
                 enabled = false;
@@ -122,6 +118,16 @@ namespace Gs2.Unity.UiKit.Gs2Version
 
     public partial class Gs2VersionOwnAcceptVersionList
     {
+
+        public void OnEnable()
+        {
+            _fetcher.OnFetched.AddListener(OnFetched);
+        }
+
+        public void OnDisable()
+        {
+            _fetcher.OnFetched.RemoveListener(OnFetched);
+        }
 
     }
 

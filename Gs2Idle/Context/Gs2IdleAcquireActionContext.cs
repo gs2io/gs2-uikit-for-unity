@@ -27,6 +27,7 @@
 using Gs2.Unity.Gs2Idle.ScriptableObject;
 using Gs2.Unity.UiKit.Core;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2Idle.Context
 {
@@ -75,11 +76,21 @@ namespace Gs2.Unity.UiKit.Gs2Idle.Context
 
     public partial class Gs2IdleAcquireActionContext
     {
-        public AcquireAction AcquireAction;
+        [SerializeField]
+        private AcquireAction _acquireAction;
+        public AcquireAction AcquireAction
+        {
+            get => _acquireAction;
+            set => SetAcquireAction(value);
+        }
 
         public void SetAcquireAction(AcquireAction AcquireAction) {
-            this.AcquireAction = AcquireAction;
+            this._acquireAction = AcquireAction;
+
+            this.OnUpdate.Invoke();
         }
+
+        public UnityEvent OnUpdate = new UnityEvent();
     }
 
     /// <summary>

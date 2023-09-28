@@ -27,6 +27,7 @@
 using Gs2.Unity.Gs2Inventory.ScriptableObject;
 using Gs2.Unity.UiKit.Core;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2Inventory.Context
 {
@@ -80,11 +81,21 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Context
 
     public partial class Gs2InventorySimpleInventoryModelContext
     {
-        public SimpleInventoryModel SimpleInventoryModel;
+        [SerializeField]
+        private SimpleInventoryModel _simpleInventoryModel;
+        public SimpleInventoryModel SimpleInventoryModel
+        {
+            get => _simpleInventoryModel;
+            set => SetSimpleInventoryModel(value);
+        }
 
         public void SetSimpleInventoryModel(SimpleInventoryModel SimpleInventoryModel) {
-            this.SimpleInventoryModel = SimpleInventoryModel;
+            this._simpleInventoryModel = SimpleInventoryModel;
+
+            this.OnUpdate.Invoke();
         }
+
+        public UnityEvent OnUpdate = new UnityEvent();
     }
 
     /// <summary>

@@ -42,21 +42,19 @@ namespace Gs2.Unity.UiKit.Gs2Inventory
     {
         private List<Gs2InventorySimpleInventoryModelContext> _children;
 
-        public void Update() {
-            if (_fetcher.Fetched && this._fetcher.SimpleInventoryModels != null) {
-                for (var i = 0; i < this.maximumItems; i++) {
-                    if (i < this._fetcher.SimpleInventoryModels.Count) {
-                        _children[i].SetSimpleInventoryModel(
-                            SimpleInventoryModel.New(
+        public void OnFetched() {
+            for (var i = 0; i < this.maximumItems; i++) {
+                if (i < this._fetcher.SimpleInventoryModels.Count) {
+                    _children[i].SetSimpleInventoryModel(
+                        SimpleInventoryModel.New(
                                 this._fetcher.Context.Namespace,
                                 this._fetcher.SimpleInventoryModels[i].Name
                             )
-                        );
-                        _children[i].gameObject.SetActive(true);
-                    }
-                    else {
-                        _children[i].gameObject.SetActive(false);
-                    }
+                    );
+                    _children[i].gameObject.SetActive(true);
+                }
+                else {
+                    _children[i].gameObject.SetActive(false);
                 }
             }
         }
@@ -80,7 +78,6 @@ namespace Gs2.Unity.UiKit.Gs2Inventory
             }
 
             _fetcher = GetComponent<Gs2InventorySimpleInventoryModelListFetcher>() ?? GetComponentInParent<Gs2InventorySimpleInventoryModelListFetcher>();
-
             if (_fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2InventorySimpleInventoryModelListFetcher.");
                 enabled = false;
@@ -122,7 +119,15 @@ namespace Gs2.Unity.UiKit.Gs2Inventory
 
     public partial class Gs2InventorySimpleInventoryModelList
     {
+        public void OnEnable()
+        {
+            _fetcher.OnFetched.AddListener(OnFetched);
+        }
 
+        public void OnDisable()
+        {
+            _fetcher.OnFetched.RemoveListener(OnFetched);
+        }
     }
 
     /// <summary>

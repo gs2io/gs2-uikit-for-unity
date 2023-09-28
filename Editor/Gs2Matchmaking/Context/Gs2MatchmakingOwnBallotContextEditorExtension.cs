@@ -44,7 +44,7 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking.Editor
 
             if (original.Ballot == null) {
                 EditorGUILayout.HelpBox("OwnBallot not assigned.", MessageType.Error);
-                EditorGUILayout.PropertyField(serializedObject.FindProperty("Ballot"), true);
+                EditorGUILayout.PropertyField(serializedObject.FindProperty("_ballot"), true);
             }
             else {
                 original.Ballot = EditorGUILayout.ObjectField("OwnBallot", original.Ballot, typeof(OwnBallot), false) as OwnBallot;

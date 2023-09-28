@@ -48,7 +48,7 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking.Editor
                 }
                 else {
                     EditorGUILayout.HelpBox("OwnRating not assigned.", MessageType.Error);
-                    EditorGUILayout.PropertyField(serializedObject.FindProperty("Rating"), true);
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("_rating"), true);
                 }
             }
             else {

@@ -27,6 +27,7 @@
 using Gs2.Unity.Gs2Formation.ScriptableObject;
 using Gs2.Unity.UiKit.Core;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2Formation.Context
 {
@@ -80,11 +81,21 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Context
 
     public partial class Gs2FormationMoldModelContext
     {
-        public MoldModel MoldModel;
+        [SerializeField]
+        private MoldModel _moldModel;
+        public MoldModel MoldModel
+        {
+            get => _moldModel;
+            set => SetMoldModel(value);
+        }
 
         public void SetMoldModel(MoldModel MoldModel) {
-            this.MoldModel = MoldModel;
+            this._moldModel = MoldModel;
+
+            this.OnUpdate.Invoke();
         }
+
+        public UnityEvent OnUpdate = new UnityEvent();
     }
 
     /// <summary>

@@ -42,21 +42,19 @@ namespace Gs2.Unity.UiKit.Gs2Chat
     {
         private List<Gs2ChatOwnSubscribeContext> _children;
 
-        public void Update() {
-            if (_fetcher.Fetched && this._fetcher.Subscribes != null) {
-                for (var i = 0; i < this.maximumItems; i++) {
-                    if (i < this._fetcher.Subscribes.Count) {
-                        _children[i].SetOwnSubscribe(
-                            OwnSubscribe.New(
+        public void OnFetched() {
+            for (var i = 0; i < this.maximumItems; i++) {
+                if (i < this._fetcher.Subscribes.Count) {
+                    _children[i].SetOwnSubscribe(
+                        OwnSubscribe.New(
                                 this._fetcher.Context.Namespace,
                                 this._fetcher.Subscribes[i].RoomName
                             )
-                        );
-                        _children[i].gameObject.SetActive(true);
-                    }
-                    else {
-                        _children[i].gameObject.SetActive(false);
-                    }
+                    );
+                    _children[i].gameObject.SetActive(true);
+                }
+                else {
+                    _children[i].gameObject.SetActive(false);
                 }
             }
         }
@@ -69,7 +67,6 @@ namespace Gs2.Unity.UiKit.Gs2Chat
     public partial class Gs2ChatOwnSubscribeList
     {
         private Gs2ChatOwnSubscribeListFetcher _fetcher;
-        private Gs2ChatNamespaceContext Context => _fetcher.Context;
 
         public void Awake()
         {
@@ -80,7 +77,6 @@ namespace Gs2.Unity.UiKit.Gs2Chat
             }
 
             _fetcher = GetComponent<Gs2ChatOwnSubscribeListFetcher>() ?? GetComponentInParent<Gs2ChatOwnSubscribeListFetcher>();
-
             if (_fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ChatOwnSubscribeListFetcher.");
                 enabled = false;
@@ -122,6 +118,16 @@ namespace Gs2.Unity.UiKit.Gs2Chat
 
     public partial class Gs2ChatOwnSubscribeList
     {
+
+        public void OnEnable()
+        {
+            _fetcher.OnFetched.AddListener(OnFetched);
+        }
+
+        public void OnDisable()
+        {
+            _fetcher.OnFetched.RemoveListener(OnFetched);
+        }
 
     }
 

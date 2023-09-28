@@ -27,6 +27,7 @@
 using Gs2.Unity.Gs2Ranking.ScriptableObject;
 using Gs2.Unity.UiKit.Core;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2Ranking.Context
 {
@@ -79,11 +80,21 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Context
 
     public partial class Gs2RankingOwnSubscribeUserContext
     {
-        public OwnSubscribeUser SubscribeUser;
+        [SerializeField]
+        private OwnSubscribeUser _subscribeUser;
+        public OwnSubscribeUser SubscribeUser
+        {
+            get => _subscribeUser;
+            set => SetOwnSubscribeUser(value);
+        }
 
         public void SetOwnSubscribeUser(OwnSubscribeUser subscribeUser) {
-            this.SubscribeUser = subscribeUser;
+            this._subscribeUser = subscribeUser;
+
+            this.OnUpdate.Invoke();
         }
+
+        public UnityEvent OnUpdate = new UnityEvent();
     }
 
     /// <summary>

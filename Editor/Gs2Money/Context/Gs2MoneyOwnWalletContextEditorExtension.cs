@@ -44,7 +44,7 @@ namespace Gs2.Unity.UiKit.Gs2Money.Editor
 
             if (original.Wallet == null) {
                 EditorGUILayout.HelpBox("OwnWallet not assigned.", MessageType.Error);
-                EditorGUILayout.PropertyField(serializedObject.FindProperty("Wallet"), true);
+                EditorGUILayout.PropertyField(serializedObject.FindProperty("_wallet"), true);
             }
             else {
                 original.Wallet = EditorGUILayout.ObjectField("OwnWallet", original.Wallet, typeof(OwnWallet), false) as OwnWallet;

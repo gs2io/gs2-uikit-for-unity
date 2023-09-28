@@ -48,7 +48,7 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Editor
                 }
                 else {
                     EditorGUILayout.HelpBox("OwnMold not assigned.", MessageType.Error);
-                    EditorGUILayout.PropertyField(serializedObject.FindProperty("Mold"), true);
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("_mold"), true);
                 }
             }
             else {

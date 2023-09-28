@@ -48,7 +48,7 @@ namespace Gs2.Unity.UiKit.Gs2Exchange.Editor
                 }
                 else {
                     EditorGUILayout.HelpBox("OwnAwait not assigned.", MessageType.Error);
-                    EditorGUILayout.PropertyField(serializedObject.FindProperty("Await"), true);
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("_await"), true);
                 }
             }
             else {

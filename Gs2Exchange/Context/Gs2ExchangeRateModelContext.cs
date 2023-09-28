@@ -27,6 +27,7 @@
 using Gs2.Unity.Gs2Exchange.ScriptableObject;
 using Gs2.Unity.UiKit.Core;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2Exchange.Context
 {
@@ -80,11 +81,21 @@ namespace Gs2.Unity.UiKit.Gs2Exchange.Context
 
     public partial class Gs2ExchangeRateModelContext
     {
-        public RateModel RateModel;
+        [SerializeField]
+        private RateModel _rateModel;
+        public RateModel RateModel
+        {
+            get => _rateModel;
+            set => SetRateModel(value);
+        }
 
         public void SetRateModel(RateModel RateModel) {
-            this.RateModel = RateModel;
+            this._rateModel = RateModel;
+
+            this.OnUpdate.Invoke();
         }
+
+        public UnityEvent OnUpdate = new UnityEvent();
     }
 
     /// <summary>

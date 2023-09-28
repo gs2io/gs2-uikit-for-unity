@@ -58,7 +58,7 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Editor
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2InventorySimpleItemModelContext), false);
                     EditorGUI.indentLevel++;
-                    context.SimpleItemModel = EditorGUILayout.ObjectField("SimpleItemModel", context.SimpleItemModel, typeof(SimpleItemModel), false) as SimpleItemModel;
+                    EditorGUILayout.ObjectField("SimpleItemModel", context.SimpleItemModel, typeof(SimpleItemModel), false);
                     if (context.SimpleItemModel != null) {
                         EditorGUI.indentLevel++;
                         EditorGUILayout.TextField("NamespaceName", context.SimpleItemModel?.NamespaceName?.ToString());

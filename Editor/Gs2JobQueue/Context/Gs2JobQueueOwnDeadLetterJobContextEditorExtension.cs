@@ -44,7 +44,7 @@ namespace Gs2.Unity.UiKit.Gs2JobQueue.Editor
 
             if (original.DeadLetterJob == null) {
                 EditorGUILayout.HelpBox("OwnDeadLetterJob not assigned.", MessageType.Error);
-                EditorGUILayout.PropertyField(serializedObject.FindProperty("DeadLetterJob"), true);
+                EditorGUILayout.PropertyField(serializedObject.FindProperty("_deadLetterJob"), true);
             }
             else {
                 original.DeadLetterJob = EditorGUILayout.ObjectField("OwnDeadLetterJob", original.DeadLetterJob, typeof(OwnDeadLetterJob), false) as OwnDeadLetterJob;

@@ -27,6 +27,7 @@
 using Gs2.Unity.Gs2Chat.ScriptableObject;
 using Gs2.Unity.UiKit.Core;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2Chat.Context
 {
@@ -75,11 +76,21 @@ namespace Gs2.Unity.UiKit.Gs2Chat.Context
 
     public partial class Gs2ChatRoomContext
     {
-        public Room Room;
+        [SerializeField]
+        private Room _room;
+        public Room Room
+        {
+            get => _room;
+            set => SetRoom(value);
+        }
 
         public void SetRoom(Room Room) {
-            this.Room = Room;
+            this._room = Room;
+
+            this.OnUpdate.Invoke();
         }
+
+        public UnityEvent OnUpdate = new UnityEvent();
     }
 
     /// <summary>

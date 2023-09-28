@@ -27,6 +27,7 @@
 using Gs2.Unity.Gs2LoginReward.ScriptableObject;
 using Gs2.Unity.UiKit.Core;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2LoginReward.Context
 {
@@ -80,11 +81,21 @@ namespace Gs2.Unity.UiKit.Gs2LoginReward.Context
 
     public partial class Gs2LoginRewardBonusModelContext
     {
-        public BonusModel BonusModel;
+        [SerializeField]
+        private BonusModel _bonusModel;
+        public BonusModel BonusModel
+        {
+            get => _bonusModel;
+            set => SetBonusModel(value);
+        }
 
         public void SetBonusModel(BonusModel BonusModel) {
-            this.BonusModel = BonusModel;
+            this._bonusModel = BonusModel;
+
+            this.OnUpdate.Invoke();
         }
+
+        public UnityEvent OnUpdate = new UnityEvent();
     }
 
     /// <summary>

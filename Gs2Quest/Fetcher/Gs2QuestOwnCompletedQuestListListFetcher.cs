@@ -32,6 +32,7 @@ using System.Collections.Generic;
 using System.Text;
 using Gs2.Core.Exception;
 using Gs2.Unity.Core.Exception;
+using Gs2.Unity.Gs2Quest.Domain.Model;
 using Gs2.Unity.Gs2Quest.Model;
 using Gs2.Unity.Gs2Quest.ScriptableObject;
 using Gs2.Unity.Util;
@@ -49,70 +50,97 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Fetcher
 	[AddComponentMenu("GS2 UIKit/Quest/CompletedQuestList/Fetcher/Gs2QuestOwnCompletedQuestListListFetcher")]
     public partial class Gs2QuestOwnCompletedQuestListListFetcher : MonoBehaviour
     {
-        private IEnumerator Fetch()
-        {
-            var retryWaitSecond = 1;
-            Gs2Exception e;
-            while (true)
-            {
-                if (_gameSessionHolder != null && _gameSessionHolder.Initialized &&
-                    _clientHolder != null && _clientHolder.Initialized &&
-                    Context != null)
-                {
-                    
-                    var domain = this._clientHolder.Gs2.Quest.Namespace(
-                        this.Context.Namespace.NamespaceName
-                    ).Me(
-                        this._gameSessionHolder.GameSession
-                    );
-                    var it = domain.CompletedQuestLists();
-                    var items = new List<Gs2.Unity.Gs2Quest.Model.EzCompletedQuestList>();
-                    while (it.HasNext())
-                    {
-                        yield return it.Next();
-                        if (it.Error != null)
-                        {
-                            if (it.Error is BadRequestException || it.Error is NotFoundException)
-                            {
-                                onError.Invoke(e = it.Error, null);
-                                Debug.LogError($"{gameObject.GetFullPath()}: {it.Error.Message}");
-                                break;
-                            }
-                            else {
-                                onError.Invoke(new CanIgnoreException(it.Error), null);
-                            }
-                            yield return new WaitForSeconds(retryWaitSecond);
-                            retryWaitSecond *= 2;
-                        }
-                        else {
-                            if (it.Current != null)
-                            {
-                                items.Add(it.Current);
-                            } else {
-                                break;
-                            }
-                        }
-                    }
+        private EzUserGameSessionDomain _domain;
+        private ulong? _callbackId;
 
-                    retryWaitSecond = 1;
-                    CompletedQuestList = items;
-                    Fetched = true;
+        private IEnumerator Load() {
+            var retryWaitSecond = 1;
+            var it = _domain.CompletedQuestLists();
+            var items = new List<Gs2.Unity.Gs2Quest.Model.EzCompletedQuestList>();
+            while (it.HasNext())
+            {
+                yield return it.Next();
+                if (it.Error != null)
+                {
+                    if (it.Error is BadRequestException || it.Error is NotFoundException)
+                    {
+                        onError.Invoke(it.Error, null);
+                        Debug.LogError($"{gameObject.GetFullPath()}: {it.Error.Message}");
+                        break;
+                    }
+                    else {
+                        onError.Invoke(new CanIgnoreException(it.Error), null);
+                    }
+                    yield return new WaitForSeconds(retryWaitSecond);
+                    retryWaitSecond *= 2;
                 }
                 else {
-                    yield return new WaitForSeconds(0.1f);
+                    if (it.Current != null)
+                    {
+                        items.Add(it.Current);
+                    } else {
+                        break;
+                    }
                 }
             }
-            // ReSharper disable once IteratorNeverReturns
+
+            retryWaitSecond = 1;
+            CompletedQuestList = items;
+            Fetched = true;
+
+            this.OnFetched.Invoke();
+        }
+
+        private IEnumerator Fetch()
+        {
+            var clientHolder = Gs2ClientHolder.Instance;
+            var gameSessionHolder = Gs2GameSessionHolder.Instance;
+
+            yield return new WaitUntil(() => clientHolder.Initialized);
+            yield return new WaitUntil(() => gameSessionHolder.Initialized);
+            yield return new WaitUntil(() => Context != null && Context.Namespace != null);
+
+            this._domain = clientHolder.Gs2.Quest.Namespace(
+                this.Context.Namespace.NamespaceName
+            ).Me(
+                gameSessionHolder.GameSession
+            );
+            this._callbackId = this._domain.SubscribeCompletedQuestLists(
+                () =>
+                {
+                    StartCoroutine(nameof(Load));
+                }
+            );
+
+            yield return Load();
+        }
+
+        public void OnUpdateContext() {
+            OnDisable();
+            Awake();
+            OnEnable();
         }
 
         public void OnEnable()
         {
             StartCoroutine(nameof(Fetch));
+            Context.OnUpdate.AddListener(OnUpdateContext);
         }
 
         public void OnDisable()
         {
-            StopCoroutine(nameof(Fetch));
+            Context.OnUpdate.RemoveListener(OnUpdateContext);
+
+            if (this._domain == null) {
+                return;
+            }
+            if (!this._callbackId.HasValue) {
+                return;
+            }
+            this._domain.UnsubscribeCompletedQuestLists(
+                this._callbackId.Value
+            );
+            this._callbackId = null;
         }
     }
 
@@ -122,23 +150,20 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Fetcher
 
     public partial class Gs2QuestOwnCompletedQuestListListFetcher
     {
-        private Gs2ClientHolder _clientHolder;
-        private Gs2GameSessionHolder _gameSessionHolder;
         public Gs2QuestNamespaceContext Context;
+
+        public UnityEvent OnFetched = new UnityEvent();
 
         public void Awake()
         {
-            _clientHolder = Gs2ClientHolder.Instance;
-            _gameSessionHolder = Gs2GameSessionHolder.Instance;
             Context = GetComponent<Gs2QuestNamespaceContext>() ?? GetComponentInParent<Gs2QuestNamespaceContext>();
-
             if (Context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2QuestNamespaceContext.");
                 enabled = false;
             }
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
             Context = GetComponent<Gs2QuestNamespaceContext>() ?? GetComponentInParent<Gs2QuestNamespaceContext>(true);
             if (Context == null) {

@@ -27,6 +27,7 @@
 using Gs2.Unity.Gs2Matchmaking.ScriptableObject;
 using Gs2.Unity.UiKit.Core;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2Matchmaking.Context
 {
@@ -75,11 +76,21 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking.Context
 
     public partial class Gs2MatchmakingVoteContext
     {
-        public Vote Vote;
+        [SerializeField]
+        private Vote _vote;
+        public Vote Vote
+        {
+            get => _vote;
+            set => SetVote(value);
+        }
 
         public void SetVote(Vote Vote) {
-            this.Vote = Vote;
+            this._vote = Vote;
+
+            this.OnUpdate.Invoke();
         }
+
+        public UnityEvent OnUpdate = new UnityEvent();
     }
 
     /// <summary>

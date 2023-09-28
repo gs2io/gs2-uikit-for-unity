@@ -48,7 +48,7 @@ namespace Gs2.Unity.UiKit.Gs2MegaField.Editor
                 }
                 else {
                     EditorGUILayout.HelpBox("AreaModel not assigned.", MessageType.Error);
-                    EditorGUILayout.PropertyField(serializedObject.FindProperty("AreaModel"), true);
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("_areaModel"), true);
                 }
             }
             else {

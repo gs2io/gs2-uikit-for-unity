@@ -42,21 +42,19 @@ namespace Gs2.Unity.UiKit.Gs2Enhance
     {
         private List<Gs2EnhanceRateModelContext> _children;
 
-        public void Update() {
-            if (_fetcher.Fetched && this._fetcher.RateModels != null) {
-                for (var i = 0; i < this.maximumItems; i++) {
-                    if (i < this._fetcher.RateModels.Count) {
-                        _children[i].SetRateModel(
-                            RateModel.New(
+        public void OnFetched() {
+            for (var i = 0; i < this.maximumItems; i++) {
+                if (i < this._fetcher.RateModels.Count) {
+                    _children[i].SetRateModel(
+                        RateModel.New(
                                 this._fetcher.Context.Namespace,
                                 this._fetcher.RateModels[i].Name
                             )
-                        );
-                        _children[i].gameObject.SetActive(true);
-                    }
-                    else {
-                        _children[i].gameObject.SetActive(false);
-                    }
+                    );
+                    _children[i].gameObject.SetActive(true);
+                }
+                else {
+                    _children[i].gameObject.SetActive(false);
                 }
             }
         }
@@ -80,7 +78,6 @@ namespace Gs2.Unity.UiKit.Gs2Enhance
             }
 
             _fetcher = GetComponent<Gs2EnhanceRateModelListFetcher>() ?? GetComponentInParent<Gs2EnhanceRateModelListFetcher>();
-
             if (_fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2EnhanceRateModelListFetcher.");
                 enabled = false;
@@ -122,7 +119,15 @@ namespace Gs2.Unity.UiKit.Gs2Enhance
 
     public partial class Gs2EnhanceRateModelList
     {
+        public void OnEnable()
+        {
+            _fetcher.OnFetched.AddListener(OnFetched);
+        }
 
+        public void OnDisable()
+        {
+            _fetcher.OnFetched.RemoveListener(OnFetched);
+        }
     }
 
     /// <summary>

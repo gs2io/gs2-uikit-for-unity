@@ -42,21 +42,19 @@ namespace Gs2.Unity.UiKit.Gs2Schedule
     {
         private List<Gs2ScheduleOwnEventContext> _children;
 
-        public void Update() {
-            if (_fetcher.Fetched && this._fetcher.Events != null) {
-                for (var i = 0; i < this.maximumItems; i++) {
-                    if (i < this._fetcher.Events.Count) {
-                        _children[i].SetOwnEvent(
-                            OwnEvent.New(
+        public void OnFetched() {
+            for (var i = 0; i < this.maximumItems; i++) {
+                if (i < this._fetcher.Events.Count) {
+                    _children[i].SetOwnEvent(
+                        OwnEvent.New(
                                 this._fetcher.Context.Namespace,
                                 this._fetcher.Events[i].Name
                             )
-                        );
-                        _children[i].gameObject.SetActive(true);
-                    }
-                    else {
-                        _children[i].gameObject.SetActive(false);
-                    }
+                    );
+                    _children[i].gameObject.SetActive(true);
+                }
+                else {
+                    _children[i].gameObject.SetActive(false);
                 }
             }
         }
@@ -69,7 +67,6 @@ namespace Gs2.Unity.UiKit.Gs2Schedule
     public partial class Gs2ScheduleOwnEventList
     {
         private Gs2ScheduleOwnEventListFetcher _fetcher;
-        private Gs2ScheduleNamespaceContext Context => _fetcher.Context;
 
         public void Awake()
         {
@@ -80,7 +77,6 @@ namespace Gs2.Unity.UiKit.Gs2Schedule
             }
 
             _fetcher = GetComponent<Gs2ScheduleOwnEventListFetcher>() ?? GetComponentInParent<Gs2ScheduleOwnEventListFetcher>();
-
             if (_fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ScheduleOwnEventListFetcher.");
                 enabled = false;
@@ -122,6 +118,16 @@ namespace Gs2.Unity.UiKit.Gs2Schedule
 
     public partial class Gs2ScheduleOwnEventList
     {
+
+        public void OnEnable()
+        {
+            _fetcher.OnFetched.AddListener(OnFetched);
+        }
+
+        public void OnDisable()
+        {
+            _fetcher.OnFetched.RemoveListener(OnFetched);
+        }
 
     }
 

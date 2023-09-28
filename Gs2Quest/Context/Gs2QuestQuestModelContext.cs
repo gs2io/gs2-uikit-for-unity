@@ -27,6 +27,7 @@
 using Gs2.Unity.Gs2Quest.ScriptableObject;
 using Gs2.Unity.UiKit.Core;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2Quest.Context
 {
@@ -80,11 +81,21 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Context
 
     public partial class Gs2QuestQuestModelContext
     {
-        public QuestModel QuestModel;
+        [SerializeField]
+        private QuestModel _questModel;
+        public QuestModel QuestModel
+        {
+            get => _questModel;
+            set => SetQuestModel(value);
+        }
 
         public void SetQuestModel(QuestModel QuestModel) {
-            this.QuestModel = QuestModel;
+            this._questModel = QuestModel;
+
+            this.OnUpdate.Invoke();
         }
+
+        public UnityEvent OnUpdate = new UnityEvent();
     }
 
     /// <summary>

@@ -48,7 +48,7 @@ namespace Gs2.Unity.UiKit.Gs2Stamina.Editor
                 }
                 else {
                     EditorGUILayout.HelpBox("OwnStamina not assigned.", MessageType.Error);
-                    EditorGUILayout.PropertyField(serializedObject.FindProperty("Stamina"), true);
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("_stamina"), true);
                 }
             }
             else {

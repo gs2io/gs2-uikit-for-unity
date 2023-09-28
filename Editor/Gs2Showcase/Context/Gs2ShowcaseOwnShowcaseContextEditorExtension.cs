@@ -44,7 +44,7 @@ namespace Gs2.Unity.UiKit.Gs2Showcase.Editor
 
             if (original.Showcase == null) {
                 EditorGUILayout.HelpBox("OwnShowcase not assigned.", MessageType.Error);
-                EditorGUILayout.PropertyField(serializedObject.FindProperty("Showcase"), true);
+                EditorGUILayout.PropertyField(serializedObject.FindProperty("_showcase"), true);
             }
             else {
                 original.Showcase = EditorGUILayout.ObjectField("OwnShowcase", original.Showcase, typeof(OwnShowcase), false) as OwnShowcase;

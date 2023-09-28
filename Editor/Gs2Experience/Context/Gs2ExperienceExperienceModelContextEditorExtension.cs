@@ -48,7 +48,7 @@ namespace Gs2.Unity.UiKit.Gs2Experience.Editor
                 }
                 else {
                     EditorGUILayout.HelpBox("ExperienceModel not assigned.", MessageType.Error);
-                    EditorGUILayout.PropertyField(serializedObject.FindProperty("ExperienceModel"), true);
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("_experienceModel"), true);
                 }
             }
             else {

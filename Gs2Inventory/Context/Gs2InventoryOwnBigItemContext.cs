@@ -27,6 +27,7 @@
 using Gs2.Unity.Gs2Inventory.ScriptableObject;
 using Gs2.Unity.UiKit.Core;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2Inventory.Context
 {
@@ -43,10 +44,8 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Context
             }
         }
         public override bool HasError() {
-            if (base.HasError()) {
-                return true;
-            }
-            if (BigItem == null) {
+            var hasError = base.HasError();
+            if (BigItem == null || hasError) {
                 if (GetComponentInParent<Gs2InventoryOwnBigItemList>(true) != null) {
                     return false;
                 }
@@ -82,7 +81,13 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Context
 
     public partial class Gs2InventoryOwnBigItemContext
     {
-        public OwnBigItem BigItem;
+        [SerializeField]
+        private OwnBigItem _bigItem;
+        public OwnBigItem BigItem
+        {
+            get => _bigItem;
+            set => SetOwnBigItem(value);
+        }
 
         public void SetOwnBigItem(OwnBigItem bigItem) {
             this.BigItemModel = BigItemModel.New(
@@ -94,7 +99,9 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Context
                 ),
                 bigItem.ItemName
             );
-            this.BigItem = bigItem;
+            this._bigItem = bigItem;
+
+            this.OnUpdate.Invoke();
         }
     }
 

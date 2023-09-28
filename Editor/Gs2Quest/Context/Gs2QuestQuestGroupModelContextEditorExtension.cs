@@ -48,7 +48,7 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Editor
                 }
                 else {
                     EditorGUILayout.HelpBox("QuestGroupModel not assigned.", MessageType.Error);
-                    EditorGUILayout.PropertyField(serializedObject.FindProperty("QuestGroupModel"), true);
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("_questGroupModel"), true);
                 }
             }
             else {

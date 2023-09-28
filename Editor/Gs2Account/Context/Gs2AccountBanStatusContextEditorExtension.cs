@@ -44,7 +44,7 @@ namespace Gs2.Unity.UiKit.Gs2Account.Editor
 
             if (original.BanStatus == null) {
                 EditorGUILayout.HelpBox("BanStatus not assigned.", MessageType.Error);
-                EditorGUILayout.PropertyField(serializedObject.FindProperty("BanStatus"), true);
+                EditorGUILayout.PropertyField(serializedObject.FindProperty("_banStatus"), true);
             }
             else {
                 original.BanStatus = EditorGUILayout.ObjectField("BanStatus", original.BanStatus, typeof(BanStatus), false) as BanStatus;

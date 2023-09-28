@@ -48,7 +48,7 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Editor
                 }
                 else {
                     EditorGUILayout.HelpBox("CounterModel not assigned.", MessageType.Error);
-                    EditorGUILayout.PropertyField(serializedObject.FindProperty("CounterModel"), true);
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("_counterModel"), true);
                 }
             }
             else {

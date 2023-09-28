@@ -44,7 +44,7 @@ namespace Gs2.Unity.UiKit.Gs2JobQueue.Editor
 
             if (original.Namespace == null) {
                 EditorGUILayout.HelpBox("Namespace not assigned.", MessageType.Error);
-                EditorGUILayout.PropertyField(serializedObject.FindProperty("Namespace"), true);
+                EditorGUILayout.PropertyField(serializedObject.FindProperty("_namespace"), true);
             }
             else {
                 original.Namespace = EditorGUILayout.ObjectField("Namespace", original.Namespace, typeof(Namespace), false) as Namespace;

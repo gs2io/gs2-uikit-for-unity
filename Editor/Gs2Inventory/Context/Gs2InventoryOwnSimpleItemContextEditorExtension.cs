@@ -48,7 +48,7 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Editor
                 }
                 else {
                     EditorGUILayout.HelpBox("OwnSimpleItem not assigned.", MessageType.Error);
-                    EditorGUILayout.PropertyField(serializedObject.FindProperty("SimpleItem"), true);
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("_simpleItem"), true);
                 }
             }
             else {

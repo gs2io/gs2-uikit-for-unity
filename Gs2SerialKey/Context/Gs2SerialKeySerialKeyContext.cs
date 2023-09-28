@@ -27,6 +27,7 @@
 using Gs2.Unity.Gs2SerialKey.ScriptableObject;
 using Gs2.Unity.UiKit.Core;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2SerialKey.Context
 {
@@ -75,11 +76,21 @@ namespace Gs2.Unity.UiKit.Gs2SerialKey.Context
 
     public partial class Gs2SerialKeySerialKeyContext
     {
-        public SerialKey SerialKey;
+        [SerializeField]
+        private SerialKey _serialKey;
+        public SerialKey SerialKey
+        {
+            get => _serialKey;
+            set => SetSerialKey(value);
+        }
 
         public void SetSerialKey(SerialKey SerialKey) {
-            this.SerialKey = SerialKey;
+            this._serialKey = SerialKey;
+
+            this.OnUpdate.Invoke();
         }
+
+        public UnityEvent OnUpdate = new UnityEvent();
     }
 
     /// <summary>

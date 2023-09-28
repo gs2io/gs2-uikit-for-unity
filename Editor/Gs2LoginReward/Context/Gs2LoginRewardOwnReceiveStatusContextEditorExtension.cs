@@ -48,7 +48,7 @@ namespace Gs2.Unity.UiKit.Gs2LoginReward.Editor
                 }
                 else {
                     EditorGUILayout.HelpBox("OwnReceiveStatus not assigned.", MessageType.Error);
-                    EditorGUILayout.PropertyField(serializedObject.FindProperty("ReceiveStatus"), true);
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("_receiveStatus"), true);
                 }
             }
             else {

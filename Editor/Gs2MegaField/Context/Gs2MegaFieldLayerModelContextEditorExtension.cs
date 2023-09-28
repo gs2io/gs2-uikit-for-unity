@@ -48,7 +48,7 @@ namespace Gs2.Unity.UiKit.Gs2MegaField.Editor
                 }
                 else {
                     EditorGUILayout.HelpBox("LayerModel not assigned.", MessageType.Error);
-                    EditorGUILayout.PropertyField(serializedObject.FindProperty("LayerModel"), true);
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("_layerModel"), true);
                 }
             }
             else {

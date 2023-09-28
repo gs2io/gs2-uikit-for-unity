@@ -27,6 +27,7 @@
 using Gs2.Unity.Gs2Enchant.ScriptableObject;
 using Gs2.Unity.UiKit.Core;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2Enchant.Context
 {
@@ -80,11 +81,21 @@ namespace Gs2.Unity.UiKit.Gs2Enchant.Context
 
     public partial class Gs2EnchantBalanceParameterModelContext
     {
-        public BalanceParameterModel BalanceParameterModel;
+        [SerializeField]
+        private BalanceParameterModel _balanceParameterModel;
+        public BalanceParameterModel BalanceParameterModel
+        {
+            get => _balanceParameterModel;
+            set => SetBalanceParameterModel(value);
+        }
 
         public void SetBalanceParameterModel(BalanceParameterModel BalanceParameterModel) {
-            this.BalanceParameterModel = BalanceParameterModel;
+            this._balanceParameterModel = BalanceParameterModel;
+
+            this.OnUpdate.Invoke();
         }
+
+        public UnityEvent OnUpdate = new UnityEvent();
     }
 
     /// <summary>

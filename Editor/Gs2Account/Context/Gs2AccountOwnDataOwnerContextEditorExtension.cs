@@ -44,7 +44,7 @@ namespace Gs2.Unity.UiKit.Gs2Account.Editor
 
             if (original.DataOwner == null) {
                 EditorGUILayout.HelpBox("OwnDataOwner not assigned.", MessageType.Error);
-                EditorGUILayout.PropertyField(serializedObject.FindProperty("DataOwner"), true);
+                EditorGUILayout.PropertyField(serializedObject.FindProperty("_dataOwner"), true);
             }
             else {
                 original.DataOwner = EditorGUILayout.ObjectField("OwnDataOwner", original.DataOwner, typeof(OwnDataOwner), false) as OwnDataOwner;

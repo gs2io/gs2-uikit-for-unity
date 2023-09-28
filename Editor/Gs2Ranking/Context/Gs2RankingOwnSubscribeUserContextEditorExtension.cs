@@ -48,7 +48,7 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Editor
                 }
                 else {
                     EditorGUILayout.HelpBox("OwnSubscribeUser not assigned.", MessageType.Error);
-                    EditorGUILayout.PropertyField(serializedObject.FindProperty("SubscribeUser"), true);
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("_subscribeUser"), true);
                 }
             }
             else {

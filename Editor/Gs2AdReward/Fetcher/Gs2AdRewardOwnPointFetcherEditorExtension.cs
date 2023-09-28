@@ -51,7 +51,7 @@ namespace Gs2.Unity.UiKit.Gs2AdReward.Editor
                 EditorGUI.BeginDisabledGroup(true);
                 EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2AdRewardOwnPointContext), false);
                 EditorGUI.indentLevel++;
-                context.Point = EditorGUILayout.ObjectField("Point", context.Point, typeof(OwnPoint), false) as OwnPoint;
+                EditorGUILayout.ObjectField("Point", context.Point, typeof(OwnPoint), false);
                 if (context.Point != null) {
                     EditorGUI.indentLevel++;
                     EditorGUILayout.TextField("NamespaceName", context.Point?.NamespaceName?.ToString());

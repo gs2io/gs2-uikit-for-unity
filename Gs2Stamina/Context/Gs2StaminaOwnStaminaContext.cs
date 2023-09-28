@@ -27,6 +27,7 @@
 using Gs2.Unity.Gs2Stamina.ScriptableObject;
 using Gs2.Unity.UiKit.Core;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2Stamina.Context
 {
@@ -43,10 +44,8 @@ namespace Gs2.Unity.UiKit.Gs2Stamina.Context
             }
         }
         public override bool HasError() {
-            if (base.HasError()) {
-                return true;
-            }
-            if (Stamina == null) {
+            var hasError = base.HasError();
+            if (Stamina == null || hasError) {
                 if (GetComponentInParent<Gs2StaminaOwnStaminaList>(true) != null) {
                     return false;
                 }
@@ -82,7 +81,13 @@ namespace Gs2.Unity.UiKit.Gs2Stamina.Context
 
     public partial class Gs2StaminaOwnStaminaContext
     {
-        public OwnStamina Stamina;
+        [SerializeField]
+        private OwnStamina _stamina;
+        public OwnStamina Stamina
+        {
+            get => _stamina;
+            set => SetOwnStamina(value);
+        }
 
         public void SetOwnStamina(OwnStamina stamina) {
             this.StaminaModel = StaminaModel.New(
@@ -91,7 +96,9 @@ namespace Gs2.Unity.UiKit.Gs2Stamina.Context
                 ),
                 stamina.StaminaName
             );
-            this.Stamina = stamina;
+            this._stamina = stamina;
+
+            this.OnUpdate.Invoke();
         }
     }
 

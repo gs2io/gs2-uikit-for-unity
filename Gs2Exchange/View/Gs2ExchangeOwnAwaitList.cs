@@ -42,21 +42,19 @@ namespace Gs2.Unity.UiKit.Gs2Exchange
     {
         private List<Gs2ExchangeOwnAwaitContext> _children;
 
-        public void Update() {
-            if (_fetcher.Fetched && this._fetcher.Awaits != null) {
-                for (var i = 0; i < this.maximumItems; i++) {
-                    if (i < this._fetcher.Awaits.Count) {
-                        _children[i].SetOwnAwait(
-                            OwnAwait.New(
+        public void OnFetched() {
+            for (var i = 0; i < this.maximumItems; i++) {
+                if (i < this._fetcher.Awaits.Count) {
+                    _children[i].SetOwnAwait(
+                        OwnAwait.New(
                                 this._fetcher.Context.Namespace,
                                 this._fetcher.Awaits[i].Name
                             )
-                        );
-                        _children[i].gameObject.SetActive(true);
-                    }
-                    else {
-                        _children[i].gameObject.SetActive(false);
-                    }
+                    );
+                    _children[i].gameObject.SetActive(true);
+                }
+                else {
+                    _children[i].gameObject.SetActive(false);
                 }
             }
         }
@@ -69,7 +67,6 @@ namespace Gs2.Unity.UiKit.Gs2Exchange
     public partial class Gs2ExchangeOwnAwaitList
     {
         private Gs2ExchangeOwnAwaitListFetcher _fetcher;
-        private Gs2ExchangeNamespaceContext Context => _fetcher.Context;
 
         public void Awake()
         {
@@ -80,7 +77,6 @@ namespace Gs2.Unity.UiKit.Gs2Exchange
             }
 
             _fetcher = GetComponent<Gs2ExchangeOwnAwaitListFetcher>() ?? GetComponentInParent<Gs2ExchangeOwnAwaitListFetcher>();
-
             if (_fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ExchangeOwnAwaitListFetcher.");
                 enabled = false;
@@ -122,6 +118,16 @@ namespace Gs2.Unity.UiKit.Gs2Exchange
 
     public partial class Gs2ExchangeOwnAwaitList
     {
+
+        public void OnEnable()
+        {
+            _fetcher.OnFetched.AddListener(OnFetched);
+        }
+
+        public void OnDisable()
+        {
+            _fetcher.OnFetched.RemoveListener(OnFetched);
+        }
 
     }
 

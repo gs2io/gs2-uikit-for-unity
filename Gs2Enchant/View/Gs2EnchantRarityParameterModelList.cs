@@ -42,21 +42,19 @@ namespace Gs2.Unity.UiKit.Gs2Enchant
     {
         private List<Gs2EnchantRarityParameterModelContext> _children;
 
-        public void Update() {
-            if (_fetcher.Fetched && this._fetcher.RarityParameterModels != null) {
-                for (var i = 0; i < this.maximumItems; i++) {
-                    if (i < this._fetcher.RarityParameterModels.Count) {
-                        _children[i].SetRarityParameterModel(
-                            RarityParameterModel.New(
+        public void OnFetched() {
+            for (var i = 0; i < this.maximumItems; i++) {
+                if (i < this._fetcher.RarityParameterModels.Count) {
+                    _children[i].SetRarityParameterModel(
+                        RarityParameterModel.New(
                                 this._fetcher.Context.Namespace,
                                 this._fetcher.RarityParameterModels[i].Name
                             )
-                        );
-                        _children[i].gameObject.SetActive(true);
-                    }
-                    else {
-                        _children[i].gameObject.SetActive(false);
-                    }
+                    );
+                    _children[i].gameObject.SetActive(true);
+                }
+                else {
+                    _children[i].gameObject.SetActive(false);
                 }
             }
         }
@@ -80,7 +78,6 @@ namespace Gs2.Unity.UiKit.Gs2Enchant
             }
 
             _fetcher = GetComponent<Gs2EnchantRarityParameterModelListFetcher>() ?? GetComponentInParent<Gs2EnchantRarityParameterModelListFetcher>();
-
             if (_fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2EnchantRarityParameterModelListFetcher.");
                 enabled = false;
@@ -122,7 +119,15 @@ namespace Gs2.Unity.UiKit.Gs2Enchant
 
     public partial class Gs2EnchantRarityParameterModelList
     {
+        public void OnEnable()
+        {
+            _fetcher.OnFetched.AddListener(OnFetched);
+        }
 
+        public void OnDisable()
+        {
+            _fetcher.OnFetched.RemoveListener(OnFetched);
+        }
     }
 
     /// <summary>

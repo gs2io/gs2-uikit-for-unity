@@ -27,6 +27,7 @@
 using Gs2.Unity.Gs2Account.ScriptableObject;
 using Gs2.Unity.UiKit.Core;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2Account.Context
 {
@@ -79,11 +80,21 @@ namespace Gs2.Unity.UiKit.Gs2Account.Context
 
     public partial class Gs2AccountOwnTakeOverContext
     {
-        public OwnTakeOver TakeOver;
+        [SerializeField]
+        private OwnTakeOver _takeOver;
+        public OwnTakeOver TakeOver
+        {
+            get => _takeOver;
+            set => SetOwnTakeOver(value);
+        }
 
         public void SetOwnTakeOver(OwnTakeOver takeOver) {
-            this.TakeOver = takeOver;
+            this._takeOver = takeOver;
+
+            this.OnUpdate.Invoke();
         }
+
+        public UnityEvent OnUpdate = new UnityEvent();
     }
 
     /// <summary>

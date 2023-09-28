@@ -27,6 +27,7 @@
 using Gs2.Unity.Gs2Mission.ScriptableObject;
 using Gs2.Unity.UiKit.Core;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2Mission.Context
 {
@@ -79,11 +80,21 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Context
 
     public partial class Gs2MissionOwnCompleteContext
     {
-        public OwnComplete Complete;
+        [SerializeField]
+        private OwnComplete _complete;
+        public OwnComplete Complete
+        {
+            get => _complete;
+            set => SetOwnComplete(value);
+        }
 
         public void SetOwnComplete(OwnComplete complete) {
-            this.Complete = complete;
+            this._complete = complete;
+
+            this.OnUpdate.Invoke();
         }
+
+        public UnityEvent OnUpdate = new UnityEvent();
     }
 
     /// <summary>

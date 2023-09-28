@@ -27,6 +27,7 @@
 using Gs2.Unity.Gs2Account.ScriptableObject;
 using Gs2.Unity.UiKit.Core;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2Account.Context
 {
@@ -74,11 +75,21 @@ namespace Gs2.Unity.UiKit.Gs2Account.Context
 
     public partial class Gs2AccountOwnDataOwnerContext
     {
-        public OwnDataOwner DataOwner;
+        [SerializeField]
+        private OwnDataOwner _dataOwner;
+        public OwnDataOwner DataOwner
+        {
+            get => _dataOwner;
+            set => SetOwnDataOwner(value);
+        }
 
         public void SetOwnDataOwner(OwnDataOwner dataOwner) {
-            this.DataOwner = dataOwner;
+            this._dataOwner = dataOwner;
+
+            this.OnUpdate.Invoke();
         }
+
+        public UnityEvent OnUpdate = new UnityEvent();
     }
 
     /// <summary>

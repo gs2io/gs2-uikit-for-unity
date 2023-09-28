@@ -51,7 +51,7 @@ namespace Gs2.Unity.UiKit.Gs2Chat.Editor
                 EditorGUI.BeginDisabledGroup(true);
                 EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2ChatMessageContext), false);
                 EditorGUI.indentLevel++;
-                context.Message = EditorGUILayout.ObjectField("Message", context.Message, typeof(Message), false) as Message;
+                EditorGUILayout.ObjectField("Message", context.Message, typeof(Message), false);
                 if (context.Message != null) {
                     EditorGUI.indentLevel++;
                     EditorGUILayout.TextField("NamespaceName", context.Message?.NamespaceName?.ToString());

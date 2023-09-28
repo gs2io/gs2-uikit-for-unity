@@ -27,6 +27,7 @@
 using Gs2.Unity.Gs2Money.ScriptableObject;
 using Gs2.Unity.UiKit.Core;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2Money.Context
 {
@@ -74,11 +75,21 @@ namespace Gs2.Unity.UiKit.Gs2Money.Context
 
     public partial class Gs2MoneyOwnWalletContext
     {
-        public OwnWallet Wallet;
+        [SerializeField]
+        private OwnWallet _wallet;
+        public OwnWallet Wallet
+        {
+            get => _wallet;
+            set => SetOwnWallet(value);
+        }
 
         public void SetOwnWallet(OwnWallet wallet) {
-            this.Wallet = wallet;
+            this._wallet = wallet;
+
+            this.OnUpdate.Invoke();
         }
+
+        public UnityEvent OnUpdate = new UnityEvent();
     }
 
     /// <summary>

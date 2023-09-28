@@ -27,6 +27,7 @@
 using Gs2.Unity.Gs2Mission.ScriptableObject;
 using Gs2.Unity.UiKit.Core;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2Mission.Context
 {
@@ -43,10 +44,8 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Context
             }
         }
         public override bool HasError() {
-            if (base.HasError()) {
-                return true;
-            }
-            if (Counter == null) {
+            var hasError = base.HasError();
+            if (Counter == null || hasError) {
                 if (GetComponentInParent<Gs2MissionOwnCounterList>(true) != null) {
                     return false;
                 }
@@ -82,7 +81,13 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Context
 
     public partial class Gs2MissionOwnCounterContext
     {
-        public OwnCounter Counter;
+        [SerializeField]
+        private OwnCounter _counter;
+        public OwnCounter Counter
+        {
+            get => _counter;
+            set => SetOwnCounter(value);
+        }
 
         public void SetOwnCounter(OwnCounter counter) {
             this.CounterModel = CounterModel.New(
@@ -91,7 +96,9 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Context
                 ),
                 counter.CounterName
             );
-            this.Counter = counter;
+            this._counter = counter;
+
+            this.OnUpdate.Invoke();
         }
     }
 

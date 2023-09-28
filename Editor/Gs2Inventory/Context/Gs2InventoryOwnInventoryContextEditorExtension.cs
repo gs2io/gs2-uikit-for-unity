@@ -48,7 +48,7 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Editor
                 }
                 else {
                     EditorGUILayout.HelpBox("OwnInventory not assigned.", MessageType.Error);
-                    EditorGUILayout.PropertyField(serializedObject.FindProperty("Inventory"), true);
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("_inventory"), true);
                 }
             }
             else {

@@ -27,6 +27,7 @@
 using Gs2.Unity.Gs2Friend.ScriptableObject;
 using Gs2.Unity.UiKit.Core;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2Friend.Context
 {
@@ -79,11 +80,21 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Context
 
     public partial class Gs2FriendOwnBlackListContext
     {
-        public OwnBlackList BlackList;
+        [SerializeField]
+        private OwnBlackList _blackList;
+        public OwnBlackList BlackList
+        {
+            get => _blackList;
+            set => SetOwnBlackList(value);
+        }
 
         public void SetOwnBlackList(OwnBlackList blackList) {
-            this.BlackList = blackList;
+            this._blackList = blackList;
+
+            this.OnUpdate.Invoke();
         }
+
+        public UnityEvent OnUpdate = new UnityEvent();
     }
 
     /// <summary>

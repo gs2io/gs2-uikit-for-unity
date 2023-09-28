@@ -42,22 +42,20 @@ namespace Gs2.Unity.UiKit.Gs2Limit
     {
         private List<Gs2LimitOwnCounterContext> _children;
 
-        public void Update() {
-            if (_fetcher.Fetched && this._fetcher.Counters != null) {
-                for (var i = 0; i < this.maximumItems; i++) {
-                    if (i < this._fetcher.Counters.Count) {
-                        _children[i].SetOwnCounter(
-                            OwnCounter.New(
+        public void OnFetched() {
+            for (var i = 0; i < this.maximumItems; i++) {
+                if (i < this._fetcher.Counters.Count) {
+                    _children[i].SetOwnCounter(
+                        OwnCounter.New(
                                 this._fetcher.Context.Namespace,
                                 this._fetcher.Counters[i].LimitName,
                                 this._fetcher.Counters[i].Name
                             )
-                        );
-                        _children[i].gameObject.SetActive(true);
-                    }
-                    else {
-                        _children[i].gameObject.SetActive(false);
-                    }
+                    );
+                    _children[i].gameObject.SetActive(true);
+                }
+                else {
+                    _children[i].gameObject.SetActive(false);
                 }
             }
         }
@@ -70,7 +68,6 @@ namespace Gs2.Unity.UiKit.Gs2Limit
     public partial class Gs2LimitOwnCounterList
     {
         private Gs2LimitOwnCounterListFetcher _fetcher;
-        private Gs2LimitNamespaceContext Context => _fetcher.Context;
 
         public void Awake()
         {
@@ -81,7 +78,6 @@ namespace Gs2.Unity.UiKit.Gs2Limit
             }
 
             _fetcher = GetComponent<Gs2LimitOwnCounterListFetcher>() ?? GetComponentInParent<Gs2LimitOwnCounterListFetcher>();
-
             if (_fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2LimitOwnCounterListFetcher.");
                 enabled = false;
@@ -124,6 +120,16 @@ namespace Gs2.Unity.UiKit.Gs2Limit
 
     public partial class Gs2LimitOwnCounterList
     {
+
+        public void OnEnable()
+        {
+            _fetcher.OnFetched.AddListener(OnFetched);
+        }
+
+        public void OnDisable()
+        {
+            _fetcher.OnFetched.RemoveListener(OnFetched);
+        }
 
     }
 

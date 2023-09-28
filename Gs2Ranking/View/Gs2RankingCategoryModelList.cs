@@ -42,21 +42,19 @@ namespace Gs2.Unity.UiKit.Gs2Ranking
     {
         private List<Gs2RankingCategoryModelContext> _children;
 
-        public void Update() {
-            if (_fetcher.Fetched && this._fetcher.CategoryModels != null) {
-                for (var i = 0; i < this.maximumItems; i++) {
-                    if (i < this._fetcher.CategoryModels.Count) {
-                        _children[i].SetCategoryModel(
-                            CategoryModel.New(
+        public void OnFetched() {
+            for (var i = 0; i < this.maximumItems; i++) {
+                if (i < this._fetcher.CategoryModels.Count) {
+                    _children[i].SetCategoryModel(
+                        CategoryModel.New(
                                 this._fetcher.Context.Namespace,
                                 this._fetcher.CategoryModels[i].Name
                             )
-                        );
-                        _children[i].gameObject.SetActive(true);
-                    }
-                    else {
-                        _children[i].gameObject.SetActive(false);
-                    }
+                    );
+                    _children[i].gameObject.SetActive(true);
+                }
+                else {
+                    _children[i].gameObject.SetActive(false);
                 }
             }
         }
@@ -80,7 +78,6 @@ namespace Gs2.Unity.UiKit.Gs2Ranking
             }
 
             _fetcher = GetComponent<Gs2RankingCategoryModelListFetcher>() ?? GetComponentInParent<Gs2RankingCategoryModelListFetcher>();
-
             if (_fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2RankingCategoryModelListFetcher.");
                 enabled = false;
@@ -122,7 +119,15 @@ namespace Gs2.Unity.UiKit.Gs2Ranking
 
     public partial class Gs2RankingCategoryModelList
     {
+        public void OnEnable()
+        {
+            _fetcher.OnFetched.AddListener(OnFetched);
+        }
 
+        public void OnDisable()
+        {
+            _fetcher.OnFetched.RemoveListener(OnFetched);
+        }
     }
 
     /// <summary>

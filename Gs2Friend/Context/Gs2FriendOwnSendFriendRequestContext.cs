@@ -27,6 +27,7 @@
 using Gs2.Unity.Gs2Friend.ScriptableObject;
 using Gs2.Unity.UiKit.Core;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2Friend.Context
 {
@@ -79,11 +80,21 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Context
 
     public partial class Gs2FriendOwnSendFriendRequestContext
     {
-        public OwnSendFriendRequest SendFriendRequest;
+        [SerializeField]
+        private OwnSendFriendRequest _sendFriendRequest;
+        public OwnSendFriendRequest SendFriendRequest
+        {
+            get => _sendFriendRequest;
+            set => SetOwnSendFriendRequest(value);
+        }
 
         public void SetOwnSendFriendRequest(OwnSendFriendRequest sendFriendRequest) {
-            this.SendFriendRequest = sendFriendRequest;
+            this._sendFriendRequest = sendFriendRequest;
+
+            this.OnUpdate.Invoke();
         }
+
+        public UnityEvent OnUpdate = new UnityEvent();
     }
 
     /// <summary>

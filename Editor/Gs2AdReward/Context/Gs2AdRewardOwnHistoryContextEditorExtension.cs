@@ -44,7 +44,7 @@ namespace Gs2.Unity.UiKit.Gs2AdReward.Editor
 
             if (original.History == null) {
                 EditorGUILayout.HelpBox("OwnHistory not assigned.", MessageType.Error);
-                EditorGUILayout.PropertyField(serializedObject.FindProperty("History"), true);
+                EditorGUILayout.PropertyField(serializedObject.FindProperty("_history"), true);
             }
             else {
                 original.History = EditorGUILayout.ObjectField("OwnHistory", original.History, typeof(OwnHistory), false) as OwnHistory;

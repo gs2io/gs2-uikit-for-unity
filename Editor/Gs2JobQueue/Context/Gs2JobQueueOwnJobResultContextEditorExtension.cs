@@ -44,7 +44,7 @@ namespace Gs2.Unity.UiKit.Gs2JobQueue.Editor
 
             if (original.JobResult == null) {
                 EditorGUILayout.HelpBox("OwnJobResult not assigned.", MessageType.Error);
-                EditorGUILayout.PropertyField(serializedObject.FindProperty("JobResult"), true);
+                EditorGUILayout.PropertyField(serializedObject.FindProperty("_jobResult"), true);
             }
             else {
                 original.JobResult = EditorGUILayout.ObjectField("OwnJobResult", original.JobResult, typeof(OwnJobResult), false) as OwnJobResult;

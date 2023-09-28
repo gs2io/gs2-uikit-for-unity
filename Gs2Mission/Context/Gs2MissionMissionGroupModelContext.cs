@@ -27,6 +27,7 @@
 using Gs2.Unity.Gs2Mission.ScriptableObject;
 using Gs2.Unity.UiKit.Core;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2Mission.Context
 {
@@ -80,11 +81,21 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Context
 
     public partial class Gs2MissionMissionGroupModelContext
     {
-        public MissionGroupModel MissionGroupModel;
+        [SerializeField]
+        private MissionGroupModel _missionGroupModel;
+        public MissionGroupModel MissionGroupModel
+        {
+            get => _missionGroupModel;
+            set => SetMissionGroupModel(value);
+        }
 
         public void SetMissionGroupModel(MissionGroupModel MissionGroupModel) {
-            this.MissionGroupModel = MissionGroupModel;
+            this._missionGroupModel = MissionGroupModel;
+
+            this.OnUpdate.Invoke();
         }
+
+        public UnityEvent OnUpdate = new UnityEvent();
     }
 
     /// <summary>

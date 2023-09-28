@@ -58,7 +58,7 @@ namespace Gs2.Unity.UiKit.Gs2Limit.Editor
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2LimitLimitModelContext), false);
                     EditorGUI.indentLevel++;
-                    context.LimitModel = EditorGUILayout.ObjectField("LimitModel", context.LimitModel, typeof(LimitModel), false) as LimitModel;
+                    EditorGUILayout.ObjectField("LimitModel", context.LimitModel, typeof(LimitModel), false);
                     if (context.LimitModel != null) {
                         EditorGUI.indentLevel++;
                         EditorGUILayout.TextField("NamespaceName", context.LimitModel?.NamespaceName?.ToString());

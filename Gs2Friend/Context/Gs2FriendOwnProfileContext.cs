@@ -27,6 +27,7 @@
 using Gs2.Unity.Gs2Friend.ScriptableObject;
 using Gs2.Unity.UiKit.Core;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2Friend.Context
 {
@@ -74,11 +75,21 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Context
 
     public partial class Gs2FriendOwnProfileContext
     {
-        public OwnProfile Profile;
+        [SerializeField]
+        private OwnProfile _profile;
+        public OwnProfile Profile
+        {
+            get => _profile;
+            set => SetOwnProfile(value);
+        }
 
         public void SetOwnProfile(OwnProfile profile) {
-            this.Profile = profile;
+            this._profile = profile;
+
+            this.OnUpdate.Invoke();
         }
+
+        public UnityEvent OnUpdate = new UnityEvent();
     }
 
     /// <summary>

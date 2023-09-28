@@ -27,6 +27,7 @@
 using Gs2.Unity.Gs2MegaField.ScriptableObject;
 using Gs2.Unity.UiKit.Core;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2MegaField.Context
 {
@@ -74,11 +75,21 @@ namespace Gs2.Unity.UiKit.Gs2MegaField.Context
 
     public partial class Gs2MegaFieldOwnSpatialContext
     {
-        public OwnSpatial Spatial;
+        [SerializeField]
+        private OwnSpatial _spatial;
+        public OwnSpatial Spatial
+        {
+            get => _spatial;
+            set => SetOwnSpatial(value);
+        }
 
         public void SetOwnSpatial(OwnSpatial spatial) {
-            this.Spatial = spatial;
+            this._spatial = spatial;
+
+            this.OnUpdate.Invoke();
         }
+
+        public UnityEvent OnUpdate = new UnityEvent();
     }
 
     /// <summary>

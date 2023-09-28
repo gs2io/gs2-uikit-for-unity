@@ -27,6 +27,7 @@
 using Gs2.Unity.Gs2MegaField.ScriptableObject;
 using Gs2.Unity.UiKit.Core;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2MegaField.Context
 {
@@ -80,11 +81,21 @@ namespace Gs2.Unity.UiKit.Gs2MegaField.Context
 
     public partial class Gs2MegaFieldLayerModelContext
     {
-        public LayerModel LayerModel;
+        [SerializeField]
+        private LayerModel _layerModel;
+        public LayerModel LayerModel
+        {
+            get => _layerModel;
+            set => SetLayerModel(value);
+        }
 
         public void SetLayerModel(LayerModel LayerModel) {
-            this.LayerModel = LayerModel;
+            this._layerModel = LayerModel;
+
+            this.OnUpdate.Invoke();
         }
+
+        public UnityEvent OnUpdate = new UnityEvent();
     }
 
     /// <summary>

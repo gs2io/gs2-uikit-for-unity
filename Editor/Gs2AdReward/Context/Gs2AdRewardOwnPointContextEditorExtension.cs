@@ -44,7 +44,7 @@ namespace Gs2.Unity.UiKit.Gs2AdReward.Editor
 
             if (original.Point == null) {
                 EditorGUILayout.HelpBox("OwnPoint not assigned.", MessageType.Error);
-                EditorGUILayout.PropertyField(serializedObject.FindProperty("Point"), true);
+                EditorGUILayout.PropertyField(serializedObject.FindProperty("_point"), true);
             }
             else {
                 original.Point = EditorGUILayout.ObjectField("OwnPoint", original.Point, typeof(OwnPoint), false) as OwnPoint;

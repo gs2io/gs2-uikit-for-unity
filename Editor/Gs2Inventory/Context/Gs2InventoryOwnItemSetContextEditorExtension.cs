@@ -48,7 +48,7 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Editor
                 }
                 else {
                     EditorGUILayout.HelpBox("OwnItemSet not assigned.", MessageType.Error);
-                    EditorGUILayout.PropertyField(serializedObject.FindProperty("ItemSet"), true);
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("_itemSet"), true);
                 }
             }
             else {

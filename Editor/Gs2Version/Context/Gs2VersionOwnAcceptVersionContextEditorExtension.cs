@@ -48,7 +48,7 @@ namespace Gs2.Unity.UiKit.Gs2Version.Editor
                 }
                 else {
                     EditorGUILayout.HelpBox("OwnAcceptVersion not assigned.", MessageType.Error);
-                    EditorGUILayout.PropertyField(serializedObject.FindProperty("AcceptVersion"), true);
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("_acceptVersion"), true);
                 }
             }
             else {

@@ -42,21 +42,19 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking
     {
         private List<Gs2MatchmakingRatingModelContext> _children;
 
-        public void Update() {
-            if (_fetcher.Fetched && this._fetcher.RatingModels != null) {
-                for (var i = 0; i < this.maximumItems; i++) {
-                    if (i < this._fetcher.RatingModels.Count) {
-                        _children[i].SetRatingModel(
-                            RatingModel.New(
+        public void OnFetched() {
+            for (var i = 0; i < this.maximumItems; i++) {
+                if (i < this._fetcher.RatingModels.Count) {
+                    _children[i].SetRatingModel(
+                        RatingModel.New(
                                 this._fetcher.Context.Namespace,
                                 this._fetcher.RatingModels[i].Name
                             )
-                        );
-                        _children[i].gameObject.SetActive(true);
-                    }
-                    else {
-                        _children[i].gameObject.SetActive(false);
-                    }
+                    );
+                    _children[i].gameObject.SetActive(true);
+                }
+                else {
+                    _children[i].gameObject.SetActive(false);
                 }
             }
         }
@@ -80,7 +78,6 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking
             }
 
             _fetcher = GetComponent<Gs2MatchmakingRatingModelListFetcher>() ?? GetComponentInParent<Gs2MatchmakingRatingModelListFetcher>();
-
             if (_fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MatchmakingRatingModelListFetcher.");
                 enabled = false;
@@ -122,7 +119,15 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking
 
     public partial class Gs2MatchmakingRatingModelList
     {
+        public void OnEnable()
+        {
+            _fetcher.OnFetched.AddListener(OnFetched);
+        }
 
+        public void OnDisable()
+        {
+            _fetcher.OnFetched.RemoveListener(OnFetched);
+        }
     }
 
     /// <summary>

@@ -48,7 +48,7 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Editor
                 }
                 else {
                     EditorGUILayout.HelpBox("SimpleInventoryModel not assigned.", MessageType.Error);
-                    EditorGUILayout.PropertyField(serializedObject.FindProperty("SimpleInventoryModel"), true);
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("_simpleInventoryModel"), true);
                 }
             }
             else {

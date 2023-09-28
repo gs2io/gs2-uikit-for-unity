@@ -27,6 +27,7 @@
 using Gs2.Unity.Gs2SerialKey.ScriptableObject;
 using Gs2.Unity.UiKit.Core;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2SerialKey.Context
 {
@@ -75,11 +76,21 @@ namespace Gs2.Unity.UiKit.Gs2SerialKey.Context
 
     public partial class Gs2SerialKeyIssueJobContext
     {
-        public IssueJob IssueJob;
+        [SerializeField]
+        private IssueJob _issueJob;
+        public IssueJob IssueJob
+        {
+            get => _issueJob;
+            set => SetIssueJob(value);
+        }
 
         public void SetIssueJob(IssueJob IssueJob) {
-            this.IssueJob = IssueJob;
+            this._issueJob = IssueJob;
+
+            this.OnUpdate.Invoke();
         }
+
+        public UnityEvent OnUpdate = new UnityEvent();
     }
 
     /// <summary>

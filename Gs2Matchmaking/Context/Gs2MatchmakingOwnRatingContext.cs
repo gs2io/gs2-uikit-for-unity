@@ -27,6 +27,7 @@
 using Gs2.Unity.Gs2Matchmaking.ScriptableObject;
 using Gs2.Unity.UiKit.Core;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2Matchmaking.Context
 {
@@ -43,10 +44,8 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking.Context
             }
         }
         public override bool HasError() {
-            if (base.HasError()) {
-                return true;
-            }
-            if (Rating == null) {
+            var hasError = base.HasError();
+            if (Rating == null || hasError) {
                 if (GetComponentInParent<Gs2MatchmakingOwnRatingList>(true) != null) {
                     return false;
                 }
@@ -82,7 +81,13 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking.Context
 
     public partial class Gs2MatchmakingOwnRatingContext
     {
-        public OwnRating Rating;
+        [SerializeField]
+        private OwnRating _rating;
+        public OwnRating Rating
+        {
+            get => _rating;
+            set => SetOwnRating(value);
+        }
 
         public void SetOwnRating(OwnRating rating) {
             this.RatingModel = RatingModel.New(
@@ -91,7 +96,9 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking.Context
                 ),
                 rating.RatingName
             );
-            this.Rating = rating;
+            this._rating = rating;
+
+            this.OnUpdate.Invoke();
         }
     }
 

@@ -27,6 +27,7 @@
 using Gs2.Unity.Gs2Schedule.ScriptableObject;
 using Gs2.Unity.UiKit.Core;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2Schedule.Context
 {
@@ -79,11 +80,21 @@ namespace Gs2.Unity.UiKit.Gs2Schedule.Context
 
     public partial class Gs2ScheduleOwnEventContext
     {
-        public OwnEvent Event_;
+        [SerializeField]
+        private OwnEvent _event;
+        public OwnEvent Event_
+        {
+            get => _event;
+            set => SetOwnEvent(value);
+        }
 
         public void SetOwnEvent(OwnEvent event_) {
-            this.Event_ = event_;
+            this._event = event_;
+
+            this.OnUpdate.Invoke();
         }
+
+        public UnityEvent OnUpdate = new UnityEvent();
     }
 
     /// <summary>

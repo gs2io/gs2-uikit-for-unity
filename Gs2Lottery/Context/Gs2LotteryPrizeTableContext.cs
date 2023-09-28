@@ -27,6 +27,7 @@
 using Gs2.Unity.Gs2Lottery.ScriptableObject;
 using Gs2.Unity.UiKit.Core;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2Lottery.Context
 {
@@ -75,11 +76,21 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.Context
 
     public partial class Gs2LotteryPrizeTableContext
     {
-        public PrizeTable PrizeTable;
+        [SerializeField]
+        private PrizeTable _prizeTable;
+        public PrizeTable PrizeTable
+        {
+            get => _prizeTable;
+            set => SetPrizeTable(value);
+        }
 
         public void SetPrizeTable(PrizeTable PrizeTable) {
-            this.PrizeTable = PrizeTable;
+            this._prizeTable = PrizeTable;
+
+            this.OnUpdate.Invoke();
         }
+
+        public UnityEvent OnUpdate = new UnityEvent();
     }
 
     /// <summary>

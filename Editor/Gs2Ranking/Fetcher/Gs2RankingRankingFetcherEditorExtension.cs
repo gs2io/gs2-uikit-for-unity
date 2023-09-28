@@ -58,7 +58,7 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Editor
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2RankingRankingContext), false);
                     EditorGUI.indentLevel++;
-                    context.Ranking = EditorGUILayout.ObjectField("Ranking", context.Ranking, typeof(Ranking), false) as Ranking;
+                    EditorGUILayout.ObjectField("Ranking", context.Ranking, typeof(Ranking), false);
                     if (context.Ranking != null) {
                         EditorGUI.indentLevel++;
                         EditorGUI.indentLevel--;

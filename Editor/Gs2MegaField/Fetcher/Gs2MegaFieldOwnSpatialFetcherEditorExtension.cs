@@ -51,7 +51,7 @@ namespace Gs2.Unity.UiKit.Gs2MegaField.Editor
                 EditorGUI.BeginDisabledGroup(true);
                 EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2MegaFieldOwnSpatialContext), false);
                 EditorGUI.indentLevel++;
-                context.Spatial = EditorGUILayout.ObjectField("Spatial", context.Spatial, typeof(OwnSpatial), false) as OwnSpatial;
+                EditorGUILayout.ObjectField("Spatial", context.Spatial, typeof(OwnSpatial), false);
                 if (context.Spatial != null) {
                     EditorGUI.indentLevel++;
                     EditorGUILayout.TextField("NamespaceName", context.Spatial?.NamespaceName?.ToString());

@@ -27,6 +27,7 @@
 using Gs2.Unity.Gs2Datastore.ScriptableObject;
 using Gs2.Unity.UiKit.Core;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2Datastore.Context
 {
@@ -79,11 +80,21 @@ namespace Gs2.Unity.UiKit.Gs2Datastore.Context
 
     public partial class Gs2DatastoreOwnDataObjectHistoryContext
     {
-        public OwnDataObjectHistory DataObjectHistory;
+        [SerializeField]
+        private OwnDataObjectHistory _dataObjectHistory;
+        public OwnDataObjectHistory DataObjectHistory
+        {
+            get => _dataObjectHistory;
+            set => SetOwnDataObjectHistory(value);
+        }
 
         public void SetOwnDataObjectHistory(OwnDataObjectHistory dataObjectHistory) {
-            this.DataObjectHistory = dataObjectHistory;
+            this._dataObjectHistory = dataObjectHistory;
+
+            this.OnUpdate.Invoke();
         }
+
+        public UnityEvent OnUpdate = new UnityEvent();
     }
 
     /// <summary>

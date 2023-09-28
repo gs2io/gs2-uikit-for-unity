@@ -44,7 +44,7 @@ namespace Gs2.Unity.UiKit.Gs2SkillTree.Editor
 
             if (original.Status == null) {
                 EditorGUILayout.HelpBox("OwnStatus not assigned.", MessageType.Error);
-                EditorGUILayout.PropertyField(serializedObject.FindProperty("Status"), true);
+                EditorGUILayout.PropertyField(serializedObject.FindProperty("_status"), true);
             }
             else {
                 original.Status = EditorGUILayout.ObjectField("OwnStatus", original.Status, typeof(OwnStatus), false) as OwnStatus;

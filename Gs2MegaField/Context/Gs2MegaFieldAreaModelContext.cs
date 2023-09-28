@@ -27,6 +27,7 @@
 using Gs2.Unity.Gs2MegaField.ScriptableObject;
 using Gs2.Unity.UiKit.Core;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2MegaField.Context
 {
@@ -80,11 +81,21 @@ namespace Gs2.Unity.UiKit.Gs2MegaField.Context
 
     public partial class Gs2MegaFieldAreaModelContext
     {
-        public AreaModel AreaModel;
+        [SerializeField]
+        private AreaModel _areaModel;
+        public AreaModel AreaModel
+        {
+            get => _areaModel;
+            set => SetAreaModel(value);
+        }
 
         public void SetAreaModel(AreaModel AreaModel) {
-            this.AreaModel = AreaModel;
+            this._areaModel = AreaModel;
+
+            this.OnUpdate.Invoke();
         }
+
+        public UnityEvent OnUpdate = new UnityEvent();
     }
 
     /// <summary>

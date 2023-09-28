@@ -44,7 +44,7 @@ namespace Gs2.Unity.UiKit.Gs2Money.Editor
 
             if (original.Receipt == null) {
                 EditorGUILayout.HelpBox("OwnReceipt not assigned.", MessageType.Error);
-                EditorGUILayout.PropertyField(serializedObject.FindProperty("Receipt"), true);
+                EditorGUILayout.PropertyField(serializedObject.FindProperty("_receipt"), true);
             }
             else {
                 original.Receipt = EditorGUILayout.ObjectField("OwnReceipt", original.Receipt, typeof(OwnReceipt), false) as OwnReceipt;

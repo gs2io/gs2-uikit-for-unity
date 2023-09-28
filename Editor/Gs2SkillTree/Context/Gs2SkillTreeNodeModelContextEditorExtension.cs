@@ -48,7 +48,7 @@ namespace Gs2.Unity.UiKit.Gs2SkillTree.Editor
                 }
                 else {
                     EditorGUILayout.HelpBox("NodeModel not assigned.", MessageType.Error);
-                    EditorGUILayout.PropertyField(serializedObject.FindProperty("NodeModel"), true);
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("_nodeModel"), true);
                 }
             }
             else {

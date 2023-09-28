@@ -58,7 +58,7 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Editor
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2RankingOwnScoreContext), false);
                     EditorGUI.indentLevel++;
-                    context.Score = EditorGUILayout.ObjectField("Score", context.Score, typeof(OwnScore), false) as OwnScore;
+                    EditorGUILayout.ObjectField("Score", context.Score, typeof(OwnScore), false);
                     if (context.Score != null) {
                         EditorGUI.indentLevel++;
                         EditorGUILayout.TextField("NamespaceName", context.Score?.NamespaceName?.ToString());

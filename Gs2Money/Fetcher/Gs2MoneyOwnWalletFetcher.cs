@@ -30,6 +30,7 @@ using System.Collections.Generic;
 using System.Text;
 using Gs2.Core.Exception;
 using Gs2.Unity.Core.Exception;
+using Gs2.Unity.Gs2Money.Domain.Model;
 using Gs2.Unity.Gs2Money.Model;
 using Gs2.Unity.Gs2Money.ScriptableObject;
 using Gs2.Unity.Util;
@@ -48,62 +49,77 @@ namespace Gs2.Unity.UiKit.Gs2Money.Fetcher
 	[AddComponentMenu("GS2 UIKit/Money/Wallet/Fetcher/Gs2MoneyOwnWalletFetcher")]
     public partial class Gs2MoneyOwnWalletFetcher : MonoBehaviour
     {
+        private EzWalletGameSessionDomain _domain;
+        private ulong? _callbackId;
+
         private IEnumerator Fetch()
         {
             var retryWaitSecond = 1;
-            Gs2Exception e;
-            while (true)
-            {
-                if (_gameSessionHolder != null && _gameSessionHolder.Initialized &&
-                    _clientHolder != null && _clientHolder.Initialized &&
-                    Context != null && this.Context.Wallet != null)
+            var clientHolder = Gs2ClientHolder.Instance;
+            var gameSessionHolder = Gs2GameSessionHolder.Instance;
+
+            yield return new WaitUntil(() => clientHolder.Initialized);
+            yield return new WaitUntil(() => gameSessionHolder.Initialized);
+            yield return new WaitUntil(() => Context != null && this.Context.Wallet != null);
+
+            this._domain = clientHolder.Gs2.Money.Namespace(
+                this.Context.Wallet.NamespaceName
+            ).Me(
+                gameSessionHolder.GameSession
+            ).Wallet(
+                this.Context.Wallet.Slot
+            );;
+            this._callbackId = this._domain.Subscribe(
+                item =>
                 {
-                    
-                    var domain = this._clientHolder.Gs2.Money.Namespace(
-                        this.Context.Wallet.NamespaceName
-                    ).Me(
-                        this._gameSessionHolder.GameSession
-                    ).Wallet(
-                        this.Context.Wallet.Slot
-                    );
-                    var future = domain.Model();
-                    yield return future;
-                    if (future.Error != null)
-                    {
-                        if (future.Error is BadRequestException || future.Error is NotFoundException)
-                        {
-                            onError.Invoke(e = future.Error, null);
-                            Debug.LogError($"{gameObject.GetFullPath()}: {future.Error.Message}");
-                            break;
-                        }
-                        else {
-                            onError.Invoke(new CanIgnoreException(future.Error), null);
-                        }
-                        yield return new WaitForSeconds(retryWaitSecond);
-                        retryWaitSecond *= 2;
-                    }
-                    else
-                    {
-                        retryWaitSecond = 1;
-                        Wallet = future.Result;
-                        Fetched = true;
-                    }
+                    Wallet = item;
+                    Fetched = true;
+                }
+            );
+
+            while (true) {
+                var future = this._domain.Model();
+                yield return future;
+                if (future.Error != null) {
+                    yield return new WaitForSeconds(retryWaitSecond);
+                    retryWaitSecond *= 2;
                 }
                 else {
-                    yield return new WaitForSeconds(0.1f);
+                    Wallet = future.Result;
+                    Fetched = true;
+                    break;
                 }
             }
-            // ReSharper disable once IteratorNeverReturns
+
+            this.OnFetched.Invoke();
+        }
+
+        public void OnUpdateContext() {
+            OnDisable();
+            Awake();
+            OnEnable();
         }
 
         public void OnEnable()
         {
             StartCoroutine(nameof(Fetch));
+            Context.OnUpdate.AddListener(OnUpdateContext);
         }
 
         public void OnDisable()
         {
-            StopCoroutine(nameof(Fetch));
+            Context.OnUpdate.RemoveListener(OnUpdateContext);
+
+            if (this._domain == null) {
+                return;
+            }
+            if (!this._callbackId.HasValue) {
+                return;
+            }
+            this._domain.Unsubscribe(
+                this._callbackId.Value
+            );
+            this._callbackId = null;
         }
     }
 
@@ -113,16 +129,13 @@ namespace Gs2.Unity.UiKit.Gs2Money.Fetcher
 
     public partial class Gs2MoneyOwnWalletFetcher
     {
-        protected Gs2ClientHolder _clientHolder;
-        protected Gs2GameSessionHolder _gameSessionHolder;
         public Gs2MoneyOwnWalletContext Context { get; private set; }
+
+        public UnityEvent OnFetched = new UnityEvent();
 
         public void Awake()
         {
-            _clientHolder = Gs2ClientHolder.Instance;
-            _gameSessionHolder = Gs2GameSessionHolder.Instance;
             Context = GetComponent<Gs2MoneyOwnWalletContext>() ?? GetComponentInParent<Gs2MoneyOwnWalletContext>();
-
             if (Context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MoneyOwnWalletContext.");
                 enabled = false;

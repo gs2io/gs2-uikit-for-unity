@@ -48,7 +48,7 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Editor
                 }
                 else {
                     EditorGUILayout.HelpBox("OwnComplete not assigned.", MessageType.Error);
-                    EditorGUILayout.PropertyField(serializedObject.FindProperty("Complete"), true);
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("_complete"), true);
                 }
             }
             else {

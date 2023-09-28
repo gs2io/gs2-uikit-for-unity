@@ -27,6 +27,7 @@
 using Gs2.Unity.Gs2Matchmaking.ScriptableObject;
 using Gs2.Unity.UiKit.Core;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2Matchmaking.Context
 {
@@ -75,11 +76,21 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking.Context
 
     public partial class Gs2MatchmakingGatheringContext
     {
-        public Gathering Gathering;
+        [SerializeField]
+        private Gathering _gathering;
+        public Gathering Gathering
+        {
+            get => _gathering;
+            set => SetGathering(value);
+        }
 
         public void SetGathering(Gathering Gathering) {
-            this.Gathering = Gathering;
+            this._gathering = Gathering;
+
+            this.OnUpdate.Invoke();
         }
+
+        public UnityEvent OnUpdate = new UnityEvent();
     }
 
     /// <summary>

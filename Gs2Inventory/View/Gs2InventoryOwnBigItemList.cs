@@ -42,12 +42,11 @@ namespace Gs2.Unity.UiKit.Gs2Inventory
     {
         private List<Gs2InventoryOwnBigItemContext> _children;
 
-        public void Update() {
-            if (_fetcher.Fetched && this._fetcher.BigItems != null) {
-                for (var i = 0; i < this.maximumItems; i++) {
-                    if (i < this._fetcher.BigItems.Count) {
-                        _children[i].SetOwnBigItem(
-                            OwnBigItem.New(
+        public void OnFetched() {
+            for (var i = 0; i < this.maximumItems; i++) {
+                if (i < this._fetcher.BigItems.Count) {
+                    _children[i].SetOwnBigItem(
+                        OwnBigItem.New(
                                 OwnBigInventory.New(
                                     Namespace.New(
                                         this._fetcher.Context.BigInventoryModel.NamespaceName
@@ -56,12 +55,11 @@ namespace Gs2.Unity.UiKit.Gs2Inventory
                                 ),
                                 this._fetcher.BigItems[i].ItemName
                             )
-                        );
-                        _children[i].gameObject.SetActive(true);
-                    }
-                    else {
-                        _children[i].gameObject.SetActive(false);
-                    }
+                    );
+                    _children[i].gameObject.SetActive(true);
+                }
+                else {
+                    _children[i].gameObject.SetActive(false);
                 }
             }
         }
@@ -74,7 +72,6 @@ namespace Gs2.Unity.UiKit.Gs2Inventory
     public partial class Gs2InventoryOwnBigItemList
     {
         private Gs2InventoryOwnBigItemListFetcher _fetcher;
-        private Gs2InventoryBigInventoryModelContext Context => _fetcher.Context;
 
         public void Awake()
         {
@@ -85,7 +82,6 @@ namespace Gs2.Unity.UiKit.Gs2Inventory
             }
 
             _fetcher = GetComponent<Gs2InventoryOwnBigItemListFetcher>() ?? GetComponentInParent<Gs2InventoryOwnBigItemListFetcher>();
-
             if (_fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2InventoryOwnBigItemListFetcher.");
                 enabled = false;
@@ -131,6 +127,16 @@ namespace Gs2.Unity.UiKit.Gs2Inventory
 
     public partial class Gs2InventoryOwnBigItemList
     {
+
+        public void OnEnable()
+        {
+            _fetcher.OnFetched.AddListener(OnFetched);
+        }
+
+        public void OnDisable()
+        {
+            _fetcher.OnFetched.RemoveListener(OnFetched);
+        }
 
     }
 

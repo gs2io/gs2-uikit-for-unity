@@ -27,6 +27,7 @@
 using Gs2.Unity.Gs2Friend.ScriptableObject;
 using Gs2.Unity.UiKit.Core;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2Friend.Context
 {
@@ -74,11 +75,21 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Context
 
     public partial class Gs2FriendOwnPublicProfileContext
     {
-        public OwnPublicProfile PublicProfile;
+        [SerializeField]
+        private OwnPublicProfile _publicProfile;
+        public OwnPublicProfile PublicProfile
+        {
+            get => _publicProfile;
+            set => SetOwnPublicProfile(value);
+        }
 
         public void SetOwnPublicProfile(OwnPublicProfile publicProfile) {
-            this.PublicProfile = publicProfile;
+            this._publicProfile = publicProfile;
+
+            this.OnUpdate.Invoke();
         }
+
+        public UnityEvent OnUpdate = new UnityEvent();
     }
 
     /// <summary>

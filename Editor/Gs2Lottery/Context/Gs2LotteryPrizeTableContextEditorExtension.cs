@@ -44,7 +44,7 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.Editor
 
             if (original.PrizeTable == null) {
                 EditorGUILayout.HelpBox("PrizeTable not assigned.", MessageType.Error);
-                EditorGUILayout.PropertyField(serializedObject.FindProperty("PrizeTable"), true);
+                EditorGUILayout.PropertyField(serializedObject.FindProperty("_prizeTable"), true);
             }
             else {
                 original.PrizeTable = EditorGUILayout.ObjectField("PrizeTable", original.PrizeTable, typeof(PrizeTable), false) as PrizeTable;

@@ -27,6 +27,7 @@
 using Gs2.Unity.Gs2Exchange.ScriptableObject;
 using Gs2.Unity.UiKit.Core;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2Exchange.Context
 {
@@ -79,11 +80,21 @@ namespace Gs2.Unity.UiKit.Gs2Exchange.Context
 
     public partial class Gs2ExchangeOwnAwaitContext
     {
-        public OwnAwait Await_;
+        [SerializeField]
+        private OwnAwait _await;
+        public OwnAwait Await_
+        {
+            get => _await;
+            set => SetOwnAwait(value);
+        }
 
         public void SetOwnAwait(OwnAwait await_) {
-            this.Await_ = await_;
+            this._await = await_;
+
+            this.OnUpdate.Invoke();
         }
+
+        public UnityEvent OnUpdate = new UnityEvent();
     }
 
     /// <summary>

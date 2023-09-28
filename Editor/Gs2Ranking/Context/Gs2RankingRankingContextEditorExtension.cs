@@ -48,7 +48,7 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Editor
                 }
                 else {
                     EditorGUILayout.HelpBox("Ranking not assigned.", MessageType.Error);
-                    EditorGUILayout.PropertyField(serializedObject.FindProperty("Ranking"), true);
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("_ranking"), true);
                 }
             }
             else {

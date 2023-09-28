@@ -58,7 +58,7 @@ namespace Gs2.Unity.UiKit.Gs2Idle.Editor
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2IdleCategoryModelContext), false);
                     EditorGUI.indentLevel++;
-                    context.CategoryModel = EditorGUILayout.ObjectField("CategoryModel", context.CategoryModel, typeof(CategoryModel), false) as CategoryModel;
+                    EditorGUILayout.ObjectField("CategoryModel", context.CategoryModel, typeof(CategoryModel), false);
                     if (context.CategoryModel != null) {
                         EditorGUI.indentLevel++;
                         EditorGUILayout.TextField("NamespaceName", context.CategoryModel?.NamespaceName?.ToString());

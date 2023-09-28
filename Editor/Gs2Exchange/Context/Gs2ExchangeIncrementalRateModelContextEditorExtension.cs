@@ -48,7 +48,7 @@ namespace Gs2.Unity.UiKit.Gs2Exchange.Editor
                 }
                 else {
                     EditorGUILayout.HelpBox("IncrementalRateModel not assigned.", MessageType.Error);
-                    EditorGUILayout.PropertyField(serializedObject.FindProperty("IncrementalRateModel"), true);
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("_incrementalRateModel"), true);
                 }
             }
             else {

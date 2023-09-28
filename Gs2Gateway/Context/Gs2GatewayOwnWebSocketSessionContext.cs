@@ -27,6 +27,7 @@
 using Gs2.Unity.Gs2Gateway.ScriptableObject;
 using Gs2.Unity.UiKit.Core;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2Gateway.Context
 {
@@ -74,11 +75,21 @@ namespace Gs2.Unity.UiKit.Gs2Gateway.Context
 
     public partial class Gs2GatewayOwnWebSocketSessionContext
     {
-        public OwnWebSocketSession WebSocketSession;
+        [SerializeField]
+        private OwnWebSocketSession _webSocketSession;
+        public OwnWebSocketSession WebSocketSession
+        {
+            get => _webSocketSession;
+            set => SetOwnWebSocketSession(value);
+        }
 
         public void SetOwnWebSocketSession(OwnWebSocketSession webSocketSession) {
-            this.WebSocketSession = webSocketSession;
+            this._webSocketSession = webSocketSession;
+
+            this.OnUpdate.Invoke();
         }
+
+        public UnityEvent OnUpdate = new UnityEvent();
     }
 
     /// <summary>

@@ -44,7 +44,7 @@ namespace Gs2.Unity.UiKit.Gs2SerialKey.Editor
 
             if (original.CampaignModel == null) {
                 EditorGUILayout.HelpBox("CampaignModel not assigned.", MessageType.Error);
-                EditorGUILayout.PropertyField(serializedObject.FindProperty("CampaignModel"), true);
+                EditorGUILayout.PropertyField(serializedObject.FindProperty("_campaignModel"), true);
             }
             else {
                 original.CampaignModel = EditorGUILayout.ObjectField("CampaignModel", original.CampaignModel, typeof(CampaignModel), false) as CampaignModel;

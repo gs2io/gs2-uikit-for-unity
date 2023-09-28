@@ -27,6 +27,7 @@
 using Gs2.Unity.Gs2JobQueue.ScriptableObject;
 using Gs2.Unity.UiKit.Core;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2JobQueue.Context
 {
@@ -74,11 +75,21 @@ namespace Gs2.Unity.UiKit.Gs2JobQueue.Context
 
     public partial class Gs2JobQueueOwnDeadLetterJobContext
     {
-        public OwnDeadLetterJob DeadLetterJob;
+        [SerializeField]
+        private OwnDeadLetterJob _deadLetterJob;
+        public OwnDeadLetterJob DeadLetterJob
+        {
+            get => _deadLetterJob;
+            set => SetOwnDeadLetterJob(value);
+        }
 
         public void SetOwnDeadLetterJob(OwnDeadLetterJob deadLetterJob) {
-            this.DeadLetterJob = deadLetterJob;
+            this._deadLetterJob = deadLetterJob;
+
+            this.OnUpdate.Invoke();
         }
+
+        public UnityEvent OnUpdate = new UnityEvent();
     }
 
     /// <summary>

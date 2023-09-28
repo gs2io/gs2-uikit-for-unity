@@ -48,7 +48,7 @@ namespace Gs2.Unity.UiKit.Gs2Version.Editor
                 }
                 else {
                     EditorGUILayout.HelpBox("VersionModel not assigned.", MessageType.Error);
-                    EditorGUILayout.PropertyField(serializedObject.FindProperty("VersionModel"), true);
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("_versionModel"), true);
                 }
             }
             else {

@@ -27,6 +27,7 @@
 using Gs2.Unity.Gs2Inventory.ScriptableObject;
 using Gs2.Unity.UiKit.Core;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2Inventory.Context
 {
@@ -80,11 +81,21 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Context
 
     public partial class Gs2InventoryBigItemModelContext
     {
-        public BigItemModel BigItemModel;
+        [SerializeField]
+        private BigItemModel _bigItemModel;
+        public BigItemModel BigItemModel
+        {
+            get => _bigItemModel;
+            set => SetBigItemModel(value);
+        }
 
         public void SetBigItemModel(BigItemModel BigItemModel) {
-            this.BigItemModel = BigItemModel;
+            this._bigItemModel = BigItemModel;
+
+            this.OnUpdate.Invoke();
         }
+
+        public UnityEvent OnUpdate = new UnityEvent();
     }
 
     /// <summary>

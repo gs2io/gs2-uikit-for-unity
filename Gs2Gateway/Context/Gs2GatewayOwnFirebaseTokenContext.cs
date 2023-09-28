@@ -27,6 +27,7 @@
 using Gs2.Unity.Gs2Gateway.ScriptableObject;
 using Gs2.Unity.UiKit.Core;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2Gateway.Context
 {
@@ -74,11 +75,21 @@ namespace Gs2.Unity.UiKit.Gs2Gateway.Context
 
     public partial class Gs2GatewayOwnFirebaseTokenContext
     {
-        public OwnFirebaseToken FirebaseToken;
+        [SerializeField]
+        private OwnFirebaseToken _firebaseToken;
+        public OwnFirebaseToken FirebaseToken
+        {
+            get => _firebaseToken;
+            set => SetOwnFirebaseToken(value);
+        }
 
         public void SetOwnFirebaseToken(OwnFirebaseToken firebaseToken) {
-            this.FirebaseToken = firebaseToken;
+            this._firebaseToken = firebaseToken;
+
+            this.OnUpdate.Invoke();
         }
+
+        public UnityEvent OnUpdate = new UnityEvent();
     }
 
     /// <summary>

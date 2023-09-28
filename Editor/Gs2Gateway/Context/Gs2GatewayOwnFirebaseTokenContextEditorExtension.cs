@@ -44,7 +44,7 @@ namespace Gs2.Unity.UiKit.Gs2Gateway.Editor
 
             if (original.FirebaseToken == null) {
                 EditorGUILayout.HelpBox("OwnFirebaseToken not assigned.", MessageType.Error);
-                EditorGUILayout.PropertyField(serializedObject.FindProperty("FirebaseToken"), true);
+                EditorGUILayout.PropertyField(serializedObject.FindProperty("_firebaseToken"), true);
             }
             else {
                 original.FirebaseToken = EditorGUILayout.ObjectField("OwnFirebaseToken", original.FirebaseToken, typeof(OwnFirebaseToken), false) as OwnFirebaseToken;

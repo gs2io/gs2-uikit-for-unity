@@ -27,6 +27,7 @@
 using Gs2.Unity.Gs2Lottery.ScriptableObject;
 using Gs2.Unity.UiKit.Core;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2Lottery.Context
 {
@@ -75,11 +76,21 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.Context
 
     public partial class Gs2LotteryPrizeLimitContext
     {
-        public PrizeLimit PrizeLimit;
+        [SerializeField]
+        private PrizeLimit _prizeLimit;
+        public PrizeLimit PrizeLimit
+        {
+            get => _prizeLimit;
+            set => SetPrizeLimit(value);
+        }
 
         public void SetPrizeLimit(PrizeLimit PrizeLimit) {
-            this.PrizeLimit = PrizeLimit;
+            this._prizeLimit = PrizeLimit;
+
+            this.OnUpdate.Invoke();
         }
+
+        public UnityEvent OnUpdate = new UnityEvent();
     }
 
     /// <summary>

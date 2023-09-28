@@ -42,22 +42,20 @@ namespace Gs2.Unity.UiKit.Gs2Experience
     {
         private List<Gs2ExperienceOwnStatusContext> _children;
 
-        public void Update() {
-            if (_fetcher.Fetched && this._fetcher.Statuses != null) {
-                for (var i = 0; i < this.maximumItems; i++) {
-                    if (i < this._fetcher.Statuses.Count) {
-                        _children[i].SetOwnStatus(
-                            OwnStatus.New(
+        public void OnFetched() {
+            for (var i = 0; i < this.maximumItems; i++) {
+                if (i < this._fetcher.Statuses.Count) {
+                    _children[i].SetOwnStatus(
+                        OwnStatus.New(
                                 this._fetcher.Context.Namespace,
                                 this._fetcher.Statuses[i].ExperienceName,
                                 this._fetcher.Statuses[i].PropertyId
                             )
-                        );
-                        _children[i].gameObject.SetActive(true);
-                    }
-                    else {
-                        _children[i].gameObject.SetActive(false);
-                    }
+                    );
+                    _children[i].gameObject.SetActive(true);
+                }
+                else {
+                    _children[i].gameObject.SetActive(false);
                 }
             }
         }
@@ -70,7 +68,6 @@ namespace Gs2.Unity.UiKit.Gs2Experience
     public partial class Gs2ExperienceOwnStatusList
     {
         private Gs2ExperienceOwnStatusListFetcher _fetcher;
-        private Gs2ExperienceNamespaceContext Context => _fetcher.Context;
 
         public void Awake()
         {
@@ -81,7 +78,6 @@ namespace Gs2.Unity.UiKit.Gs2Experience
             }
 
             _fetcher = GetComponent<Gs2ExperienceOwnStatusListFetcher>() ?? GetComponentInParent<Gs2ExperienceOwnStatusListFetcher>();
-
             if (_fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ExperienceOwnStatusListFetcher.");
                 enabled = false;
@@ -124,6 +120,16 @@ namespace Gs2.Unity.UiKit.Gs2Experience
 
     public partial class Gs2ExperienceOwnStatusList
     {
+
+        public void OnEnable()
+        {
+            _fetcher.OnFetched.AddListener(OnFetched);
+        }
+
+        public void OnDisable()
+        {
+            _fetcher.OnFetched.RemoveListener(OnFetched);
+        }
 
     }
 

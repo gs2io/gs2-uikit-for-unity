@@ -48,7 +48,7 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Editor
                 }
                 else {
                     EditorGUILayout.HelpBox("PropertyFormModel not assigned.", MessageType.Error);
-                    EditorGUILayout.PropertyField(serializedObject.FindProperty("PropertyFormModel"), true);
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("_propertyFormModel"), true);
                 }
             }
             else {

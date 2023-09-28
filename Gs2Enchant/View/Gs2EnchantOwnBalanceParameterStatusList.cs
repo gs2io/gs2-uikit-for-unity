@@ -42,22 +42,20 @@ namespace Gs2.Unity.UiKit.Gs2Enchant
     {
         private List<Gs2EnchantOwnBalanceParameterStatusContext> _children;
 
-        public void Update() {
-            if (_fetcher.Fetched && this._fetcher.BalanceParameterStatuses != null) {
-                for (var i = 0; i < this.maximumItems; i++) {
-                    if (i < this._fetcher.BalanceParameterStatuses.Count) {
-                        _children[i].SetOwnBalanceParameterStatus(
-                            OwnBalanceParameterStatus.New(
+        public void OnFetched() {
+            for (var i = 0; i < this.maximumItems; i++) {
+                if (i < this._fetcher.BalanceParameterStatuses.Count) {
+                    _children[i].SetOwnBalanceParameterStatus(
+                        OwnBalanceParameterStatus.New(
                                 this._fetcher.Context.Namespace,
                                 this._fetcher.BalanceParameterStatuses[i].ParameterName,
                                 this._fetcher.BalanceParameterStatuses[i].PropertyId
                             )
-                        );
-                        _children[i].gameObject.SetActive(true);
-                    }
-                    else {
-                        _children[i].gameObject.SetActive(false);
-                    }
+                    );
+                    _children[i].gameObject.SetActive(true);
+                }
+                else {
+                    _children[i].gameObject.SetActive(false);
                 }
             }
         }
@@ -70,7 +68,6 @@ namespace Gs2.Unity.UiKit.Gs2Enchant
     public partial class Gs2EnchantOwnBalanceParameterStatusList
     {
         private Gs2EnchantOwnBalanceParameterStatusListFetcher _fetcher;
-        private Gs2EnchantNamespaceContext Context => _fetcher.Context;
 
         public void Awake()
         {
@@ -81,7 +78,6 @@ namespace Gs2.Unity.UiKit.Gs2Enchant
             }
 
             _fetcher = GetComponent<Gs2EnchantOwnBalanceParameterStatusListFetcher>() ?? GetComponentInParent<Gs2EnchantOwnBalanceParameterStatusListFetcher>();
-
             if (_fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2EnchantOwnBalanceParameterStatusListFetcher.");
                 enabled = false;
@@ -124,6 +120,16 @@ namespace Gs2.Unity.UiKit.Gs2Enchant
 
     public partial class Gs2EnchantOwnBalanceParameterStatusList
     {
+
+        public void OnEnable()
+        {
+            _fetcher.OnFetched.AddListener(OnFetched);
+        }
+
+        public void OnDisable()
+        {
+            _fetcher.OnFetched.RemoveListener(OnFetched);
+        }
 
     }
 

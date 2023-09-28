@@ -51,12 +51,11 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Editor
                 EditorGUI.BeginDisabledGroup(true);
                 EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2FormationFormModelContext), false);
                 EditorGUI.indentLevel++;
-                context.FormModel = EditorGUILayout.ObjectField("FormModel", context.FormModel, typeof(FormModel), false) as FormModel;
+                EditorGUILayout.ObjectField("FormModel", context.FormModel, typeof(FormModel), false);
                 if (context.FormModel != null) {
                     EditorGUI.indentLevel++;
                     EditorGUILayout.TextField("NamespaceName", context.FormModel?.NamespaceName?.ToString());
                     EditorGUILayout.TextField("MoldModelName", context.FormModel?.MoldModelName?.ToString());
-                    EditorGUILayout.TextField("FormModelName", context.FormModel?.FormModelName?.ToString());
                     EditorGUI.indentLevel--;
                 }
                 EditorGUI.indentLevel--;

@@ -48,7 +48,7 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Editor
                 }
                 else {
                     EditorGUILayout.HelpBox("OwnFollowUser not assigned.", MessageType.Error);
-                    EditorGUILayout.PropertyField(serializedObject.FindProperty("FollowUser"), true);
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("_followUser"), true);
                 }
             }
             else {

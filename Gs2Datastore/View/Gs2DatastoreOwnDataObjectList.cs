@@ -42,21 +42,19 @@ namespace Gs2.Unity.UiKit.Gs2Datastore
     {
         private List<Gs2DatastoreOwnDataObjectContext> _children;
 
-        public void Update() {
-            if (_fetcher.Fetched && this._fetcher.DataObjects != null) {
-                for (var i = 0; i < this.maximumItems; i++) {
-                    if (i < this._fetcher.DataObjects.Count) {
-                        _children[i].SetOwnDataObject(
-                            OwnDataObject.New(
+        public void OnFetched() {
+            for (var i = 0; i < this.maximumItems; i++) {
+                if (i < this._fetcher.DataObjects.Count) {
+                    _children[i].SetOwnDataObject(
+                        OwnDataObject.New(
                                 this._fetcher.Context.Namespace,
                                 this._fetcher.DataObjects[i].Name
                             )
-                        );
-                        _children[i].gameObject.SetActive(true);
-                    }
-                    else {
-                        _children[i].gameObject.SetActive(false);
-                    }
+                    );
+                    _children[i].gameObject.SetActive(true);
+                }
+                else {
+                    _children[i].gameObject.SetActive(false);
                 }
             }
         }
@@ -69,7 +67,6 @@ namespace Gs2.Unity.UiKit.Gs2Datastore
     public partial class Gs2DatastoreOwnDataObjectList
     {
         private Gs2DatastoreOwnDataObjectListFetcher _fetcher;
-        private Gs2DatastoreNamespaceContext Context => _fetcher.Context;
 
         public void Awake()
         {
@@ -80,7 +77,6 @@ namespace Gs2.Unity.UiKit.Gs2Datastore
             }
 
             _fetcher = GetComponent<Gs2DatastoreOwnDataObjectListFetcher>() ?? GetComponentInParent<Gs2DatastoreOwnDataObjectListFetcher>();
-
             if (_fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2DatastoreOwnDataObjectListFetcher.");
                 enabled = false;
@@ -122,6 +118,16 @@ namespace Gs2.Unity.UiKit.Gs2Datastore
 
     public partial class Gs2DatastoreOwnDataObjectList
     {
+
+        public void OnEnable()
+        {
+            _fetcher.OnFetched.AddListener(OnFetched);
+        }
+
+        public void OnDisable()
+        {
+            _fetcher.OnFetched.RemoveListener(OnFetched);
+        }
 
     }
 

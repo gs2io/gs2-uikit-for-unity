@@ -48,7 +48,7 @@ namespace Gs2.Unity.UiKit.Gs2Showcase.Editor
                 }
                 else {
                     EditorGUILayout.HelpBox("OwnRandomDisplayItem not assigned.", MessageType.Error);
-                    EditorGUILayout.PropertyField(serializedObject.FindProperty("RandomDisplayItem"), true);
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("_randomDisplayItem"), true);
                 }
             }
             else {

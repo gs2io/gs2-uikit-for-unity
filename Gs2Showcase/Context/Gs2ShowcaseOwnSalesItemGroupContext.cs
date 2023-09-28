@@ -27,6 +27,7 @@
 using Gs2.Unity.Gs2Showcase.ScriptableObject;
 using Gs2.Unity.UiKit.Core;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2Showcase.Context
 {
@@ -74,11 +75,21 @@ namespace Gs2.Unity.UiKit.Gs2Showcase.Context
 
     public partial class Gs2ShowcaseOwnSalesItemGroupContext
     {
-        public OwnSalesItemGroup SalesItemGroup;
+        [SerializeField]
+        private OwnSalesItemGroup _salesItemGroup;
+        public OwnSalesItemGroup SalesItemGroup
+        {
+            get => _salesItemGroup;
+            set => SetOwnSalesItemGroup(value);
+        }
 
         public void SetOwnSalesItemGroup(OwnSalesItemGroup salesItemGroup) {
-            this.SalesItemGroup = salesItemGroup;
+            this._salesItemGroup = salesItemGroup;
+
+            this.OnUpdate.Invoke();
         }
+
+        public UnityEvent OnUpdate = new UnityEvent();
     }
 
     /// <summary>

@@ -44,7 +44,7 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking.Editor
 
             if (original.Gathering == null) {
                 EditorGUILayout.HelpBox("Gathering not assigned.", MessageType.Error);
-                EditorGUILayout.PropertyField(serializedObject.FindProperty("Gathering"), true);
+                EditorGUILayout.PropertyField(serializedObject.FindProperty("_gathering"), true);
             }
             else {
                 original.Gathering = EditorGUILayout.ObjectField("Gathering", original.Gathering, typeof(Gathering), false) as Gathering;

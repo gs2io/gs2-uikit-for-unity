@@ -44,7 +44,7 @@ namespace Gs2.Unity.UiKit.Gs2MegaField.Editor
 
             if (original.Layer == null) {
                 EditorGUILayout.HelpBox("Layer not assigned.", MessageType.Error);
-                EditorGUILayout.PropertyField(serializedObject.FindProperty("Layer"), true);
+                EditorGUILayout.PropertyField(serializedObject.FindProperty("_layer"), true);
             }
             else {
                 original.Layer = EditorGUILayout.ObjectField("Layer", original.Layer, typeof(Layer), false) as Layer;

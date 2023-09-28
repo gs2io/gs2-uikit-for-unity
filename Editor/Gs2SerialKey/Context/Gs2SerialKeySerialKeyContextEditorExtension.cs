@@ -44,7 +44,7 @@ namespace Gs2.Unity.UiKit.Gs2SerialKey.Editor
 
             if (original.SerialKey == null) {
                 EditorGUILayout.HelpBox("SerialKey not assigned.", MessageType.Error);
-                EditorGUILayout.PropertyField(serializedObject.FindProperty("SerialKey"), true);
+                EditorGUILayout.PropertyField(serializedObject.FindProperty("_serialKey"), true);
             }
             else {
                 original.SerialKey = EditorGUILayout.ObjectField("SerialKey", original.SerialKey, typeof(SerialKey), false) as SerialKey;

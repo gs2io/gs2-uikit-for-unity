@@ -27,6 +27,7 @@
 using Gs2.Unity.Gs2Limit.ScriptableObject;
 using Gs2.Unity.UiKit.Core;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2Limit.Context
 {
@@ -80,11 +81,21 @@ namespace Gs2.Unity.UiKit.Gs2Limit.Context
 
     public partial class Gs2LimitLimitModelContext
     {
-        public LimitModel LimitModel;
+        [SerializeField]
+        private LimitModel _limitModel;
+        public LimitModel LimitModel
+        {
+            get => _limitModel;
+            set => SetLimitModel(value);
+        }
 
         public void SetLimitModel(LimitModel LimitModel) {
-            this.LimitModel = LimitModel;
+            this._limitModel = LimitModel;
+
+            this.OnUpdate.Invoke();
         }
+
+        public UnityEvent OnUpdate = new UnityEvent();
     }
 
     /// <summary>

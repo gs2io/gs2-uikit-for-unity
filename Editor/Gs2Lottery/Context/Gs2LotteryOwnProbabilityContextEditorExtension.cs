@@ -48,7 +48,7 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.Editor
                 }
                 else {
                     EditorGUILayout.HelpBox("OwnProbability not assigned.", MessageType.Error);
-                    EditorGUILayout.PropertyField(serializedObject.FindProperty("Probability"), true);
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("_probability"), true);
                 }
             }
             else {

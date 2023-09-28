@@ -32,6 +32,7 @@ using System.Collections.Generic;
 using System.Text;
 using Gs2.Core.Exception;
 using Gs2.Unity.Core.Exception;
+using Gs2.Unity.Gs2Friend.Domain.Model;
 using Gs2.Unity.Gs2Friend.Model;
 using Gs2.Unity.Gs2Friend.ScriptableObject;
 using Gs2.Unity.Util;
@@ -49,47 +50,58 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Fetcher
 	[AddComponentMenu("GS2 UIKit/Friend/BlackList/Fetcher/Gs2FriendOwnBlackListListFetcher")]
     public partial class Gs2FriendOwnBlackListListFetcher : MonoBehaviour
     {
+        private EzBlackListGameSessionDomain _domain;
+        private ulong? _callbackId;
+
         private IEnumerator Fetch()
         {
-            while (true)
-            {
-                if (_gameSessionHolder != null && _gameSessionHolder.Initialized &&
-                    _clientHolder != null && _clientHolder.Initialized &&
-                    Context != null)
+            var clientHolder = Gs2ClientHolder.Instance;
+            var gameSessionHolder = Gs2GameSessionHolder.Instance;
+
+            yield return new WaitUntil(() => clientHolder.Initialized);
+            yield return new WaitUntil(() => gameSessionHolder.Initialized);
+            yield return new WaitUntil(() => Context != null && Context.Namespace != null);
+
+            this._domain = clientHolder.Gs2.Friend.Namespace(
+                this.Context.Namespace.NamespaceName
+            ).Me(
+                gameSessionHolder.GameSession
+            ).BlackList();
+            this._callbackId = this._domain.Subscribe(
+                item =>
                 {
-                    
-                    var domain = this._clientHolder.Gs2.Friend.Namespace(
-                        this.Context.Namespace.NamespaceName
-                    ).Me(
-                        this._gameSessionHolder.GameSession
-                    );
-                    var future = domain.BlackList().Model();
-
-                    yield return future;
-
-                    if (future.Error != null) {
-                        this.onError.Invoke(future.Error, null);
-                        continue;
-                    }
-
-                    BlackList = future.Result.TargetUserIds;
+                    BlackList = item.TargetUserIds;
                     Fetched = true;
                 }
-                else {
-                    yield return new WaitForSeconds(0.1f);
-                }
-            }
-            // ReSharper disable once IteratorNeverReturns
+            );
+        }
+
+        public void OnUpdateContext() {
+            OnDisable();
+            Awake();
+            OnEnable();
         }
 
         public void OnEnable()
         {
             StartCoroutine(nameof(Fetch));
+            Context.OnUpdate.AddListener(OnUpdateContext);
         }
 
         public void OnDisable()
         {
-            StopCoroutine(nameof(Fetch));
+            Context.OnUpdate.RemoveListener(OnUpdateContext);
+
+            if (this._domain == null) {
+                return;
+            }
+            if (!this._callbackId.HasValue) {
+                return;
+            }
+            this._domain.Unsubscribe(
+                this._callbackId.Value
+            );
+            this._callbackId = null;
         }
     }
 
@@ -99,16 +111,13 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Fetcher
 
     public partial class Gs2FriendOwnBlackListListFetcher
     {
-        private Gs2ClientHolder _clientHolder;
-        private Gs2GameSessionHolder _gameSessionHolder;
         public Gs2FriendNamespaceContext Context;
+
+        public UnityEvent OnFetched = new UnityEvent();
 
         public void Awake()
         {
-            _clientHolder = Gs2ClientHolder.Instance;
-            _gameSessionHolder = Gs2GameSessionHolder.Instance;
             Context = GetComponent<Gs2FriendNamespaceContext>() ?? GetComponentInParent<Gs2FriendNamespaceContext>();
-
             if (Context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2FriendNamespaceContext.");
                 enabled = false;

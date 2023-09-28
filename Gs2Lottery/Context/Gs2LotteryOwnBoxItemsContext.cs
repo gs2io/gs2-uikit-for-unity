@@ -27,6 +27,7 @@
 using Gs2.Unity.Gs2Lottery.ScriptableObject;
 using Gs2.Unity.UiKit.Core;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2Lottery.Context
 {
@@ -79,11 +80,21 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.Context
 
     public partial class Gs2LotteryOwnBoxItemsContext
     {
-        public OwnBoxItems BoxItems;
+        [SerializeField]
+        private OwnBoxItems _boxItems;
+        public OwnBoxItems BoxItems
+        {
+            get => _boxItems;
+            set => SetOwnBoxItems(value);
+        }
 
         public void SetOwnBoxItems(OwnBoxItems boxItems) {
-            this.BoxItems = boxItems;
+            this._boxItems = boxItems;
+
+            this.OnUpdate.Invoke();
         }
+
+        public UnityEvent OnUpdate = new UnityEvent();
     }
 
     /// <summary>

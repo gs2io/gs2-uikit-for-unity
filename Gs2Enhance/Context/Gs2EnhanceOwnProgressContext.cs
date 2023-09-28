@@ -27,6 +27,7 @@
 using Gs2.Unity.Gs2Enhance.ScriptableObject;
 using Gs2.Unity.UiKit.Core;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2Enhance.Context
 {
@@ -74,11 +75,21 @@ namespace Gs2.Unity.UiKit.Gs2Enhance.Context
 
     public partial class Gs2EnhanceOwnProgressContext
     {
-        public OwnProgress Progress;
+        [SerializeField]
+        private OwnProgress _progress;
+        public OwnProgress Progress
+        {
+            get => _progress;
+            set => SetOwnProgress(value);
+        }
 
         public void SetOwnProgress(OwnProgress progress) {
-            this.Progress = progress;
+            this._progress = progress;
+
+            this.OnUpdate.Invoke();
         }
+
+        public UnityEvent OnUpdate = new UnityEvent();
     }
 
     /// <summary>

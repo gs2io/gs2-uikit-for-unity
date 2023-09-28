@@ -58,7 +58,7 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Editor
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2MissionOwnCompleteContext), false);
                     EditorGUI.indentLevel++;
-                    context.Complete = EditorGUILayout.ObjectField("Complete", context.Complete, typeof(OwnComplete), false) as OwnComplete;
+                    EditorGUILayout.ObjectField("Complete", context.Complete, typeof(OwnComplete), false);
                     if (context.Complete != null) {
                         EditorGUI.indentLevel++;
                         EditorGUILayout.TextField("NamespaceName", context.Complete?.NamespaceName?.ToString());

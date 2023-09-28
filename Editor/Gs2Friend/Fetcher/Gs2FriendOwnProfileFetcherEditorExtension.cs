@@ -51,7 +51,7 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Editor
                 EditorGUI.BeginDisabledGroup(true);
                 EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2FriendOwnProfileContext), false);
                 EditorGUI.indentLevel++;
-                context.Profile = EditorGUILayout.ObjectField("Profile", context.Profile, typeof(OwnProfile), false) as OwnProfile;
+                EditorGUILayout.ObjectField("Profile", context.Profile, typeof(OwnProfile), false);
                 if (context.Profile != null) {
                     EditorGUI.indentLevel++;
                     EditorGUILayout.TextField("NamespaceName", context.Profile?.NamespaceName?.ToString());

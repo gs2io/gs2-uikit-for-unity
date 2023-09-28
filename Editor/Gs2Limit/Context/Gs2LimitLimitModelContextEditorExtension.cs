@@ -48,7 +48,7 @@ namespace Gs2.Unity.UiKit.Gs2Limit.Editor
                 }
                 else {
                     EditorGUILayout.HelpBox("LimitModel not assigned.", MessageType.Error);
-                    EditorGUILayout.PropertyField(serializedObject.FindProperty("LimitModel"), true);
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("_limitModel"), true);
                 }
             }
             else {

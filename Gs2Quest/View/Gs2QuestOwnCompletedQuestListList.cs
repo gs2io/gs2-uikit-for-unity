@@ -42,21 +42,19 @@ namespace Gs2.Unity.UiKit.Gs2Quest
     {
         private List<Gs2QuestOwnCompletedQuestListContext> _children;
 
-        public void Update() {
-            if (_fetcher.Fetched && this._fetcher.CompletedQuestList != null) {
-                for (var i = 0; i < this.maximumItems; i++) {
-                    if (i < this._fetcher.CompletedQuestList.Count) {
-                        _children[i].SetOwnCompletedQuestList(
-                            OwnCompletedQuestList.New(
+        public void OnFetched() {
+            for (var i = 0; i < this.maximumItems; i++) {
+                if (i < this._fetcher.CompletedQuestList.Count) {
+                    _children[i].SetOwnCompletedQuestList(
+                        OwnCompletedQuestList.New(
                                 this._fetcher.Context.Namespace,
                                 this._fetcher.CompletedQuestList[i].QuestGroupName
                             )
-                        );
-                        _children[i].gameObject.SetActive(true);
-                    }
-                    else {
-                        _children[i].gameObject.SetActive(false);
-                    }
+                    );
+                    _children[i].gameObject.SetActive(true);
+                }
+                else {
+                    _children[i].gameObject.SetActive(false);
                 }
             }
         }
@@ -69,7 +67,6 @@ namespace Gs2.Unity.UiKit.Gs2Quest
     public partial class Gs2QuestOwnCompletedQuestListList
     {
         private Gs2QuestOwnCompletedQuestListListFetcher _fetcher;
-        private Gs2QuestNamespaceContext Context => _fetcher.Context;
 
         public void Awake()
         {
@@ -80,7 +77,6 @@ namespace Gs2.Unity.UiKit.Gs2Quest
             }
 
             _fetcher = GetComponent<Gs2QuestOwnCompletedQuestListListFetcher>() ?? GetComponentInParent<Gs2QuestOwnCompletedQuestListListFetcher>();
-
             if (_fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2QuestOwnCompletedQuestListListFetcher.");
                 enabled = false;
@@ -122,6 +118,16 @@ namespace Gs2.Unity.UiKit.Gs2Quest
 
     public partial class Gs2QuestOwnCompletedQuestListList
     {
+
+        public void OnEnable()
+        {
+            _fetcher.OnFetched.AddListener(OnFetched);
+        }
+
+        public void OnDisable()
+        {
+            _fetcher.OnFetched.RemoveListener(OnFetched);
+        }
 
     }
 

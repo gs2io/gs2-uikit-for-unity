@@ -48,7 +48,7 @@ namespace Gs2.Unity.UiKit.Gs2Enhance.Editor
                 }
                 else {
                     EditorGUILayout.HelpBox("RateModel not assigned.", MessageType.Error);
-                    EditorGUILayout.PropertyField(serializedObject.FindProperty("RateModel"), true);
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("_rateModel"), true);
                 }
             }
             else {

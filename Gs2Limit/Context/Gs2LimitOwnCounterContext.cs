@@ -27,6 +27,7 @@
 using Gs2.Unity.Gs2Limit.ScriptableObject;
 using Gs2.Unity.UiKit.Core;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2Limit.Context
 {
@@ -79,11 +80,21 @@ namespace Gs2.Unity.UiKit.Gs2Limit.Context
 
     public partial class Gs2LimitOwnCounterContext
     {
-        public OwnCounter Counter;
+        [SerializeField]
+        private OwnCounter _counter;
+        public OwnCounter Counter
+        {
+            get => _counter;
+            set => SetOwnCounter(value);
+        }
 
         public void SetOwnCounter(OwnCounter counter) {
-            this.Counter = counter;
+            this._counter = counter;
+
+            this.OnUpdate.Invoke();
         }
+
+        public UnityEvent OnUpdate = new UnityEvent();
     }
 
     /// <summary>

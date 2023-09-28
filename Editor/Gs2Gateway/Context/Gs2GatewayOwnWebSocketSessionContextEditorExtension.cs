@@ -44,7 +44,7 @@ namespace Gs2.Unity.UiKit.Gs2Gateway.Editor
 
             if (original.WebSocketSession == null) {
                 EditorGUILayout.HelpBox("OwnWebSocketSession not assigned.", MessageType.Error);
-                EditorGUILayout.PropertyField(serializedObject.FindProperty("WebSocketSession"), true);
+                EditorGUILayout.PropertyField(serializedObject.FindProperty("_webSocketSession"), true);
             }
             else {
                 original.WebSocketSession = EditorGUILayout.ObjectField("OwnWebSocketSession", original.WebSocketSession, typeof(OwnWebSocketSession), false) as OwnWebSocketSession;

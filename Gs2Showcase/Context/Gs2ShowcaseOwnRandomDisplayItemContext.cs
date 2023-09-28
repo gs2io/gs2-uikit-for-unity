@@ -27,6 +27,7 @@
 using Gs2.Unity.Gs2Showcase.ScriptableObject;
 using Gs2.Unity.UiKit.Core;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2Showcase.Context
 {
@@ -79,11 +80,21 @@ namespace Gs2.Unity.UiKit.Gs2Showcase.Context
 
     public partial class Gs2ShowcaseOwnRandomDisplayItemContext
     {
-        public OwnRandomDisplayItem RandomDisplayItem;
+        [SerializeField]
+        private OwnRandomDisplayItem _randomDisplayItem;
+        public OwnRandomDisplayItem RandomDisplayItem
+        {
+            get => _randomDisplayItem;
+            set => SetOwnRandomDisplayItem(value);
+        }
 
         public void SetOwnRandomDisplayItem(OwnRandomDisplayItem randomDisplayItem) {
-            this.RandomDisplayItem = randomDisplayItem;
+            this._randomDisplayItem = randomDisplayItem;
+
+            this.OnUpdate.Invoke();
         }
+
+        public UnityEvent OnUpdate = new UnityEvent();
     }
 
     /// <summary>

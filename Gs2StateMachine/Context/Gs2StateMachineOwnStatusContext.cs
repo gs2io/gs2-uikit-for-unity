@@ -27,6 +27,7 @@
 using Gs2.Unity.Gs2StateMachine.ScriptableObject;
 using Gs2.Unity.UiKit.Core;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2StateMachine.Context
 {
@@ -79,11 +80,21 @@ namespace Gs2.Unity.UiKit.Gs2StateMachine.Context
 
     public partial class Gs2StateMachineOwnStatusContext
     {
-        public OwnStatus Status;
+        [SerializeField]
+        private OwnStatus _status;
+        public OwnStatus Status
+        {
+            get => _status;
+            set => SetOwnStatus(value);
+        }
 
         public void SetOwnStatus(OwnStatus status) {
-            this.Status = status;
+            this._status = status;
+
+            this.OnUpdate.Invoke();
         }
+
+        public UnityEvent OnUpdate = new UnityEvent();
     }
 
     /// <summary>

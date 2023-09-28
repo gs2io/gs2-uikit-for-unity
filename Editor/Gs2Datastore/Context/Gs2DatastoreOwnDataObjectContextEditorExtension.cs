@@ -48,7 +48,7 @@ namespace Gs2.Unity.UiKit.Gs2Datastore.Editor
                 }
                 else {
                     EditorGUILayout.HelpBox("OwnDataObject not assigned.", MessageType.Error);
-                    EditorGUILayout.PropertyField(serializedObject.FindProperty("DataObject"), true);
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("_dataObject"), true);
                 }
             }
             else {

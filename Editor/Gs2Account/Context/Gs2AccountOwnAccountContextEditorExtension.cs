@@ -44,7 +44,7 @@ namespace Gs2.Unity.UiKit.Gs2Account.Editor
 
             if (original.Account == null) {
                 EditorGUILayout.HelpBox("OwnAccount not assigned.", MessageType.Error);
-                EditorGUILayout.PropertyField(serializedObject.FindProperty("Account"), true);
+                EditorGUILayout.PropertyField(serializedObject.FindProperty("_account"), true);
             }
             else {
                 original.Account = EditorGUILayout.ObjectField("OwnAccount", original.Account, typeof(OwnAccount), false) as OwnAccount;

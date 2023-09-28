@@ -48,7 +48,7 @@ namespace Gs2.Unity.UiKit.Gs2StateMachine.Editor
                 }
                 else {
                     EditorGUILayout.HelpBox("OwnStatus not assigned.", MessageType.Error);
-                    EditorGUILayout.PropertyField(serializedObject.FindProperty("Status"), true);
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("_status"), true);
                 }
             }
             else {

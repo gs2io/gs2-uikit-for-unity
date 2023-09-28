@@ -44,7 +44,7 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.Editor
 
             if (original.PrizeLimit == null) {
                 EditorGUILayout.HelpBox("PrizeLimit not assigned.", MessageType.Error);
-                EditorGUILayout.PropertyField(serializedObject.FindProperty("PrizeLimit"), true);
+                EditorGUILayout.PropertyField(serializedObject.FindProperty("_prizeLimit"), true);
             }
             else {
                 original.PrizeLimit = EditorGUILayout.ObjectField("PrizeLimit", original.PrizeLimit, typeof(PrizeLimit), false) as PrizeLimit;

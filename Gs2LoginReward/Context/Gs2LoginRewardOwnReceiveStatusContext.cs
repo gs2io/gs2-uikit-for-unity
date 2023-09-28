@@ -27,6 +27,7 @@
 using Gs2.Unity.Gs2LoginReward.ScriptableObject;
 using Gs2.Unity.UiKit.Core;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2LoginReward.Context
 {
@@ -79,11 +80,21 @@ namespace Gs2.Unity.UiKit.Gs2LoginReward.Context
 
     public partial class Gs2LoginRewardOwnReceiveStatusContext
     {
-        public OwnReceiveStatus ReceiveStatus;
+        [SerializeField]
+        private OwnReceiveStatus _receiveStatus;
+        public OwnReceiveStatus ReceiveStatus
+        {
+            get => _receiveStatus;
+            set => SetOwnReceiveStatus(value);
+        }
 
         public void SetOwnReceiveStatus(OwnReceiveStatus receiveStatus) {
-            this.ReceiveStatus = receiveStatus;
+            this._receiveStatus = receiveStatus;
+
+            this.OnUpdate.Invoke();
         }
+
+        public UnityEvent OnUpdate = new UnityEvent();
     }
 
     /// <summary>

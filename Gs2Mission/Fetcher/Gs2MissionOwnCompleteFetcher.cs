@@ -30,6 +30,7 @@ using System.Collections.Generic;
 using System.Text;
 using Gs2.Core.Exception;
 using Gs2.Unity.Core.Exception;
+using Gs2.Unity.Gs2Mission.Domain.Model;
 using Gs2.Unity.Gs2Mission.Model;
 using Gs2.Unity.Gs2Mission.ScriptableObject;
 using Gs2.Unity.Util;
@@ -48,62 +49,77 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Fetcher
 	[AddComponentMenu("GS2 UIKit/Mission/Complete/Fetcher/Gs2MissionOwnCompleteFetcher")]
     public partial class Gs2MissionOwnCompleteFetcher : MonoBehaviour
     {
+        private EzCompleteGameSessionDomain _domain;
+        private ulong? _callbackId;
+
         private IEnumerator Fetch()
         {
             var retryWaitSecond = 1;
-            Gs2Exception e;
-            while (true)
-            {
-                if (_gameSessionHolder != null && _gameSessionHolder.Initialized &&
-                    _clientHolder != null && _clientHolder.Initialized &&
-                    Context != null && this.Context.Complete != null)
+            var clientHolder = Gs2ClientHolder.Instance;
+            var gameSessionHolder = Gs2GameSessionHolder.Instance;
+
+            yield return new WaitUntil(() => clientHolder.Initialized);
+            yield return new WaitUntil(() => gameSessionHolder.Initialized);
+            yield return new WaitUntil(() => Context != null && this.Context.Complete != null);
+
+            this._domain = clientHolder.Gs2.Mission.Namespace(
+                this.Context.Complete.NamespaceName
+            ).Me(
+                gameSessionHolder.GameSession
+            ).Complete(
+                this.Context.Complete.MissionGroupName
+            );;
+            this._callbackId = this._domain.Subscribe(
+                item =>
                 {
-                    
-                    var domain = this._clientHolder.Gs2.Mission.Namespace(
-                        this.Context.Complete.NamespaceName
-                    ).Me(
-                        this._gameSessionHolder.GameSession
-                    ).Complete(
-                        this.Context.Complete.MissionGroupName
-                    );
-                    var future = domain.Model();
-                    yield return future;
-                    if (future.Error != null)
-                    {
-                        if (future.Error is BadRequestException || future.Error is NotFoundException)
-                        {
-                            onError.Invoke(e = future.Error, null);
-                            Debug.LogError($"{gameObject.GetFullPath()}: {future.Error.Message}");
-                            break;
-                        }
-                        else {
-                            onError.Invoke(new CanIgnoreException(future.Error), null);
-                        }
-                        yield return new WaitForSeconds(retryWaitSecond);
-                        retryWaitSecond *= 2;
-                    }
-                    else
-                    {
-                        retryWaitSecond = 1;
-                        Complete = future.Result;
-                        Fetched = true;
-                    }
+                    Complete = item;
+                    Fetched = true;
+                }
+            );
+
+            while (true) {
+                var future = this._domain.Model();
+                yield return future;
+                if (future.Error != null) {
+                    yield return new WaitForSeconds(retryWaitSecond);
+                    retryWaitSecond *= 2;
                 }
                 else {
-                    yield return new WaitForSeconds(0.1f);
+                    Complete = future.Result;
+                    Fetched = true;
+                    break;
                 }
             }
-            // ReSharper disable once IteratorNeverReturns
+
+            this.OnFetched.Invoke();
+        }
+
+        public void OnUpdateContext() {
+            OnDisable();
+            Awake();
+            OnEnable();
         }
 
         public void OnEnable()
         {
             StartCoroutine(nameof(Fetch));
+            Context.OnUpdate.AddListener(OnUpdateContext);
         }
 
         public void OnDisable()
         {
-            StopCoroutine(nameof(Fetch));
+            Context.OnUpdate.RemoveListener(OnUpdateContext);
+
+            if (this._domain == null) {
+                return;
+            }
+            if (!this._callbackId.HasValue) {
+                return;
+            }
+            this._domain.Unsubscribe(
+                this._callbackId.Value
+            );
+            this._callbackId = null;
         }
     }
 
@@ -113,16 +129,13 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Fetcher
 
     public partial class Gs2MissionOwnCompleteFetcher
     {
-        protected Gs2ClientHolder _clientHolder;
-        protected Gs2GameSessionHolder _gameSessionHolder;
         public Gs2MissionOwnCompleteContext Context { get; private set; }
+
+        public UnityEvent OnFetched = new UnityEvent();
 
         public void Awake()
         {
-            _clientHolder = Gs2ClientHolder.Instance;
-            _gameSessionHolder = Gs2GameSessionHolder.Instance;
             Context = GetComponent<Gs2MissionOwnCompleteContext>() ?? GetComponentInParent<Gs2MissionOwnCompleteContext>();
-
             if (Context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MissionOwnCompleteContext.");
                 enabled = false;

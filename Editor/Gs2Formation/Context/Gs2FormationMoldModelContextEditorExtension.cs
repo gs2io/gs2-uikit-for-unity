@@ -48,7 +48,7 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Editor
                 }
                 else {
                     EditorGUILayout.HelpBox("MoldModel not assigned.", MessageType.Error);
-                    EditorGUILayout.PropertyField(serializedObject.FindProperty("MoldModel"), true);
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("_moldModel"), true);
                 }
             }
             else {

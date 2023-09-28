@@ -58,7 +58,7 @@ namespace Gs2.Unity.UiKit.Gs2Limit.Editor
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2LimitOwnCounterContext), false);
                     EditorGUI.indentLevel++;
-                    context.Counter = EditorGUILayout.ObjectField("Counter", context.Counter, typeof(OwnCounter), false) as OwnCounter;
+                    EditorGUILayout.ObjectField("Counter", context.Counter, typeof(OwnCounter), false);
                     if (context.Counter != null) {
                         EditorGUI.indentLevel++;
                         EditorGUILayout.TextField("NamespaceName", context.Counter?.NamespaceName?.ToString());

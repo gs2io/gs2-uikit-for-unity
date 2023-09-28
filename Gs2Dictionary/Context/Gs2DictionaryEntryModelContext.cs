@@ -27,6 +27,7 @@
 using Gs2.Unity.Gs2Dictionary.ScriptableObject;
 using Gs2.Unity.UiKit.Core;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2Dictionary.Context
 {
@@ -80,11 +81,21 @@ namespace Gs2.Unity.UiKit.Gs2Dictionary.Context
 
     public partial class Gs2DictionaryEntryModelContext
     {
-        public EntryModel EntryModel;
+        [SerializeField]
+        private EntryModel _entryModel;
+        public EntryModel EntryModel
+        {
+            get => _entryModel;
+            set => SetEntryModel(value);
+        }
 
         public void SetEntryModel(EntryModel EntryModel) {
-            this.EntryModel = EntryModel;
+            this._entryModel = EntryModel;
+
+            this.OnUpdate.Invoke();
         }
+
+        public UnityEvent OnUpdate = new UnityEvent();
     }
 
     /// <summary>

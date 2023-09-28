@@ -27,6 +27,7 @@
 using Gs2.Unity.Gs2Friend.ScriptableObject;
 using Gs2.Unity.UiKit.Core;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2Friend.Context
 {
@@ -79,11 +80,21 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Context
 
     public partial class Gs2FriendOwnFollowUserContext
     {
-        public OwnFollowUser FollowUser;
+        [SerializeField]
+        private OwnFollowUser _followUser;
+        public OwnFollowUser FollowUser
+        {
+            get => _followUser;
+            set => SetOwnFollowUser(value);
+        }
 
         public void SetOwnFollowUser(OwnFollowUser followUser) {
-            this.FollowUser = followUser;
+            this._followUser = followUser;
+
+            this.OnUpdate.Invoke();
         }
+
+        public UnityEvent OnUpdate = new UnityEvent();
     }
 
     /// <summary>

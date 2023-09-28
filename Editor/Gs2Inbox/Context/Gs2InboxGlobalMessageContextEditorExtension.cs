@@ -44,7 +44,7 @@ namespace Gs2.Unity.UiKit.Gs2Inbox.Editor
 
             if (original.GlobalMessage == null) {
                 EditorGUILayout.HelpBox("GlobalMessage not assigned.", MessageType.Error);
-                EditorGUILayout.PropertyField(serializedObject.FindProperty("GlobalMessage"), true);
+                EditorGUILayout.PropertyField(serializedObject.FindProperty("_globalMessage"), true);
             }
             else {
                 original.GlobalMessage = EditorGUILayout.ObjectField("GlobalMessage", original.GlobalMessage, typeof(GlobalMessage), false) as GlobalMessage;

@@ -48,7 +48,7 @@ namespace Gs2.Unity.UiKit.Gs2Inbox.Editor
                 }
                 else {
                     EditorGUILayout.HelpBox("OwnMessage not assigned.", MessageType.Error);
-                    EditorGUILayout.PropertyField(serializedObject.FindProperty("Message"), true);
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("_message"), true);
                 }
             }
             else {

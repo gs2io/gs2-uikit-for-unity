@@ -44,7 +44,7 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Editor
 
             if (original.SimpleInventory == null) {
                 EditorGUILayout.HelpBox("OwnSimpleInventory not assigned.", MessageType.Error);
-                EditorGUILayout.PropertyField(serializedObject.FindProperty("SimpleInventory"), true);
+                EditorGUILayout.PropertyField(serializedObject.FindProperty("_simpleInventory"), true);
             }
             else {
                 original.SimpleInventory = EditorGUILayout.ObjectField("OwnSimpleInventory", original.SimpleInventory, typeof(OwnSimpleInventory), false) as OwnSimpleInventory;

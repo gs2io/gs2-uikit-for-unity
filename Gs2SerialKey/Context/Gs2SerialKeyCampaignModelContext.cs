@@ -27,6 +27,7 @@
 using Gs2.Unity.Gs2SerialKey.ScriptableObject;
 using Gs2.Unity.UiKit.Core;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2SerialKey.Context
 {
@@ -75,11 +76,21 @@ namespace Gs2.Unity.UiKit.Gs2SerialKey.Context
 
     public partial class Gs2SerialKeyCampaignModelContext
     {
-        public CampaignModel CampaignModel;
+        [SerializeField]
+        private CampaignModel _campaignModel;
+        public CampaignModel CampaignModel
+        {
+            get => _campaignModel;
+            set => SetCampaignModel(value);
+        }
 
         public void SetCampaignModel(CampaignModel CampaignModel) {
-            this.CampaignModel = CampaignModel;
+            this._campaignModel = CampaignModel;
+
+            this.OnUpdate.Invoke();
         }
+
+        public UnityEvent OnUpdate = new UnityEvent();
     }
 
     /// <summary>

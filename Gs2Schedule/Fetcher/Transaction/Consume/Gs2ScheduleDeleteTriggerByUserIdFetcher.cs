@@ -110,9 +110,6 @@ namespace Gs2.Unity.UiKit.Gs2Schedule.Fetcher
 
         public override bool HasError()
         {
-            if (base.HasError()) {
-                return true;
-            }
             _fetcher = GetComponent<IConsumeActionsFetcher>() ?? GetComponentInParent<IConsumeActionsFetcher>(true);
             if (_fetcher == null) {
                 return true;

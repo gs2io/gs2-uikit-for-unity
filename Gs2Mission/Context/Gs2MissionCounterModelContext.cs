@@ -27,6 +27,7 @@
 using Gs2.Unity.Gs2Mission.ScriptableObject;
 using Gs2.Unity.UiKit.Core;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2Mission.Context
 {
@@ -80,11 +81,21 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Context
 
     public partial class Gs2MissionCounterModelContext
     {
-        public CounterModel CounterModel;
+        [SerializeField]
+        private CounterModel _counterModel;
+        public CounterModel CounterModel
+        {
+            get => _counterModel;
+            set => SetCounterModel(value);
+        }
 
         public void SetCounterModel(CounterModel CounterModel) {
-            this.CounterModel = CounterModel;
+            this._counterModel = CounterModel;
+
+            this.OnUpdate.Invoke();
         }
+
+        public UnityEvent OnUpdate = new UnityEvent();
     }
 
     /// <summary>

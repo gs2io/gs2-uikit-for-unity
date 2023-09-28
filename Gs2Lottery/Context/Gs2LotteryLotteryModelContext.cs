@@ -27,6 +27,7 @@
 using Gs2.Unity.Gs2Lottery.ScriptableObject;
 using Gs2.Unity.UiKit.Core;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2Lottery.Context
 {
@@ -80,11 +81,21 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.Context
 
     public partial class Gs2LotteryLotteryModelContext
     {
-        public LotteryModel LotteryModel;
+        [SerializeField]
+        private LotteryModel _lotteryModel;
+        public LotteryModel LotteryModel
+        {
+            get => _lotteryModel;
+            set => SetLotteryModel(value);
+        }
 
         public void SetLotteryModel(LotteryModel LotteryModel) {
-            this.LotteryModel = LotteryModel;
+            this._lotteryModel = LotteryModel;
+
+            this.OnUpdate.Invoke();
         }
+
+        public UnityEvent OnUpdate = new UnityEvent();
     }
 
     /// <summary>

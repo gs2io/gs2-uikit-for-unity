@@ -42,21 +42,19 @@ namespace Gs2.Unity.UiKit.Gs2Quest
     {
         private List<Gs2QuestQuestModelContext> _children;
 
-        public void Update() {
-            if (_fetcher.Fetched && this._fetcher.QuestModels != null) {
-                for (var i = 0; i < this.maximumItems; i++) {
-                    if (i < this._fetcher.QuestModels.Count) {
-                        _children[i].SetQuestModel(
-                            QuestModel.New(
+        public void OnFetched() {
+            for (var i = 0; i < this.maximumItems; i++) {
+                if (i < this._fetcher.QuestModels.Count) {
+                    _children[i].SetQuestModel(
+                        QuestModel.New(
                                 this._fetcher.Context.QuestGroupModel,
                                 this._fetcher.QuestModels[i].Name
                             )
-                        );
-                        _children[i].gameObject.SetActive(true);
-                    }
-                    else {
-                        _children[i].gameObject.SetActive(false);
-                    }
+                    );
+                    _children[i].gameObject.SetActive(true);
+                }
+                else {
+                    _children[i].gameObject.SetActive(false);
                 }
             }
         }
@@ -80,7 +78,6 @@ namespace Gs2.Unity.UiKit.Gs2Quest
             }
 
             _fetcher = GetComponent<Gs2QuestQuestModelListFetcher>() ?? GetComponentInParent<Gs2QuestQuestModelListFetcher>();
-
             if (_fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2QuestQuestModelListFetcher.");
                 enabled = false;
@@ -122,7 +119,15 @@ namespace Gs2.Unity.UiKit.Gs2Quest
 
     public partial class Gs2QuestQuestModelList
     {
+        public void OnEnable()
+        {
+            _fetcher.OnFetched.AddListener(OnFetched);
+        }
 
+        public void OnDisable()
+        {
+            _fetcher.OnFetched.RemoveListener(OnFetched);
+        }
     }
 
     /// <summary>

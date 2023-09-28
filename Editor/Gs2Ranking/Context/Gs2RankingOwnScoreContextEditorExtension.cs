@@ -48,7 +48,7 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Editor
                 }
                 else {
                     EditorGUILayout.HelpBox("OwnScore not assigned.", MessageType.Error);
-                    EditorGUILayout.PropertyField(serializedObject.FindProperty("Score"), true);
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("_score"), true);
                 }
             }
             else {

@@ -51,7 +51,7 @@ namespace Gs2.Unity.UiKit.Gs2Showcase.Editor
                 EditorGUI.BeginDisabledGroup(true);
                 EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2ShowcaseOwnDisplayItemContext), false);
                 EditorGUI.indentLevel++;
-                context.DisplayItem = EditorGUILayout.ObjectField("DisplayItem", context.DisplayItem, typeof(OwnDisplayItem), false) as OwnDisplayItem;
+                EditorGUILayout.ObjectField("DisplayItem", context.DisplayItem, typeof(OwnDisplayItem), false);
                 if (context.DisplayItem != null) {
                     EditorGUI.indentLevel++;
                     EditorGUILayout.TextField("NamespaceName", context.DisplayItem?.NamespaceName?.ToString());

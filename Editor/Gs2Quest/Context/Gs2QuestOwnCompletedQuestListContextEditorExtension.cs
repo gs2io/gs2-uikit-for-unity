@@ -48,7 +48,7 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Editor
                 }
                 else {
                     EditorGUILayout.HelpBox("OwnCompletedQuestList not assigned.", MessageType.Error);
-                    EditorGUILayout.PropertyField(serializedObject.FindProperty("CompletedQuestList"), true);
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("_completedQuestList"), true);
                 }
             }
             else {

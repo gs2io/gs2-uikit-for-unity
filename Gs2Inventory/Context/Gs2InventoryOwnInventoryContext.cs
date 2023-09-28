@@ -27,6 +27,7 @@
 using Gs2.Unity.Gs2Inventory.ScriptableObject;
 using Gs2.Unity.UiKit.Core;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2Inventory.Context
 {
@@ -43,10 +44,8 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Context
             }
         }
         public override bool HasError() {
-            if (base.HasError()) {
-                return true;
-            }
-            if (Inventory == null) {
+            var hasError = base.HasError();
+            if (Inventory == null || hasError) {
                 if (GetComponentInParent<Gs2InventoryOwnInventoryList>(true) != null) {
                     return false;
                 }
@@ -82,7 +81,13 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Context
 
     public partial class Gs2InventoryOwnInventoryContext
     {
-        public OwnInventory Inventory;
+        [SerializeField]
+        private OwnInventory _inventory;
+        public OwnInventory Inventory
+        {
+            get => _inventory;
+            set => SetOwnInventory(value);
+        }
 
         public void SetOwnInventory(OwnInventory inventory) {
             this.InventoryModel = InventoryModel.New(
@@ -91,7 +96,9 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Context
                 ),
                 inventory.InventoryName
             );
-            this.Inventory = inventory;
+            this._inventory = inventory;
+
+            this.OnUpdate.Invoke();
         }
     }
 

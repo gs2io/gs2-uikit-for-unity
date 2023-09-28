@@ -44,7 +44,7 @@ namespace Gs2.Unity.UiKit.Gs2Showcase.Editor
 
             if (original.SalesItemGroup == null) {
                 EditorGUILayout.HelpBox("OwnSalesItemGroup not assigned.", MessageType.Error);
-                EditorGUILayout.PropertyField(serializedObject.FindProperty("SalesItemGroup"), true);
+                EditorGUILayout.PropertyField(serializedObject.FindProperty("_salesItemGroup"), true);
             }
             else {
                 original.SalesItemGroup = EditorGUILayout.ObjectField("OwnSalesItemGroup", original.SalesItemGroup, typeof(OwnSalesItemGroup), false) as OwnSalesItemGroup;

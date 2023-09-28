@@ -64,7 +64,7 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Editor
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2FormationMoldModelContext), false);
                     EditorGUI.indentLevel++;
-                    context.MoldModel = EditorGUILayout.ObjectField("MoldModel", context.MoldModel, typeof(MoldModel), false) as MoldModel;
+                    EditorGUILayout.ObjectField("MoldModel", context.MoldModel, typeof(MoldModel), false);
                     if (context.MoldModel != null) {
                         EditorGUI.indentLevel++;
                         EditorGUILayout.TextField("NamespaceName", context.MoldModel?.NamespaceName?.ToString());

@@ -27,6 +27,7 @@
 using Gs2.Unity.Gs2Formation.ScriptableObject;
 using Gs2.Unity.UiKit.Core;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2Formation.Context
 {
@@ -43,10 +44,8 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Context
             }
         }
         public override bool HasError() {
-            if (base.HasError()) {
-                return true;
-            }
-            if (PropertyForm == null) {
+            var hasError = base.HasError();
+            if (PropertyForm == null || hasError) {
                 if (GetComponentInParent<Gs2FormationOwnPropertyFormList>(true) != null) {
                     return false;
                 }
@@ -82,7 +81,13 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Context
 
     public partial class Gs2FormationOwnPropertyFormContext
     {
-        public OwnPropertyForm PropertyForm;
+        [SerializeField]
+        private OwnPropertyForm _propertyForm;
+        public OwnPropertyForm PropertyForm
+        {
+            get => _propertyForm;
+            set => SetOwnPropertyForm(value);
+        }
 
         public void SetOwnPropertyForm(OwnPropertyForm propertyForm) {
             this.PropertyFormModel = PropertyFormModel.New(
@@ -91,7 +96,9 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Context
                 ),
                 propertyForm.PropertyFormModelName
             );
-            this.PropertyForm = propertyForm;
+            this._propertyForm = propertyForm;
+
+            this.OnUpdate.Invoke();
         }
     }
 

@@ -48,7 +48,7 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Editor
                 }
                 else {
                     EditorGUILayout.HelpBox("OwnForm not assigned.", MessageType.Error);
-                    EditorGUILayout.PropertyField(serializedObject.FindProperty("Form"), true);
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("_form"), true);
                 }
             }
             else {

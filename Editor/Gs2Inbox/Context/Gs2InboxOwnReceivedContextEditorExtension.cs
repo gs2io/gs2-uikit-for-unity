@@ -44,7 +44,7 @@ namespace Gs2.Unity.UiKit.Gs2Inbox.Editor
 
             if (original.Received == null) {
                 EditorGUILayout.HelpBox("OwnReceived not assigned.", MessageType.Error);
-                EditorGUILayout.PropertyField(serializedObject.FindProperty("Received"), true);
+                EditorGUILayout.PropertyField(serializedObject.FindProperty("_received"), true);
             }
             else {
                 original.Received = EditorGUILayout.ObjectField("OwnReceived", original.Received, typeof(OwnReceived), false) as OwnReceived;

@@ -44,7 +44,7 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Editor
 
             if (original.ReferenceOf == null) {
                 EditorGUILayout.HelpBox("OwnReferenceOf not assigned.", MessageType.Error);
-                EditorGUILayout.PropertyField(serializedObject.FindProperty("ReferenceOf"), true);
+                EditorGUILayout.PropertyField(serializedObject.FindProperty("_referenceOf"), true);
             }
             else {
                 original.ReferenceOf = EditorGUILayout.ObjectField("OwnReferenceOf", original.ReferenceOf, typeof(OwnReferenceOf), false) as OwnReferenceOf;

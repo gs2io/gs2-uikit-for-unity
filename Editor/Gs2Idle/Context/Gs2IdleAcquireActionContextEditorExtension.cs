@@ -44,7 +44,7 @@ namespace Gs2.Unity.UiKit.Gs2Idle.Editor
 
             if (original.AcquireAction == null) {
                 EditorGUILayout.HelpBox("AcquireAction not assigned.", MessageType.Error);
-                EditorGUILayout.PropertyField(serializedObject.FindProperty("AcquireAction"), true);
+                EditorGUILayout.PropertyField(serializedObject.FindProperty("_acquireAction"), true);
             }
             else {
                 original.AcquireAction = EditorGUILayout.ObjectField("AcquireAction", original.AcquireAction, typeof(AcquireAction), false) as AcquireAction;

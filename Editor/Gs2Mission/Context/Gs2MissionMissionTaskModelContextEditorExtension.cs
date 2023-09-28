@@ -48,7 +48,7 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Editor
                 }
                 else {
                     EditorGUILayout.HelpBox("MissionTaskModel not assigned.", MessageType.Error);
-                    EditorGUILayout.PropertyField(serializedObject.FindProperty("MissionTaskModel"), true);
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("_missionTaskModel"), true);
                 }
             }
             else {

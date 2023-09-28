@@ -27,6 +27,7 @@
 using Gs2.Unity.Gs2Experience.ScriptableObject;
 using Gs2.Unity.UiKit.Core;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2Experience.Context
 {
@@ -80,11 +81,21 @@ namespace Gs2.Unity.UiKit.Gs2Experience.Context
 
     public partial class Gs2ExperienceExperienceModelContext
     {
-        public ExperienceModel ExperienceModel;
+        [SerializeField]
+        private ExperienceModel _experienceModel;
+        public ExperienceModel ExperienceModel
+        {
+            get => _experienceModel;
+            set => SetExperienceModel(value);
+        }
 
         public void SetExperienceModel(ExperienceModel ExperienceModel) {
-            this.ExperienceModel = ExperienceModel;
+            this._experienceModel = ExperienceModel;
+
+            this.OnUpdate.Invoke();
         }
+
+        public UnityEvent OnUpdate = new UnityEvent();
     }
 
     /// <summary>

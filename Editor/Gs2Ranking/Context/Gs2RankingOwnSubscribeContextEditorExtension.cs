@@ -44,7 +44,7 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Editor
 
             if (original.Subscribe == null) {
                 EditorGUILayout.HelpBox("OwnSubscribe not assigned.", MessageType.Error);
-                EditorGUILayout.PropertyField(serializedObject.FindProperty("Subscribe"), true);
+                EditorGUILayout.PropertyField(serializedObject.FindProperty("_subscribe"), true);
             }
             else {
                 original.Subscribe = EditorGUILayout.ObjectField("OwnSubscribe", original.Subscribe, typeof(OwnSubscribe), false) as OwnSubscribe;

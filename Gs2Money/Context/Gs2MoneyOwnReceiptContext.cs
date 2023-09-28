@@ -27,6 +27,7 @@
 using Gs2.Unity.Gs2Money.ScriptableObject;
 using Gs2.Unity.UiKit.Core;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2Money.Context
 {
@@ -74,11 +75,21 @@ namespace Gs2.Unity.UiKit.Gs2Money.Context
 
     public partial class Gs2MoneyOwnReceiptContext
     {
-        public OwnReceipt Receipt;
+        [SerializeField]
+        private OwnReceipt _receipt;
+        public OwnReceipt Receipt
+        {
+            get => _receipt;
+            set => SetOwnReceipt(value);
+        }
 
         public void SetOwnReceipt(OwnReceipt receipt) {
-            this.Receipt = receipt;
+            this._receipt = receipt;
+
+            this.OnUpdate.Invoke();
         }
+
+        public UnityEvent OnUpdate = new UnityEvent();
     }
 
     /// <summary>

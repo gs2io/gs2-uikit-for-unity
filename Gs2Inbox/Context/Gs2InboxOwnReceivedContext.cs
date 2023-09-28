@@ -27,6 +27,7 @@
 using Gs2.Unity.Gs2Inbox.ScriptableObject;
 using Gs2.Unity.UiKit.Core;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2Inbox.Context
 {
@@ -74,11 +75,21 @@ namespace Gs2.Unity.UiKit.Gs2Inbox.Context
 
     public partial class Gs2InboxOwnReceivedContext
     {
-        public OwnReceived Received;
+        [SerializeField]
+        private OwnReceived _received;
+        public OwnReceived Received
+        {
+            get => _received;
+            set => SetOwnReceived(value);
+        }
 
         public void SetOwnReceived(OwnReceived received) {
-            this.Received = received;
+            this._received = received;
+
+            this.OnUpdate.Invoke();
         }
+
+        public UnityEvent OnUpdate = new UnityEvent();
     }
 
     /// <summary>

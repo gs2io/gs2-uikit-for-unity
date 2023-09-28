@@ -27,6 +27,7 @@
 using Gs2.Unity.Gs2AdReward.ScriptableObject;
 using Gs2.Unity.UiKit.Core;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2AdReward.Context
 {
@@ -74,11 +75,21 @@ namespace Gs2.Unity.UiKit.Gs2AdReward.Context
 
     public partial class Gs2AdRewardOwnPointContext
     {
-        public OwnPoint Point;
+        [SerializeField]
+        private OwnPoint _point;
+        public OwnPoint Point
+        {
+            get => _point;
+            set => SetOwnPoint(value);
+        }
 
         public void SetOwnPoint(OwnPoint point) {
-            this.Point = point;
+            this._point = point;
+
+            this.OnUpdate.Invoke();
         }
+
+        public UnityEvent OnUpdate = new UnityEvent();
     }
 
     /// <summary>

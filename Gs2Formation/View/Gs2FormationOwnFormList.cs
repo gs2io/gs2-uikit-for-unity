@@ -42,21 +42,19 @@ namespace Gs2.Unity.UiKit.Gs2Formation
     {
         private List<Gs2FormationOwnFormContext> _children;
 
-        public void Update() {
-            if (_fetcher.Fetched && this._fetcher.Forms != null) {
-                for (var i = 0; i < this.maximumItems; i++) {
-                    if (i < this._fetcher.Forms.Count) {
-                        _children[i].SetOwnForm(
-                            OwnForm.New(
+        public void OnFetched() {
+            for (var i = 0; i < this.maximumItems; i++) {
+                if (i < this._fetcher.Forms.Count) {
+                    _children[i].SetOwnForm(
+                        OwnForm.New(
                                 this._fetcher.Context.Mold,
                                 this._fetcher.Forms[i].Index
                             )
-                        );
-                        _children[i].gameObject.SetActive(true);
-                    }
-                    else {
-                        _children[i].gameObject.SetActive(false);
-                    }
+                    );
+                    _children[i].gameObject.SetActive(true);
+                }
+                else {
+                    _children[i].gameObject.SetActive(false);
                 }
             }
         }
@@ -69,7 +67,6 @@ namespace Gs2.Unity.UiKit.Gs2Formation
     public partial class Gs2FormationOwnFormList
     {
         private Gs2FormationOwnFormListFetcher _fetcher;
-        private Gs2FormationOwnMoldContext Context => _fetcher.Context;
 
         public void Awake()
         {
@@ -80,7 +77,6 @@ namespace Gs2.Unity.UiKit.Gs2Formation
             }
 
             _fetcher = GetComponent<Gs2FormationOwnFormListFetcher>() ?? GetComponentInParent<Gs2FormationOwnFormListFetcher>();
-
             if (_fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2FormationOwnFormListFetcher.");
                 enabled = false;
@@ -122,6 +118,16 @@ namespace Gs2.Unity.UiKit.Gs2Formation
 
     public partial class Gs2FormationOwnFormList
     {
+
+        public void OnEnable()
+        {
+            _fetcher.OnFetched.AddListener(OnFetched);
+        }
+
+        public void OnDisable()
+        {
+            _fetcher.OnFetched.RemoveListener(OnFetched);
+        }
 
     }
 

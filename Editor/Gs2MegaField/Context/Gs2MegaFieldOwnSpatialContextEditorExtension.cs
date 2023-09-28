@@ -44,7 +44,7 @@ namespace Gs2.Unity.UiKit.Gs2MegaField.Editor
 
             if (original.Spatial == null) {
                 EditorGUILayout.HelpBox("OwnSpatial not assigned.", MessageType.Error);
-                EditorGUILayout.PropertyField(serializedObject.FindProperty("Spatial"), true);
+                EditorGUILayout.PropertyField(serializedObject.FindProperty("_spatial"), true);
             }
             else {
                 original.Spatial = EditorGUILayout.ObjectField("OwnSpatial", original.Spatial, typeof(OwnSpatial), false) as OwnSpatial;

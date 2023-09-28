@@ -42,21 +42,19 @@ namespace Gs2.Unity.UiKit.Gs2MegaField
     {
         private List<Gs2MegaFieldAreaModelContext> _children;
 
-        public void Update() {
-            if (_fetcher.Fetched && this._fetcher.AreaModels != null) {
-                for (var i = 0; i < this.maximumItems; i++) {
-                    if (i < this._fetcher.AreaModels.Count) {
-                        _children[i].SetAreaModel(
-                            AreaModel.New(
+        public void OnFetched() {
+            for (var i = 0; i < this.maximumItems; i++) {
+                if (i < this._fetcher.AreaModels.Count) {
+                    _children[i].SetAreaModel(
+                        AreaModel.New(
                                 this._fetcher.Context.Namespace,
                                 this._fetcher.AreaModels[i].Name
                             )
-                        );
-                        _children[i].gameObject.SetActive(true);
-                    }
-                    else {
-                        _children[i].gameObject.SetActive(false);
-                    }
+                    );
+                    _children[i].gameObject.SetActive(true);
+                }
+                else {
+                    _children[i].gameObject.SetActive(false);
                 }
             }
         }
@@ -80,7 +78,6 @@ namespace Gs2.Unity.UiKit.Gs2MegaField
             }
 
             _fetcher = GetComponent<Gs2MegaFieldAreaModelListFetcher>() ?? GetComponentInParent<Gs2MegaFieldAreaModelListFetcher>();
-
             if (_fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MegaFieldAreaModelListFetcher.");
                 enabled = false;
@@ -122,7 +119,15 @@ namespace Gs2.Unity.UiKit.Gs2MegaField
 
     public partial class Gs2MegaFieldAreaModelList
     {
+        public void OnEnable()
+        {
+            _fetcher.OnFetched.AddListener(OnFetched);
+        }
 
+        public void OnDisable()
+        {
+            _fetcher.OnFetched.RemoveListener(OnFetched);
+        }
     }
 
     /// <summary>

@@ -48,7 +48,7 @@ namespace Gs2.Unity.UiKit.Gs2Account.Editor
                 }
                 else {
                     EditorGUILayout.HelpBox("OwnTakeOver not assigned.", MessageType.Error);
-                    EditorGUILayout.PropertyField(serializedObject.FindProperty("TakeOver"), true);
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("_takeOver"), true);
                 }
             }
             else {

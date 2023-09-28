@@ -49,7 +49,7 @@ namespace Gs2.Unity.UiKit.Gs2Schedule.Editor
                 }
                 else {
                     EditorGUILayout.HelpBox("OwnEvent not assigned.", MessageType.Error);
-                    EditorGUILayout.PropertyField(serializedObject.FindProperty("Event"), true);
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("_event"), true);
                 }
             }
             else {

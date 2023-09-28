@@ -48,7 +48,7 @@ namespace Gs2.Unity.UiKit.Gs2Enchant.Editor
                 }
                 else {
                     EditorGUILayout.HelpBox("BalanceParameterModel not assigned.", MessageType.Error);
-                    EditorGUILayout.PropertyField(serializedObject.FindProperty("BalanceParameterModel"), true);
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("_balanceParameterModel"), true);
                 }
             }
             else {

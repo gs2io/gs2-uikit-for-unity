@@ -42,21 +42,19 @@ namespace Gs2.Unity.UiKit.Gs2StateMachine
     {
         private List<Gs2StateMachineOwnStatusContext> _children;
 
-        public void Update() {
-            if (_fetcher.Fetched && this._fetcher.Statuses != null) {
-                for (var i = 0; i < this.maximumItems; i++) {
-                    if (i < this._fetcher.Statuses.Count) {
-                        _children[i].SetOwnStatus(
-                            OwnStatus.New(
+        public void OnFetched() {
+            for (var i = 0; i < this.maximumItems; i++) {
+                if (i < this._fetcher.Statuses.Count) {
+                    _children[i].SetOwnStatus(
+                        OwnStatus.New(
                                 this._fetcher.Context.Namespace,
                                 this._fetcher.Statuses[i].Name
                             )
-                        );
-                        _children[i].gameObject.SetActive(true);
-                    }
-                    else {
-                        _children[i].gameObject.SetActive(false);
-                    }
+                    );
+                    _children[i].gameObject.SetActive(true);
+                }
+                else {
+                    _children[i].gameObject.SetActive(false);
                 }
             }
         }
@@ -69,7 +67,6 @@ namespace Gs2.Unity.UiKit.Gs2StateMachine
     public partial class Gs2StateMachineOwnStatusList
     {
         private Gs2StateMachineOwnStatusListFetcher _fetcher;
-        private Gs2StateMachineNamespaceContext Context => _fetcher.Context;
 
         public void Awake()
         {
@@ -80,7 +77,6 @@ namespace Gs2.Unity.UiKit.Gs2StateMachine
             }
 
             _fetcher = GetComponent<Gs2StateMachineOwnStatusListFetcher>() ?? GetComponentInParent<Gs2StateMachineOwnStatusListFetcher>();
-
             if (_fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2StateMachineOwnStatusListFetcher.");
                 enabled = false;
@@ -122,6 +118,16 @@ namespace Gs2.Unity.UiKit.Gs2StateMachine
 
     public partial class Gs2StateMachineOwnStatusList
     {
+
+        public void OnEnable()
+        {
+            _fetcher.OnFetched.AddListener(OnFetched);
+        }
+
+        public void OnDisable()
+        {
+            _fetcher.OnFetched.RemoveListener(OnFetched);
+        }
 
     }
 

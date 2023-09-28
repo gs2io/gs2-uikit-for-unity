@@ -42,21 +42,19 @@ namespace Gs2.Unity.UiKit.Gs2Exchange
     {
         private List<Gs2ExchangeIncrementalRateModelContext> _children;
 
-        public void Update() {
-            if (_fetcher.Fetched && this._fetcher.IncrementalRateModels != null) {
-                for (var i = 0; i < this.maximumItems; i++) {
-                    if (i < this._fetcher.IncrementalRateModels.Count) {
-                        _children[i].SetIncrementalRateModel(
-                            IncrementalRateModel.New(
+        public void OnFetched() {
+            for (var i = 0; i < this.maximumItems; i++) {
+                if (i < this._fetcher.IncrementalRateModels.Count) {
+                    _children[i].SetIncrementalRateModel(
+                        IncrementalRateModel.New(
                                 this._fetcher.Context.Namespace,
                                 this._fetcher.IncrementalRateModels[i].Name
                             )
-                        );
-                        _children[i].gameObject.SetActive(true);
-                    }
-                    else {
-                        _children[i].gameObject.SetActive(false);
-                    }
+                    );
+                    _children[i].gameObject.SetActive(true);
+                }
+                else {
+                    _children[i].gameObject.SetActive(false);
                 }
             }
         }
@@ -80,7 +78,6 @@ namespace Gs2.Unity.UiKit.Gs2Exchange
             }
 
             _fetcher = GetComponent<Gs2ExchangeIncrementalRateModelListFetcher>() ?? GetComponentInParent<Gs2ExchangeIncrementalRateModelListFetcher>();
-
             if (_fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ExchangeIncrementalRateModelListFetcher.");
                 enabled = false;
@@ -122,7 +119,15 @@ namespace Gs2.Unity.UiKit.Gs2Exchange
 
     public partial class Gs2ExchangeIncrementalRateModelList
     {
+        public void OnEnable()
+        {
+            _fetcher.OnFetched.AddListener(OnFetched);
+        }
 
+        public void OnDisable()
+        {
+            _fetcher.OnFetched.RemoveListener(OnFetched);
+        }
     }
 
     /// <summary>

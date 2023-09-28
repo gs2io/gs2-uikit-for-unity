@@ -27,6 +27,7 @@
 using Gs2.Unity.Gs2Formation.ScriptableObject;
 using Gs2.Unity.UiKit.Core;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2Formation.Context
 {
@@ -43,10 +44,8 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Context
             }
         }
         public override bool HasError() {
-            if (base.HasError()) {
-                return true;
-            }
-            if (Mold == null) {
+            var hasError = base.HasError();
+            if (Mold == null || hasError) {
                 if (GetComponentInParent<Gs2FormationOwnMoldList>(true) != null) {
                     return false;
                 }
@@ -82,7 +81,13 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Context
 
     public partial class Gs2FormationOwnMoldContext
     {
-        public OwnMold Mold;
+        [SerializeField]
+        private OwnMold _mold;
+        public OwnMold Mold
+        {
+            get => _mold;
+            set => SetOwnMold(value);
+        }
 
         public void SetOwnMold(OwnMold mold) {
             this.MoldModel = MoldModel.New(
@@ -91,7 +96,9 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Context
                 ),
                 mold.MoldModelName
             );
-            this.Mold = mold;
+            this._mold = mold;
+
+            this.OnUpdate.Invoke();
         }
     }
 

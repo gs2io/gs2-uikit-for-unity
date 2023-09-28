@@ -48,7 +48,7 @@ namespace Gs2.Unity.UiKit.Gs2LoginReward.Editor
                 }
                 else {
                     EditorGUILayout.HelpBox("BonusModel not assigned.", MessageType.Error);
-                    EditorGUILayout.PropertyField(serializedObject.FindProperty("BonusModel"), true);
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("_bonusModel"), true);
                 }
             }
             else {

@@ -27,6 +27,7 @@
 using Gs2.Unity.Gs2SkillTree.ScriptableObject;
 using Gs2.Unity.UiKit.Core;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2SkillTree.Context
 {
@@ -80,11 +81,21 @@ namespace Gs2.Unity.UiKit.Gs2SkillTree.Context
 
     public partial class Gs2SkillTreeNodeModelContext
     {
-        public NodeModel NodeModel;
+        [SerializeField]
+        private NodeModel _nodeModel;
+        public NodeModel NodeModel
+        {
+            get => _nodeModel;
+            set => SetNodeModel(value);
+        }
 
         public void SetNodeModel(NodeModel NodeModel) {
-            this.NodeModel = NodeModel;
+            this._nodeModel = NodeModel;
+
+            this.OnUpdate.Invoke();
         }
+
+        public UnityEvent OnUpdate = new UnityEvent();
     }
 
     /// <summary>

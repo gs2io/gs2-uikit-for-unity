@@ -48,7 +48,7 @@ namespace Gs2.Unity.UiKit.Gs2Idle.Editor
                 }
                 else {
                     EditorGUILayout.HelpBox("CategoryModel not assigned.", MessageType.Error);
-                    EditorGUILayout.PropertyField(serializedObject.FindProperty("CategoryModel"), true);
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("_categoryModel"), true);
                 }
             }
             else {

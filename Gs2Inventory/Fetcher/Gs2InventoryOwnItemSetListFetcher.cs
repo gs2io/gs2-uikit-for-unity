@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
@@ -30,6 +32,7 @@ using System.Collections.Generic;
 using System.Text;
 using Gs2.Core.Exception;
 using Gs2.Unity.Core.Exception;
+using Gs2.Unity.Gs2Inventory.Domain.Model;
 using Gs2.Unity.Gs2Inventory.Model;
 using Gs2.Unity.Gs2Inventory.ScriptableObject;
 using Gs2.Unity.Util;
@@ -47,72 +50,102 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Fetcher
 	[AddComponentMenu("GS2 UIKit/Inventory/ItemSet/Fetcher/Gs2InventoryOwnItemSetListFetcher")]
     public partial class Gs2InventoryOwnItemSetListFetcher : MonoBehaviour
     {
-        private IEnumerator Fetch()
-        {
-            var retryWaitSecond = 1;
-            Gs2Exception e;
-            while (true)
-            {
-                if (_gameSessionHolder != null && _gameSessionHolder.Initialized &&
-                    _clientHolder != null && _clientHolder.Initialized &&
-                    Context != null && Context.Inventory != null)
-                {
-                    
-                    var domain = this._clientHolder.Gs2.Inventory.Namespace(
-                        this.Context.Inventory.NamespaceName
-                    ).Me(
-                        this._gameSessionHolder.GameSession
-                    ).Inventory(
-                        this.Context.Inventory.InventoryName
-                    );
-                    var it = domain.ItemSets();
-                    var items = new List<Gs2.Unity.Gs2Inventory.Model.EzItemSet>();
-                    while (it.HasNext())
-                    {
-                        yield return it.Next();
-                        if (it.Error != null)
-                        {
-                            if (it.Error is BadRequestException || it.Error is NotFoundException)
-                            {
-                                onError.Invoke(e = it.Error, null);
-                                Debug.LogError($"{gameObject.GetFullPath()}: {it.Error.Message}");
-                                break;
-                            }
-                            else {
-                                onError.Invoke(new CanIgnoreException(it.Error), null);
-                            }
-                            yield return new WaitForSeconds(retryWaitSecond);
-                            retryWaitSecond *= 2;
-                        }
-                        else {
-                            if (it.Current != null)
-                            {
-                                items.Add(it.Current);
-                            } else {
-                                break;
-                            }
-                        }
-                    }
+        private EzInventoryGameSessionDomain _domain;
+        private ulong? _callbackId;
 
-                    retryWaitSecond = 1;
-                    ItemSets = items;
-                    Fetched = true;
+        private IEnumerator Load() {
+            var retryWaitSecond = 1;
+            var it = _domain.ItemSets();
+            var items = new List<Gs2.Unity.Gs2Inventory.Model.EzItemSet>();
+            while (it.HasNext())
+            {
+                yield return it.Next();
+                if (it.Error != null)
+                {
+                    if (it.Error is BadRequestException || it.Error is NotFoundException)
+                    {
+                        onError.Invoke(it.Error, null);
+                        Debug.LogError($"{gameObject.GetFullPath()}: {it.Error.Message}");
+                        break;
+                    }
+                    else {
+                        onError.Invoke(new CanIgnoreException(it.Error), null);
+                    }
+                    yield return new WaitForSeconds(retryWaitSecond);
+                    retryWaitSecond *= 2;
                 }
                 else {
-                    yield return new WaitForSeconds(0.1f);
+                    if (it.Current != null)
+                    {
+                        items.Add(it.Current);
+                    } else {
+                        break;
+                    }
                 }
             }
-            // ReSharper disable once IteratorNeverReturns
+
+            retryWaitSecond = 1;
+            ItemSets = items;
+            Fetched = true;
+
+            this.OnFetched.Invoke();
+            
+            yield return new WaitForSeconds(1);
+            StartCoroutine(nameof(Load));
+        }
+
+        private IEnumerator Fetch()
+        {
+            var clientHolder = Gs2ClientHolder.Instance;
+            var gameSessionHolder = Gs2GameSessionHolder.Instance;
+
+            yield return new WaitUntil(() => clientHolder.Initialized);
+            yield return new WaitUntil(() => gameSessionHolder.Initialized);
+            yield return new WaitUntil(() => Context != null && Context.Inventory != null);
+
+            this._domain = clientHolder.Gs2.Inventory.Namespace(
+                this.Context.Inventory.NamespaceName
+            ).Me(
+                gameSessionHolder.GameSession
+            ).Inventory(
+                this.Context.Inventory.InventoryName
+            );
+            this._callbackId = this._domain.SubscribeItemSets(
+                () =>
+                {
+                    StartCoroutine(nameof(Load));
+                }
+            );
+
+            yield return Load();
+        }
+
+        public void OnUpdateContext() {
+            OnDisable();
+            Awake();
+            OnEnable();
         }
 
         public void OnEnable()
         {
             StartCoroutine(nameof(Fetch));
+            Context.OnUpdate.AddListener(OnUpdateContext);
         }
 
         public void OnDisable()
         {
-            StopCoroutine(nameof(Fetch));
+            Context.OnUpdate.RemoveListener(OnUpdateContext);
+
+            if (this._domain == null) {
+                return;
+            }
+            if (!this._callbackId.HasValue) {
+                return;
+            }
+            this._domain.UnsubscribeItemSets(
+                this._callbackId.Value
+            );
+            this._callbackId = null;
         }
     }
 
@@ -122,16 +155,13 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Fetcher
 
     public partial class Gs2InventoryOwnItemSetListFetcher
     {
-        private Gs2ClientHolder _clientHolder;
-        private Gs2GameSessionHolder _gameSessionHolder;
         public Gs2InventoryOwnInventoryContext Context { get; private set; }
+
+        public UnityEvent OnFetched = new UnityEvent();
 
         public void Awake()
         {
-            _clientHolder = Gs2ClientHolder.Instance;
-            _gameSessionHolder = Gs2GameSessionHolder.Instance;
             Context = GetComponent<Gs2InventoryOwnInventoryContext>() ?? GetComponentInParent<Gs2InventoryOwnInventoryContext>();
-
             if (Context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2InventoryOwnInventoryContext.");
                 enabled = false;

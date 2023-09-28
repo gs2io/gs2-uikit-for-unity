@@ -42,21 +42,19 @@ namespace Gs2.Unity.UiKit.Gs2Mission
     {
         private List<Gs2MissionOwnCounterContext> _children;
 
-        public void Update() {
-            if (_fetcher.Fetched && this._fetcher.Counters != null) {
-                for (var i = 0; i < this.maximumItems; i++) {
-                    if (i < this._fetcher.Counters.Count) {
-                        _children[i].SetOwnCounter(
-                            OwnCounter.New(
+        public void OnFetched() {
+            for (var i = 0; i < this.maximumItems; i++) {
+                if (i < this._fetcher.Counters.Count) {
+                    _children[i].SetOwnCounter(
+                        OwnCounter.New(
                                 this._fetcher.Context.Namespace,
                                 this._fetcher.Counters[i].Name
                             )
-                        );
-                        _children[i].gameObject.SetActive(true);
-                    }
-                    else {
-                        _children[i].gameObject.SetActive(false);
-                    }
+                    );
+                    _children[i].gameObject.SetActive(true);
+                }
+                else {
+                    _children[i].gameObject.SetActive(false);
                 }
             }
         }
@@ -69,7 +67,6 @@ namespace Gs2.Unity.UiKit.Gs2Mission
     public partial class Gs2MissionOwnCounterList
     {
         private Gs2MissionOwnCounterListFetcher _fetcher;
-        private Gs2MissionNamespaceContext Context => _fetcher.Context;
 
         public void Awake()
         {
@@ -80,7 +77,6 @@ namespace Gs2.Unity.UiKit.Gs2Mission
             }
 
             _fetcher = GetComponent<Gs2MissionOwnCounterListFetcher>() ?? GetComponentInParent<Gs2MissionOwnCounterListFetcher>();
-
             if (_fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MissionOwnCounterListFetcher.");
                 enabled = false;
@@ -126,6 +122,16 @@ namespace Gs2.Unity.UiKit.Gs2Mission
 
     public partial class Gs2MissionOwnCounterList
     {
+
+        public void OnEnable()
+        {
+            _fetcher.OnFetched.AddListener(OnFetched);
+        }
+
+        public void OnDisable()
+        {
+            _fetcher.OnFetched.RemoveListener(OnFetched);
+        }
 
     }
 

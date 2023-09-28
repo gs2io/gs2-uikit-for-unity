@@ -27,6 +27,7 @@
 using Gs2.Unity.Gs2Enchant.ScriptableObject;
 using Gs2.Unity.UiKit.Core;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2Enchant.Context
 {
@@ -79,11 +80,21 @@ namespace Gs2.Unity.UiKit.Gs2Enchant.Context
 
     public partial class Gs2EnchantOwnRarityParameterStatusContext
     {
-        public OwnRarityParameterStatus RarityParameterStatus;
+        [SerializeField]
+        private OwnRarityParameterStatus _rarityParameterStatus;
+        public OwnRarityParameterStatus RarityParameterStatus
+        {
+            get => _rarityParameterStatus;
+            set => SetOwnRarityParameterStatus(value);
+        }
 
         public void SetOwnRarityParameterStatus(OwnRarityParameterStatus rarityParameterStatus) {
-            this.RarityParameterStatus = rarityParameterStatus;
+            this._rarityParameterStatus = rarityParameterStatus;
+
+            this.OnUpdate.Invoke();
         }
+
+        public UnityEvent OnUpdate = new UnityEvent();
     }
 
     /// <summary>

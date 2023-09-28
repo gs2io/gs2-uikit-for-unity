@@ -48,7 +48,7 @@ namespace Gs2.Unity.UiKit.Gs2Limit.Editor
                 }
                 else {
                     EditorGUILayout.HelpBox("OwnCounter not assigned.", MessageType.Error);
-                    EditorGUILayout.PropertyField(serializedObject.FindProperty("Counter"), true);
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("_counter"), true);
                 }
             }
             else {

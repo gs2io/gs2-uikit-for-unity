@@ -65,7 +65,6 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Fetcher
                     ).MoldModel(
                         this.Context.SlotModel.MoldModelName
                     ).FormModel(
-                        this.Context.SlotModel.FormModelName
                     );
                     var future = domain.Model();
                     yield return future;

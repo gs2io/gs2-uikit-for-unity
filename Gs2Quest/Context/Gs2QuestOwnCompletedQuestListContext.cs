@@ -27,6 +27,7 @@
 using Gs2.Unity.Gs2Quest.ScriptableObject;
 using Gs2.Unity.UiKit.Core;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2Quest.Context
 {
@@ -79,11 +80,21 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Context
 
     public partial class Gs2QuestOwnCompletedQuestListContext
     {
-        public OwnCompletedQuestList CompletedQuestList;
+        [SerializeField]
+        private OwnCompletedQuestList _completedQuestList;
+        public OwnCompletedQuestList CompletedQuestList
+        {
+            get => _completedQuestList;
+            set => SetOwnCompletedQuestList(value);
+        }
 
         public void SetOwnCompletedQuestList(OwnCompletedQuestList completedQuestList) {
-            this.CompletedQuestList = completedQuestList;
+            this._completedQuestList = completedQuestList;
+
+            this.OnUpdate.Invoke();
         }
+
+        public UnityEvent OnUpdate = new UnityEvent();
     }
 
     /// <summary>

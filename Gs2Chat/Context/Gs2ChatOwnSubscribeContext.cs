@@ -27,6 +27,7 @@
 using Gs2.Unity.Gs2Chat.ScriptableObject;
 using Gs2.Unity.UiKit.Core;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2Chat.Context
 {
@@ -79,11 +80,21 @@ namespace Gs2.Unity.UiKit.Gs2Chat.Context
 
     public partial class Gs2ChatOwnSubscribeContext
     {
-        public OwnSubscribe Subscribe;
+        [SerializeField]
+        private OwnSubscribe _subscribe;
+        public OwnSubscribe Subscribe
+        {
+            get => _subscribe;
+            set => SetOwnSubscribe(value);
+        }
 
         public void SetOwnSubscribe(OwnSubscribe subscribe) {
-            this.Subscribe = subscribe;
+            this._subscribe = subscribe;
+
+            this.OnUpdate.Invoke();
         }
+
+        public UnityEvent OnUpdate = new UnityEvent();
     }
 
     /// <summary>

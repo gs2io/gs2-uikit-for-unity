@@ -44,7 +44,7 @@ namespace Gs2.Unity.UiKit.Gs2Enhance.Editor
 
             if (original.Progress == null) {
                 EditorGUILayout.HelpBox("OwnProgress not assigned.", MessageType.Error);
-                EditorGUILayout.PropertyField(serializedObject.FindProperty("Progress"), true);
+                EditorGUILayout.PropertyField(serializedObject.FindProperty("_progress"), true);
             }
             else {
                 original.Progress = EditorGUILayout.ObjectField("OwnProgress", original.Progress, typeof(OwnProgress), false) as OwnProgress;

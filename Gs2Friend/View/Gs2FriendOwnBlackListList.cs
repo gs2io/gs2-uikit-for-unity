@@ -42,20 +42,18 @@ namespace Gs2.Unity.UiKit.Gs2Friend
     {
         private List<Gs2FriendOwnBlackListContext> _children;
 
-        public void Update() {
-            if (_fetcher.Fetched && this._fetcher.BlackList != null) {
-                for (var i = 0; i < this.maximumItems; i++) {
-                    if (i < this._fetcher.BlackList.Count) {
-                        _children[i].SetOwnBlackList(
-                            OwnBlackList.New(
+        public void OnFetched() {
+            for (var i = 0; i < this.maximumItems; i++) {
+                if (i < this._fetcher.BlackList.Count) {
+                    _children[i].SetOwnBlackList(
+                        OwnBlackList.New(
                                 this._fetcher.Context.Namespace
                             )
-                        );
-                        _children[i].gameObject.SetActive(true);
-                    }
-                    else {
-                        _children[i].gameObject.SetActive(false);
-                    }
+                    );
+                    _children[i].gameObject.SetActive(true);
+                }
+                else {
+                    _children[i].gameObject.SetActive(false);
                 }
             }
         }
@@ -68,7 +66,6 @@ namespace Gs2.Unity.UiKit.Gs2Friend
     public partial class Gs2FriendOwnBlackListList
     {
         private Gs2FriendOwnBlackListListFetcher _fetcher;
-        private Gs2FriendNamespaceContext Context => _fetcher.Context;
 
         public void Awake()
         {
@@ -79,7 +76,6 @@ namespace Gs2.Unity.UiKit.Gs2Friend
             }
 
             _fetcher = GetComponent<Gs2FriendOwnBlackListListFetcher>() ?? GetComponentInParent<Gs2FriendOwnBlackListListFetcher>();
-
             if (_fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2FriendOwnBlackListListFetcher.");
                 enabled = false;
@@ -120,6 +116,16 @@ namespace Gs2.Unity.UiKit.Gs2Friend
 
     public partial class Gs2FriendOwnBlackListList
     {
+
+        public void OnEnable()
+        {
+            _fetcher.OnFetched.AddListener(OnFetched);
+        }
+
+        public void OnDisable()
+        {
+            _fetcher.OnFetched.RemoveListener(OnFetched);
+        }
 
     }
 

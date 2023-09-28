@@ -44,7 +44,7 @@ namespace Gs2.Unity.UiKit.Gs2Chat.Editor
 
             if (original.Room == null) {
                 EditorGUILayout.HelpBox("Room not assigned.", MessageType.Error);
-                EditorGUILayout.PropertyField(serializedObject.FindProperty("Room"), true);
+                EditorGUILayout.PropertyField(serializedObject.FindProperty("_room"), true);
             }
             else {
                 original.Room = EditorGUILayout.ObjectField("Room", original.Room, typeof(Room), false) as Room;

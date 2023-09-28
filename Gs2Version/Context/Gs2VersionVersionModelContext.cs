@@ -27,6 +27,7 @@
 using Gs2.Unity.Gs2Version.ScriptableObject;
 using Gs2.Unity.UiKit.Core;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2Version.Context
 {
@@ -80,11 +81,21 @@ namespace Gs2.Unity.UiKit.Gs2Version.Context
 
     public partial class Gs2VersionVersionModelContext
     {
-        public VersionModel VersionModel;
+        [SerializeField]
+        private VersionModel _versionModel;
+        public VersionModel VersionModel
+        {
+            get => _versionModel;
+            set => SetVersionModel(value);
+        }
 
         public void SetVersionModel(VersionModel VersionModel) {
-            this.VersionModel = VersionModel;
+            this._versionModel = VersionModel;
+
+            this.OnUpdate.Invoke();
         }
+
+        public UnityEvent OnUpdate = new UnityEvent();
     }
 
     /// <summary>

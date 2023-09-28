@@ -42,21 +42,19 @@ namespace Gs2.Unity.UiKit.Gs2Formation
     {
         private List<Gs2FormationOwnMoldContext> _children;
 
-        public void Update() {
-            if (_fetcher.Fetched && this._fetcher.Molds != null) {
-                for (var i = 0; i < this.maximumItems; i++) {
-                    if (i < this._fetcher.Molds.Count) {
-                        _children[i].SetOwnMold(
-                            OwnMold.New(
+        public void OnFetched() {
+            for (var i = 0; i < this.maximumItems; i++) {
+                if (i < this._fetcher.Molds.Count) {
+                    _children[i].SetOwnMold(
+                        OwnMold.New(
                                 this._fetcher.Context.Namespace,
                                 this._fetcher.Molds[i].Name
                             )
-                        );
-                        _children[i].gameObject.SetActive(true);
-                    }
-                    else {
-                        _children[i].gameObject.SetActive(false);
-                    }
+                    );
+                    _children[i].gameObject.SetActive(true);
+                }
+                else {
+                    _children[i].gameObject.SetActive(false);
                 }
             }
         }
@@ -69,7 +67,6 @@ namespace Gs2.Unity.UiKit.Gs2Formation
     public partial class Gs2FormationOwnMoldList
     {
         private Gs2FormationOwnMoldListFetcher _fetcher;
-        private Gs2FormationNamespaceContext Context => _fetcher.Context;
 
         public void Awake()
         {
@@ -80,7 +77,6 @@ namespace Gs2.Unity.UiKit.Gs2Formation
             }
 
             _fetcher = GetComponent<Gs2FormationOwnMoldListFetcher>() ?? GetComponentInParent<Gs2FormationOwnMoldListFetcher>();
-
             if (_fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2FormationOwnMoldListFetcher.");
                 enabled = false;
@@ -126,6 +122,16 @@ namespace Gs2.Unity.UiKit.Gs2Formation
 
     public partial class Gs2FormationOwnMoldList
     {
+
+        public void OnEnable()
+        {
+            _fetcher.OnFetched.AddListener(OnFetched);
+        }
+
+        public void OnDisable()
+        {
+            _fetcher.OnFetched.RemoveListener(OnFetched);
+        }
 
     }
 

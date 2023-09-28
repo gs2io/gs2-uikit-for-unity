@@ -27,6 +27,7 @@
 using Gs2.Unity.Gs2Formation.ScriptableObject;
 using Gs2.Unity.UiKit.Core;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2Formation.Context
 {
@@ -80,11 +81,21 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Context
 
     public partial class Gs2FormationPropertyFormModelContext
     {
-        public PropertyFormModel PropertyFormModel;
+        [SerializeField]
+        private PropertyFormModel _propertyFormModel;
+        public PropertyFormModel PropertyFormModel
+        {
+            get => _propertyFormModel;
+            set => SetPropertyFormModel(value);
+        }
 
         public void SetPropertyFormModel(PropertyFormModel PropertyFormModel) {
-            this.PropertyFormModel = PropertyFormModel;
+            this._propertyFormModel = PropertyFormModel;
+
+            this.OnUpdate.Invoke();
         }
+
+        public UnityEvent OnUpdate = new UnityEvent();
     }
 
     /// <summary>

@@ -27,6 +27,7 @@
 using Gs2.Unity.Gs2Inventory.ScriptableObject;
 using Gs2.Unity.UiKit.Core;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2Inventory.Context
 {
@@ -43,10 +44,8 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Context
             }
         }
         public override bool HasError() {
-            if (base.HasError()) {
-                return true;
-            }
-            if (ItemSet == null) {
+            var hasError = base.HasError();
+            if (ItemSet == null || hasError) {
                 if (GetComponentInParent<Gs2InventoryOwnItemSetList>(true) != null) {
                     return false;
                 }
@@ -82,7 +81,13 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Context
 
     public partial class Gs2InventoryOwnItemSetContext
     {
-        public OwnItemSet ItemSet;
+        [SerializeField]
+        private OwnItemSet _itemSet;
+        public OwnItemSet ItemSet
+        {
+            get => _itemSet;
+            set => SetOwnItemSet(value);
+        }
 
         public void SetOwnItemSet(OwnItemSet itemSet) {
             this.ItemModel = ItemModel.New(
@@ -94,7 +99,9 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Context
                 ),
                 itemSet.ItemName
             );
-            this.ItemSet = itemSet;
+            this._itemSet = itemSet;
+
+            this.OnUpdate.Invoke();
         }
     }
 

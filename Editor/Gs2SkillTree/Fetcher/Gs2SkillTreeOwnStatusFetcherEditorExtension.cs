@@ -51,7 +51,7 @@ namespace Gs2.Unity.UiKit.Gs2SkillTree.Editor
                 EditorGUI.BeginDisabledGroup(true);
                 EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2SkillTreeOwnStatusContext), false);
                 EditorGUI.indentLevel++;
-                context.Status = EditorGUILayout.ObjectField("Status", context.Status, typeof(OwnStatus), false) as OwnStatus;
+                EditorGUILayout.ObjectField("Status", context.Status, typeof(OwnStatus), false);
                 if (context.Status != null) {
                     EditorGUI.indentLevel++;
                     EditorGUILayout.TextField("NamespaceName", context.Status?.NamespaceName?.ToString());

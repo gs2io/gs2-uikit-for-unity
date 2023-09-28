@@ -42,21 +42,19 @@ namespace Gs2.Unity.UiKit.Gs2Mission
     {
         private List<Gs2MissionOwnCompleteContext> _children;
 
-        public void Update() {
-            if (_fetcher.Fetched && this._fetcher.Completes != null) {
-                for (var i = 0; i < this.maximumItems; i++) {
-                    if (i < this._fetcher.Completes.Count) {
-                        _children[i].SetOwnComplete(
-                            OwnComplete.New(
+        public void OnFetched() {
+            for (var i = 0; i < this.maximumItems; i++) {
+                if (i < this._fetcher.Completes.Count) {
+                    _children[i].SetOwnComplete(
+                        OwnComplete.New(
                                 this._fetcher.Context.Namespace,
                                 this._fetcher.Completes[i].MissionGroupName
                             )
-                        );
-                        _children[i].gameObject.SetActive(true);
-                    }
-                    else {
-                        _children[i].gameObject.SetActive(false);
-                    }
+                    );
+                    _children[i].gameObject.SetActive(true);
+                }
+                else {
+                    _children[i].gameObject.SetActive(false);
                 }
             }
         }
@@ -69,7 +67,6 @@ namespace Gs2.Unity.UiKit.Gs2Mission
     public partial class Gs2MissionOwnCompleteList
     {
         private Gs2MissionOwnCompleteListFetcher _fetcher;
-        private Gs2MissionNamespaceContext Context => _fetcher.Context;
 
         public void Awake()
         {
@@ -80,7 +77,6 @@ namespace Gs2.Unity.UiKit.Gs2Mission
             }
 
             _fetcher = GetComponent<Gs2MissionOwnCompleteListFetcher>() ?? GetComponentInParent<Gs2MissionOwnCompleteListFetcher>();
-
             if (_fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MissionOwnCompleteListFetcher.");
                 enabled = false;
@@ -122,6 +118,16 @@ namespace Gs2.Unity.UiKit.Gs2Mission
 
     public partial class Gs2MissionOwnCompleteList
     {
+
+        public void OnEnable()
+        {
+            _fetcher.OnFetched.AddListener(OnFetched);
+        }
+
+        public void OnDisable()
+        {
+            _fetcher.OnFetched.RemoveListener(OnFetched);
+        }
 
     }
 

@@ -44,7 +44,7 @@ namespace Gs2.Unity.UiKit.Gs2Showcase.Editor
 
             if (original.RandomShowcase == null) {
                 EditorGUILayout.HelpBox("OwnRandomShowcase not assigned.", MessageType.Error);
-                EditorGUILayout.PropertyField(serializedObject.FindProperty("RandomShowcase"), true);
+                EditorGUILayout.PropertyField(serializedObject.FindProperty("_randomShowcase"), true);
             }
             else {
                 original.RandomShowcase = EditorGUILayout.ObjectField("OwnRandomShowcase", original.RandomShowcase, typeof(OwnRandomShowcase), false) as OwnRandomShowcase;

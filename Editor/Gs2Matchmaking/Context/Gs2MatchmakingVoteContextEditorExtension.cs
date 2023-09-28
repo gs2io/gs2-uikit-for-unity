@@ -44,7 +44,7 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking.Editor
 
             if (original.Vote == null) {
                 EditorGUILayout.HelpBox("Vote not assigned.", MessageType.Error);
-                EditorGUILayout.PropertyField(serializedObject.FindProperty("Vote"), true);
+                EditorGUILayout.PropertyField(serializedObject.FindProperty("_vote"), true);
             }
             else {
                 original.Vote = EditorGUILayout.ObjectField("Vote", original.Vote, typeof(Vote), false) as Vote;

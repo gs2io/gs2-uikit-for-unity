@@ -27,6 +27,7 @@
 using Gs2.Unity.Gs2Matchmaking.ScriptableObject;
 using Gs2.Unity.UiKit.Core;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2Matchmaking.Context
 {
@@ -80,11 +81,21 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking.Context
 
     public partial class Gs2MatchmakingRatingModelContext
     {
-        public RatingModel RatingModel;
+        [SerializeField]
+        private RatingModel _ratingModel;
+        public RatingModel RatingModel
+        {
+            get => _ratingModel;
+            set => SetRatingModel(value);
+        }
 
         public void SetRatingModel(RatingModel RatingModel) {
-            this.RatingModel = RatingModel;
+            this._ratingModel = RatingModel;
+
+            this.OnUpdate.Invoke();
         }
+
+        public UnityEvent OnUpdate = new UnityEvent();
     }
 
     /// <summary>

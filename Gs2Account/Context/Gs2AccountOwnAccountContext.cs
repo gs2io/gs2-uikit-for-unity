@@ -27,6 +27,7 @@
 using Gs2.Unity.Gs2Account.ScriptableObject;
 using Gs2.Unity.UiKit.Core;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2Account.Context
 {
@@ -74,11 +75,21 @@ namespace Gs2.Unity.UiKit.Gs2Account.Context
 
     public partial class Gs2AccountOwnAccountContext
     {
-        public OwnAccount Account;
+        [SerializeField]
+        private OwnAccount _account;
+        public OwnAccount Account
+        {
+            get => _account;
+            set => SetOwnAccount(value);
+        }
 
         public void SetOwnAccount(OwnAccount account) {
-            this.Account = account;
+            this._account = account;
+
+            this.OnUpdate.Invoke();
         }
+
+        public UnityEvent OnUpdate = new UnityEvent();
     }
 
     /// <summary>

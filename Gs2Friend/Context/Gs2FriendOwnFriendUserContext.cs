@@ -27,7 +27,9 @@
 #pragma warning disable CS0472
 
 using Gs2.Unity.Gs2Friend.ScriptableObject;
+using Gs2.Unity.UiKit.Core;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2Friend.Context
 {
@@ -40,11 +42,10 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Context
     {
         public void Start() {
             if (FriendUser == null) {
-                Debug.LogError("FriendUser is not set in Gs2FriendOwnFriendUserContext.");
+                Debug.LogError($"{gameObject.GetFullPath()}: FriendUser is not set in Gs2FriendOwnFriendUserContext.");
             }
         }
-
-        public bool HasError() {
+        public virtual bool HasError() {
             if (FriendUser == null) {
                 if (GetComponentInParent<Gs2FriendOwnFriendList>(true) != null) {
                     return false;
@@ -87,11 +88,21 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Context
 
     public partial class Gs2FriendOwnFriendUserContext
     {
-        public OwnFriendUser FriendUser;
-
-        public void SetOwnFriendUser(OwnFriendUser FriendUser) {
-            this.FriendUser = FriendUser;
+        [SerializeField]
+        private OwnFriendUser _friendUser;
+        public OwnFriendUser FriendUser
+        {
+            get => _friendUser;
+            set => SetOwnFriendUser(value);
         }
+
+        public void SetOwnFriendUser(OwnFriendUser friendUser) {
+            this._friendUser = friendUser;
+
+            this.OnUpdate.Invoke();
+        }
+
+        public UnityEvent OnUpdate = new UnityEvent();
     }
 
     /// <summary>

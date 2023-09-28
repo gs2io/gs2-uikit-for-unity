@@ -42,21 +42,19 @@ namespace Gs2.Unity.UiKit.Gs2Formation
     {
         private List<Gs2FormationPropertyFormModelContext> _children;
 
-        public void Update() {
-            if (_fetcher.Fetched && this._fetcher.PropertyFormModels != null) {
-                for (var i = 0; i < this.maximumItems; i++) {
-                    if (i < this._fetcher.PropertyFormModels.Count) {
-                        _children[i].SetPropertyFormModel(
-                            PropertyFormModel.New(
+        public void OnFetched() {
+            for (var i = 0; i < this.maximumItems; i++) {
+                if (i < this._fetcher.PropertyFormModels.Count) {
+                    _children[i].SetPropertyFormModel(
+                        PropertyFormModel.New(
                                 this._fetcher.Context.Namespace,
                                 this._fetcher.PropertyFormModels[i].Name
                             )
-                        );
-                        _children[i].gameObject.SetActive(true);
-                    }
-                    else {
-                        _children[i].gameObject.SetActive(false);
-                    }
+                    );
+                    _children[i].gameObject.SetActive(true);
+                }
+                else {
+                    _children[i].gameObject.SetActive(false);
                 }
             }
         }
@@ -80,7 +78,6 @@ namespace Gs2.Unity.UiKit.Gs2Formation
             }
 
             _fetcher = GetComponent<Gs2FormationPropertyFormModelListFetcher>() ?? GetComponentInParent<Gs2FormationPropertyFormModelListFetcher>();
-
             if (_fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2FormationPropertyFormModelListFetcher.");
                 enabled = false;
@@ -122,7 +119,15 @@ namespace Gs2.Unity.UiKit.Gs2Formation
 
     public partial class Gs2FormationPropertyFormModelList
     {
+        public void OnEnable()
+        {
+            _fetcher.OnFetched.AddListener(OnFetched);
+        }
 
+        public void OnDisable()
+        {
+            _fetcher.OnFetched.RemoveListener(OnFetched);
+        }
     }
 
     /// <summary>

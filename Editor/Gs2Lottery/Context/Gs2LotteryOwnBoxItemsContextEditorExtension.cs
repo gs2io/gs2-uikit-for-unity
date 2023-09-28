@@ -48,7 +48,7 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.Editor
                 }
                 else {
                     EditorGUILayout.HelpBox("OwnBoxItems not assigned.", MessageType.Error);
-                    EditorGUILayout.PropertyField(serializedObject.FindProperty("BoxItems"), true);
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("_boxItems"), true);
                 }
             }
             else {

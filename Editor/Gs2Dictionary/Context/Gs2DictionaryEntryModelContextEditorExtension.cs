@@ -48,7 +48,7 @@ namespace Gs2.Unity.UiKit.Gs2Dictionary.Editor
                 }
                 else {
                     EditorGUILayout.HelpBox("EntryModel not assigned.", MessageType.Error);
-                    EditorGUILayout.PropertyField(serializedObject.FindProperty("EntryModel"), true);
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("_entryModel"), true);
                 }
             }
             else {

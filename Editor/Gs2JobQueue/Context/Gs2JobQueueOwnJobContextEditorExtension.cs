@@ -44,7 +44,7 @@ namespace Gs2.Unity.UiKit.Gs2JobQueue.Editor
 
             if (original.Job == null) {
                 EditorGUILayout.HelpBox("OwnJob not assigned.", MessageType.Error);
-                EditorGUILayout.PropertyField(serializedObject.FindProperty("Job"), true);
+                EditorGUILayout.PropertyField(serializedObject.FindProperty("_job"), true);
             }
             else {
                 original.Job = EditorGUILayout.ObjectField("OwnJob", original.Job, typeof(OwnJob), false) as OwnJob;

@@ -48,7 +48,7 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.Editor
                 }
                 else {
                     EditorGUILayout.HelpBox("LotteryModel not assigned.", MessageType.Error);
-                    EditorGUILayout.PropertyField(serializedObject.FindProperty("LotteryModel"), true);
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("_lotteryModel"), true);
                 }
             }
             else {

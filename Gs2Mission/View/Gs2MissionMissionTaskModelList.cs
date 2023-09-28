@@ -42,21 +42,19 @@ namespace Gs2.Unity.UiKit.Gs2Mission
     {
         private List<Gs2MissionMissionTaskModelContext> _children;
 
-        public void Update() {
-            if (_fetcher.Fetched && this._fetcher.MissionTaskModels != null) {
-                for (var i = 0; i < this.maximumItems; i++) {
-                    if (i < this._fetcher.MissionTaskModels.Count) {
-                        _children[i].SetMissionTaskModel(
-                            MissionTaskModel.New(
+        public void OnFetched() {
+            for (var i = 0; i < this.maximumItems; i++) {
+                if (i < this._fetcher.MissionTaskModels.Count) {
+                    _children[i].SetMissionTaskModel(
+                        MissionTaskModel.New(
                                 this._fetcher.Context.MissionGroupModel,
                                 this._fetcher.MissionTaskModels[i].Name
                             )
-                        );
-                        _children[i].gameObject.SetActive(true);
-                    }
-                    else {
-                        _children[i].gameObject.SetActive(false);
-                    }
+                    );
+                    _children[i].gameObject.SetActive(true);
+                }
+                else {
+                    _children[i].gameObject.SetActive(false);
                 }
             }
         }
@@ -80,7 +78,6 @@ namespace Gs2.Unity.UiKit.Gs2Mission
             }
 
             _fetcher = GetComponent<Gs2MissionMissionTaskModelListFetcher>() ?? GetComponentInParent<Gs2MissionMissionTaskModelListFetcher>();
-
             if (_fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MissionMissionTaskModelListFetcher.");
                 enabled = false;
@@ -122,7 +119,15 @@ namespace Gs2.Unity.UiKit.Gs2Mission
 
     public partial class Gs2MissionMissionTaskModelList
     {
+        public void OnEnable()
+        {
+            _fetcher.OnFetched.AddListener(OnFetched);
+        }
 
+        public void OnDisable()
+        {
+            _fetcher.OnFetched.RemoveListener(OnFetched);
+        }
     }
 
     /// <summary>

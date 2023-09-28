@@ -27,6 +27,7 @@
 using Gs2.Unity.Gs2Lottery.ScriptableObject;
 using Gs2.Unity.UiKit.Core;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2Lottery.Context
 {
@@ -79,11 +80,21 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.Context
 
     public partial class Gs2LotteryOwnProbabilityContext
     {
-        public OwnProbability Probability;
+        [SerializeField]
+        private OwnProbability _probability;
+        public OwnProbability Probability
+        {
+            get => _probability;
+            set => SetOwnProbability(value);
+        }
 
         public void SetOwnProbability(OwnProbability probability) {
-            this.Probability = probability;
+            this._probability = probability;
+
+            this.OnUpdate.Invoke();
         }
+
+        public UnityEvent OnUpdate = new UnityEvent();
     }
 
     /// <summary>

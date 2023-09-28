@@ -42,21 +42,19 @@ namespace Gs2.Unity.UiKit.Gs2LoginReward
     {
         private List<Gs2LoginRewardOwnReceiveStatusContext> _children;
 
-        public void Update() {
-            if (_fetcher.Fetched && this._fetcher.ReceiveStatuses != null) {
-                for (var i = 0; i < this.maximumItems; i++) {
-                    if (i < this._fetcher.ReceiveStatuses.Count) {
-                        _children[i].SetOwnReceiveStatus(
-                            OwnReceiveStatus.New(
+        public void OnFetched() {
+            for (var i = 0; i < this.maximumItems; i++) {
+                if (i < this._fetcher.ReceiveStatuses.Count) {
+                    _children[i].SetOwnReceiveStatus(
+                        OwnReceiveStatus.New(
                                 this._fetcher.Context.Namespace,
                                 this._fetcher.ReceiveStatuses[i].BonusModelName
                             )
-                        );
-                        _children[i].gameObject.SetActive(true);
-                    }
-                    else {
-                        _children[i].gameObject.SetActive(false);
-                    }
+                    );
+                    _children[i].gameObject.SetActive(true);
+                }
+                else {
+                    _children[i].gameObject.SetActive(false);
                 }
             }
         }
@@ -69,7 +67,6 @@ namespace Gs2.Unity.UiKit.Gs2LoginReward
     public partial class Gs2LoginRewardOwnReceiveStatusList
     {
         private Gs2LoginRewardOwnReceiveStatusListFetcher _fetcher;
-        private Gs2LoginRewardNamespaceContext Context => _fetcher.Context;
 
         public void Awake()
         {
@@ -80,7 +77,6 @@ namespace Gs2.Unity.UiKit.Gs2LoginReward
             }
 
             _fetcher = GetComponent<Gs2LoginRewardOwnReceiveStatusListFetcher>() ?? GetComponentInParent<Gs2LoginRewardOwnReceiveStatusListFetcher>();
-
             if (_fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2LoginRewardOwnReceiveStatusListFetcher.");
                 enabled = false;
@@ -122,6 +118,16 @@ namespace Gs2.Unity.UiKit.Gs2LoginReward
 
     public partial class Gs2LoginRewardOwnReceiveStatusList
     {
+
+        public void OnEnable()
+        {
+            _fetcher.OnFetched.AddListener(OnFetched);
+        }
+
+        public void OnDisable()
+        {
+            _fetcher.OnFetched.RemoveListener(OnFetched);
+        }
 
     }
 

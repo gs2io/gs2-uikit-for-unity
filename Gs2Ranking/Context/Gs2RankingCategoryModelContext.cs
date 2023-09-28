@@ -27,6 +27,7 @@
 using Gs2.Unity.Gs2Ranking.ScriptableObject;
 using Gs2.Unity.UiKit.Core;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2Ranking.Context
 {
@@ -80,11 +81,21 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Context
 
     public partial class Gs2RankingCategoryModelContext
     {
-        public CategoryModel CategoryModel;
+        [SerializeField]
+        private CategoryModel _categoryModel;
+        public CategoryModel CategoryModel
+        {
+            get => _categoryModel;
+            set => SetCategoryModel(value);
+        }
 
         public void SetCategoryModel(CategoryModel CategoryModel) {
-            this.CategoryModel = CategoryModel;
+            this._categoryModel = CategoryModel;
+
+            this.OnUpdate.Invoke();
         }
+
+        public UnityEvent OnUpdate = new UnityEvent();
     }
 
     /// <summary>

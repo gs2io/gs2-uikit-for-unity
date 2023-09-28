@@ -58,7 +58,7 @@ namespace Gs2.Unity.UiKit.Gs2SkillTree.Editor
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2SkillTreeNodeModelContext), false);
                     EditorGUI.indentLevel++;
-                    context.NodeModel = EditorGUILayout.ObjectField("NodeModel", context.NodeModel, typeof(NodeModel), false) as NodeModel;
+                    EditorGUILayout.ObjectField("NodeModel", context.NodeModel, typeof(NodeModel), false);
                     if (context.NodeModel != null) {
                         EditorGUI.indentLevel++;
                         EditorGUILayout.TextField("NamespaceName", context.NodeModel?.NamespaceName?.ToString());

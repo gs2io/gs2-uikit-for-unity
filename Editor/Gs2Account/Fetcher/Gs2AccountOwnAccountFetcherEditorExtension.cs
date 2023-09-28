@@ -51,7 +51,7 @@ namespace Gs2.Unity.UiKit.Gs2Account.Editor
                 EditorGUI.BeginDisabledGroup(true);
                 EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2AccountOwnAccountContext), false);
                 EditorGUI.indentLevel++;
-                context.Account = EditorGUILayout.ObjectField("Account", context.Account, typeof(OwnAccount), false) as OwnAccount;
+                EditorGUILayout.ObjectField("Account", context.Account, typeof(OwnAccount), false);
                 if (context.Account != null) {
                     EditorGUI.indentLevel++;
                     EditorGUILayout.TextField("NamespaceName", context.Account?.NamespaceName?.ToString());

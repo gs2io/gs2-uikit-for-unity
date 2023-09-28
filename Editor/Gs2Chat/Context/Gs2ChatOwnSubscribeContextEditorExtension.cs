@@ -48,7 +48,7 @@ namespace Gs2.Unity.UiKit.Gs2Chat.Editor
                 }
                 else {
                     EditorGUILayout.HelpBox("OwnSubscribe not assigned.", MessageType.Error);
-                    EditorGUILayout.PropertyField(serializedObject.FindProperty("Subscribe"), true);
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("_subscribe"), true);
                 }
             }
             else {

@@ -27,6 +27,7 @@
 using Gs2.Unity.Gs2Ranking.ScriptableObject;
 using Gs2.Unity.UiKit.Core;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2Ranking.Context
 {
@@ -79,11 +80,21 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Context
 
     public partial class Gs2RankingOwnScoreContext
     {
-        public OwnScore Score;
+        [SerializeField]
+        private OwnScore _score;
+        public OwnScore Score
+        {
+            get => _score;
+            set => SetOwnScore(value);
+        }
 
         public void SetOwnScore(OwnScore score) {
-            this.Score = score;
+            this._score = score;
+
+            this.OnUpdate.Invoke();
         }
+
+        public UnityEvent OnUpdate = new UnityEvent();
     }
 
     /// <summary>

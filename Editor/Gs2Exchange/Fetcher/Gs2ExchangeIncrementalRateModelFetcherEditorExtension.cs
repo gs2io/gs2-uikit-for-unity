@@ -58,7 +58,7 @@ namespace Gs2.Unity.UiKit.Gs2Exchange.Editor
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2ExchangeIncrementalRateModelContext), false);
                     EditorGUI.indentLevel++;
-                    context.IncrementalRateModel = EditorGUILayout.ObjectField("IncrementalRateModel", context.IncrementalRateModel, typeof(IncrementalRateModel), false) as IncrementalRateModel;
+                    EditorGUILayout.ObjectField("IncrementalRateModel", context.IncrementalRateModel, typeof(IncrementalRateModel), false);
                     if (context.IncrementalRateModel != null) {
                         EditorGUI.indentLevel++;
                         EditorGUILayout.TextField("NamespaceName", context.IncrementalRateModel?.NamespaceName?.ToString());

@@ -27,6 +27,7 @@
 using Gs2.Unity.Gs2Inbox.ScriptableObject;
 using Gs2.Unity.UiKit.Core;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2Inbox.Context
 {
@@ -75,11 +76,21 @@ namespace Gs2.Unity.UiKit.Gs2Inbox.Context
 
     public partial class Gs2InboxGlobalMessageContext
     {
-        public GlobalMessage GlobalMessage;
+        [SerializeField]
+        private GlobalMessage _globalMessage;
+        public GlobalMessage GlobalMessage
+        {
+            get => _globalMessage;
+            set => SetGlobalMessage(value);
+        }
 
         public void SetGlobalMessage(GlobalMessage GlobalMessage) {
-            this.GlobalMessage = GlobalMessage;
+            this._globalMessage = GlobalMessage;
+
+            this.OnUpdate.Invoke();
         }
+
+        public UnityEvent OnUpdate = new UnityEvent();
     }
 
     /// <summary>

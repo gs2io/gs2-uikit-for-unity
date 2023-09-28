@@ -12,8 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
- * deny overwrite
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
@@ -29,6 +27,7 @@
 using Gs2.Unity.Gs2Formation.ScriptableObject;
 using Gs2.Unity.UiKit.Core;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2Formation.Context
 {
@@ -45,10 +44,8 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Context
             }
         }
         public override bool HasError() {
-            if (!base.HasError()) {
-                return false;
-            }
-            if (Form == null) {
+            var hasError = base.HasError();
+            if (Form == null || hasError) {
                 if (GetComponentInParent<Gs2FormationOwnFormList>(true) != null) {
                     return false;
                 }
@@ -84,14 +81,26 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Context
 
     public partial class Gs2FormationOwnFormContext
     {
-        public OwnForm Form;
+        [SerializeField]
+        private OwnForm _form;
+        public OwnForm Form
+        {
+            get => _form;
+            set => SetOwnForm(value);
+        }
 
         public void SetOwnForm(OwnForm form) {
             this.FormModel = FormModel.New(
-                form.Mold,
-                form.MoldModelName
+                MoldModel.New(
+                    Namespace.New(
+                        form.NamespaceName
+                    ),
+                    form.MoldModelName
+                )
             );
-            this.Form = form;
+            this._form = form;
+
+            this.OnUpdate.Invoke();
         }
     }
 

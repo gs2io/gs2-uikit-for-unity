@@ -49,7 +49,7 @@ namespace Gs2.Unity.UiKit.Gs2Schedule.Editor
                 }
                 else {
                     EditorGUILayout.HelpBox("OwnTrigger not assigned.", MessageType.Error);
-                    EditorGUILayout.PropertyField(serializedObject.FindProperty("Trigger"), true);
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("_trigger"), true);
                 }
             }
             else {

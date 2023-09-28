@@ -44,7 +44,7 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Editor
 
             if (original.BigInventory == null) {
                 EditorGUILayout.HelpBox("OwnBigInventory not assigned.", MessageType.Error);
-                EditorGUILayout.PropertyField(serializedObject.FindProperty("BigInventory"), true);
+                EditorGUILayout.PropertyField(serializedObject.FindProperty("_bigInventory"), true);
             }
             else {
                 original.BigInventory = EditorGUILayout.ObjectField("OwnBigInventory", original.BigInventory, typeof(OwnBigInventory), false) as OwnBigInventory;

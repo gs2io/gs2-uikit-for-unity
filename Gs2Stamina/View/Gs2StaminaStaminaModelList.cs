@@ -42,21 +42,19 @@ namespace Gs2.Unity.UiKit.Gs2Stamina
     {
         private List<Gs2StaminaStaminaModelContext> _children;
 
-        public void Update() {
-            if (_fetcher.Fetched && this._fetcher.StaminaModels != null) {
-                for (var i = 0; i < this.maximumItems; i++) {
-                    if (i < this._fetcher.StaminaModels.Count) {
-                        _children[i].SetStaminaModel(
-                            StaminaModel.New(
+        public void OnFetched() {
+            for (var i = 0; i < this.maximumItems; i++) {
+                if (i < this._fetcher.StaminaModels.Count) {
+                    _children[i].SetStaminaModel(
+                        StaminaModel.New(
                                 this._fetcher.Context.Namespace,
                                 this._fetcher.StaminaModels[i].Name
                             )
-                        );
-                        _children[i].gameObject.SetActive(true);
-                    }
-                    else {
-                        _children[i].gameObject.SetActive(false);
-                    }
+                    );
+                    _children[i].gameObject.SetActive(true);
+                }
+                else {
+                    _children[i].gameObject.SetActive(false);
                 }
             }
         }
@@ -80,7 +78,6 @@ namespace Gs2.Unity.UiKit.Gs2Stamina
             }
 
             _fetcher = GetComponent<Gs2StaminaStaminaModelListFetcher>() ?? GetComponentInParent<Gs2StaminaStaminaModelListFetcher>();
-
             if (_fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2StaminaStaminaModelListFetcher.");
                 enabled = false;
@@ -122,7 +119,15 @@ namespace Gs2.Unity.UiKit.Gs2Stamina
 
     public partial class Gs2StaminaStaminaModelList
     {
+        public void OnEnable()
+        {
+            _fetcher.OnFetched.AddListener(OnFetched);
+        }
 
+        public void OnDisable()
+        {
+            _fetcher.OnFetched.RemoveListener(OnFetched);
+        }
     }
 
     /// <summary>

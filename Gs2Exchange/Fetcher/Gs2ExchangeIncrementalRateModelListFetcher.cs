@@ -30,6 +30,7 @@ using System.Collections.Generic;
 using System.Text;
 using Gs2.Core.Exception;
 using Gs2.Unity.Core.Exception;
+using Gs2.Unity.Gs2Exchange.Domain.Model;
 using Gs2.Unity.Gs2Exchange.Model;
 using Gs2.Unity.Gs2Exchange.ScriptableObject;
 using Gs2.Unity.Util;
@@ -47,68 +48,95 @@ namespace Gs2.Unity.UiKit.Gs2Exchange.Fetcher
 	[AddComponentMenu("GS2 UIKit/Exchange/IncrementalRateModel/Fetcher/Gs2ExchangeIncrementalRateModelListFetcher")]
     public partial class Gs2ExchangeIncrementalRateModelListFetcher : MonoBehaviour
     {
-        private IEnumerator Fetch()
-        {
-            var retryWaitSecond = 1;
-            Gs2Exception e;
-            while (true)
-            {
-                if (_gameSessionHolder != null && _gameSessionHolder.Initialized && 
-                    _clientHolder != null && _clientHolder.Initialized &&
-                    Context != null && Context.Namespace != null)
-                {
-                    
-                    var domain = this._clientHolder.Gs2.Exchange.Namespace(
-                        this.Context.Namespace.NamespaceName
-                    );
-                    var it = domain.IncrementalRateModels();
-                    var items = new List<Gs2.Unity.Gs2Exchange.Model.EzIncrementalRateModel>();
-                    while (it.HasNext())
-                    {
-                        yield return it.Next();
-                        if (it.Error != null)
-                        {
-                            if (it.Error is BadRequestException || it.Error is NotFoundException)
-                            {
-                                onError.Invoke(e = it.Error, null);
-                                Debug.LogError($"{gameObject.GetFullPath()}: {it.Error.Message}");
-                                break;
-                            }
-                            else {
-                                onError.Invoke(new CanIgnoreException(it.Error), null);
-                            }
-                            yield return new WaitForSeconds(retryWaitSecond);
-                            retryWaitSecond *= 2;
-                        }
-                        else {
-                            if (it.Current != null)
-                            {
-                                items.Add(it.Current);
-                            } else {
-                                break;
-                            }
-                        }
-                    }
+        private EzNamespaceDomain _domain;
+        private ulong? _callbackId;
 
-                    retryWaitSecond = 1;
-                    IncrementalRateModels = items;
-                    Fetched = true;
+        private IEnumerator Load() {
+            var retryWaitSecond = 1;
+            var it = _domain.IncrementalRateModels();
+            var items = new List<Gs2.Unity.Gs2Exchange.Model.EzIncrementalRateModel>();
+            while (it.HasNext())
+            {
+                yield return it.Next();
+                if (it.Error != null)
+                {
+                    if (it.Error is BadRequestException || it.Error is NotFoundException)
+                    {
+                        onError.Invoke(it.Error, null);
+                        Debug.LogError($"{gameObject.GetFullPath()}: {it.Error.Message}");
+                        break;
+                    }
+                    else {
+                        onError.Invoke(new CanIgnoreException(it.Error), null);
+                    }
+                    yield return new WaitForSeconds(retryWaitSecond);
+                    retryWaitSecond *= 2;
                 }
                 else {
-                    yield return new WaitForSeconds(0.1f);
+                    if (it.Current != null)
+                    {
+                        items.Add(it.Current);
+                    } else {
+                        break;
+                    }
                 }
             }
-            // ReSharper disable once IteratorNeverReturns
+
+            retryWaitSecond = 1;
+            IncrementalRateModels = items;
+            Fetched = true;
+
+            this.OnFetched.Invoke();
+        }
+
+        private IEnumerator Fetch()
+        {
+            var clientHolder = Gs2ClientHolder.Instance;
+            var gameSessionHolder = Gs2GameSessionHolder.Instance;
+
+            yield return new WaitUntil(() => clientHolder.Initialized);
+            yield return new WaitUntil(() => gameSessionHolder.Initialized);
+            yield return new WaitUntil(() => Context != null && Context.Namespace != null);
+
+            this._domain = clientHolder.Gs2.Exchange.Namespace(
+                this.Context.Namespace.NamespaceName
+            );
+            this._callbackId = this._domain.SubscribeIncrementalRateModels(
+                () =>
+                {
+                    StartCoroutine(nameof(Load));
+                }
+            );
+
+            yield return Load();
+        }
+
+        public void OnUpdateContext() {
+            OnDisable();
+            Awake();
+            OnEnable();
         }
 
         public void OnEnable()
         {
             StartCoroutine(nameof(Fetch));
+            Context.OnUpdate.AddListener(OnUpdateContext);
         }
 
         public void OnDisable()
         {
-            StopCoroutine(nameof(Fetch));
+            Context.OnUpdate.RemoveListener(OnUpdateContext);
+
+            if (this._domain == null) {
+                return;
+            }
+            if (!this._callbackId.HasValue) {
+                return;
+            }
+            this._domain.UnsubscribeIncrementalRateModels(
+                this._callbackId.Value
+            );
+            this._callbackId = null;
         }
     }
 
@@ -118,16 +146,13 @@ namespace Gs2.Unity.UiKit.Gs2Exchange.Fetcher
     
     public partial class Gs2ExchangeIncrementalRateModelListFetcher
     {
-        private Gs2ClientHolder _clientHolder;
-        private Gs2GameSessionHolder _gameSessionHolder;
         public Gs2ExchangeNamespaceContext Context { get; private set; }
+
+        public UnityEvent OnFetched = new UnityEvent();
 
         public void Awake()
         {
-            _clientHolder = Gs2ClientHolder.Instance;
-            _gameSessionHolder = Gs2GameSessionHolder.Instance;
             Context = GetComponent<Gs2ExchangeNamespaceContext>() ?? GetComponentInParent<Gs2ExchangeNamespaceContext>();
-
             if (Context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ExchangeNamespaceContext.");
                 enabled = false;

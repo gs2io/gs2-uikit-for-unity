@@ -27,6 +27,7 @@
 using Gs2.Unity.Gs2Inventory.ScriptableObject;
 using Gs2.Unity.UiKit.Core;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2Inventory.Context
 {
@@ -74,11 +75,21 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Context
 
     public partial class Gs2InventoryOwnReferenceOfContext
     {
-        public OwnReferenceOf ReferenceOf;
+        [SerializeField]
+        private OwnReferenceOf _referenceOf;
+        public OwnReferenceOf ReferenceOf
+        {
+            get => _referenceOf;
+            set => SetOwnReferenceOf(value);
+        }
 
         public void SetOwnReferenceOf(OwnReferenceOf referenceOf) {
-            this.ReferenceOf = referenceOf;
+            this._referenceOf = referenceOf;
+
+            this.OnUpdate.Invoke();
         }
+
+        public UnityEvent OnUpdate = new UnityEvent();
     }
 
     /// <summary>

@@ -48,7 +48,7 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Editor
                 }
                 else {
                     EditorGUILayout.HelpBox("BigItemModel not assigned.", MessageType.Error);
-                    EditorGUILayout.PropertyField(serializedObject.FindProperty("BigItemModel"), true);
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("_bigItemModel"), true);
                 }
             }
             else {

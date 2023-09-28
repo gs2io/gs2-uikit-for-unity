@@ -27,6 +27,7 @@
 using Gs2.Unity.Gs2Enhance.ScriptableObject;
 using Gs2.Unity.UiKit.Core;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2Enhance.Context
 {
@@ -75,11 +76,21 @@ namespace Gs2.Unity.UiKit.Gs2Enhance.Context
 
     public partial class Gs2EnhanceNamespaceContext
     {
-        public Namespace Namespace;
+        [SerializeField]
+        private Namespace _namespace;
+        public Namespace Namespace
+        {
+            get => _namespace;
+            set => SetNamespace(value);
+        }
 
         public void SetNamespace(Namespace Namespace) {
-            this.Namespace = Namespace;
+            this._namespace = Namespace;
+
+            this.OnUpdate.Invoke();
         }
+
+        public UnityEvent OnUpdate = new UnityEvent();
     }
 
     /// <summary>

@@ -27,6 +27,7 @@
 using Gs2.Unity.Gs2Stamina.ScriptableObject;
 using Gs2.Unity.UiKit.Core;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2Stamina.Context
 {
@@ -80,11 +81,21 @@ namespace Gs2.Unity.UiKit.Gs2Stamina.Context
 
     public partial class Gs2StaminaStaminaModelContext
     {
-        public StaminaModel StaminaModel;
+        [SerializeField]
+        private StaminaModel _staminaModel;
+        public StaminaModel StaminaModel
+        {
+            get => _staminaModel;
+            set => SetStaminaModel(value);
+        }
 
         public void SetStaminaModel(StaminaModel StaminaModel) {
-            this.StaminaModel = StaminaModel;
+            this._staminaModel = StaminaModel;
+
+            this.OnUpdate.Invoke();
         }
+
+        public UnityEvent OnUpdate = new UnityEvent();
     }
 
     /// <summary>
