@@ -39,9 +39,6 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Context
     public partial class Gs2FormationOwnFormContext : Gs2FormationFormModelContext
     {
         public new void Start() {
-            if (Form == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Form is not set in Gs2FormationOwnFormContext.");
-            }
         }
         public override bool HasError() {
             var hasError = base.HasError();
@@ -49,9 +46,10 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Context
                 if (GetComponentInParent<Gs2FormationOwnFormList>(true) != null) {
                     return false;
                 }
-                else {
-                    return true;
+                if (GetComponentInParent<Gs2FormationConvertFormModelToOwnForm>(true) != null) {
+                    return false;
                 }
+                return true;
             }
             return false;
         }

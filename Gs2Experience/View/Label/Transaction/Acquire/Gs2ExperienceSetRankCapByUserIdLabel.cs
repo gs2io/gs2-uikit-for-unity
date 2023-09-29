@@ -42,69 +42,68 @@ namespace Gs2.Unity.UiKit.Gs2Experience.Label
 	[AddComponentMenu("GS2 UIKit/Experience/Status/View/Label/Transaction/Gs2ExperienceSetRankCapByUserIdLabel")]
     public partial class Gs2ExperienceSetRankCapByUserIdLabel : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched && _fetcher.Request != null &&
-                    _userDataFetcher != null && _userDataFetcher.Fetched && _userDataFetcher.Status != null) {
-                {
-                    onUpdate?.Invoke(
-                        format.Replace(
-                            "{namespaceName}",
-                            $"{_fetcher.Request.NamespaceName}"
-                        ).Replace(
-                            "{userId}",
-                            $"{_fetcher.Request.UserId}"
-                        ).Replace(
-                            "{experienceName}",
-                            $"{_fetcher.Request.ExperienceName}"
-                        ).Replace(
-                            "{propertyId}",
-                            $"{_fetcher.Request.PropertyId}"
-                        ).Replace(
-                            "{rankCapValue}",
-                            $"{_fetcher.Request.RankCapValue}"
-                        ).Replace(
-                            "{userData:experienceName}",
-                            $"{_userDataFetcher.Status.ExperienceName}"
-                        ).Replace(
-                            "{userData:propertyId}",
-                            $"{_userDataFetcher.Status.PropertyId}"
-                        ).Replace(
-                            "{userData:experienceValue}",
-                            $"{_userDataFetcher.Status.ExperienceValue}"
-                        ).Replace(
-                            "{userData:rankValue}",
-                            $"{_userDataFetcher.Status.RankValue}"
-                        ).Replace(
-                            "{userData:rankCapValue}",
-                            $"{_userDataFetcher.Status.RankCapValue}"
-                        ).Replace(
-                            "{userData:nextRankUpExperienceValue}",
-                            $"{_userDataFetcher.Status.NextRankUpExperienceValue}"
-                        )
-                    );
-                }
-            } else if (_fetcher.Fetched && _fetcher.Request != null) {
-                {
-                    onUpdate?.Invoke(
-                        format.Replace(
-                            "{namespaceName}",
-                            $"{_fetcher.Request.NamespaceName}"
-                        ).Replace(
-                            "{userId}",
-                            $"{_fetcher.Request.UserId}"
-                        ).Replace(
-                            "{experienceName}",
-                            $"{_fetcher.Request.ExperienceName}"
-                        ).Replace(
-                            "{propertyId}",
-                            $"{_fetcher.Request.PropertyId}"
-                        ).Replace(
-                            "{rankCapValue}",
-                            $"{_fetcher.Request.RankCapValue}"
-                        )
-                    );
-                }
+            if ((!this._fetcher?.Fetched ?? false) || this._fetcher.Request == null) {
+                return;
+            }
+            if (this._userDataFetcher?.Fetched ?? false)
+            {
+                this.onUpdate?.Invoke(
+                    this.format.Replace(
+                        "{namespaceName}",
+                        $"{this._fetcher.Request.NamespaceName}"
+                    ).Replace(
+                        "{userId}",
+                        $"{this._fetcher.Request.UserId}"
+                    ).Replace(
+                        "{experienceName}",
+                        $"{this._fetcher.Request.ExperienceName}"
+                    ).Replace(
+                        "{propertyId}",
+                        $"{this._fetcher.Request.PropertyId}"
+                    ).Replace(
+                        "{rankCapValue}",
+                        $"{this._fetcher.Request.RankCapValue}"
+                    ).Replace(
+                        "{userData:experienceName}",
+                        $"{this._userDataFetcher.Status.ExperienceName}"
+                    ).Replace(
+                        "{userData:propertyId}",
+                        $"{this._userDataFetcher.Status.PropertyId}"
+                    ).Replace(
+                        "{userData:experienceValue}",
+                        $"{this._userDataFetcher.Status.ExperienceValue}"
+                    ).Replace(
+                        "{userData:rankValue}",
+                        $"{this._userDataFetcher.Status.RankValue}"
+                    ).Replace(
+                        "{userData:rankCapValue}",
+                        $"{this._userDataFetcher.Status.RankCapValue}"
+                    ).Replace(
+                        "{userData:nextRankUpExperienceValue}",
+                        $"{this._userDataFetcher.Status.NextRankUpExperienceValue}"
+                    )
+                );
+            } else {
+                this.onUpdate?.Invoke(
+                    this.format.Replace(
+                        "{namespaceName}",
+                        $"{this._fetcher.Request.NamespaceName}"
+                    ).Replace(
+                        "{userId}",
+                        $"{this._fetcher.Request.UserId}"
+                    ).Replace(
+                        "{experienceName}",
+                        $"{this._fetcher.Request.ExperienceName}"
+                    ).Replace(
+                        "{propertyId}",
+                        $"{this._fetcher.Request.PropertyId}"
+                    ).Replace(
+                        "{rankCapValue}",
+                        $"{this._fetcher.Request.RankCapValue}"
+                    )
+                );
             }
         }
     }
@@ -120,25 +119,52 @@ namespace Gs2.Unity.UiKit.Gs2Experience.Label
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2ExperienceSetRankCapByUserIdFetcher>() ?? GetComponentInParent<Gs2ExperienceSetRankCapByUserIdFetcher>();
-            _userDataFetcher = GetComponent<Gs2ExperienceOwnStatusFetcher>() ?? GetComponentInParent<Gs2ExperienceOwnStatusFetcher>();
-
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2ExperienceSetRankCapByUserIdFetcher>() ?? GetComponentInParent<Gs2ExperienceSetRankCapByUserIdFetcher>();
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ExperienceSetRankCapByUserIdFetcher.");
                 enabled = false;
             }
-
-            Update();
+            this._userDataFetcher = GetComponent<Gs2ExperienceOwnStatusFetcher>() ?? GetComponentInParent<Gs2ExperienceOwnStatusFetcher>();
         }
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2ExperienceSetRankCapByUserIdFetcher>() ?? GetComponentInParent<Gs2ExperienceSetRankCapByUserIdFetcher>(true);
-            _userDataFetcher = GetComponent<Gs2ExperienceOwnStatusFetcher>() ?? GetComponentInParent<Gs2ExperienceOwnStatusFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2ExperienceSetRankCapByUserIdFetcher>() ?? GetComponentInParent<Gs2ExperienceSetRankCapByUserIdFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+            if (this._userDataFetcher != null) {
+                this._userDataFetcher.OnFetched.AddListener(this._onFetched);
+                if (this._userDataFetcher.Fetched) {
+                    OnFetched();
+                }
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                if (this._userDataFetcher != null) {
+                    this._userDataFetcher.OnFetched.RemoveListener(this._onFetched);
+                }
+                this._onFetched = null;
+            }
         }
     }
 
@@ -176,8 +202,8 @@ namespace Gs2.Unity.UiKit.Gs2Experience.Label
 
         public event UnityAction<string> OnUpdate
         {
-            add => onUpdate.AddListener(value);
-            remove => onUpdate.RemoveListener(value);
+            add => this.onUpdate.AddListener(value);
+            remove => this.onUpdate.RemoveListener(value);
         }
     }
 }

@@ -18,6 +18,14 @@
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable UnusedAutoPropertyAccessor.Local
 // ReSharper disable CheckNamespace
+// ReSharper disable RedundantNameQualifier
+// ReSharper disable RedundantAssignment
+// ReSharper disable NotAccessedVariable
+// ReSharper disable RedundantUsingDirective
+// ReSharper disable Unity.NoNullPropagation
+// ReSharper disable InconsistentNaming
+
+#pragma warning disable CS0472
 
 using System;
 using System.Collections;
@@ -43,13 +51,16 @@ namespace Gs2.Unity.UiKit.Gs2Idle
     {
         private IEnumerator Process()
         {
-            yield return new WaitUntil(() => this._clientHolder.Initialized);
-            yield return new WaitUntil(() => this._gameSessionHolder.Initialized);
+            var clientHolder = Gs2ClientHolder.Instance;
+            var gameSessionHolder = Gs2GameSessionHolder.Instance;
+
+            yield return new WaitUntil(() => clientHolder.Initialized);
+            yield return new WaitUntil(() => gameSessionHolder.Initialized);
             
-            var domain = this._clientHolder.Gs2.Idle.Namespace(
+            var domain = clientHolder.Gs2.Idle.Namespace(
                 this._context.Status.NamespaceName
             ).Me(
-                this._gameSessionHolder.GameSession
+                gameSessionHolder.GameSession
             ).Status(
                 this._context.Status.CategoryName
             );
@@ -100,20 +111,24 @@ namespace Gs2.Unity.UiKit.Gs2Idle
 
     public partial class Gs2IdleStatusPredictionAction
     {
-        private Gs2ClientHolder _clientHolder;
-        private Gs2GameSessionHolder _gameSessionHolder;
         private Gs2IdleOwnStatusContext _context;
 
         public void Awake()
         {
-            this._clientHolder = Gs2ClientHolder.Instance;
-            this._gameSessionHolder = Gs2GameSessionHolder.Instance;
-            this._context = GetComponentInParent<Gs2IdleOwnStatusContext>();
-
+            this._context = GetComponent<Gs2IdleOwnStatusContext>() ?? GetComponentInParent<Gs2IdleOwnStatusContext>();
             if (_context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2IdleOwnStatusContext.");
                 enabled = false;
             }
+        }
+
+        public virtual bool HasError()
+        {
+            this._context = GetComponent<Gs2IdleOwnStatusContext>() ?? GetComponentInParent<Gs2IdleOwnStatusContext>(true);
+            if (_context == null) {
+                return true;
+            }
+            return false;
         }
     }
 
@@ -131,6 +146,7 @@ namespace Gs2.Unity.UiKit.Gs2Idle
     /// </summary>
     public partial class Gs2IdleStatusPredictionAction
     {
+        public bool WaitAsyncProcessComplete;
     }
 
     /// <summary>
@@ -152,6 +168,8 @@ namespace Gs2.Unity.UiKit.Gs2Idle
             add => this.onPredictionComplete.AddListener(value);
             remove => this.onPredictionComplete.RemoveListener(value);
         }
+
+        public UnityEvent OnChange = new UnityEvent();
 
         [SerializeField]
         internal ErrorEvent onError = new ErrorEvent();

@@ -40,13 +40,36 @@ namespace Gs2.Unity.UiKit.Gs2Chat
 	[AddComponentMenu("GS2 UIKit/Chat/Subscribe/View/Label/Gs2ChatSubscribeUpdateSubscribeSettingActionLabel")]
     public partial class Gs2ChatSubscribeUpdateSubscribeSettingActionLabel : MonoBehaviour
     {
-        public void Update()
+        private void OnChange()
         {
-            onUpdate?.Invoke(
-                format.Replace(
-                    "{notificationTypes}", $"{action?.NotificationTypes}"
+            this.onUpdate?.Invoke(
+                this.format.Replace(
+                    "{notificationTypes}", $"{this.action?.NotificationTypes}"
                 )
             );
+        }
+
+        public void Awake() {
+            if (this.action == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2AccountAccountAuthenticationAction.");
+                enabled = false;
+            }
+        }
+
+        public virtual bool HasError()
+        {
+            if (this.action == null) {
+                return true;
+            }
+            return false;
+        }
+
+        public void OnEnable() {
+            this.action.OnChange.AddListener(OnChange);
+        }
+
+        public void OnDisable() {
+            this.action.OnChange.RemoveListener(OnChange);
         }
     }
 

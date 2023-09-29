@@ -72,6 +72,7 @@ namespace Gs2.Unity.UiKit.Gs2Exchange.Fetcher
                 {
                     IncrementalRateModel = item;
                     Fetched = true;
+                    this.OnFetched.Invoke();
                 }
             );
 
@@ -85,11 +86,10 @@ namespace Gs2.Unity.UiKit.Gs2Exchange.Fetcher
                 else {
                     IncrementalRateModel = future.Result;
                     Fetched = true;
+                    this.OnFetched.Invoke();
                     break;
                 }
             }
-
-            this.OnFetched.Invoke();
         }
 
         public void OnUpdateContext() {
@@ -126,6 +126,18 @@ namespace Gs2.Unity.UiKit.Gs2Exchange.Fetcher
             }
             return IncrementalRateModel.AcquireActions;
         }
+
+        bool IAcquireActionsFetcher.IsFetched() {
+            return this.Fetched;
+        }
+
+        UnityEvent IAcquireActionsFetcher.OnFetchedEvent() {
+            return this.OnFetched;
+        }
+
+        GameObject IAcquireActionsFetcher.GameObject() {
+            return gameObject;
+        }
     }
 
     /// <summary>
@@ -135,8 +147,6 @@ namespace Gs2.Unity.UiKit.Gs2Exchange.Fetcher
     public partial class Gs2ExchangeIncrementalRateModelFetcher
     {
         public Gs2ExchangeIncrementalRateModelContext Context { get; private set; }
-
-        public UnityEvent OnFetched = new UnityEvent();
 
         public void Awake()
         {
@@ -165,6 +175,7 @@ namespace Gs2.Unity.UiKit.Gs2Exchange.Fetcher
     {
         public Gs2.Unity.Gs2Exchange.Model.EzIncrementalRateModel IncrementalRateModel { get; protected set; }
         public bool Fetched { get; protected set; }
+        public UnityEvent OnFetched = new UnityEvent();
     }
 
     /// <summary>

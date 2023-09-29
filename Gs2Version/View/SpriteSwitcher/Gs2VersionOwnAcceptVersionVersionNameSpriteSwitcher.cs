@@ -40,33 +40,32 @@ namespace Gs2.Unity.UiKit.Gs2Version.SpriteSwitcher
 	[AddComponentMenu("GS2 UIKit/Version/AcceptVersion/View/SpriteSwitcher/Properties/VersionName/Gs2VersionOwnAcceptVersionVersionNameSpriteSwitcher")]
     public partial class Gs2VersionOwnAcceptVersionVersionNameSpriteSwitcher : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched && _fetcher.AcceptVersion != null)
+            switch(this.expression)
             {
-                switch(expression)
-                {
-                    case Expression.In:
-                        if (applyVersionNames.Contains(_fetcher.AcceptVersion.VersionName)) {
-                            this.onUpdate.Invoke(this.sprite);
-                        }
-                        break;
-                    case Expression.NotIn:
-                        if (!applyVersionNames.Contains(_fetcher.AcceptVersion.VersionName)) {
-                            this.onUpdate.Invoke(this.sprite);
-                        }
-                        break;
-                    case Expression.StartsWith:
-                        if (_fetcher.AcceptVersion.VersionName.StartsWith(applyVersionName)) {
-                            this.onUpdate.Invoke(this.sprite);
-                        }
-                        break;
-                    case Expression.EndsWith:
-                        if (_fetcher.AcceptVersion.VersionName.EndsWith(applyVersionName)) {
-                            this.onUpdate.Invoke(this.sprite);
-                        }
-                        break;
-                }
+                case Expression.In:
+                    if (this.applyVersionNames.Contains(this._fetcher.AcceptVersion.VersionName)) {
+                        this.onUpdate.Invoke(this.sprite);
+                    }
+                    break;
+                case Expression.NotIn:
+                    if (!this.applyVersionNames.Contains(this._fetcher.AcceptVersion.VersionName)) {
+                        this.onUpdate.Invoke(this.sprite);
+                    }
+                    break;
+                case Expression.StartsWith:
+                    if (this._fetcher.AcceptVersion.VersionName.StartsWith(this.applyVersionName)) {
+                        this.onUpdate.Invoke(this.sprite);
+                    }
+                    break;
+                case Expression.EndsWith:
+                    if (this._fetcher.AcceptVersion.VersionName.EndsWith(this.applyVersionName)) {
+                        this.onUpdate.Invoke(this.sprite);
+                    }
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
         }
     }
@@ -81,13 +80,13 @@ namespace Gs2.Unity.UiKit.Gs2Version.SpriteSwitcher
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2VersionOwnAcceptVersionFetcher>() ?? GetComponentInParent<Gs2VersionOwnAcceptVersionFetcher>();
+            this._fetcher = GetComponent<Gs2VersionOwnAcceptVersionFetcher>() ?? GetComponentInParent<Gs2VersionOwnAcceptVersionFetcher>();
 
-            if (_fetcher == null) {
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2VersionOwnAcceptVersionFetcher.");
                 enabled = false;
             }
-            if (sprite == null) {
+            if (this.sprite == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: sprite is not set.");
                 enabled = false;
             }
@@ -95,14 +94,37 @@ namespace Gs2.Unity.UiKit.Gs2Version.SpriteSwitcher
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2VersionOwnAcceptVersionFetcher>() ?? GetComponentInParent<Gs2VersionOwnAcceptVersionFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2VersionOwnAcceptVersionFetcher>() ?? GetComponentInParent<Gs2VersionOwnAcceptVersionFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
-            if (sprite == null) {
+            if (this.sprite == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 

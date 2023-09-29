@@ -16,7 +16,7 @@
  * deny overwrite
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
-// ReSharper disable CheckPropertyFormModel
+// ReSharper disable CheckNamespace
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantAssignment
 // ReSharper disable NotAccessedVariable
@@ -32,6 +32,7 @@ using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Formation.Context;
 using Gs2.Unity.UiKit.Gs2Formation.Fetcher;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2Formation
 {
@@ -44,22 +45,20 @@ namespace Gs2.Unity.UiKit.Gs2Formation
     {
         private List<Gs2FormationOwnPropertyFormContext> _children;
 
-        public void Update() {
-            if (_fetcher.Fetched && this._fetcher.PropertyForms != null) {
-                for (var i = 0; i < this.maximumItems; i++) {
-                    if (i < this._fetcher.PropertyForms.Count) {
-                        _children[i].SetOwnPropertyForm(
-                            OwnPropertyForm.New(
-                                this._fetcher.Context.PropertyFormModel.Namespace,
-                                this._fetcher.PropertyForms[i].Name,
-                                this._fetcher.PropertyForms[i].PropertyId
-                            )
-                        );
-                        _children[i].gameObject.SetActive(true);
-                    }
-                    else {
-                        _children[i].gameObject.SetActive(false);
-                    }
+        public void OnFetched() {
+            for (var i = 0; i < this.maximumItems; i++) {
+                if (i < this._fetcher.PropertyForms.Count) {
+                    _children[i].SetOwnPropertyForm(
+                        OwnPropertyForm.New(
+                            this._fetcher.Context.PropertyFormModel.Namespace,
+                            this._fetcher.PropertyForms[i].Name,
+                            this._fetcher.PropertyForms[i].PropertyId
+                        )
+                    );
+                    _children[i].gameObject.SetActive(true);
+                }
+                else {
+                    _children[i].gameObject.SetActive(false);
                 }
             }
         }
@@ -72,7 +71,6 @@ namespace Gs2.Unity.UiKit.Gs2Formation
     public partial class Gs2FormationOwnPropertyFormList
     {
         private Gs2FormationOwnPropertyFormListFetcher _fetcher;
-        private Gs2FormationPropertyFormModelContext Context => _fetcher.Context;
 
         public void Awake()
         {
@@ -83,13 +81,12 @@ namespace Gs2.Unity.UiKit.Gs2Formation
             }
 
             _fetcher = GetComponent<Gs2FormationOwnPropertyFormListFetcher>() ?? GetComponentInParent<Gs2FormationOwnPropertyFormListFetcher>();
-
             if (_fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2FormationOwnPropertyFormListFetcher.");
                 enabled = false;
             }
 
-            var context = GetComponent<Gs2FormationPropertyFormModelContext>() ?? GetComponentInParent<Gs2FormationPropertyFormModelContext>(true);
+            var context = GetComponent<Gs2FormationNamespaceContext>() ?? GetComponentInParent<Gs2FormationNamespaceContext>(true);
             if (context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2FormationOwnPropertyFormListFetcher::Context.");
                 enabled = false;
@@ -100,11 +97,11 @@ namespace Gs2.Unity.UiKit.Gs2Formation
             for (var i = 0; i < this.maximumItems; i++) {
                 var node = Instantiate(this.prefab, transform);
                 node.PropertyFormModel = PropertyFormModel.New(
-                    context.PropertyFormModel.Namespace,
+                    context.Namespace,
                     ""
                 );
                 node.PropertyForm = OwnPropertyForm.New(
-                    context.PropertyFormModel.Namespace,
+                    context.Namespace,
                     "",
                     ""
                 );
@@ -121,6 +118,29 @@ namespace Gs2.Unity.UiKit.Gs2Formation
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 

@@ -40,41 +40,38 @@ namespace Gs2.Unity.UiKit.Gs2Account
 	[AddComponentMenu("GS2 UIKit/Account/TakeOver/View/Label/Gs2AccountOwnTakeOverLabel")]
     public partial class Gs2AccountOwnTakeOverLabel : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched && _fetcher.TakeOver != null)
-            {
-                var createdAt = _fetcher.TakeOver.CreatedAt == null ? DateTime.Now : UnixTime.FromUnixTime(_fetcher.TakeOver.CreatedAt).ToLocalTime();
-                onUpdate?.Invoke(
-                    format.Replace(
-                        "{userId}", $"{_fetcher?.TakeOver?.UserId}"
-                    ).Replace(
-                        "{type}", $"{_fetcher?.TakeOver?.Type}"
-                    ).Replace(
-                        "{userIdentifier}", $"{_fetcher?.TakeOver?.UserIdentifier}"
-                    ).Replace(
-                        "{createdAt:yyyy}", createdAt.ToString("yyyy")
-                    ).Replace(
-                        "{createdAt:yy}", createdAt.ToString("yy")
-                    ).Replace(
-                        "{createdAt:MM}", createdAt.ToString("MM")
-                    ).Replace(
-                        "{createdAt:MMM}", createdAt.ToString("MMM")
-                    ).Replace(
-                        "{createdAt:dd}", createdAt.ToString("dd")
-                    ).Replace(
-                        "{createdAt:hh}", createdAt.ToString("hh")
-                    ).Replace(
-                        "{createdAt:HH}", createdAt.ToString("HH")
-                    ).Replace(
-                        "{createdAt:tt}", createdAt.ToString("tt")
-                    ).Replace(
-                        "{createdAt:mm}", createdAt.ToString("mm")
-                    ).Replace(
-                        "{createdAt:ss}", createdAt.ToString("ss")
-                    )
-                );
-            }
+            var createdAt = this._fetcher.TakeOver.CreatedAt == null ? DateTime.Now : UnixTime.FromUnixTime(_fetcher.TakeOver.CreatedAt).ToLocalTime();
+            this.onUpdate?.Invoke(
+                this.format.Replace(
+                    "{userId}", $"{this._fetcher?.TakeOver?.UserId}"
+                ).Replace(
+                    "{type}", $"{this._fetcher?.TakeOver?.Type}"
+                ).Replace(
+                    "{userIdentifier}", $"{this._fetcher?.TakeOver?.UserIdentifier}"
+                ).Replace(
+                    "{createdAt:yyyy}", createdAt.ToString("yyyy")
+                ).Replace(
+                    "{createdAt:yy}", createdAt.ToString("yy")
+                ).Replace(
+                    "{createdAt:MM}", createdAt.ToString("MM")
+                ).Replace(
+                    "{createdAt:MMM}", createdAt.ToString("MMM")
+                ).Replace(
+                    "{createdAt:dd}", createdAt.ToString("dd")
+                ).Replace(
+                    "{createdAt:hh}", createdAt.ToString("hh")
+                ).Replace(
+                    "{createdAt:HH}", createdAt.ToString("HH")
+                ).Replace(
+                    "{createdAt:tt}", createdAt.ToString("tt")
+                ).Replace(
+                    "{createdAt:mm}", createdAt.ToString("mm")
+                ).Replace(
+                    "{createdAt:ss}", createdAt.ToString("ss")
+                )
+            );
         }
     }
 
@@ -88,23 +85,43 @@ namespace Gs2.Unity.UiKit.Gs2Account
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2AccountOwnTakeOverFetcher>() ?? GetComponentInParent<Gs2AccountOwnTakeOverFetcher>();
-
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2AccountOwnTakeOverFetcher>() ?? GetComponentInParent<Gs2AccountOwnTakeOverFetcher>();
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2AccountOwnTakeOverFetcher.");
                 enabled = false;
             }
-
-            Update();
         }
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2AccountOwnTakeOverFetcher>() ?? GetComponentInParent<Gs2AccountOwnTakeOverFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2AccountOwnTakeOverFetcher>() ?? GetComponentInParent<Gs2AccountOwnTakeOverFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 
@@ -142,8 +159,8 @@ namespace Gs2.Unity.UiKit.Gs2Account
 
         public event UnityAction<string> OnUpdate
         {
-            add => onUpdate.AddListener(value);
-            remove => onUpdate.RemoveListener(value);
+            add => this.onUpdate.AddListener(value);
+            remove => this.onUpdate.RemoveListener(value);
         }
     }
 }

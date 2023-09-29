@@ -29,6 +29,7 @@
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2StateMachine.Fetcher;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.Localization.Components;
 using UnityEngine.Localization.SmartFormat.PersistentVariables;
 
@@ -41,27 +42,24 @@ namespace Gs2.Unity.UiKit.Gs2StateMachine.Localization
     [AddComponentMenu("GS2 UIKit/StateMachine/Status/View/Localization/Gs2StateMachineStatusLocalizationVariables")]
     public partial class Gs2StateMachineStatusLocalizationVariables : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched) {
-                target.StringReference["statusId"] = new StringVariable {
-                    Value = _fetcher?.Status?.StatusId ?? "",
-                };
-                target.StringReference["name"] = new StringVariable {
-                    Value = _fetcher?.Status?.Name ?? "",
-                };
-                target.StringReference["status"] = new StringVariable {
-                    Value = _fetcher?.Status?.Status ?? "",
-                };
-                target.StringReference["lastError"] = new StringVariable {
-                    Value = _fetcher?.Status?.LastError ?? "",
-                };
-                target.StringReference["transitionCount"] = new IntVariable {
-                    Value = _fetcher?.Status?.TransitionCount ?? 0,
-                };
-                enabled = false;
-                target.enabled = true;
-            }
+            this.target.StringReference["statusId"] = new StringVariable {
+                Value = _fetcher?.Status?.StatusId ?? "",
+            };
+            this.target.StringReference["name"] = new StringVariable {
+                Value = _fetcher?.Status?.Name ?? "",
+            };
+            this.target.StringReference["status"] = new StringVariable {
+                Value = _fetcher?.Status?.Status ?? "",
+            };
+            this.target.StringReference["lastError"] = new StringVariable {
+                Value = _fetcher?.Status?.LastError ?? "",
+            };
+            this.target.StringReference["transitionCount"] = new IntVariable {
+                Value = _fetcher?.Status?.TransitionCount ?? 0,
+            };
+            this.target.enabled = true;
         }
     }
 
@@ -74,10 +72,10 @@ namespace Gs2.Unity.UiKit.Gs2StateMachine.Localization
         private Gs2StateMachineOwnStatusFetcher _fetcher;
 
         public void Awake() {
-            target.enabled = false;
-            _fetcher = GetComponent<Gs2StateMachineOwnStatusFetcher>() ?? GetComponentInParent<Gs2StateMachineOwnStatusFetcher>();
+            this.target.enabled = false;
+            this._fetcher = GetComponent<Gs2StateMachineOwnStatusFetcher>() ?? GetComponentInParent<Gs2StateMachineOwnStatusFetcher>();
 
-            if (_fetcher == null) {
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2StateMachineStatusFetcher.");
                 enabled = false;
             }
@@ -85,11 +83,34 @@ namespace Gs2.Unity.UiKit.Gs2StateMachine.Localization
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2StateMachineOwnStatusFetcher>() ?? GetComponentInParent<Gs2StateMachineOwnStatusFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2StateMachineOwnStatusFetcher>() ?? GetComponentInParent<Gs2StateMachineOwnStatusFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 

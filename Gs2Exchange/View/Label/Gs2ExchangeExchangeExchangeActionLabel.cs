@@ -17,6 +17,14 @@
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
+// ReSharper disable RedundantNameQualifier
+// ReSharper disable RedundantAssignment
+// ReSharper disable NotAccessedVariable
+// ReSharper disable RedundantUsingDirective
+// ReSharper disable Unity.NoNullPropagation
+// ReSharper disable InconsistentNaming
+
+#pragma warning disable CS0472
 
 using System;
 using Gs2.Core.Util;
@@ -31,18 +39,41 @@ namespace Gs2.Unity.UiKit.Gs2Exchange
     /// Main
     /// </summary>
 
-	[AddComponentMenu("GS2 UIKit/Exchange/Exchange/View/Gs2ExchangeExchangeExchangeActionLabel")]
+	[AddComponentMenu("GS2 UIKit/Exchange/Exchange/View/Label/Gs2ExchangeExchangeExchangeActionLabel")]
     public partial class Gs2ExchangeExchangeExchangeActionLabel : MonoBehaviour
     {
-        public void Update()
+        private void OnChange()
         {
-            onUpdate?.Invoke(
-                format.Replace(
-                    "{count}", $"{action?.Count}"
+            this.onUpdate?.Invoke(
+                this.format.Replace(
+                    "{count}", $"{this.action?.Count}"
                 ).Replace(
-                    "{config}", $"{action?.Config}"
+                    "{config}", $"{this.action?.Config}"
                 )
             );
+        }
+
+        public void Awake() {
+            if (this.action == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2AccountAccountAuthenticationAction.");
+                enabled = false;
+            }
+        }
+
+        public virtual bool HasError()
+        {
+            if (this.action == null) {
+                return true;
+            }
+            return false;
+        }
+
+        public void OnEnable() {
+            this.action.OnChange.AddListener(OnChange);
+        }
+
+        public void OnDisable() {
+            this.action.OnChange.RemoveListener(OnChange);
         }
     }
 

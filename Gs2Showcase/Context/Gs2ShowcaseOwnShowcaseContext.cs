@@ -40,7 +40,7 @@ namespace Gs2.Unity.UiKit.Gs2Showcase.Context
     {
         public void Start() {
             if (Showcase == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Showcase is not set in Gs2ShowcaseOwnShowcaseContext.");
+                Debug.LogWarning($"{gameObject.GetFullPath()}: Showcase is not set in Gs2ShowcaseOwnShowcaseContext.");
             }
         }
         public virtual bool HasError() {

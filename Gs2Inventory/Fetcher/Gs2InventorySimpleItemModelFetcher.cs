@@ -74,6 +74,7 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Fetcher
                 {
                     SimpleItemModel = item;
                     Fetched = true;
+                    this.OnFetched.Invoke();
                 }
             );
 
@@ -87,11 +88,10 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Fetcher
                 else {
                     SimpleItemModel = future.Result;
                     Fetched = true;
+                    this.OnFetched.Invoke();
                     break;
                 }
             }
-
-            this.OnFetched.Invoke();
         }
 
         public void OnUpdateContext() {
@@ -131,8 +131,6 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Fetcher
     {
         public Gs2InventorySimpleItemModelContext Context { get; private set; }
 
-        public UnityEvent OnFetched = new UnityEvent();
-
         public void Awake()
         {
             Context = GetComponent<Gs2InventorySimpleItemModelContext>() ?? GetComponentInParent<Gs2InventorySimpleItemModelContext>();
@@ -160,6 +158,7 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Fetcher
     {
         public Gs2.Unity.Gs2Inventory.Model.EzSimpleItemModel SimpleItemModel { get; protected set; }
         public bool Fetched { get; protected set; }
+        public UnityEvent OnFetched = new UnityEvent();
     }
 
     /// <summary>

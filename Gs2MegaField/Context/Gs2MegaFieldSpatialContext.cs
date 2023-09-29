@@ -27,6 +27,7 @@
 using Gs2.Unity.Gs2MegaField.ScriptableObject;
 using Gs2.Unity.UiKit.Core;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2MegaField.Context
 {
@@ -42,8 +43,7 @@ namespace Gs2.Unity.UiKit.Gs2MegaField.Context
                 Debug.LogError($"{gameObject.GetFullPath()}: Spatial is not set in Gs2MegaFieldSpatialContext.");
             }
         }
-
-        public bool HasError() {
+        public virtual bool HasError() {
             if (Spatial == null) {
                 return true;
             }
@@ -75,11 +75,21 @@ namespace Gs2.Unity.UiKit.Gs2MegaField.Context
 
     public partial class Gs2MegaFieldSpatialContext
     {
-        public Spatial Spatial;
-
-        public void SetSpatial(Spatial Spatial) {
-            this.Spatial = Spatial;
+        [SerializeField]
+        private Spatial _spatial;
+        public Spatial Spatial
+        {
+            get => _spatial;
+            set => SetSpatial(value);
         }
+
+        public void SetSpatial(Spatial spatial) {
+            this._spatial = spatial;
+
+            this.OnUpdate.Invoke();
+        }
+
+        public UnityEvent OnUpdate = new UnityEvent();
     }
 
     /// <summary>

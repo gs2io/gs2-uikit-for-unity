@@ -40,33 +40,32 @@ namespace Gs2.Unity.UiKit.Gs2Exchange.SpriteSwitcher
 	[AddComponentMenu("GS2 UIKit/Exchange/Await/View/SpriteSwitcher/Properties/RateName/Gs2ExchangeOwnAwaitRateNameSpriteSwitcher")]
     public partial class Gs2ExchangeOwnAwaitRateNameSpriteSwitcher : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched && _fetcher.Await != null)
+            switch(this.expression)
             {
-                switch(expression)
-                {
-                    case Expression.In:
-                        if (applyRateNames.Contains(_fetcher.Await.RateName)) {
-                            this.onUpdate.Invoke(this.sprite);
-                        }
-                        break;
-                    case Expression.NotIn:
-                        if (!applyRateNames.Contains(_fetcher.Await.RateName)) {
-                            this.onUpdate.Invoke(this.sprite);
-                        }
-                        break;
-                    case Expression.StartsWith:
-                        if (_fetcher.Await.RateName.StartsWith(applyRateName)) {
-                            this.onUpdate.Invoke(this.sprite);
-                        }
-                        break;
-                    case Expression.EndsWith:
-                        if (_fetcher.Await.RateName.EndsWith(applyRateName)) {
-                            this.onUpdate.Invoke(this.sprite);
-                        }
-                        break;
-                }
+                case Expression.In:
+                    if (this.applyRateNames.Contains(this._fetcher.Await.RateName)) {
+                        this.onUpdate.Invoke(this.sprite);
+                    }
+                    break;
+                case Expression.NotIn:
+                    if (!this.applyRateNames.Contains(this._fetcher.Await.RateName)) {
+                        this.onUpdate.Invoke(this.sprite);
+                    }
+                    break;
+                case Expression.StartsWith:
+                    if (this._fetcher.Await.RateName.StartsWith(this.applyRateName)) {
+                        this.onUpdate.Invoke(this.sprite);
+                    }
+                    break;
+                case Expression.EndsWith:
+                    if (this._fetcher.Await.RateName.EndsWith(this.applyRateName)) {
+                        this.onUpdate.Invoke(this.sprite);
+                    }
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
         }
     }
@@ -81,13 +80,13 @@ namespace Gs2.Unity.UiKit.Gs2Exchange.SpriteSwitcher
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2ExchangeOwnAwaitFetcher>() ?? GetComponentInParent<Gs2ExchangeOwnAwaitFetcher>();
+            this._fetcher = GetComponent<Gs2ExchangeOwnAwaitFetcher>() ?? GetComponentInParent<Gs2ExchangeOwnAwaitFetcher>();
 
-            if (_fetcher == null) {
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ExchangeOwnAwaitFetcher.");
                 enabled = false;
             }
-            if (sprite == null) {
+            if (this.sprite == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: sprite is not set.");
                 enabled = false;
             }
@@ -95,14 +94,37 @@ namespace Gs2.Unity.UiKit.Gs2Exchange.SpriteSwitcher
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2ExchangeOwnAwaitFetcher>() ?? GetComponentInParent<Gs2ExchangeOwnAwaitFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2ExchangeOwnAwaitFetcher>() ?? GetComponentInParent<Gs2ExchangeOwnAwaitFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
-            if (sprite == null) {
+            if (this.sprite == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 

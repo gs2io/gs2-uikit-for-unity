@@ -43,8 +43,12 @@ namespace Gs2.Unity.UiKit.Gs2SkillTree.Editor
             serializedObject.Update();
 
             if (original.NodeModel == null) {
-                if (original.GetComponentInParent<Gs2SkillTreeNodeModelList>(true) != null) {
+                var list = original.GetComponentInParent<Gs2SkillTreeNodeModelList>(true);
+                if (list != null) {
                     EditorGUILayout.HelpBox("NodeModel is auto assign from Gs2SkillTreeNodeModelList.", MessageType.Info);
+                    EditorGUI.BeginDisabledGroup(true);
+                    EditorGUILayout.ObjectField("List", list, typeof(Gs2SkillTreeNodeModelList), false);
+                    EditorGUI.EndDisabledGroup();
                 }
                 else {
                     EditorGUILayout.HelpBox("NodeModel not assigned.", MessageType.Error);

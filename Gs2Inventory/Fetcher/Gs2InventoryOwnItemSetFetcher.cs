@@ -80,6 +80,7 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Fetcher
                 {
                     ItemSet = item == null ? new List<EzItemSet>() : item.ToList();
                     Fetched = true;
+                    this.OnFetched.Invoke();
                 }
             );
 
@@ -93,11 +94,10 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Fetcher
                 else {
                     ItemSet = future.Result == null ? new List<EzItemSet>() : future.Result.ToList();
                     Fetched = true;
+                    this.OnFetched.Invoke();
                     break;
                 }
             }
-
-            this.OnFetched.Invoke();
         }
 
         public void OnUpdateContext() {
@@ -137,8 +137,6 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Fetcher
     {
         public Gs2InventoryOwnItemSetContext Context { get; private set; }
 
-        public UnityEvent OnFetched = new UnityEvent();
-
         public void Awake()
         {
             Context = GetComponent<Gs2InventoryOwnItemSetContext>() ?? GetComponentInParent<Gs2InventoryOwnItemSetContext>();
@@ -166,6 +164,7 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Fetcher
     {
         public List<Gs2.Unity.Gs2Inventory.Model.EzItemSet> ItemSet { get; protected set; }
         public bool Fetched { get; protected set; }
+        public UnityEvent OnFetched = new UnityEvent();
     }
 
     /// <summary>

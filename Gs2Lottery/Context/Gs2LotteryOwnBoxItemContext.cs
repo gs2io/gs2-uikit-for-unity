@@ -24,33 +24,33 @@
 
 #pragma warning disable CS0472
 
-using System;
-using Gs2.Core.Util;
+using Gs2.Unity.Gs2Lottery.ScriptableObject;
 using Gs2.Unity.UiKit.Core;
-using Gs2.Unity.UiKit.Gs2Showcase.Fetcher;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace Gs2.Unity.UiKit.Gs2Showcase
+namespace Gs2.Unity.UiKit.Gs2Lottery.Context
 {
     /// <summary>
     /// Main
     /// </summary>
 
-	[AddComponentMenu("GS2 UIKit/Showcase/Showcase/View/Label/Gs2ShowcaseShowcaseBuyActionLabel")]
-    public partial class Gs2ShowcaseShowcaseBuyActionLabel : MonoBehaviour
+	[AddComponentMenu("GS2 UIKit/Lottery/BoxItem/Context/Gs2LotteryOwnBoxItemContext")]
+    public partial class Gs2LotteryOwnBoxItemContext : MonoBehaviour
     {
-        public void Update()
-        {
-            onUpdate?.Invoke(
-                format.Replace(
-                    "{displayItemId}", $"{action?.DisplayItemId}"
-                ).Replace(
-                    "{quantity}", $"{action?.Quantity}"
-                ).Replace(
-                    "{config}", $"{action?.Config}"
-                )
-            );
+        public void Start() {
+            if (BoxItem == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: BoxItem is not set in Gs2LotteryOwnBoxItemContext.");
+            }
+        }
+        public virtual bool HasError() {
+            if (BoxItem == null) {
+                if (GetComponentInParent<Gs2LotteryOwnBoxItemsList>(true) != null) {
+                    return false;
+                }
+                return true;
+            }
+            return false;
         }
     }
 
@@ -58,16 +58,16 @@ namespace Gs2.Unity.UiKit.Gs2Showcase
     /// Dependent components
     /// </summary>
 
-    public partial class Gs2ShowcaseShowcaseBuyActionLabel
+    public partial class Gs2LotteryOwnBoxItemContext
     {
-        
+
     }
 
     /// <summary>
     /// Public properties
     /// </summary>
 
-    public partial class Gs2ShowcaseShowcaseBuyActionLabel
+    public partial class Gs2LotteryOwnBoxItemContext
     {
 
     }
@@ -76,30 +76,30 @@ namespace Gs2.Unity.UiKit.Gs2Showcase
     /// Parameters for Inspector
     /// </summary>
 
-    public partial class Gs2ShowcaseShowcaseBuyActionLabel
+    public partial class Gs2LotteryOwnBoxItemContext
     {
-        public Gs2ShowcaseShowcaseBuyAction action;
-        public string format;
+        [SerializeField]
+        private OwnBoxItem _boxItem;
+        public OwnBoxItem BoxItem
+        {
+            get => _boxItem;
+            set => SetOwnBoxItem(value);
+        }
+
+        public void SetOwnBoxItem(OwnBoxItem boxItem) {
+            this._boxItem = boxItem;
+
+            this.OnUpdate.Invoke();
+        }
+
+        public UnityEvent OnUpdate = new UnityEvent();
     }
 
     /// <summary>
     /// Event handlers
     /// </summary>
-    public partial class Gs2ShowcaseShowcaseBuyActionLabel
+    public partial class Gs2LotteryOwnBoxItemContext
     {
-        [Serializable]
-        private class UpdateEvent : UnityEvent<string>
-        {
 
-        }
-
-        [SerializeField]
-        private UpdateEvent onUpdate = new UpdateEvent();
-
-        public event UnityAction<string> OnUpdate
-        {
-            add => onUpdate.AddListener(value);
-            remove => onUpdate.RemoveListener(value);
-        }
     }
 }

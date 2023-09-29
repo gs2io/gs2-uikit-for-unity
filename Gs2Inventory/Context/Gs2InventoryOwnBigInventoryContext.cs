@@ -39,13 +39,13 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Context
     public partial class Gs2InventoryOwnBigInventoryContext : Gs2InventoryBigInventoryModelContext
     {
         public new void Start() {
-            if (BigInventory == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: BigInventory is not set in Gs2InventoryOwnBigInventoryContext.");
-            }
         }
         public override bool HasError() {
             var hasError = base.HasError();
             if (BigInventory == null || hasError) {
+                if (GetComponentInParent<Gs2InventoryConvertBigInventoryModelToOwnBigInventory>(true) != null) {
+                    return false;
+                }
                 return true;
             }
             return false;

@@ -42,57 +42,56 @@ namespace Gs2.Unity.UiKit.Gs2Exchange.Label
 	[AddComponentMenu("GS2 UIKit/Exchange/Await/View/Label/Transaction/Gs2ExchangeCreateAwaitByUserIdLabel")]
     public partial class Gs2ExchangeCreateAwaitByUserIdLabel : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched && _fetcher.Request != null &&
-                    _userDataFetcher != null && _userDataFetcher.Fetched && _userDataFetcher.Await != null) {
-                {
-                    onUpdate?.Invoke(
-                        format.Replace(
-                            "{namespaceName}",
-                            $"{_fetcher.Request.NamespaceName}"
-                        ).Replace(
-                            "{userId}",
-                            $"{_fetcher.Request.UserId}"
-                        ).Replace(
-                            "{rateName}",
-                            $"{_fetcher.Request.RateName}"
-                        ).Replace(
-                            "{count}",
-                            $"{_fetcher.Request.Count}"
-                        ).Replace(
-                            "{userData:userId}",
-                            $"{_userDataFetcher.Await.UserId}"
-                        ).Replace(
-                            "{userData:rateName}",
-                            $"{_userDataFetcher.Await.RateName}"
-                        ).Replace(
-                            "{userData:name}",
-                            $"{_userDataFetcher.Await.Name}"
-                        ).Replace(
-                            "{userData:exchangedAt}",
-                            $"{_userDataFetcher.Await.ExchangedAt}"
-                        )
-                    );
-                }
-            } else if (_fetcher.Fetched && _fetcher.Request != null) {
-                {
-                    onUpdate?.Invoke(
-                        format.Replace(
-                            "{namespaceName}",
-                            $"{_fetcher.Request.NamespaceName}"
-                        ).Replace(
-                            "{userId}",
-                            $"{_fetcher.Request.UserId}"
-                        ).Replace(
-                            "{rateName}",
-                            $"{_fetcher.Request.RateName}"
-                        ).Replace(
-                            "{count}",
-                            $"{_fetcher.Request.Count}"
-                        )
-                    );
-                }
+            if ((!this._fetcher?.Fetched ?? false) || this._fetcher.Request == null) {
+                return;
+            }
+            if (this._userDataFetcher?.Fetched ?? false)
+            {
+                this.onUpdate?.Invoke(
+                    this.format.Replace(
+                        "{namespaceName}",
+                        $"{this._fetcher.Request.NamespaceName}"
+                    ).Replace(
+                        "{userId}",
+                        $"{this._fetcher.Request.UserId}"
+                    ).Replace(
+                        "{rateName}",
+                        $"{this._fetcher.Request.RateName}"
+                    ).Replace(
+                        "{count}",
+                        $"{this._fetcher.Request.Count}"
+                    ).Replace(
+                        "{userData:userId}",
+                        $"{this._userDataFetcher.Await.UserId}"
+                    ).Replace(
+                        "{userData:rateName}",
+                        $"{this._userDataFetcher.Await.RateName}"
+                    ).Replace(
+                        "{userData:name}",
+                        $"{this._userDataFetcher.Await.Name}"
+                    ).Replace(
+                        "{userData:exchangedAt}",
+                        $"{this._userDataFetcher.Await.ExchangedAt}"
+                    )
+                );
+            } else {
+                this.onUpdate?.Invoke(
+                    this.format.Replace(
+                        "{namespaceName}",
+                        $"{this._fetcher.Request.NamespaceName}"
+                    ).Replace(
+                        "{userId}",
+                        $"{this._fetcher.Request.UserId}"
+                    ).Replace(
+                        "{rateName}",
+                        $"{this._fetcher.Request.RateName}"
+                    ).Replace(
+                        "{count}",
+                        $"{this._fetcher.Request.Count}"
+                    )
+                );
             }
         }
     }
@@ -108,25 +107,52 @@ namespace Gs2.Unity.UiKit.Gs2Exchange.Label
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2ExchangeCreateAwaitByUserIdFetcher>() ?? GetComponentInParent<Gs2ExchangeCreateAwaitByUserIdFetcher>();
-            _userDataFetcher = GetComponent<Gs2ExchangeOwnAwaitFetcher>() ?? GetComponentInParent<Gs2ExchangeOwnAwaitFetcher>();
-
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2ExchangeCreateAwaitByUserIdFetcher>() ?? GetComponentInParent<Gs2ExchangeCreateAwaitByUserIdFetcher>();
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ExchangeCreateAwaitByUserIdFetcher.");
                 enabled = false;
             }
-
-            Update();
+            this._userDataFetcher = GetComponent<Gs2ExchangeOwnAwaitFetcher>() ?? GetComponentInParent<Gs2ExchangeOwnAwaitFetcher>();
         }
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2ExchangeCreateAwaitByUserIdFetcher>() ?? GetComponentInParent<Gs2ExchangeCreateAwaitByUserIdFetcher>(true);
-            _userDataFetcher = GetComponent<Gs2ExchangeOwnAwaitFetcher>() ?? GetComponentInParent<Gs2ExchangeOwnAwaitFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2ExchangeCreateAwaitByUserIdFetcher>() ?? GetComponentInParent<Gs2ExchangeCreateAwaitByUserIdFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+            if (this._userDataFetcher != null) {
+                this._userDataFetcher.OnFetched.AddListener(this._onFetched);
+                if (this._userDataFetcher.Fetched) {
+                    OnFetched();
+                }
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                if (this._userDataFetcher != null) {
+                    this._userDataFetcher.OnFetched.RemoveListener(this._onFetched);
+                }
+                this._onFetched = null;
+            }
         }
     }
 
@@ -164,8 +190,8 @@ namespace Gs2.Unity.UiKit.Gs2Exchange.Label
 
         public event UnityAction<string> OnUpdate
         {
-            add => onUpdate.AddListener(value);
-            remove => onUpdate.RemoveListener(value);
+            add => this.onUpdate.AddListener(value);
+            remove => this.onUpdate.RemoveListener(value);
         }
     }
 }

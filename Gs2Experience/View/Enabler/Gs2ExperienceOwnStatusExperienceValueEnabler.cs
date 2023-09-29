@@ -24,10 +24,12 @@
 
 #pragma warning disable CS0472
 
+using System;
 using System.Collections.Generic;
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Experience.Fetcher;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2Experience
 {
@@ -38,35 +40,30 @@ namespace Gs2.Unity.UiKit.Gs2Experience
 	[AddComponentMenu("GS2 UIKit/Experience/Status/View/Enabler/Properties/ExperienceValue/Gs2ExperienceOwnStatusExperienceValueEnabler")]
     public partial class Gs2ExperienceOwnStatusExperienceValueEnabler : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched && _fetcher.Status != null)
+            switch(this.expression)
             {
-                switch(expression)
-                {
-                    case Expression.In:
-                        target.SetActive(enableExperienceValues.Contains(_fetcher.Status.ExperienceValue));
-                        break;
-                    case Expression.NotIn:
-                        target.SetActive(!enableExperienceValues.Contains(_fetcher.Status.ExperienceValue));
-                        break;
-                    case Expression.Less:
-                        target.SetActive(enableExperienceValue > _fetcher.Status.ExperienceValue);
-                        break;
-                    case Expression.LessEqual:
-                        target.SetActive(enableExperienceValue >= _fetcher.Status.ExperienceValue);
-                        break;
-                    case Expression.Greater:
-                        target.SetActive(enableExperienceValue < _fetcher.Status.ExperienceValue);
-                        break;
-                    case Expression.GreaterEqual:
-                        target.SetActive(enableExperienceValue <= _fetcher.Status.ExperienceValue);
-                        break;
-                }
-            }
-            else
-            {
-                target.SetActive(false);
+                case Expression.In:
+                    this.target.SetActive(this.enableExperienceValues.Contains(this._fetcher.Status.ExperienceValue));
+                    break;
+                case Expression.NotIn:
+                    this.target.SetActive(!this.enableExperienceValues.Contains(this._fetcher.Status.ExperienceValue));
+                    break;
+                case Expression.Less:
+                    this.target.SetActive(this.enableExperienceValue > this._fetcher.Status.ExperienceValue);
+                    break;
+                case Expression.LessEqual:
+                    this.target.SetActive(this.enableExperienceValue >= this._fetcher.Status.ExperienceValue);
+                    break;
+                case Expression.Greater:
+                    this.target.SetActive(this.enableExperienceValue < this._fetcher.Status.ExperienceValue);
+                    break;
+                case Expression.GreaterEqual:
+                    this.target.SetActive(this.enableExperienceValue <= this._fetcher.Status.ExperienceValue);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
         }
     }
@@ -81,13 +78,12 @@ namespace Gs2.Unity.UiKit.Gs2Experience
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2ExperienceOwnStatusFetcher>() ?? GetComponentInParent<Gs2ExperienceOwnStatusFetcher>();
-
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2ExperienceOwnStatusFetcher>() ?? GetComponentInParent<Gs2ExperienceOwnStatusFetcher>();
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ExperienceOwnStatusFetcher.");
                 enabled = false;
             }
-            if (target == null) {
+            if (this.target == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: target is not set.");
                 enabled = false;
             }
@@ -95,14 +91,37 @@ namespace Gs2.Unity.UiKit.Gs2Experience
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2ExperienceOwnStatusFetcher>() ?? GetComponentInParent<Gs2ExperienceOwnStatusFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2ExperienceOwnStatusFetcher>() ?? GetComponentInParent<Gs2ExperienceOwnStatusFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
-            if (target == null) {
+            if (this.target == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 

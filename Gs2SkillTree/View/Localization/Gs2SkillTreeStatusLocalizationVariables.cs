@@ -29,6 +29,7 @@
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2SkillTree.Fetcher;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.Localization.Components;
 using UnityEngine.Localization.SmartFormat.PersistentVariables;
 
@@ -41,18 +42,15 @@ namespace Gs2.Unity.UiKit.Gs2SkillTree.Localization
     [AddComponentMenu("GS2 UIKit/SkillTree/Status/View/Localization/Gs2SkillTreeStatusLocalizationVariables")]
     public partial class Gs2SkillTreeStatusLocalizationVariables : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched) {
-                target.StringReference["statusId"] = new StringVariable {
-                    Value = _fetcher?.Status?.StatusId ?? "",
-                };
-                target.StringReference["userId"] = new StringVariable {
-                    Value = _fetcher?.Status?.UserId ?? "",
-                };
-                enabled = false;
-                target.enabled = true;
-            }
+            this.target.StringReference["statusId"] = new StringVariable {
+                Value = _fetcher?.Status?.StatusId ?? "",
+            };
+            this.target.StringReference["userId"] = new StringVariable {
+                Value = _fetcher?.Status?.UserId ?? "",
+            };
+            this.target.enabled = true;
         }
     }
 
@@ -65,10 +63,10 @@ namespace Gs2.Unity.UiKit.Gs2SkillTree.Localization
         private Gs2SkillTreeOwnStatusFetcher _fetcher;
 
         public void Awake() {
-            target.enabled = false;
-            _fetcher = GetComponent<Gs2SkillTreeOwnStatusFetcher>() ?? GetComponentInParent<Gs2SkillTreeOwnStatusFetcher>();
+            this.target.enabled = false;
+            this._fetcher = GetComponent<Gs2SkillTreeOwnStatusFetcher>() ?? GetComponentInParent<Gs2SkillTreeOwnStatusFetcher>();
 
-            if (_fetcher == null) {
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2SkillTreeStatusFetcher.");
                 enabled = false;
             }
@@ -76,11 +74,34 @@ namespace Gs2.Unity.UiKit.Gs2SkillTree.Localization
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2SkillTreeOwnStatusFetcher>() ?? GetComponentInParent<Gs2SkillTreeOwnStatusFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2SkillTreeOwnStatusFetcher>() ?? GetComponentInParent<Gs2SkillTreeOwnStatusFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 

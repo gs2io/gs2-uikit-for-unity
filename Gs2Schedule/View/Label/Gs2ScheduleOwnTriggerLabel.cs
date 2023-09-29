@@ -40,60 +40,57 @@ namespace Gs2.Unity.UiKit.Gs2Schedule
 	[AddComponentMenu("GS2 UIKit/Schedule/Trigger/View/Label/Gs2ScheduleOwnTriggerLabel")]
     public partial class Gs2ScheduleOwnTriggerLabel : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched && _fetcher.Trigger != null)
-            {
-                var createdAt = _fetcher.Trigger.CreatedAt == null ? DateTime.Now : UnixTime.FromUnixTime(_fetcher.Trigger.CreatedAt).ToLocalTime();
-                var expiresAt = _fetcher.Trigger.ExpiresAt == null ? DateTime.Now : UnixTime.FromUnixTime(_fetcher.Trigger.ExpiresAt).ToLocalTime();
-                onUpdate?.Invoke(
-                    format.Replace(
-                        "{triggerId}", $"{_fetcher?.Trigger?.TriggerId}"
-                    ).Replace(
-                        "{name}", $"{_fetcher?.Trigger?.Name}"
-                    ).Replace(
-                        "{createdAt:yyyy}", createdAt.ToString("yyyy")
-                    ).Replace(
-                        "{createdAt:yy}", createdAt.ToString("yy")
-                    ).Replace(
-                        "{createdAt:MM}", createdAt.ToString("MM")
-                    ).Replace(
-                        "{createdAt:MMM}", createdAt.ToString("MMM")
-                    ).Replace(
-                        "{createdAt:dd}", createdAt.ToString("dd")
-                    ).Replace(
-                        "{createdAt:hh}", createdAt.ToString("hh")
-                    ).Replace(
-                        "{createdAt:HH}", createdAt.ToString("HH")
-                    ).Replace(
-                        "{createdAt:tt}", createdAt.ToString("tt")
-                    ).Replace(
-                        "{createdAt:mm}", createdAt.ToString("mm")
-                    ).Replace(
-                        "{createdAt:ss}", createdAt.ToString("ss")
-                    ).Replace(
-                        "{expiresAt:yyyy}", expiresAt.ToString("yyyy")
-                    ).Replace(
-                        "{expiresAt:yy}", expiresAt.ToString("yy")
-                    ).Replace(
-                        "{expiresAt:MM}", expiresAt.ToString("MM")
-                    ).Replace(
-                        "{expiresAt:MMM}", expiresAt.ToString("MMM")
-                    ).Replace(
-                        "{expiresAt:dd}", expiresAt.ToString("dd")
-                    ).Replace(
-                        "{expiresAt:hh}", expiresAt.ToString("hh")
-                    ).Replace(
-                        "{expiresAt:HH}", expiresAt.ToString("HH")
-                    ).Replace(
-                        "{expiresAt:tt}", expiresAt.ToString("tt")
-                    ).Replace(
-                        "{expiresAt:mm}", expiresAt.ToString("mm")
-                    ).Replace(
-                        "{expiresAt:ss}", expiresAt.ToString("ss")
-                    )
-                );
-            }
+            var createdAt = this._fetcher.Trigger.CreatedAt == null ? DateTime.Now : UnixTime.FromUnixTime(_fetcher.Trigger.CreatedAt).ToLocalTime();
+            var expiresAt = this._fetcher.Trigger.ExpiresAt == null ? DateTime.Now : UnixTime.FromUnixTime(_fetcher.Trigger.ExpiresAt).ToLocalTime();
+            this.onUpdate?.Invoke(
+                this.format.Replace(
+                    "{triggerId}", $"{this._fetcher?.Trigger?.TriggerId}"
+                ).Replace(
+                    "{name}", $"{this._fetcher?.Trigger?.Name}"
+                ).Replace(
+                    "{createdAt:yyyy}", createdAt.ToString("yyyy")
+                ).Replace(
+                    "{createdAt:yy}", createdAt.ToString("yy")
+                ).Replace(
+                    "{createdAt:MM}", createdAt.ToString("MM")
+                ).Replace(
+                    "{createdAt:MMM}", createdAt.ToString("MMM")
+                ).Replace(
+                    "{createdAt:dd}", createdAt.ToString("dd")
+                ).Replace(
+                    "{createdAt:hh}", createdAt.ToString("hh")
+                ).Replace(
+                    "{createdAt:HH}", createdAt.ToString("HH")
+                ).Replace(
+                    "{createdAt:tt}", createdAt.ToString("tt")
+                ).Replace(
+                    "{createdAt:mm}", createdAt.ToString("mm")
+                ).Replace(
+                    "{createdAt:ss}", createdAt.ToString("ss")
+                ).Replace(
+                    "{expiresAt:yyyy}", expiresAt.ToString("yyyy")
+                ).Replace(
+                    "{expiresAt:yy}", expiresAt.ToString("yy")
+                ).Replace(
+                    "{expiresAt:MM}", expiresAt.ToString("MM")
+                ).Replace(
+                    "{expiresAt:MMM}", expiresAt.ToString("MMM")
+                ).Replace(
+                    "{expiresAt:dd}", expiresAt.ToString("dd")
+                ).Replace(
+                    "{expiresAt:hh}", expiresAt.ToString("hh")
+                ).Replace(
+                    "{expiresAt:HH}", expiresAt.ToString("HH")
+                ).Replace(
+                    "{expiresAt:tt}", expiresAt.ToString("tt")
+                ).Replace(
+                    "{expiresAt:mm}", expiresAt.ToString("mm")
+                ).Replace(
+                    "{expiresAt:ss}", expiresAt.ToString("ss")
+                )
+            );
         }
     }
 
@@ -107,23 +104,43 @@ namespace Gs2.Unity.UiKit.Gs2Schedule
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2ScheduleOwnTriggerFetcher>() ?? GetComponentInParent<Gs2ScheduleOwnTriggerFetcher>();
-
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2ScheduleOwnTriggerFetcher>() ?? GetComponentInParent<Gs2ScheduleOwnTriggerFetcher>();
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ScheduleOwnTriggerFetcher.");
                 enabled = false;
             }
-
-            Update();
         }
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2ScheduleOwnTriggerFetcher>() ?? GetComponentInParent<Gs2ScheduleOwnTriggerFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2ScheduleOwnTriggerFetcher>() ?? GetComponentInParent<Gs2ScheduleOwnTriggerFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 
@@ -161,8 +178,8 @@ namespace Gs2.Unity.UiKit.Gs2Schedule
 
         public event UnityAction<string> OnUpdate
         {
-            add => onUpdate.AddListener(value);
-            remove => onUpdate.RemoveListener(value);
+            add => this.onUpdate.AddListener(value);
+            remove => this.onUpdate.RemoveListener(value);
         }
     }
 }

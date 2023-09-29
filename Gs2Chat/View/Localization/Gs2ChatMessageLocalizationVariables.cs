@@ -29,6 +29,7 @@
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Chat.Fetcher;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.Localization.Components;
 using UnityEngine.Localization.SmartFormat.PersistentVariables;
 
@@ -41,30 +42,27 @@ namespace Gs2.Unity.UiKit.Gs2Chat.Localization
     [AddComponentMenu("GS2 UIKit/Chat/Message/View/Localization/Gs2ChatMessageLocalizationVariables")]
     public partial class Gs2ChatMessageLocalizationVariables : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched) {
-                target.StringReference["name"] = new StringVariable {
-                    Value = _fetcher?.Message?.Name ?? "",
-                };
-                target.StringReference["roomName"] = new StringVariable {
-                    Value = _fetcher?.Message?.RoomName ?? "",
-                };
-                target.StringReference["userId"] = new StringVariable {
-                    Value = _fetcher?.Message?.UserId ?? "",
-                };
-                target.StringReference["category"] = new IntVariable {
-                    Value = _fetcher?.Message?.Category ?? 0,
-                };
-                target.StringReference["metadata"] = new StringVariable {
-                    Value = _fetcher?.Message?.Metadata ?? "",
-                };
-                target.StringReference["createdAt"] = new LongVariable {
-                    Value = _fetcher?.Message?.CreatedAt ?? 0,
-                };
-                enabled = false;
-                target.enabled = true;
-            }
+            this.target.StringReference["name"] = new StringVariable {
+                Value = _fetcher?.Message?.Name ?? "",
+            };
+            this.target.StringReference["roomName"] = new StringVariable {
+                Value = _fetcher?.Message?.RoomName ?? "",
+            };
+            this.target.StringReference["userId"] = new StringVariable {
+                Value = _fetcher?.Message?.UserId ?? "",
+            };
+            this.target.StringReference["category"] = new IntVariable {
+                Value = _fetcher?.Message?.Category ?? 0,
+            };
+            this.target.StringReference["metadata"] = new StringVariable {
+                Value = _fetcher?.Message?.Metadata ?? "",
+            };
+            this.target.StringReference["createdAt"] = new LongVariable {
+                Value = _fetcher?.Message?.CreatedAt ?? 0,
+            };
+            this.target.enabled = true;
         }
     }
 
@@ -77,10 +75,10 @@ namespace Gs2.Unity.UiKit.Gs2Chat.Localization
         private Gs2ChatMessageFetcher _fetcher;
 
         public void Awake() {
-            target.enabled = false;
-            _fetcher = GetComponent<Gs2ChatMessageFetcher>() ?? GetComponentInParent<Gs2ChatMessageFetcher>();
+            this.target.enabled = false;
+            this._fetcher = GetComponent<Gs2ChatMessageFetcher>() ?? GetComponentInParent<Gs2ChatMessageFetcher>();
 
-            if (_fetcher == null) {
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ChatMessageFetcher.");
                 enabled = false;
             }
@@ -88,11 +86,34 @@ namespace Gs2.Unity.UiKit.Gs2Chat.Localization
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2ChatMessageFetcher>() ?? GetComponentInParent<Gs2ChatMessageFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2ChatMessageFetcher>() ?? GetComponentInParent<Gs2ChatMessageFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 

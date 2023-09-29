@@ -40,45 +40,42 @@ namespace Gs2.Unity.UiKit.Gs2Chat
 	[AddComponentMenu("GS2 UIKit/Chat/Message/View/Label/Gs2ChatMessageLabel")]
     public partial class Gs2ChatMessageLabel : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched && _fetcher.Message != null)
-            {
-                var createdAt = _fetcher.Message.CreatedAt == null ? DateTime.Now : UnixTime.FromUnixTime(_fetcher.Message.CreatedAt).ToLocalTime();
-                onUpdate?.Invoke(
-                    format.Replace(
-                        "{name}", $"{_fetcher?.Message?.Name}"
-                    ).Replace(
-                        "{roomName}", $"{_fetcher?.Message?.RoomName}"
-                    ).Replace(
-                        "{userId}", $"{_fetcher?.Message?.UserId}"
-                    ).Replace(
-                        "{category}", $"{_fetcher?.Message?.Category}"
-                    ).Replace(
-                        "{metadata}", $"{_fetcher?.Message?.Metadata}"
-                    ).Replace(
-                        "{createdAt:yyyy}", createdAt.ToString("yyyy")
-                    ).Replace(
-                        "{createdAt:yy}", createdAt.ToString("yy")
-                    ).Replace(
-                        "{createdAt:MM}", createdAt.ToString("MM")
-                    ).Replace(
-                        "{createdAt:MMM}", createdAt.ToString("MMM")
-                    ).Replace(
-                        "{createdAt:dd}", createdAt.ToString("dd")
-                    ).Replace(
-                        "{createdAt:hh}", createdAt.ToString("hh")
-                    ).Replace(
-                        "{createdAt:HH}", createdAt.ToString("HH")
-                    ).Replace(
-                        "{createdAt:tt}", createdAt.ToString("tt")
-                    ).Replace(
-                        "{createdAt:mm}", createdAt.ToString("mm")
-                    ).Replace(
-                        "{createdAt:ss}", createdAt.ToString("ss")
-                    )
-                );
-            }
+            var createdAt = this._fetcher.Message.CreatedAt == null ? DateTime.Now : UnixTime.FromUnixTime(_fetcher.Message.CreatedAt).ToLocalTime();
+            this.onUpdate?.Invoke(
+                this.format.Replace(
+                    "{name}", $"{this._fetcher?.Message?.Name}"
+                ).Replace(
+                    "{roomName}", $"{this._fetcher?.Message?.RoomName}"
+                ).Replace(
+                    "{userId}", $"{this._fetcher?.Message?.UserId}"
+                ).Replace(
+                    "{category}", $"{this._fetcher?.Message?.Category}"
+                ).Replace(
+                    "{metadata}", $"{this._fetcher?.Message?.Metadata}"
+                ).Replace(
+                    "{createdAt:yyyy}", createdAt.ToString("yyyy")
+                ).Replace(
+                    "{createdAt:yy}", createdAt.ToString("yy")
+                ).Replace(
+                    "{createdAt:MM}", createdAt.ToString("MM")
+                ).Replace(
+                    "{createdAt:MMM}", createdAt.ToString("MMM")
+                ).Replace(
+                    "{createdAt:dd}", createdAt.ToString("dd")
+                ).Replace(
+                    "{createdAt:hh}", createdAt.ToString("hh")
+                ).Replace(
+                    "{createdAt:HH}", createdAt.ToString("HH")
+                ).Replace(
+                    "{createdAt:tt}", createdAt.ToString("tt")
+                ).Replace(
+                    "{createdAt:mm}", createdAt.ToString("mm")
+                ).Replace(
+                    "{createdAt:ss}", createdAt.ToString("ss")
+                )
+            );
         }
     }
 
@@ -92,23 +89,43 @@ namespace Gs2.Unity.UiKit.Gs2Chat
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2ChatMessageFetcher>() ?? GetComponentInParent<Gs2ChatMessageFetcher>();
-
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2ChatMessageFetcher>() ?? GetComponentInParent<Gs2ChatMessageFetcher>();
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ChatMessageFetcher.");
                 enabled = false;
             }
-
-            Update();
         }
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2ChatMessageFetcher>() ?? GetComponentInParent<Gs2ChatMessageFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2ChatMessageFetcher>() ?? GetComponentInParent<Gs2ChatMessageFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 
@@ -146,8 +163,8 @@ namespace Gs2.Unity.UiKit.Gs2Chat
 
         public event UnityAction<string> OnUpdate
         {
-            add => onUpdate.AddListener(value);
-            remove => onUpdate.RemoveListener(value);
+            add => this.onUpdate.AddListener(value);
+            remove => this.onUpdate.RemoveListener(value);
         }
     }
 }

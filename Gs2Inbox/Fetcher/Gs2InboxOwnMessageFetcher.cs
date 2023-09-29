@@ -74,6 +74,7 @@ namespace Gs2.Unity.UiKit.Gs2Inbox.Fetcher
                 {
                     Message = item;
                     Fetched = true;
+                    this.OnFetched.Invoke();
                 }
             );
 
@@ -87,11 +88,10 @@ namespace Gs2.Unity.UiKit.Gs2Inbox.Fetcher
                 else {
                     Message = future.Result;
                     Fetched = true;
+                    this.OnFetched.Invoke();
                     break;
                 }
             }
-
-            this.OnFetched.Invoke();
         }
 
         public void OnUpdateContext() {
@@ -128,6 +128,18 @@ namespace Gs2.Unity.UiKit.Gs2Inbox.Fetcher
             }
             return Message.ReadAcquireActions;
         }
+
+        bool IAcquireActionsFetcher.IsFetched() {
+            return this.Fetched;
+        }
+
+        UnityEvent IAcquireActionsFetcher.OnFetchedEvent() {
+            return this.OnFetched;
+        }
+
+        GameObject IAcquireActionsFetcher.GameObject() {
+            return gameObject;
+        }
     }
 
     /// <summary>
@@ -137,8 +149,6 @@ namespace Gs2.Unity.UiKit.Gs2Inbox.Fetcher
     public partial class Gs2InboxOwnMessageFetcher
     {
         public Gs2InboxOwnMessageContext Context { get; private set; }
-
-        public UnityEvent OnFetched = new UnityEvent();
 
         public void Awake()
         {
@@ -167,6 +177,7 @@ namespace Gs2.Unity.UiKit.Gs2Inbox.Fetcher
     {
         public Gs2.Unity.Gs2Inbox.Model.EzMessage Message { get; protected set; }
         public bool Fetched { get; protected set; }
+        public UnityEvent OnFetched = new UnityEvent();
     }
 
     /// <summary>

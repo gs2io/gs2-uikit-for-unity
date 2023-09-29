@@ -48,37 +48,21 @@ namespace Gs2.Unity.UiKit.Gs2SkillTree.Fetcher
 	[AddComponentMenu("GS2 UIKit/SkillTree/Status/Fetcher/Consume/Gs2SkillTreeMarkRestrainByUserIdFetcher")]
     public partial class Gs2SkillTreeMarkRestrainByUserIdFetcher : Gs2SkillTreeNamespaceContext
     {
-        private IEnumerator Fetch()
+        private void Fetch()
         {
-            while (true)
-            {
-                if (_fetcher != null) {
-                    var action = _fetcher.ConsumeActions().FirstOrDefault(v => v.Action == "Gs2SkillTree:MarkRestrainByUserId");
-                    if (action != null) {
-                        Request = MarkRestrainByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
-                        if (Namespace == null || (
-                                Namespace.NamespaceName == Request.NamespaceName)
-                           ) {
-                            Namespace = Namespace.New(
+            var action = _fetcher.ConsumeActions().FirstOrDefault(v => v.Action == "Gs2SkillTree:MarkRestrainByUserId");
+            if (action != null) {
+                Request = MarkRestrainByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
+                if (Namespace == null || (
+                        Namespace.NamespaceName == Request.NamespaceName)
+                   ) {
+                    Namespace = Namespace.New(
                                 Request.NamespaceName
                             );
-                        }
-                        Fetched = true;
-                    }
                 }
-                yield return new WaitForSeconds(0.1f);
             }
-            // ReSharper disable once IteratorNeverReturns
-        }
-
-        public void OnEnable()
-        {
-            StartCoroutine(nameof(Fetch));
-        }
-
-        public void OnDisable()
-        {
-            StopCoroutine(nameof(Fetch));
+            Fetched = true;
+            this.OnFetched.Invoke();
         }
     }
 
@@ -96,9 +80,8 @@ namespace Gs2.Unity.UiKit.Gs2SkillTree.Fetcher
 
         public void Awake()
         {
-            _fetcher = GetComponent<IConsumeActionsFetcher>() ?? GetComponentInParent<IConsumeActionsFetcher>();
-
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<IConsumeActionsFetcher>() ?? GetComponentInParent<IConsumeActionsFetcher>();
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the IConsumeActionFetcher.");
                 enabled = false;
             }
@@ -106,11 +89,24 @@ namespace Gs2.Unity.UiKit.Gs2SkillTree.Fetcher
 
         public override bool HasError()
         {
-            _fetcher = GetComponent<IConsumeActionsFetcher>() ?? GetComponentInParent<IConsumeActionsFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<IConsumeActionsFetcher>() ?? GetComponentInParent<IConsumeActionsFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
             return false;
+        }
+
+        public void OnEnable()
+        {
+            this._fetcher.OnFetchedEvent().AddListener(Fetch);
+            if (this._fetcher.IsFetched()) {
+                Fetch();
+            }
+        }
+
+        public void OnDisable()
+        {
+            this._fetcher.OnFetchedEvent().RemoveListener(Fetch);
         }
     }
 
@@ -122,6 +118,7 @@ namespace Gs2.Unity.UiKit.Gs2SkillTree.Fetcher
     {
         public MarkRestrainByUserIdRequest Request { get; protected set; }
         public bool Fetched { get; protected set; }
+        public UnityEvent OnFetched = new UnityEvent();
     }
 
     /// <summary>
@@ -138,13 +135,6 @@ namespace Gs2.Unity.UiKit.Gs2SkillTree.Fetcher
     /// </summary>
     public partial class Gs2SkillTreeMarkRestrainByUserIdFetcher
     {
-        [SerializeField]
-        internal ErrorEvent onError = new ErrorEvent();
 
-        public event UnityAction<Gs2Exception, Func<IEnumerator>> OnError
-        {
-            add => onError.AddListener(value);
-            remove => onError.RemoveListener(value);
-        }
     }
 }

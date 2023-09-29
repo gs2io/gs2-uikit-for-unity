@@ -40,7 +40,7 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Context
     {
         public void Start() {
             if (CategoryModel == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: CategoryModel is not set in Gs2RankingCategoryModelContext.");
+                Debug.LogWarning($"{gameObject.GetFullPath()}: CategoryModel is not set in Gs2RankingCategoryModelContext.");
             }
         }
 
@@ -49,9 +49,7 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Context
                 if (GetComponentInParent<Gs2RankingCategoryModelList>(true) != null) {
                     return false;
                 }
-                else {
-                    return true;
-                }
+                return true;
             }
             return false;
         }

@@ -72,6 +72,7 @@ namespace Gs2.Unity.UiKit.Gs2SerialKey.Fetcher
                 {
                     CampaignModel = item;
                     Fetched = true;
+                    this.OnFetched.Invoke();
                 }
             );
 
@@ -85,11 +86,10 @@ namespace Gs2.Unity.UiKit.Gs2SerialKey.Fetcher
                 else {
                     CampaignModel = future.Result;
                     Fetched = true;
+                    this.OnFetched.Invoke();
                     break;
                 }
             }
-
-            this.OnFetched.Invoke();
         }
 
         public void OnUpdateContext() {
@@ -129,8 +129,6 @@ namespace Gs2.Unity.UiKit.Gs2SerialKey.Fetcher
     {
         public Gs2SerialKeyCampaignModelContext Context { get; private set; }
 
-        public UnityEvent OnFetched = new UnityEvent();
-
         public void Awake()
         {
             Context = GetComponent<Gs2SerialKeyCampaignModelContext>() ?? GetComponentInParent<Gs2SerialKeyCampaignModelContext>();
@@ -158,6 +156,7 @@ namespace Gs2.Unity.UiKit.Gs2SerialKey.Fetcher
     {
         public Gs2.Unity.Gs2SerialKey.Model.EzCampaignModel CampaignModel { get; protected set; }
         public bool Fetched { get; protected set; }
+        public UnityEvent OnFetched = new UnityEvent();
     }
 
     /// <summary>

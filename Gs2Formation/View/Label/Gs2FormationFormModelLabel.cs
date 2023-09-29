@@ -40,20 +40,17 @@ namespace Gs2.Unity.UiKit.Gs2Formation
 	[AddComponentMenu("GS2 UIKit/Formation/FormModel/View/Label/Gs2FormationFormModelLabel")]
     public partial class Gs2FormationFormModelLabel : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched && _fetcher.FormModel != null)
-            {
-                onUpdate?.Invoke(
-                    format.Replace(
-                        "{name}", $"{_fetcher?.FormModel?.Name}"
-                    ).Replace(
-                        "{metadata}", $"{_fetcher?.FormModel?.Metadata}"
-                    ).Replace(
-                        "{slots}", $"{_fetcher?.FormModel?.Slots}"
-                    )
-                );
-            }
+            this.onUpdate?.Invoke(
+                this.format.Replace(
+                    "{name}", $"{this._fetcher?.FormModel?.Name}"
+                ).Replace(
+                    "{metadata}", $"{this._fetcher?.FormModel?.Metadata}"
+                ).Replace(
+                    "{slots}", $"{this._fetcher?.FormModel?.Slots}"
+                )
+            );
         }
     }
 
@@ -67,23 +64,43 @@ namespace Gs2.Unity.UiKit.Gs2Formation
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2FormationFormModelFetcher>() ?? GetComponentInParent<Gs2FormationFormModelFetcher>();
-
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2FormationFormModelFetcher>() ?? GetComponentInParent<Gs2FormationFormModelFetcher>();
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2FormationFormModelFetcher.");
                 enabled = false;
             }
-
-            Update();
         }
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2FormationFormModelFetcher>() ?? GetComponentInParent<Gs2FormationFormModelFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2FormationFormModelFetcher>() ?? GetComponentInParent<Gs2FormationFormModelFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 
@@ -121,8 +138,8 @@ namespace Gs2.Unity.UiKit.Gs2Formation
 
         public event UnityAction<string> OnUpdate
         {
-            add => onUpdate.AddListener(value);
-            remove => onUpdate.RemoveListener(value);
+            add => this.onUpdate.AddListener(value);
+            remove => this.onUpdate.RemoveListener(value);
         }
     }
 }

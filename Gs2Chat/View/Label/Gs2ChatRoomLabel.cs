@@ -40,18 +40,15 @@ namespace Gs2.Unity.UiKit.Gs2Chat
 	[AddComponentMenu("GS2 UIKit/Chat/Room/View/Label/Gs2ChatRoomLabel")]
     public partial class Gs2ChatRoomLabel : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched && _fetcher.Room != null)
-            {
-                onUpdate?.Invoke(
-                    format.Replace(
-                        "{name}", $"{_fetcher?.Room?.Name}"
-                    ).Replace(
-                        "{metadata}", $"{_fetcher?.Room?.Metadata}"
-                    )
-                );
-            }
+            this.onUpdate?.Invoke(
+                this.format.Replace(
+                    "{name}", $"{this._fetcher?.Room?.Name}"
+                ).Replace(
+                    "{metadata}", $"{this._fetcher?.Room?.Metadata}"
+                )
+            );
         }
     }
 
@@ -65,23 +62,43 @@ namespace Gs2.Unity.UiKit.Gs2Chat
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2ChatRoomFetcher>() ?? GetComponentInParent<Gs2ChatRoomFetcher>();
-
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2ChatRoomFetcher>() ?? GetComponentInParent<Gs2ChatRoomFetcher>();
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ChatRoomFetcher.");
                 enabled = false;
             }
-
-            Update();
         }
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2ChatRoomFetcher>() ?? GetComponentInParent<Gs2ChatRoomFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2ChatRoomFetcher>() ?? GetComponentInParent<Gs2ChatRoomFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 
@@ -119,8 +136,8 @@ namespace Gs2.Unity.UiKit.Gs2Chat
 
         public event UnityAction<string> OnUpdate
         {
-            add => onUpdate.AddListener(value);
-            remove => onUpdate.RemoveListener(value);
+            add => this.onUpdate.AddListener(value);
+            remove => this.onUpdate.RemoveListener(value);
         }
     }
 }

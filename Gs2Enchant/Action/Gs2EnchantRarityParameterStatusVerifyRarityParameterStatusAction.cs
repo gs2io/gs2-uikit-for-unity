@@ -48,13 +48,16 @@ namespace Gs2.Unity.UiKit.Gs2Enchant
     {
         private IEnumerator Process()
         {
-            yield return new WaitUntil(() => this._clientHolder.Initialized);
-            yield return new WaitUntil(() => this._gameSessionHolder.Initialized);
+            var clientHolder = Gs2ClientHolder.Instance;
+            var gameSessionHolder = Gs2GameSessionHolder.Instance;
+
+            yield return new WaitUntil(() => clientHolder.Initialized);
+            yield return new WaitUntil(() => gameSessionHolder.Initialized);
             
-            var domain = this._clientHolder.Gs2.Enchant.Namespace(
+            var domain = clientHolder.Gs2.Enchant.Namespace(
                 this._context.RarityParameterStatus.NamespaceName
             ).Me(
-                this._gameSessionHolder.GameSession
+                gameSessionHolder.GameSession
             ).RarityParameterStatus(
                 this._context.RarityParameterStatus.ParameterName,
                 this._context.RarityParameterStatus.PropertyId
@@ -124,16 +127,11 @@ namespace Gs2.Unity.UiKit.Gs2Enchant
 
     public partial class Gs2EnchantRarityParameterStatusVerifyRarityParameterStatusAction
     {
-        private Gs2ClientHolder _clientHolder;
-        private Gs2GameSessionHolder _gameSessionHolder;
         private Gs2EnchantOwnRarityParameterStatusContext _context;
 
         public void Awake()
         {
-            this._clientHolder = Gs2ClientHolder.Instance;
-            this._gameSessionHolder = Gs2GameSessionHolder.Instance;
             this._context = GetComponent<Gs2EnchantOwnRarityParameterStatusContext>() ?? GetComponentInParent<Gs2EnchantOwnRarityParameterStatusContext>();
-
             if (_context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2EnchantOwnRarityParameterStatusContext.");
                 enabled = false;
@@ -170,28 +168,33 @@ namespace Gs2.Unity.UiKit.Gs2Enchant
         public int ParameterCount;
 
         public void SetVerifyType(string value) {
-            VerifyType = value;
-            this.onChangeVerifyType.Invoke(VerifyType);
+            this.VerifyType = value;
+            this.onChangeVerifyType.Invoke(this.VerifyType);
+            this.OnChange.Invoke();
         }
 
         public void SetParameterValueName(string value) {
-            ParameterValueName = value;
-            this.onChangeParameterValueName.Invoke(ParameterValueName);
+            this.ParameterValueName = value;
+            this.onChangeParameterValueName.Invoke(this.ParameterValueName);
+            this.OnChange.Invoke();
         }
 
         public void SetParameterCount(int value) {
-            ParameterCount = value;
-            this.onChangeParameterCount.Invoke(ParameterCount);
+            this.ParameterCount = value;
+            this.onChangeParameterCount.Invoke(this.ParameterCount);
+            this.OnChange.Invoke();
         }
 
         public void DecreaseParameterCount() {
-            ParameterCount -= 1;
-            this.onChangeParameterCount.Invoke(ParameterCount);
+            this.ParameterCount -= 1;
+            this.onChangeParameterCount.Invoke(this.ParameterCount);
+            this.OnChange.Invoke();
         }
 
         public void IncreaseParameterCount() {
-            ParameterCount += 1;
-            this.onChangeParameterCount.Invoke(ParameterCount);
+            this.ParameterCount += 1;
+            this.onChangeParameterCount.Invoke(this.ParameterCount);
+            this.OnChange.Invoke();
         }
     }
 
@@ -256,6 +259,8 @@ namespace Gs2.Unity.UiKit.Gs2Enchant
             add => this.onVerifyRarityParameterStatusComplete.AddListener(value);
             remove => this.onVerifyRarityParameterStatusComplete.RemoveListener(value);
         }
+
+        public UnityEvent OnChange = new UnityEvent();
 
         [SerializeField]
         internal ErrorEvent onError = new ErrorEvent();

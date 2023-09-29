@@ -40,15 +40,38 @@ namespace Gs2.Unity.UiKit.Gs2Money
 	[AddComponentMenu("GS2 UIKit/Money/Wallet/View/Label/Gs2MoneyWalletWithdrawActionLabel")]
     public partial class Gs2MoneyWalletWithdrawActionLabel : MonoBehaviour
     {
-        public void Update()
+        private void OnChange()
         {
-            onUpdate?.Invoke(
-                format.Replace(
-                    "{count}", $"{action?.Count}"
+            this.onUpdate?.Invoke(
+                this.format.Replace(
+                    "{count}", $"{this.action?.Count}"
                 ).Replace(
-                    "{paidOnly}", $"{action?.PaidOnly}"
+                    "{paidOnly}", $"{this.action?.PaidOnly}"
                 )
             );
+        }
+
+        public void Awake() {
+            if (this.action == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2AccountAccountAuthenticationAction.");
+                enabled = false;
+            }
+        }
+
+        public virtual bool HasError()
+        {
+            if (this.action == null) {
+                return true;
+            }
+            return false;
+        }
+
+        public void OnEnable() {
+            this.action.OnChange.AddListener(OnChange);
+        }
+
+        public void OnDisable() {
+            this.action.OnChange.RemoveListener(OnChange);
         }
     }
 

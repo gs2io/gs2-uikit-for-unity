@@ -40,14 +40,11 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking
 	[AddComponentMenu("GS2 UIKit/Matchmaking/Gathering/Fetcher/Properties/UpdatedAt/Gs2MatchmakingGatheringUpdatedAtFetcher")]
     public partial class Gs2MatchmakingGatheringUpdatedAtFetcher : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched && _fetcher.Gathering != null)
-            {
-                onUpdate?.Invoke(
-                    _fetcher.Gathering.UpdatedAt
-                );
-            }
+            onUpdate?.Invoke(
+                this._fetcher.Gathering.UpdatedAt
+            );
         }
     }
 
@@ -61,9 +58,8 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2MatchmakingGatheringFetcher>() ?? GetComponentInParent<Gs2MatchmakingGatheringFetcher>();
-
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2MatchmakingGatheringFetcher>() ?? GetComponentInParent<Gs2MatchmakingGatheringFetcher>();
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MatchmakingGatheringFetcher.");
                 enabled = false;
             }
@@ -71,11 +67,34 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2MatchmakingGatheringFetcher>() ?? GetComponentInParent<Gs2MatchmakingGatheringFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2MatchmakingGatheringFetcher>() ?? GetComponentInParent<Gs2MatchmakingGatheringFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 

@@ -40,14 +40,11 @@ namespace Gs2.Unity.UiKit.Gs2Datastore
 	[AddComponentMenu("GS2 UIKit/Datastore/DataObject/Fetcher/Properties/UpdatedAt/Gs2DatastoreDataObjectUpdatedAtFetcher")]
     public partial class Gs2DatastoreDataObjectUpdatedAtFetcher : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched && _fetcher.DataObject != null)
-            {
-                onUpdate?.Invoke(
-                    _fetcher.DataObject.UpdatedAt
-                );
-            }
+            onUpdate?.Invoke(
+                _fetcher.DataObject.UpdatedAt
+            );
         }
     }
 
@@ -57,25 +54,48 @@ namespace Gs2.Unity.UiKit.Gs2Datastore
 
     public partial class Gs2DatastoreDataObjectUpdatedAtFetcher
     {
-        private Gs2DatastoreOwnDataObjectFetcher _fetcher;
+        private Gs2DatastoreDataObjectFetcher _fetcher;
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2DatastoreOwnDataObjectFetcher>() ?? GetComponentInParent<Gs2DatastoreOwnDataObjectFetcher>();
+            this._fetcher = GetComponent<Gs2DatastoreDataObjectFetcher>() ?? GetComponentInParent<Gs2DatastoreDataObjectFetcher>();
 
-            if (_fetcher == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2DatastoreOwnDataObjectFetcher.");
+            if (this._fetcher == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2DatastoreDataObjectFetcher.");
                 enabled = false;
             }
         }
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2DatastoreOwnDataObjectFetcher>() ?? GetComponentInParent<Gs2DatastoreOwnDataObjectFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2DatastoreDataObjectFetcher>() ?? GetComponentInParent<Gs2DatastoreDataObjectFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 

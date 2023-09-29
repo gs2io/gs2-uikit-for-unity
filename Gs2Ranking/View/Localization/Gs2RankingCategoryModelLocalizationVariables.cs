@@ -29,6 +29,7 @@
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Ranking.Fetcher;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.Localization.Components;
 using UnityEngine.Localization.SmartFormat.PersistentVariables;
 
@@ -41,24 +42,21 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Localization
     [AddComponentMenu("GS2 UIKit/Ranking/CategoryModel/View/Localization/Gs2RankingCategoryModelLocalizationVariables")]
     public partial class Gs2RankingCategoryModelLocalizationVariables : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched) {
-                target.StringReference["name"] = new StringVariable {
-                    Value = _fetcher?.CategoryModel?.Name ?? "",
-                };
-                target.StringReference["metadata"] = new StringVariable {
-                    Value = _fetcher?.CategoryModel?.Metadata ?? "",
-                };
-                target.StringReference["entryPeriodEventId"] = new StringVariable {
-                    Value = _fetcher?.CategoryModel?.EntryPeriodEventId ?? "",
-                };
-                target.StringReference["accessPeriodEventId"] = new StringVariable {
-                    Value = _fetcher?.CategoryModel?.AccessPeriodEventId ?? "",
-                };
-                enabled = false;
-                target.enabled = true;
-            }
+            this.target.StringReference["name"] = new StringVariable {
+                Value = _fetcher?.CategoryModel?.Name ?? "",
+            };
+            this.target.StringReference["metadata"] = new StringVariable {
+                Value = _fetcher?.CategoryModel?.Metadata ?? "",
+            };
+            this.target.StringReference["entryPeriodEventId"] = new StringVariable {
+                Value = _fetcher?.CategoryModel?.EntryPeriodEventId ?? "",
+            };
+            this.target.StringReference["accessPeriodEventId"] = new StringVariable {
+                Value = _fetcher?.CategoryModel?.AccessPeriodEventId ?? "",
+            };
+            this.target.enabled = true;
         }
     }
 
@@ -71,10 +69,10 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Localization
         private Gs2RankingCategoryModelFetcher _fetcher;
 
         public void Awake() {
-            target.enabled = false;
-            _fetcher = GetComponent<Gs2RankingCategoryModelFetcher>() ?? GetComponentInParent<Gs2RankingCategoryModelFetcher>();
+            this.target.enabled = false;
+            this._fetcher = GetComponent<Gs2RankingCategoryModelFetcher>() ?? GetComponentInParent<Gs2RankingCategoryModelFetcher>();
 
-            if (_fetcher == null) {
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2RankingCategoryModelFetcher.");
                 enabled = false;
             }
@@ -82,11 +80,34 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Localization
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2RankingCategoryModelFetcher>() ?? GetComponentInParent<Gs2RankingCategoryModelFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2RankingCategoryModelFetcher>() ?? GetComponentInParent<Gs2RankingCategoryModelFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 

@@ -40,15 +40,38 @@ namespace Gs2.Unity.UiKit.Gs2Limit
 	[AddComponentMenu("GS2 UIKit/Limit/Counter/View/Label/Gs2LimitCounterCountUpActionLabel")]
     public partial class Gs2LimitCounterCountUpActionLabel : MonoBehaviour
     {
-        public void Update()
+        private void OnChange()
         {
-            onUpdate?.Invoke(
-                format.Replace(
-                    "{countUpValue}", $"{action?.CountUpValue}"
+            this.onUpdate?.Invoke(
+                this.format.Replace(
+                    "{countUpValue}", $"{this.action?.CountUpValue}"
                 ).Replace(
-                    "{maxValue}", $"{action?.MaxValue}"
+                    "{maxValue}", $"{this.action?.MaxValue}"
                 )
             );
+        }
+
+        public void Awake() {
+            if (this.action == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2AccountAccountAuthenticationAction.");
+                enabled = false;
+            }
+        }
+
+        public virtual bool HasError()
+        {
+            if (this.action == null) {
+                return true;
+            }
+            return false;
+        }
+
+        public void OnEnable() {
+            this.action.OnChange.AddListener(OnChange);
+        }
+
+        public void OnDisable() {
+            this.action.OnChange.RemoveListener(OnChange);
         }
     }
 

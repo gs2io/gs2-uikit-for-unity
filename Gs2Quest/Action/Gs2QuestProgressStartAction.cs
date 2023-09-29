@@ -48,13 +48,16 @@ namespace Gs2.Unity.UiKit.Gs2Quest
     {
         private IEnumerator Process()
         {
-            yield return new WaitUntil(() => this._clientHolder.Initialized);
-            yield return new WaitUntil(() => this._gameSessionHolder.Initialized);
+            var clientHolder = Gs2ClientHolder.Instance;
+            var gameSessionHolder = Gs2GameSessionHolder.Instance;
+
+            yield return new WaitUntil(() => clientHolder.Initialized);
+            yield return new WaitUntil(() => gameSessionHolder.Initialized);
             
-            var domain = this._clientHolder.Gs2.Quest.Namespace(
+            var domain = clientHolder.Gs2.Quest.Namespace(
                 this._context.Progress.NamespaceName
             ).Me(
-                this._gameSessionHolder.GameSession
+                gameSessionHolder.GameSession
             );
             var future = domain.Start(
                 QuestGroupName,
@@ -111,16 +114,11 @@ namespace Gs2.Unity.UiKit.Gs2Quest
 
     public partial class Gs2QuestProgressStartAction
     {
-        private Gs2ClientHolder _clientHolder;
-        private Gs2GameSessionHolder _gameSessionHolder;
         private Gs2QuestOwnProgressContext _context;
 
         public void Awake()
         {
-            this._clientHolder = Gs2ClientHolder.Instance;
-            this._gameSessionHolder = Gs2GameSessionHolder.Instance;
             this._context = GetComponent<Gs2QuestOwnProgressContext>() ?? GetComponentInParent<Gs2QuestOwnProgressContext>();
-
             if (_context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2QuestOwnProgressContext.");
                 enabled = false;
@@ -158,23 +156,27 @@ namespace Gs2.Unity.UiKit.Gs2Quest
         public List<Gs2.Unity.Gs2Quest.Model.EzConfig> Config;
 
         public void SetQuestGroupName(string value) {
-            QuestGroupName = value;
-            this.onChangeQuestGroupName.Invoke(QuestGroupName);
+            this.QuestGroupName = value;
+            this.onChangeQuestGroupName.Invoke(this.QuestGroupName);
+            this.OnChange.Invoke();
         }
 
         public void SetQuestName(string value) {
-            QuestName = value;
-            this.onChangeQuestName.Invoke(QuestName);
+            this.QuestName = value;
+            this.onChangeQuestName.Invoke(this.QuestName);
+            this.OnChange.Invoke();
         }
 
         public void SetForce(bool value) {
-            Force = value;
-            this.onChangeForce.Invoke(Force);
+            this.Force = value;
+            this.onChangeForce.Invoke(this.Force);
+            this.OnChange.Invoke();
         }
 
         public void SetConfig(List<Gs2.Unity.Gs2Quest.Model.EzConfig> value) {
-            Config = value;
-            this.onChangeConfig.Invoke(Config);
+            this.Config = value;
+            this.onChangeConfig.Invoke(this.Config);
+            this.OnChange.Invoke();
         }
     }
 
@@ -253,6 +255,8 @@ namespace Gs2.Unity.UiKit.Gs2Quest
             add => this.onStartComplete.AddListener(value);
             remove => this.onStartComplete.RemoveListener(value);
         }
+
+        public UnityEvent OnChange = new UnityEvent();
 
         [SerializeField]
         internal ErrorEvent onError = new ErrorEvent();

@@ -42,48 +42,47 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Label
 	[AddComponentMenu("GS2 UIKit/Quest/Progress/View/Label/Transaction/Gs2QuestDeleteProgressByUserIdLabel")]
     public partial class Gs2QuestDeleteProgressByUserIdLabel : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched && _fetcher.Request != null &&
-                    _userDataFetcher != null && _userDataFetcher.Fetched && _userDataFetcher.Progress != null) {
-                {
-                    onUpdate?.Invoke(
-                        format.Replace(
-                            "{namespaceName}",
-                            $"{_fetcher.Request.NamespaceName}"
-                        ).Replace(
-                            "{userId}",
-                            $"{_fetcher.Request.UserId}"
-                        ).Replace(
-                            "{userData:progressId}",
-                            $"{_userDataFetcher.Progress.ProgressId}"
-                        ).Replace(
-                            "{userData:transactionId}",
-                            $"{_userDataFetcher.Progress.TransactionId}"
-                        ).Replace(
-                            "{userData:questModelId}",
-                            $"{_userDataFetcher.Progress.QuestModelId}"
-                        ).Replace(
-                            "{userData:randomSeed}",
-                            $"{_userDataFetcher.Progress.RandomSeed}"
-                        ).Replace(
-                            "{userData:rewards}",
-                            $"{_userDataFetcher.Progress.Rewards}"
-                        )
-                    );
-                }
-            } else if (_fetcher.Fetched && _fetcher.Request != null) {
-                {
-                    onUpdate?.Invoke(
-                        format.Replace(
-                            "{namespaceName}",
-                            $"{_fetcher.Request.NamespaceName}"
-                        ).Replace(
-                            "{userId}",
-                            $"{_fetcher.Request.UserId}"
-                        )
-                    );
-                }
+            if ((!this._fetcher?.Fetched ?? false) || this._fetcher.Request == null) {
+                return;
+            }
+            if (this._userDataFetcher?.Fetched ?? false)
+            {
+                this.onUpdate?.Invoke(
+                    this.format.Replace(
+                        "{namespaceName}",
+                        $"{this._fetcher.Request.NamespaceName}"
+                    ).Replace(
+                        "{userId}",
+                        $"{this._fetcher.Request.UserId}"
+                    ).Replace(
+                        "{userData:progressId}",
+                        $"{this._userDataFetcher.Progress.ProgressId}"
+                    ).Replace(
+                        "{userData:transactionId}",
+                        $"{this._userDataFetcher.Progress.TransactionId}"
+                    ).Replace(
+                        "{userData:questModelId}",
+                        $"{this._userDataFetcher.Progress.QuestModelId}"
+                    ).Replace(
+                        "{userData:randomSeed}",
+                        $"{this._userDataFetcher.Progress.RandomSeed}"
+                    ).Replace(
+                        "{userData:rewards}",
+                        $"{this._userDataFetcher.Progress.Rewards}"
+                    )
+                );
+            } else {
+                this.onUpdate?.Invoke(
+                    this.format.Replace(
+                        "{namespaceName}",
+                        $"{this._fetcher.Request.NamespaceName}"
+                    ).Replace(
+                        "{userId}",
+                        $"{this._fetcher.Request.UserId}"
+                    )
+                );
             }
         }
     }
@@ -99,25 +98,52 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Label
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2QuestDeleteProgressByUserIdFetcher>() ?? GetComponentInParent<Gs2QuestDeleteProgressByUserIdFetcher>();
-            _userDataFetcher = GetComponent<Gs2QuestOwnProgressFetcher>() ?? GetComponentInParent<Gs2QuestOwnProgressFetcher>();
-
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2QuestDeleteProgressByUserIdFetcher>() ?? GetComponentInParent<Gs2QuestDeleteProgressByUserIdFetcher>();
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2QuestDeleteProgressByUserIdFetcher.");
                 enabled = false;
             }
-
-            Update();
+            this._userDataFetcher = GetComponent<Gs2QuestOwnProgressFetcher>() ?? GetComponentInParent<Gs2QuestOwnProgressFetcher>();
         }
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2QuestDeleteProgressByUserIdFetcher>() ?? GetComponentInParent<Gs2QuestDeleteProgressByUserIdFetcher>(true);
-            _userDataFetcher = GetComponent<Gs2QuestOwnProgressFetcher>() ?? GetComponentInParent<Gs2QuestOwnProgressFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2QuestDeleteProgressByUserIdFetcher>() ?? GetComponentInParent<Gs2QuestDeleteProgressByUserIdFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+            if (this._userDataFetcher != null) {
+                this._userDataFetcher.OnFetched.AddListener(this._onFetched);
+                if (this._userDataFetcher.Fetched) {
+                    OnFetched();
+                }
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                if (this._userDataFetcher != null) {
+                    this._userDataFetcher.OnFetched.RemoveListener(this._onFetched);
+                }
+                this._onFetched = null;
+            }
         }
     }
 
@@ -155,8 +181,8 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Label
 
         public event UnityAction<string> OnUpdate
         {
-            add => onUpdate.AddListener(value);
-            remove => onUpdate.RemoveListener(value);
+            add => this.onUpdate.AddListener(value);
+            remove => this.onUpdate.RemoveListener(value);
         }
     }
 }

@@ -43,8 +43,12 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Editor
             serializedObject.Update();
 
             if (original.SimpleInventoryModel == null) {
-                if (original.GetComponentInParent<Gs2InventorySimpleInventoryModelList>(true) != null) {
+                var list = original.GetComponentInParent<Gs2InventorySimpleInventoryModelList>(true);
+                if (list != null) {
                     EditorGUILayout.HelpBox("SimpleInventoryModel is auto assign from Gs2InventorySimpleInventoryModelList.", MessageType.Info);
+                    EditorGUI.BeginDisabledGroup(true);
+                    EditorGUILayout.ObjectField("List", list, typeof(Gs2InventorySimpleInventoryModelList), false);
+                    EditorGUI.EndDisabledGroup();
                 }
                 else {
                     EditorGUILayout.HelpBox("SimpleInventoryModel not assigned.", MessageType.Error);

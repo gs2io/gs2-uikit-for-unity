@@ -40,13 +40,36 @@ namespace Gs2.Unity.UiKit.Gs2Enhance
 	[AddComponentMenu("GS2 UIKit/Enhance/Progress/View/Label/Gs2EnhanceProgressEndActionLabel")]
     public partial class Gs2EnhanceProgressEndActionLabel : MonoBehaviour
     {
-        public void Update()
+        private void OnChange()
         {
-            onUpdate?.Invoke(
-                format.Replace(
-                    "{config}", $"{action?.Config}"
+            this.onUpdate?.Invoke(
+                this.format.Replace(
+                    "{config}", $"{this.action?.Config}"
                 )
             );
+        }
+
+        public void Awake() {
+            if (this.action == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2AccountAccountAuthenticationAction.");
+                enabled = false;
+            }
+        }
+
+        public virtual bool HasError()
+        {
+            if (this.action == null) {
+                return true;
+            }
+            return false;
+        }
+
+        public void OnEnable() {
+            this.action.OnChange.AddListener(OnChange);
+        }
+
+        public void OnDisable() {
+            this.action.OnChange.RemoveListener(OnChange);
         }
     }
 

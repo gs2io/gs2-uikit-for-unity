@@ -40,21 +40,44 @@ namespace Gs2.Unity.UiKit.Gs2Datastore
 	[AddComponentMenu("GS2 UIKit/Datastore/DataObject/View/Label/Gs2DatastoreDataObjectPrepareUploadActionLabel")]
     public partial class Gs2DatastoreDataObjectPrepareUploadActionLabel : MonoBehaviour
     {
-        public void Update()
+        private void OnChange()
         {
-            onUpdate?.Invoke(
-                format.Replace(
-                    "{name}", $"{action?.Name}"
+            this.onUpdate?.Invoke(
+                this.format.Replace(
+                    "{name}", $"{this.action?.Name}"
                 ).Replace(
-                    "{scope}", $"{action?.Scope}"
+                    "{scope}", $"{this.action?.Scope}"
                 ).Replace(
-                    "{contentType}", $"{action?.ContentType}"
+                    "{contentType}", $"{this.action?.ContentType}"
                 ).Replace(
-                    "{allowUserIds}", $"{action?.AllowUserIds}"
+                    "{allowUserIds}", $"{this.action?.AllowUserIds}"
                 ).Replace(
-                    "{updateIfExists}", $"{action?.UpdateIfExists}"
+                    "{updateIfExists}", $"{this.action?.UpdateIfExists}"
                 )
             );
+        }
+
+        public void Awake() {
+            if (this.action == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2AccountAccountAuthenticationAction.");
+                enabled = false;
+            }
+        }
+
+        public virtual bool HasError()
+        {
+            if (this.action == null) {
+                return true;
+            }
+            return false;
+        }
+
+        public void OnEnable() {
+            this.action.OnChange.AddListener(OnChange);
+        }
+
+        public void OnDisable() {
+            this.action.OnChange.RemoveListener(OnChange);
         }
     }
 

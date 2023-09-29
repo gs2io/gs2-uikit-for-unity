@@ -41,7 +41,7 @@ namespace Gs2.Unity.UiKit.Gs2Schedule.Context
     {
         public void Start() {
             if (Namespace == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Namespace is not set in Gs2ScheduleNamespaceContext.");
+                Debug.LogWarning($"{gameObject.GetFullPath()}: Namespace is not set in Gs2ScheduleNamespaceContext.");
             }
         }
 

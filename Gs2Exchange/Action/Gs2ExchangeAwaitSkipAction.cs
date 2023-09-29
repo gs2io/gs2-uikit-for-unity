@@ -48,13 +48,16 @@ namespace Gs2.Unity.UiKit.Gs2Exchange
     {
         private IEnumerator Process()
         {
-            yield return new WaitUntil(() => this._clientHolder.Initialized);
-            yield return new WaitUntil(() => this._gameSessionHolder.Initialized);
+            var clientHolder = Gs2ClientHolder.Instance;
+            var gameSessionHolder = Gs2GameSessionHolder.Instance;
+
+            yield return new WaitUntil(() => clientHolder.Initialized);
+            yield return new WaitUntil(() => gameSessionHolder.Initialized);
             
-            var domain = this._clientHolder.Gs2.Exchange.Namespace(
+            var domain = clientHolder.Gs2.Exchange.Namespace(
                 this._context.Await_.NamespaceName
             ).Me(
-                this._gameSessionHolder.GameSession
+                gameSessionHolder.GameSession
             ).Await(
                 this._context.Await_.AwaitName
             );
@@ -109,16 +112,11 @@ namespace Gs2.Unity.UiKit.Gs2Exchange
 
     public partial class Gs2ExchangeAwaitSkipAction
     {
-        private Gs2ClientHolder _clientHolder;
-        private Gs2GameSessionHolder _gameSessionHolder;
         private Gs2ExchangeOwnAwaitContext _context;
 
         public void Awake()
         {
-            this._clientHolder = Gs2ClientHolder.Instance;
-            this._gameSessionHolder = Gs2GameSessionHolder.Instance;
             this._context = GetComponent<Gs2ExchangeOwnAwaitContext>() ?? GetComponentInParent<Gs2ExchangeOwnAwaitContext>();
-
             if (_context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ExchangeOwnAwaitContext.");
                 enabled = false;
@@ -171,6 +169,8 @@ namespace Gs2.Unity.UiKit.Gs2Exchange
             add => this.onSkipComplete.AddListener(value);
             remove => this.onSkipComplete.RemoveListener(value);
         }
+
+        public UnityEvent OnChange = new UnityEvent();
 
         [SerializeField]
         internal ErrorEvent onError = new ErrorEvent();

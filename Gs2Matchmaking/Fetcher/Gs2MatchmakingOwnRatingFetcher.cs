@@ -74,6 +74,7 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking.Fetcher
                 {
                     Rating = item;
                     Fetched = true;
+                    this.OnFetched.Invoke();
                 }
             );
 
@@ -87,11 +88,10 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking.Fetcher
                 else {
                     Rating = future.Result;
                     Fetched = true;
+                    this.OnFetched.Invoke();
                     break;
                 }
             }
-
-            this.OnFetched.Invoke();
         }
 
         public void OnUpdateContext() {
@@ -131,8 +131,6 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking.Fetcher
     {
         public Gs2MatchmakingOwnRatingContext Context { get; private set; }
 
-        public UnityEvent OnFetched = new UnityEvent();
-
         public void Awake()
         {
             Context = GetComponent<Gs2MatchmakingOwnRatingContext>() ?? GetComponentInParent<Gs2MatchmakingOwnRatingContext>();
@@ -160,6 +158,7 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking.Fetcher
     {
         public Gs2.Unity.Gs2Matchmaking.Model.EzRating Rating { get; protected set; }
         public bool Fetched { get; protected set; }
+        public UnityEvent OnFetched = new UnityEvent();
     }
 
     /// <summary>

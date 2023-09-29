@@ -40,7 +40,7 @@ namespace Gs2.Unity.UiKit.Gs2Chat.Context
     {
         public void Start() {
             if (Subscribe == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Subscribe is not set in Gs2ChatOwnSubscribeContext.");
+                Debug.LogWarning($"{gameObject.GetFullPath()}: Subscribe is not set in Gs2ChatOwnSubscribeContext.");
             }
         }
         public virtual bool HasError() {
@@ -48,9 +48,7 @@ namespace Gs2.Unity.UiKit.Gs2Chat.Context
                 if (GetComponentInParent<Gs2ChatOwnSubscribeList>(true) != null) {
                     return false;
                 }
-                else {
-                    return true;
-                }
+                return true;
             }
             return false;
         }

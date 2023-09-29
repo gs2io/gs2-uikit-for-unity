@@ -40,7 +40,7 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Context
     {
         public void Start() {
             if (SubscribeUser == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: SubscribeUser is not set in Gs2RankingOwnSubscribeUserContext.");
+                Debug.LogWarning($"{gameObject.GetFullPath()}: SubscribeUser is not set in Gs2RankingOwnSubscribeUserContext.");
             }
         }
         public virtual bool HasError() {
@@ -48,9 +48,7 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Context
                 if (GetComponentInParent<Gs2RankingOwnSubscribeUserList>(true) != null) {
                     return false;
                 }
-                else {
-                    return true;
-                }
+                return true;
             }
             return false;
         }

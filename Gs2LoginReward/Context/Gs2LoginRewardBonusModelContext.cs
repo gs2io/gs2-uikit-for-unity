@@ -40,7 +40,7 @@ namespace Gs2.Unity.UiKit.Gs2LoginReward.Context
     {
         public void Start() {
             if (BonusModel == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: BonusModel is not set in Gs2LoginRewardBonusModelContext.");
+                Debug.LogWarning($"{gameObject.GetFullPath()}: BonusModel is not set in Gs2LoginRewardBonusModelContext.");
             }
         }
 
@@ -49,9 +49,7 @@ namespace Gs2.Unity.UiKit.Gs2LoginReward.Context
                 if (GetComponentInParent<Gs2LoginRewardBonusModelList>(true) != null) {
                     return false;
                 }
-                else {
-                    return true;
-                }
+                return true;
             }
             return false;
         }

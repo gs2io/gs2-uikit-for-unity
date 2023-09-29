@@ -40,14 +40,11 @@ namespace Gs2.Unity.UiKit.Gs2Exchange
 	[AddComponentMenu("GS2 UIKit/Exchange/Await/Fetcher/Properties/ExchangedAt/Gs2ExchangeOwnAwaitExchangedAtFetcher")]
     public partial class Gs2ExchangeOwnAwaitExchangedAtFetcher : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched && _fetcher.Await != null)
-            {
-                onUpdate?.Invoke(
-                    _fetcher.Await.ExchangedAt
-                );
-            }
+            onUpdate?.Invoke(
+                _fetcher.Await.ExchangedAt
+            );
         }
     }
 
@@ -61,9 +58,9 @@ namespace Gs2.Unity.UiKit.Gs2Exchange
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2ExchangeOwnAwaitFetcher>() ?? GetComponentInParent<Gs2ExchangeOwnAwaitFetcher>();
+            this._fetcher = GetComponent<Gs2ExchangeOwnAwaitFetcher>() ?? GetComponentInParent<Gs2ExchangeOwnAwaitFetcher>();
 
-            if (_fetcher == null) {
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ExchangeOwnAwaitFetcher.");
                 enabled = false;
             }
@@ -71,11 +68,34 @@ namespace Gs2.Unity.UiKit.Gs2Exchange
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2ExchangeOwnAwaitFetcher>() ?? GetComponentInParent<Gs2ExchangeOwnAwaitFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2ExchangeOwnAwaitFetcher>() ?? GetComponentInParent<Gs2ExchangeOwnAwaitFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 

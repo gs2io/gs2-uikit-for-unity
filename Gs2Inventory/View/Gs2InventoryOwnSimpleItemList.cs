@@ -12,8 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
- * deny overwrite
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
@@ -32,6 +30,7 @@ using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Inventory.Context;
 using Gs2.Unity.UiKit.Gs2Inventory.Fetcher;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2Inventory
 {
@@ -44,17 +43,24 @@ namespace Gs2.Unity.UiKit.Gs2Inventory
     {
         private List<Gs2InventoryOwnSimpleItemContext> _children;
 
-        public void Update() {
-            if (_fetcher.Fetched && this._fetcher.SimpleItems != null) {
-                for (var i = 0; i < this.maximumItems; i++) {
-                    if (i < this._fetcher.SimpleItems.Count) {
-                        _children[i].SimpleItemModel.itemName = this._fetcher.SimpleItems[i].ItemName;
-                        _children[i].SimpleItem.itemName = this._fetcher.SimpleItems[i].ItemName;
-                        _children[i].gameObject.SetActive(true);
-                    }
-                    else {
-                        _children[i].gameObject.SetActive(false);
-                    }
+        private void OnFetched() {
+            for (var i = 0; i < this._children.Count; i++) {
+                if (i < this._fetcher.SimpleItems.Count) {
+                    this._children[i].SetOwnSimpleItem(
+                        OwnSimpleItem.New(
+                            OwnSimpleInventory.New(
+                                Namespace.New(
+                                    this._fetcher.Context.SimpleInventoryModel.NamespaceName
+                                ),
+                                this._fetcher.Context.SimpleInventoryModel.InventoryName
+                            ),
+                            this._fetcher.SimpleItems[i].ItemName
+                        )
+                    );
+                    this._children[i].gameObject.SetActive(true);
+                }
+                else {
+                    this._children[i].gameObject.SetActive(false);
                 }
             }
         }
@@ -67,41 +73,76 @@ namespace Gs2.Unity.UiKit.Gs2Inventory
     public partial class Gs2InventoryOwnSimpleItemList
     {
         private Gs2InventoryOwnSimpleItemListFetcher _fetcher;
-        private Gs2InventorySimpleInventoryModelContext Context => _fetcher.Context;
+
+        private void Initialize() {
+            for (var i = 0; i < this.maximumItems; i++) {
+                var node = Instantiate(this.prefab, transform);
+                node.SimpleItemModel = SimpleItemModel.New(
+                    this._fetcher.Context.SimpleInventoryModel,
+                    ""
+                );
+                node.SimpleItem = OwnSimpleItem.New(
+                    this._fetcher.Context.SimpleInventoryModel,
+                    ""
+                );
+                node.gameObject.SetActive(false);
+                this._children.Add(node);
+            }
+        }
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2InventoryOwnSimpleItemListFetcher>() ?? GetComponentInParent<Gs2InventoryOwnSimpleItemListFetcher>();
+            if (this.prefab == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2InventoryOwnSimpleItemContext Prefab.");
+                enabled = false;
+                return;
+            }
 
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2InventoryOwnSimpleItemListFetcher>() ?? GetComponentInParent<Gs2InventoryOwnSimpleItemListFetcher>();
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2InventoryOwnSimpleItemListFetcher.");
                 enabled = false;
             }
 
-            _children = new List<Gs2InventoryOwnSimpleItemContext>();
-            for (var i = 0; i < this.maximumItems; i++) {
-                var node = Instantiate(this.prefab, transform);
-                node.SimpleItemModel = SimpleItemModel.New(
-                    _fetcher.Context.SimpleInventoryModel,
-                    ""
-                );
-                node.SimpleItem = OwnSimpleItem.New(
-                    _fetcher.Context.SimpleInventoryModel,
-                    ""
-                );
-                node.gameObject.SetActive(false);
-                _children.Add(node);
-            }
+            this._children = new List<Gs2InventoryOwnSimpleItemContext>();
             this.prefab.gameObject.SetActive(false);
+
+            Invoke(nameof(Initialize), 0);
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2InventoryOwnSimpleItemListFetcher>() ?? GetComponentInParent<Gs2InventoryOwnSimpleItemListFetcher>(true);
-            if (_fetcher == null) {
+            if (this.prefab == null) {
+                return true;
+            }
+            this._fetcher = GetComponent<Gs2InventoryOwnSimpleItemListFetcher>() ?? GetComponentInParent<Gs2InventoryOwnSimpleItemListFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 

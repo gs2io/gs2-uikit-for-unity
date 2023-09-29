@@ -40,24 +40,21 @@ namespace Gs2.Unity.UiKit.Gs2Enhance
 	[AddComponentMenu("GS2 UIKit/Enhance/Progress/View/Label/Gs2EnhanceOwnProgressLabel")]
     public partial class Gs2EnhanceOwnProgressLabel : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched && _fetcher.Progress != null)
-            {
-                onUpdate?.Invoke(
-                    format.Replace(
-                        "{name}", $"{_fetcher?.Progress?.Name}"
-                    ).Replace(
-                        "{rateName}", $"{_fetcher?.Progress?.RateName}"
-                    ).Replace(
-                        "{propertyId}", $"{_fetcher?.Progress?.PropertyId}"
-                    ).Replace(
-                        "{experienceValue}", $"{_fetcher?.Progress?.ExperienceValue}"
-                    ).Replace(
-                        "{rate}", $"{_fetcher?.Progress?.Rate}"
-                    )
-                );
-            }
+            this.onUpdate?.Invoke(
+                this.format.Replace(
+                    "{name}", $"{this._fetcher?.Progress?.Name}"
+                ).Replace(
+                    "{rateName}", $"{this._fetcher?.Progress?.RateName}"
+                ).Replace(
+                    "{propertyId}", $"{this._fetcher?.Progress?.PropertyId}"
+                ).Replace(
+                    "{experienceValue}", $"{this._fetcher?.Progress?.ExperienceValue}"
+                ).Replace(
+                    "{rate}", $"{this._fetcher?.Progress?.Rate}"
+                )
+            );
         }
     }
 
@@ -71,23 +68,43 @@ namespace Gs2.Unity.UiKit.Gs2Enhance
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2EnhanceOwnProgressFetcher>() ?? GetComponentInParent<Gs2EnhanceOwnProgressFetcher>();
-
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2EnhanceOwnProgressFetcher>() ?? GetComponentInParent<Gs2EnhanceOwnProgressFetcher>();
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2EnhanceOwnProgressFetcher.");
                 enabled = false;
             }
-
-            Update();
         }
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2EnhanceOwnProgressFetcher>() ?? GetComponentInParent<Gs2EnhanceOwnProgressFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2EnhanceOwnProgressFetcher>() ?? GetComponentInParent<Gs2EnhanceOwnProgressFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 
@@ -125,8 +142,8 @@ namespace Gs2.Unity.UiKit.Gs2Enhance
 
         public event UnityAction<string> OnUpdate
         {
-            add => onUpdate.AddListener(value);
-            remove => onUpdate.RemoveListener(value);
+            add => this.onUpdate.AddListener(value);
+            remove => this.onUpdate.RemoveListener(value);
         }
     }
 }

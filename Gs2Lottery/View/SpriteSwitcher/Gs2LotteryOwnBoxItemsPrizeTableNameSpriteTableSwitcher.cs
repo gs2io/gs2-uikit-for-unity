@@ -41,19 +41,13 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.SpriteSwitcher
 	[AddComponentMenu("GS2 UIKit/Lottery/BoxItems/View/SpriteSwitcher/Properties/PrizeTableName/Gs2LotteryOwnBoxItemsPrizeTableNameSpriteTableSwitcher")]
     public partial class Gs2LotteryOwnBoxItemsPrizeTableNameSpriteTableSwitcher : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched && _fetcher.BoxItems != null)
-            {
-                if (sprites.Count(v => v.value == _fetcher.BoxItems.PrizeTableName) > 0) {
-                    this.onUpdate.Invoke(sprites.Find(v => v.value == _fetcher.BoxItems.PrizeTableName).sprite);
-                }
-                else {
-                    this.onUpdate.Invoke(defaultSprite);
-                }
+            if (this.sprites.Count(v => v.value == _fetcher.BoxItems.PrizeTableName) > 0) {
+                this.onUpdate.Invoke(this.sprites.Find(v => v.value == _fetcher.BoxItems.PrizeTableName).sprite);
             }
             else {
-                this.onUpdate.Invoke(defaultSprite);
+                this.onUpdate.Invoke(this.defaultSprite);
             }
         }
     }
@@ -68,13 +62,12 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.SpriteSwitcher
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2LotteryOwnBoxItemsFetcher>() ?? GetComponentInParent<Gs2LotteryOwnBoxItemsFetcher>();
-
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2LotteryOwnBoxItemsFetcher>() ?? GetComponentInParent<Gs2LotteryOwnBoxItemsFetcher>();
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2LotteryOwnBoxItemsFetcher.");
                 enabled = false;
             }
-            if (sprites == null) {
+            if (this.sprites == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: sprite is not set.");
                 enabled = false;
             }
@@ -82,14 +75,37 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.SpriteSwitcher
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2LotteryOwnBoxItemsFetcher>() ?? GetComponentInParent<Gs2LotteryOwnBoxItemsFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2LotteryOwnBoxItemsFetcher>() ?? GetComponentInParent<Gs2LotteryOwnBoxItemsFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
-            if (sprites == null) {
+            if (this.sprites == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 

@@ -40,7 +40,7 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking.Context
     {
         public void Start() {
             if (Ballot == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Ballot is not set in Gs2MatchmakingOwnBallotContext.");
+                Debug.LogWarning($"{gameObject.GetFullPath()}: Ballot is not set in Gs2MatchmakingOwnBallotContext.");
             }
         }
         public virtual bool HasError() {

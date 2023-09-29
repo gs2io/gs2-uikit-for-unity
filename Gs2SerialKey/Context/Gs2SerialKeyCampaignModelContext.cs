@@ -40,7 +40,7 @@ namespace Gs2.Unity.UiKit.Gs2SerialKey.Context
     {
         public void Start() {
             if (CampaignModel == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: CampaignModel is not set in Gs2SerialKeyCampaignModelContext.");
+                Debug.LogWarning($"{gameObject.GetFullPath()}: CampaignModel is not set in Gs2SerialKeyCampaignModelContext.");
             }
         }
 

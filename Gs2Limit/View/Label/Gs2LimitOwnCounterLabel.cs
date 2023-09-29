@@ -40,64 +40,61 @@ namespace Gs2.Unity.UiKit.Gs2Limit
 	[AddComponentMenu("GS2 UIKit/Limit/Counter/View/Label/Gs2LimitOwnCounterLabel")]
     public partial class Gs2LimitOwnCounterLabel : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched && _fetcher.Counter != null)
-            {
-                var createdAt = _fetcher.Counter.CreatedAt == null ? DateTime.Now : UnixTime.FromUnixTime(_fetcher.Counter.CreatedAt).ToLocalTime();
-                var updatedAt = _fetcher.Counter.UpdatedAt == null ? DateTime.Now : UnixTime.FromUnixTime(_fetcher.Counter.UpdatedAt).ToLocalTime();
-                onUpdate?.Invoke(
-                    format.Replace(
-                        "{counterId}", $"{_fetcher?.Counter?.CounterId}"
-                    ).Replace(
-                        "{limitName}", $"{_fetcher?.Counter?.LimitName}"
-                    ).Replace(
-                        "{name}", $"{_fetcher?.Counter?.Name}"
-                    ).Replace(
-                        "{count}", $"{_fetcher?.Counter?.Count}"
-                    ).Replace(
-                        "{createdAt:yyyy}", createdAt.ToString("yyyy")
-                    ).Replace(
-                        "{createdAt:yy}", createdAt.ToString("yy")
-                    ).Replace(
-                        "{createdAt:MM}", createdAt.ToString("MM")
-                    ).Replace(
-                        "{createdAt:MMM}", createdAt.ToString("MMM")
-                    ).Replace(
-                        "{createdAt:dd}", createdAt.ToString("dd")
-                    ).Replace(
-                        "{createdAt:hh}", createdAt.ToString("hh")
-                    ).Replace(
-                        "{createdAt:HH}", createdAt.ToString("HH")
-                    ).Replace(
-                        "{createdAt:tt}", createdAt.ToString("tt")
-                    ).Replace(
-                        "{createdAt:mm}", createdAt.ToString("mm")
-                    ).Replace(
-                        "{createdAt:ss}", createdAt.ToString("ss")
-                    ).Replace(
-                        "{updatedAt:yyyy}", updatedAt.ToString("yyyy")
-                    ).Replace(
-                        "{updatedAt:yy}", updatedAt.ToString("yy")
-                    ).Replace(
-                        "{updatedAt:MM}", updatedAt.ToString("MM")
-                    ).Replace(
-                        "{updatedAt:MMM}", updatedAt.ToString("MMM")
-                    ).Replace(
-                        "{updatedAt:dd}", updatedAt.ToString("dd")
-                    ).Replace(
-                        "{updatedAt:hh}", updatedAt.ToString("hh")
-                    ).Replace(
-                        "{updatedAt:HH}", updatedAt.ToString("HH")
-                    ).Replace(
-                        "{updatedAt:tt}", updatedAt.ToString("tt")
-                    ).Replace(
-                        "{updatedAt:mm}", updatedAt.ToString("mm")
-                    ).Replace(
-                        "{updatedAt:ss}", updatedAt.ToString("ss")
-                    )
-                );
-            }
+            var createdAt = this._fetcher.Counter.CreatedAt == null ? DateTime.Now : UnixTime.FromUnixTime(_fetcher.Counter.CreatedAt).ToLocalTime();
+            var updatedAt = this._fetcher.Counter.UpdatedAt == null ? DateTime.Now : UnixTime.FromUnixTime(_fetcher.Counter.UpdatedAt).ToLocalTime();
+            this.onUpdate?.Invoke(
+                this.format.Replace(
+                    "{counterId}", $"{this._fetcher?.Counter?.CounterId}"
+                ).Replace(
+                    "{limitName}", $"{this._fetcher?.Counter?.LimitName}"
+                ).Replace(
+                    "{name}", $"{this._fetcher?.Counter?.Name}"
+                ).Replace(
+                    "{count}", $"{this._fetcher?.Counter?.Count}"
+                ).Replace(
+                    "{createdAt:yyyy}", createdAt.ToString("yyyy")
+                ).Replace(
+                    "{createdAt:yy}", createdAt.ToString("yy")
+                ).Replace(
+                    "{createdAt:MM}", createdAt.ToString("MM")
+                ).Replace(
+                    "{createdAt:MMM}", createdAt.ToString("MMM")
+                ).Replace(
+                    "{createdAt:dd}", createdAt.ToString("dd")
+                ).Replace(
+                    "{createdAt:hh}", createdAt.ToString("hh")
+                ).Replace(
+                    "{createdAt:HH}", createdAt.ToString("HH")
+                ).Replace(
+                    "{createdAt:tt}", createdAt.ToString("tt")
+                ).Replace(
+                    "{createdAt:mm}", createdAt.ToString("mm")
+                ).Replace(
+                    "{createdAt:ss}", createdAt.ToString("ss")
+                ).Replace(
+                    "{updatedAt:yyyy}", updatedAt.ToString("yyyy")
+                ).Replace(
+                    "{updatedAt:yy}", updatedAt.ToString("yy")
+                ).Replace(
+                    "{updatedAt:MM}", updatedAt.ToString("MM")
+                ).Replace(
+                    "{updatedAt:MMM}", updatedAt.ToString("MMM")
+                ).Replace(
+                    "{updatedAt:dd}", updatedAt.ToString("dd")
+                ).Replace(
+                    "{updatedAt:hh}", updatedAt.ToString("hh")
+                ).Replace(
+                    "{updatedAt:HH}", updatedAt.ToString("HH")
+                ).Replace(
+                    "{updatedAt:tt}", updatedAt.ToString("tt")
+                ).Replace(
+                    "{updatedAt:mm}", updatedAt.ToString("mm")
+                ).Replace(
+                    "{updatedAt:ss}", updatedAt.ToString("ss")
+                )
+            );
         }
     }
 
@@ -111,23 +108,43 @@ namespace Gs2.Unity.UiKit.Gs2Limit
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2LimitOwnCounterFetcher>() ?? GetComponentInParent<Gs2LimitOwnCounterFetcher>();
-
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2LimitOwnCounterFetcher>() ?? GetComponentInParent<Gs2LimitOwnCounterFetcher>();
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2LimitOwnCounterFetcher.");
                 enabled = false;
             }
-
-            Update();
         }
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2LimitOwnCounterFetcher>() ?? GetComponentInParent<Gs2LimitOwnCounterFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2LimitOwnCounterFetcher>() ?? GetComponentInParent<Gs2LimitOwnCounterFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 
@@ -165,8 +182,8 @@ namespace Gs2.Unity.UiKit.Gs2Limit
 
         public event UnityAction<string> OnUpdate
         {
-            add => onUpdate.AddListener(value);
-            remove => onUpdate.RemoveListener(value);
+            add => this.onUpdate.AddListener(value);
+            remove => this.onUpdate.RemoveListener(value);
         }
     }
 }

@@ -24,10 +24,12 @@
 
 #pragma warning disable CS0472
 
+using System;
 using System.Collections.Generic;
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2AdReward.Fetcher;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2AdReward
 {
@@ -38,35 +40,30 @@ namespace Gs2.Unity.UiKit.Gs2AdReward
 	[AddComponentMenu("GS2 UIKit/AdReward/Point/View/Enabler/Properties/Point/Gs2AdRewardOwnPointPointEnabler")]
     public partial class Gs2AdRewardOwnPointPointEnabler : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched && _fetcher.Point != null)
+            switch(this.expression)
             {
-                switch(expression)
-                {
-                    case Expression.In:
-                        target.SetActive(enablePoints.Contains(_fetcher.Point.Point));
-                        break;
-                    case Expression.NotIn:
-                        target.SetActive(!enablePoints.Contains(_fetcher.Point.Point));
-                        break;
-                    case Expression.Less:
-                        target.SetActive(enablePoint > _fetcher.Point.Point);
-                        break;
-                    case Expression.LessEqual:
-                        target.SetActive(enablePoint >= _fetcher.Point.Point);
-                        break;
-                    case Expression.Greater:
-                        target.SetActive(enablePoint < _fetcher.Point.Point);
-                        break;
-                    case Expression.GreaterEqual:
-                        target.SetActive(enablePoint <= _fetcher.Point.Point);
-                        break;
-                }
-            }
-            else
-            {
-                target.SetActive(false);
+                case Expression.In:
+                    this.target.SetActive(this.enablePoints.Contains(this._fetcher.Point.Point));
+                    break;
+                case Expression.NotIn:
+                    this.target.SetActive(!this.enablePoints.Contains(this._fetcher.Point.Point));
+                    break;
+                case Expression.Less:
+                    this.target.SetActive(this.enablePoint > this._fetcher.Point.Point);
+                    break;
+                case Expression.LessEqual:
+                    this.target.SetActive(this.enablePoint >= this._fetcher.Point.Point);
+                    break;
+                case Expression.Greater:
+                    this.target.SetActive(this.enablePoint < this._fetcher.Point.Point);
+                    break;
+                case Expression.GreaterEqual:
+                    this.target.SetActive(this.enablePoint <= this._fetcher.Point.Point);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
         }
     }
@@ -81,13 +78,12 @@ namespace Gs2.Unity.UiKit.Gs2AdReward
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2AdRewardOwnPointFetcher>() ?? GetComponentInParent<Gs2AdRewardOwnPointFetcher>();
-
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2AdRewardOwnPointFetcher>() ?? GetComponentInParent<Gs2AdRewardOwnPointFetcher>();
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2AdRewardOwnPointFetcher.");
                 enabled = false;
             }
-            if (target == null) {
+            if (this.target == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: target is not set.");
                 enabled = false;
             }
@@ -95,14 +91,37 @@ namespace Gs2.Unity.UiKit.Gs2AdReward
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2AdRewardOwnPointFetcher>() ?? GetComponentInParent<Gs2AdRewardOwnPointFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2AdRewardOwnPointFetcher>() ?? GetComponentInParent<Gs2AdRewardOwnPointFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
-            if (target == null) {
+            if (this.target == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 

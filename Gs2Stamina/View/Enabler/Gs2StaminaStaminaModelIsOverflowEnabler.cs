@@ -24,10 +24,12 @@
 
 #pragma warning disable CS0472
 
+using System;
 using System.Collections.Generic;
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Stamina.Fetcher;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2Stamina
 {
@@ -38,23 +40,18 @@ namespace Gs2.Unity.UiKit.Gs2Stamina
 	[AddComponentMenu("GS2 UIKit/Stamina/StaminaModel/View/Enabler/Properties/IsOverflow/Gs2StaminaStaminaModelIsOverflowEnabler")]
     public partial class Gs2StaminaStaminaModelIsOverflowEnabler : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched && _fetcher.StaminaModel != null)
+            switch(this.expression)
             {
-                switch(expression)
-                {
-                    case Expression.True:
-                        target.SetActive(_fetcher.StaminaModel.IsOverflow);
-                        break;
-                    case Expression.False:
-                        target.SetActive(!_fetcher.StaminaModel.IsOverflow);
-                        break;
-                }
-            }
-            else
-            {
-                target.SetActive(false);
+                case Expression.True:
+                    this.target.SetActive(this._fetcher.StaminaModel.IsOverflow);
+                    break;
+                case Expression.False:
+                    this.target.SetActive(!this._fetcher.StaminaModel.IsOverflow);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
         }
     }
@@ -69,13 +66,12 @@ namespace Gs2.Unity.UiKit.Gs2Stamina
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2StaminaStaminaModelFetcher>() ?? GetComponentInParent<Gs2StaminaStaminaModelFetcher>();
-
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2StaminaStaminaModelFetcher>() ?? GetComponentInParent<Gs2StaminaStaminaModelFetcher>();
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2StaminaStaminaModelFetcher.");
                 enabled = false;
             }
-            if (target == null) {
+            if (this.target == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: target is not set.");
                 enabled = false;
             }
@@ -83,14 +79,37 @@ namespace Gs2.Unity.UiKit.Gs2Stamina
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2StaminaStaminaModelFetcher>() ?? GetComponentInParent<Gs2StaminaStaminaModelFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2StaminaStaminaModelFetcher>() ?? GetComponentInParent<Gs2StaminaStaminaModelFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
-            if (target == null) {
+            if (this.target == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 

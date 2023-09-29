@@ -40,7 +40,7 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Context
     {
         public void Start() {
             if (MissionTaskModel == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: MissionTaskModel is not set in Gs2MissionMissionTaskModelContext.");
+                Debug.LogWarning($"{gameObject.GetFullPath()}: MissionTaskModel is not set in Gs2MissionMissionTaskModelContext.");
             }
         }
 
@@ -49,9 +49,7 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Context
                 if (GetComponentInParent<Gs2MissionMissionTaskModelList>(true) != null) {
                     return false;
                 }
-                else {
-                    return true;
-                }
+                return true;
             }
             return false;
         }

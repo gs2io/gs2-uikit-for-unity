@@ -42,66 +42,65 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Label
 	[AddComponentMenu("GS2 UIKit/Formation/Form/View/Label/Transaction/Gs2FormationAcquireActionsToFormPropertiesLabel")]
     public partial class Gs2FormationAcquireActionsToFormPropertiesLabel : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched && _fetcher.Request != null &&
-                    _userDataFetcher != null && _userDataFetcher.Fetched && _userDataFetcher.Form != null) {
-                {
-                    onUpdate?.Invoke(
-                        format.Replace(
-                            "{namespaceName}",
-                            $"{_fetcher.Request.NamespaceName}"
-                        ).Replace(
-                            "{userId}",
-                            $"{_fetcher.Request.UserId}"
-                        ).Replace(
-                            "{moldModelName}",
-                            $"{_fetcher.Request.MoldModelName}"
-                        ).Replace(
-                            "{index}",
-                            $"{_fetcher.Request.Index}"
-                        ).Replace(
-                            "{acquireAction}",
-                            $"{_fetcher.Request.AcquireAction}"
-                        ).Replace(
-                            "{config}",
-                            $"{_fetcher.Request.Config}"
-                        ).Replace(
-                            "{userData:name}",
-                            $"{_userDataFetcher.Form.Name}"
-                        ).Replace(
-                            "{userData:index}",
-                            $"{_userDataFetcher.Form.Index}"
-                        ).Replace(
-                            "{userData:slots}",
-                            $"{_userDataFetcher.Form.Slots}"
-                        )
-                    );
-                }
-            } else if (_fetcher.Fetched && _fetcher.Request != null) {
-                {
-                    onUpdate?.Invoke(
-                        format.Replace(
-                            "{namespaceName}",
-                            $"{_fetcher.Request.NamespaceName}"
-                        ).Replace(
-                            "{userId}",
-                            $"{_fetcher.Request.UserId}"
-                        ).Replace(
-                            "{moldModelName}",
-                            $"{_fetcher.Request.MoldModelName}"
-                        ).Replace(
-                            "{index}",
-                            $"{_fetcher.Request.Index}"
-                        ).Replace(
-                            "{acquireAction}",
-                            $"{_fetcher.Request.AcquireAction}"
-                        ).Replace(
-                            "{config}",
-                            $"{_fetcher.Request.Config}"
-                        )
-                    );
-                }
+            if ((!this._fetcher?.Fetched ?? false) || this._fetcher.Request == null) {
+                return;
+            }
+            if (this._userDataFetcher?.Fetched ?? false)
+            {
+                this.onUpdate?.Invoke(
+                    this.format.Replace(
+                        "{namespaceName}",
+                        $"{this._fetcher.Request.NamespaceName}"
+                    ).Replace(
+                        "{userId}",
+                        $"{this._fetcher.Request.UserId}"
+                    ).Replace(
+                        "{moldModelName}",
+                        $"{this._fetcher.Request.MoldModelName}"
+                    ).Replace(
+                        "{index}",
+                        $"{this._fetcher.Request.Index}"
+                    ).Replace(
+                        "{acquireAction}",
+                        $"{this._fetcher.Request.AcquireAction}"
+                    ).Replace(
+                        "{config}",
+                        $"{this._fetcher.Request.Config}"
+                    ).Replace(
+                        "{userData:name}",
+                        $"{this._userDataFetcher.Form.Name}"
+                    ).Replace(
+                        "{userData:index}",
+                        $"{this._userDataFetcher.Form.Index}"
+                    ).Replace(
+                        "{userData:slots}",
+                        $"{this._userDataFetcher.Form.Slots}"
+                    )
+                );
+            } else {
+                this.onUpdate?.Invoke(
+                    this.format.Replace(
+                        "{namespaceName}",
+                        $"{this._fetcher.Request.NamespaceName}"
+                    ).Replace(
+                        "{userId}",
+                        $"{this._fetcher.Request.UserId}"
+                    ).Replace(
+                        "{moldModelName}",
+                        $"{this._fetcher.Request.MoldModelName}"
+                    ).Replace(
+                        "{index}",
+                        $"{this._fetcher.Request.Index}"
+                    ).Replace(
+                        "{acquireAction}",
+                        $"{this._fetcher.Request.AcquireAction}"
+                    ).Replace(
+                        "{config}",
+                        $"{this._fetcher.Request.Config}"
+                    )
+                );
             }
         }
     }
@@ -117,25 +116,52 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Label
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2FormationAcquireActionsToFormPropertiesFetcher>() ?? GetComponentInParent<Gs2FormationAcquireActionsToFormPropertiesFetcher>();
-            _userDataFetcher = GetComponent<Gs2FormationOwnFormFetcher>() ?? GetComponentInParent<Gs2FormationOwnFormFetcher>();
-
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2FormationAcquireActionsToFormPropertiesFetcher>() ?? GetComponentInParent<Gs2FormationAcquireActionsToFormPropertiesFetcher>();
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2FormationAcquireActionsToFormPropertiesFetcher.");
                 enabled = false;
             }
-
-            Update();
+            this._userDataFetcher = GetComponent<Gs2FormationOwnFormFetcher>() ?? GetComponentInParent<Gs2FormationOwnFormFetcher>();
         }
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2FormationAcquireActionsToFormPropertiesFetcher>() ?? GetComponentInParent<Gs2FormationAcquireActionsToFormPropertiesFetcher>(true);
-            _userDataFetcher = GetComponent<Gs2FormationOwnFormFetcher>() ?? GetComponentInParent<Gs2FormationOwnFormFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2FormationAcquireActionsToFormPropertiesFetcher>() ?? GetComponentInParent<Gs2FormationAcquireActionsToFormPropertiesFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+            if (this._userDataFetcher != null) {
+                this._userDataFetcher.OnFetched.AddListener(this._onFetched);
+                if (this._userDataFetcher.Fetched) {
+                    OnFetched();
+                }
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                if (this._userDataFetcher != null) {
+                    this._userDataFetcher.OnFetched.RemoveListener(this._onFetched);
+                }
+                this._onFetched = null;
+            }
         }
     }
 
@@ -173,8 +199,8 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Label
 
         public event UnityAction<string> OnUpdate
         {
-            add => onUpdate.AddListener(value);
-            remove => onUpdate.RemoveListener(value);
+            add => this.onUpdate.AddListener(value);
+            remove => this.onUpdate.RemoveListener(value);
         }
     }
 }

@@ -40,20 +40,17 @@ namespace Gs2.Unity.UiKit.Gs2Formation
 	[AddComponentMenu("GS2 UIKit/Formation/Slot/View/Label/Gs2FormationOwnSlotLabel")]
     public partial class Gs2FormationOwnSlotLabel : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched && _fetcher.Slot != null)
-            {
-                onUpdate?.Invoke(
-                    format.Replace(
-                        "{name}", $"{_fetcher?.Slot?.Name}"
-                    ).Replace(
-                        "{metadata}", $"{_fetcher?.Slot?.Metadata}"
-                    ).Replace(
-                        "{propertyId}", $"{_fetcher?.Slot?.PropertyId}"
-                    )
-                );
-            }
+            this.onUpdate?.Invoke(
+                this.format.Replace(
+                    "{name}", $"{_fetcher?.Slot?.Name}"
+                ).Replace(
+                    "{metadata}", $"{_fetcher?.Slot?.Metadata}"
+                ).Replace(
+                    "{propertyId}", $"{_fetcher?.Slot?.PropertyId}"
+                )
+            );
         }
     }
 
@@ -67,23 +64,43 @@ namespace Gs2.Unity.UiKit.Gs2Formation
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2FormationOwnSlotFetcher>() ?? GetComponentInParent<Gs2FormationOwnSlotFetcher>();
-
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2FormationOwnSlotFetcher>() ?? GetComponentInParent<Gs2FormationOwnSlotFetcher>();
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2FormationOwnSlotFetcher.");
                 enabled = false;
             }
-
-            Update();
         }
 
         public bool HasError()
         {
-            _fetcher = GetComponent<Gs2FormationOwnSlotFetcher>() ?? GetComponentInParent<Gs2FormationOwnSlotFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2FormationOwnSlotFetcher>() ?? GetComponentInParent<Gs2FormationOwnSlotFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
             return false;
+        }
+        
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 
@@ -121,8 +138,8 @@ namespace Gs2.Unity.UiKit.Gs2Formation
 
         public event UnityAction<string> OnUpdate
         {
-            add => onUpdate.AddListener(value);
-            remove => onUpdate.RemoveListener(value);
+            add => this.onUpdate.AddListener(value);
+            remove => this.onUpdate.RemoveListener(value);
         }
     }
 }

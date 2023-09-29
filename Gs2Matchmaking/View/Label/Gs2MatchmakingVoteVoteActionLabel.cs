@@ -40,19 +40,42 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking
 	[AddComponentMenu("GS2 UIKit/Matchmaking/Vote/View/Label/Gs2MatchmakingVoteVoteActionLabel")]
     public partial class Gs2MatchmakingVoteVoteActionLabel : MonoBehaviour
     {
-        public void Update()
+        private void OnChange()
         {
-            onUpdate?.Invoke(
-                format.Replace(
-                    "{ballotBody}", $"{action?.BallotBody}"
+            this.onUpdate?.Invoke(
+                this.format.Replace(
+                    "{ballotBody}", $"{this.action?.BallotBody}"
                 ).Replace(
-                    "{ballotSignature}", $"{action?.BallotSignature}"
+                    "{ballotSignature}", $"{this.action?.BallotSignature}"
                 ).Replace(
-                    "{gameResults}", $"{action?.GameResults}"
+                    "{gameResults}", $"{this.action?.GameResults}"
                 ).Replace(
-                    "{keyId}", $"{action?.KeyId}"
+                    "{keyId}", $"{this.action?.KeyId}"
                 )
             );
+        }
+
+        public void Awake() {
+            if (this.action == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2AccountAccountAuthenticationAction.");
+                enabled = false;
+            }
+        }
+
+        public virtual bool HasError()
+        {
+            if (this.action == null) {
+                return true;
+            }
+            return false;
+        }
+
+        public void OnEnable() {
+            this.action.OnChange.AddListener(OnChange);
+        }
+
+        public void OnDisable() {
+            this.action.OnChange.RemoveListener(OnChange);
         }
     }
 

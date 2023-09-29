@@ -40,43 +40,42 @@ namespace Gs2.Unity.UiKit.Gs2Idle
 	[AddComponentMenu("GS2 UIKit/Idle/Status/View/SpriteSwitcher/Properties/MaximumIdleMinutes/Gs2IdleOwnStatusMaximumIdleMinutesSpriteSwitcher")]
     public partial class Gs2IdleOwnStatusMaximumIdleMinutesSpriteSwitcher : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched && _fetcher.Status != null)
+            switch(this.expression)
             {
-                switch(expression)
-                {
-                    case Expression.In:
-                        if (applyMaximumIdleMinuteses.Contains(_fetcher.Status.MaximumIdleMinutes)) {
-                            this.onUpdate.Invoke(this.sprite);
-                        }
-                        break;
-                    case Expression.NotIn:
-                        if (!applyMaximumIdleMinuteses.Contains(_fetcher.Status.MaximumIdleMinutes)) {
-                            this.onUpdate.Invoke(this.sprite);
-                        }
-                        break;
-                    case Expression.Less:
-                        if (applyMaximumIdleMinutes > _fetcher.Status.MaximumIdleMinutes) {
-                            this.onUpdate.Invoke(this.sprite);
-                        }
-                        break;
-                    case Expression.LessEqual:
-                        if (applyMaximumIdleMinutes >= _fetcher.Status.MaximumIdleMinutes) {
-                            this.onUpdate.Invoke(this.sprite);
-                        }
-                        break;
-                    case Expression.Greater:
-                        if (applyMaximumIdleMinutes < _fetcher.Status.MaximumIdleMinutes) {
-                            this.onUpdate.Invoke(this.sprite);
-                        }
-                        break;
-                    case Expression.GreaterEqual:
-                        if (applyMaximumIdleMinutes <= _fetcher.Status.MaximumIdleMinutes) {
-                            this.onUpdate.Invoke(this.sprite);
-                        }
-                        break;
-                }
+                case Expression.In:
+                    if (this.applyMaximumIdleMinuteses.Contains(this._fetcher.Status.MaximumIdleMinutes)) {
+                        this.onUpdate.Invoke(this.sprite);
+                    }
+                    break;
+                case Expression.NotIn:
+                    if (!this.applyMaximumIdleMinuteses.Contains(this._fetcher.Status.MaximumIdleMinutes)) {
+                        this.onUpdate.Invoke(this.sprite);
+                    }
+                    break;
+                case Expression.Less:
+                    if (this.applyMaximumIdleMinutes > this._fetcher.Status.MaximumIdleMinutes) {
+                        this.onUpdate.Invoke(this.sprite);
+                    }
+                    break;
+                case Expression.LessEqual:
+                    if (this.applyMaximumIdleMinutes >= this._fetcher.Status.MaximumIdleMinutes) {
+                        this.onUpdate.Invoke(this.sprite);
+                    }
+                    break;
+                case Expression.Greater:
+                    if (this.applyMaximumIdleMinutes < this._fetcher.Status.MaximumIdleMinutes) {
+                        this.onUpdate.Invoke(this.sprite);
+                    }
+                    break;
+                case Expression.GreaterEqual:
+                    if (this.applyMaximumIdleMinutes <= this._fetcher.Status.MaximumIdleMinutes) {
+                        this.onUpdate.Invoke(this.sprite);
+                    }
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
         }
     }
@@ -91,13 +90,12 @@ namespace Gs2.Unity.UiKit.Gs2Idle
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2IdleOwnStatusFetcher>() ?? GetComponentInParent<Gs2IdleOwnStatusFetcher>();
-
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2IdleOwnStatusFetcher>() ?? GetComponentInParent<Gs2IdleOwnStatusFetcher>();
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2IdleOwnStatusFetcher.");
                 enabled = false;
             }
-            if (sprite == null) {
+            if (this.sprite == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: sprite is not set.");
                 enabled = false;
             }
@@ -105,14 +103,37 @@ namespace Gs2.Unity.UiKit.Gs2Idle
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2IdleOwnStatusFetcher>() ?? GetComponentInParent<Gs2IdleOwnStatusFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2IdleOwnStatusFetcher>() ?? GetComponentInParent<Gs2IdleOwnStatusFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
-            if (sprite == null) {
+            if (this.sprite == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 

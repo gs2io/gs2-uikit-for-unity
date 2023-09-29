@@ -39,13 +39,13 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Context
     public partial class Gs2InventoryOwnSimpleInventoryContext : Gs2InventorySimpleInventoryModelContext
     {
         public new void Start() {
-            if (SimpleInventory == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: SimpleInventory is not set in Gs2InventoryOwnSimpleInventoryContext.");
-            }
         }
         public override bool HasError() {
             var hasError = base.HasError();
             if (SimpleInventory == null || hasError) {
+                if (GetComponentInParent<Gs2InventoryConvertSimpleInventoryModelToOwnSimpleInventory>(true) != null) {
+                    return false;
+                }
                 return true;
             }
             return false;

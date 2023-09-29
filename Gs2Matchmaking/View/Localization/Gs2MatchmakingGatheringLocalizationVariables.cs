@@ -29,6 +29,7 @@
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Matchmaking.Fetcher;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.Localization.Components;
 using UnityEngine.Localization.SmartFormat.PersistentVariables;
 
@@ -41,30 +42,27 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking.Localization
     [AddComponentMenu("GS2 UIKit/Matchmaking/Gathering/View/Localization/Gs2MatchmakingGatheringLocalizationVariables")]
     public partial class Gs2MatchmakingGatheringLocalizationVariables : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched) {
-                target.StringReference["gatheringId"] = new StringVariable {
-                    Value = _fetcher?.Gathering?.GatheringId ?? "",
-                };
-                target.StringReference["name"] = new StringVariable {
-                    Value = _fetcher?.Gathering?.Name ?? "",
-                };
-                target.StringReference["metadata"] = new StringVariable {
-                    Value = _fetcher?.Gathering?.Metadata ?? "",
-                };
-                target.StringReference["expiresAt"] = new LongVariable {
-                    Value = _fetcher?.Gathering?.ExpiresAt ?? 0,
-                };
-                target.StringReference["createdAt"] = new LongVariable {
-                    Value = _fetcher?.Gathering?.CreatedAt ?? 0,
-                };
-                target.StringReference["updatedAt"] = new LongVariable {
-                    Value = _fetcher?.Gathering?.UpdatedAt ?? 0,
-                };
-                enabled = false;
-                target.enabled = true;
-            }
+            this.target.StringReference["gatheringId"] = new StringVariable {
+                Value = _fetcher?.Gathering?.GatheringId ?? "",
+            };
+            this.target.StringReference["name"] = new StringVariable {
+                Value = _fetcher?.Gathering?.Name ?? "",
+            };
+            this.target.StringReference["metadata"] = new StringVariable {
+                Value = _fetcher?.Gathering?.Metadata ?? "",
+            };
+            this.target.StringReference["expiresAt"] = new LongVariable {
+                Value = _fetcher?.Gathering?.ExpiresAt ?? 0,
+            };
+            this.target.StringReference["createdAt"] = new LongVariable {
+                Value = _fetcher?.Gathering?.CreatedAt ?? 0,
+            };
+            this.target.StringReference["updatedAt"] = new LongVariable {
+                Value = _fetcher?.Gathering?.UpdatedAt ?? 0,
+            };
+            this.target.enabled = true;
         }
     }
 
@@ -77,10 +75,10 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking.Localization
         private Gs2MatchmakingGatheringFetcher _fetcher;
 
         public void Awake() {
-            target.enabled = false;
-            _fetcher = GetComponent<Gs2MatchmakingGatheringFetcher>() ?? GetComponentInParent<Gs2MatchmakingGatheringFetcher>();
+            this.target.enabled = false;
+            this._fetcher = GetComponent<Gs2MatchmakingGatheringFetcher>() ?? GetComponentInParent<Gs2MatchmakingGatheringFetcher>();
 
-            if (_fetcher == null) {
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MatchmakingGatheringFetcher.");
                 enabled = false;
             }
@@ -88,11 +86,34 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking.Localization
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2MatchmakingGatheringFetcher>() ?? GetComponentInParent<Gs2MatchmakingGatheringFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2MatchmakingGatheringFetcher>() ?? GetComponentInParent<Gs2MatchmakingGatheringFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 

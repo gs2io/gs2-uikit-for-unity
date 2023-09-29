@@ -48,13 +48,16 @@ namespace Gs2.Unity.UiKit.Gs2Stamina
     {
         private IEnumerator Process()
         {
-            yield return new WaitUntil(() => this._clientHolder.Initialized);
-            yield return new WaitUntil(() => this._gameSessionHolder.Initialized);
+            var clientHolder = Gs2ClientHolder.Instance;
+            var gameSessionHolder = Gs2GameSessionHolder.Instance;
+
+            yield return new WaitUntil(() => clientHolder.Initialized);
+            yield return new WaitUntil(() => gameSessionHolder.Initialized);
             
-            var domain = this._clientHolder.Gs2.Stamina.Namespace(
+            var domain = clientHolder.Gs2.Stamina.Namespace(
                 this._context.Stamina.NamespaceName
             ).Me(
-                this._gameSessionHolder.GameSession
+                gameSessionHolder.GameSession
             ).Stamina(
                 this._context.Stamina.StaminaName
             );
@@ -123,16 +126,11 @@ namespace Gs2.Unity.UiKit.Gs2Stamina
 
     public partial class Gs2StaminaStaminaSetRecoverIntervalAction
     {
-        private Gs2ClientHolder _clientHolder;
-        private Gs2GameSessionHolder _gameSessionHolder;
         private Gs2StaminaOwnStaminaContext _context;
 
         public void Awake()
         {
-            this._clientHolder = Gs2ClientHolder.Instance;
-            this._gameSessionHolder = Gs2GameSessionHolder.Instance;
             this._context = GetComponent<Gs2StaminaOwnStaminaContext>() ?? GetComponentInParent<Gs2StaminaOwnStaminaContext>();
-
             if (_context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2StaminaOwnStaminaContext.");
                 enabled = false;
@@ -169,18 +167,21 @@ namespace Gs2.Unity.UiKit.Gs2Stamina
         public string SignedStatusSignature;
 
         public void SetKeyId(string value) {
-            KeyId = value;
-            this.onChangeKeyId.Invoke(KeyId);
+            this.KeyId = value;
+            this.onChangeKeyId.Invoke(this.KeyId);
+            this.OnChange.Invoke();
         }
 
         public void SetSignedStatusBody(string value) {
-            SignedStatusBody = value;
-            this.onChangeSignedStatusBody.Invoke(SignedStatusBody);
+            this.SignedStatusBody = value;
+            this.onChangeSignedStatusBody.Invoke(this.SignedStatusBody);
+            this.OnChange.Invoke();
         }
 
         public void SetSignedStatusSignature(string value) {
-            SignedStatusSignature = value;
-            this.onChangeSignedStatusSignature.Invoke(SignedStatusSignature);
+            this.SignedStatusSignature = value;
+            this.onChangeSignedStatusSignature.Invoke(this.SignedStatusSignature);
+            this.OnChange.Invoke();
         }
     }
 
@@ -245,6 +246,8 @@ namespace Gs2.Unity.UiKit.Gs2Stamina
             add => this.onSetRecoverIntervalComplete.AddListener(value);
             remove => this.onSetRecoverIntervalComplete.RemoveListener(value);
         }
+
+        public UnityEvent OnChange = new UnityEvent();
 
         [SerializeField]
         internal ErrorEvent onError = new ErrorEvent();

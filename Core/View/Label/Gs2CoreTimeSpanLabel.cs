@@ -32,7 +32,7 @@ namespace Gs2.Unity.UiKit.Core
 	[AddComponentMenu("GS2 UIKit/Core/View/Label/Gs2CoreTimeSpanLabel")]
     public partial class Gs2CoreTimeSpanLabel : MonoBehaviour
     {
-        public void Update()
+        public void OnChangeValue()
         {
             if (time > 0)
             {
@@ -71,7 +71,7 @@ namespace Gs2.Unity.UiKit.Core
     {
         public void Awake()
         {
-            Update();
+            OnChangeValue();
         }
     }
 
@@ -86,6 +86,7 @@ namespace Gs2.Unity.UiKit.Core
         }
         public void SetTime(long time) {
             this.time = time;
+            OnChangeValue();
         }
     }
 
@@ -115,8 +116,8 @@ namespace Gs2.Unity.UiKit.Core
 
         public event UnityAction<string> OnUpdate
         {
-            add => onUpdate.AddListener(value);
-            remove => onUpdate.RemoveListener(value);
+            add => this.onUpdate.AddListener(value);
+            remove => this.onUpdate.RemoveListener(value);
         }
     }
 }

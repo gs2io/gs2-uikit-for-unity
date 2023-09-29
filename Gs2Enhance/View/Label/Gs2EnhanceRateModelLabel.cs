@@ -40,26 +40,23 @@ namespace Gs2.Unity.UiKit.Gs2Enhance
 	[AddComponentMenu("GS2 UIKit/Enhance/RateModel/View/Label/Gs2EnhanceRateModelLabel")]
     public partial class Gs2EnhanceRateModelLabel : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched && _fetcher.RateModel != null)
-            {
-                onUpdate?.Invoke(
-                    format.Replace(
-                        "{name}", $"{_fetcher?.RateModel?.Name}"
-                    ).Replace(
-                        "{metadata}", $"{_fetcher?.RateModel?.Metadata}"
-                    ).Replace(
-                        "{targetInventoryModelId}", $"{_fetcher?.RateModel?.TargetInventoryModelId}"
-                    ).Replace(
-                        "{acquireExperienceSuffix}", $"{_fetcher?.RateModel?.AcquireExperienceSuffix}"
-                    ).Replace(
-                        "{materialInventoryModelId}", $"{_fetcher?.RateModel?.MaterialInventoryModelId}"
-                    ).Replace(
-                        "{experienceModelId}", $"{_fetcher?.RateModel?.ExperienceModelId}"
-                    )
-                );
-            }
+            this.onUpdate?.Invoke(
+                this.format.Replace(
+                    "{name}", $"{this._fetcher?.RateModel?.Name}"
+                ).Replace(
+                    "{metadata}", $"{this._fetcher?.RateModel?.Metadata}"
+                ).Replace(
+                    "{targetInventoryModelId}", $"{this._fetcher?.RateModel?.TargetInventoryModelId}"
+                ).Replace(
+                    "{acquireExperienceSuffix}", $"{this._fetcher?.RateModel?.AcquireExperienceSuffix}"
+                ).Replace(
+                    "{materialInventoryModelId}", $"{this._fetcher?.RateModel?.MaterialInventoryModelId}"
+                ).Replace(
+                    "{experienceModelId}", $"{this._fetcher?.RateModel?.ExperienceModelId}"
+                )
+            );
         }
     }
 
@@ -73,23 +70,43 @@ namespace Gs2.Unity.UiKit.Gs2Enhance
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2EnhanceRateModelFetcher>() ?? GetComponentInParent<Gs2EnhanceRateModelFetcher>();
-
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2EnhanceRateModelFetcher>() ?? GetComponentInParent<Gs2EnhanceRateModelFetcher>();
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2EnhanceRateModelFetcher.");
                 enabled = false;
             }
-
-            Update();
         }
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2EnhanceRateModelFetcher>() ?? GetComponentInParent<Gs2EnhanceRateModelFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2EnhanceRateModelFetcher>() ?? GetComponentInParent<Gs2EnhanceRateModelFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 
@@ -127,8 +144,8 @@ namespace Gs2.Unity.UiKit.Gs2Enhance
 
         public event UnityAction<string> OnUpdate
         {
-            add => onUpdate.AddListener(value);
-            remove => onUpdate.RemoveListener(value);
+            add => this.onUpdate.AddListener(value);
+            remove => this.onUpdate.RemoveListener(value);
         }
     }
 }

@@ -40,7 +40,7 @@ namespace Gs2.Unity.UiKit.Gs2Money.Context
     {
         public void Start() {
             if (Receipt == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Receipt is not set in Gs2MoneyOwnReceiptContext.");
+                Debug.LogWarning($"{gameObject.GetFullPath()}: Receipt is not set in Gs2MoneyOwnReceiptContext.");
             }
         }
         public virtual bool HasError() {

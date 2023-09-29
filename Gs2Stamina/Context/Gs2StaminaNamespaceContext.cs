@@ -40,7 +40,7 @@ namespace Gs2.Unity.UiKit.Gs2Stamina.Context
     {
         public void Start() {
             if (Namespace == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Namespace is not set in Gs2StaminaNamespaceContext.");
+                Debug.LogWarning($"{gameObject.GetFullPath()}: Namespace is not set in Gs2StaminaNamespaceContext.");
             }
         }
 

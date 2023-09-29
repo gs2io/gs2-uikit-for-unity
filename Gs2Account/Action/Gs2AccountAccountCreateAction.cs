@@ -48,9 +48,12 @@ namespace Gs2.Unity.UiKit.Gs2Account
     {
         private IEnumerator Process()
         {
-            yield return new WaitUntil(() => this._clientHolder.Initialized);
+            var clientHolder = Gs2ClientHolder.Instance;
+            var gameSessionHolder = Gs2GameSessionHolder.Instance;
+
+            yield return new WaitUntil(() => clientHolder.Initialized);
             
-            var domain = this._clientHolder.Gs2.Account.Namespace(
+            var domain = clientHolder.Gs2.Account.Namespace(
                 this._context.Namespace.NamespaceName
             );
             var future = domain.Create(
@@ -115,17 +118,12 @@ namespace Gs2.Unity.UiKit.Gs2Account
 
     public partial class Gs2AccountAccountCreateAction
     {
-        private Gs2ClientHolder _clientHolder;
-        private Gs2GameSessionHolder _gameSessionHolder;
         private Gs2AccountNamespaceContext _context;
 
         public void Awake()
         {
-            this._clientHolder = Gs2ClientHolder.Instance;
-            this._gameSessionHolder = Gs2GameSessionHolder.Instance;
             this._context = GetComponent<Gs2AccountNamespaceContext>() ?? GetComponentInParent<Gs2AccountNamespaceContext>();
-
-            if (_context == null) {
+            if (this._context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2AccountNamespaceContext.");
                 enabled = false;
             }
@@ -134,7 +132,7 @@ namespace Gs2.Unity.UiKit.Gs2Account
         public virtual bool HasError()
         {
             this._context = GetComponent<Gs2AccountNamespaceContext>() ?? GetComponentInParent<Gs2AccountNamespaceContext>(true);
-            if (_context == null) {
+            if (this._context == null) {
                 return true;
             }
             return false;
@@ -177,6 +175,8 @@ namespace Gs2.Unity.UiKit.Gs2Account
             add => this.onCreateComplete.AddListener(value);
             remove => this.onCreateComplete.RemoveListener(value);
         }
+
+        public UnityEvent OnChange = new UnityEvent();
 
         [SerializeField]
         internal ErrorEvent onError = new ErrorEvent();

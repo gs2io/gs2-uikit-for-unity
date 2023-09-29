@@ -53,7 +53,7 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.Editor
                 EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2LotteryOwnBoxItemsListFetcher), false);
                 EditorGUI.indentLevel++;
                 if (fetcher.Context != null) {
-                    fetcher.Context.PrizeTable = EditorGUILayout.ObjectField("PrizeTable", fetcher.Context.PrizeTable, typeof(PrizeTable), false) as PrizeTable;
+                    fetcher.Context.BoxItems = EditorGUILayout.ObjectField("BoxItems", fetcher.Context.BoxItems, typeof(PrizeTable), false) as OwnBoxItems;
                     EditorGUI.indentLevel++;
                     EditorGUI.indentLevel--;
                 }

@@ -40,7 +40,7 @@ namespace Gs2.Unity.UiKit.Gs2Account.Context
     {
         public void Start() {
             if (TakeOver == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: TakeOver is not set in Gs2AccountOwnTakeOverContext.");
+                Debug.LogWarning($"{gameObject.GetFullPath()}: TakeOver is not set in Gs2AccountOwnTakeOverContext.");
             }
         }
         public virtual bool HasError() {
@@ -48,9 +48,7 @@ namespace Gs2.Unity.UiKit.Gs2Account.Context
                 if (GetComponentInParent<Gs2AccountOwnTakeOverList>(true) != null) {
                     return false;
                 }
-                else {
-                    return true;
-                }
+                return true;
             }
             return false;
         }

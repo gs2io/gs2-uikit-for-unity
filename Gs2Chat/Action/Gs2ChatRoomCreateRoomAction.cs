@@ -48,13 +48,16 @@ namespace Gs2.Unity.UiKit.Gs2Chat
     {
         private IEnumerator Process()
         {
-            yield return new WaitUntil(() => this._clientHolder.Initialized);
-            yield return new WaitUntil(() => this._gameSessionHolder.Initialized);
+            var clientHolder = Gs2ClientHolder.Instance;
+            var gameSessionHolder = Gs2GameSessionHolder.Instance;
+
+            yield return new WaitUntil(() => clientHolder.Initialized);
+            yield return new WaitUntil(() => gameSessionHolder.Initialized);
             
-            var domain = this._clientHolder.Gs2.Chat.Namespace(
+            var domain = clientHolder.Gs2.Chat.Namespace(
                 this._context.Namespace.NamespaceName
             ).Me(
-                this._gameSessionHolder.GameSession
+                gameSessionHolder.GameSession
             );
             var future = domain.CreateRoom(
                 Name,
@@ -122,16 +125,11 @@ namespace Gs2.Unity.UiKit.Gs2Chat
 
     public partial class Gs2ChatRoomCreateRoomAction
     {
-        private Gs2ClientHolder _clientHolder;
-        private Gs2GameSessionHolder _gameSessionHolder;
         private Gs2ChatNamespaceContext _context;
 
         public void Awake()
         {
-            this._clientHolder = Gs2ClientHolder.Instance;
-            this._gameSessionHolder = Gs2GameSessionHolder.Instance;
             this._context = GetComponent<Gs2ChatNamespaceContext>() ?? GetComponentInParent<Gs2ChatNamespaceContext>();
-
             if (_context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ChatNamespaceContext.");
                 enabled = false;
@@ -169,23 +167,27 @@ namespace Gs2.Unity.UiKit.Gs2Chat
         public List<string> WhiteListUserIds;
 
         public void SetName(string value) {
-            Name = value;
-            this.onChangeName.Invoke(Name);
+            this.Name = value;
+            this.onChangeName.Invoke(this.Name);
+            this.OnChange.Invoke();
         }
 
         public void SetMetadata(string value) {
-            Metadata = value;
-            this.onChangeMetadata.Invoke(Metadata);
+            this.Metadata = value;
+            this.onChangeMetadata.Invoke(this.Metadata);
+            this.OnChange.Invoke();
         }
 
         public void SetPassword(string value) {
-            Password = value;
-            this.onChangePassword.Invoke(Password);
+            this.Password = value;
+            this.onChangePassword.Invoke(this.Password);
+            this.OnChange.Invoke();
         }
 
         public void SetWhiteListUserIds(List<string> value) {
-            WhiteListUserIds = value;
-            this.onChangeWhiteListUserIds.Invoke(WhiteListUserIds);
+            this.WhiteListUserIds = value;
+            this.onChangeWhiteListUserIds.Invoke(this.WhiteListUserIds);
+            this.OnChange.Invoke();
         }
     }
 
@@ -264,6 +266,8 @@ namespace Gs2.Unity.UiKit.Gs2Chat
             add => this.onCreateRoomComplete.AddListener(value);
             remove => this.onCreateRoomComplete.RemoveListener(value);
         }
+
+        public UnityEvent OnChange = new UnityEvent();
 
         [SerializeField]
         internal ErrorEvent onError = new ErrorEvent();

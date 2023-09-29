@@ -40,41 +40,38 @@ namespace Gs2.Unity.UiKit.Gs2Exchange
 	[AddComponentMenu("GS2 UIKit/Exchange/Await/View/Label/Gs2ExchangeOwnAwaitLabel")]
     public partial class Gs2ExchangeOwnAwaitLabel : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched && _fetcher.Await != null)
-            {
-                var exchangedAt = _fetcher.Await.ExchangedAt == null ? DateTime.Now : UnixTime.FromUnixTime(_fetcher.Await.ExchangedAt).ToLocalTime();
-                onUpdate?.Invoke(
-                    format.Replace(
-                        "{userId}", $"{_fetcher?.Await?.UserId}"
-                    ).Replace(
-                        "{rateName}", $"{_fetcher?.Await?.RateName}"
-                    ).Replace(
-                        "{name}", $"{_fetcher?.Await?.Name}"
-                    ).Replace(
-                        "{exchangedAt:yyyy}", exchangedAt.ToString("yyyy")
-                    ).Replace(
-                        "{exchangedAt:yy}", exchangedAt.ToString("yy")
-                    ).Replace(
-                        "{exchangedAt:MM}", exchangedAt.ToString("MM")
-                    ).Replace(
-                        "{exchangedAt:MMM}", exchangedAt.ToString("MMM")
-                    ).Replace(
-                        "{exchangedAt:dd}", exchangedAt.ToString("dd")
-                    ).Replace(
-                        "{exchangedAt:hh}", exchangedAt.ToString("hh")
-                    ).Replace(
-                        "{exchangedAt:HH}", exchangedAt.ToString("HH")
-                    ).Replace(
-                        "{exchangedAt:tt}", exchangedAt.ToString("tt")
-                    ).Replace(
-                        "{exchangedAt:mm}", exchangedAt.ToString("mm")
-                    ).Replace(
-                        "{exchangedAt:ss}", exchangedAt.ToString("ss")
-                    )
-                );
-            }
+            var exchangedAt = this._fetcher.Await.ExchangedAt == null ? DateTime.Now : UnixTime.FromUnixTime(_fetcher.Await.ExchangedAt).ToLocalTime();
+            this.onUpdate?.Invoke(
+                this.format.Replace(
+                    "{userId}", $"{this._fetcher?.Await?.UserId}"
+                ).Replace(
+                    "{rateName}", $"{this._fetcher?.Await?.RateName}"
+                ).Replace(
+                    "{name}", $"{this._fetcher?.Await?.Name}"
+                ).Replace(
+                    "{exchangedAt:yyyy}", exchangedAt.ToString("yyyy")
+                ).Replace(
+                    "{exchangedAt:yy}", exchangedAt.ToString("yy")
+                ).Replace(
+                    "{exchangedAt:MM}", exchangedAt.ToString("MM")
+                ).Replace(
+                    "{exchangedAt:MMM}", exchangedAt.ToString("MMM")
+                ).Replace(
+                    "{exchangedAt:dd}", exchangedAt.ToString("dd")
+                ).Replace(
+                    "{exchangedAt:hh}", exchangedAt.ToString("hh")
+                ).Replace(
+                    "{exchangedAt:HH}", exchangedAt.ToString("HH")
+                ).Replace(
+                    "{exchangedAt:tt}", exchangedAt.ToString("tt")
+                ).Replace(
+                    "{exchangedAt:mm}", exchangedAt.ToString("mm")
+                ).Replace(
+                    "{exchangedAt:ss}", exchangedAt.ToString("ss")
+                )
+            );
         }
     }
 
@@ -88,23 +85,43 @@ namespace Gs2.Unity.UiKit.Gs2Exchange
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2ExchangeOwnAwaitFetcher>() ?? GetComponentInParent<Gs2ExchangeOwnAwaitFetcher>();
-
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2ExchangeOwnAwaitFetcher>() ?? GetComponentInParent<Gs2ExchangeOwnAwaitFetcher>();
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ExchangeOwnAwaitFetcher.");
                 enabled = false;
             }
-
-            Update();
         }
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2ExchangeOwnAwaitFetcher>() ?? GetComponentInParent<Gs2ExchangeOwnAwaitFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2ExchangeOwnAwaitFetcher>() ?? GetComponentInParent<Gs2ExchangeOwnAwaitFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 
@@ -142,8 +159,8 @@ namespace Gs2.Unity.UiKit.Gs2Exchange
 
         public event UnityAction<string> OnUpdate
         {
-            add => onUpdate.AddListener(value);
-            remove => onUpdate.RemoveListener(value);
+            add => this.onUpdate.AddListener(value);
+            remove => this.onUpdate.RemoveListener(value);
         }
     }
 }

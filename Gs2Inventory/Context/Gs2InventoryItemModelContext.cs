@@ -40,7 +40,7 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Context
     {
         public void Start() {
             if (ItemModel == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: ItemModel is not set in Gs2InventoryItemModelContext.");
+                Debug.LogWarning($"{gameObject.GetFullPath()}: ItemModel is not set in Gs2InventoryItemModelContext.");
             }
         }
 
@@ -49,9 +49,7 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Context
                 if (GetComponentInParent<Gs2InventoryItemModelList>(true) != null) {
                     return false;
                 }
-                else {
-                    return true;
-                }
+                return true;
             }
             return false;
         }

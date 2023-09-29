@@ -29,6 +29,7 @@
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Inventory.Fetcher;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.Localization.Components;
 using UnityEngine.Localization.SmartFormat.PersistentVariables;
 
@@ -41,24 +42,21 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Localization
     [AddComponentMenu("GS2 UIKit/Inventory/Inventory/View/Localization/Gs2InventoryInventoryLocalizationVariables")]
     public partial class Gs2InventoryInventoryLocalizationVariables : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched) {
-                target.StringReference["inventoryId"] = new StringVariable {
-                    Value = _fetcher?.Inventory?.InventoryId ?? "",
-                };
-                target.StringReference["inventoryName"] = new StringVariable {
-                    Value = _fetcher?.Inventory?.InventoryName ?? "",
-                };
-                target.StringReference["currentInventoryCapacityUsage"] = new IntVariable {
-                    Value = _fetcher?.Inventory?.CurrentInventoryCapacityUsage ?? 0,
-                };
-                target.StringReference["currentInventoryMaxCapacity"] = new IntVariable {
-                    Value = _fetcher?.Inventory?.CurrentInventoryMaxCapacity ?? 0,
-                };
-                enabled = false;
-                target.enabled = true;
-            }
+            this.target.StringReference["inventoryId"] = new StringVariable {
+                Value = _fetcher?.Inventory?.InventoryId ?? "",
+            };
+            this.target.StringReference["inventoryName"] = new StringVariable {
+                Value = _fetcher?.Inventory?.InventoryName ?? "",
+            };
+            this.target.StringReference["currentInventoryCapacityUsage"] = new IntVariable {
+                Value = _fetcher?.Inventory?.CurrentInventoryCapacityUsage ?? 0,
+            };
+            this.target.StringReference["currentInventoryMaxCapacity"] = new IntVariable {
+                Value = _fetcher?.Inventory?.CurrentInventoryMaxCapacity ?? 0,
+            };
+            this.target.enabled = true;
         }
     }
 
@@ -71,10 +69,10 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Localization
         private Gs2InventoryOwnInventoryFetcher _fetcher;
 
         public void Awake() {
-            target.enabled = false;
-            _fetcher = GetComponent<Gs2InventoryOwnInventoryFetcher>() ?? GetComponentInParent<Gs2InventoryOwnInventoryFetcher>();
+            this.target.enabled = false;
+            this._fetcher = GetComponent<Gs2InventoryOwnInventoryFetcher>() ?? GetComponentInParent<Gs2InventoryOwnInventoryFetcher>();
 
-            if (_fetcher == null) {
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2InventoryInventoryFetcher.");
                 enabled = false;
             }
@@ -82,11 +80,34 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Localization
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2InventoryOwnInventoryFetcher>() ?? GetComponentInParent<Gs2InventoryOwnInventoryFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2InventoryOwnInventoryFetcher>() ?? GetComponentInParent<Gs2InventoryOwnInventoryFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 

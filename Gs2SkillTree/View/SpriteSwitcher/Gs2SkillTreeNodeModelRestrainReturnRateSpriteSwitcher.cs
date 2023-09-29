@@ -40,43 +40,42 @@ namespace Gs2.Unity.UiKit.Gs2SkillTree
 	[AddComponentMenu("GS2 UIKit/SkillTree/NodeModel/View/SpriteSwitcher/Properties/RestrainReturnRate/Gs2SkillTreeNodeModelRestrainReturnRateSpriteSwitcher")]
     public partial class Gs2SkillTreeNodeModelRestrainReturnRateSpriteSwitcher : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched && _fetcher.NodeModel != null)
+            switch(this.expression)
             {
-                switch(expression)
-                {
-                    case Expression.In:
-                        if (applyRestrainReturnRates.Contains(_fetcher.NodeModel.RestrainReturnRate)) {
-                            this.onUpdate.Invoke(this.sprite);
-                        }
-                        break;
-                    case Expression.NotIn:
-                        if (!applyRestrainReturnRates.Contains(_fetcher.NodeModel.RestrainReturnRate)) {
-                            this.onUpdate.Invoke(this.sprite);
-                        }
-                        break;
-                    case Expression.Less:
-                        if (applyRestrainReturnRate > _fetcher.NodeModel.RestrainReturnRate) {
-                            this.onUpdate.Invoke(this.sprite);
-                        }
-                        break;
-                    case Expression.LessEqual:
-                        if (applyRestrainReturnRate >= _fetcher.NodeModel.RestrainReturnRate) {
-                            this.onUpdate.Invoke(this.sprite);
-                        }
-                        break;
-                    case Expression.Greater:
-                        if (applyRestrainReturnRate < _fetcher.NodeModel.RestrainReturnRate) {
-                            this.onUpdate.Invoke(this.sprite);
-                        }
-                        break;
-                    case Expression.GreaterEqual:
-                        if (applyRestrainReturnRate <= _fetcher.NodeModel.RestrainReturnRate) {
-                            this.onUpdate.Invoke(this.sprite);
-                        }
-                        break;
-                }
+                case Expression.In:
+                    if (this.applyRestrainReturnRates.Contains(this._fetcher.NodeModel.RestrainReturnRate)) {
+                        this.onUpdate.Invoke(this.sprite);
+                    }
+                    break;
+                case Expression.NotIn:
+                    if (!this.applyRestrainReturnRates.Contains(this._fetcher.NodeModel.RestrainReturnRate)) {
+                        this.onUpdate.Invoke(this.sprite);
+                    }
+                    break;
+                case Expression.Less:
+                    if (this.applyRestrainReturnRate > this._fetcher.NodeModel.RestrainReturnRate) {
+                        this.onUpdate.Invoke(this.sprite);
+                    }
+                    break;
+                case Expression.LessEqual:
+                    if (this.applyRestrainReturnRate >= this._fetcher.NodeModel.RestrainReturnRate) {
+                        this.onUpdate.Invoke(this.sprite);
+                    }
+                    break;
+                case Expression.Greater:
+                    if (this.applyRestrainReturnRate < this._fetcher.NodeModel.RestrainReturnRate) {
+                        this.onUpdate.Invoke(this.sprite);
+                    }
+                    break;
+                case Expression.GreaterEqual:
+                    if (this.applyRestrainReturnRate <= this._fetcher.NodeModel.RestrainReturnRate) {
+                        this.onUpdate.Invoke(this.sprite);
+                    }
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
         }
     }
@@ -91,13 +90,12 @@ namespace Gs2.Unity.UiKit.Gs2SkillTree
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2SkillTreeNodeModelFetcher>() ?? GetComponentInParent<Gs2SkillTreeNodeModelFetcher>();
-
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2SkillTreeNodeModelFetcher>() ?? GetComponentInParent<Gs2SkillTreeNodeModelFetcher>();
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2SkillTreeNodeModelFetcher.");
                 enabled = false;
             }
-            if (sprite == null) {
+            if (this.sprite == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: sprite is not set.");
                 enabled = false;
             }
@@ -105,14 +103,37 @@ namespace Gs2.Unity.UiKit.Gs2SkillTree
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2SkillTreeNodeModelFetcher>() ?? GetComponentInParent<Gs2SkillTreeNodeModelFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2SkillTreeNodeModelFetcher>() ?? GetComponentInParent<Gs2SkillTreeNodeModelFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
-            if (sprite == null) {
+            if (this.sprite == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 

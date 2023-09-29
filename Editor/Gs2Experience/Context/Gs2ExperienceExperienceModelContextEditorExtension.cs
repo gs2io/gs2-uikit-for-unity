@@ -43,8 +43,12 @@ namespace Gs2.Unity.UiKit.Gs2Experience.Editor
             serializedObject.Update();
 
             if (original.ExperienceModel == null) {
-                if (original.GetComponentInParent<Gs2ExperienceExperienceModelList>(true) != null) {
+                var list = original.GetComponentInParent<Gs2ExperienceExperienceModelList>(true);
+                if (list != null) {
                     EditorGUILayout.HelpBox("ExperienceModel is auto assign from Gs2ExperienceExperienceModelList.", MessageType.Info);
+                    EditorGUI.BeginDisabledGroup(true);
+                    EditorGUILayout.ObjectField("List", list, typeof(Gs2ExperienceExperienceModelList), false);
+                    EditorGUI.EndDisabledGroup();
                 }
                 else {
                     EditorGUILayout.HelpBox("ExperienceModel not assigned.", MessageType.Error);

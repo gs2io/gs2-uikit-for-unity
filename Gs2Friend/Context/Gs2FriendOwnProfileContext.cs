@@ -40,7 +40,7 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Context
     {
         public void Start() {
             if (Profile == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Profile is not set in Gs2FriendOwnProfileContext.");
+                Debug.LogWarning($"{gameObject.GetFullPath()}: Profile is not set in Gs2FriendOwnProfileContext.");
             }
         }
         public virtual bool HasError() {

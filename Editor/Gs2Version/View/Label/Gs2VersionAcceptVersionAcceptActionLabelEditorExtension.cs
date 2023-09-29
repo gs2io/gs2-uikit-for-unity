@@ -37,6 +37,14 @@ namespace Gs2.Unity.UiKit.Gs2Version.Editor
 
             if (original == null) return;
 
+            if (original.action == null) {
+                EditorGUILayout.HelpBox("Gs2VersionAcceptVersionAcceptAction not found.", MessageType.Error);
+                if (GUILayout.Button("Add Context")) {
+                    original.gameObject.AddComponent<Gs2VersionAcceptVersionAcceptAction>();
+                }
+                return;
+            }
+
             serializedObject.Update();
             EditorGUILayout.PropertyField(serializedObject.FindProperty("action"), true);
             original.format = EditorGUILayout.TextField("Format", original.format);

@@ -29,6 +29,7 @@
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Enhance.Fetcher;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.Localization.Components;
 using UnityEngine.Localization.SmartFormat.PersistentVariables;
 
@@ -41,30 +42,27 @@ namespace Gs2.Unity.UiKit.Gs2Enhance.Localization
     [AddComponentMenu("GS2 UIKit/Enhance/RateModel/View/Localization/Gs2EnhanceRateModelLocalizationVariables")]
     public partial class Gs2EnhanceRateModelLocalizationVariables : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched) {
-                target.StringReference["name"] = new StringVariable {
-                    Value = _fetcher?.RateModel?.Name ?? "",
-                };
-                target.StringReference["metadata"] = new StringVariable {
-                    Value = _fetcher?.RateModel?.Metadata ?? "",
-                };
-                target.StringReference["targetInventoryModelId"] = new StringVariable {
-                    Value = _fetcher?.RateModel?.TargetInventoryModelId ?? "",
-                };
-                target.StringReference["acquireExperienceSuffix"] = new StringVariable {
-                    Value = _fetcher?.RateModel?.AcquireExperienceSuffix ?? "",
-                };
-                target.StringReference["materialInventoryModelId"] = new StringVariable {
-                    Value = _fetcher?.RateModel?.MaterialInventoryModelId ?? "",
-                };
-                target.StringReference["experienceModelId"] = new StringVariable {
-                    Value = _fetcher?.RateModel?.ExperienceModelId ?? "",
-                };
-                enabled = false;
-                target.enabled = true;
-            }
+            this.target.StringReference["name"] = new StringVariable {
+                Value = _fetcher?.RateModel?.Name ?? "",
+            };
+            this.target.StringReference["metadata"] = new StringVariable {
+                Value = _fetcher?.RateModel?.Metadata ?? "",
+            };
+            this.target.StringReference["targetInventoryModelId"] = new StringVariable {
+                Value = _fetcher?.RateModel?.TargetInventoryModelId ?? "",
+            };
+            this.target.StringReference["acquireExperienceSuffix"] = new StringVariable {
+                Value = _fetcher?.RateModel?.AcquireExperienceSuffix ?? "",
+            };
+            this.target.StringReference["materialInventoryModelId"] = new StringVariable {
+                Value = _fetcher?.RateModel?.MaterialInventoryModelId ?? "",
+            };
+            this.target.StringReference["experienceModelId"] = new StringVariable {
+                Value = _fetcher?.RateModel?.ExperienceModelId ?? "",
+            };
+            this.target.enabled = true;
         }
     }
 
@@ -77,10 +75,10 @@ namespace Gs2.Unity.UiKit.Gs2Enhance.Localization
         private Gs2EnhanceRateModelFetcher _fetcher;
 
         public void Awake() {
-            target.enabled = false;
-            _fetcher = GetComponent<Gs2EnhanceRateModelFetcher>() ?? GetComponentInParent<Gs2EnhanceRateModelFetcher>();
+            this.target.enabled = false;
+            this._fetcher = GetComponent<Gs2EnhanceRateModelFetcher>() ?? GetComponentInParent<Gs2EnhanceRateModelFetcher>();
 
-            if (_fetcher == null) {
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2EnhanceRateModelFetcher.");
                 enabled = false;
             }
@@ -88,11 +86,34 @@ namespace Gs2.Unity.UiKit.Gs2Enhance.Localization
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2EnhanceRateModelFetcher>() ?? GetComponentInParent<Gs2EnhanceRateModelFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2EnhanceRateModelFetcher>() ?? GetComponentInParent<Gs2EnhanceRateModelFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 

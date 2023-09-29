@@ -43,8 +43,12 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Editor
             serializedObject.Update();
 
             if (original.PropertyFormModel == null) {
-                if (original.GetComponentInParent<Gs2FormationPropertyFormModelList>(true) != null) {
+                var list = original.GetComponentInParent<Gs2FormationPropertyFormModelList>(true);
+                if (list != null) {
                     EditorGUILayout.HelpBox("PropertyFormModel is auto assign from Gs2FormationPropertyFormModelList.", MessageType.Info);
+                    EditorGUI.BeginDisabledGroup(true);
+                    EditorGUILayout.ObjectField("List", list, typeof(Gs2FormationPropertyFormModelList), false);
+                    EditorGUI.EndDisabledGroup();
                 }
                 else {
                     EditorGUILayout.HelpBox("PropertyFormModel not assigned.", MessageType.Error);

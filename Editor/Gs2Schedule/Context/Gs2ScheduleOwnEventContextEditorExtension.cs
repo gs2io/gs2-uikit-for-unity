@@ -44,8 +44,12 @@ namespace Gs2.Unity.UiKit.Gs2Schedule.Editor
             serializedObject.Update();
 
             if (original.Event_ == null) {
-                if (original.GetComponentInParent<Gs2ScheduleOwnEventList>(true) != null) {
-                    EditorGUILayout.HelpBox("OwnEvent is auto assign from Gs2ScheduleOwnEventList.", MessageType.Info);
+                var list = original.GetComponentInParent<Gs2ScheduleOwnEventList>(true);
+                if (list != null) {
+                    EditorGUILayout.HelpBox("Event is auto assign from Gs2ScheduleOwnEventList.", MessageType.Info);
+                    EditorGUI.BeginDisabledGroup(true);
+                    EditorGUILayout.ObjectField("List", list, typeof(Gs2ScheduleOwnEventList), false);
+                    EditorGUI.EndDisabledGroup();
                 }
                 else {
                     EditorGUILayout.HelpBox("OwnEvent not assigned.", MessageType.Error);

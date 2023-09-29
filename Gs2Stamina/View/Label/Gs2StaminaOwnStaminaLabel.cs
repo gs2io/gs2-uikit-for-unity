@@ -40,47 +40,44 @@ namespace Gs2.Unity.UiKit.Gs2Stamina
 	[AddComponentMenu("GS2 UIKit/Stamina/Stamina/View/Label/Gs2StaminaOwnStaminaLabel")]
     public partial class Gs2StaminaOwnStaminaLabel : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched && _fetcher.Stamina != null)
-            {
-                var nextRecoverAt = _fetcher.Stamina.NextRecoverAt == null ? DateTime.Now : UnixTime.FromUnixTime(_fetcher.Stamina.NextRecoverAt).ToLocalTime();
-                onUpdate?.Invoke(
-                    format.Replace(
-                        "{staminaName}", $"{_fetcher?.Stamina?.StaminaName}"
-                    ).Replace(
-                        "{value}", $"{_fetcher?.Stamina?.Value}"
-                    ).Replace(
-                        "{overflowValue}", $"{_fetcher?.Stamina?.OverflowValue}"
-                    ).Replace(
-                        "{maxValue}", $"{_fetcher?.Stamina?.MaxValue}"
-                    ).Replace(
-                        "{recoverIntervalMinutes}", $"{_fetcher?.Stamina?.RecoverIntervalMinutes}"
-                    ).Replace(
-                        "{recoverValue}", $"{_fetcher?.Stamina?.RecoverValue}"
-                    ).Replace(
-                        "{nextRecoverAt:yyyy}", nextRecoverAt.ToString("yyyy")
-                    ).Replace(
-                        "{nextRecoverAt:yy}", nextRecoverAt.ToString("yy")
-                    ).Replace(
-                        "{nextRecoverAt:MM}", nextRecoverAt.ToString("MM")
-                    ).Replace(
-                        "{nextRecoverAt:MMM}", nextRecoverAt.ToString("MMM")
-                    ).Replace(
-                        "{nextRecoverAt:dd}", nextRecoverAt.ToString("dd")
-                    ).Replace(
-                        "{nextRecoverAt:hh}", nextRecoverAt.ToString("hh")
-                    ).Replace(
-                        "{nextRecoverAt:HH}", nextRecoverAt.ToString("HH")
-                    ).Replace(
-                        "{nextRecoverAt:tt}", nextRecoverAt.ToString("tt")
-                    ).Replace(
-                        "{nextRecoverAt:mm}", nextRecoverAt.ToString("mm")
-                    ).Replace(
-                        "{nextRecoverAt:ss}", nextRecoverAt.ToString("ss")
-                    )
-                );
-            }
+            var nextRecoverAt = this._fetcher.Stamina.NextRecoverAt == null ? DateTime.Now : UnixTime.FromUnixTime(_fetcher.Stamina.NextRecoverAt).ToLocalTime();
+            this.onUpdate?.Invoke(
+                this.format.Replace(
+                    "{staminaName}", $"{this._fetcher?.Stamina?.StaminaName}"
+                ).Replace(
+                    "{value}", $"{this._fetcher?.Stamina?.Value}"
+                ).Replace(
+                    "{overflowValue}", $"{this._fetcher?.Stamina?.OverflowValue}"
+                ).Replace(
+                    "{maxValue}", $"{this._fetcher?.Stamina?.MaxValue}"
+                ).Replace(
+                    "{recoverIntervalMinutes}", $"{this._fetcher?.Stamina?.RecoverIntervalMinutes}"
+                ).Replace(
+                    "{recoverValue}", $"{this._fetcher?.Stamina?.RecoverValue}"
+                ).Replace(
+                    "{nextRecoverAt:yyyy}", nextRecoverAt.ToString("yyyy")
+                ).Replace(
+                    "{nextRecoverAt:yy}", nextRecoverAt.ToString("yy")
+                ).Replace(
+                    "{nextRecoverAt:MM}", nextRecoverAt.ToString("MM")
+                ).Replace(
+                    "{nextRecoverAt:MMM}", nextRecoverAt.ToString("MMM")
+                ).Replace(
+                    "{nextRecoverAt:dd}", nextRecoverAt.ToString("dd")
+                ).Replace(
+                    "{nextRecoverAt:hh}", nextRecoverAt.ToString("hh")
+                ).Replace(
+                    "{nextRecoverAt:HH}", nextRecoverAt.ToString("HH")
+                ).Replace(
+                    "{nextRecoverAt:tt}", nextRecoverAt.ToString("tt")
+                ).Replace(
+                    "{nextRecoverAt:mm}", nextRecoverAt.ToString("mm")
+                ).Replace(
+                    "{nextRecoverAt:ss}", nextRecoverAt.ToString("ss")
+                )
+            );
         }
     }
 
@@ -94,23 +91,43 @@ namespace Gs2.Unity.UiKit.Gs2Stamina
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2StaminaOwnStaminaFetcher>() ?? GetComponentInParent<Gs2StaminaOwnStaminaFetcher>();
-
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2StaminaOwnStaminaFetcher>() ?? GetComponentInParent<Gs2StaminaOwnStaminaFetcher>();
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2StaminaOwnStaminaFetcher.");
                 enabled = false;
             }
-
-            Update();
         }
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2StaminaOwnStaminaFetcher>() ?? GetComponentInParent<Gs2StaminaOwnStaminaFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2StaminaOwnStaminaFetcher>() ?? GetComponentInParent<Gs2StaminaOwnStaminaFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 
@@ -148,8 +165,8 @@ namespace Gs2.Unity.UiKit.Gs2Stamina
 
         public event UnityAction<string> OnUpdate
         {
-            add => onUpdate.AddListener(value);
-            remove => onUpdate.RemoveListener(value);
+            add => this.onUpdate.AddListener(value);
+            remove => this.onUpdate.RemoveListener(value);
         }
     }
 }

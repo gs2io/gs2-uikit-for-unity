@@ -40,7 +40,7 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Context
     {
         public void Start() {
             if (QuestModel == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: QuestModel is not set in Gs2QuestQuestModelContext.");
+                Debug.LogWarning($"{gameObject.GetFullPath()}: QuestModel is not set in Gs2QuestQuestModelContext.");
             }
         }
 
@@ -49,9 +49,7 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Context
                 if (GetComponentInParent<Gs2QuestQuestModelList>(true) != null) {
                     return false;
                 }
-                else {
-                    return true;
-                }
+                return true;
             }
             return false;
         }

@@ -40,7 +40,7 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Context
     {
         public void Start() {
             if (BigInventoryModel == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: BigInventoryModel is not set in Gs2InventoryBigInventoryModelContext.");
+                Debug.LogWarning($"{gameObject.GetFullPath()}: BigInventoryModel is not set in Gs2InventoryBigInventoryModelContext.");
             }
         }
 
@@ -49,9 +49,7 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Context
                 if (GetComponentInParent<Gs2InventoryBigInventoryModelList>(true) != null) {
                     return false;
                 }
-                else {
-                    return true;
-                }
+                return true;
             }
             return false;
         }

@@ -40,28 +40,25 @@ namespace Gs2.Unity.UiKit.Gs2Idle
 	[AddComponentMenu("GS2 UIKit/Idle/CategoryModel/View/Label/Gs2IdleCategoryModelLabel")]
     public partial class Gs2IdleCategoryModelLabel : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched && _fetcher.CategoryModel != null)
-            {
-                onUpdate?.Invoke(
-                    format.Replace(
-                        "{name}", $"{_fetcher?.CategoryModel?.Name}"
-                    ).Replace(
-                        "{metadata}", $"{_fetcher?.CategoryModel?.Metadata}"
-                    ).Replace(
-                        "{rewardIntervalMinutes}", $"{_fetcher?.CategoryModel?.RewardIntervalMinutes}"
-                    ).Replace(
-                        "{defaultMaximumIdleMinutes}", $"{_fetcher?.CategoryModel?.DefaultMaximumIdleMinutes}"
-                    ).Replace(
-                        "{acquireActions}", $"{_fetcher?.CategoryModel?.AcquireActions}"
-                    ).Replace(
-                        "{idlePeriodScheduleId}", $"{_fetcher?.CategoryModel?.IdlePeriodScheduleId}"
-                    ).Replace(
-                        "{receivePeriodScheduleId}", $"{_fetcher?.CategoryModel?.ReceivePeriodScheduleId}"
-                    )
-                );
-            }
+            this.onUpdate?.Invoke(
+                this.format.Replace(
+                    "{name}", $"{this._fetcher?.CategoryModel?.Name}"
+                ).Replace(
+                    "{metadata}", $"{this._fetcher?.CategoryModel?.Metadata}"
+                ).Replace(
+                    "{rewardIntervalMinutes}", $"{this._fetcher?.CategoryModel?.RewardIntervalMinutes}"
+                ).Replace(
+                    "{defaultMaximumIdleMinutes}", $"{this._fetcher?.CategoryModel?.DefaultMaximumIdleMinutes}"
+                ).Replace(
+                    "{acquireActions}", $"{this._fetcher?.CategoryModel?.AcquireActions}"
+                ).Replace(
+                    "{idlePeriodScheduleId}", $"{this._fetcher?.CategoryModel?.IdlePeriodScheduleId}"
+                ).Replace(
+                    "{receivePeriodScheduleId}", $"{this._fetcher?.CategoryModel?.ReceivePeriodScheduleId}"
+                )
+            );
         }
     }
 
@@ -75,23 +72,43 @@ namespace Gs2.Unity.UiKit.Gs2Idle
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2IdleCategoryModelFetcher>() ?? GetComponentInParent<Gs2IdleCategoryModelFetcher>();
-
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2IdleCategoryModelFetcher>() ?? GetComponentInParent<Gs2IdleCategoryModelFetcher>();
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2IdleCategoryModelFetcher.");
                 enabled = false;
             }
-
-            Update();
         }
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2IdleCategoryModelFetcher>() ?? GetComponentInParent<Gs2IdleCategoryModelFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2IdleCategoryModelFetcher>() ?? GetComponentInParent<Gs2IdleCategoryModelFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 
@@ -129,8 +146,8 @@ namespace Gs2.Unity.UiKit.Gs2Idle
 
         public event UnityAction<string> OnUpdate
         {
-            add => onUpdate.AddListener(value);
-            remove => onUpdate.RemoveListener(value);
+            add => this.onUpdate.AddListener(value);
+            remove => this.onUpdate.RemoveListener(value);
         }
     }
 }

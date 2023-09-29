@@ -40,22 +40,19 @@ namespace Gs2.Unity.UiKit.Gs2SerialKey
 	[AddComponentMenu("GS2 UIKit/SerialKey/SerialKey/View/Label/Gs2SerialKeySerialKeyLabel")]
     public partial class Gs2SerialKeySerialKeyLabel : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched && _fetcher.SerialKey != null)
-            {
-                onUpdate?.Invoke(
-                    format.Replace(
-                        "{campaignModelName}", $"{_fetcher?.SerialKey?.CampaignModelName}"
-                    ).Replace(
-                        "{metadata}", $"{_fetcher?.SerialKey?.Metadata}"
-                    ).Replace(
-                        "{code}", $"{_fetcher?.SerialKey?.Code}"
-                    ).Replace(
-                        "{status}", $"{_fetcher?.SerialKey?.Status}"
-                    )
-                );
-            }
+            this.onUpdate?.Invoke(
+                this.format.Replace(
+                    "{campaignModelName}", $"{this._fetcher?.SerialKey?.CampaignModelName}"
+                ).Replace(
+                    "{metadata}", $"{this._fetcher?.SerialKey?.Metadata}"
+                ).Replace(
+                    "{code}", $"{this._fetcher?.SerialKey?.Code}"
+                ).Replace(
+                    "{status}", $"{this._fetcher?.SerialKey?.Status}"
+                )
+            );
         }
     }
 
@@ -69,23 +66,43 @@ namespace Gs2.Unity.UiKit.Gs2SerialKey
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2SerialKeySerialKeyFetcher>() ?? GetComponentInParent<Gs2SerialKeySerialKeyFetcher>();
-
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2SerialKeySerialKeyFetcher>() ?? GetComponentInParent<Gs2SerialKeySerialKeyFetcher>();
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2SerialKeySerialKeyFetcher.");
                 enabled = false;
             }
-
-            Update();
         }
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2SerialKeySerialKeyFetcher>() ?? GetComponentInParent<Gs2SerialKeySerialKeyFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2SerialKeySerialKeyFetcher>() ?? GetComponentInParent<Gs2SerialKeySerialKeyFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 
@@ -123,8 +140,8 @@ namespace Gs2.Unity.UiKit.Gs2SerialKey
 
         public event UnityAction<string> OnUpdate
         {
-            add => onUpdate.AddListener(value);
-            remove => onUpdate.RemoveListener(value);
+            add => this.onUpdate.AddListener(value);
+            remove => this.onUpdate.RemoveListener(value);
         }
     }
 }

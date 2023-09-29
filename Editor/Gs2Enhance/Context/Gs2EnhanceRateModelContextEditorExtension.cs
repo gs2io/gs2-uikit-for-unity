@@ -43,8 +43,12 @@ namespace Gs2.Unity.UiKit.Gs2Enhance.Editor
             serializedObject.Update();
 
             if (original.RateModel == null) {
-                if (original.GetComponentInParent<Gs2EnhanceRateModelList>(true) != null) {
+                var list = original.GetComponentInParent<Gs2EnhanceRateModelList>(true);
+                if (list != null) {
                     EditorGUILayout.HelpBox("RateModel is auto assign from Gs2EnhanceRateModelList.", MessageType.Info);
+                    EditorGUI.BeginDisabledGroup(true);
+                    EditorGUILayout.ObjectField("List", list, typeof(Gs2EnhanceRateModelList), false);
+                    EditorGUI.EndDisabledGroup();
                 }
                 else {
                     EditorGUILayout.HelpBox("RateModel not assigned.", MessageType.Error);

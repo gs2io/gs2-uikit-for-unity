@@ -54,9 +54,12 @@ namespace Gs2.Unity.UiKit.Gs2Showcase
     {
         private IEnumerator Process()
         {
-            yield return new WaitUntil(() => this._clientHolder.Initialized);
-            yield return new WaitUntil(() => this._gameSessionHolder.Initialized);
-            
+            var clientHolder = Gs2ClientHolder.Instance;
+            var gameSessionHolder = Gs2GameSessionHolder.Instance;
+
+            yield return new WaitUntil(() => clientHolder.Initialized);
+            yield return new WaitUntil(() => gameSessionHolder.Initialized);
+
             var config = new List<Gs2.Unity.Gs2Showcase.Model.EzConfig>(Config);
             
 #if GS2_ENABLE_PURCHASING
@@ -82,10 +85,10 @@ namespace Gs2.Unity.UiKit.Gs2Showcase
 
 #endif
 
-            var domain = this._clientHolder.Gs2.Showcase.Namespace(
+            var domain = clientHolder.Gs2.Showcase.Namespace(
                 this._fetcher.Context.DisplayItem.NamespaceName
             ).Me(
-                this._gameSessionHolder.GameSession
+                gameSessionHolder.GameSession
             ).Showcase(
                 this._fetcher.Context.DisplayItem.ShowcaseName
             ).DisplayItem(
@@ -158,17 +161,12 @@ namespace Gs2.Unity.UiKit.Gs2Showcase
 
     public partial class Gs2ShowcaseDisplayItemBuyAction
     {
-        private Gs2ClientHolder _clientHolder;
-        private Gs2GameSessionHolder _gameSessionHolder;
         private Gs2ShowcaseOwnDisplayItemFetcher _fetcher;
 
         public void Awake()
         {
-            this._clientHolder = Gs2ClientHolder.Instance;
-            this._gameSessionHolder = Gs2GameSessionHolder.Instance;
             this._fetcher = GetComponent<Gs2ShowcaseOwnDisplayItemFetcher>() ?? GetComponentInParent<Gs2ShowcaseOwnDisplayItemFetcher>();
-
-            if (_fetcher == null) {
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ShowcaseOwnDisplayItemFetcher.");
                 enabled = false;
             }
@@ -177,7 +175,7 @@ namespace Gs2.Unity.UiKit.Gs2Showcase
         public bool HasError()
         {
             this._fetcher = GetComponent<Gs2ShowcaseOwnDisplayItemFetcher>() ?? GetComponentInParent<Gs2ShowcaseOwnDisplayItemFetcher>(true);
-            if (_fetcher == null) {
+            if (this._fetcher == null) {
                 return true;
             }
             return false;
@@ -203,18 +201,20 @@ namespace Gs2.Unity.UiKit.Gs2Showcase
         public List<Gs2.Unity.Gs2Showcase.Model.EzConfig> Config;
 
         public void SetQuantity(int value) {
-            Quantity = value;
-            this.onChangeQuantity.Invoke(Quantity);
+            this.Quantity = value;
+            this.onChangeQuantity.Invoke(this.Quantity);
+            this.OnChange.Invoke();
         }
 
         public void DecreaseQuantity() {
-            Quantity -= 1;
-            this.onChangeQuantity.Invoke(Quantity);
+            this.Quantity -= 1;
+            this.onChangeQuantity.Invoke(this.Quantity);
         }
 
         public void IncreaseQuantity() {
-            Quantity += 1;
-            this.onChangeQuantity.Invoke(Quantity);
+            this.Quantity += 1;
+            this.onChangeQuantity.Invoke(this.Quantity);
+            this.OnChange.Invoke();
         }
 
         public void SetConfig(List<Gs2.Unity.Gs2Showcase.Model.EzConfig> value) {
@@ -270,6 +270,8 @@ namespace Gs2.Unity.UiKit.Gs2Showcase
             add => this.onBuyComplete.AddListener(value);
             remove => this.onBuyComplete.RemoveListener(value);
         }
+
+        public UnityEvent OnChange = new UnityEvent();
 
         [SerializeField]
         internal ErrorEvent onError = new ErrorEvent();

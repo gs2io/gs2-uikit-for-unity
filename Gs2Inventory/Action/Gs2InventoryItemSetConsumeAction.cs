@@ -18,6 +18,14 @@
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable UnusedAutoPropertyAccessor.Local
 // ReSharper disable CheckNamespace
+// ReSharper disable RedundantNameQualifier
+// ReSharper disable RedundantAssignment
+// ReSharper disable NotAccessedVariable
+// ReSharper disable RedundantUsingDirective
+// ReSharper disable Unity.NoNullPropagation
+// ReSharper disable InconsistentNaming
+
+#pragma warning disable CS0472
 
 using System;
 using System.Collections;
@@ -43,17 +51,20 @@ namespace Gs2.Unity.UiKit.Gs2Inventory
     {
         private IEnumerator Process()
         {
-            yield return new WaitUntil(() => this._clientHolder.Initialized);
-            yield return new WaitUntil(() => this._gameSessionHolder.Initialized);
+            var clientHolder = Gs2ClientHolder.Instance;
+            var gameSessionHolder = Gs2GameSessionHolder.Instance;
+
+            yield return new WaitUntil(() => clientHolder.Initialized);
+            yield return new WaitUntil(() => gameSessionHolder.Initialized);
             
-            var domain = this._clientHolder.Gs2.Inventory.Namespace(
-                this._context.ItemModel.NamespaceName
+            var domain = clientHolder.Gs2.Inventory.Namespace(
+                this._context.ItemSet.NamespaceName
             ).Me(
-                this._gameSessionHolder.GameSession
+                gameSessionHolder.GameSession
             ).Inventory(
-                this._context.ItemModel.InventoryName
+                this._context.ItemSet.InventoryName
             ).ItemSet(
-                this._context.ItemModel.ItemName,
+                this._context.ItemSet.ItemName,
                 this._context.ItemSet.ItemSetName
             );
             var future = domain.Consume(
@@ -119,20 +130,24 @@ namespace Gs2.Unity.UiKit.Gs2Inventory
 
     public partial class Gs2InventoryItemSetConsumeAction
     {
-        private Gs2ClientHolder _clientHolder;
-        private Gs2GameSessionHolder _gameSessionHolder;
         private Gs2InventoryOwnItemSetContext _context;
 
         public void Awake()
         {
-            this._clientHolder = Gs2ClientHolder.Instance;
-            this._gameSessionHolder = Gs2GameSessionHolder.Instance;
-            this._context = GetComponentInParent<Gs2InventoryOwnItemSetContext>();
-
+            this._context = GetComponent<Gs2InventoryOwnItemSetContext>() ?? GetComponentInParent<Gs2InventoryOwnItemSetContext>();
             if (_context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2InventoryOwnItemSetContext.");
                 enabled = false;
             }
+        }
+
+        public virtual bool HasError()
+        {
+            this._context = GetComponent<Gs2InventoryOwnItemSetContext>() ?? GetComponentInParent<Gs2InventoryOwnItemSetContext>(true);
+            if (_context == null) {
+                return true;
+            }
+            return false;
         }
     }
 
@@ -150,21 +165,25 @@ namespace Gs2.Unity.UiKit.Gs2Inventory
     /// </summary>
     public partial class Gs2InventoryItemSetConsumeAction
     {
+        public bool WaitAsyncProcessComplete;
         public long ConsumeCount;
 
         public void SetConsumeCount(long value) {
-            ConsumeCount = value;
-            this.onChangeConsumeCount.Invoke(ConsumeCount);
+            this.ConsumeCount = value;
+            this.onChangeConsumeCount.Invoke(this.ConsumeCount);
+            this.OnChange.Invoke();
         }
 
         public void DecreaseConsumeCount() {
-            ConsumeCount -= 1;
-            this.onChangeConsumeCount.Invoke(ConsumeCount);
+            this.ConsumeCount -= 1;
+            this.onChangeConsumeCount.Invoke(this.ConsumeCount);
+            this.OnChange.Invoke();
         }
 
         public void IncreaseConsumeCount() {
-            ConsumeCount += 1;
-            this.onChangeConsumeCount.Invoke(ConsumeCount);
+            this.ConsumeCount += 1;
+            this.onChangeConsumeCount.Invoke(this.ConsumeCount);
+            this.OnChange.Invoke();
         }
     }
 
@@ -201,6 +220,8 @@ namespace Gs2.Unity.UiKit.Gs2Inventory
             add => this.onConsumeComplete.AddListener(value);
             remove => this.onConsumeComplete.RemoveListener(value);
         }
+
+        public UnityEvent OnChange = new UnityEvent();
 
         [SerializeField]
         internal ErrorEvent onError = new ErrorEvent();

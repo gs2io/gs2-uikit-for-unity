@@ -39,46 +39,43 @@ namespace Gs2.Unity.UiKit.Gs2Money
     /// Main
     /// </summary>
 
-	[AddComponentMenu("GS2 UIKit/Money/Wallet/View/Label/Gs2MoneyWalletLabel")]
+	[AddComponentMenu("GS2 UIKit/Money/Wallet/View/Label/Gs2MoneyOwnWalletLabel")]
     public partial class Gs2MoneyOwnWalletLabel : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched && _fetcher.Wallet != null)
-            {
-                var updatedAt = _fetcher.Wallet.UpdatedAt == null ? DateTime.Now : UnixTime.FromUnixTime(_fetcher.Wallet.UpdatedAt).ToLocalTime();
-                onUpdate?.Invoke(
-                    format.Replace(
-                        "{slot}", $"{_fetcher?.Wallet?.Slot}"
-                    ).Replace(
-                        "{paid}", $"{_fetcher?.Wallet?.Paid}"
-                    ).Replace(
-                        "{free}", $"{_fetcher?.Wallet?.Free}"
-                    ).Replace(
-                        "{total}", $"{_fetcher?.Wallet?.Free + _fetcher?.Wallet?.Paid}"
-                    ).Replace(
-                        "{updatedAt:yyyy}", updatedAt.ToString("yyyy")
-                    ).Replace(
-                        "{updatedAt:yy}", updatedAt.ToString("yy")
-                    ).Replace(
-                        "{updatedAt:MM}", updatedAt.ToString("MM")
-                    ).Replace(
-                        "{updatedAt:MMM}", updatedAt.ToString("MMM")
-                    ).Replace(
-                        "{updatedAt:dd}", updatedAt.ToString("dd")
-                    ).Replace(
-                        "{updatedAt:hh}", updatedAt.ToString("hh")
-                    ).Replace(
-                        "{updatedAt:HH}", updatedAt.ToString("HH")
-                    ).Replace(
-                        "{updatedAt:tt}", updatedAt.ToString("tt")
-                    ).Replace(
-                        "{updatedAt:mm}", updatedAt.ToString("mm")
-                    ).Replace(
-                        "{updatedAt:ss}", updatedAt.ToString("ss")
-                    )
-                );
-            }
+            var updatedAt = this._fetcher.Wallet.UpdatedAt == null ? DateTime.Now : UnixTime.FromUnixTime(_fetcher.Wallet.UpdatedAt).ToLocalTime();
+            this.onUpdate?.Invoke(
+                this.format.Replace(
+                    "{slot}", $"{this._fetcher?.Wallet?.Slot}"
+                ).Replace(
+                    "{paid}", $"{this._fetcher?.Wallet?.Paid}"
+                ).Replace(
+                    "{free}", $"{this._fetcher?.Wallet?.Free}"
+                ).Replace(
+                    "{total}", $"{_fetcher?.Wallet?.Free + _fetcher?.Wallet?.Paid}"
+                ).Replace(
+                    "{updatedAt:yyyy}", updatedAt.ToString("yyyy")
+                ).Replace(
+                    "{updatedAt:yy}", updatedAt.ToString("yy")
+                ).Replace(
+                    "{updatedAt:MM}", updatedAt.ToString("MM")
+                ).Replace(
+                    "{updatedAt:MMM}", updatedAt.ToString("MMM")
+                ).Replace(
+                    "{updatedAt:dd}", updatedAt.ToString("dd")
+                ).Replace(
+                    "{updatedAt:hh}", updatedAt.ToString("hh")
+                ).Replace(
+                    "{updatedAt:HH}", updatedAt.ToString("HH")
+                ).Replace(
+                    "{updatedAt:tt}", updatedAt.ToString("tt")
+                ).Replace(
+                    "{updatedAt:mm}", updatedAt.ToString("mm")
+                ).Replace(
+                    "{updatedAt:ss}", updatedAt.ToString("ss")
+                )
+            );
         }
     }
 
@@ -92,23 +89,43 @@ namespace Gs2.Unity.UiKit.Gs2Money
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2MoneyOwnWalletFetcher>() ?? GetComponentInParent<Gs2MoneyOwnWalletFetcher>();
-
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2MoneyOwnWalletFetcher>() ?? GetComponentInParent<Gs2MoneyOwnWalletFetcher>();
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MoneyOwnWalletFetcher.");
                 enabled = false;
             }
-
-            Update();
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2MoneyOwnWalletFetcher>() ?? GetComponentInParent<Gs2MoneyOwnWalletFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2MoneyOwnWalletFetcher>() ?? GetComponentInParent<Gs2MoneyOwnWalletFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 
@@ -146,8 +163,8 @@ namespace Gs2.Unity.UiKit.Gs2Money
 
         public event UnityAction<string> OnUpdate
         {
-            add => onUpdate.AddListener(value);
-            remove => onUpdate.RemoveListener(value);
+            add => this.onUpdate.AddListener(value);
+            remove => this.onUpdate.RemoveListener(value);
         }
     }
 }

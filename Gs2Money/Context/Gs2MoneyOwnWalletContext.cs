@@ -40,7 +40,7 @@ namespace Gs2.Unity.UiKit.Gs2Money.Context
     {
         public void Start() {
             if (Wallet == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Wallet is not set in Gs2MoneyOwnWalletContext.");
+                Debug.LogWarning($"{gameObject.GetFullPath()}: Wallet is not set in Gs2MoneyOwnWalletContext.");
             }
         }
         public virtual bool HasError() {

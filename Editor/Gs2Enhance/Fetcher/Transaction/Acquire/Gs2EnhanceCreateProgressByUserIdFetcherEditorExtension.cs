@@ -43,9 +43,13 @@ namespace Gs2.Unity.UiKit.Gs2Enhance.Fetcher.Editor
             if (fetcher == null) {
                 EditorGUILayout.HelpBox("IAcquireActionsFetcher not found.", MessageType.Error);
             }
+            else {
+                EditorGUI.BeginDisabledGroup(true);
+                EditorGUILayout.ObjectField("Fetcher", fetcher.GameObject(), typeof(GameObject), false);
+                EditorGUI.EndDisabledGroup();
+            }
             
             serializedObject.Update();
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("onError"), true);
             serializedObject.ApplyModifiedProperties();
         }
     }

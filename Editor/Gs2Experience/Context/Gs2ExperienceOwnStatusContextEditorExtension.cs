@@ -43,8 +43,12 @@ namespace Gs2.Unity.UiKit.Gs2Experience.Editor
             serializedObject.Update();
 
             if (original.Status == null) {
-                if (original.GetComponentInParent<Gs2ExperienceOwnStatusList>(true) != null) {
-                    EditorGUILayout.HelpBox("OwnStatus is auto assign from Gs2ExperienceOwnStatusList.", MessageType.Info);
+                var list = original.GetComponentInParent<Gs2ExperienceOwnStatusList>(true);
+                if (list != null) {
+                    EditorGUILayout.HelpBox("Status is auto assign from Gs2ExperienceOwnStatusList.", MessageType.Info);
+                    EditorGUI.BeginDisabledGroup(true);
+                    EditorGUILayout.ObjectField("List", list, typeof(Gs2ExperienceOwnStatusList), false);
+                    EditorGUI.EndDisabledGroup();
                 }
                 else {
                     EditorGUILayout.HelpBox("OwnStatus not assigned.", MessageType.Error);

@@ -40,33 +40,30 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.SpriteSwitcher
 	[AddComponentMenu("GS2 UIKit/Lottery/DrawnPrize/View/SpriteSwitcher/Properties/PrizeId/Gs2LotteryDrawnPrizePrizeIdSpriteSwitcher")]
     public partial class Gs2LotteryOwnDrawnPrizePrizeIdSpriteSwitcher : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched && _fetcher.DrawnPrize != null)
+            switch(this.expression)
             {
-                switch(expression)
-                {
-                    case Expression.In:
-                        if (applyPrizeIds.Contains(_fetcher.DrawnPrize.PrizeId)) {
-                            this.onUpdate.Invoke(this.sprite);
-                        }
-                        break;
-                    case Expression.NotIn:
-                        if (!applyPrizeIds.Contains(_fetcher.DrawnPrize.PrizeId)) {
-                            this.onUpdate.Invoke(this.sprite);
-                        }
-                        break;
-                    case Expression.StartsWith:
-                        if (_fetcher.DrawnPrize.PrizeId.StartsWith(applyPrizeId)) {
-                            this.onUpdate.Invoke(this.sprite);
-                        }
-                        break;
-                    case Expression.EndsWith:
-                        if (_fetcher.DrawnPrize.PrizeId.EndsWith(applyPrizeId)) {
-                            this.onUpdate.Invoke(this.sprite);
-                        }
-                        break;
-                }
+                case Expression.In:
+                    if (this.applyPrizeIds.Contains(this._fetcher.DrawnPrize.PrizeId)) {
+                        this.onUpdate.Invoke(this.sprite);
+                    }
+                    break;
+                case Expression.NotIn:
+                    if (!this.applyPrizeIds.Contains(this._fetcher.DrawnPrize.PrizeId)) {
+                        this.onUpdate.Invoke(this.sprite);
+                    }
+                    break;
+                case Expression.StartsWith:
+                    if (this._fetcher.DrawnPrize.PrizeId.StartsWith(this.applyPrizeId)) {
+                        this.onUpdate.Invoke(this.sprite);
+                    }
+                    break;
+                case Expression.EndsWith:
+                    if (this._fetcher.DrawnPrize.PrizeId.EndsWith(this.applyPrizeId)) {
+                        this.onUpdate.Invoke(this.sprite);
+                    }
+                    break;
             }
         }
     }
@@ -81,13 +78,12 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.SpriteSwitcher
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2LotteryOwnDrawnPrizeFetcher>() ?? GetComponentInParent<Gs2LotteryOwnDrawnPrizeFetcher>();
-
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2LotteryOwnDrawnPrizeFetcher>() ?? GetComponentInParent<Gs2LotteryOwnDrawnPrizeFetcher>();
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2LotteryOwnDrawnPrizeFetcher.");
                 enabled = false;
             }
-            if (sprite == null) {
+            if (this.sprite == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: sprite is not set.");
                 enabled = false;
             }
@@ -95,14 +91,37 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.SpriteSwitcher
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2LotteryOwnDrawnPrizeFetcher>() ?? GetComponentInParent<Gs2LotteryOwnDrawnPrizeFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2LotteryOwnDrawnPrizeFetcher>() ?? GetComponentInParent<Gs2LotteryOwnDrawnPrizeFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
-            if (sprite == null) {
+            if (this.sprite == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 

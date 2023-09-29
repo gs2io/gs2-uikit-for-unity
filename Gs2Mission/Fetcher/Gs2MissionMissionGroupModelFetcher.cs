@@ -72,6 +72,7 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Fetcher
                 {
                     MissionGroupModel = item;
                     Fetched = true;
+                    this.OnFetched.Invoke();
                 }
             );
 
@@ -85,11 +86,10 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Fetcher
                 else {
                     MissionGroupModel = future.Result;
                     Fetched = true;
+                    this.OnFetched.Invoke();
                     break;
                 }
             }
-
-            this.OnFetched.Invoke();
         }
 
         public void OnUpdateContext() {
@@ -129,8 +129,6 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Fetcher
     {
         public Gs2MissionMissionGroupModelContext Context { get; private set; }
 
-        public UnityEvent OnFetched = new UnityEvent();
-
         public void Awake()
         {
             Context = GetComponent<Gs2MissionMissionGroupModelContext>() ?? GetComponentInParent<Gs2MissionMissionGroupModelContext>();
@@ -158,6 +156,7 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Fetcher
     {
         public Gs2.Unity.Gs2Mission.Model.EzMissionGroupModel MissionGroupModel { get; protected set; }
         public bool Fetched { get; protected set; }
+        public UnityEvent OnFetched = new UnityEvent();
     }
 
     /// <summary>

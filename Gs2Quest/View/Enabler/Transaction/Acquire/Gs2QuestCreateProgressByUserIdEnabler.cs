@@ -44,7 +44,7 @@ namespace Gs2.Unity.UiKit.Gs2Quest
 	[AddComponentMenu("GS2 UIKit/Quest/Progress/View/Enabler/Transaction/Gs2QuestCreateProgressByUserIdEnabler")]
     public partial class Gs2QuestCreateProgressByUserIdEnabler : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
             if (this._fetcher.AcquireActions().Count(v => v.Action == "Gs2Quest:CreateProgressByUserId") == 0) {
                 target.SetActive(this.notIncludeAcquireActions);
@@ -74,8 +74,6 @@ namespace Gs2.Unity.UiKit.Gs2Quest
                 Debug.LogError($"{gameObject.GetFullPath()}: target is not set.");
                 enabled = false;
             }
-
-            Update();
         }
 
         public virtual bool HasError()
@@ -88,6 +86,28 @@ namespace Gs2.Unity.UiKit.Gs2Quest
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetchedEvent().AddListener(this._onFetched);
+            if (this._fetcher.IsFetched()) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetchedEvent().RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 

@@ -45,19 +45,13 @@ namespace Gs2.Unity.UiKit.Gs2Friend
 	[AddComponentMenu("GS2 UIKit/Friend/FollowUser/View/Enabler/Gs2FriendFollowStatusEnabler")]
     public partial class Gs2FriendOwnFollowStatusEnabler : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (this._followListFetcher.Fetched && this._followListFetcher.FollowUsers != null) {
-                if (!this._followListFetcher.FollowUsers.Select(v => v.UserId).Contains(this._context.FollowUser.TargetUserId)) {
-                    this.target.SetActive(this.followed);
-                }
-                else {
-                    this.target.SetActive(this.unrelated);
-                }
+            if (!this._fetcher.FollowUsers.Select(v => v.UserId).Contains(this._context.FollowUser.TargetUserId)) {
+                this.target.SetActive(this.followed);
             }
-            else
-            {
-                this.target.SetActive(false);
+            else {
+                this.target.SetActive(this.unrelated);
             }
         }
     }
@@ -69,28 +63,69 @@ namespace Gs2.Unity.UiKit.Gs2Friend
     public partial class Gs2FriendOwnFollowStatusEnabler
     {
         private Gs2FriendOwnFollowUserContext _context;
-        private Gs2FriendOwnFollowUserListFetcher _followListFetcher;
+        private Gs2FriendOwnFollowUserListFetcher _fetcher;
 
         public void Awake()
         {
-            _context = GetComponent<Gs2FriendOwnFollowUserContext>() ?? GetComponentInParent<Gs2FriendOwnFollowUserContext>();
-            _followListFetcher = GetComponent<Gs2FriendOwnFollowUserListFetcher>() ?? GetComponentInParent<Gs2FriendOwnFollowUserListFetcher>();
+            this._context = GetComponent<Gs2FriendOwnFollowUserContext>() ?? GetComponentInParent<Gs2FriendOwnFollowUserContext>();
+            this._fetcher = GetComponent<Gs2FriendOwnFollowUserListFetcher>() ?? GetComponentInParent<Gs2FriendOwnFollowUserListFetcher>();
 
-            if (_followListFetcher == null) {
+            if (this._context == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2FriendOwnFollowUserContext.");
+                enabled = false;
+            }
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2FriendOwnFollowUserListFetcher.");
                 enabled = false;
             }
-
-            Update();
+            if (this.target == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: target is not set.");
+                enabled = false;
+            }
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
         }
 
         public bool HasError()
         {
-            _followListFetcher = GetComponent<Gs2FriendOwnFollowUserListFetcher>() ?? GetComponentInParent<Gs2FriendOwnFollowUserListFetcher>(true);
-            if (_followListFetcher == null) {
+            this._context = GetComponent<Gs2FriendOwnFollowUserContext>() ?? GetComponentInParent<Gs2FriendOwnFollowUserContext>(true);
+            if (this._context == null) {
+                return true;
+            }
+            this._fetcher = GetComponent<Gs2FriendOwnFollowUserListFetcher>() ?? GetComponentInParent<Gs2FriendOwnFollowUserListFetcher>(true);
+            if (this._fetcher == null) {
+                return true;
+            }
+            if (this.target == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+            this._context.OnUpdate.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._context.OnUpdate.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 

@@ -40,7 +40,7 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.Context
     {
         public void Start() {
             if (LotteryModel == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: LotteryModel is not set in Gs2LotteryLotteryModelContext.");
+                Debug.LogWarning($"{gameObject.GetFullPath()}: LotteryModel is not set in Gs2LotteryLotteryModelContext.");
             }
         }
 
@@ -49,9 +49,7 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.Context
                 if (GetComponentInParent<Gs2LotteryLotteryModelList>(true) != null) {
                     return false;
                 }
-                else {
-                    return true;
-                }
+                return true;
             }
             return false;
         }

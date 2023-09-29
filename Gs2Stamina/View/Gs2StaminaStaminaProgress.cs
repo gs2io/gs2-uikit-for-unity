@@ -32,14 +32,11 @@ namespace Gs2.Unity.UiKit.Gs2Stamina
 	[AddComponentMenu("GS2 UIKit/Stamina/Stamina/View/Gs2StaminaStaminaProgress")]
     public partial class Gs2StaminaStaminaProgress : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched && _fetcher.Stamina != null)
-            {
-                onUpdate?.Invoke(
-                    Math.Min((float)_fetcher.Stamina.Value / this._fetcher.Stamina.MaxValue, 1)
-                );
-            }
+            this.onUpdate?.Invoke(
+                Math.Min((float) this._fetcher.Stamina.Value / this._fetcher.Stamina.MaxValue, 1)
+            );
         }
     }
 
@@ -53,8 +50,46 @@ namespace Gs2.Unity.UiKit.Gs2Stamina
 
         public void Awake()
         {
-            _fetcher = GetComponentInParent<Gs2StaminaOwnStaminaFetcher>();
-            Update();
+            this._fetcher = GetComponentInParent<Gs2StaminaOwnStaminaFetcher>();
+            if (this._fetcher == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2StaminaOwnStaminaFetcher.");
+                enabled = false;
+            }
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+        
+        public virtual bool HasError()
+        {
+            this._fetcher = GetComponent<Gs2StaminaOwnStaminaFetcher>() ?? GetComponentInParent<Gs2StaminaOwnStaminaFetcher>(true);
+            if (this._fetcher == null) {
+                return true;
+            }
+            return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 

@@ -40,87 +40,84 @@ namespace Gs2.Unity.UiKit.Gs2Inbox
 	[AddComponentMenu("GS2 UIKit/Inbox/Message/View/Label/Gs2InboxOwnMessageLabel")]
     public partial class Gs2InboxOwnMessageLabel : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched && _fetcher.Message != null)
-            {
-                var receivedAt = _fetcher.Message.ReceivedAt == null ? DateTime.Now : UnixTime.FromUnixTime(_fetcher.Message.ReceivedAt).ToLocalTime();
-                var readAt = _fetcher.Message.ReadAt == null ? DateTime.Now : UnixTime.FromUnixTime(_fetcher.Message.ReadAt).ToLocalTime();
-                var expiresAt = _fetcher.Message.ExpiresAt == null ? DateTime.Now : UnixTime.FromUnixTime(_fetcher.Message.ExpiresAt).ToLocalTime();
-                onUpdate?.Invoke(
-                    format.Replace(
-                        "{messageId}", $"{_fetcher?.Message?.MessageId}"
-                    ).Replace(
-                        "{name}", $"{_fetcher?.Message?.Name}"
-                    ).Replace(
-                        "{metadata}", $"{_fetcher?.Message?.Metadata}"
-                    ).Replace(
-                        "{isRead}", $"{_fetcher?.Message?.IsRead}"
-                    ).Replace(
-                        "{readAcquireActions}", $"{_fetcher?.Message?.ReadAcquireActions}"
-                    ).Replace(
-                        "{receivedAt:yyyy}", receivedAt.ToString("yyyy")
-                    ).Replace(
-                        "{receivedAt:yy}", receivedAt.ToString("yy")
-                    ).Replace(
-                        "{receivedAt:MM}", receivedAt.ToString("MM")
-                    ).Replace(
-                        "{receivedAt:MMM}", receivedAt.ToString("MMM")
-                    ).Replace(
-                        "{receivedAt:dd}", receivedAt.ToString("dd")
-                    ).Replace(
-                        "{receivedAt:hh}", receivedAt.ToString("hh")
-                    ).Replace(
-                        "{receivedAt:HH}", receivedAt.ToString("HH")
-                    ).Replace(
-                        "{receivedAt:tt}", receivedAt.ToString("tt")
-                    ).Replace(
-                        "{receivedAt:mm}", receivedAt.ToString("mm")
-                    ).Replace(
-                        "{receivedAt:ss}", receivedAt.ToString("ss")
-                    ).Replace(
-                        "{readAt:yyyy}", readAt.ToString("yyyy")
-                    ).Replace(
-                        "{readAt:yy}", readAt.ToString("yy")
-                    ).Replace(
-                        "{readAt:MM}", readAt.ToString("MM")
-                    ).Replace(
-                        "{readAt:MMM}", readAt.ToString("MMM")
-                    ).Replace(
-                        "{readAt:dd}", readAt.ToString("dd")
-                    ).Replace(
-                        "{readAt:hh}", readAt.ToString("hh")
-                    ).Replace(
-                        "{readAt:HH}", readAt.ToString("HH")
-                    ).Replace(
-                        "{readAt:tt}", readAt.ToString("tt")
-                    ).Replace(
-                        "{readAt:mm}", readAt.ToString("mm")
-                    ).Replace(
-                        "{readAt:ss}", readAt.ToString("ss")
-                    ).Replace(
-                        "{expiresAt:yyyy}", expiresAt.ToString("yyyy")
-                    ).Replace(
-                        "{expiresAt:yy}", expiresAt.ToString("yy")
-                    ).Replace(
-                        "{expiresAt:MM}", expiresAt.ToString("MM")
-                    ).Replace(
-                        "{expiresAt:MMM}", expiresAt.ToString("MMM")
-                    ).Replace(
-                        "{expiresAt:dd}", expiresAt.ToString("dd")
-                    ).Replace(
-                        "{expiresAt:hh}", expiresAt.ToString("hh")
-                    ).Replace(
-                        "{expiresAt:HH}", expiresAt.ToString("HH")
-                    ).Replace(
-                        "{expiresAt:tt}", expiresAt.ToString("tt")
-                    ).Replace(
-                        "{expiresAt:mm}", expiresAt.ToString("mm")
-                    ).Replace(
-                        "{expiresAt:ss}", expiresAt.ToString("ss")
-                    )
-                );
-            }
+            var receivedAt = this._fetcher.Message.ReceivedAt == null ? DateTime.Now : UnixTime.FromUnixTime(_fetcher.Message.ReceivedAt).ToLocalTime();
+            var readAt = this._fetcher.Message.ReadAt == null ? DateTime.Now : UnixTime.FromUnixTime(_fetcher.Message.ReadAt).ToLocalTime();
+            var expiresAt = this._fetcher.Message.ExpiresAt == null ? DateTime.Now : UnixTime.FromUnixTime(_fetcher.Message.ExpiresAt).ToLocalTime();
+            this.onUpdate?.Invoke(
+                this.format.Replace(
+                    "{messageId}", $"{this._fetcher?.Message?.MessageId}"
+                ).Replace(
+                    "{name}", $"{this._fetcher?.Message?.Name}"
+                ).Replace(
+                    "{metadata}", $"{this._fetcher?.Message?.Metadata}"
+                ).Replace(
+                    "{isRead}", $"{this._fetcher?.Message?.IsRead}"
+                ).Replace(
+                    "{readAcquireActions}", $"{this._fetcher?.Message?.ReadAcquireActions}"
+                ).Replace(
+                    "{receivedAt:yyyy}", receivedAt.ToString("yyyy")
+                ).Replace(
+                    "{receivedAt:yy}", receivedAt.ToString("yy")
+                ).Replace(
+                    "{receivedAt:MM}", receivedAt.ToString("MM")
+                ).Replace(
+                    "{receivedAt:MMM}", receivedAt.ToString("MMM")
+                ).Replace(
+                    "{receivedAt:dd}", receivedAt.ToString("dd")
+                ).Replace(
+                    "{receivedAt:hh}", receivedAt.ToString("hh")
+                ).Replace(
+                    "{receivedAt:HH}", receivedAt.ToString("HH")
+                ).Replace(
+                    "{receivedAt:tt}", receivedAt.ToString("tt")
+                ).Replace(
+                    "{receivedAt:mm}", receivedAt.ToString("mm")
+                ).Replace(
+                    "{receivedAt:ss}", receivedAt.ToString("ss")
+                ).Replace(
+                    "{readAt:yyyy}", readAt.ToString("yyyy")
+                ).Replace(
+                    "{readAt:yy}", readAt.ToString("yy")
+                ).Replace(
+                    "{readAt:MM}", readAt.ToString("MM")
+                ).Replace(
+                    "{readAt:MMM}", readAt.ToString("MMM")
+                ).Replace(
+                    "{readAt:dd}", readAt.ToString("dd")
+                ).Replace(
+                    "{readAt:hh}", readAt.ToString("hh")
+                ).Replace(
+                    "{readAt:HH}", readAt.ToString("HH")
+                ).Replace(
+                    "{readAt:tt}", readAt.ToString("tt")
+                ).Replace(
+                    "{readAt:mm}", readAt.ToString("mm")
+                ).Replace(
+                    "{readAt:ss}", readAt.ToString("ss")
+                ).Replace(
+                    "{expiresAt:yyyy}", expiresAt.ToString("yyyy")
+                ).Replace(
+                    "{expiresAt:yy}", expiresAt.ToString("yy")
+                ).Replace(
+                    "{expiresAt:MM}", expiresAt.ToString("MM")
+                ).Replace(
+                    "{expiresAt:MMM}", expiresAt.ToString("MMM")
+                ).Replace(
+                    "{expiresAt:dd}", expiresAt.ToString("dd")
+                ).Replace(
+                    "{expiresAt:hh}", expiresAt.ToString("hh")
+                ).Replace(
+                    "{expiresAt:HH}", expiresAt.ToString("HH")
+                ).Replace(
+                    "{expiresAt:tt}", expiresAt.ToString("tt")
+                ).Replace(
+                    "{expiresAt:mm}", expiresAt.ToString("mm")
+                ).Replace(
+                    "{expiresAt:ss}", expiresAt.ToString("ss")
+                )
+            );
         }
     }
 
@@ -134,23 +131,43 @@ namespace Gs2.Unity.UiKit.Gs2Inbox
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2InboxOwnMessageFetcher>() ?? GetComponentInParent<Gs2InboxOwnMessageFetcher>();
-
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2InboxOwnMessageFetcher>() ?? GetComponentInParent<Gs2InboxOwnMessageFetcher>();
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2InboxOwnMessageFetcher.");
                 enabled = false;
             }
-
-            Update();
         }
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2InboxOwnMessageFetcher>() ?? GetComponentInParent<Gs2InboxOwnMessageFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2InboxOwnMessageFetcher>() ?? GetComponentInParent<Gs2InboxOwnMessageFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 
@@ -188,8 +205,8 @@ namespace Gs2.Unity.UiKit.Gs2Inbox
 
         public event UnityAction<string> OnUpdate
         {
-            add => onUpdate.AddListener(value);
-            remove => onUpdate.RemoveListener(value);
+            add => this.onUpdate.AddListener(value);
+            remove => this.onUpdate.RemoveListener(value);
         }
     }
 }

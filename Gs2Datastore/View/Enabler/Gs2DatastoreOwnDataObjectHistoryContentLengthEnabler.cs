@@ -24,10 +24,12 @@
 
 #pragma warning disable CS0472
 
+using System;
 using System.Collections.Generic;
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Datastore.Fetcher;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2Datastore
 {
@@ -38,35 +40,30 @@ namespace Gs2.Unity.UiKit.Gs2Datastore
 	[AddComponentMenu("GS2 UIKit/Datastore/DataObjectHistory/View/Enabler/Properties/ContentLength/Gs2DatastoreOwnDataObjectHistoryContentLengthEnabler")]
     public partial class Gs2DatastoreOwnDataObjectHistoryContentLengthEnabler : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched && _fetcher.DataObjectHistory != null)
+            switch(this.expression)
             {
-                switch(expression)
-                {
-                    case Expression.In:
-                        target.SetActive(enableContentLengths.Contains(_fetcher.DataObjectHistory.ContentLength));
-                        break;
-                    case Expression.NotIn:
-                        target.SetActive(!enableContentLengths.Contains(_fetcher.DataObjectHistory.ContentLength));
-                        break;
-                    case Expression.Less:
-                        target.SetActive(enableContentLength > _fetcher.DataObjectHistory.ContentLength);
-                        break;
-                    case Expression.LessEqual:
-                        target.SetActive(enableContentLength >= _fetcher.DataObjectHistory.ContentLength);
-                        break;
-                    case Expression.Greater:
-                        target.SetActive(enableContentLength < _fetcher.DataObjectHistory.ContentLength);
-                        break;
-                    case Expression.GreaterEqual:
-                        target.SetActive(enableContentLength <= _fetcher.DataObjectHistory.ContentLength);
-                        break;
-                }
-            }
-            else
-            {
-                target.SetActive(false);
+                case Expression.In:
+                    this.target.SetActive(this.enableContentLengths.Contains(this._fetcher.DataObjectHistory.ContentLength));
+                    break;
+                case Expression.NotIn:
+                    this.target.SetActive(!this.enableContentLengths.Contains(this._fetcher.DataObjectHistory.ContentLength));
+                    break;
+                case Expression.Less:
+                    this.target.SetActive(this.enableContentLength > this._fetcher.DataObjectHistory.ContentLength);
+                    break;
+                case Expression.LessEqual:
+                    this.target.SetActive(this.enableContentLength >= this._fetcher.DataObjectHistory.ContentLength);
+                    break;
+                case Expression.Greater:
+                    this.target.SetActive(this.enableContentLength < this._fetcher.DataObjectHistory.ContentLength);
+                    break;
+                case Expression.GreaterEqual:
+                    this.target.SetActive(this.enableContentLength <= this._fetcher.DataObjectHistory.ContentLength);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
         }
     }
@@ -81,13 +78,12 @@ namespace Gs2.Unity.UiKit.Gs2Datastore
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2DatastoreOwnDataObjectHistoryFetcher>() ?? GetComponentInParent<Gs2DatastoreOwnDataObjectHistoryFetcher>();
-
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2DatastoreOwnDataObjectHistoryFetcher>() ?? GetComponentInParent<Gs2DatastoreOwnDataObjectHistoryFetcher>();
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2DatastoreOwnDataObjectHistoryFetcher.");
                 enabled = false;
             }
-            if (target == null) {
+            if (this.target == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: target is not set.");
                 enabled = false;
             }
@@ -95,14 +91,37 @@ namespace Gs2.Unity.UiKit.Gs2Datastore
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2DatastoreOwnDataObjectHistoryFetcher>() ?? GetComponentInParent<Gs2DatastoreOwnDataObjectHistoryFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2DatastoreOwnDataObjectHistoryFetcher>() ?? GetComponentInParent<Gs2DatastoreOwnDataObjectHistoryFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
-            if (target == null) {
+            if (this.target == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 

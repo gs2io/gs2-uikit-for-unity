@@ -40,7 +40,7 @@ namespace Gs2.Unity.UiKit.Gs2SerialKey.Context
     {
         public void Start() {
             if (IssueJob == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: IssueJob is not set in Gs2SerialKeyIssueJobContext.");
+                Debug.LogWarning($"{gameObject.GetFullPath()}: IssueJob is not set in Gs2SerialKeyIssueJobContext.");
             }
         }
 

@@ -20,6 +20,7 @@ using System.Collections.Generic;
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Money.Fetcher;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2Money
 {
@@ -30,35 +31,28 @@ namespace Gs2.Unity.UiKit.Gs2Money
 	[AddComponentMenu("GS2 UIKit/Money/Wallet/View/Properties/Total/Gs2MoneyWalletTotalEnabler")]
     public partial class Gs2MoneyOwnWalletTotalEnabler : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched && _fetcher.Wallet != null)
+            switch(this.expression)
             {
-                switch(expression)
-                {
-                    case Expression.In:
-                        target.SetActive(enableTotals.Contains(_fetcher.Wallet.Free + _fetcher.Wallet.Paid));
-                        break;
-                    case Expression.NotIn:
-                        target.SetActive(!enableTotals.Contains(_fetcher.Wallet.Free + _fetcher.Wallet.Paid));
-                        break;
-                    case Expression.Less:
-                        target.SetActive(enableTotal > _fetcher.Wallet.Free + _fetcher.Wallet.Paid);
-                        break;
-                    case Expression.LessEqual:
-                        target.SetActive(enableTotal >= _fetcher.Wallet.Free + _fetcher.Wallet.Paid);
-                        break;
-                    case Expression.Greater:
-                        target.SetActive(enableTotal < _fetcher.Wallet.Free + _fetcher.Wallet.Paid);
-                        break;
-                    case Expression.GreaterEqual:
-                        target.SetActive(enableTotal <= _fetcher.Wallet.Free + _fetcher.Wallet.Paid);
-                        break;
-                }
-            }
-            else
-            {
-                target.SetActive(false);
+                case Expression.In:
+                    this.target.SetActive(this.enableTotals.Contains(this._fetcher.Wallet.Free + this._fetcher.Wallet.Paid));
+                    break;
+                case Expression.NotIn:
+                    this.target.SetActive(!this.enableTotals.Contains(this._fetcher.Wallet.Free + this._fetcher.Wallet.Paid));
+                    break;
+                case Expression.Less:
+                    this.target.SetActive(this.enableTotal > this._fetcher.Wallet.Free + this._fetcher.Wallet.Paid);
+                    break;
+                case Expression.LessEqual:
+                    this.target.SetActive(this.enableTotal >= this._fetcher.Wallet.Free + this._fetcher.Wallet.Paid);
+                    break;
+                case Expression.Greater:
+                    this.target.SetActive(this.enableTotal < this._fetcher.Wallet.Free + this._fetcher.Wallet.Paid);
+                    break;
+                case Expression.GreaterEqual:
+                    this.target.SetActive(this.enableTotal <= this._fetcher.Wallet.Free + this._fetcher.Wallet.Paid);
+                    break;
             }
         }
     }
@@ -73,11 +67,48 @@ namespace Gs2.Unity.UiKit.Gs2Money
 
         public void Awake()
         {
-            _fetcher = GetComponentInParent<Gs2MoneyOwnWalletFetcher>();
-
-            if (_fetcher == null) {
+            this._fetcher = GetComponentInParent<Gs2MoneyOwnWalletFetcher>();
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MoneyOwnWalletFetcher.");
                 enabled = false;
+            }
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+        
+        public virtual bool HasError()
+        {
+            this._fetcher = GetComponent<Gs2MoneyOwnWalletFetcher>() ?? GetComponentInParent<Gs2MoneyOwnWalletFetcher>(true);
+            if (this._fetcher == null) {
+                return true;
+            }
+            if (this.target == null) {
+                return true;
+            }
+            return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
             }
         }
     }

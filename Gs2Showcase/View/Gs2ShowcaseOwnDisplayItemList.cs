@@ -17,11 +17,13 @@
 // ReSharper disable CheckNamespace
 
 using System.Collections.Generic;
+using System.Linq;
 using Gs2.Unity.Gs2Showcase.ScriptableObject;
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Showcase.Context;
 using Gs2.Unity.UiKit.Gs2Showcase.Fetcher;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2Showcase
 {
@@ -34,16 +36,19 @@ namespace Gs2.Unity.UiKit.Gs2Showcase
     {
         private List<Gs2ShowcaseOwnDisplayItemContext> _children;
 
-        public void Update() {
-            if (_fetcher.Fetched && this._fetcher.Showcase != null) {
-                for (var i = 0; i < this.maximumItems; i++) {
-                    if (i < this._fetcher.Showcase.DisplayItems.Count) {
-                        _children[i].DisplayItem.displayItemId = this._fetcher.Showcase.DisplayItems[i].DisplayItemId;
-                        _children[i].gameObject.SetActive(true);
-                    }
-                    else {
-                        _children[i].gameObject.SetActive(false);
-                    }
+        private void OnFetched() {
+            for (var i = 0; i < this._children.Count(); i++) {
+                if (i < this._fetcher.Showcase.DisplayItems.Count) {
+                    this._children[i].SetOwnDisplayItem(
+                        OwnDisplayItem.New(
+                            this._fetcher.Context.Showcase,
+                            this._fetcher.Showcase.DisplayItems[i].DisplayItemId
+                        )
+                    );
+                    this._children[i].gameObject.SetActive(true);
+                }
+                else {
+                    this._children[i].gameObject.SetActive(false);
                 }
             }
         }
@@ -57,40 +62,72 @@ namespace Gs2.Unity.UiKit.Gs2Showcase
     {
         private Gs2ShowcaseOwnShowcaseFetcher _fetcher;
 
-        public void Awake()
-        {
-            if (prefab == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ShowcaseOwnDisplayItemContext Prefab.");
-                enabled = false;
-                return;
-            }
-
-            _fetcher = GetComponentInParent<Gs2ShowcaseOwnShowcaseFetcher>();
-
-            if (_fetcher == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ShowcaseOwnShowcaseFetcher.");
-                enabled = false;
-                return;
-            }
-
-            var context = GetComponentInParent<Gs2ShowcaseOwnShowcaseContext>();
-            if (context == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ShowcaseOwnShowcaseFetcher::Context.");
-                enabled = false;
-                return;
-            }
-
-            _children = new List<Gs2ShowcaseOwnDisplayItemContext>();
+        private void Initialize() {
             for (var i = 0; i < this.maximumItems; i++) {
                 var node = Instantiate(this.prefab, transform);
                 node.DisplayItem = OwnDisplayItem.New(
-                    context.Showcase,
+                    this._fetcher.Context.Showcase,
                     ""
                 );
                 node.gameObject.SetActive(false);
                 _children.Add(node);
             }
+        }
+
+        public void Awake()
+        {
+            if (this.prefab == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ShowcaseOwnDisplayItemContext Prefab.");
+                enabled = false;
+                return;
+            }
+
+            this._fetcher = GetComponentInParent<Gs2ShowcaseOwnShowcaseFetcher>();
+            if (this._fetcher == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ShowcaseOwnShowcaseFetcher.");
+                enabled = false;
+                return;
+            }
+
+            this._children = new List<Gs2ShowcaseOwnDisplayItemContext>();
             this.prefab.gameObject.SetActive(false);
+
+            Invoke(nameof(Initialize), 0);
+        }
+        
+        public virtual bool HasError()
+        {
+            if (this.prefab == null) {
+                return true;
+            }
+            this._fetcher = GetComponent<Gs2ShowcaseOwnShowcaseFetcher>() ?? GetComponentInParent<Gs2ShowcaseOwnShowcaseFetcher>(true);
+            if (this._fetcher == null) {
+                return true;
+            }
+            return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 

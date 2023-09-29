@@ -17,12 +17,22 @@
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
+// ReSharper disable RedundantNameQualifier
+// ReSharper disable RedundantAssignment
+// ReSharper disable NotAccessedVariable
+// ReSharper disable RedundantUsingDirective
+// ReSharper disable Unity.NoNullPropagation
+// ReSharper disable InconsistentNaming
+
+#pragma warning disable CS0472
 
 using System.Collections.Generic;
 using Gs2.Unity.Gs2Account.ScriptableObject;
+using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Account.Context;
 using Gs2.Unity.UiKit.Gs2Account.Fetcher;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2Account
 {
@@ -35,16 +45,19 @@ namespace Gs2.Unity.UiKit.Gs2Account
     {
         private List<Gs2AccountOwnTakeOverContext> _children;
 
-        public void Update() {
-            if (_fetcher.Fetched) {
-                for (var i = 0; i < this.maximumItems; i++) {
-                    if (i < this._fetcher.TakeOvers.Count) {
-                        _children[i].TakeOver.type = this._fetcher.TakeOvers[i].Type;
-                        _children[i].gameObject.SetActive(true);
-                    }
-                    else {
-                        _children[i].gameObject.SetActive(false);
-                    }
+        public void OnFetched() {
+            for (var i = 0; i < this.maximumItems; i++) {
+                if (i < this._fetcher.TakeOvers.Count) {
+                    _children[i].SetOwnTakeOver(
+                        OwnTakeOver.New(
+                            this._fetcher.Context.Account,
+                            this._fetcher.TakeOvers[i].Type
+                        )
+                    );
+                    _children[i].gameObject.SetActive(true);
+                }
+                else {
+                    _children[i].gameObject.SetActive(false);
                 }
             }
         }
@@ -56,20 +69,35 @@ namespace Gs2.Unity.UiKit.Gs2Account
 
     public partial class Gs2AccountOwnTakeOverList
     {
-        private Gs2AccountOwnAccountContext _context;
         private Gs2AccountOwnTakeOverListFetcher _fetcher;
 
         public void Awake()
         {
-            _context = GetComponentInParent<Gs2AccountOwnAccountContext>();
-            _fetcher = GetComponentInParent<Gs2AccountOwnTakeOverListFetcher>();
+            if (prefab == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2AccountOwnTakeOverContext Prefab.");
+                enabled = false;
+                return;
+            }
+
+            _fetcher = GetComponent<Gs2AccountOwnTakeOverListFetcher>() ?? GetComponentInParent<Gs2AccountOwnTakeOverListFetcher>();
+            if (_fetcher == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2AccountOwnTakeOverListFetcher.");
+                enabled = false;
+            }
+
+            var context = GetComponent<Gs2AccountOwnAccountContext>() ?? GetComponentInParent<Gs2AccountOwnAccountContext>(true);
+            if (context == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2AccountOwnTakeOverListFetcher::Context.");
+                enabled = false;
+                return;
+            }
 
             _children = new List<Gs2AccountOwnTakeOverContext>();
             for (var i = 0; i < this.maximumItems; i++) {
                 var node = Instantiate(this.prefab, transform);
                 node.TakeOver = OwnTakeOver.New(
                     OwnAccount.New(
-                        _context.Account.Namespace
+                        context.Account.Namespace
                     ),
                     0
                 );
@@ -77,6 +105,38 @@ namespace Gs2.Unity.UiKit.Gs2Account
                 _children.Add(node);
             }
             this.prefab.gameObject.SetActive(false);
+        }
+
+        public virtual bool HasError()
+        {
+            _fetcher = GetComponent<Gs2AccountOwnTakeOverListFetcher>() ?? GetComponentInParent<Gs2AccountOwnTakeOverListFetcher>(true);
+            if (_fetcher == null) {
+                return true;
+            }
+            return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 

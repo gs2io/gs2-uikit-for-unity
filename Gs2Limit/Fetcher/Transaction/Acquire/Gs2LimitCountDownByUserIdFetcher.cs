@@ -34,7 +34,6 @@ using Gs2.Unity.Gs2Limit.ScriptableObject;
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Core.Fetcher;
 using Gs2.Unity.UiKit.Gs2Limit.Context;
-using Gs2.Unity.UiKit.Gs2Limit.Fetcher;
 using Gs2.Unity.Util;
 using Gs2.Util.LitJson;
 using UnityEngine;
@@ -49,43 +48,27 @@ namespace Gs2.Unity.UiKit.Gs2Limit.Fetcher
 	[AddComponentMenu("GS2 UIKit/Limit/Counter/Fetcher/Acquire/Gs2LimitCountDownByUserIdFetcher")]
     public partial class Gs2LimitCountDownByUserIdFetcher : Gs2LimitOwnCounterContext
     {
-        private IEnumerator Fetch()
+        private void Fetch()
         {
-            while (true)
-            {
-                if (_fetcher != null) {
-                    var action = _fetcher.AcquireActions().FirstOrDefault(v => v.Action == "Gs2Limit:CountDownByUserId");
-                    if (action != null) {
-                        Request = CountDownByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
-                        if (Counter == null || (
-                                Counter.NamespaceName == Request.NamespaceName &&
-                                Counter.LimitName == Request.LimitName &&
-                                Counter.CounterName == Request.CounterName)
-                           ) {
-                            Counter = OwnCounter.New(
+            var action = _fetcher.AcquireActions().FirstOrDefault(v => v.Action == "Gs2Limit:CountDownByUserId");
+            if (action != null) {
+                Request = CountDownByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
+                if (Counter == null || (
+                        Counter.NamespaceName == Request.NamespaceName &&
+                        Counter.LimitName == Request.LimitName &&
+                        Counter.CounterName == Request.CounterName)
+                   ) {
+                    Counter = OwnCounter.New(
                                 Namespace.New(
                                     Request.NamespaceName
                                 ),
                                 Request.LimitName,
                                 Request.CounterName
                             );
-                        }
-                        Fetched = true;
-                    }
                 }
-                yield return new WaitForSeconds(0.1f);
             }
-            // ReSharper disable once IteratorNeverReturns
-        }
-
-        public void OnEnable()
-        {
-            StartCoroutine(nameof(Fetch));
-        }
-
-        public void OnDisable()
-        {
-            StopCoroutine(nameof(Fetch));
+            Fetched = true;
+            this.OnFetched.Invoke();
         }
     }
 
@@ -103,9 +86,8 @@ namespace Gs2.Unity.UiKit.Gs2Limit.Fetcher
 
         public void Awake()
         {
-            _fetcher = GetComponent<IAcquireActionsFetcher>() ?? GetComponentInParent<IAcquireActionsFetcher>();
-
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<IAcquireActionsFetcher>() ?? GetComponentInParent<IAcquireActionsFetcher>();
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the IAcquireActionFetcher.");
                 enabled = false;
             }
@@ -113,11 +95,24 @@ namespace Gs2.Unity.UiKit.Gs2Limit.Fetcher
 
         public override bool HasError()
         {
-            _fetcher = GetComponent<IAcquireActionsFetcher>() ?? GetComponentInParent<IAcquireActionsFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<IAcquireActionsFetcher>() ?? GetComponentInParent<IAcquireActionsFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
             return false;
+        }
+
+        public void OnEnable()
+        {
+            this._fetcher.OnFetchedEvent().AddListener(Fetch);
+            if (this._fetcher.IsFetched()) {
+                Fetch();
+            }
+        }
+
+        public void OnDisable()
+        {
+            this._fetcher.OnFetchedEvent().RemoveListener(Fetch);
         }
     }
 
@@ -129,6 +124,7 @@ namespace Gs2.Unity.UiKit.Gs2Limit.Fetcher
     {
         public CountDownByUserIdRequest Request { get; protected set; }
         public bool Fetched { get; protected set; }
+        public UnityEvent OnFetched = new UnityEvent();
     }
 
     /// <summary>
@@ -145,13 +141,6 @@ namespace Gs2.Unity.UiKit.Gs2Limit.Fetcher
     /// </summary>
     public partial class Gs2LimitCountDownByUserIdFetcher
     {
-        [SerializeField]
-        internal ErrorEvent onError = new ErrorEvent();
 
-        public event UnityAction<Gs2Exception, Func<IEnumerator>> OnError
-        {
-            add => onError.AddListener(value);
-            remove => onError.RemoveListener(value);
-        }
     }
 }

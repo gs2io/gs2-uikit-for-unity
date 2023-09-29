@@ -40,20 +40,17 @@ namespace Gs2.Unity.UiKit.Gs2Friend
 	[AddComponentMenu("GS2 UIKit/Friend/FollowUser/View/Label/Gs2FriendOwnFollowUserLabel")]
     public partial class Gs2FriendOwnFollowUserLabel : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched && _fetcher.FollowUser != null)
-            {
-                onUpdate?.Invoke(
-                    format.Replace(
-                        "{userId}", $"{_fetcher?.FollowUser?.UserId}"
-                    ).Replace(
-                        "{publicProfile}", $"{_fetcher?.FollowUser?.PublicProfile}"
-                    ).Replace(
-                        "{followerProfile}", $"{_fetcher?.FollowUser?.FollowerProfile}"
-                    )
-                );
-            }
+            this.onUpdate?.Invoke(
+                this.format.Replace(
+                    "{userId}", $"{this._fetcher?.FollowUser?.UserId}"
+                ).Replace(
+                    "{publicProfile}", $"{this._fetcher?.FollowUser?.PublicProfile}"
+                ).Replace(
+                    "{followerProfile}", $"{this._fetcher?.FollowUser?.FollowerProfile}"
+                )
+            );
         }
     }
 
@@ -67,23 +64,43 @@ namespace Gs2.Unity.UiKit.Gs2Friend
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2FriendOwnFollowUserFetcher>() ?? GetComponentInParent<Gs2FriendOwnFollowUserFetcher>();
-
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2FriendOwnFollowUserFetcher>() ?? GetComponentInParent<Gs2FriendOwnFollowUserFetcher>();
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2FriendOwnFollowUserFetcher.");
                 enabled = false;
             }
-
-            Update();
         }
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2FriendOwnFollowUserFetcher>() ?? GetComponentInParent<Gs2FriendOwnFollowUserFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2FriendOwnFollowUserFetcher>() ?? GetComponentInParent<Gs2FriendOwnFollowUserFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 
@@ -121,8 +138,8 @@ namespace Gs2.Unity.UiKit.Gs2Friend
 
         public event UnityAction<string> OnUpdate
         {
-            add => onUpdate.AddListener(value);
-            remove => onUpdate.RemoveListener(value);
+            add => this.onUpdate.AddListener(value);
+            remove => this.onUpdate.RemoveListener(value);
         }
     }
 }

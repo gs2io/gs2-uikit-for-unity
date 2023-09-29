@@ -40,7 +40,7 @@ namespace Gs2.Unity.UiKit.Gs2Dictionary.Context
     {
         public void Start() {
             if (Namespace == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Namespace is not set in Gs2DictionaryNamespaceContext.");
+                Debug.LogWarning($"{gameObject.GetFullPath()}: Namespace is not set in Gs2DictionaryNamespaceContext.");
             }
         }
 

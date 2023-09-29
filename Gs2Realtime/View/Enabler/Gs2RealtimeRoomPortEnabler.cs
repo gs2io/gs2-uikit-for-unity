@@ -24,10 +24,12 @@
 
 #pragma warning disable CS0472
 
+using System;
 using System.Collections.Generic;
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Realtime.Fetcher;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2Realtime
 {
@@ -38,35 +40,30 @@ namespace Gs2.Unity.UiKit.Gs2Realtime
 	[AddComponentMenu("GS2 UIKit/Realtime/Room/View/Enabler/Properties/Port/Gs2RealtimeRoomPortEnabler")]
     public partial class Gs2RealtimeRoomPortEnabler : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched && _fetcher.Room != null)
+            switch(this.expression)
             {
-                switch(expression)
-                {
-                    case Expression.In:
-                        target.SetActive(enablePorts.Contains(_fetcher.Room.Port));
-                        break;
-                    case Expression.NotIn:
-                        target.SetActive(!enablePorts.Contains(_fetcher.Room.Port));
-                        break;
-                    case Expression.Less:
-                        target.SetActive(enablePort > _fetcher.Room.Port);
-                        break;
-                    case Expression.LessEqual:
-                        target.SetActive(enablePort >= _fetcher.Room.Port);
-                        break;
-                    case Expression.Greater:
-                        target.SetActive(enablePort < _fetcher.Room.Port);
-                        break;
-                    case Expression.GreaterEqual:
-                        target.SetActive(enablePort <= _fetcher.Room.Port);
-                        break;
-                }
-            }
-            else
-            {
-                target.SetActive(false);
+                case Expression.In:
+                    this.target.SetActive(this.enablePorts.Contains(this._fetcher.Room.Port));
+                    break;
+                case Expression.NotIn:
+                    this.target.SetActive(!this.enablePorts.Contains(this._fetcher.Room.Port));
+                    break;
+                case Expression.Less:
+                    this.target.SetActive(this.enablePort > this._fetcher.Room.Port);
+                    break;
+                case Expression.LessEqual:
+                    this.target.SetActive(this.enablePort >= this._fetcher.Room.Port);
+                    break;
+                case Expression.Greater:
+                    this.target.SetActive(this.enablePort < this._fetcher.Room.Port);
+                    break;
+                case Expression.GreaterEqual:
+                    this.target.SetActive(this.enablePort <= this._fetcher.Room.Port);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
         }
     }
@@ -81,13 +78,12 @@ namespace Gs2.Unity.UiKit.Gs2Realtime
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2RealtimeRoomFetcher>() ?? GetComponentInParent<Gs2RealtimeRoomFetcher>();
-
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2RealtimeRoomFetcher>() ?? GetComponentInParent<Gs2RealtimeRoomFetcher>();
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2RealtimeRoomFetcher.");
                 enabled = false;
             }
-            if (target == null) {
+            if (this.target == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: target is not set.");
                 enabled = false;
             }
@@ -95,14 +91,37 @@ namespace Gs2.Unity.UiKit.Gs2Realtime
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2RealtimeRoomFetcher>() ?? GetComponentInParent<Gs2RealtimeRoomFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2RealtimeRoomFetcher>() ?? GetComponentInParent<Gs2RealtimeRoomFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
-            if (target == null) {
+            if (this.target == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 

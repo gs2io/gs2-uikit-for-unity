@@ -40,13 +40,36 @@ namespace Gs2.Unity.UiKit.Gs2Account
 	[AddComponentMenu("GS2 UIKit/Account/TakeOver/View/Label/Gs2AccountTakeOverDoTakeOverActionLabel")]
     public partial class Gs2AccountTakeOverDoTakeOverActionLabel : MonoBehaviour
     {
-        public void Update()
+        private void OnChange()
         {
-            onUpdate?.Invoke(
-                format.Replace(
-                    "{password}", $"{action?.Password}"
+            this.onUpdate?.Invoke(
+                this.format.Replace(
+                    "{password}", $"{this.action?.Password}"
                 )
             );
+        }
+
+        public void Awake() {
+            if (this.action == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2AccountAccountAuthenticationAction.");
+                enabled = false;
+            }
+        }
+
+        public virtual bool HasError()
+        {
+            if (this.action == null) {
+                return true;
+            }
+            return false;
+        }
+
+        public void OnEnable() {
+            this.action.OnChange.AddListener(OnChange);
+        }
+
+        public void OnDisable() {
+            this.action.OnChange.RemoveListener(OnChange);
         }
     }
 

@@ -76,6 +76,7 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Fetcher
                 {
                     Score = item;
                     Fetched = true;
+                    this.OnFetched.Invoke();
                 }
             );
 
@@ -89,11 +90,10 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Fetcher
                 else {
                     Score = future.Result;
                     Fetched = true;
+                    this.OnFetched.Invoke();
                     break;
                 }
             }
-
-            this.OnFetched.Invoke();
         }
 
         public void OnUpdateContext() {
@@ -133,8 +133,6 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Fetcher
     {
         public Gs2RankingOwnScoreContext Context { get; private set; }
 
-        public UnityEvent OnFetched = new UnityEvent();
-
         public void Awake()
         {
             Context = GetComponent<Gs2RankingOwnScoreContext>() ?? GetComponentInParent<Gs2RankingOwnScoreContext>();
@@ -162,6 +160,7 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Fetcher
     {
         public Gs2.Unity.Gs2Ranking.Model.EzScore Score { get; protected set; }
         public bool Fetched { get; protected set; }
+        public UnityEvent OnFetched = new UnityEvent();
     }
 
     /// <summary>

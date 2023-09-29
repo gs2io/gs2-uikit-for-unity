@@ -73,6 +73,7 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Fetcher
                 {
                     FormModel = item;
                     Fetched = true;
+                    this.OnFetched.Invoke();
                 }
             );
 
@@ -86,11 +87,10 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Fetcher
                 else {
                     FormModel = future.Result;
                     Fetched = true;
+                    this.OnFetched.Invoke();
                     break;
                 }
             }
-
-            this.OnFetched.Invoke();
         }
 
         public void OnUpdateContext() {
@@ -130,8 +130,6 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Fetcher
     {
         public Gs2FormationFormModelContext Context { get; private set; }
 
-        public UnityEvent OnFetched = new UnityEvent();
-
         public void Awake()
         {
             Context = GetComponent<Gs2FormationFormModelContext>() ?? GetComponentInParent<Gs2FormationFormModelContext>();
@@ -159,6 +157,7 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Fetcher
     {
         public Gs2.Unity.Gs2Formation.Model.EzFormModel FormModel { get; protected set; }
         public bool Fetched { get; protected set; }
+        public UnityEvent OnFetched = new UnityEvent();
     }
 
     /// <summary>

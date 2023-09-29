@@ -40,7 +40,7 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.Context
     {
         public void Start() {
             if (PrizeLimit == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: PrizeLimit is not set in Gs2LotteryPrizeLimitContext.");
+                Debug.LogWarning($"{gameObject.GetFullPath()}: PrizeLimit is not set in Gs2LotteryPrizeLimitContext.");
             }
         }
 

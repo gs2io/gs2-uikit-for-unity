@@ -12,8 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
- * deny overwrite
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable UnusedAutoPropertyAccessor.Local
@@ -38,6 +36,7 @@ using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Friend.Context;
 using UnityEngine;
 using UnityEngine.Events;
+using SendFriendRequest = Gs2.Unity.Gs2Friend.ScriptableObject.OwnSendFriendRequest;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -49,16 +48,19 @@ namespace Gs2.Unity.UiKit.Gs2Friend
     {
         private IEnumerator Process()
         {
-            yield return new WaitUntil(() => this._clientHolder.Initialized);
-            yield return new WaitUntil(() => this._gameSessionHolder.Initialized);
+            var clientHolder = Gs2ClientHolder.Instance;
+            var gameSessionHolder = Gs2GameSessionHolder.Instance;
+
+            yield return new WaitUntil(() => clientHolder.Initialized);
+            yield return new WaitUntil(() => gameSessionHolder.Initialized);
             
-            var domain = this._clientHolder.Gs2.Friend.Namespace(
-                this._context.FriendUser.NamespaceName
+            var domain = clientHolder.Gs2.Friend.Namespace(
+                this._context.SendFriendRequest.NamespaceName
             ).Me(
-                this._gameSessionHolder.GameSession
+                gameSessionHolder.GameSession
             );
             var future = domain.SendRequest(
-                this._context.FriendUser.TargetUserId
+                this._context.SendFriendRequest.TargetUserId
             );
             yield return future;
             if (future.Error != null)
@@ -120,25 +122,20 @@ namespace Gs2.Unity.UiKit.Gs2Friend
 
     public partial class Gs2FriendSendFriendRequestSendRequestAction
     {
-        private Gs2ClientHolder _clientHolder;
-        private Gs2GameSessionHolder _gameSessionHolder;
-        private Gs2FriendOwnFriendUserContext _context;
+        private Gs2FriendOwnSendFriendRequestContext _context;
 
         public void Awake()
         {
-            this._clientHolder = Gs2ClientHolder.Instance;
-            this._gameSessionHolder = Gs2GameSessionHolder.Instance;
-            this._context = GetComponent<Gs2FriendOwnFriendUserContext>() ?? GetComponentInParent<Gs2FriendOwnFriendUserContext>();
-
+            this._context = GetComponent<Gs2FriendOwnSendFriendRequestContext>() ?? GetComponentInParent<Gs2FriendOwnSendFriendRequestContext>();
             if (_context == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2FriendOwnFriendUserContext.");
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2FriendOwnSendFriendRequestContext.");
                 enabled = false;
             }
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
-            this._context = GetComponent<Gs2FriendOwnFriendUserContext>() ?? GetComponentInParent<Gs2FriendOwnFriendUserContext>(true);
+            this._context = GetComponent<Gs2FriendOwnSendFriendRequestContext>() ?? GetComponentInParent<Gs2FriendOwnSendFriendRequestContext>(true);
             if (_context == null) {
                 return true;
             }
@@ -160,6 +157,7 @@ namespace Gs2.Unity.UiKit.Gs2Friend
     /// </summary>
     public partial class Gs2FriendSendFriendRequestSendRequestAction
     {
+        public bool WaitAsyncProcessComplete;
     }
 
     /// <summary>
@@ -181,6 +179,8 @@ namespace Gs2.Unity.UiKit.Gs2Friend
             add => this.onSendRequestComplete.AddListener(value);
             remove => this.onSendRequestComplete.RemoveListener(value);
         }
+
+        public UnityEvent OnChange = new UnityEvent();
 
         [SerializeField]
         internal ErrorEvent onError = new ErrorEvent();

@@ -18,6 +18,7 @@
 
 using Gs2.Unity.Util;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2Account
 {
@@ -28,19 +29,13 @@ namespace Gs2.Unity.UiKit.Gs2Account
     [AddComponentMenu("GS2 UIKit/Account/Account/View/Enabler/Gs2AccountLoggedInEnabler")]
     public partial class Gs2AccountLoggedInEnabler : MonoBehaviour
     {
-        public void Update()
+        private void OnLogin()
         {
-            if (_sessionHolder.Initialized)
-            {
-                if (_sessionHolder.GameSession == null) {
-                    target.SetActive(!loggedIn);
-                }
-                else {
-                    target.SetActive(loggedIn);
-                }
+            if (this._sessionHolder.GameSession == null) {
+                this.target.SetActive(!this.loggedIn);
             }
             else {
-                target.SetActive(!loggedIn);
+                this.target.SetActive(this.loggedIn);
             }
         }
     }
@@ -55,7 +50,32 @@ namespace Gs2.Unity.UiKit.Gs2Account
 
         public void Awake()
         {
-            _sessionHolder = Gs2GameSessionHolder.Instance;
+            this._sessionHolder = Gs2GameSessionHolder.Instance;
+            this.target.SetActive(!this.loggedIn);
+        }
+        
+
+        private UnityAction _onLogin;
+
+        public void OnEnable()
+        {
+            this._onLogin = () =>
+            {
+                OnLogin();
+            };
+            this._sessionHolder.OnLogin.AddListener(this._onLogin);
+
+            if (this._sessionHolder.Initialized) {
+                OnLogin();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onLogin != null) {
+                this._sessionHolder.OnLogin.RemoveListener(this._onLogin);
+                this._onLogin = null;
+            }
         }
     }
 

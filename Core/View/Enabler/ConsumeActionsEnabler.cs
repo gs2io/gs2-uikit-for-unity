@@ -18,6 +18,7 @@
 
 using System;
 using System.Collections;
+using System.Threading;
 using Gs2.Core.Exception;
 using Gs2.Unity.Core.Exception;
 using Gs2.Unity.Core.Model;
@@ -35,45 +36,42 @@ namespace Gs2.Unity.UiKit.Core.Consume.Enabler
 	[AddComponentMenu("GS2 UIKit/Core/View/Enabler/ConsumeActionsEnabler")]
     public partial class ConsumeActionsEnabler : MonoBehaviour
     {
-        private bool _satisfy;
-        
-        public IEnumerator Process() {
-            while (true) {
-                yield return new WaitForSeconds(0.1f);
-                
-                if (_clientHolder.Initialized && _sessionHolder.Initialized) {
-                    bool satisfy = true;
-                    foreach (var consumeAction in _fetcher.ConsumeActions()) {
-                        var future = consumeAction.Satisfy(
-                            _clientHolder.Gs2,
-                            _sessionHolder.GameSession
-                        );
-                        yield return future;
-                        if (future.Error != null) {
-                            this.onError.Invoke(new CanIgnoreException(future.Error), null);
-                        }
-                        if (!future.Result) {
-                            satisfy = false;
-                            break;
+        private IEnumerator Fetch() {
+            var ready = new []{false};
+            var clientHolder = Gs2ClientHolder.Instance;
+            var gameSessionHolder = Gs2GameSessionHolder.Instance;
+
+            yield return new WaitUntil(() => clientHolder.Initialized);
+            yield return new WaitUntil(() => gameSessionHolder.Initialized);
+            
+            var ok = true;
+            foreach (var consumeAction in this._fetcher.ConsumeActions()) {
+                var future = consumeAction.Satisfy(
+                    clientHolder.Gs2,
+                    gameSessionHolder.GameSession,
+                    () =>
+                    {
+                        if (ready[0]) {
+                            StartCoroutine(nameof(Fetch));
                         }
                     }
-                    _satisfy = satisfy;
+                );
+                yield return future;
+                if (future.Error != null) {
+                    this.onError.Invoke(new CanIgnoreException(future.Error), null);
+                }
+                if (!future.Result) {
+                    ok = false;
+                    break;
                 }
             }
-        }
-
-        public void OnEnable() {
-            StartCoroutine(nameof(Process));
-        }
-
-        public void Update()
-        {
-            if (this._satisfy) {
+            if (ok) {
                 this.target.SetActive(this.satisfy);
             }
             else {
                 this.target.SetActive(this.notSatisfy);
             }
+            ready[0] = true;
         }
     }
 
@@ -83,37 +81,54 @@ namespace Gs2.Unity.UiKit.Core.Consume.Enabler
 
     public partial class ConsumeActionsEnabler
     {
-        private Gs2ClientHolder _clientHolder;
-        private Gs2GameSessionHolder _sessionHolder;
         private IConsumeActionsFetcher _fetcher;
         
         public void Awake()
         {
-            _clientHolder = Gs2ClientHolder.Instance;
-            _sessionHolder = Gs2GameSessionHolder.Instance;
-            _fetcher = GetComponent<IConsumeActionsFetcher>() ?? GetComponentInParent<IConsumeActionsFetcher>();
-
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<IConsumeActionsFetcher>() ?? GetComponentInParent<IConsumeActionsFetcher>();
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the IConsumeActionsFetcher.");
                 enabled = false;
             }
-            if (target == null) {
+            if (this.target == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: target is not set.");
                 enabled = false;
             }
-            Update();
         }
         
         public bool HasError()
         {
-            _fetcher = GetComponent<IConsumeActionsFetcher>() ?? GetComponentInParent<IConsumeActionsFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<IConsumeActionsFetcher>() ?? GetComponentInParent<IConsumeActionsFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
-            if (target == null) {
+            if (this.target == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable() {
+            this._onFetched = () =>
+            {
+                if (gameObject.activeInHierarchy) {
+                    StartCoroutine(nameof(Fetch));
+                }
+            };
+            this._fetcher.OnFetchedEvent().AddListener(this._onFetched);
+            if (this._fetcher.IsFetched()) {
+                this._onFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetchedEvent().RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 

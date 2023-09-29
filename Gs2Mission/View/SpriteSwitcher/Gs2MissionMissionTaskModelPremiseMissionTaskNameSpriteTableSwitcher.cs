@@ -41,19 +41,13 @@ namespace Gs2.Unity.UiKit.Gs2Mission.SpriteSwitcher
 	[AddComponentMenu("GS2 UIKit/Mission/MissionTaskModel/View/SpriteSwitcher/Properties/PremiseMissionTaskName/Gs2MissionMissionTaskModelPremiseMissionTaskNameSpriteTableSwitcher")]
     public partial class Gs2MissionMissionTaskModelPremiseMissionTaskNameSpriteTableSwitcher : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched && _fetcher.MissionTaskModel != null)
-            {
-                if (sprites.Count(v => v.value == _fetcher.MissionTaskModel.PremiseMissionTaskName) > 0) {
-                    this.onUpdate.Invoke(sprites.Find(v => v.value == _fetcher.MissionTaskModel.PremiseMissionTaskName).sprite);
-                }
-                else {
-                    this.onUpdate.Invoke(defaultSprite);
-                }
+            if (this.sprites.Count(v => v.value == this._fetcher.MissionTaskModel.PremiseMissionTaskName) > 0) {
+                this.onUpdate.Invoke(sprites.Find(v => v.value == _fetcher.MissionTaskModel.PremiseMissionTaskName).sprite);
             }
             else {
-                this.onUpdate.Invoke(defaultSprite);
+                this.onUpdate.Invoke(this.defaultSprite);
             }
         }
     }
@@ -68,13 +62,12 @@ namespace Gs2.Unity.UiKit.Gs2Mission.SpriteSwitcher
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2MissionMissionTaskModelFetcher>() ?? GetComponentInParent<Gs2MissionMissionTaskModelFetcher>();
-
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2MissionMissionTaskModelFetcher>() ?? GetComponentInParent<Gs2MissionMissionTaskModelFetcher>();
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MissionMissionTaskModelFetcher.");
                 enabled = false;
             }
-            if (sprites == null) {
+            if (this.sprites == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: sprite is not set.");
                 enabled = false;
             }
@@ -82,14 +75,37 @@ namespace Gs2.Unity.UiKit.Gs2Mission.SpriteSwitcher
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2MissionMissionTaskModelFetcher>() ?? GetComponentInParent<Gs2MissionMissionTaskModelFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2MissionMissionTaskModelFetcher>() ?? GetComponentInParent<Gs2MissionMissionTaskModelFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
-            if (sprites == null) {
+            if (this.sprites == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 

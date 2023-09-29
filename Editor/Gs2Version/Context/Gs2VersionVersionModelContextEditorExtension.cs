@@ -43,8 +43,12 @@ namespace Gs2.Unity.UiKit.Gs2Version.Editor
             serializedObject.Update();
 
             if (original.VersionModel == null) {
-                if (original.GetComponentInParent<Gs2VersionVersionModelList>(true) != null) {
+                var list = original.GetComponentInParent<Gs2VersionVersionModelList>(true);
+                if (list != null) {
                     EditorGUILayout.HelpBox("VersionModel is auto assign from Gs2VersionVersionModelList.", MessageType.Info);
+                    EditorGUI.BeginDisabledGroup(true);
+                    EditorGUILayout.ObjectField("List", list, typeof(Gs2VersionVersionModelList), false);
+                    EditorGUI.EndDisabledGroup();
                 }
                 else {
                     EditorGUILayout.HelpBox("VersionModel not assigned.", MessageType.Error);

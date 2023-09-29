@@ -30,6 +30,7 @@ using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Matchmaking.Context;
 using Gs2.Unity.UiKit.Gs2Matchmaking.Fetcher;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2Matchmaking
 {
@@ -43,18 +44,18 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking
         private List<Gs2MatchmakingOwnRatingContext> _children;
 
         public void OnFetched() {
-            for (var i = 0; i < this.maximumItems; i++) {
+            for (var i = 0; i < this._children.Count; i++) {
                 if (i < this._fetcher.Ratings.Count) {
-                    _children[i].SetOwnRating(
+                    this._children[i].SetOwnRating(
                         OwnRating.New(
-                                this._fetcher.Context.Namespace,
-                                this._fetcher.Ratings[i].Name
-                            )
+                            this._fetcher.Context.Namespace,
+                            this._fetcher.Ratings[i].Name
+                        )
                     );
-                    _children[i].gameObject.SetActive(true);
+                    this._children[i].gameObject.SetActive(true);
                 }
                 else {
-                    _children[i].gameObject.SetActive(false);
+                    this._children[i].gameObject.SetActive(false);
                 }
             }
         }
@@ -68,51 +69,75 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking
     {
         private Gs2MatchmakingOwnRatingListFetcher _fetcher;
 
+        private void Initialize() {
+            for (var i = 0; i < this.maximumItems; i++) {
+                var node = Instantiate(this.prefab, transform);
+                node.RatingModel = RatingModel.New(
+                    this._fetcher.Context.Namespace,
+                    ""
+                );
+                node.Rating = OwnRating.New(
+                    this._fetcher.Context.Namespace,
+                    ""
+                );
+                node.gameObject.SetActive(false);
+                this._children.Add(node);
+            }
+        }
+
         public void Awake()
         {
-            if (prefab == null) {
+            if (this.prefab == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MatchmakingOwnRatingContext Prefab.");
                 enabled = false;
                 return;
             }
 
-            _fetcher = GetComponent<Gs2MatchmakingOwnRatingListFetcher>() ?? GetComponentInParent<Gs2MatchmakingOwnRatingListFetcher>();
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2MatchmakingOwnRatingListFetcher>() ?? GetComponentInParent<Gs2MatchmakingOwnRatingListFetcher>();
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MatchmakingOwnRatingListFetcher.");
                 enabled = false;
             }
 
-            var context = GetComponent<Gs2MatchmakingNamespaceContext>() ?? GetComponentInParent<Gs2MatchmakingNamespaceContext>(true);
-            if (context == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MatchmakingOwnRatingListFetcher::Context.");
-                enabled = false;
-                return;
-            }
-
-            _children = new List<Gs2MatchmakingOwnRatingContext>();
-            for (var i = 0; i < this.maximumItems; i++) {
-                var node = Instantiate(this.prefab, transform);
-                node.RatingModel = RatingModel.New(
-                    context.Namespace,
-                    ""
-                );
-                node.Rating = OwnRating.New(
-                    context.Namespace,
-                    ""
-                );
-                node.gameObject.SetActive(false);
-                _children.Add(node);
-            }
+            this._children = new List<Gs2MatchmakingOwnRatingContext>();
             this.prefab.gameObject.SetActive(false);
+
+            Invoke(nameof(Initialize), 0);
         }
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2MatchmakingOwnRatingListFetcher>() ?? GetComponentInParent<Gs2MatchmakingOwnRatingListFetcher>(true);
-            if (_fetcher == null) {
+            if (this.prefab == null) {
+                return true;
+            }
+            this._fetcher = GetComponent<Gs2MatchmakingOwnRatingListFetcher>() ?? GetComponentInParent<Gs2MatchmakingOwnRatingListFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 
@@ -122,16 +147,6 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking
 
     public partial class Gs2MatchmakingOwnRatingList
     {
-
-        public void OnEnable()
-        {
-            _fetcher.OnFetched.AddListener(OnFetched);
-        }
-
-        public void OnDisable()
-        {
-            _fetcher.OnFetched.RemoveListener(OnFetched);
-        }
 
     }
 

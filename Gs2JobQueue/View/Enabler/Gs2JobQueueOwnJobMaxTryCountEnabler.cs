@@ -24,10 +24,12 @@
 
 #pragma warning disable CS0472
 
+using System;
 using System.Collections.Generic;
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2JobQueue.Fetcher;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2JobQueue
 {
@@ -38,35 +40,30 @@ namespace Gs2.Unity.UiKit.Gs2JobQueue
 	[AddComponentMenu("GS2 UIKit/JobQueue/Job/View/Enabler/Properties/MaxTryCount/Gs2JobQueueOwnJobMaxTryCountEnabler")]
     public partial class Gs2JobQueueOwnJobMaxTryCountEnabler : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched && _fetcher.Job != null)
+            switch(this.expression)
             {
-                switch(expression)
-                {
-                    case Expression.In:
-                        target.SetActive(enableMaxTryCounts.Contains(_fetcher.Job.MaxTryCount));
-                        break;
-                    case Expression.NotIn:
-                        target.SetActive(!enableMaxTryCounts.Contains(_fetcher.Job.MaxTryCount));
-                        break;
-                    case Expression.Less:
-                        target.SetActive(enableMaxTryCount > _fetcher.Job.MaxTryCount);
-                        break;
-                    case Expression.LessEqual:
-                        target.SetActive(enableMaxTryCount >= _fetcher.Job.MaxTryCount);
-                        break;
-                    case Expression.Greater:
-                        target.SetActive(enableMaxTryCount < _fetcher.Job.MaxTryCount);
-                        break;
-                    case Expression.GreaterEqual:
-                        target.SetActive(enableMaxTryCount <= _fetcher.Job.MaxTryCount);
-                        break;
-                }
-            }
-            else
-            {
-                target.SetActive(false);
+                case Expression.In:
+                    this.target.SetActive(this.enableMaxTryCounts.Contains(this._fetcher.Job.MaxTryCount));
+                    break;
+                case Expression.NotIn:
+                    this.target.SetActive(!this.enableMaxTryCounts.Contains(this._fetcher.Job.MaxTryCount));
+                    break;
+                case Expression.Less:
+                    this.target.SetActive(this.enableMaxTryCount > this._fetcher.Job.MaxTryCount);
+                    break;
+                case Expression.LessEqual:
+                    this.target.SetActive(this.enableMaxTryCount >= this._fetcher.Job.MaxTryCount);
+                    break;
+                case Expression.Greater:
+                    this.target.SetActive(this.enableMaxTryCount < this._fetcher.Job.MaxTryCount);
+                    break;
+                case Expression.GreaterEqual:
+                    this.target.SetActive(this.enableMaxTryCount <= this._fetcher.Job.MaxTryCount);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
         }
     }
@@ -81,13 +78,12 @@ namespace Gs2.Unity.UiKit.Gs2JobQueue
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2JobQueueOwnJobFetcher>() ?? GetComponentInParent<Gs2JobQueueOwnJobFetcher>();
-
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2JobQueueOwnJobFetcher>() ?? GetComponentInParent<Gs2JobQueueOwnJobFetcher>();
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2JobQueueOwnJobFetcher.");
                 enabled = false;
             }
-            if (target == null) {
+            if (this.target == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: target is not set.");
                 enabled = false;
             }
@@ -95,14 +91,37 @@ namespace Gs2.Unity.UiKit.Gs2JobQueue
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2JobQueueOwnJobFetcher>() ?? GetComponentInParent<Gs2JobQueueOwnJobFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2JobQueueOwnJobFetcher>() ?? GetComponentInParent<Gs2JobQueueOwnJobFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
-            if (target == null) {
+            if (this.target == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 

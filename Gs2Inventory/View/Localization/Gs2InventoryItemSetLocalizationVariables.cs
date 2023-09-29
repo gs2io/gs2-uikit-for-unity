@@ -17,12 +17,21 @@
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
+// ReSharper disable RedundantNameQualifier
+// ReSharper disable RedundantAssignment
+// ReSharper disable NotAccessedVariable
+// ReSharper disable RedundantUsingDirective
+// ReSharper disable Unity.NoNullPropagation
+// ReSharper disable InconsistentNaming
+
+#pragma warning disable CS0472
 
 #if GS2_ENABLE_LOCALIZATION
 
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Inventory.Fetcher;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.Localization.Components;
 using UnityEngine.Localization.SmartFormat.PersistentVariables;
 
@@ -32,36 +41,33 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Localization
     /// Main
     /// </summary>
 
-    [AddComponentMenu("GS2 UIKit/Inventory/ItemSet/View/Gs2InventoryItemSetLocalizationVariables")]
+    [AddComponentMenu("GS2 UIKit/Inventory/ItemSet/View/Localization/Gs2InventoryItemSetLocalizationVariables")]
     public partial class Gs2InventoryItemSetLocalizationVariables : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched) {
-                target.StringReference["itemSetId"] = new StringVariable {
-                    Value = _fetcher?.ItemSet?[index].ItemSetId ?? "",
-                };
-                target.StringReference["name"] = new StringVariable {
-                    Value = _fetcher?.ItemSet?[index].Name ?? "",
-                };
-                target.StringReference["inventoryName"] = new StringVariable {
-                    Value = _fetcher?.ItemSet?[index].InventoryName ?? "",
-                };
-                target.StringReference["itemName"] = new StringVariable {
-                    Value = _fetcher?.ItemSet?[index].ItemName ?? "",
-                };
-                target.StringReference["count"] = new LongVariable {
-                    Value = _fetcher?.ItemSet?[index].Count ?? 0,
-                };
-                target.StringReference["sortValue"] = new IntVariable {
-                    Value = _fetcher?.ItemSet?[index].SortValue ?? 0,
-                };
-                target.StringReference["expiresAt"] = new LongVariable {
-                    Value = _fetcher?.ItemSet?[index].ExpiresAt ?? 0,
-                };
-                enabled = false;
-                target.enabled = true;
-            }
+            this.target.StringReference["itemSetId"] = new StringVariable {
+                Value = _fetcher?.ItemSet?[index].ItemSetId ?? "",
+            };
+            this.target.StringReference["name"] = new StringVariable {
+                Value = _fetcher?.ItemSet?[index].Name ?? "",
+            };
+            this.target.StringReference["inventoryName"] = new StringVariable {
+                Value = _fetcher?.ItemSet?[index].InventoryName ?? "",
+            };
+            this.target.StringReference["itemName"] = new StringVariable {
+                Value = _fetcher?.ItemSet?[index].ItemName ?? "",
+            };
+            this.target.StringReference["count"] = new LongVariable {
+                Value = _fetcher?.ItemSet?[index].Count ?? 0,
+            };
+            this.target.StringReference["sortValue"] = new IntVariable {
+                Value = _fetcher?.ItemSet?[index].SortValue ?? 0,
+            };
+            this.target.StringReference["expiresAt"] = new LongVariable {
+                Value = _fetcher?.ItemSet?[index].ExpiresAt ?? 0,
+            };
+            this.target.enabled = true;
         }
     }
 
@@ -74,12 +80,44 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Localization
         private Gs2InventoryOwnItemSetFetcher _fetcher;
 
         public void Awake() {
-            target.enabled = false;
-            _fetcher = GetComponent<Gs2InventoryOwnItemSetFetcher>() ?? GetComponentInParent<Gs2InventoryOwnItemSetFetcher>();
+            this.target.enabled = false;
+            this._fetcher = GetComponent<Gs2InventoryOwnItemSetFetcher>() ?? GetComponentInParent<Gs2InventoryOwnItemSetFetcher>();
 
-            if (_fetcher == null) {
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2InventoryItemSetFetcher.");
                 enabled = false;
+            }
+        }
+
+        public virtual bool HasError()
+        {
+            this._fetcher = GetComponent<Gs2InventoryOwnItemSetFetcher>() ?? GetComponentInParent<Gs2InventoryOwnItemSetFetcher>(true);
+            if (this._fetcher == null) {
+                return true;
+            }
+            return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
             }
         }
     }
@@ -99,9 +137,8 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Localization
 
     public partial class Gs2InventoryItemSetLocalizationVariables
     {
-        public LocalizeStringEvent target;
-
         public int index;
+        public LocalizeStringEvent target;
     }
 
     /// <summary>

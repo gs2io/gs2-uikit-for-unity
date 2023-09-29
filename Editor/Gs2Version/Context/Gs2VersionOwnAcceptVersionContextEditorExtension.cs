@@ -43,8 +43,12 @@ namespace Gs2.Unity.UiKit.Gs2Version.Editor
             serializedObject.Update();
 
             if (original.AcceptVersion == null) {
-                if (original.GetComponentInParent<Gs2VersionOwnAcceptVersionList>(true) != null) {
-                    EditorGUILayout.HelpBox("OwnAcceptVersion is auto assign from Gs2VersionOwnAcceptVersionList.", MessageType.Info);
+                var list = original.GetComponentInParent<Gs2VersionOwnAcceptVersionList>(true);
+                if (list != null) {
+                    EditorGUILayout.HelpBox("AcceptVersion is auto assign from Gs2VersionOwnAcceptVersionList.", MessageType.Info);
+                    EditorGUI.BeginDisabledGroup(true);
+                    EditorGUILayout.ObjectField("List", list, typeof(Gs2VersionOwnAcceptVersionList), false);
+                    EditorGUI.EndDisabledGroup();
                 }
                 else {
                     EditorGUILayout.HelpBox("OwnAcceptVersion not assigned.", MessageType.Error);

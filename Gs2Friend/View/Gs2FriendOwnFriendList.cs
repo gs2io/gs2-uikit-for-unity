@@ -32,6 +32,7 @@ using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Friend.Context;
 using Gs2.Unity.UiKit.Gs2Friend.Fetcher;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2Friend
 {
@@ -44,15 +45,20 @@ namespace Gs2.Unity.UiKit.Gs2Friend
     {
         private List<Gs2FriendOwnFriendUserContext> _children;
 
-        public void Update() {
-            if (_fetcher.Fetched && this._fetcher.Friends != null) {
-                for (var i = 0; i < this.maximumItems; i++) {
-                    if (i < this._fetcher.Friends.Count) {
-                        _children[i].gameObject.SetActive(true);
-                    }
-                    else {
-                        _children[i].gameObject.SetActive(false);
-                    }
+        private void OnFetched() {
+            for (var i = 0; i < this.maximumItems; i++) {
+                if (i < this._fetcher.Friends.Count) {
+                    this._children[i].SetOwnFriendUser(
+                        OwnFriendUser.New(
+                            this._fetcher.Context.Namespace,
+                            this._fetcher.Friends[i].UserId,
+                            this._fetcher.WithProfile
+                        )
+                    );
+                    this._children[i].gameObject.SetActive(true);
+                }
+                else {
+                    this._children[i].gameObject.SetActive(false);
                 }
             }
         }
@@ -65,38 +71,68 @@ namespace Gs2.Unity.UiKit.Gs2Friend
     public partial class Gs2FriendOwnFriendList
     {
         private Gs2FriendOwnFriendListFetcher _fetcher;
-        private Gs2FriendNamespaceContext Context => _fetcher.Context;
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2FriendOwnFriendListFetcher>() ?? GetComponentInParent<Gs2FriendOwnFriendListFetcher>();
+            if (this.prefab == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2FriendOwnFriendContext Prefab.");
+                enabled = false;
+                return;
+            }
 
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2FriendOwnFriendListFetcher>() ?? GetComponentInParent<Gs2FriendOwnFriendListFetcher>();
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2FriendOwnFriendListFetcher.");
                 enabled = false;
             }
 
-            _children = new List<Gs2FriendOwnFriendUserContext>();
+            this._children = new List<Gs2FriendOwnFriendUserContext>();
             for (var i = 0; i < this.maximumItems; i++) {
                 var node = Instantiate(this.prefab, transform);
                 node.FriendUser = OwnFriendUser.New(
                     _fetcher.Context.Namespace,
                     "",
-                    false
+                    this._fetcher.WithProfile
                 );
                 node.gameObject.SetActive(false);
-                _children.Add(node);
+                this._children.Add(node);
             }
             this.prefab.gameObject.SetActive(false);
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2FriendOwnFriendListFetcher>() ?? GetComponentInParent<Gs2FriendOwnFriendListFetcher>(true);
-            if (_fetcher == null) {
+            if (this.prefab == null) {
+                return true;
+            }
+            this._fetcher = GetComponent<Gs2FriendOwnFriendListFetcher>() ?? GetComponentInParent<Gs2FriendOwnFriendListFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 

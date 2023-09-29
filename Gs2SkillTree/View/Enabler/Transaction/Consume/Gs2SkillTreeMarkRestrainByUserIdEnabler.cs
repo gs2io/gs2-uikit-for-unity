@@ -44,7 +44,7 @@ namespace Gs2.Unity.UiKit.Gs2SkillTree
 	[AddComponentMenu("GS2 UIKit/SkillTree/Status/View/Enabler/Transaction/Gs2SkillTreeMarkRestrainByUserIdEnabler")]
     public partial class Gs2SkillTreeMarkRestrainByUserIdEnabler : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
             if (this._fetcher.ConsumeActions().Count(v => v.Action == "Gs2SkillTree:MarkRestrainByUserId") == 0) {
                 target.SetActive(this.notIncludeConsumeActions);
@@ -74,8 +74,6 @@ namespace Gs2.Unity.UiKit.Gs2SkillTree
                 Debug.LogError($"{gameObject.GetFullPath()}: target is not set.");
                 enabled = false;
             }
-
-            Update();
         }
 
         public virtual bool HasError()
@@ -88,6 +86,28 @@ namespace Gs2.Unity.UiKit.Gs2SkillTree
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetchedEvent().AddListener(this._onFetched);
+            if (this._fetcher.IsFetched()) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetchedEvent().RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 

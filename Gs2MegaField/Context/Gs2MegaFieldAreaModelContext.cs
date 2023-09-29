@@ -40,7 +40,7 @@ namespace Gs2.Unity.UiKit.Gs2MegaField.Context
     {
         public void Start() {
             if (AreaModel == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: AreaModel is not set in Gs2MegaFieldAreaModelContext.");
+                Debug.LogWarning($"{gameObject.GetFullPath()}: AreaModel is not set in Gs2MegaFieldAreaModelContext.");
             }
         }
 
@@ -49,9 +49,7 @@ namespace Gs2.Unity.UiKit.Gs2MegaField.Context
                 if (GetComponentInParent<Gs2MegaFieldAreaModelList>(true) != null) {
                     return false;
                 }
-                else {
-                    return true;
-                }
+                return true;
             }
             return false;
         }

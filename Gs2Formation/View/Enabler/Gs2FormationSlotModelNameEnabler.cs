@@ -38,29 +38,22 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Enabler
 	[AddComponentMenu("GS2 UIKit/Formation/SlotModel/View/Enabler/Properties/Name/Gs2FormationSlotModelNameEnabler")]
     public partial class Gs2FormationSlotModelNameEnabler : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched && _fetcher.SlotModel != null)
+            switch(this.expression)
             {
-                switch(expression)
-                {
-                    case Expression.In:
-                        target.SetActive(enableNames.Contains(_fetcher.SlotModel.Name));
-                        break;
-                    case Expression.NotIn:
-                        target.SetActive(!enableNames.Contains(_fetcher.SlotModel.Name));
-                        break;
-                    case Expression.StartsWith:
-                        target.SetActive(_fetcher.SlotModel.Name.StartsWith(enableName));
-                        break;
-                    case Expression.EndsWith:
-                        target.SetActive(_fetcher.SlotModel.Name.EndsWith(enableName));
-                        break;
-                }
-            }
-            else
-            {
-                target.SetActive(false);
+                case Expression.In:
+                    this.target.SetActive(this.enableNames.Contains(_fetcher.SlotModel.Name));
+                    break;
+                case Expression.NotIn:
+                    this.target.SetActive(!this.enableNames.Contains(_fetcher.SlotModel.Name));
+                    break;
+                case Expression.StartsWith:
+                    this.target.SetActive(this._fetcher.SlotModel.Name.StartsWith(enableName));
+                    break;
+                case Expression.EndsWith:
+                    this.target.SetActive(this._fetcher.SlotModel.Name.EndsWith(enableName));
+                    break;
             }
         }
     }
@@ -75,13 +68,12 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Enabler
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2FormationSlotModelFetcher>() ?? GetComponentInParent<Gs2FormationSlotModelFetcher>();
-
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2FormationSlotModelFetcher>() ?? GetComponentInParent<Gs2FormationSlotModelFetcher>();
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2FormationSlotModelFetcher.");
                 enabled = false;
             }
-            if (target == null) {
+            if (this.target == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: target is not set.");
                 enabled = false;
             }
@@ -89,11 +81,11 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Enabler
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2FormationSlotModelFetcher>() ?? GetComponentInParent<Gs2FormationSlotModelFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2FormationSlotModelFetcher>() ?? GetComponentInParent<Gs2FormationSlotModelFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
-            if (target == null) {
+            if (this.target == null) {
                 return true;
             }
             return false;

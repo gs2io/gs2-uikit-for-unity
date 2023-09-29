@@ -27,6 +27,7 @@
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Ranking.Fetcher;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2Ranking
 {
@@ -37,22 +38,15 @@ namespace Gs2.Unity.UiKit.Gs2Ranking
 	[AddComponentMenu("GS2 UIKit/Ranking/SubscribeUser/View/Enabler/Gs2RankingOwnSubscribeUserEnabler")]
     public partial class Gs2RankingOwnSubscribeUserEnabler : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (!_fetcher.Fetched)
+            if (this._fetcher.SubscribeUser == null)
             {
-                target.SetActive(loading);
+                this.target.SetActive(this.notFound);
             }
             else
             {
-                if (_fetcher.SubscribeUser == null)
-                {
-                    target.SetActive(notFound);
-                }
-                else
-                {
-                    target.SetActive(loaded);
-                }
+                this.target.SetActive(this.loaded);
             }
         }
     }
@@ -67,28 +61,56 @@ namespace Gs2.Unity.UiKit.Gs2Ranking
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2RankingOwnSubscribeUserFetcher>() ?? GetComponentInParent<Gs2RankingOwnSubscribeUserFetcher>();
-
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2RankingOwnSubscribeUserFetcher>() ?? GetComponentInParent<Gs2RankingOwnSubscribeUserFetcher>();
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2RankingOwnSubscribeUserFetcher.");
                 enabled = false;
             }
-            if (target == null) {
+            if (this.target == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: target is not set.");
                 enabled = false;
+            }
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+            else {
+                this.target.SetActive(this.loading);
             }
         }
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2RankingOwnSubscribeUserFetcher>() ?? GetComponentInParent<Gs2RankingOwnSubscribeUserFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2RankingOwnSubscribeUserFetcher>() ?? GetComponentInParent<Gs2RankingOwnSubscribeUserFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
-            if (target == null) {
+            if (this.target == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 

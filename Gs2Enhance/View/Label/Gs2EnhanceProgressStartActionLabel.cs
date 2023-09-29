@@ -40,21 +40,44 @@ namespace Gs2.Unity.UiKit.Gs2Enhance
 	[AddComponentMenu("GS2 UIKit/Enhance/Progress/View/Label/Gs2EnhanceProgressStartActionLabel")]
     public partial class Gs2EnhanceProgressStartActionLabel : MonoBehaviour
     {
-        public void Update()
+        private void OnChange()
         {
-            onUpdate?.Invoke(
-                format.Replace(
-                    "{rateName}", $"{action?.RateName}"
+            this.onUpdate?.Invoke(
+                this.format.Replace(
+                    "{rateName}", $"{this.action?.RateName}"
                 ).Replace(
-                    "{targetItemSetId}", $"{action?.TargetItemSetId}"
+                    "{targetItemSetId}", $"{this.action?.TargetItemSetId}"
                 ).Replace(
-                    "{materials}", $"{action?.Materials}"
+                    "{materials}", $"{this.action?.Materials}"
                 ).Replace(
-                    "{force}", $"{action?.Force}"
+                    "{force}", $"{this.action?.Force}"
                 ).Replace(
-                    "{config}", $"{action?.Config}"
+                    "{config}", $"{this.action?.Config}"
                 )
             );
+        }
+
+        public void Awake() {
+            if (this.action == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2AccountAccountAuthenticationAction.");
+                enabled = false;
+            }
+        }
+
+        public virtual bool HasError()
+        {
+            if (this.action == null) {
+                return true;
+            }
+            return false;
+        }
+
+        public void OnEnable() {
+            this.action.OnChange.AddListener(OnChange);
+        }
+
+        public void OnDisable() {
+            this.action.OnChange.RemoveListener(OnChange);
         }
     }
 

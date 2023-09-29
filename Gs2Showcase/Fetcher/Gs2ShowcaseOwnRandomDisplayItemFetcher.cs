@@ -76,6 +76,7 @@ namespace Gs2.Unity.UiKit.Gs2Showcase.Fetcher
                 {
                     RandomDisplayItem = item;
                     Fetched = true;
+                    this.OnFetched.Invoke();
                 }
             );
 
@@ -89,11 +90,10 @@ namespace Gs2.Unity.UiKit.Gs2Showcase.Fetcher
                 else {
                     RandomDisplayItem = future.Result;
                     Fetched = true;
+                    this.OnFetched.Invoke();
                     break;
                 }
             }
-
-            this.OnFetched.Invoke();
         }
 
         public void OnUpdateContext() {
@@ -131,11 +131,35 @@ namespace Gs2.Unity.UiKit.Gs2Showcase.Fetcher
             return RandomDisplayItem.AcquireActions;
         }
 
+        bool IAcquireActionsFetcher.IsFetched() {
+            return this.Fetched;
+        }
+
+        UnityEvent IAcquireActionsFetcher.OnFetchedEvent() {
+            return this.OnFetched;
+        }
+
+        GameObject IAcquireActionsFetcher.GameObject() {
+            return gameObject;
+        }
+
         public List<Unity.Core.Model.EzConsumeAction> ConsumeActions(string context = "default") {
             if (!Fetched) {
                 return new List<Unity.Core.Model.EzConsumeAction>();
             }
             return RandomDisplayItem.ConsumeActions;
+        }
+
+        bool IConsumeActionsFetcher.IsFetched() {
+            return this.Fetched;
+        }
+
+        UnityEvent IConsumeActionsFetcher.OnFetchedEvent() {
+            return this.OnFetched;
+        }
+
+        GameObject IConsumeActionsFetcher.GameObject() {
+            return gameObject;
         }
     }
 
@@ -146,8 +170,6 @@ namespace Gs2.Unity.UiKit.Gs2Showcase.Fetcher
     public partial class Gs2ShowcaseOwnRandomDisplayItemFetcher
     {
         public Gs2ShowcaseOwnRandomDisplayItemContext Context { get; private set; }
-
-        public UnityEvent OnFetched = new UnityEvent();
 
         public void Awake()
         {
@@ -176,6 +198,7 @@ namespace Gs2.Unity.UiKit.Gs2Showcase.Fetcher
     {
         public Gs2.Unity.Gs2Showcase.Model.EzRandomDisplayItem RandomDisplayItem { get; protected set; }
         public bool Fetched { get; protected set; }
+        public UnityEvent OnFetched = new UnityEvent();
     }
 
     /// <summary>

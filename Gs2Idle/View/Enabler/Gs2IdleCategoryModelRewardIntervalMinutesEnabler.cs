@@ -24,10 +24,12 @@
 
 #pragma warning disable CS0472
 
+using System;
 using System.Collections.Generic;
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Idle.Fetcher;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2Idle
 {
@@ -38,35 +40,30 @@ namespace Gs2.Unity.UiKit.Gs2Idle
 	[AddComponentMenu("GS2 UIKit/Idle/CategoryModel/View/Enabler/Properties/RewardIntervalMinutes/Gs2IdleCategoryModelRewardIntervalMinutesEnabler")]
     public partial class Gs2IdleCategoryModelRewardIntervalMinutesEnabler : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched && _fetcher.CategoryModel != null)
+            switch(this.expression)
             {
-                switch(expression)
-                {
-                    case Expression.In:
-                        target.SetActive(enableRewardIntervalMinuteses.Contains(_fetcher.CategoryModel.RewardIntervalMinutes));
-                        break;
-                    case Expression.NotIn:
-                        target.SetActive(!enableRewardIntervalMinuteses.Contains(_fetcher.CategoryModel.RewardIntervalMinutes));
-                        break;
-                    case Expression.Less:
-                        target.SetActive(enableRewardIntervalMinutes > _fetcher.CategoryModel.RewardIntervalMinutes);
-                        break;
-                    case Expression.LessEqual:
-                        target.SetActive(enableRewardIntervalMinutes >= _fetcher.CategoryModel.RewardIntervalMinutes);
-                        break;
-                    case Expression.Greater:
-                        target.SetActive(enableRewardIntervalMinutes < _fetcher.CategoryModel.RewardIntervalMinutes);
-                        break;
-                    case Expression.GreaterEqual:
-                        target.SetActive(enableRewardIntervalMinutes <= _fetcher.CategoryModel.RewardIntervalMinutes);
-                        break;
-                }
-            }
-            else
-            {
-                target.SetActive(false);
+                case Expression.In:
+                    this.target.SetActive(this.enableRewardIntervalMinuteses.Contains(this._fetcher.CategoryModel.RewardIntervalMinutes));
+                    break;
+                case Expression.NotIn:
+                    this.target.SetActive(!this.enableRewardIntervalMinuteses.Contains(this._fetcher.CategoryModel.RewardIntervalMinutes));
+                    break;
+                case Expression.Less:
+                    this.target.SetActive(this.enableRewardIntervalMinutes > this._fetcher.CategoryModel.RewardIntervalMinutes);
+                    break;
+                case Expression.LessEqual:
+                    this.target.SetActive(this.enableRewardIntervalMinutes >= this._fetcher.CategoryModel.RewardIntervalMinutes);
+                    break;
+                case Expression.Greater:
+                    this.target.SetActive(this.enableRewardIntervalMinutes < this._fetcher.CategoryModel.RewardIntervalMinutes);
+                    break;
+                case Expression.GreaterEqual:
+                    this.target.SetActive(this.enableRewardIntervalMinutes <= this._fetcher.CategoryModel.RewardIntervalMinutes);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
         }
     }
@@ -81,13 +78,12 @@ namespace Gs2.Unity.UiKit.Gs2Idle
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2IdleCategoryModelFetcher>() ?? GetComponentInParent<Gs2IdleCategoryModelFetcher>();
-
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2IdleCategoryModelFetcher>() ?? GetComponentInParent<Gs2IdleCategoryModelFetcher>();
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2IdleCategoryModelFetcher.");
                 enabled = false;
             }
-            if (target == null) {
+            if (this.target == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: target is not set.");
                 enabled = false;
             }
@@ -95,14 +91,37 @@ namespace Gs2.Unity.UiKit.Gs2Idle
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2IdleCategoryModelFetcher>() ?? GetComponentInParent<Gs2IdleCategoryModelFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2IdleCategoryModelFetcher>() ?? GetComponentInParent<Gs2IdleCategoryModelFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
-            if (target == null) {
+            if (this.target == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 

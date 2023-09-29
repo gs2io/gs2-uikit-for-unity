@@ -40,7 +40,7 @@ namespace Gs2.Unity.UiKit.Gs2Idle.Context
     {
         public void Start() {
             if (Status == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Status is not set in Gs2IdleOwnStatusContext.");
+                Debug.LogWarning($"{gameObject.GetFullPath()}: Status is not set in Gs2IdleOwnStatusContext.");
             }
         }
         public virtual bool HasError() {
@@ -48,9 +48,7 @@ namespace Gs2.Unity.UiKit.Gs2Idle.Context
                 if (GetComponentInParent<Gs2IdleOwnStatusList>(true) != null) {
                     return false;
                 }
-                else {
-                    return true;
-                }
+                return true;
             }
             return false;
         }

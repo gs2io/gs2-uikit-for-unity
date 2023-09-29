@@ -40,7 +40,7 @@ namespace Gs2.Unity.UiKit.Gs2MegaField.Context
     {
         public void Start() {
             if (LayerModel == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: LayerModel is not set in Gs2MegaFieldLayerModelContext.");
+                Debug.LogWarning($"{gameObject.GetFullPath()}: LayerModel is not set in Gs2MegaFieldLayerModelContext.");
             }
         }
 
@@ -49,9 +49,7 @@ namespace Gs2.Unity.UiKit.Gs2MegaField.Context
                 if (GetComponentInParent<Gs2MegaFieldLayerModelList>(true) != null) {
                     return false;
                 }
-                else {
-                    return true;
-                }
+                return true;
             }
             return false;
         }

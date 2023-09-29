@@ -47,27 +47,19 @@ namespace Gs2.Unity.UiKit.Gs2Friend
 	[AddComponentMenu("GS2 UIKit/Friend/FriendUser/View/Enabler/Gs2FriendFriendStatusEnabler")]
     public partial class Gs2FriendOwnFriendStatusEnabler : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (this._friendListFetcher.Fetched && this._friendListFetcher.Friends != null &&
-                (this._sendFriendRequestListFetcher == null || (this._sendFriendRequestListFetcher.Fetched && this._sendFriendRequestListFetcher.SendFriendRequests != null)) &&
-                 (this._receiveFriendRequestListFetcher == null || (this._receiveFriendRequestListFetcher.Fetched && this._receiveFriendRequestListFetcher.ReceiveFriendRequests != null))) {
-                if (!this._friendListFetcher.Friends.Select(v => v.UserId).Contains(this._context.FriendUser.TargetUserId)) {
-                    this.target.SetActive(this.friend);
-                }
-                else if (this._sendFriendRequestListFetcher != null && !this._sendFriendRequestListFetcher.SendFriendRequests.Select(v => v.TargetUserId).Contains(this._context.FriendUser.TargetUserId)) {
-                    this.target.SetActive(this.sent);
-                }
-                else if (this._receiveFriendRequestListFetcher != null && !this._receiveFriendRequestListFetcher.ReceiveFriendRequests.Select(v => v.UserId).Contains(this._context.FriendUser.TargetUserId)) {
-                    this.target.SetActive(this.received);
-                }
-                else {
-                    this.target.SetActive(this.unrelated);
-                }
+            if (!this._friendListFetcher?.Friends?.Select(v => v.UserId)?.Contains(this._context.FriendUser.TargetUserId) ?? false) {
+                this.target.SetActive(this.friend);
             }
-            else
-            {
-                this.target.SetActive(false);
+            else if (!this._sendFriendRequestListFetcher?.SendFriendRequests?.Select(v => v.TargetUserId)?.Contains(this._context.FriendUser.TargetUserId) ?? false) {
+                this.target.SetActive(this.sent);
+            }
+            else if (!this._receiveFriendRequestListFetcher?.ReceiveFriendRequests?.Select(v => v.UserId)?.Contains(this._context.FriendUser.TargetUserId) ?? false) {
+                this.target.SetActive(this.received);
+            }
+            else {
+                this.target.SetActive(this.unrelated);
             }
         }
     }
@@ -85,26 +77,65 @@ namespace Gs2.Unity.UiKit.Gs2Friend
 
         public void Awake()
         {
-            _context = GetComponent<Gs2FriendOwnFriendUserContext>() ?? GetComponentInParent<Gs2FriendOwnFriendUserContext>();
-            _friendListFetcher = GetComponent<Gs2FriendOwnFriendListFetcher>() ?? GetComponentInParent<Gs2FriendOwnFriendListFetcher>();
-            _sendFriendRequestListFetcher = GetComponent<Gs2FriendOwnSendFriendRequestListFetcher>() ?? GetComponentInParent<Gs2FriendOwnSendFriendRequestListFetcher>();
-            _receiveFriendRequestListFetcher = GetComponent<Gs2FriendOwnReceiveFriendRequestListFetcher>() ?? GetComponentInParent<Gs2FriendOwnReceiveFriendRequestListFetcher>();
+            this._context = GetComponent<Gs2FriendOwnFriendUserContext>() ?? GetComponentInParent<Gs2FriendOwnFriendUserContext>();
+            this._friendListFetcher = GetComponent<Gs2FriendOwnFriendListFetcher>() ?? GetComponentInParent<Gs2FriendOwnFriendListFetcher>();
+            this._sendFriendRequestListFetcher = GetComponent<Gs2FriendOwnSendFriendRequestListFetcher>() ?? GetComponentInParent<Gs2FriendOwnSendFriendRequestListFetcher>();
+            this._receiveFriendRequestListFetcher = GetComponent<Gs2FriendOwnReceiveFriendRequestListFetcher>() ?? GetComponentInParent<Gs2FriendOwnReceiveFriendRequestListFetcher>();
 
-            if (_friendListFetcher == null) {
+            if (this._friendListFetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2FriendOwnFriendListFetcher.");
                 enabled = false;
             }
-
-            Update();
         }
 
         public bool HasError()
         {
-            _friendListFetcher = GetComponent<Gs2FriendOwnFriendListFetcher>() ?? GetComponentInParent<Gs2FriendOwnFriendListFetcher>(true);
-            if (_friendListFetcher == null) {
+            this._friendListFetcher = GetComponent<Gs2FriendOwnFriendListFetcher>() ?? GetComponentInParent<Gs2FriendOwnFriendListFetcher>(true);
+            if (this._friendListFetcher == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            
+            this._friendListFetcher.OnFetched.AddListener(this._onFetched);
+            if (this._friendListFetcher.Fetched) {
+                OnFetched();
+            }
+            if (this._sendFriendRequestListFetcher != null) {
+                this._sendFriendRequestListFetcher.OnFetched.AddListener(this._onFetched);
+                if (this._sendFriendRequestListFetcher.Fetched) {
+                    OnFetched();
+                }
+            }
+            if (this._receiveFriendRequestListFetcher != null) {
+                this._receiveFriendRequestListFetcher.OnFetched.AddListener(this._onFetched);
+                if (this._receiveFriendRequestListFetcher.Fetched) {
+                    OnFetched();
+                }
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._friendListFetcher.OnFetched.RemoveListener(this._onFetched);
+                if (this._sendFriendRequestListFetcher != null) {
+                    this._sendFriendRequestListFetcher.OnFetched.RemoveListener(this._onFetched);
+                }
+                if (this._receiveFriendRequestListFetcher != null) {
+                    this._receiveFriendRequestListFetcher.OnFetched.RemoveListener(this._onFetched);
+                }
+                this._onFetched = null;
+            }
         }
     }
 

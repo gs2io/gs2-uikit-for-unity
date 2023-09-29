@@ -41,19 +41,13 @@ namespace Gs2.Unity.UiKit.Gs2Friend.SpriteSwitcher
 	[AddComponentMenu("GS2 UIKit/Friend/FollowUser/View/SpriteSwitcher/Properties/UserId/Gs2FriendOwnFollowUserUserIdSpriteTableSwitcher")]
     public partial class Gs2FriendOwnFollowUserUserIdSpriteTableSwitcher : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched && _fetcher.FollowUser != null)
-            {
-                if (sprites.Count(v => v.value == _fetcher.FollowUser.UserId) > 0) {
-                    this.onUpdate.Invoke(sprites.Find(v => v.value == _fetcher.FollowUser.UserId).sprite);
-                }
-                else {
-                    this.onUpdate.Invoke(defaultSprite);
-                }
+            if (this.sprites.Count(v => v.value == _fetcher.FollowUser.UserId) > 0) {
+                this.onUpdate.Invoke(this.sprites.Find(v => v.value == _fetcher.FollowUser.UserId).sprite);
             }
             else {
-                this.onUpdate.Invoke(defaultSprite);
+                this.onUpdate.Invoke(this.defaultSprite);
             }
         }
     }
@@ -68,13 +62,12 @@ namespace Gs2.Unity.UiKit.Gs2Friend.SpriteSwitcher
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2FriendOwnFollowUserFetcher>() ?? GetComponentInParent<Gs2FriendOwnFollowUserFetcher>();
-
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2FriendOwnFollowUserFetcher>() ?? GetComponentInParent<Gs2FriendOwnFollowUserFetcher>();
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2FriendOwnFollowUserFetcher.");
                 enabled = false;
             }
-            if (sprites == null) {
+            if (this.sprites == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: sprite is not set.");
                 enabled = false;
             }
@@ -82,14 +75,37 @@ namespace Gs2.Unity.UiKit.Gs2Friend.SpriteSwitcher
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2FriendOwnFollowUserFetcher>() ?? GetComponentInParent<Gs2FriendOwnFollowUserFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2FriendOwnFollowUserFetcher>() ?? GetComponentInParent<Gs2FriendOwnFollowUserFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
-            if (sprites == null) {
+            if (this.sprites == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 

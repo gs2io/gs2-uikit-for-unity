@@ -44,23 +44,19 @@ namespace Gs2.Unity.UiKit.Gs2Mission
 	[AddComponentMenu("GS2 UIKit/Mission/Complete/View/Enabler/Transaction/Gs2MissionReceiveRewardsEnabler")]
     public partial class Gs2MissionReceiveRewardsEnabler : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (this._fetcher.Fetched && this._fetcher.MissionTaskModel != null &&
-                this._userDataFetcher.Fetched && this._userDataFetcher.Complete != null) {
-                if (!_userDataFetcher.Complete.CompletedMissionTaskNames.Contains(this._fetcher.MissionTaskModel.Name)) {
-                    this.target.SetActive(this.notCompleted);
-                }
-                else if (!_userDataFetcher.Complete.ReceivedMissionTaskNames.Contains(this._fetcher.MissionTaskModel.Name)) {
-                    this.target.SetActive(this.completed);
-                }
-                else {
-                    this.target.SetActive(this.received);
-                }
+            if (this._fetcher?.MissionTaskModel == null) return;
+            if (this._userDataFetcher?.Complete == null) return;
+            
+            if (!this._userDataFetcher.Complete.CompletedMissionTaskNames.Contains(this._fetcher.MissionTaskModel.Name)) {
+                this.target.SetActive(this.notCompleted);
             }
-            else
-            {
-                this.target.SetActive(false);
+            else if (!_userDataFetcher.Complete.ReceivedMissionTaskNames.Contains(this._fetcher.MissionTaskModel.Name)) {
+                this.target.SetActive(this.completed);
+            }
+            else {
+                this.target.SetActive(this.received);
             }
         }
     }
@@ -76,32 +72,53 @@ namespace Gs2.Unity.UiKit.Gs2Mission
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2MissionMissionTaskModelFetcher>() ?? GetComponentInParent<Gs2MissionMissionTaskModelFetcher>();
-            _userDataFetcher = GetComponent<Gs2MissionOwnCompleteFetcher>() ?? GetComponentInParent<Gs2MissionOwnCompleteFetcher>();
+            this._fetcher = GetComponent<Gs2MissionMissionTaskModelFetcher>() ?? GetComponentInParent<Gs2MissionMissionTaskModelFetcher>();
+            this._userDataFetcher = GetComponent<Gs2MissionOwnCompleteFetcher>() ?? GetComponentInParent<Gs2MissionOwnCompleteFetcher>();
 
-            if (_fetcher == null) {
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MissionMissionTaskModelFetcher.");
                 enabled = false;
             }
-            if (_userDataFetcher == null) {
+            if (this._userDataFetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MissionOwnCompleteFetcher.");
                 enabled = false;
             }
-
-            Update();
         }
 
         public bool HasError()
         {
-            _fetcher = GetComponent<Gs2MissionMissionTaskModelFetcher>() ?? GetComponentInParent<Gs2MissionMissionTaskModelFetcher>(true);
-            _userDataFetcher = GetComponent<Gs2MissionOwnCompleteFetcher>() ?? GetComponentInParent<Gs2MissionOwnCompleteFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2MissionMissionTaskModelFetcher>() ?? GetComponentInParent<Gs2MissionMissionTaskModelFetcher>(true);
+            this._userDataFetcher = GetComponent<Gs2MissionOwnCompleteFetcher>() ?? GetComponentInParent<Gs2MissionOwnCompleteFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
-            if (_userDataFetcher == null) {
+            if (this._userDataFetcher == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 

@@ -42,60 +42,59 @@ namespace Gs2.Unity.UiKit.Gs2Enchant.Label
 	[AddComponentMenu("GS2 UIKit/Enchant/BalanceParameterStatus/View/Label/Transaction/Gs2EnchantSetBalanceParameterStatusByUserIdLabel")]
     public partial class Gs2EnchantSetBalanceParameterStatusByUserIdLabel : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched && _fetcher.Request != null &&
-                    _userDataFetcher != null && _userDataFetcher.Fetched && _userDataFetcher.BalanceParameterStatus != null) {
-                {
-                    onUpdate?.Invoke(
-                        format.Replace(
-                            "{namespaceName}",
-                            $"{_fetcher.Request.NamespaceName}"
-                        ).Replace(
-                            "{userId}",
-                            $"{_fetcher.Request.UserId}"
-                        ).Replace(
-                            "{parameterName}",
-                            $"{_fetcher.Request.ParameterName}"
-                        ).Replace(
-                            "{propertyId}",
-                            $"{_fetcher.Request.PropertyId}"
-                        ).Replace(
-                            "{parameterValues}",
-                            $"{_fetcher.Request.ParameterValues}"
-                        ).Replace(
-                            "{userData:parameterName}",
-                            $"{_userDataFetcher.BalanceParameterStatus.ParameterName}"
-                        ).Replace(
-                            "{userData:propertyId}",
-                            $"{_userDataFetcher.BalanceParameterStatus.PropertyId}"
-                        ).Replace(
-                            "{userData:parameterValues}",
-                            $"{_userDataFetcher.BalanceParameterStatus.ParameterValues}"
-                        )
-                    );
-                }
-            } else if (_fetcher.Fetched && _fetcher.Request != null) {
-                {
-                    onUpdate?.Invoke(
-                        format.Replace(
-                            "{namespaceName}",
-                            $"{_fetcher.Request.NamespaceName}"
-                        ).Replace(
-                            "{userId}",
-                            $"{_fetcher.Request.UserId}"
-                        ).Replace(
-                            "{parameterName}",
-                            $"{_fetcher.Request.ParameterName}"
-                        ).Replace(
-                            "{propertyId}",
-                            $"{_fetcher.Request.PropertyId}"
-                        ).Replace(
-                            "{parameterValues}",
-                            $"{_fetcher.Request.ParameterValues}"
-                        )
-                    );
-                }
+            if ((!this._fetcher?.Fetched ?? false) || this._fetcher.Request == null) {
+                return;
+            }
+            if (this._userDataFetcher?.Fetched ?? false)
+            {
+                this.onUpdate?.Invoke(
+                    this.format.Replace(
+                        "{namespaceName}",
+                        $"{this._fetcher.Request.NamespaceName}"
+                    ).Replace(
+                        "{userId}",
+                        $"{this._fetcher.Request.UserId}"
+                    ).Replace(
+                        "{parameterName}",
+                        $"{this._fetcher.Request.ParameterName}"
+                    ).Replace(
+                        "{propertyId}",
+                        $"{this._fetcher.Request.PropertyId}"
+                    ).Replace(
+                        "{parameterValues}",
+                        $"{this._fetcher.Request.ParameterValues}"
+                    ).Replace(
+                        "{userData:parameterName}",
+                        $"{this._userDataFetcher.BalanceParameterStatus.ParameterName}"
+                    ).Replace(
+                        "{userData:propertyId}",
+                        $"{this._userDataFetcher.BalanceParameterStatus.PropertyId}"
+                    ).Replace(
+                        "{userData:parameterValues}",
+                        $"{this._userDataFetcher.BalanceParameterStatus.ParameterValues}"
+                    )
+                );
+            } else {
+                this.onUpdate?.Invoke(
+                    this.format.Replace(
+                        "{namespaceName}",
+                        $"{this._fetcher.Request.NamespaceName}"
+                    ).Replace(
+                        "{userId}",
+                        $"{this._fetcher.Request.UserId}"
+                    ).Replace(
+                        "{parameterName}",
+                        $"{this._fetcher.Request.ParameterName}"
+                    ).Replace(
+                        "{propertyId}",
+                        $"{this._fetcher.Request.PropertyId}"
+                    ).Replace(
+                        "{parameterValues}",
+                        $"{this._fetcher.Request.ParameterValues}"
+                    )
+                );
             }
         }
     }
@@ -111,25 +110,52 @@ namespace Gs2.Unity.UiKit.Gs2Enchant.Label
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2EnchantSetBalanceParameterStatusByUserIdFetcher>() ?? GetComponentInParent<Gs2EnchantSetBalanceParameterStatusByUserIdFetcher>();
-            _userDataFetcher = GetComponent<Gs2EnchantOwnBalanceParameterStatusFetcher>() ?? GetComponentInParent<Gs2EnchantOwnBalanceParameterStatusFetcher>();
-
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2EnchantSetBalanceParameterStatusByUserIdFetcher>() ?? GetComponentInParent<Gs2EnchantSetBalanceParameterStatusByUserIdFetcher>();
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2EnchantSetBalanceParameterStatusByUserIdFetcher.");
                 enabled = false;
             }
-
-            Update();
+            this._userDataFetcher = GetComponent<Gs2EnchantOwnBalanceParameterStatusFetcher>() ?? GetComponentInParent<Gs2EnchantOwnBalanceParameterStatusFetcher>();
         }
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2EnchantSetBalanceParameterStatusByUserIdFetcher>() ?? GetComponentInParent<Gs2EnchantSetBalanceParameterStatusByUserIdFetcher>(true);
-            _userDataFetcher = GetComponent<Gs2EnchantOwnBalanceParameterStatusFetcher>() ?? GetComponentInParent<Gs2EnchantOwnBalanceParameterStatusFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2EnchantSetBalanceParameterStatusByUserIdFetcher>() ?? GetComponentInParent<Gs2EnchantSetBalanceParameterStatusByUserIdFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+            if (this._userDataFetcher != null) {
+                this._userDataFetcher.OnFetched.AddListener(this._onFetched);
+                if (this._userDataFetcher.Fetched) {
+                    OnFetched();
+                }
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                if (this._userDataFetcher != null) {
+                    this._userDataFetcher.OnFetched.RemoveListener(this._onFetched);
+                }
+                this._onFetched = null;
+            }
         }
     }
 
@@ -167,8 +193,8 @@ namespace Gs2.Unity.UiKit.Gs2Enchant.Label
 
         public event UnityAction<string> OnUpdate
         {
-            add => onUpdate.AddListener(value);
-            remove => onUpdate.RemoveListener(value);
+            add => this.onUpdate.AddListener(value);
+            remove => this.onUpdate.RemoveListener(value);
         }
     }
 }

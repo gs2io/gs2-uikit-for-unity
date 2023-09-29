@@ -41,19 +41,13 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.SpriteSwitcher
 	[AddComponentMenu("GS2 UIKit/Inventory/InventoryModel/View/SpriteSwitcher/Properties/Name/Gs2InventoryInventoryModelNameSpriteTableSwitcher")]
     public partial class Gs2InventoryInventoryModelNameSpriteTableSwitcher : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched && _fetcher.InventoryModel != null)
-            {
-                if (sprites.Count(v => v.value == _fetcher.InventoryModel.Name) > 0) {
-                    this.onUpdate.Invoke(sprites.Find(v => v.value == _fetcher.InventoryModel.Name).sprite);
-                }
-                else {
-                    this.onUpdate.Invoke(defaultSprite);
-                }
+            if (this.sprites.Count(v => v.value == this._fetcher.InventoryModel.Name) > 0) {
+                this.onUpdate.Invoke(sprites.Find(v => v.value == _fetcher.InventoryModel.Name).sprite);
             }
             else {
-                this.onUpdate.Invoke(defaultSprite);
+                this.onUpdate.Invoke(this.defaultSprite);
             }
         }
     }
@@ -68,13 +62,12 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.SpriteSwitcher
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2InventoryInventoryModelFetcher>() ?? GetComponentInParent<Gs2InventoryInventoryModelFetcher>();
-
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2InventoryInventoryModelFetcher>() ?? GetComponentInParent<Gs2InventoryInventoryModelFetcher>();
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2InventoryInventoryModelFetcher.");
                 enabled = false;
             }
-            if (sprites == null) {
+            if (this.sprites == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: sprite is not set.");
                 enabled = false;
             }
@@ -82,14 +75,37 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.SpriteSwitcher
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2InventoryInventoryModelFetcher>() ?? GetComponentInParent<Gs2InventoryInventoryModelFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2InventoryInventoryModelFetcher>() ?? GetComponentInParent<Gs2InventoryInventoryModelFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
-            if (sprites == null) {
+            if (this.sprites == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 

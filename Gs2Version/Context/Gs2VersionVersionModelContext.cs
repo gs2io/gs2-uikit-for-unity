@@ -40,7 +40,7 @@ namespace Gs2.Unity.UiKit.Gs2Version.Context
     {
         public void Start() {
             if (VersionModel == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: VersionModel is not set in Gs2VersionVersionModelContext.");
+                Debug.LogWarning($"{gameObject.GetFullPath()}: VersionModel is not set in Gs2VersionVersionModelContext.");
             }
         }
 
@@ -49,9 +49,7 @@ namespace Gs2.Unity.UiKit.Gs2Version.Context
                 if (GetComponentInParent<Gs2VersionVersionModelList>(true) != null) {
                     return false;
                 }
-                else {
-                    return true;
-                }
+                return true;
             }
             return false;
         }

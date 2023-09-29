@@ -40,17 +40,40 @@ namespace Gs2.Unity.UiKit.Gs2Exchange
 	[AddComponentMenu("GS2 UIKit/Exchange/Exchange/View/Label/Gs2ExchangeExchangeIncrementalExchangeActionLabel")]
     public partial class Gs2ExchangeExchangeIncrementalExchangeActionLabel : MonoBehaviour
     {
-        public void Update()
+        private void OnChange()
         {
-            onUpdate?.Invoke(
-                format.Replace(
-                    "{rateName}", $"{action?.RateName}"
+            this.onUpdate?.Invoke(
+                this.format.Replace(
+                    "{rateName}", $"{this.action?.RateName}"
                 ).Replace(
-                    "{count}", $"{action?.Count}"
+                    "{count}", $"{this.action?.Count}"
                 ).Replace(
-                    "{config}", $"{action?.Config}"
+                    "{config}", $"{this.action?.Config}"
                 )
             );
+        }
+
+        public void Awake() {
+            if (this.action == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2AccountAccountAuthenticationAction.");
+                enabled = false;
+            }
+        }
+
+        public virtual bool HasError()
+        {
+            if (this.action == null) {
+                return true;
+            }
+            return false;
+        }
+
+        public void OnEnable() {
+            this.action.OnChange.AddListener(OnChange);
+        }
+
+        public void OnDisable() {
+            this.action.OnChange.RemoveListener(OnChange);
         }
     }
 

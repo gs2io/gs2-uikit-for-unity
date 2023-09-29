@@ -40,7 +40,7 @@ namespace Gs2.Unity.UiKit.Gs2Inbox.Context
     {
         public void Start() {
             if (Received == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Received is not set in Gs2InboxOwnReceivedContext.");
+                Debug.LogWarning($"{gameObject.GetFullPath()}: Received is not set in Gs2InboxOwnReceivedContext.");
             }
         }
         public virtual bool HasError() {

@@ -43,8 +43,12 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.Editor
             serializedObject.Update();
 
             if (original.Probability == null) {
-                if (original.GetComponentInParent<Gs2LotteryOwnProbabilityList>(true) != null) {
-                    EditorGUILayout.HelpBox("OwnProbability is auto assign from Gs2LotteryOwnProbabilityList.", MessageType.Info);
+                var list = original.GetComponentInParent<Gs2LotteryOwnProbabilityList>(true);
+                if (list != null) {
+                    EditorGUILayout.HelpBox("Probability is auto assign from Gs2LotteryOwnProbabilityList.", MessageType.Info);
+                    EditorGUI.BeginDisabledGroup(true);
+                    EditorGUILayout.ObjectField("List", list, typeof(Gs2LotteryOwnProbabilityList), false);
+                    EditorGUI.EndDisabledGroup();
                 }
                 else {
                     EditorGUILayout.HelpBox("OwnProbability not assigned.", MessageType.Error);

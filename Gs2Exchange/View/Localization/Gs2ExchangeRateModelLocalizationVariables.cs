@@ -29,6 +29,7 @@
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Exchange.Fetcher;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.Localization.Components;
 using UnityEngine.Localization.SmartFormat.PersistentVariables;
 
@@ -41,24 +42,21 @@ namespace Gs2.Unity.UiKit.Gs2Exchange.Localization
     [AddComponentMenu("GS2 UIKit/Exchange/RateModel/View/Localization/Gs2ExchangeRateModelLocalizationVariables")]
     public partial class Gs2ExchangeRateModelLocalizationVariables : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched) {
-                target.StringReference["name"] = new StringVariable {
-                    Value = _fetcher?.RateModel?.Name ?? "",
-                };
-                target.StringReference["metadata"] = new StringVariable {
-                    Value = _fetcher?.RateModel?.Metadata ?? "",
-                };
-                target.StringReference["timingType"] = new StringVariable {
-                    Value = _fetcher?.RateModel?.TimingType ?? "",
-                };
-                target.StringReference["lockTime"] = new IntVariable {
-                    Value = _fetcher?.RateModel?.LockTime ?? 0,
-                };
-                enabled = false;
-                target.enabled = true;
-            }
+            this.target.StringReference["name"] = new StringVariable {
+                Value = _fetcher?.RateModel?.Name ?? "",
+            };
+            this.target.StringReference["metadata"] = new StringVariable {
+                Value = _fetcher?.RateModel?.Metadata ?? "",
+            };
+            this.target.StringReference["timingType"] = new StringVariable {
+                Value = _fetcher?.RateModel?.TimingType ?? "",
+            };
+            this.target.StringReference["lockTime"] = new IntVariable {
+                Value = _fetcher?.RateModel?.LockTime ?? 0,
+            };
+            this.target.enabled = true;
         }
     }
 
@@ -71,10 +69,10 @@ namespace Gs2.Unity.UiKit.Gs2Exchange.Localization
         private Gs2ExchangeRateModelFetcher _fetcher;
 
         public void Awake() {
-            target.enabled = false;
-            _fetcher = GetComponent<Gs2ExchangeRateModelFetcher>() ?? GetComponentInParent<Gs2ExchangeRateModelFetcher>();
+            this.target.enabled = false;
+            this._fetcher = GetComponent<Gs2ExchangeRateModelFetcher>() ?? GetComponentInParent<Gs2ExchangeRateModelFetcher>();
 
-            if (_fetcher == null) {
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ExchangeRateModelFetcher.");
                 enabled = false;
             }
@@ -82,11 +80,34 @@ namespace Gs2.Unity.UiKit.Gs2Exchange.Localization
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2ExchangeRateModelFetcher>() ?? GetComponentInParent<Gs2ExchangeRateModelFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2ExchangeRateModelFetcher>() ?? GetComponentInParent<Gs2ExchangeRateModelFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 

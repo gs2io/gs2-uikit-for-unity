@@ -48,13 +48,16 @@ namespace Gs2.Unity.UiKit.Gs2Ranking
     {
         private IEnumerator Process()
         {
-            yield return new WaitUntil(() => this._clientHolder.Initialized);
-            yield return new WaitUntil(() => this._gameSessionHolder.Initialized);
+            var clientHolder = Gs2ClientHolder.Instance;
+            var gameSessionHolder = Gs2GameSessionHolder.Instance;
+
+            yield return new WaitUntil(() => clientHolder.Initialized);
+            yield return new WaitUntil(() => gameSessionHolder.Initialized);
             
-            var domain = this._clientHolder.Gs2.Ranking.Namespace(
+            var domain = clientHolder.Gs2.Ranking.Namespace(
                 this._context.SubscribeUser.NamespaceName
             ).Me(
-                this._gameSessionHolder.GameSession
+                gameSessionHolder.GameSession
             ).SubscribeUser(
                 this._context.SubscribeUser.CategoryName,
                 this._context.SubscribeUser.TargetUserId
@@ -121,16 +124,11 @@ namespace Gs2.Unity.UiKit.Gs2Ranking
 
     public partial class Gs2RankingSubscribeUserUnsubscribeAction
     {
-        private Gs2ClientHolder _clientHolder;
-        private Gs2GameSessionHolder _gameSessionHolder;
         private Gs2RankingOwnSubscribeUserContext _context;
 
         public void Awake()
         {
-            this._clientHolder = Gs2ClientHolder.Instance;
-            this._gameSessionHolder = Gs2GameSessionHolder.Instance;
             this._context = GetComponent<Gs2RankingOwnSubscribeUserContext>() ?? GetComponentInParent<Gs2RankingOwnSubscribeUserContext>();
-
             if (_context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2RankingOwnSubscribeUserContext.");
                 enabled = false;
@@ -183,6 +181,8 @@ namespace Gs2.Unity.UiKit.Gs2Ranking
             add => this.onUnsubscribeComplete.AddListener(value);
             remove => this.onUnsubscribeComplete.RemoveListener(value);
         }
+
+        public UnityEvent OnChange = new UnityEvent();
 
         [SerializeField]
         internal ErrorEvent onError = new ErrorEvent();

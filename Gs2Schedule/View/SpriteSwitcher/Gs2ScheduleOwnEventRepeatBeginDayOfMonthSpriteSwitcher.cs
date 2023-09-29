@@ -40,43 +40,42 @@ namespace Gs2.Unity.UiKit.Gs2Schedule
 	[AddComponentMenu("GS2 UIKit/Schedule/Event/View/SpriteSwitcher/Properties/RepeatBeginDayOfMonth/Gs2ScheduleOwnEventRepeatBeginDayOfMonthSpriteSwitcher")]
     public partial class Gs2ScheduleOwnEventRepeatBeginDayOfMonthSpriteSwitcher : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched && _fetcher.Event != null)
+            switch(this.expression)
             {
-                switch(expression)
-                {
-                    case Expression.In:
-                        if (applyRepeatBeginDayOfMonths.Contains(_fetcher.Event.RepeatBeginDayOfMonth)) {
-                            this.onUpdate.Invoke(this.sprite);
-                        }
-                        break;
-                    case Expression.NotIn:
-                        if (!applyRepeatBeginDayOfMonths.Contains(_fetcher.Event.RepeatBeginDayOfMonth)) {
-                            this.onUpdate.Invoke(this.sprite);
-                        }
-                        break;
-                    case Expression.Less:
-                        if (applyRepeatBeginDayOfMonth > _fetcher.Event.RepeatBeginDayOfMonth) {
-                            this.onUpdate.Invoke(this.sprite);
-                        }
-                        break;
-                    case Expression.LessEqual:
-                        if (applyRepeatBeginDayOfMonth >= _fetcher.Event.RepeatBeginDayOfMonth) {
-                            this.onUpdate.Invoke(this.sprite);
-                        }
-                        break;
-                    case Expression.Greater:
-                        if (applyRepeatBeginDayOfMonth < _fetcher.Event.RepeatBeginDayOfMonth) {
-                            this.onUpdate.Invoke(this.sprite);
-                        }
-                        break;
-                    case Expression.GreaterEqual:
-                        if (applyRepeatBeginDayOfMonth <= _fetcher.Event.RepeatBeginDayOfMonth) {
-                            this.onUpdate.Invoke(this.sprite);
-                        }
-                        break;
-                }
+                case Expression.In:
+                    if (this.applyRepeatBeginDayOfMonths.Contains(this._fetcher.Event.RepeatBeginDayOfMonth)) {
+                        this.onUpdate.Invoke(this.sprite);
+                    }
+                    break;
+                case Expression.NotIn:
+                    if (!this.applyRepeatBeginDayOfMonths.Contains(this._fetcher.Event.RepeatBeginDayOfMonth)) {
+                        this.onUpdate.Invoke(this.sprite);
+                    }
+                    break;
+                case Expression.Less:
+                    if (this.applyRepeatBeginDayOfMonth > this._fetcher.Event.RepeatBeginDayOfMonth) {
+                        this.onUpdate.Invoke(this.sprite);
+                    }
+                    break;
+                case Expression.LessEqual:
+                    if (this.applyRepeatBeginDayOfMonth >= this._fetcher.Event.RepeatBeginDayOfMonth) {
+                        this.onUpdate.Invoke(this.sprite);
+                    }
+                    break;
+                case Expression.Greater:
+                    if (this.applyRepeatBeginDayOfMonth < this._fetcher.Event.RepeatBeginDayOfMonth) {
+                        this.onUpdate.Invoke(this.sprite);
+                    }
+                    break;
+                case Expression.GreaterEqual:
+                    if (this.applyRepeatBeginDayOfMonth <= this._fetcher.Event.RepeatBeginDayOfMonth) {
+                        this.onUpdate.Invoke(this.sprite);
+                    }
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
         }
     }
@@ -91,13 +90,12 @@ namespace Gs2.Unity.UiKit.Gs2Schedule
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2ScheduleOwnEventFetcher>() ?? GetComponentInParent<Gs2ScheduleOwnEventFetcher>();
-
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2ScheduleOwnEventFetcher>() ?? GetComponentInParent<Gs2ScheduleOwnEventFetcher>();
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ScheduleOwnEventFetcher.");
                 enabled = false;
             }
-            if (sprite == null) {
+            if (this.sprite == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: sprite is not set.");
                 enabled = false;
             }
@@ -105,14 +103,37 @@ namespace Gs2.Unity.UiKit.Gs2Schedule
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2ScheduleOwnEventFetcher>() ?? GetComponentInParent<Gs2ScheduleOwnEventFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2ScheduleOwnEventFetcher>() ?? GetComponentInParent<Gs2ScheduleOwnEventFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
-            if (sprite == null) {
+            if (this.sprite == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 

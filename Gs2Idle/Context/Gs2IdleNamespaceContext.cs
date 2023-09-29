@@ -40,7 +40,7 @@ namespace Gs2.Unity.UiKit.Gs2Idle.Context
     {
         public void Start() {
             if (Namespace == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Namespace is not set in Gs2IdleNamespaceContext.");
+                Debug.LogWarning($"{gameObject.GetFullPath()}: Namespace is not set in Gs2IdleNamespaceContext.");
             }
         }
 

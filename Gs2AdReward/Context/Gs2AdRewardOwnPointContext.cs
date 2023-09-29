@@ -40,7 +40,7 @@ namespace Gs2.Unity.UiKit.Gs2AdReward.Context
     {
         public void Start() {
             if (Point == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Point is not set in Gs2AdRewardOwnPointContext.");
+                Debug.LogWarning($"{gameObject.GetFullPath()}: Point is not set in Gs2AdRewardOwnPointContext.");
             }
         }
         public virtual bool HasError() {

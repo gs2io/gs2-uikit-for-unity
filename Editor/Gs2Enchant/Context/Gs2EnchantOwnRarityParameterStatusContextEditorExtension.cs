@@ -43,8 +43,12 @@ namespace Gs2.Unity.UiKit.Gs2Enchant.Editor
             serializedObject.Update();
 
             if (original.RarityParameterStatus == null) {
-                if (original.GetComponentInParent<Gs2EnchantOwnRarityParameterStatusList>(true) != null) {
-                    EditorGUILayout.HelpBox("OwnRarityParameterStatus is auto assign from Gs2EnchantOwnRarityParameterStatusList.", MessageType.Info);
+                var list = original.GetComponentInParent<Gs2EnchantOwnRarityParameterStatusList>(true);
+                if (list != null) {
+                    EditorGUILayout.HelpBox("RarityParameterStatus is auto assign from Gs2EnchantOwnRarityParameterStatusList.", MessageType.Info);
+                    EditorGUI.BeginDisabledGroup(true);
+                    EditorGUILayout.ObjectField("List", list, typeof(Gs2EnchantOwnRarityParameterStatusList), false);
+                    EditorGUI.EndDisabledGroup();
                 }
                 else {
                     EditorGUILayout.HelpBox("OwnRarityParameterStatus not assigned.", MessageType.Error);

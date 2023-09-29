@@ -32,28 +32,30 @@ namespace Gs2.Unity.UiKit.Gs2Experience
 	[AddComponentMenu("GS2 UIKit/Experience/Status/View/Progress/Gs2ExperienceStatusProgress")]
     public partial class Gs2ExperienceStatusProgress : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched && _fetcher.Status != null && _modelFetcher.Fetched && _modelFetcher.ExperienceModel != null) {
-                if (this._fetcher.Status.RankValue == this._fetcher.Status.RankCapValue) {
-                    onUpdate?.Invoke(1);
-                }
-                else {
-                    var before = 0L;
-                    if (this._fetcher.Status.RankValue > 1) {
-                        before = _modelFetcher.ExperienceModel.RankThreshold.Values[
-                            (int) (this._fetcher.Status.RankValue - 2)
-                        ];
-                    }
-                    var next = _modelFetcher.ExperienceModel.RankThreshold.Values[
-                        (int)this._fetcher.Status.RankValue - 1
+            if (!this._modelFetcher.Fetched) {
+                return;
+            }
+            
+            if (this._fetcher.Status.RankValue == this._fetcher.Status.RankCapValue) {
+                this.onUpdate?.Invoke(1);
+            }
+            else {
+                var before = 0L;
+                if (this._fetcher.Status.RankValue > 1) {
+                    before = this._modelFetcher.ExperienceModel.RankThreshold.Values[
+                        (int) (this._fetcher.Status.RankValue - 2)
                     ];
-                    var value = _fetcher.Status.ExperienceValue - before;
-                    var span = next - before;
-                    onUpdate?.Invoke(
-                        Math.Min((float)value / span, 1)
-                    );
                 }
+                var next = this._modelFetcher.ExperienceModel.RankThreshold.Values[
+                    (int)this._fetcher.Status.RankValue - 1
+                ];
+                var value = this._fetcher.Status.ExperienceValue - before;
+                var span = next - before;
+                this.onUpdate?.Invoke(
+                    Math.Min((float)value / span, 1)
+                );
             }
         }
     }
@@ -69,32 +71,53 @@ namespace Gs2.Unity.UiKit.Gs2Experience
 
         public void Awake()
         {
-            _modelFetcher = GetComponent<Gs2ExperienceExperienceModelFetcher>() ?? GetComponentInParent<Gs2ExperienceExperienceModelFetcher>();
-            if (_modelFetcher == null) {
+            this._modelFetcher = GetComponent<Gs2ExperienceExperienceModelFetcher>() ?? GetComponentInParent<Gs2ExperienceExperienceModelFetcher>();
+            if (this._modelFetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ExperienceExperienceModelFetcher.");
                 enabled = false;
             }
 
-            _fetcher = GetComponent<Gs2ExperienceOwnStatusFetcher>() ?? GetComponentInParent<Gs2ExperienceOwnStatusFetcher>();
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2ExperienceOwnStatusFetcher>() ?? GetComponentInParent<Gs2ExperienceOwnStatusFetcher>();
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ExperienceOwnStatusFetcher.");
                 enabled = false;
             }
-
-            Update();
         }
 
         public bool HasError()
         {
-            _modelFetcher = GetComponent<Gs2ExperienceExperienceModelFetcher>() ?? GetComponentInParent<Gs2ExperienceExperienceModelFetcher>(true);
-            if (_modelFetcher == null) {
+            this._modelFetcher = GetComponent<Gs2ExperienceExperienceModelFetcher>() ?? GetComponentInParent<Gs2ExperienceExperienceModelFetcher>(true);
+            if (this._modelFetcher == null) {
                 return true;
             }
-            _fetcher = GetComponent<Gs2ExperienceOwnStatusFetcher>() ?? GetComponentInParent<Gs2ExperienceOwnStatusFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2ExperienceOwnStatusFetcher>() ?? GetComponentInParent<Gs2ExperienceOwnStatusFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 

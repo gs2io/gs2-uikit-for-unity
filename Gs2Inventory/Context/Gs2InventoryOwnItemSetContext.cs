@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
@@ -39,9 +41,7 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Context
     public partial class Gs2InventoryOwnItemSetContext : Gs2InventoryItemModelContext
     {
         public new void Start() {
-            if (ItemSet == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: ItemSet is not set in Gs2InventoryOwnItemSetContext.");
-            }
+            base.Start();
         }
         public override bool HasError() {
             var hasError = base.HasError();
@@ -49,9 +49,7 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Context
                 if (GetComponentInParent<Gs2InventoryOwnItemSetList>(true) != null) {
                     return false;
                 }
-                else {
-                    return true;
-                }
+                return true;
             }
             return false;
         }

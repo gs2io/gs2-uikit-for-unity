@@ -40,7 +40,7 @@ namespace Gs2.Unity.UiKit.Gs2JobQueue.Context
     {
         public void Start() {
             if (DeadLetterJob == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: DeadLetterJob is not set in Gs2JobQueueOwnDeadLetterJobContext.");
+                Debug.LogWarning($"{gameObject.GetFullPath()}: DeadLetterJob is not set in Gs2JobQueueOwnDeadLetterJobContext.");
             }
         }
         public virtual bool HasError() {

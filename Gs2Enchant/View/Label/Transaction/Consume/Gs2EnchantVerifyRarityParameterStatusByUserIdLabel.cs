@@ -42,72 +42,71 @@ namespace Gs2.Unity.UiKit.Gs2Enchant.Label
 	[AddComponentMenu("GS2 UIKit/Enchant/RarityParameterStatus/View/Label/Transaction/Gs2EnchantVerifyRarityParameterStatusByUserIdLabel")]
     public partial class Gs2EnchantVerifyRarityParameterStatusByUserIdLabel : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched && _fetcher.Request != null &&
-                    _userDataFetcher != null && _userDataFetcher.Fetched && _userDataFetcher.RarityParameterStatus != null) {
-                {
-                    onUpdate?.Invoke(
-                        format.Replace(
-                            "{namespaceName}",
-                            $"{_fetcher.Request.NamespaceName}"
-                        ).Replace(
-                            "{parameterName}",
-                            $"{_fetcher.Request.ParameterName}"
-                        ).Replace(
-                            "{userId}",
-                            $"{_fetcher.Request.UserId}"
-                        ).Replace(
-                            "{propertyId}",
-                            $"{_fetcher.Request.PropertyId}"
-                        ).Replace(
-                            "{verifyType}",
-                            $"{_fetcher.Request.VerifyType}"
-                        ).Replace(
-                            "{parameterValueName}",
-                            $"{_fetcher.Request.ParameterValueName}"
-                        ).Replace(
-                            "{parameterCount}",
-                            $"{_fetcher.Request.ParameterCount}"
-                        ).Replace(
-                            "{userData:parameterName}",
-                            $"{_userDataFetcher.RarityParameterStatus.ParameterName}"
-                        ).Replace(
-                            "{userData:propertyId}",
-                            $"{_userDataFetcher.RarityParameterStatus.PropertyId}"
-                        ).Replace(
-                            "{userData:parameterValues}",
-                            $"{_userDataFetcher.RarityParameterStatus.ParameterValues}"
-                        )
-                    );
-                }
-            } else if (_fetcher.Fetched && _fetcher.Request != null) {
-                {
-                    onUpdate?.Invoke(
-                        format.Replace(
-                            "{namespaceName}",
-                            $"{_fetcher.Request.NamespaceName}"
-                        ).Replace(
-                            "{parameterName}",
-                            $"{_fetcher.Request.ParameterName}"
-                        ).Replace(
-                            "{userId}",
-                            $"{_fetcher.Request.UserId}"
-                        ).Replace(
-                            "{propertyId}",
-                            $"{_fetcher.Request.PropertyId}"
-                        ).Replace(
-                            "{verifyType}",
-                            $"{_fetcher.Request.VerifyType}"
-                        ).Replace(
-                            "{parameterValueName}",
-                            $"{_fetcher.Request.ParameterValueName}"
-                        ).Replace(
-                            "{parameterCount}",
-                            $"{_fetcher.Request.ParameterCount}"
-                        )
-                    );
-                }
+            if ((!this._fetcher?.Fetched ?? false) || this._fetcher.Request == null) {
+                return;
+            }
+            if (this._userDataFetcher?.Fetched ?? false)
+            {
+                this.onUpdate?.Invoke(
+                    this.format.Replace(
+                        "{namespaceName}",
+                        $"{this._fetcher.Request.NamespaceName}"
+                    ).Replace(
+                        "{parameterName}",
+                        $"{this._fetcher.Request.ParameterName}"
+                    ).Replace(
+                        "{userId}",
+                        $"{this._fetcher.Request.UserId}"
+                    ).Replace(
+                        "{propertyId}",
+                        $"{this._fetcher.Request.PropertyId}"
+                    ).Replace(
+                        "{verifyType}",
+                        $"{this._fetcher.Request.VerifyType}"
+                    ).Replace(
+                        "{parameterValueName}",
+                        $"{this._fetcher.Request.ParameterValueName}"
+                    ).Replace(
+                        "{parameterCount}",
+                        $"{this._fetcher.Request.ParameterCount}"
+                    ).Replace(
+                        "{userData:parameterName}",
+                        $"{this._userDataFetcher.RarityParameterStatus.ParameterName}"
+                    ).Replace(
+                        "{userData:propertyId}",
+                        $"{this._userDataFetcher.RarityParameterStatus.PropertyId}"
+                    ).Replace(
+                        "{userData:parameterValues}",
+                        $"{this._userDataFetcher.RarityParameterStatus.ParameterValues}"
+                    )
+                );
+            } else {
+                this.onUpdate?.Invoke(
+                    this.format.Replace(
+                        "{namespaceName}",
+                        $"{this._fetcher.Request.NamespaceName}"
+                    ).Replace(
+                        "{parameterName}",
+                        $"{this._fetcher.Request.ParameterName}"
+                    ).Replace(
+                        "{userId}",
+                        $"{this._fetcher.Request.UserId}"
+                    ).Replace(
+                        "{propertyId}",
+                        $"{this._fetcher.Request.PropertyId}"
+                    ).Replace(
+                        "{verifyType}",
+                        $"{this._fetcher.Request.VerifyType}"
+                    ).Replace(
+                        "{parameterValueName}",
+                        $"{this._fetcher.Request.ParameterValueName}"
+                    ).Replace(
+                        "{parameterCount}",
+                        $"{this._fetcher.Request.ParameterCount}"
+                    )
+                );
             }
         }
     }
@@ -123,25 +122,52 @@ namespace Gs2.Unity.UiKit.Gs2Enchant.Label
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2EnchantVerifyRarityParameterStatusByUserIdFetcher>() ?? GetComponentInParent<Gs2EnchantVerifyRarityParameterStatusByUserIdFetcher>();
-            _userDataFetcher = GetComponent<Gs2EnchantOwnRarityParameterStatusFetcher>() ?? GetComponentInParent<Gs2EnchantOwnRarityParameterStatusFetcher>();
-
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2EnchantVerifyRarityParameterStatusByUserIdFetcher>() ?? GetComponentInParent<Gs2EnchantVerifyRarityParameterStatusByUserIdFetcher>();
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2EnchantVerifyRarityParameterStatusByUserIdFetcher.");
                 enabled = false;
             }
-
-            Update();
+            this._userDataFetcher = GetComponent<Gs2EnchantOwnRarityParameterStatusFetcher>() ?? GetComponentInParent<Gs2EnchantOwnRarityParameterStatusFetcher>();
         }
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2EnchantVerifyRarityParameterStatusByUserIdFetcher>() ?? GetComponentInParent<Gs2EnchantVerifyRarityParameterStatusByUserIdFetcher>(true);
-            _userDataFetcher = GetComponent<Gs2EnchantOwnRarityParameterStatusFetcher>() ?? GetComponentInParent<Gs2EnchantOwnRarityParameterStatusFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2EnchantVerifyRarityParameterStatusByUserIdFetcher>() ?? GetComponentInParent<Gs2EnchantVerifyRarityParameterStatusByUserIdFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+            if (this._userDataFetcher != null) {
+                this._userDataFetcher.OnFetched.AddListener(this._onFetched);
+                if (this._userDataFetcher.Fetched) {
+                    OnFetched();
+                }
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                if (this._userDataFetcher != null) {
+                    this._userDataFetcher.OnFetched.RemoveListener(this._onFetched);
+                }
+                this._onFetched = null;
+            }
         }
     }
 
@@ -179,8 +205,8 @@ namespace Gs2.Unity.UiKit.Gs2Enchant.Label
 
         public event UnityAction<string> OnUpdate
         {
-            add => onUpdate.AddListener(value);
-            remove => onUpdate.RemoveListener(value);
+            add => this.onUpdate.AddListener(value);
+            remove => this.onUpdate.RemoveListener(value);
         }
     }
 }

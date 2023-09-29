@@ -43,8 +43,12 @@ namespace Gs2.Unity.UiKit.Gs2Idle.Editor
             serializedObject.Update();
 
             if (original.CategoryModel == null) {
-                if (original.GetComponentInParent<Gs2IdleCategoryModelList>(true) != null) {
+                var list = original.GetComponentInParent<Gs2IdleCategoryModelList>(true);
+                if (list != null) {
                     EditorGUILayout.HelpBox("CategoryModel is auto assign from Gs2IdleCategoryModelList.", MessageType.Info);
+                    EditorGUI.BeginDisabledGroup(true);
+                    EditorGUILayout.ObjectField("List", list, typeof(Gs2IdleCategoryModelList), false);
+                    EditorGUI.EndDisabledGroup();
                 }
                 else {
                     EditorGUILayout.HelpBox("CategoryModel not assigned.", MessageType.Error);

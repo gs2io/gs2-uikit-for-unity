@@ -48,13 +48,16 @@ namespace Gs2.Unity.UiKit.Gs2Friend
     {
         private IEnumerator Process()
         {
-            yield return new WaitUntil(() => this._clientHolder.Initialized);
-            yield return new WaitUntil(() => this._gameSessionHolder.Initialized);
+            var clientHolder = Gs2ClientHolder.Instance;
+            var gameSessionHolder = Gs2GameSessionHolder.Instance;
+
+            yield return new WaitUntil(() => clientHolder.Initialized);
+            yield return new WaitUntil(() => gameSessionHolder.Initialized);
             
-            var domain = this._clientHolder.Gs2.Friend.Namespace(
+            var domain = clientHolder.Gs2.Friend.Namespace(
                 this._context.FollowUser.NamespaceName
             ).Me(
-                this._gameSessionHolder.GameSession
+                gameSessionHolder.GameSession
             ).FollowUser(
                 this._context.FollowUser.TargetUserId,
                 this._context.FollowUser.WithProfile
@@ -121,16 +124,11 @@ namespace Gs2.Unity.UiKit.Gs2Friend
 
     public partial class Gs2FriendFollowUserUnfollowAction
     {
-        private Gs2ClientHolder _clientHolder;
-        private Gs2GameSessionHolder _gameSessionHolder;
         private Gs2FriendOwnFollowUserContext _context;
 
         public void Awake()
         {
-            this._clientHolder = Gs2ClientHolder.Instance;
-            this._gameSessionHolder = Gs2GameSessionHolder.Instance;
             this._context = GetComponent<Gs2FriendOwnFollowUserContext>() ?? GetComponentInParent<Gs2FriendOwnFollowUserContext>();
-
             if (_context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2FriendOwnFollowUserContext.");
                 enabled = false;
@@ -183,6 +181,8 @@ namespace Gs2.Unity.UiKit.Gs2Friend
             add => this.onUnfollowComplete.AddListener(value);
             remove => this.onUnfollowComplete.RemoveListener(value);
         }
+
+        public UnityEvent OnChange = new UnityEvent();
 
         [SerializeField]
         internal ErrorEvent onError = new ErrorEvent();

@@ -40,7 +40,7 @@ namespace Gs2.Unity.UiKit.Gs2MegaField.Context
     {
         public void Start() {
             if (Spatial == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Spatial is not set in Gs2MegaFieldOwnSpatialContext.");
+                Debug.LogWarning($"{gameObject.GetFullPath()}: Spatial is not set in Gs2MegaFieldOwnSpatialContext.");
             }
         }
         public virtual bool HasError() {

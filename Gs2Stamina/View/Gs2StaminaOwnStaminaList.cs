@@ -12,8 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
- * deny overwrite
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
@@ -32,6 +30,7 @@ using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Stamina.Context;
 using Gs2.Unity.UiKit.Gs2Stamina.Fetcher;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2Stamina
 {
@@ -44,17 +43,19 @@ namespace Gs2.Unity.UiKit.Gs2Stamina
     {
         private List<Gs2StaminaOwnStaminaContext> _children;
 
-        public void Update() {
-            if (_fetcher.Fetched && this._fetcher.Staminas != null) {
-                for (var i = 0; i < this.maximumItems; i++) {
-                    if (i < this._fetcher.Staminas.Count) {
-                        _children[i].StaminaModel.staminaName = this._fetcher.Staminas[i].StaminaName;
-                        _children[i].Stamina.staminaName = this._fetcher.Staminas[i].StaminaName;
-                        _children[i].gameObject.SetActive(true);
-                    }
-                    else {
-                        _children[i].gameObject.SetActive(false);
-                    }
+        public void OnFetched() {
+            for (var i = 0; i < this._children.Count; i++) {
+                if (i < this._fetcher.Staminas.Count) {
+                    this._children[i].SetOwnStamina(
+                        OwnStamina.New(
+                            this._fetcher.Context.Namespace,
+                            this._fetcher.Staminas[i].StaminaName
+                        )
+                    );
+                    this._children[i].gameObject.SetActive(true);
+                }
+                else {
+                    this._children[i].gameObject.SetActive(false);
                 }
             }
         }
@@ -67,54 +68,76 @@ namespace Gs2.Unity.UiKit.Gs2Stamina
     public partial class Gs2StaminaOwnStaminaList
     {
         private Gs2StaminaOwnStaminaListFetcher _fetcher;
-        private Gs2StaminaNamespaceContext Context => _fetcher.Context;
+
+        private void Initialize() {
+            for (var i = 0; i < this.maximumItems; i++) {
+                var node = Instantiate(this.prefab, transform);
+                node.StaminaModel = StaminaModel.New(
+                    this._fetcher.Context.Namespace,
+                    ""
+                );
+                node.Stamina = OwnStamina.New(
+                    this._fetcher.Context.Namespace,
+                    ""
+                );
+                node.gameObject.SetActive(false);
+                this._children.Add(node);
+            }
+        }
 
         public void Awake()
         {
-            if (prefab == null) {
+            if (this.prefab == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2StaminaOwnStaminaContext Prefab.");
                 enabled = false;
                 return;
             }
 
-            _fetcher = GetComponent<Gs2StaminaOwnStaminaListFetcher>() ?? GetComponentInParent<Gs2StaminaOwnStaminaListFetcher>();
-
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2StaminaOwnStaminaListFetcher>() ?? GetComponentInParent<Gs2StaminaOwnStaminaListFetcher>();
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2StaminaOwnStaminaListFetcher.");
                 enabled = false;
             }
 
-            var context = GetComponent<Gs2StaminaNamespaceContext>() ?? GetComponentInParent<Gs2StaminaNamespaceContext>(true);
-            if (context == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2StaminaOwnStaminaListFetcher::Context.");
-                enabled = false;
-                return;
-            }
-
-            _children = new List<Gs2StaminaOwnStaminaContext>();
-            for (var i = 0; i < this.maximumItems; i++) {
-                var node = Instantiate(this.prefab, transform);
-                node.StaminaModel = StaminaModel.New(
-                    context.Namespace,
-                    ""
-                );
-                node.Stamina = OwnStamina.New(
-                    context.Namespace,
-                    ""
-                );
-                node.gameObject.SetActive(false);
-                _children.Add(node);
-            }
+            this._children = new List<Gs2StaminaOwnStaminaContext>();
             this.prefab.gameObject.SetActive(false);
+
+            Invoke(nameof(Initialize), 0);
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2StaminaOwnStaminaListFetcher>() ?? GetComponentInParent<Gs2StaminaOwnStaminaListFetcher>(true);
-            if (_fetcher == null) {
+            if (this.prefab == null) {
+                return true;
+            }
+            this._fetcher = GetComponent<Gs2StaminaOwnStaminaListFetcher>() ?? GetComponentInParent<Gs2StaminaOwnStaminaListFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 

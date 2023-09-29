@@ -48,13 +48,16 @@ namespace Gs2.Unity.UiKit.Gs2Ranking
     {
         private IEnumerator Process()
         {
-            yield return new WaitUntil(() => this._clientHolder.Initialized);
-            yield return new WaitUntil(() => this._gameSessionHolder.Initialized);
+            var clientHolder = Gs2ClientHolder.Instance;
+            var gameSessionHolder = Gs2GameSessionHolder.Instance;
+
+            yield return new WaitUntil(() => clientHolder.Initialized);
+            yield return new WaitUntil(() => gameSessionHolder.Initialized);
             
-            var domain = this._clientHolder.Gs2.Ranking.Namespace(
+            var domain = clientHolder.Gs2.Ranking.Namespace(
                 this._context.Ranking.NamespaceName
             ).Me(
-                this._gameSessionHolder.GameSession
+                gameSessionHolder.GameSession
             ).Ranking(
                 this._context.Ranking.CategoryName
             );
@@ -122,16 +125,11 @@ namespace Gs2.Unity.UiKit.Gs2Ranking
 
     public partial class Gs2RankingRankingPutScoreAction
     {
-        private Gs2ClientHolder _clientHolder;
-        private Gs2GameSessionHolder _gameSessionHolder;
         private Gs2RankingRankingContext _context;
 
         public void Awake()
         {
-            this._clientHolder = Gs2ClientHolder.Instance;
-            this._gameSessionHolder = Gs2GameSessionHolder.Instance;
             this._context = GetComponent<Gs2RankingRankingContext>() ?? GetComponentInParent<Gs2RankingRankingContext>();
-
             if (_context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2RankingRankingContext.");
                 enabled = false;
@@ -167,23 +165,27 @@ namespace Gs2.Unity.UiKit.Gs2Ranking
         public string Metadata;
 
         public void SetScore(long value) {
-            Score = value;
-            this.onChangeScore.Invoke(Score);
+            this.Score = value;
+            this.onChangeScore.Invoke(this.Score);
+            this.OnChange.Invoke();
         }
 
         public void DecreaseScore() {
-            Score -= 1;
-            this.onChangeScore.Invoke(Score);
+            this.Score -= 1;
+            this.onChangeScore.Invoke(this.Score);
+            this.OnChange.Invoke();
         }
 
         public void IncreaseScore() {
-            Score += 1;
-            this.onChangeScore.Invoke(Score);
+            this.Score += 1;
+            this.onChangeScore.Invoke(this.Score);
+            this.OnChange.Invoke();
         }
 
         public void SetMetadata(string value) {
-            Metadata = value;
-            this.onChangeMetadata.Invoke(Metadata);
+            this.Metadata = value;
+            this.onChangeMetadata.Invoke(this.Metadata);
+            this.OnChange.Invoke();
         }
     }
 
@@ -234,6 +236,8 @@ namespace Gs2.Unity.UiKit.Gs2Ranking
             add => this.onPutScoreComplete.AddListener(value);
             remove => this.onPutScoreComplete.RemoveListener(value);
         }
+
+        public UnityEvent OnChange = new UnityEvent();
 
         [SerializeField]
         internal ErrorEvent onError = new ErrorEvent();

@@ -40,13 +40,36 @@ namespace Gs2.Unity.UiKit.Gs2Stamina
 	[AddComponentMenu("GS2 UIKit/Stamina/Stamina/View/Label/Gs2StaminaStaminaConsumeActionLabel")]
     public partial class Gs2StaminaStaminaConsumeActionLabel : MonoBehaviour
     {
-        public void Update()
+        private void OnChange()
         {
-            onUpdate?.Invoke(
-                format.Replace(
-                    "{consumeValue}", $"{action?.ConsumeValue}"
+            this.onUpdate?.Invoke(
+                this.format.Replace(
+                    "{consumeValue}", $"{this.action?.ConsumeValue}"
                 )
             );
+        }
+
+        public void Awake() {
+            if (this.action == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2AccountAccountAuthenticationAction.");
+                enabled = false;
+            }
+        }
+
+        public virtual bool HasError()
+        {
+            if (this.action == null) {
+                return true;
+            }
+            return false;
+        }
+
+        public void OnEnable() {
+            this.action.OnChange.AddListener(OnChange);
+        }
+
+        public void OnDisable() {
+            this.action.OnChange.RemoveListener(OnChange);
         }
     }
 

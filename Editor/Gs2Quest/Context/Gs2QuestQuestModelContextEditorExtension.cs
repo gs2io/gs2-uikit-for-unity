@@ -43,8 +43,12 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Editor
             serializedObject.Update();
 
             if (original.QuestModel == null) {
-                if (original.GetComponentInParent<Gs2QuestQuestModelList>(true) != null) {
+                var list = original.GetComponentInParent<Gs2QuestQuestModelList>(true);
+                if (list != null) {
                     EditorGUILayout.HelpBox("QuestModel is auto assign from Gs2QuestQuestModelList.", MessageType.Info);
+                    EditorGUI.BeginDisabledGroup(true);
+                    EditorGUILayout.ObjectField("List", list, typeof(Gs2QuestQuestModelList), false);
+                    EditorGUI.EndDisabledGroup();
                 }
                 else {
                     EditorGUILayout.HelpBox("QuestModel not assigned.", MessageType.Error);

@@ -40,7 +40,7 @@ namespace Gs2.Unity.UiKit.Gs2Exchange.Context
     {
         public void Start() {
             if (IncrementalRateModel == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: IncrementalRateModel is not set in Gs2ExchangeIncrementalRateModelContext.");
+                Debug.LogWarning($"{gameObject.GetFullPath()}: IncrementalRateModel is not set in Gs2ExchangeIncrementalRateModelContext.");
             }
         }
 
@@ -49,9 +49,7 @@ namespace Gs2.Unity.UiKit.Gs2Exchange.Context
                 if (GetComponentInParent<Gs2ExchangeIncrementalRateModelList>(true) != null) {
                     return false;
                 }
-                else {
-                    return true;
-                }
+                return true;
             }
             return false;
         }

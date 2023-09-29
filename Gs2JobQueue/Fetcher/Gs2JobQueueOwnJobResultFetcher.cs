@@ -76,6 +76,7 @@ namespace Gs2.Unity.UiKit.Gs2JobQueue.Fetcher
                 {
                     JobResult = item;
                     Fetched = true;
+                    this.OnFetched.Invoke();
                 }
             );
 
@@ -89,11 +90,10 @@ namespace Gs2.Unity.UiKit.Gs2JobQueue.Fetcher
                 else {
                     JobResult = future.Result;
                     Fetched = true;
+                    this.OnFetched.Invoke();
                     break;
                 }
             }
-
-            this.OnFetched.Invoke();
         }
 
         public void OnUpdateContext() {
@@ -133,8 +133,6 @@ namespace Gs2.Unity.UiKit.Gs2JobQueue.Fetcher
     {
         public Gs2JobQueueOwnJobResultContext Context { get; private set; }
 
-        public UnityEvent OnFetched = new UnityEvent();
-
         public void Awake()
         {
             Context = GetComponent<Gs2JobQueueOwnJobResultContext>() ?? GetComponentInParent<Gs2JobQueueOwnJobResultContext>();
@@ -162,6 +160,7 @@ namespace Gs2.Unity.UiKit.Gs2JobQueue.Fetcher
     {
         public Gs2.Unity.Gs2JobQueue.Model.EzJobResult JobResult { get; protected set; }
         public bool Fetched { get; protected set; }
+        public UnityEvent OnFetched = new UnityEvent();
     }
 
     /// <summary>

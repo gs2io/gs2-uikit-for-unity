@@ -43,8 +43,18 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Editor
             serializedObject.Update();
 
             if (original.BigItem == null) {
-                if (original.GetComponentInParent<Gs2InventoryOwnBigItemList>(true) != null) {
-                    EditorGUILayout.HelpBox("OwnBigItem is auto assign from Gs2InventoryOwnBigItemList.", MessageType.Info);
+                var list = original.GetComponentInParent<Gs2InventoryOwnBigItemList>(true);
+                if (list != null) {
+                    EditorGUILayout.HelpBox("BigItem is auto assign from Gs2InventoryOwnBigItemList.", MessageType.Info);
+                    EditorGUI.BeginDisabledGroup(true);
+                    EditorGUILayout.ObjectField("List", list, typeof(Gs2InventoryOwnBigItemList), false);
+                    EditorGUI.EndDisabledGroup();
+                }
+                else if (original.GetComponentInParent<Gs2InventoryConvertBigItemModelToOwnBigItem>(true) != null) {
+                    EditorGUILayout.HelpBox("BigItem is auto assign from Gs2InventoryConvertBigItemModelToOwnBigItem.", MessageType.Info);
+                    EditorGUI.BeginDisabledGroup(true);
+                    EditorGUILayout.ObjectField("Converter", original.GetComponentInParent<Gs2InventoryConvertBigItemModelToOwnBigItem>(true), typeof(Gs2InventoryConvertBigItemModelToOwnBigItem), false);
+                    EditorGUI.EndDisabledGroup();
                 }
                 else {
                     EditorGUILayout.HelpBox("OwnBigItem not assigned.", MessageType.Error);

@@ -24,10 +24,12 @@
 
 #pragma warning disable CS0472
 
+using System;
 using System.Collections.Generic;
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Matchmaking.Fetcher;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2Matchmaking.Enabler
 {
@@ -38,29 +40,24 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking.Enabler
 	[AddComponentMenu("GS2 UIKit/Matchmaking/RatingModel/View/Enabler/Properties/Name/Gs2MatchmakingRatingModelNameEnabler")]
     public partial class Gs2MatchmakingRatingModelNameEnabler : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched && _fetcher.RatingModel != null)
+            switch(this.expression)
             {
-                switch(expression)
-                {
-                    case Expression.In:
-                        target.SetActive(enableNames.Contains(_fetcher.RatingModel.Name));
-                        break;
-                    case Expression.NotIn:
-                        target.SetActive(!enableNames.Contains(_fetcher.RatingModel.Name));
-                        break;
-                    case Expression.StartsWith:
-                        target.SetActive(_fetcher.RatingModel.Name.StartsWith(enableName));
-                        break;
-                    case Expression.EndsWith:
-                        target.SetActive(_fetcher.RatingModel.Name.EndsWith(enableName));
-                        break;
-                }
-            }
-            else
-            {
-                target.SetActive(false);
+                case Expression.In:
+                    this.target.SetActive(this.enableNames.Contains(this._fetcher.RatingModel.Name));
+                    break;
+                case Expression.NotIn:
+                    this.target.SetActive(!this.enableNames.Contains(this._fetcher.RatingModel.Name));
+                    break;
+                case Expression.StartsWith:
+                    this.target.SetActive(this._fetcher.RatingModel.Name.StartsWith(this.enableName));
+                    break;
+                case Expression.EndsWith:
+                    this.target.SetActive(this._fetcher.RatingModel.Name.EndsWith(this.enableName));
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
         }
     }
@@ -75,13 +72,12 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking.Enabler
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2MatchmakingRatingModelFetcher>() ?? GetComponentInParent<Gs2MatchmakingRatingModelFetcher>();
-
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2MatchmakingRatingModelFetcher>() ?? GetComponentInParent<Gs2MatchmakingRatingModelFetcher>();
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MatchmakingRatingModelFetcher.");
                 enabled = false;
             }
-            if (target == null) {
+            if (this.target == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: target is not set.");
                 enabled = false;
             }
@@ -89,14 +85,37 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking.Enabler
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2MatchmakingRatingModelFetcher>() ?? GetComponentInParent<Gs2MatchmakingRatingModelFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2MatchmakingRatingModelFetcher>() ?? GetComponentInParent<Gs2MatchmakingRatingModelFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
-            if (target == null) {
+            if (this.target == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 

@@ -40,7 +40,7 @@ namespace Gs2.Unity.UiKit.Gs2Showcase.Context
     {
         public void Start() {
             if (SalesItemGroup == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: SalesItemGroup is not set in Gs2ShowcaseOwnSalesItemGroupContext.");
+                Debug.LogWarning($"{gameObject.GetFullPath()}: SalesItemGroup is not set in Gs2ShowcaseOwnSalesItemGroupContext.");
             }
         }
         public virtual bool HasError() {

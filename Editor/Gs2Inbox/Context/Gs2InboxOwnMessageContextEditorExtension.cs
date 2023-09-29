@@ -43,8 +43,12 @@ namespace Gs2.Unity.UiKit.Gs2Inbox.Editor
             serializedObject.Update();
 
             if (original.Message == null) {
-                if (original.GetComponentInParent<Gs2InboxOwnMessageList>(true) != null) {
-                    EditorGUILayout.HelpBox("OwnMessage is auto assign from Gs2InboxOwnMessageList.", MessageType.Info);
+                var list = original.GetComponentInParent<Gs2InboxOwnMessageList>(true);
+                if (list != null) {
+                    EditorGUILayout.HelpBox("Message is auto assign from Gs2InboxOwnMessageList.", MessageType.Info);
+                    EditorGUI.BeginDisabledGroup(true);
+                    EditorGUILayout.ObjectField("List", list, typeof(Gs2InboxOwnMessageList), false);
+                    EditorGUI.EndDisabledGroup();
                 }
                 else {
                     EditorGUILayout.HelpBox("OwnMessage not assigned.", MessageType.Error);

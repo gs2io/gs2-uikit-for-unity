@@ -48,13 +48,16 @@ namespace Gs2.Unity.UiKit.Gs2Friend
     {
         private IEnumerator Process()
         {
-            yield return new WaitUntil(() => this._clientHolder.Initialized);
-            yield return new WaitUntil(() => this._gameSessionHolder.Initialized);
+            var clientHolder = Gs2ClientHolder.Instance;
+            var gameSessionHolder = Gs2GameSessionHolder.Instance;
+
+            yield return new WaitUntil(() => clientHolder.Initialized);
+            yield return new WaitUntil(() => gameSessionHolder.Initialized);
             
-            var domain = this._clientHolder.Gs2.Friend.Namespace(
+            var domain = clientHolder.Gs2.Friend.Namespace(
                 this._context.Profile.NamespaceName
             ).Me(
-                this._gameSessionHolder.GameSession
+                gameSessionHolder.GameSession
             ).Profile(
             );
             var future = domain.UpdateProfile(
@@ -122,16 +125,11 @@ namespace Gs2.Unity.UiKit.Gs2Friend
 
     public partial class Gs2FriendProfileUpdateProfileAction
     {
-        private Gs2ClientHolder _clientHolder;
-        private Gs2GameSessionHolder _gameSessionHolder;
         private Gs2FriendOwnProfileContext _context;
 
         public void Awake()
         {
-            this._clientHolder = Gs2ClientHolder.Instance;
-            this._gameSessionHolder = Gs2GameSessionHolder.Instance;
             this._context = GetComponent<Gs2FriendOwnProfileContext>() ?? GetComponentInParent<Gs2FriendOwnProfileContext>();
-
             if (_context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2FriendOwnProfileContext.");
                 enabled = false;
@@ -168,18 +166,21 @@ namespace Gs2.Unity.UiKit.Gs2Friend
         public string FriendProfile;
 
         public void SetPublicProfile(string value) {
-            PublicProfile = value;
-            this.onChangePublicProfile.Invoke(PublicProfile);
+            this.PublicProfile = value;
+            this.onChangePublicProfile.Invoke(this.PublicProfile);
+            this.OnChange.Invoke();
         }
 
         public void SetFollowerProfile(string value) {
-            FollowerProfile = value;
-            this.onChangeFollowerProfile.Invoke(FollowerProfile);
+            this.FollowerProfile = value;
+            this.onChangeFollowerProfile.Invoke(this.FollowerProfile);
+            this.OnChange.Invoke();
         }
 
         public void SetFriendProfile(string value) {
-            FriendProfile = value;
-            this.onChangeFriendProfile.Invoke(FriendProfile);
+            this.FriendProfile = value;
+            this.onChangeFriendProfile.Invoke(this.FriendProfile);
+            this.OnChange.Invoke();
         }
     }
 
@@ -244,6 +245,8 @@ namespace Gs2.Unity.UiKit.Gs2Friend
             add => this.onUpdateProfileComplete.AddListener(value);
             remove => this.onUpdateProfileComplete.RemoveListener(value);
         }
+
+        public UnityEvent OnChange = new UnityEvent();
 
         [SerializeField]
         internal ErrorEvent onError = new ErrorEvent();

@@ -73,6 +73,7 @@ namespace Gs2.Unity.UiKit.Gs2AdReward.Fetcher
                 {
                     Point = item;
                     Fetched = true;
+                    this.OnFetched.Invoke();
                 }
             );
 
@@ -86,11 +87,10 @@ namespace Gs2.Unity.UiKit.Gs2AdReward.Fetcher
                 else {
                     Point = future.Result;
                     Fetched = true;
+                    this.OnFetched.Invoke();
                     break;
                 }
             }
-
-            this.OnFetched.Invoke();
         }
 
         public void OnUpdateContext() {
@@ -130,8 +130,6 @@ namespace Gs2.Unity.UiKit.Gs2AdReward.Fetcher
     {
         public Gs2AdRewardOwnPointContext Context { get; private set; }
 
-        public UnityEvent OnFetched = new UnityEvent();
-
         public void Awake()
         {
             Context = GetComponent<Gs2AdRewardOwnPointContext>() ?? GetComponentInParent<Gs2AdRewardOwnPointContext>();
@@ -159,6 +157,7 @@ namespace Gs2.Unity.UiKit.Gs2AdReward.Fetcher
     {
         public Gs2.Unity.Gs2AdReward.Model.EzPoint Point { get; protected set; }
         public bool Fetched { get; protected set; }
+        public UnityEvent OnFetched = new UnityEvent();
     }
 
     /// <summary>

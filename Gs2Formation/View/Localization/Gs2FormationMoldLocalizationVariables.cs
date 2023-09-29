@@ -29,6 +29,7 @@
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Formation.Fetcher;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.Localization.Components;
 using UnityEngine.Localization.SmartFormat.PersistentVariables;
 
@@ -41,21 +42,18 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Localization
     [AddComponentMenu("GS2 UIKit/Formation/Mold/View/Localization/Gs2FormationMoldLocalizationVariables")]
     public partial class Gs2FormationMoldLocalizationVariables : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched) {
-                target.StringReference["name"] = new StringVariable {
-                    Value = _fetcher?.Mold?.Name ?? "",
-                };
-                target.StringReference["userId"] = new StringVariable {
-                    Value = _fetcher?.Mold?.UserId ?? "",
-                };
-                target.StringReference["capacity"] = new IntVariable {
-                    Value = _fetcher?.Mold?.Capacity ?? 0,
-                };
-                enabled = false;
-                target.enabled = true;
-            }
+            this.target.StringReference["name"] = new StringVariable {
+                Value = _fetcher?.Mold?.Name ?? "",
+            };
+            this.target.StringReference["userId"] = new StringVariable {
+                Value = _fetcher?.Mold?.UserId ?? "",
+            };
+            this.target.StringReference["capacity"] = new IntVariable {
+                Value = _fetcher?.Mold?.Capacity ?? 0,
+            };
+            this.target.enabled = true;
         }
     }
 
@@ -68,10 +66,10 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Localization
         private Gs2FormationOwnMoldFetcher _fetcher;
 
         public void Awake() {
-            target.enabled = false;
-            _fetcher = GetComponent<Gs2FormationOwnMoldFetcher>() ?? GetComponentInParent<Gs2FormationOwnMoldFetcher>();
+            this.target.enabled = false;
+            this._fetcher = GetComponent<Gs2FormationOwnMoldFetcher>() ?? GetComponentInParent<Gs2FormationOwnMoldFetcher>();
 
-            if (_fetcher == null) {
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2FormationMoldFetcher.");
                 enabled = false;
             }
@@ -79,11 +77,34 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Localization
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2FormationOwnMoldFetcher>() ?? GetComponentInParent<Gs2FormationOwnMoldFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2FormationOwnMoldFetcher>() ?? GetComponentInParent<Gs2FormationOwnMoldFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 

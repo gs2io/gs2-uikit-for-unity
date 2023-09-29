@@ -48,13 +48,16 @@ namespace Gs2.Unity.UiKit.Gs2Enhance
     {
         private IEnumerator Process()
         {
-            yield return new WaitUntil(() => this._clientHolder.Initialized);
-            yield return new WaitUntil(() => this._gameSessionHolder.Initialized);
+            var clientHolder = Gs2ClientHolder.Instance;
+            var gameSessionHolder = Gs2GameSessionHolder.Instance;
+
+            yield return new WaitUntil(() => clientHolder.Initialized);
+            yield return new WaitUntil(() => gameSessionHolder.Initialized);
             
-            var domain = this._clientHolder.Gs2.Enhance.Namespace(
+            var domain = clientHolder.Gs2.Enhance.Namespace(
                 this._context.Progress.NamespaceName
             ).Me(
-                this._gameSessionHolder.GameSession
+                gameSessionHolder.GameSession
             ).Progress(
             );
             var future = domain.End(
@@ -109,16 +112,11 @@ namespace Gs2.Unity.UiKit.Gs2Enhance
 
     public partial class Gs2EnhanceProgressEndAction
     {
-        private Gs2ClientHolder _clientHolder;
-        private Gs2GameSessionHolder _gameSessionHolder;
         private Gs2EnhanceOwnProgressContext _context;
 
         public void Awake()
         {
-            this._clientHolder = Gs2ClientHolder.Instance;
-            this._gameSessionHolder = Gs2GameSessionHolder.Instance;
             this._context = GetComponent<Gs2EnhanceOwnProgressContext>() ?? GetComponentInParent<Gs2EnhanceOwnProgressContext>();
-
             if (_context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2EnhanceOwnProgressContext.");
                 enabled = false;
@@ -153,8 +151,9 @@ namespace Gs2.Unity.UiKit.Gs2Enhance
         public List<Gs2.Unity.Gs2Enhance.Model.EzConfig> Config;
 
         public void SetConfig(List<Gs2.Unity.Gs2Enhance.Model.EzConfig> value) {
-            Config = value;
-            this.onChangeConfig.Invoke(Config);
+            this.Config = value;
+            this.onChangeConfig.Invoke(this.Config);
+            this.OnChange.Invoke();
         }
     }
 
@@ -191,6 +190,8 @@ namespace Gs2.Unity.UiKit.Gs2Enhance
             add => this.onEndComplete.AddListener(value);
             remove => this.onEndComplete.RemoveListener(value);
         }
+
+        public UnityEvent OnChange = new UnityEvent();
 
         [SerializeField]
         internal ErrorEvent onError = new ErrorEvent();

@@ -40,7 +40,7 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Context
     {
         public void Start() {
             if (FormModel == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: FormModel is not set in Gs2FormationFormModelContext.");
+                Debug.LogWarning($"{gameObject.GetFullPath()}: FormModel is not set in Gs2FormationFormModelContext.");
             }
         }
 

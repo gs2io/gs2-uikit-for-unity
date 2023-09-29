@@ -29,6 +29,7 @@
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Inventory.Fetcher;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.Localization.Components;
 using UnityEngine.Localization.SmartFormat.PersistentVariables;
 
@@ -41,24 +42,21 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Localization
     [AddComponentMenu("GS2 UIKit/Inventory/InventoryModel/View/Localization/Gs2InventoryInventoryModelLocalizationVariables")]
     public partial class Gs2InventoryInventoryModelLocalizationVariables : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched) {
-                target.StringReference["name"] = new StringVariable {
-                    Value = _fetcher?.InventoryModel?.Name ?? "",
-                };
-                target.StringReference["metadata"] = new StringVariable {
-                    Value = _fetcher?.InventoryModel?.Metadata ?? "",
-                };
-                target.StringReference["initialCapacity"] = new IntVariable {
-                    Value = _fetcher?.InventoryModel?.InitialCapacity ?? 0,
-                };
-                target.StringReference["maxCapacity"] = new IntVariable {
-                    Value = _fetcher?.InventoryModel?.MaxCapacity ?? 0,
-                };
-                enabled = false;
-                target.enabled = true;
-            }
+            this.target.StringReference["name"] = new StringVariable {
+                Value = _fetcher?.InventoryModel?.Name ?? "",
+            };
+            this.target.StringReference["metadata"] = new StringVariable {
+                Value = _fetcher?.InventoryModel?.Metadata ?? "",
+            };
+            this.target.StringReference["initialCapacity"] = new IntVariable {
+                Value = _fetcher?.InventoryModel?.InitialCapacity ?? 0,
+            };
+            this.target.StringReference["maxCapacity"] = new IntVariable {
+                Value = _fetcher?.InventoryModel?.MaxCapacity ?? 0,
+            };
+            this.target.enabled = true;
         }
     }
 
@@ -71,10 +69,10 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Localization
         private Gs2InventoryInventoryModelFetcher _fetcher;
 
         public void Awake() {
-            target.enabled = false;
-            _fetcher = GetComponent<Gs2InventoryInventoryModelFetcher>() ?? GetComponentInParent<Gs2InventoryInventoryModelFetcher>();
+            this.target.enabled = false;
+            this._fetcher = GetComponent<Gs2InventoryInventoryModelFetcher>() ?? GetComponentInParent<Gs2InventoryInventoryModelFetcher>();
 
-            if (_fetcher == null) {
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2InventoryInventoryModelFetcher.");
                 enabled = false;
             }
@@ -82,11 +80,34 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Localization
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2InventoryInventoryModelFetcher>() ?? GetComponentInParent<Gs2InventoryInventoryModelFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2InventoryInventoryModelFetcher>() ?? GetComponentInParent<Gs2InventoryInventoryModelFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 

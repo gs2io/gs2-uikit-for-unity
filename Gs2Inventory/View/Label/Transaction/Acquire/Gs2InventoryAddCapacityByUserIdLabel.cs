@@ -42,65 +42,57 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Label
 	[AddComponentMenu("GS2 UIKit/Inventory/Inventory/View/Label/Transaction/Gs2InventoryAddCapacityByUserIdLabel")]
     public partial class Gs2InventoryAddCapacityByUserIdLabel : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched && _fetcher.Request != null &&
-                    _userDataFetcher != null && _userDataFetcher.Fetched && _userDataFetcher.Inventory != null) {
-                {
-                    onUpdate?.Invoke(
-                        format.Replace(
-                            "{namespaceName}",
-                            $"{_fetcher.Request.NamespaceName}"
-                        ).Replace(
-                            "{inventoryName}",
-                            $"{_fetcher.Request.InventoryName}"
-                        ).Replace(
-                            "{userId}",
-                            $"{_fetcher.Request.UserId}"
-                        ).Replace(
-                            "{addCapacityValue}",
-                            $"{_fetcher.Request.AddCapacityValue}"
-                        ).Replace(
-                            "{userData:inventoryId}",
-                            $"{_userDataFetcher.Inventory.InventoryId}"
-                        ).Replace(
-                            "{userData:inventoryName}",
-                            $"{_userDataFetcher.Inventory.InventoryName}"
-                        ).Replace(
-                            "{userData:currentInventoryCapacityUsage}",
-                            $"{_userDataFetcher.Inventory.CurrentInventoryCapacityUsage}"
-                        ).Replace(
-                            "{userData:currentInventoryMaxCapacity}",
-                            $"{_userDataFetcher.Inventory.CurrentInventoryMaxCapacity}"
-                        ).Replace(
-                            "{userData:currentInventoryMaxCapacity:changed}",
-                            $"{_userDataFetcher.Inventory.CurrentInventoryMaxCapacity + _fetcher.Request.AddCapacityValue}"
-                        )
-                    );
-                }
-            } else if (_fetcher.Fetched && _fetcher.Request != null) {
-                {
-                    onUpdate?.Invoke(
-                        format.Replace(
-                            "{namespaceName}",
-                            $"{_fetcher.Request.NamespaceName}"
-                        ).Replace(
-                            "{inventoryName}",
-                            $"{_fetcher.Request.InventoryName}"
-                        ).Replace(
-                            "{userId}",
-                            $"{_fetcher.Request.UserId}"
-                        ).Replace(
-                            "{addCapacityValue}",
-                            $"{_fetcher.Request.AddCapacityValue}"
-                        )
-                    );
-                }
+            if ((!this._fetcher?.Fetched ?? false) || this._fetcher.Request == null) {
+                return;
+            }
+            if (this._userDataFetcher?.Fetched ?? false)
+            {
+                this.onUpdate?.Invoke(
+                    this.format.Replace(
+                        "{namespaceName}",
+                        $"{this._fetcher.Request.NamespaceName}"
+                    ).Replace(
+                        "{inventoryName}",
+                        $"{this._fetcher.Request.InventoryName}"
+                    ).Replace(
+                        "{userId}",
+                        $"{this._fetcher.Request.UserId}"
+                    ).Replace(
+                        "{addCapacityValue}",
+                        $"{this._fetcher.Request.AddCapacityValue}"
+                    ).Replace(
+                        "{userData:inventoryId}",
+                        $"{this._userDataFetcher.Inventory.InventoryId}"
+                    ).Replace(
+                        "{userData:inventoryName}",
+                        $"{this._userDataFetcher.Inventory.InventoryName}"
+                    ).Replace(
+                        "{userData:currentInventoryCapacityUsage}",
+                        $"{this._userDataFetcher.Inventory.CurrentInventoryCapacityUsage}"
+                    ).Replace(
+                        "{userData:currentInventoryMaxCapacity}",
+                        $"{this._userDataFetcher.Inventory.CurrentInventoryMaxCapacity}"
+                    ).Replace(
+                        "{userData:currentInventoryMaxCapacity:changed}",
+                        $"{this._userDataFetcher.Inventory.CurrentInventoryMaxCapacity + this._fetcher.Request.AddCapacityValue}"
+                    )
+                );
             } else {
-                onUpdate?.Invoke(
-                    format.Replace(
-                        "{currentInventoryMaxCapacity}",
-                        "0"
+                this.onUpdate?.Invoke(
+                    this.format.Replace(
+                        "{namespaceName}",
+                        $"{this._fetcher.Request.NamespaceName}"
+                    ).Replace(
+                        "{inventoryName}",
+                        $"{this._fetcher.Request.InventoryName}"
+                    ).Replace(
+                        "{userId}",
+                        $"{this._fetcher.Request.UserId}"
+                    ).Replace(
+                        "{addCapacityValue}",
+                        $"{this._fetcher.Request.AddCapacityValue}"
                     )
                 );
             }
@@ -118,25 +110,52 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Label
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2InventoryAddCapacityByUserIdFetcher>() ?? GetComponentInParent<Gs2InventoryAddCapacityByUserIdFetcher>();
-            _userDataFetcher = GetComponent<Gs2InventoryOwnInventoryFetcher>() ?? GetComponentInParent<Gs2InventoryOwnInventoryFetcher>();
-
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2InventoryAddCapacityByUserIdFetcher>() ?? GetComponentInParent<Gs2InventoryAddCapacityByUserIdFetcher>();
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2InventoryAddCapacityByUserIdFetcher.");
                 enabled = false;
             }
-
-            Update();
+            this._userDataFetcher = GetComponent<Gs2InventoryOwnInventoryFetcher>() ?? GetComponentInParent<Gs2InventoryOwnInventoryFetcher>();
         }
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2InventoryAddCapacityByUserIdFetcher>() ?? GetComponentInParent<Gs2InventoryAddCapacityByUserIdFetcher>(true);
-            _userDataFetcher = GetComponent<Gs2InventoryOwnInventoryFetcher>() ?? GetComponentInParent<Gs2InventoryOwnInventoryFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2InventoryAddCapacityByUserIdFetcher>() ?? GetComponentInParent<Gs2InventoryAddCapacityByUserIdFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+            if (this._userDataFetcher != null) {
+                this._userDataFetcher.OnFetched.AddListener(this._onFetched);
+                if (this._userDataFetcher.Fetched) {
+                    OnFetched();
+                }
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                if (this._userDataFetcher != null) {
+                    this._userDataFetcher.OnFetched.RemoveListener(this._onFetched);
+                }
+                this._onFetched = null;
+            }
         }
     }
 
@@ -174,8 +193,8 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Label
 
         public event UnityAction<string> OnUpdate
         {
-            add => onUpdate.AddListener(value);
-            remove => onUpdate.RemoveListener(value);
+            add => this.onUpdate.AddListener(value);
+            remove => this.onUpdate.RemoveListener(value);
         }
     }
 }

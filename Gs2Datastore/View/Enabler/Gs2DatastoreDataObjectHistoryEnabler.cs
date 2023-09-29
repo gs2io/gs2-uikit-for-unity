@@ -27,6 +27,7 @@
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Datastore.Fetcher;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2Datastore
 {
@@ -37,22 +38,15 @@ namespace Gs2.Unity.UiKit.Gs2Datastore
 	[AddComponentMenu("GS2 UIKit/Datastore/DataObjectHistory/View/Enabler/Gs2DatastoreDataObjectHistoryEnabler")]
     public partial class Gs2DatastoreDataObjectHistoryEnabler : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (!_fetcher.Fetched)
+            if (this._fetcher.DataObjectHistory == null)
             {
-                target.SetActive(loading);
+                this.target.SetActive(this.notFound);
             }
             else
             {
-                if (_fetcher.DataObjectHistory == null)
-                {
-                    target.SetActive(notFound);
-                }
-                else
-                {
-                    target.SetActive(loaded);
-                }
+                this.target.SetActive(this.loaded);
             }
         }
     }
@@ -63,32 +57,60 @@ namespace Gs2.Unity.UiKit.Gs2Datastore
 
     public partial class Gs2DatastoreDataObjectHistoryEnabler
     {
-        private Gs2DatastoreOwnDataObjectHistoryFetcher _fetcher;
+        private Gs2DatastoreDataObjectHistoryFetcher _fetcher;
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2DatastoreOwnDataObjectHistoryFetcher>() ?? GetComponentInParent<Gs2DatastoreOwnDataObjectHistoryFetcher>();
-
-            if (_fetcher == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2DatastoreOwnDataObjectHistoryFetcher.");
+            this._fetcher = GetComponent<Gs2DatastoreDataObjectHistoryFetcher>() ?? GetComponentInParent<Gs2DatastoreDataObjectHistoryFetcher>();
+            if (this._fetcher == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2DatastoreDataObjectHistoryFetcher.");
                 enabled = false;
             }
-            if (target == null) {
+            if (this.target == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: target is not set.");
                 enabled = false;
+            }
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+            else {
+                this.target.SetActive(this.loading);
             }
         }
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2DatastoreOwnDataObjectHistoryFetcher>() ?? GetComponentInParent<Gs2DatastoreOwnDataObjectHistoryFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2DatastoreDataObjectHistoryFetcher>() ?? GetComponentInParent<Gs2DatastoreDataObjectHistoryFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
-            if (target == null) {
+            if (this.target == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 

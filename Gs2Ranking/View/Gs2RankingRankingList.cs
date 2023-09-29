@@ -17,6 +17,14 @@
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
+// ReSharper disable RedundantNameQualifier
+// ReSharper disable RedundantAssignment
+// ReSharper disable NotAccessedVariable
+// ReSharper disable RedundantUsingDirective
+// ReSharper disable Unity.NoNullPropagation
+// ReSharper disable InconsistentNaming
+
+#pragma warning disable CS0472
 
 using System.Collections.Generic;
 using Gs2.Unity.Gs2Ranking.ScriptableObject;
@@ -24,6 +32,7 @@ using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Ranking.Context;
 using Gs2.Unity.UiKit.Gs2Ranking.Fetcher;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2Ranking
 {
@@ -36,17 +45,23 @@ namespace Gs2.Unity.UiKit.Gs2Ranking
     {
         private List<Gs2RankingRankingContext> _children;
 
-        public void Update() {
-            if (_fetcher.Fetched && this._fetcher.Rankings != null) {
-                for (var i = 0; i < this.maximumItems; i++) {
-                    if (i < this._fetcher.Rankings.Count) {
-                        _children[i].Ranking.index = this._fetcher.Rankings[i].Index;
-                        _children[i].Ranking.User.userId = this._fetcher.Rankings[i].UserId;
-                        _children[i].gameObject.SetActive(true);
-                    }
-                    else {
-                        _children[i].gameObject.SetActive(false);
-                    }
+        public void OnFetched() {
+            for (var i = 0; i < this.maximumItems; i++) {
+                if (i < this._fetcher.Rankings.Count) {
+                    this._children[i].SetRanking(
+                        Ranking.New(
+                            User.New(
+                                this._fetcher.Context.CategoryModel.Namespace,
+                                this._fetcher.Rankings[i].UserId
+                            ),
+                            this._fetcher.Context.CategoryModel,
+                            this._fetcher.Rankings[i].Index
+                        )
+                    );
+                    this._children[i].gameObject.SetActive(true);
+                }
+                else {
+                    this._children[i].gameObject.SetActive(false);
                 }
             }
         }
@@ -58,35 +73,73 @@ namespace Gs2.Unity.UiKit.Gs2Ranking
 
     public partial class Gs2RankingRankingList
     {
-        private Gs2RankingNamespaceContext _context;
-        private Gs2RankingCategoryModelContext _categoryModelContext;
-        private Gs2RankingUserContext _userContext;
         private Gs2RankingRankingListFetcher _fetcher;
 
         public void Awake()
         {
-            _context = GetComponentInParent<Gs2RankingNamespaceContext>();
-            _categoryModelContext = GetComponentInParent<Gs2RankingCategoryModelContext>();
-            _userContext = GetComponentInParent<Gs2RankingUserContext>();
-            _fetcher = GetComponentInParent<Gs2RankingRankingListFetcher>();
-
-            if (_fetcher == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2RankingRankingListFetcher.");
+            if (this.prefab == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2RankingRankingContext Prefab.");
                 enabled = false;
+                return;
             }
 
-            _children = new List<Gs2RankingRankingContext>();
+            this._fetcher = GetComponent<Gs2RankingRankingListFetcher>() ?? GetComponentInParent<Gs2RankingRankingListFetcher>();
+            if (this._fetcher == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2RankingRankingListFetcher.");
+                enabled = false;
+                return;
+            }
+
+            this._children = new List<Gs2RankingRankingContext>();
             for (var i = 0; i < this.maximumItems; i++) {
                 var node = Instantiate(this.prefab, transform);
                 node.Ranking = Ranking.New(
-                    User.New(_context.Namespace, ""),
-                    this._categoryModelContext.CategoryModel,
+                    User.New(
+                        this._fetcher.Context.CategoryModel.Namespace,
+                        this._fetcher.Rankings[i].UserId
+                    ),
+                    this._fetcher.Context.CategoryModel,
                     0
                 );
                 node.gameObject.SetActive(false);
-                _children.Add(node);
+                this._children.Add(node);
             }
             this.prefab.gameObject.SetActive(false);
+        }
+
+        public virtual bool HasError()
+        {
+            if (this.prefab == null) {
+                return true;
+            }
+            this._fetcher = GetComponent<Gs2RankingRankingListFetcher>() ?? GetComponentInParent<Gs2RankingRankingListFetcher>(true);
+            if (this._fetcher == null) {
+                return true;
+            }
+            return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 

@@ -29,6 +29,7 @@
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Datastore.Fetcher;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.Localization.Components;
 using UnityEngine.Localization.SmartFormat.PersistentVariables;
 
@@ -41,36 +42,33 @@ namespace Gs2.Unity.UiKit.Gs2Datastore.Localization
     [AddComponentMenu("GS2 UIKit/Datastore/DataObject/View/Localization/Gs2DatastoreDataObjectLocalizationVariables")]
     public partial class Gs2DatastoreDataObjectLocalizationVariables : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched) {
-                target.StringReference["dataObjectId"] = new StringVariable {
-                    Value = _fetcher?.DataObject?.DataObjectId ?? "",
-                };
-                target.StringReference["name"] = new StringVariable {
-                    Value = _fetcher?.DataObject?.Name ?? "",
-                };
-                target.StringReference["userId"] = new StringVariable {
-                    Value = _fetcher?.DataObject?.UserId ?? "",
-                };
-                target.StringReference["scope"] = new StringVariable {
-                    Value = _fetcher?.DataObject?.Scope ?? "",
-                };
-                target.StringReference["status"] = new StringVariable {
-                    Value = _fetcher?.DataObject?.Status ?? "",
-                };
-                target.StringReference["generation"] = new StringVariable {
-                    Value = _fetcher?.DataObject?.Generation ?? "",
-                };
-                target.StringReference["createdAt"] = new LongVariable {
-                    Value = _fetcher?.DataObject?.CreatedAt ?? 0,
-                };
-                target.StringReference["updatedAt"] = new LongVariable {
-                    Value = _fetcher?.DataObject?.UpdatedAt ?? 0,
-                };
-                enabled = false;
-                target.enabled = true;
-            }
+            this.target.StringReference["dataObjectId"] = new StringVariable {
+                Value = _fetcher?.DataObject?.DataObjectId ?? "",
+            };
+            this.target.StringReference["name"] = new StringVariable {
+                Value = _fetcher?.DataObject?.Name ?? "",
+            };
+            this.target.StringReference["userId"] = new StringVariable {
+                Value = _fetcher?.DataObject?.UserId ?? "",
+            };
+            this.target.StringReference["scope"] = new StringVariable {
+                Value = _fetcher?.DataObject?.Scope ?? "",
+            };
+            this.target.StringReference["status"] = new StringVariable {
+                Value = _fetcher?.DataObject?.Status ?? "",
+            };
+            this.target.StringReference["generation"] = new StringVariable {
+                Value = _fetcher?.DataObject?.Generation ?? "",
+            };
+            this.target.StringReference["createdAt"] = new LongVariable {
+                Value = _fetcher?.DataObject?.CreatedAt ?? 0,
+            };
+            this.target.StringReference["updatedAt"] = new LongVariable {
+                Value = _fetcher?.DataObject?.UpdatedAt ?? 0,
+            };
+            this.target.enabled = true;
         }
     }
 
@@ -83,10 +81,10 @@ namespace Gs2.Unity.UiKit.Gs2Datastore.Localization
         private Gs2DatastoreOwnDataObjectFetcher _fetcher;
 
         public void Awake() {
-            target.enabled = false;
-            _fetcher = GetComponent<Gs2DatastoreOwnDataObjectFetcher>() ?? GetComponentInParent<Gs2DatastoreOwnDataObjectFetcher>();
+            this.target.enabled = false;
+            this._fetcher = GetComponent<Gs2DatastoreOwnDataObjectFetcher>() ?? GetComponentInParent<Gs2DatastoreOwnDataObjectFetcher>();
 
-            if (_fetcher == null) {
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2DatastoreDataObjectFetcher.");
                 enabled = false;
             }
@@ -94,11 +92,34 @@ namespace Gs2.Unity.UiKit.Gs2Datastore.Localization
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2DatastoreOwnDataObjectFetcher>() ?? GetComponentInParent<Gs2DatastoreOwnDataObjectFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2DatastoreOwnDataObjectFetcher>() ?? GetComponentInParent<Gs2DatastoreOwnDataObjectFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 

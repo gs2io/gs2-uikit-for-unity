@@ -40,26 +40,23 @@ namespace Gs2.Unity.UiKit.Gs2Ranking
 	[AddComponentMenu("GS2 UIKit/Ranking/Score/View/Label/Gs2RankingOwnScoreLabel")]
     public partial class Gs2RankingOwnScoreLabel : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched && _fetcher.Score != null)
-            {
-                onUpdate?.Invoke(
-                    format.Replace(
-                        "{categoryName}", $"{_fetcher?.Score?.CategoryName}"
-                    ).Replace(
-                        "{userId}", $"{_fetcher?.Score?.UserId}"
-                    ).Replace(
-                        "{uniqueId}", $"{_fetcher?.Score?.UniqueId}"
-                    ).Replace(
-                        "{scorerUserId}", $"{_fetcher?.Score?.ScorerUserId}"
-                    ).Replace(
-                        "{score}", $"{_fetcher?.Score?.Score}"
-                    ).Replace(
-                        "{metadata}", $"{_fetcher?.Score?.Metadata}"
-                    )
-                );
-            }
+            this.onUpdate?.Invoke(
+                this.format.Replace(
+                    "{categoryName}", $"{this._fetcher?.Score?.CategoryName}"
+                ).Replace(
+                    "{userId}", $"{this._fetcher?.Score?.UserId}"
+                ).Replace(
+                    "{uniqueId}", $"{this._fetcher?.Score?.UniqueId}"
+                ).Replace(
+                    "{scorerUserId}", $"{this._fetcher?.Score?.ScorerUserId}"
+                ).Replace(
+                    "{score}", $"{this._fetcher?.Score?.Score}"
+                ).Replace(
+                    "{metadata}", $"{this._fetcher?.Score?.Metadata}"
+                )
+            );
         }
     }
 
@@ -73,23 +70,43 @@ namespace Gs2.Unity.UiKit.Gs2Ranking
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2RankingOwnScoreFetcher>() ?? GetComponentInParent<Gs2RankingOwnScoreFetcher>();
-
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2RankingOwnScoreFetcher>() ?? GetComponentInParent<Gs2RankingOwnScoreFetcher>();
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2RankingOwnScoreFetcher.");
                 enabled = false;
             }
-
-            Update();
         }
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2RankingOwnScoreFetcher>() ?? GetComponentInParent<Gs2RankingOwnScoreFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2RankingOwnScoreFetcher>() ?? GetComponentInParent<Gs2RankingOwnScoreFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 
@@ -127,8 +144,8 @@ namespace Gs2.Unity.UiKit.Gs2Ranking
 
         public event UnityAction<string> OnUpdate
         {
-            add => onUpdate.AddListener(value);
-            remove => onUpdate.RemoveListener(value);
+            add => this.onUpdate.AddListener(value);
+            remove => this.onUpdate.RemoveListener(value);
         }
     }
 }

@@ -77,6 +77,7 @@ namespace Gs2.Unity.UiKit.Gs2Chat.Fetcher
                 {
                     Room = item;
                     Fetched = true;
+                    this.OnFetched.Invoke();
                 }
             );
 
@@ -90,18 +91,27 @@ namespace Gs2.Unity.UiKit.Gs2Chat.Fetcher
                 else {
                     Room = future.Result;
                     Fetched = true;
+                    this.OnFetched.Invoke();
+                    break;
                 }
             }
+        }
+
+        public void OnUpdateContext() {
+            OnDisable();
+            Awake();
+            OnEnable();
         }
 
         public void OnEnable()
         {
             StartCoroutine(nameof(Fetch));
+            Context.OnUpdate.AddListener(OnUpdateContext);
         }
 
         public void OnDisable()
         {
-            StopCoroutine(nameof(Fetch));
+            Context.OnUpdate.RemoveListener(OnUpdateContext);
 
             if (this._domain == null) {
                 return;
@@ -151,6 +161,7 @@ namespace Gs2.Unity.UiKit.Gs2Chat.Fetcher
     {
         public Gs2.Unity.Gs2Chat.Model.EzRoom Room { get; protected set; }
         public bool Fetched { get; protected set; }
+        public UnityEvent OnFetched = new UnityEvent();
     }
 
     /// <summary>

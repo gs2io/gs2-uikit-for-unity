@@ -29,6 +29,7 @@
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Enchant.Fetcher;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.Localization.Components;
 using UnityEngine.Localization.SmartFormat.PersistentVariables;
 
@@ -41,21 +42,18 @@ namespace Gs2.Unity.UiKit.Gs2Enchant.Localization
     [AddComponentMenu("GS2 UIKit/Enchant/RarityParameterModel/View/Localization/Gs2EnchantRarityParameterModelLocalizationVariables")]
     public partial class Gs2EnchantRarityParameterModelLocalizationVariables : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched) {
-                target.StringReference["name"] = new StringVariable {
-                    Value = _fetcher?.RarityParameterModel?.Name ?? "",
-                };
-                target.StringReference["metadata"] = new StringVariable {
-                    Value = _fetcher?.RarityParameterModel?.Metadata ?? "",
-                };
-                target.StringReference["maximumParameterCount"] = new IntVariable {
-                    Value = _fetcher?.RarityParameterModel?.MaximumParameterCount ?? 0,
-                };
-                enabled = false;
-                target.enabled = true;
-            }
+            this.target.StringReference["name"] = new StringVariable {
+                Value = _fetcher?.RarityParameterModel?.Name ?? "",
+            };
+            this.target.StringReference["metadata"] = new StringVariable {
+                Value = _fetcher?.RarityParameterModel?.Metadata ?? "",
+            };
+            this.target.StringReference["maximumParameterCount"] = new IntVariable {
+                Value = _fetcher?.RarityParameterModel?.MaximumParameterCount ?? 0,
+            };
+            this.target.enabled = true;
         }
     }
 
@@ -68,10 +66,10 @@ namespace Gs2.Unity.UiKit.Gs2Enchant.Localization
         private Gs2EnchantRarityParameterModelFetcher _fetcher;
 
         public void Awake() {
-            target.enabled = false;
-            _fetcher = GetComponent<Gs2EnchantRarityParameterModelFetcher>() ?? GetComponentInParent<Gs2EnchantRarityParameterModelFetcher>();
+            this.target.enabled = false;
+            this._fetcher = GetComponent<Gs2EnchantRarityParameterModelFetcher>() ?? GetComponentInParent<Gs2EnchantRarityParameterModelFetcher>();
 
-            if (_fetcher == null) {
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2EnchantRarityParameterModelFetcher.");
                 enabled = false;
             }
@@ -79,11 +77,34 @@ namespace Gs2.Unity.UiKit.Gs2Enchant.Localization
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2EnchantRarityParameterModelFetcher>() ?? GetComponentInParent<Gs2EnchantRarityParameterModelFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2EnchantRarityParameterModelFetcher>() ?? GetComponentInParent<Gs2EnchantRarityParameterModelFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 

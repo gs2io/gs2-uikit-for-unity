@@ -26,10 +26,12 @@
 
 #pragma warning disable CS0472
 
+using System;
 using System.Collections.Generic;
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Showcase.Fetcher;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2Showcase.Enabler
 {
@@ -37,32 +39,27 @@ namespace Gs2.Unity.UiKit.Gs2Showcase.Enabler
     /// Main
     /// </summary>
 
-	[AddComponentMenu("GS2 UIKit/Showcase/SalesItem/View/Enabler/Properties/Name/Gs2ShowcaseSalesItemNameEnabler")]
+	[AddComponentMenu("GS2 UIKit/Showcase/SalesItem/View/Enabler/Properties/Name/Gs2ShowcaseOwnSalesItemNameEnabler")]
     public partial class Gs2ShowcaseOwnSalesItemNameEnabler : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched && _fetcher.DisplayItem != null)
+            switch(this.expression)
             {
-                switch(expression)
-                {
-                    case Expression.In:
-                        target.SetActive(enableNames.Contains(_fetcher.DisplayItem.SalesItem.Name));
-                        break;
-                    case Expression.NotIn:
-                        target.SetActive(!enableNames.Contains(_fetcher.DisplayItem.SalesItem.Name));
-                        break;
-                    case Expression.StartsWith:
-                        target.SetActive(enableName.StartsWith(_fetcher.DisplayItem.SalesItem.Name));
-                        break;
-                    case Expression.EndsWith:
-                        target.SetActive(enableName.EndsWith(_fetcher.DisplayItem.SalesItem.Name));
-                        break;
-                }
-            }
-            else
-            {
-                target.SetActive(false);
+                case Expression.In:
+                    this.target.SetActive(this.enableNames.Contains(this._fetcher.DisplayItem.SalesItem.Name));
+                    break;
+                case Expression.NotIn:
+                    this.target.SetActive(!this.enableNames.Contains(this._fetcher.DisplayItem.SalesItem.Name));
+                    break;
+                case Expression.StartsWith:
+                    this.target.SetActive(this._fetcher.DisplayItem.SalesItem.Name.StartsWith(this.enableName));
+                    break;
+                case Expression.EndsWith:
+                    this.target.SetActive(this._fetcher.DisplayItem.SalesItem.Name.EndsWith(this.enableName));
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
         }
     }
@@ -83,22 +80,45 @@ namespace Gs2.Unity.UiKit.Gs2Showcase.Enabler
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ShowcaseOwnDisplayItemFetcher.");
                 enabled = false;
             }
-            if (target == null) {
+            if (this.target == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: target is not set.");
                 enabled = false;
             }
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
             _fetcher = GetComponent<Gs2ShowcaseOwnDisplayItemFetcher>() ?? GetComponentInParent<Gs2ShowcaseOwnDisplayItemFetcher>(true);
             if (_fetcher == null) {
                 return true;
             }
-            if (target == null) {
+            if (this.target == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 

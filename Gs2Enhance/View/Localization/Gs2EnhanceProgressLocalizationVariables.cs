@@ -29,6 +29,7 @@
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Enhance.Fetcher;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.Localization.Components;
 using UnityEngine.Localization.SmartFormat.PersistentVariables;
 
@@ -41,27 +42,24 @@ namespace Gs2.Unity.UiKit.Gs2Enhance.Localization
     [AddComponentMenu("GS2 UIKit/Enhance/Progress/View/Localization/Gs2EnhanceProgressLocalizationVariables")]
     public partial class Gs2EnhanceProgressLocalizationVariables : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched) {
-                target.StringReference["name"] = new StringVariable {
-                    Value = _fetcher?.Progress?.Name ?? "",
-                };
-                target.StringReference["rateName"] = new StringVariable {
-                    Value = _fetcher?.Progress?.RateName ?? "",
-                };
-                target.StringReference["propertyId"] = new StringVariable {
-                    Value = _fetcher?.Progress?.PropertyId ?? "",
-                };
-                target.StringReference["experienceValue"] = new LongVariable {
-                    Value = _fetcher?.Progress?.ExperienceValue ?? 0,
-                };
-                target.StringReference["rate"] = new FloatVariable {
-                    Value = _fetcher?.Progress?.Rate ?? 0,
-                };
-                enabled = false;
-                target.enabled = true;
-            }
+            this.target.StringReference["name"] = new StringVariable {
+                Value = _fetcher?.Progress?.Name ?? "",
+            };
+            this.target.StringReference["rateName"] = new StringVariable {
+                Value = _fetcher?.Progress?.RateName ?? "",
+            };
+            this.target.StringReference["propertyId"] = new StringVariable {
+                Value = _fetcher?.Progress?.PropertyId ?? "",
+            };
+            this.target.StringReference["experienceValue"] = new LongVariable {
+                Value = _fetcher?.Progress?.ExperienceValue ?? 0,
+            };
+            this.target.StringReference["rate"] = new FloatVariable {
+                Value = _fetcher?.Progress?.Rate ?? 0,
+            };
+            this.target.enabled = true;
         }
     }
 
@@ -74,10 +72,10 @@ namespace Gs2.Unity.UiKit.Gs2Enhance.Localization
         private Gs2EnhanceOwnProgressFetcher _fetcher;
 
         public void Awake() {
-            target.enabled = false;
-            _fetcher = GetComponent<Gs2EnhanceOwnProgressFetcher>() ?? GetComponentInParent<Gs2EnhanceOwnProgressFetcher>();
+            this.target.enabled = false;
+            this._fetcher = GetComponent<Gs2EnhanceOwnProgressFetcher>() ?? GetComponentInParent<Gs2EnhanceOwnProgressFetcher>();
 
-            if (_fetcher == null) {
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2EnhanceProgressFetcher.");
                 enabled = false;
             }
@@ -85,11 +83,34 @@ namespace Gs2.Unity.UiKit.Gs2Enhance.Localization
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2EnhanceOwnProgressFetcher>() ?? GetComponentInParent<Gs2EnhanceOwnProgressFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2EnhanceOwnProgressFetcher>() ?? GetComponentInParent<Gs2EnhanceOwnProgressFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 

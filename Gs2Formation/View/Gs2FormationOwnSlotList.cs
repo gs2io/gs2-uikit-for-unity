@@ -30,6 +30,7 @@ using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Formation.Context;
 using Gs2.Unity.UiKit.Gs2Formation.Fetcher;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2Formation
 {
@@ -42,17 +43,19 @@ namespace Gs2.Unity.UiKit.Gs2Formation
     {
         private List<Gs2FormationOwnSlotContext> _children;
 
-        public void Update() {
-            if (_fetcher.Fetched && this._fetcher.Slots != null) {
-                for (var i = 0; i < this.maximumItems; i++) {
-                    if (i < this._fetcher.Slots.Count) {
-                        _children[i].Slot.Form = this._fetcher.Context.Form;
-                        _children[i].Slot.slotName = this._fetcher.Slots[i].Name;
-                        _children[i].gameObject.SetActive(true);
-                    }
-                    else {
-                        _children[i].gameObject.SetActive(false);
-                    }
+        private void OnFetched() {
+            for (var i = 0; i < this._children.Count; i++) {
+                if (i < this._fetcher.Slots.Count) {
+                    this._children[i].SetOwnSlot(
+                        OwnSlot.New(
+                            this._fetcher.Context.Form,
+                            this._fetcher.Slots[i].Name
+                        )
+                    );
+                    this._children[i].gameObject.SetActive(true);
+                }
+                else {
+                    this._children[i].gameObject.SetActive(false);
                 }
             }
         }
@@ -65,37 +68,72 @@ namespace Gs2.Unity.UiKit.Gs2Formation
     public partial class Gs2FormationOwnSlotList
     {
         private Gs2FormationOwnSlotListFetcher _fetcher;
-        private Gs2FormationOwnFormContext Context => _fetcher.Context;
+
+        private void Initialize() {
+            for (var i = 0; i < this.maximumItems; i++) {
+                var node = Instantiate(this.prefab, transform);
+                node.Slot = OwnSlot.New(
+                    this._fetcher.Context.Form,
+                    ""
+                );
+                node.gameObject.SetActive(false);
+                this._children.Add(node);
+            }
+        }
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2FormationOwnSlotListFetcher>() ?? GetComponentInParent<Gs2FormationOwnSlotListFetcher>();
-
-            if (_fetcher == null) {
+            if (this.prefab == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2FormationOwnSlotContext Prefab.");
+                enabled = false;
+                return;
+            }
+            
+            this._fetcher = GetComponent<Gs2FormationOwnSlotListFetcher>() ?? GetComponentInParent<Gs2FormationOwnSlotListFetcher>();
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2FormationOwnSlotListFetcher.");
                 enabled = false;
             }
 
-            _children = new List<Gs2FormationOwnSlotContext>();
-            for (var i = 0; i < this.maximumItems; i++) {
-                var node = Instantiate(this.prefab, transform);
-                node.Slot = OwnSlot.New(
-                    _fetcher.Context.Form,
-                    ""
-                );
-                node.gameObject.SetActive(false);
-                _children.Add(node);
-            }
+            this._children = new List<Gs2FormationOwnSlotContext>();
             this.prefab.gameObject.SetActive(false);
+
+            Invoke(nameof(Initialize), 0);
         }
 
         public bool HasError()
         {
-            _fetcher = GetComponent<Gs2FormationOwnSlotListFetcher>() ?? GetComponentInParent<Gs2FormationOwnSlotListFetcher>(true);
-            if (_fetcher == null) {
+            if (this.prefab == null) {
+                return true;
+            }
+            this._fetcher = GetComponent<Gs2FormationOwnSlotListFetcher>() ?? GetComponentInParent<Gs2FormationOwnSlotListFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 

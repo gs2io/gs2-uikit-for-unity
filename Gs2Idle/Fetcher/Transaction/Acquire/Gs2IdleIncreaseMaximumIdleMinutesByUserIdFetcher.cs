@@ -34,7 +34,6 @@ using Gs2.Unity.Gs2Idle.ScriptableObject;
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Core.Fetcher;
 using Gs2.Unity.UiKit.Gs2Idle.Context;
-using Gs2.Unity.UiKit.Gs2Idle.Fetcher;
 using Gs2.Unity.Util;
 using Gs2.Util.LitJson;
 using UnityEngine;
@@ -49,41 +48,25 @@ namespace Gs2.Unity.UiKit.Gs2Idle.Fetcher
 	[AddComponentMenu("GS2 UIKit/Idle/Status/Fetcher/Acquire/Gs2IdleIncreaseMaximumIdleMinutesByUserIdFetcher")]
     public partial class Gs2IdleIncreaseMaximumIdleMinutesByUserIdFetcher : Gs2IdleOwnStatusContext
     {
-        private IEnumerator Fetch()
+        private void Fetch()
         {
-            while (true)
-            {
-                if (_fetcher != null) {
-                    var action = _fetcher.AcquireActions().FirstOrDefault(v => v.Action == "Gs2Idle:IncreaseMaximumIdleMinutesByUserId");
-                    if (action != null) {
-                        Request = IncreaseMaximumIdleMinutesByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
-                        if (Status == null || (
-                                Status.NamespaceName == Request.NamespaceName &&
-                                Status.CategoryName == Request.CategoryName)
-                           ) {
-                            Status = OwnStatus.New(
+            var action = _fetcher.AcquireActions().FirstOrDefault(v => v.Action == "Gs2Idle:IncreaseMaximumIdleMinutesByUserId");
+            if (action != null) {
+                Request = IncreaseMaximumIdleMinutesByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
+                if (Status == null || (
+                        Status.NamespaceName == Request.NamespaceName &&
+                        Status.CategoryName == Request.CategoryName)
+                   ) {
+                    Status = OwnStatus.New(
                                 Namespace.New(
                                     Request.NamespaceName
                                 ),
                                 Request.CategoryName
                             );
-                        }
-                        Fetched = true;
-                    }
                 }
-                yield return new WaitForSeconds(0.1f);
             }
-            // ReSharper disable once IteratorNeverReturns
-        }
-
-        public void OnEnable()
-        {
-            StartCoroutine(nameof(Fetch));
-        }
-
-        public void OnDisable()
-        {
-            StopCoroutine(nameof(Fetch));
+            Fetched = true;
+            this.OnFetched.Invoke();
         }
     }
 
@@ -101,9 +84,8 @@ namespace Gs2.Unity.UiKit.Gs2Idle.Fetcher
 
         public void Awake()
         {
-            _fetcher = GetComponent<IAcquireActionsFetcher>() ?? GetComponentInParent<IAcquireActionsFetcher>();
-
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<IAcquireActionsFetcher>() ?? GetComponentInParent<IAcquireActionsFetcher>();
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the IAcquireActionFetcher.");
                 enabled = false;
             }
@@ -111,11 +93,24 @@ namespace Gs2.Unity.UiKit.Gs2Idle.Fetcher
 
         public override bool HasError()
         {
-            _fetcher = GetComponent<IAcquireActionsFetcher>() ?? GetComponentInParent<IAcquireActionsFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<IAcquireActionsFetcher>() ?? GetComponentInParent<IAcquireActionsFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
             return false;
+        }
+
+        public void OnEnable()
+        {
+            this._fetcher.OnFetchedEvent().AddListener(Fetch);
+            if (this._fetcher.IsFetched()) {
+                Fetch();
+            }
+        }
+
+        public void OnDisable()
+        {
+            this._fetcher.OnFetchedEvent().RemoveListener(Fetch);
         }
     }
 
@@ -127,6 +122,7 @@ namespace Gs2.Unity.UiKit.Gs2Idle.Fetcher
     {
         public IncreaseMaximumIdleMinutesByUserIdRequest Request { get; protected set; }
         public bool Fetched { get; protected set; }
+        public UnityEvent OnFetched = new UnityEvent();
     }
 
     /// <summary>
@@ -143,13 +139,6 @@ namespace Gs2.Unity.UiKit.Gs2Idle.Fetcher
     /// </summary>
     public partial class Gs2IdleIncreaseMaximumIdleMinutesByUserIdFetcher
     {
-        [SerializeField]
-        internal ErrorEvent onError = new ErrorEvent();
 
-        public event UnityAction<Gs2Exception, Func<IEnumerator>> OnError
-        {
-            add => onError.AddListener(value);
-            remove => onError.RemoveListener(value);
-        }
     }
 }

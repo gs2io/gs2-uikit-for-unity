@@ -29,6 +29,7 @@
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Inventory.Fetcher;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.Localization.Components;
 using UnityEngine.Localization.SmartFormat.PersistentVariables;
 
@@ -41,27 +42,24 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Localization
     [AddComponentMenu("GS2 UIKit/Inventory/ItemModel/View/Localization/Gs2InventoryItemModelLocalizationVariables")]
     public partial class Gs2InventoryItemModelLocalizationVariables : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched) {
-                target.StringReference["name"] = new StringVariable {
-                    Value = _fetcher?.ItemModel?.Name ?? "",
-                };
-                target.StringReference["metadata"] = new StringVariable {
-                    Value = _fetcher?.ItemModel?.Metadata ?? "",
-                };
-                target.StringReference["stackingLimit"] = new LongVariable {
-                    Value = _fetcher?.ItemModel?.StackingLimit ?? 0,
-                };
-                target.StringReference["allowMultipleStacks"] = new BoolVariable {
-                    Value = _fetcher?.ItemModel?.AllowMultipleStacks ?? false,
-                };
-                target.StringReference["sortValue"] = new IntVariable {
-                    Value = _fetcher?.ItemModel?.SortValue ?? 0,
-                };
-                enabled = false;
-                target.enabled = true;
-            }
+            this.target.StringReference["name"] = new StringVariable {
+                Value = _fetcher?.ItemModel?.Name ?? "",
+            };
+            this.target.StringReference["metadata"] = new StringVariable {
+                Value = _fetcher?.ItemModel?.Metadata ?? "",
+            };
+            this.target.StringReference["stackingLimit"] = new LongVariable {
+                Value = _fetcher?.ItemModel?.StackingLimit ?? 0,
+            };
+            this.target.StringReference["allowMultipleStacks"] = new BoolVariable {
+                Value = _fetcher?.ItemModel?.AllowMultipleStacks ?? false,
+            };
+            this.target.StringReference["sortValue"] = new IntVariable {
+                Value = _fetcher?.ItemModel?.SortValue ?? 0,
+            };
+            this.target.enabled = true;
         }
     }
 
@@ -74,10 +72,10 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Localization
         private Gs2InventoryItemModelFetcher _fetcher;
 
         public void Awake() {
-            target.enabled = false;
-            _fetcher = GetComponent<Gs2InventoryItemModelFetcher>() ?? GetComponentInParent<Gs2InventoryItemModelFetcher>();
+            this.target.enabled = false;
+            this._fetcher = GetComponent<Gs2InventoryItemModelFetcher>() ?? GetComponentInParent<Gs2InventoryItemModelFetcher>();
 
-            if (_fetcher == null) {
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2InventoryItemModelFetcher.");
                 enabled = false;
             }
@@ -85,11 +83,34 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Localization
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2InventoryItemModelFetcher>() ?? GetComponentInParent<Gs2InventoryItemModelFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2InventoryItemModelFetcher>() ?? GetComponentInParent<Gs2InventoryItemModelFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 

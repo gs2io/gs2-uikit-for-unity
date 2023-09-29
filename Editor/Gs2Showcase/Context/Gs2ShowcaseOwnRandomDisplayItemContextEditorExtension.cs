@@ -43,8 +43,12 @@ namespace Gs2.Unity.UiKit.Gs2Showcase.Editor
             serializedObject.Update();
 
             if (original.RandomDisplayItem == null) {
-                if (original.GetComponentInParent<Gs2ShowcaseOwnRandomDisplayItemList>(true) != null) {
-                    EditorGUILayout.HelpBox("OwnRandomDisplayItem is auto assign from Gs2ShowcaseOwnRandomDisplayItemList.", MessageType.Info);
+                var list = original.GetComponentInParent<Gs2ShowcaseOwnRandomDisplayItemList>(true);
+                if (list != null) {
+                    EditorGUILayout.HelpBox("RandomDisplayItem is auto assign from Gs2ShowcaseOwnRandomDisplayItemList.", MessageType.Info);
+                    EditorGUI.BeginDisabledGroup(true);
+                    EditorGUILayout.ObjectField("List", list, typeof(Gs2ShowcaseOwnRandomDisplayItemList), false);
+                    EditorGUI.EndDisabledGroup();
                 }
                 else {
                     EditorGUILayout.HelpBox("OwnRandomDisplayItem not assigned.", MessageType.Error);

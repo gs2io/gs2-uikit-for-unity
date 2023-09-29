@@ -75,6 +75,7 @@ namespace Gs2.Unity.UiKit.Gs2Limit.Fetcher
                 {
                     Counter = item;
                     Fetched = true;
+                    this.OnFetched.Invoke();
                 }
             );
 
@@ -88,11 +89,10 @@ namespace Gs2.Unity.UiKit.Gs2Limit.Fetcher
                 else {
                     Counter = future.Result;
                     Fetched = true;
+                    this.OnFetched.Invoke();
                     break;
                 }
             }
-
-            this.OnFetched.Invoke();
         }
 
         public void OnUpdateContext() {
@@ -132,8 +132,6 @@ namespace Gs2.Unity.UiKit.Gs2Limit.Fetcher
     {
         public Gs2LimitOwnCounterContext Context { get; private set; }
 
-        public UnityEvent OnFetched = new UnityEvent();
-
         public void Awake()
         {
             Context = GetComponent<Gs2LimitOwnCounterContext>() ?? GetComponentInParent<Gs2LimitOwnCounterContext>();
@@ -161,6 +159,7 @@ namespace Gs2.Unity.UiKit.Gs2Limit.Fetcher
     {
         public Gs2.Unity.Gs2Limit.Model.EzCounter Counter { get; protected set; }
         public bool Fetched { get; protected set; }
+        public UnityEvent OnFetched = new UnityEvent();
     }
 
     /// <summary>

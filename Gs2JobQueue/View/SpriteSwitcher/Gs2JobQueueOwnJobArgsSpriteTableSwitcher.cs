@@ -41,19 +41,13 @@ namespace Gs2.Unity.UiKit.Gs2JobQueue.SpriteSwitcher
 	[AddComponentMenu("GS2 UIKit/JobQueue/Job/View/SpriteSwitcher/Properties/Args/Gs2JobQueueOwnJobArgsSpriteTableSwitcher")]
     public partial class Gs2JobQueueOwnJobArgsSpriteTableSwitcher : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched && _fetcher.Job != null)
-            {
-                if (sprites.Count(v => v.value == _fetcher.Job.Args) > 0) {
-                    this.onUpdate.Invoke(sprites.Find(v => v.value == _fetcher.Job.Args).sprite);
-                }
-                else {
-                    this.onUpdate.Invoke(defaultSprite);
-                }
+            if (this.sprites.Count(v => v.value == _fetcher.Job.Args) > 0) {
+                this.onUpdate.Invoke(this.sprites.Find(v => v.value == _fetcher.Job.Args).sprite);
             }
             else {
-                this.onUpdate.Invoke(defaultSprite);
+                this.onUpdate.Invoke(this.defaultSprite);
             }
         }
     }
@@ -68,13 +62,12 @@ namespace Gs2.Unity.UiKit.Gs2JobQueue.SpriteSwitcher
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2JobQueueOwnJobFetcher>() ?? GetComponentInParent<Gs2JobQueueOwnJobFetcher>();
-
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2JobQueueOwnJobFetcher>() ?? GetComponentInParent<Gs2JobQueueOwnJobFetcher>();
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2JobQueueOwnJobFetcher.");
                 enabled = false;
             }
-            if (sprites == null) {
+            if (this.sprites == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: sprite is not set.");
                 enabled = false;
             }
@@ -82,14 +75,37 @@ namespace Gs2.Unity.UiKit.Gs2JobQueue.SpriteSwitcher
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2JobQueueOwnJobFetcher>() ?? GetComponentInParent<Gs2JobQueueOwnJobFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2JobQueueOwnJobFetcher>() ?? GetComponentInParent<Gs2JobQueueOwnJobFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
-            if (sprites == null) {
+            if (this.sprites == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 

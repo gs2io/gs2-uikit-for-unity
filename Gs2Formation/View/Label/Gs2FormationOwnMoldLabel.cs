@@ -40,20 +40,17 @@ namespace Gs2.Unity.UiKit.Gs2Formation
 	[AddComponentMenu("GS2 UIKit/Formation/Mold/View/Label/Gs2FormationOwnMoldLabel")]
     public partial class Gs2FormationOwnMoldLabel : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched && _fetcher.Mold != null)
-            {
-                onUpdate?.Invoke(
-                    format.Replace(
-                        "{name}", $"{_fetcher?.Mold?.Name}"
-                    ).Replace(
-                        "{userId}", $"{_fetcher?.Mold?.UserId}"
-                    ).Replace(
-                        "{capacity}", $"{_fetcher?.Mold?.Capacity}"
-                    )
-                );
-            }
+            this.onUpdate?.Invoke(
+                this.format.Replace(
+                    "{name}", $"{this._fetcher?.Mold?.Name}"
+                ).Replace(
+                    "{userId}", $"{this._fetcher?.Mold?.UserId}"
+                ).Replace(
+                    "{capacity}", $"{this._fetcher?.Mold?.Capacity}"
+                )
+            );
         }
     }
 
@@ -67,23 +64,43 @@ namespace Gs2.Unity.UiKit.Gs2Formation
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2FormationOwnMoldFetcher>() ?? GetComponentInParent<Gs2FormationOwnMoldFetcher>();
-
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2FormationOwnMoldFetcher>() ?? GetComponentInParent<Gs2FormationOwnMoldFetcher>();
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2FormationOwnMoldFetcher.");
                 enabled = false;
             }
-
-            Update();
         }
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2FormationOwnMoldFetcher>() ?? GetComponentInParent<Gs2FormationOwnMoldFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2FormationOwnMoldFetcher>() ?? GetComponentInParent<Gs2FormationOwnMoldFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 
@@ -121,8 +138,8 @@ namespace Gs2.Unity.UiKit.Gs2Formation
 
         public event UnityAction<string> OnUpdate
         {
-            add => onUpdate.AddListener(value);
-            remove => onUpdate.RemoveListener(value);
+            add => this.onUpdate.AddListener(value);
+            remove => this.onUpdate.RemoveListener(value);
         }
     }
 }

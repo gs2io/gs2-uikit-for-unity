@@ -40,7 +40,7 @@ namespace Gs2.Unity.UiKit.Gs2Exchange.Context
     {
         public void Start() {
             if (RateModel == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: RateModel is not set in Gs2ExchangeRateModelContext.");
+                Debug.LogWarning($"{gameObject.GetFullPath()}: RateModel is not set in Gs2ExchangeRateModelContext.");
             }
         }
 
@@ -49,9 +49,7 @@ namespace Gs2.Unity.UiKit.Gs2Exchange.Context
                 if (GetComponentInParent<Gs2ExchangeRateModelList>(true) != null) {
                     return false;
                 }
-                else {
-                    return true;
-                }
+                return true;
             }
             return false;
         }

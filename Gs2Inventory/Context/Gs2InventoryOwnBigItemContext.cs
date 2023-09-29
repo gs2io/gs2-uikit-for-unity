@@ -39,9 +39,6 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Context
     public partial class Gs2InventoryOwnBigItemContext : Gs2InventoryBigItemModelContext
     {
         public new void Start() {
-            if (BigItem == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: BigItem is not set in Gs2InventoryOwnBigItemContext.");
-            }
         }
         public override bool HasError() {
             var hasError = base.HasError();
@@ -49,9 +46,10 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Context
                 if (GetComponentInParent<Gs2InventoryOwnBigItemList>(true) != null) {
                     return false;
                 }
-                else {
-                    return true;
+                if (GetComponentInParent<Gs2InventoryConvertBigItemModelToOwnBigItem>(true) != null) {
+                    return false;
                 }
+                return true;
             }
             return false;
         }

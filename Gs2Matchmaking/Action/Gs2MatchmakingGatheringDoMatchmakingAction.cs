@@ -50,13 +50,16 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking
     {
         private IEnumerator Process()
         {
-            yield return new WaitUntil(() => this._clientHolder.Initialized);
-            yield return new WaitUntil(() => this._gameSessionHolder.Initialized);
+            var clientHolder = Gs2ClientHolder.Instance;
+            var gameSessionHolder = Gs2GameSessionHolder.Instance;
+
+            yield return new WaitUntil(() => clientHolder.Initialized);
+            yield return new WaitUntil(() => gameSessionHolder.Initialized);
             
-            var domain = this._clientHolder.Gs2.Matchmaking.Namespace(
+            var domain = clientHolder.Gs2.Matchmaking.Namespace(
                 this._context.Gathering.NamespaceName
             ).Me(
-                this._gameSessionHolder.GameSession
+                gameSessionHolder.GameSession
             );
             var items = domain.DoMatchmaking(
                   Player
@@ -82,23 +85,18 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking
 
     public partial class Gs2MatchmakingGatheringDoMatchmakingAction
     {
-        private Gs2ClientHolder _clientHolder;
-        private Gs2GameSessionHolder _gameSessionHolder;
         private Gs2MatchmakingGatheringContext _context;
 
         public void Awake()
         {
-            this._clientHolder = Gs2ClientHolder.Instance;
-            this._gameSessionHolder = Gs2GameSessionHolder.Instance;
             this._context = GetComponent<Gs2MatchmakingGatheringContext>() ?? GetComponentInParent<Gs2MatchmakingGatheringContext>();
-
             if (_context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MatchmakingGatheringContext.");
                 enabled = false;
             }
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
             this._context = GetComponent<Gs2MatchmakingGatheringContext>() ?? GetComponentInParent<Gs2MatchmakingGatheringContext>(true);
             if (_context == null) {
@@ -122,17 +120,20 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking
     /// </summary>
     public partial class Gs2MatchmakingGatheringDoMatchmakingAction
     {
+        public bool WaitAsyncProcessComplete;
         public Gs2.Unity.Gs2Matchmaking.Model.EzPlayer Player;
         public string MatchmakingContextToken;
 
         public void SetPlayer(Gs2.Unity.Gs2Matchmaking.Model.EzPlayer value) {
-            Player = value;
-            this.onChangePlayer.Invoke(Player);
+            this.Player = value;
+            this.onChangePlayer.Invoke(this.Player);
+            this.OnChange.Invoke();
         }
 
         public void SetMatchmakingContextToken(string value) {
-            MatchmakingContextToken = value;
-            this.onChangeMatchmakingContextToken.Invoke(MatchmakingContextToken);
+            this.MatchmakingContextToken = value;
+            this.onChangeMatchmakingContextToken.Invoke(this.MatchmakingContextToken);
+            this.OnChange.Invoke();
         }
     }
 
@@ -183,6 +184,8 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking
             add => this.onDoMatchmakingComplete.AddListener(value);
             remove => this.onDoMatchmakingComplete.RemoveListener(value);
         }
+
+        public UnityEvent OnChange = new UnityEvent();
 
         [SerializeField]
         internal ErrorEvent onError = new ErrorEvent();

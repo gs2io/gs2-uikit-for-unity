@@ -50,13 +50,16 @@ namespace Gs2.Unity.UiKit.Gs2Exchange
     {
         private IEnumerator Process()
         {
-            yield return new WaitUntil(() => this._clientHolder.Initialized);
-            yield return new WaitUntil(() => this._gameSessionHolder.Initialized);
+            var clientHolder = Gs2ClientHolder.Instance;
+            var gameSessionHolder = Gs2GameSessionHolder.Instance;
+
+            yield return new WaitUntil(() => clientHolder.Initialized);
+            yield return new WaitUntil(() => gameSessionHolder.Initialized);
             
-            var domain = this._clientHolder.Gs2.Exchange.Namespace(
+            var domain = clientHolder.Gs2.Exchange.Namespace(
                 this._context.RateModel.NamespaceName
             ).Me(
-                this._gameSessionHolder.GameSession
+                gameSessionHolder.GameSession
             ).Exchange(
             );
             var future = domain.Exchange(
@@ -113,16 +116,11 @@ namespace Gs2.Unity.UiKit.Gs2Exchange
 
     public partial class Gs2ExchangeExchangeExchangeAction
     {
-        private Gs2ClientHolder _clientHolder;
-        private Gs2GameSessionHolder _gameSessionHolder;
         private Gs2ExchangeRateModelContext _context;
 
         public void Awake()
         {
-            this._clientHolder = Gs2ClientHolder.Instance;
-            this._gameSessionHolder = Gs2GameSessionHolder.Instance;
-            this._context = GetComponentInParent<Gs2ExchangeRateModelContext>();
-
+            this._context = GetComponent<Gs2ExchangeRateModelContext>() ?? GetComponentInParent<Gs2ExchangeRateModelContext>();
             if (_context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ExchangeRateModelContext.");
                 enabled = false;
@@ -154,27 +152,38 @@ namespace Gs2.Unity.UiKit.Gs2Exchange
     public partial class Gs2ExchangeExchangeExchangeAction
     {
         public bool WaitAsyncProcessComplete;
+        public string RateName;
         public int Count;
         public List<Gs2.Unity.Gs2Exchange.Model.EzConfig> Config;
 
+        public void SetRateName(string value) {
+            this.RateName = value;
+            this.onChangeRateName.Invoke(this.RateName);
+            this.OnChange.Invoke();
+        }
+
         public void SetCount(int value) {
-            Count = value;
-            this.onChangeCount.Invoke(Count);
+            this.Count = value;
+            this.onChangeCount.Invoke(this.Count);
+            this.OnChange.Invoke();
         }
 
         public void DecreaseCount() {
-            Count -= 1;
-            this.onChangeCount.Invoke(Count);
+            this.Count -= 1;
+            this.onChangeCount.Invoke(this.Count);
+            this.OnChange.Invoke();
         }
 
         public void IncreaseCount() {
-            Count += 1;
-            this.onChangeCount.Invoke(Count);
+            this.Count += 1;
+            this.onChangeCount.Invoke(this.Count);
+            this.OnChange.Invoke();
         }
 
         public void SetConfig(List<Gs2.Unity.Gs2Exchange.Model.EzConfig> value) {
-            Config = value;
-            this.onChangeConfig.Invoke(Config);
+            this.Config = value;
+            this.onChangeConfig.Invoke(this.Config);
+            this.OnChange.Invoke();
         }
     }
 
@@ -239,6 +248,8 @@ namespace Gs2.Unity.UiKit.Gs2Exchange
             add => this.onExchangeComplete.AddListener(value);
             remove => this.onExchangeComplete.RemoveListener(value);
         }
+
+        public UnityEvent OnChange = new UnityEvent();
 
         [SerializeField]
         internal ErrorEvent onError = new ErrorEvent();

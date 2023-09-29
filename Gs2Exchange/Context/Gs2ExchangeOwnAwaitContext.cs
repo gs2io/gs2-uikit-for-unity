@@ -40,7 +40,7 @@ namespace Gs2.Unity.UiKit.Gs2Exchange.Context
     {
         public void Start() {
             if (Await_ == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Await_ is not set in Gs2ExchangeOwnAwaitContext.");
+                Debug.LogWarning($"{gameObject.GetFullPath()}: Await_ is not set in Gs2ExchangeOwnAwaitContext.");
             }
         }
         public virtual bool HasError() {
@@ -48,9 +48,7 @@ namespace Gs2.Unity.UiKit.Gs2Exchange.Context
                 if (GetComponentInParent<Gs2ExchangeOwnAwaitList>(true) != null) {
                     return false;
                 }
-                else {
-                    return true;
-                }
+                return true;
             }
             return false;
         }

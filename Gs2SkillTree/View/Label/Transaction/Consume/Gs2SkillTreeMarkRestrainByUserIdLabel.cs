@@ -42,48 +42,47 @@ namespace Gs2.Unity.UiKit.Gs2SkillTree.Label
 	[AddComponentMenu("GS2 UIKit/SkillTree/Status/View/Label/Transaction/Gs2SkillTreeMarkRestrainByUserIdLabel")]
     public partial class Gs2SkillTreeMarkRestrainByUserIdLabel : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched && _fetcher.Request != null &&
-                    _userDataFetcher != null && _userDataFetcher.Fetched && _userDataFetcher.Status != null) {
-                {
-                    onUpdate?.Invoke(
-                        format.Replace(
-                            "{namespaceName}",
-                            $"{_fetcher.Request.NamespaceName}"
-                        ).Replace(
-                            "{userId}",
-                            $"{_fetcher.Request.UserId}"
-                        ).Replace(
-                            "{nodeModelNames}",
-                            $"{_fetcher.Request.NodeModelNames}"
-                        ).Replace(
-                            "{userData:statusId}",
-                            $"{_userDataFetcher.Status.StatusId}"
-                        ).Replace(
-                            "{userData:userId}",
-                            $"{_userDataFetcher.Status.UserId}"
-                        ).Replace(
-                            "{userData:releasedNodeNames}",
-                            $"{_userDataFetcher.Status.ReleasedNodeNames}"
-                        )
-                    );
-                }
-            } else if (_fetcher.Fetched && _fetcher.Request != null) {
-                {
-                    onUpdate?.Invoke(
-                        format.Replace(
-                            "{namespaceName}",
-                            $"{_fetcher.Request.NamespaceName}"
-                        ).Replace(
-                            "{userId}",
-                            $"{_fetcher.Request.UserId}"
-                        ).Replace(
-                            "{nodeModelNames}",
-                            $"{_fetcher.Request.NodeModelNames}"
-                        )
-                    );
-                }
+            if ((!this._fetcher?.Fetched ?? false) || this._fetcher.Request == null) {
+                return;
+            }
+            if (this._userDataFetcher?.Fetched ?? false)
+            {
+                this.onUpdate?.Invoke(
+                    this.format.Replace(
+                        "{namespaceName}",
+                        $"{this._fetcher.Request.NamespaceName}"
+                    ).Replace(
+                        "{userId}",
+                        $"{this._fetcher.Request.UserId}"
+                    ).Replace(
+                        "{nodeModelNames}",
+                        $"{this._fetcher.Request.NodeModelNames}"
+                    ).Replace(
+                        "{userData:statusId}",
+                        $"{this._userDataFetcher.Status.StatusId}"
+                    ).Replace(
+                        "{userData:userId}",
+                        $"{this._userDataFetcher.Status.UserId}"
+                    ).Replace(
+                        "{userData:releasedNodeNames}",
+                        $"{this._userDataFetcher.Status.ReleasedNodeNames}"
+                    )
+                );
+            } else {
+                this.onUpdate?.Invoke(
+                    this.format.Replace(
+                        "{namespaceName}",
+                        $"{this._fetcher.Request.NamespaceName}"
+                    ).Replace(
+                        "{userId}",
+                        $"{this._fetcher.Request.UserId}"
+                    ).Replace(
+                        "{nodeModelNames}",
+                        $"{this._fetcher.Request.NodeModelNames}"
+                    )
+                );
             }
         }
     }
@@ -99,25 +98,52 @@ namespace Gs2.Unity.UiKit.Gs2SkillTree.Label
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2SkillTreeMarkRestrainByUserIdFetcher>() ?? GetComponentInParent<Gs2SkillTreeMarkRestrainByUserIdFetcher>();
-            _userDataFetcher = GetComponent<Gs2SkillTreeOwnStatusFetcher>() ?? GetComponentInParent<Gs2SkillTreeOwnStatusFetcher>();
-
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2SkillTreeMarkRestrainByUserIdFetcher>() ?? GetComponentInParent<Gs2SkillTreeMarkRestrainByUserIdFetcher>();
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2SkillTreeMarkRestrainByUserIdFetcher.");
                 enabled = false;
             }
-
-            Update();
+            this._userDataFetcher = GetComponent<Gs2SkillTreeOwnStatusFetcher>() ?? GetComponentInParent<Gs2SkillTreeOwnStatusFetcher>();
         }
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2SkillTreeMarkRestrainByUserIdFetcher>() ?? GetComponentInParent<Gs2SkillTreeMarkRestrainByUserIdFetcher>(true);
-            _userDataFetcher = GetComponent<Gs2SkillTreeOwnStatusFetcher>() ?? GetComponentInParent<Gs2SkillTreeOwnStatusFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2SkillTreeMarkRestrainByUserIdFetcher>() ?? GetComponentInParent<Gs2SkillTreeMarkRestrainByUserIdFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+            if (this._userDataFetcher != null) {
+                this._userDataFetcher.OnFetched.AddListener(this._onFetched);
+                if (this._userDataFetcher.Fetched) {
+                    OnFetched();
+                }
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                if (this._userDataFetcher != null) {
+                    this._userDataFetcher.OnFetched.RemoveListener(this._onFetched);
+                }
+                this._onFetched = null;
+            }
         }
     }
 
@@ -155,8 +181,8 @@ namespace Gs2.Unity.UiKit.Gs2SkillTree.Label
 
         public event UnityAction<string> OnUpdate
         {
-            add => onUpdate.AddListener(value);
-            remove => onUpdate.RemoveListener(value);
+            add => this.onUpdate.AddListener(value);
+            remove => this.onUpdate.RemoveListener(value);
         }
     }
 }

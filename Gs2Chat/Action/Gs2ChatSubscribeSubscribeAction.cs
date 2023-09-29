@@ -48,13 +48,16 @@ namespace Gs2.Unity.UiKit.Gs2Chat
     {
         private IEnumerator Process()
         {
-            yield return new WaitUntil(() => this._clientHolder.Initialized);
-            yield return new WaitUntil(() => this._gameSessionHolder.Initialized);
+            var clientHolder = Gs2ClientHolder.Instance;
+            var gameSessionHolder = Gs2GameSessionHolder.Instance;
+
+            yield return new WaitUntil(() => clientHolder.Initialized);
+            yield return new WaitUntil(() => gameSessionHolder.Initialized);
             
-            var domain = this._clientHolder.Gs2.Chat.Namespace(
+            var domain = clientHolder.Gs2.Chat.Namespace(
                 this._context.Subscribe.NamespaceName
             ).Me(
-                this._gameSessionHolder.GameSession
+                gameSessionHolder.GameSession
             ).Subscribe(
                 this._context.Subscribe.RoomName
             );
@@ -121,16 +124,11 @@ namespace Gs2.Unity.UiKit.Gs2Chat
 
     public partial class Gs2ChatSubscribeSubscribeAction
     {
-        private Gs2ClientHolder _clientHolder;
-        private Gs2GameSessionHolder _gameSessionHolder;
         private Gs2ChatOwnSubscribeContext _context;
 
         public void Awake()
         {
-            this._clientHolder = Gs2ClientHolder.Instance;
-            this._gameSessionHolder = Gs2GameSessionHolder.Instance;
             this._context = GetComponent<Gs2ChatOwnSubscribeContext>() ?? GetComponentInParent<Gs2ChatOwnSubscribeContext>();
-
             if (_context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ChatOwnSubscribeContext.");
                 enabled = false;
@@ -165,8 +163,9 @@ namespace Gs2.Unity.UiKit.Gs2Chat
         public List<Gs2.Unity.Gs2Chat.Model.EzNotificationType> NotificationTypes;
 
         public void SetNotificationTypes(List<Gs2.Unity.Gs2Chat.Model.EzNotificationType> value) {
-            NotificationTypes = value;
-            this.onChangeNotificationTypes.Invoke(NotificationTypes);
+            this.NotificationTypes = value;
+            this.onChangeNotificationTypes.Invoke(this.NotificationTypes);
+            this.OnChange.Invoke();
         }
     }
 
@@ -203,6 +202,8 @@ namespace Gs2.Unity.UiKit.Gs2Chat
             add => this.onSubscribeComplete.AddListener(value);
             remove => this.onSubscribeComplete.RemoveListener(value);
         }
+
+        public UnityEvent OnChange = new UnityEvent();
 
         [SerializeField]
         internal ErrorEvent onError = new ErrorEvent();

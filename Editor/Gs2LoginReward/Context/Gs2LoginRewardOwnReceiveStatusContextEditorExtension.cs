@@ -43,8 +43,12 @@ namespace Gs2.Unity.UiKit.Gs2LoginReward.Editor
             serializedObject.Update();
 
             if (original.ReceiveStatus == null) {
-                if (original.GetComponentInParent<Gs2LoginRewardOwnReceiveStatusList>(true) != null) {
-                    EditorGUILayout.HelpBox("OwnReceiveStatus is auto assign from Gs2LoginRewardOwnReceiveStatusList.", MessageType.Info);
+                var list = original.GetComponentInParent<Gs2LoginRewardOwnReceiveStatusList>(true);
+                if (list != null) {
+                    EditorGUILayout.HelpBox("ReceiveStatus is auto assign from Gs2LoginRewardOwnReceiveStatusList.", MessageType.Info);
+                    EditorGUI.BeginDisabledGroup(true);
+                    EditorGUILayout.ObjectField("List", list, typeof(Gs2LoginRewardOwnReceiveStatusList), false);
+                    EditorGUI.EndDisabledGroup();
                 }
                 else {
                     EditorGUILayout.HelpBox("OwnReceiveStatus not assigned.", MessageType.Error);

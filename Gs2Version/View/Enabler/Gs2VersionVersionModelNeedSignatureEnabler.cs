@@ -24,10 +24,12 @@
 
 #pragma warning disable CS0472
 
+using System;
 using System.Collections.Generic;
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Version.Fetcher;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2Version
 {
@@ -38,23 +40,18 @@ namespace Gs2.Unity.UiKit.Gs2Version
 	[AddComponentMenu("GS2 UIKit/Version/VersionModel/View/Enabler/Properties/NeedSignature/Gs2VersionVersionModelNeedSignatureEnabler")]
     public partial class Gs2VersionVersionModelNeedSignatureEnabler : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched && _fetcher.VersionModel != null)
+            switch(this.expression)
             {
-                switch(expression)
-                {
-                    case Expression.True:
-                        target.SetActive(_fetcher.VersionModel.NeedSignature);
-                        break;
-                    case Expression.False:
-                        target.SetActive(!_fetcher.VersionModel.NeedSignature);
-                        break;
-                }
-            }
-            else
-            {
-                target.SetActive(false);
+                case Expression.True:
+                    this.target.SetActive(this._fetcher.VersionModel.NeedSignature);
+                    break;
+                case Expression.False:
+                    this.target.SetActive(!this._fetcher.VersionModel.NeedSignature);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
         }
     }
@@ -69,13 +66,12 @@ namespace Gs2.Unity.UiKit.Gs2Version
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2VersionVersionModelFetcher>() ?? GetComponentInParent<Gs2VersionVersionModelFetcher>();
-
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2VersionVersionModelFetcher>() ?? GetComponentInParent<Gs2VersionVersionModelFetcher>();
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2VersionVersionModelFetcher.");
                 enabled = false;
             }
-            if (target == null) {
+            if (this.target == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: target is not set.");
                 enabled = false;
             }
@@ -83,14 +79,37 @@ namespace Gs2.Unity.UiKit.Gs2Version
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2VersionVersionModelFetcher>() ?? GetComponentInParent<Gs2VersionVersionModelFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2VersionVersionModelFetcher>() ?? GetComponentInParent<Gs2VersionVersionModelFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
-            if (target == null) {
+            if (this.target == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 

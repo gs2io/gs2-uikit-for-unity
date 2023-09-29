@@ -40,24 +40,21 @@ namespace Gs2.Unity.UiKit.Gs2Quest
 	[AddComponentMenu("GS2 UIKit/Quest/Progress/View/Label/Gs2QuestOwnProgressLabel")]
     public partial class Gs2QuestOwnProgressLabel : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched && _fetcher.Progress != null)
-            {
-                onUpdate?.Invoke(
-                    format.Replace(
-                        "{progressId}", $"{_fetcher?.Progress?.ProgressId}"
-                    ).Replace(
-                        "{transactionId}", $"{_fetcher?.Progress?.TransactionId}"
-                    ).Replace(
-                        "{questModelId}", $"{_fetcher?.Progress?.QuestModelId}"
-                    ).Replace(
-                        "{randomSeed}", $"{_fetcher?.Progress?.RandomSeed}"
-                    ).Replace(
-                        "{rewards}", $"{_fetcher?.Progress?.Rewards}"
-                    )
-                );
-            }
+            this.onUpdate?.Invoke(
+                this.format.Replace(
+                    "{progressId}", $"{this._fetcher?.Progress?.ProgressId}"
+                ).Replace(
+                    "{transactionId}", $"{this._fetcher?.Progress?.TransactionId}"
+                ).Replace(
+                    "{questModelId}", $"{this._fetcher?.Progress?.QuestModelId}"
+                ).Replace(
+                    "{randomSeed}", $"{this._fetcher?.Progress?.RandomSeed}"
+                ).Replace(
+                    "{rewards}", $"{this._fetcher?.Progress?.Rewards}"
+                )
+            );
         }
     }
 
@@ -71,23 +68,43 @@ namespace Gs2.Unity.UiKit.Gs2Quest
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2QuestOwnProgressFetcher>() ?? GetComponentInParent<Gs2QuestOwnProgressFetcher>();
-
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2QuestOwnProgressFetcher>() ?? GetComponentInParent<Gs2QuestOwnProgressFetcher>();
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2QuestOwnProgressFetcher.");
                 enabled = false;
             }
-
-            Update();
         }
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2QuestOwnProgressFetcher>() ?? GetComponentInParent<Gs2QuestOwnProgressFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2QuestOwnProgressFetcher>() ?? GetComponentInParent<Gs2QuestOwnProgressFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 
@@ -125,8 +142,8 @@ namespace Gs2.Unity.UiKit.Gs2Quest
 
         public event UnityAction<string> OnUpdate
         {
-            add => onUpdate.AddListener(value);
-            remove => onUpdate.RemoveListener(value);
+            add => this.onUpdate.AddListener(value);
+            remove => this.onUpdate.RemoveListener(value);
         }
     }
 }

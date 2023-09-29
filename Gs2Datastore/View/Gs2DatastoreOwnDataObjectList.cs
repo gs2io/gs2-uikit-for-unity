@@ -30,6 +30,7 @@ using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Datastore.Context;
 using Gs2.Unity.UiKit.Gs2Datastore.Fetcher;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2Datastore
 {
@@ -43,18 +44,18 @@ namespace Gs2.Unity.UiKit.Gs2Datastore
         private List<Gs2DatastoreOwnDataObjectContext> _children;
 
         public void OnFetched() {
-            for (var i = 0; i < this.maximumItems; i++) {
+            for (var i = 0; i < this._children.Count; i++) {
                 if (i < this._fetcher.DataObjects.Count) {
-                    _children[i].SetOwnDataObject(
+                    this._children[i].SetOwnDataObject(
                         OwnDataObject.New(
-                                this._fetcher.Context.Namespace,
-                                this._fetcher.DataObjects[i].Name
-                            )
+                            this._fetcher.Context.Namespace,
+                            this._fetcher.DataObjects[i].Name
+                        )
                     );
-                    _children[i].gameObject.SetActive(true);
+                    this._children[i].gameObject.SetActive(true);
                 }
                 else {
-                    _children[i].gameObject.SetActive(false);
+                    this._children[i].gameObject.SetActive(false);
                 }
             }
         }
@@ -68,47 +69,71 @@ namespace Gs2.Unity.UiKit.Gs2Datastore
     {
         private Gs2DatastoreOwnDataObjectListFetcher _fetcher;
 
+        private void Initialize() {
+            for (var i = 0; i < this.maximumItems; i++) {
+                var node = Instantiate(this.prefab, transform);
+                node.DataObject = OwnDataObject.New(
+                    this._fetcher.Context.Namespace,
+                    ""
+                );
+                node.gameObject.SetActive(false);
+                this._children.Add(node);
+            }
+        }
+
         public void Awake()
         {
-            if (prefab == null) {
+            if (this.prefab == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2DatastoreOwnDataObjectContext Prefab.");
                 enabled = false;
                 return;
             }
 
-            _fetcher = GetComponent<Gs2DatastoreOwnDataObjectListFetcher>() ?? GetComponentInParent<Gs2DatastoreOwnDataObjectListFetcher>();
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2DatastoreOwnDataObjectListFetcher>() ?? GetComponentInParent<Gs2DatastoreOwnDataObjectListFetcher>();
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2DatastoreOwnDataObjectListFetcher.");
                 enabled = false;
             }
 
-            var context = GetComponent<Gs2DatastoreNamespaceContext>() ?? GetComponentInParent<Gs2DatastoreNamespaceContext>(true);
-            if (context == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2DatastoreOwnDataObjectListFetcher::Context.");
-                enabled = false;
-                return;
-            }
-
-            _children = new List<Gs2DatastoreOwnDataObjectContext>();
-            for (var i = 0; i < this.maximumItems; i++) {
-                var node = Instantiate(this.prefab, transform);
-                node.DataObject = OwnDataObject.New(
-                    context.Namespace,
-                    ""
-                );
-                node.gameObject.SetActive(false);
-                _children.Add(node);
-            }
+            this._children = new List<Gs2DatastoreOwnDataObjectContext>();
             this.prefab.gameObject.SetActive(false);
+
+            Invoke(nameof(Initialize), 0);
         }
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2DatastoreOwnDataObjectListFetcher>() ?? GetComponentInParent<Gs2DatastoreOwnDataObjectListFetcher>(true);
-            if (_fetcher == null) {
+            if (this.prefab == null) {
+                return true;
+            }
+            this._fetcher = GetComponent<Gs2DatastoreOwnDataObjectListFetcher>() ?? GetComponentInParent<Gs2DatastoreOwnDataObjectListFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 
@@ -118,16 +143,6 @@ namespace Gs2.Unity.UiKit.Gs2Datastore
 
     public partial class Gs2DatastoreOwnDataObjectList
     {
-
-        public void OnEnable()
-        {
-            _fetcher.OnFetched.AddListener(OnFetched);
-        }
-
-        public void OnDisable()
-        {
-            _fetcher.OnFetched.RemoveListener(OnFetched);
-        }
 
     }
 

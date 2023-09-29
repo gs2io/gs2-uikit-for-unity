@@ -42,23 +42,24 @@ namespace Gs2.Unity.UiKit.Gs2Money.Label
 	[AddComponentMenu("GS2 UIKit/Money/Receipt/View/Label/Transaction/Gs2MoneyRevertRecordReceiptLabel")]
     public partial class Gs2MoneyRevertRecordReceiptLabel : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched && _fetcher.Request != null) {
-                {
-                    onUpdate?.Invoke(
-                        format.Replace(
-                            "{namespaceName}",
-                            $"{_fetcher.Request.NamespaceName}"
-                        ).Replace(
-                            "{userId}",
-                            $"{_fetcher.Request.UserId}"
-                        ).Replace(
-                            "{receipt}",
-                            $"{_fetcher.Request.Receipt}"
-                        )
-                    );
-                }
+            if ((!this._fetcher?.Fetched ?? false) || this._fetcher.Request == null) {
+                return;
+            }
+            {
+                this.onUpdate?.Invoke(
+                    this.format.Replace(
+                        "{namespaceName}",
+                        $"{this._fetcher.Request.NamespaceName}"
+                    ).Replace(
+                        "{userId}",
+                        $"{this._fetcher.Request.UserId}"
+                    ).Replace(
+                        "{receipt}",
+                        $"{this._fetcher.Request.Receipt}"
+                    )
+                );
             }
         }
     }
@@ -73,23 +74,42 @@ namespace Gs2.Unity.UiKit.Gs2Money.Label
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2MoneyRevertRecordReceiptFetcher>() ?? GetComponentInParent<Gs2MoneyRevertRecordReceiptFetcher>();
-
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2MoneyRevertRecordReceiptFetcher>() ?? GetComponentInParent<Gs2MoneyRevertRecordReceiptFetcher>();
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MoneyRevertRecordReceiptFetcher.");
                 enabled = false;
             }
-
-            Update();
         }
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2MoneyRevertRecordReceiptFetcher>() ?? GetComponentInParent<Gs2MoneyRevertRecordReceiptFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2MoneyRevertRecordReceiptFetcher>() ?? GetComponentInParent<Gs2MoneyRevertRecordReceiptFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 
@@ -127,8 +147,8 @@ namespace Gs2.Unity.UiKit.Gs2Money.Label
 
         public event UnityAction<string> OnUpdate
         {
-            add => onUpdate.AddListener(value);
-            remove => onUpdate.RemoveListener(value);
+            add => this.onUpdate.AddListener(value);
+            remove => this.onUpdate.RemoveListener(value);
         }
     }
 }

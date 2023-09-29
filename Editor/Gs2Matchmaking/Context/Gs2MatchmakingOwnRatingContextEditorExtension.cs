@@ -43,8 +43,18 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking.Editor
             serializedObject.Update();
 
             if (original.Rating == null) {
-                if (original.GetComponentInParent<Gs2MatchmakingOwnRatingList>(true) != null) {
-                    EditorGUILayout.HelpBox("OwnRating is auto assign from Gs2MatchmakingOwnRatingList.", MessageType.Info);
+                var list = original.GetComponentInParent<Gs2MatchmakingOwnRatingList>(true);
+                if (list != null) {
+                    EditorGUILayout.HelpBox("Rating is auto assign from Gs2MatchmakingOwnRatingList.", MessageType.Info);
+                    EditorGUI.BeginDisabledGroup(true);
+                    EditorGUILayout.ObjectField("List", list, typeof(Gs2MatchmakingOwnRatingList), false);
+                    EditorGUI.EndDisabledGroup();
+                }
+                else if (original.GetComponentInParent<Gs2MatchmakingConvertRatingModelToOwnRating>(true) != null) {
+                    EditorGUILayout.HelpBox("Rating is auto assign from Gs2MatchmakingConvertRatingModelToOwnRating.", MessageType.Info);
+                    EditorGUI.BeginDisabledGroup(true);
+                    EditorGUILayout.ObjectField("Converter", original.GetComponentInParent<Gs2MatchmakingConvertRatingModelToOwnRating>(true), typeof(Gs2MatchmakingConvertRatingModelToOwnRating), false);
+                    EditorGUI.EndDisabledGroup();
                 }
                 else {
                     EditorGUILayout.HelpBox("OwnRating not assigned.", MessageType.Error);

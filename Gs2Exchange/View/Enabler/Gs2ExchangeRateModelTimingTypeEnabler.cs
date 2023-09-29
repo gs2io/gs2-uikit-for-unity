@@ -24,10 +24,12 @@
 
 #pragma warning disable CS0472
 
+using System;
 using System.Collections.Generic;
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Exchange.Fetcher;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2Exchange.Enabler
 {
@@ -38,29 +40,24 @@ namespace Gs2.Unity.UiKit.Gs2Exchange.Enabler
 	[AddComponentMenu("GS2 UIKit/Exchange/RateModel/View/Enabler/Properties/TimingType/Gs2ExchangeRateModelTimingTypeEnabler")]
     public partial class Gs2ExchangeRateModelTimingTypeEnabler : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched && _fetcher.RateModel != null)
+            switch(this.expression)
             {
-                switch(expression)
-                {
-                    case Expression.In:
-                        target.SetActive(enableTimingTypes.Contains(_fetcher.RateModel.TimingType));
-                        break;
-                    case Expression.NotIn:
-                        target.SetActive(!enableTimingTypes.Contains(_fetcher.RateModel.TimingType));
-                        break;
-                    case Expression.StartsWith:
-                        target.SetActive(_fetcher.RateModel.TimingType.StartsWith(enableTimingType));
-                        break;
-                    case Expression.EndsWith:
-                        target.SetActive(_fetcher.RateModel.TimingType.EndsWith(enableTimingType));
-                        break;
-                }
-            }
-            else
-            {
-                target.SetActive(false);
+                case Expression.In:
+                    this.target.SetActive(this.enableTimingTypes.Contains(this._fetcher.RateModel.TimingType));
+                    break;
+                case Expression.NotIn:
+                    this.target.SetActive(!this.enableTimingTypes.Contains(this._fetcher.RateModel.TimingType));
+                    break;
+                case Expression.StartsWith:
+                    this.target.SetActive(this._fetcher.RateModel.TimingType.StartsWith(this.enableTimingType));
+                    break;
+                case Expression.EndsWith:
+                    this.target.SetActive(this._fetcher.RateModel.TimingType.EndsWith(this.enableTimingType));
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
         }
     }
@@ -75,13 +72,12 @@ namespace Gs2.Unity.UiKit.Gs2Exchange.Enabler
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2ExchangeRateModelFetcher>() ?? GetComponentInParent<Gs2ExchangeRateModelFetcher>();
-
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2ExchangeRateModelFetcher>() ?? GetComponentInParent<Gs2ExchangeRateModelFetcher>();
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ExchangeRateModelFetcher.");
                 enabled = false;
             }
-            if (target == null) {
+            if (this.target == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: target is not set.");
                 enabled = false;
             }
@@ -89,14 +85,37 @@ namespace Gs2.Unity.UiKit.Gs2Exchange.Enabler
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2ExchangeRateModelFetcher>() ?? GetComponentInParent<Gs2ExchangeRateModelFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2ExchangeRateModelFetcher>() ?? GetComponentInParent<Gs2ExchangeRateModelFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
-            if (target == null) {
+            if (this.target == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 

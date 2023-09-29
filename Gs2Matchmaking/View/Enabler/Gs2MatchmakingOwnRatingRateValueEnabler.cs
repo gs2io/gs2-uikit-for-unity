@@ -24,10 +24,12 @@
 
 #pragma warning disable CS0472
 
+using System;
 using System.Collections.Generic;
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Matchmaking.Fetcher;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2Matchmaking
 {
@@ -38,35 +40,30 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking
 	[AddComponentMenu("GS2 UIKit/Matchmaking/Rating/View/Enabler/Properties/RateValue/Gs2MatchmakingOwnRatingRateValueEnabler")]
     public partial class Gs2MatchmakingOwnRatingRateValueEnabler : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched && _fetcher.Rating != null)
+            switch(this.expression)
             {
-                switch(expression)
-                {
-                    case Expression.In:
-                        target.SetActive(enableRateValues.Contains(_fetcher.Rating.RateValue));
-                        break;
-                    case Expression.NotIn:
-                        target.SetActive(!enableRateValues.Contains(_fetcher.Rating.RateValue));
-                        break;
-                    case Expression.Less:
-                        target.SetActive(enableRateValue > _fetcher.Rating.RateValue);
-                        break;
-                    case Expression.LessEqual:
-                        target.SetActive(enableRateValue >= _fetcher.Rating.RateValue);
-                        break;
-                    case Expression.Greater:
-                        target.SetActive(enableRateValue < _fetcher.Rating.RateValue);
-                        break;
-                    case Expression.GreaterEqual:
-                        target.SetActive(enableRateValue <= _fetcher.Rating.RateValue);
-                        break;
-                }
-            }
-            else
-            {
-                target.SetActive(false);
+                case Expression.In:
+                    this.target.SetActive(this.enableRateValues.Contains(this._fetcher.Rating.RateValue));
+                    break;
+                case Expression.NotIn:
+                    this.target.SetActive(!this.enableRateValues.Contains(this._fetcher.Rating.RateValue));
+                    break;
+                case Expression.Less:
+                    this.target.SetActive(this.enableRateValue > this._fetcher.Rating.RateValue);
+                    break;
+                case Expression.LessEqual:
+                    this.target.SetActive(this.enableRateValue >= this._fetcher.Rating.RateValue);
+                    break;
+                case Expression.Greater:
+                    this.target.SetActive(this.enableRateValue < this._fetcher.Rating.RateValue);
+                    break;
+                case Expression.GreaterEqual:
+                    this.target.SetActive(this.enableRateValue <= this._fetcher.Rating.RateValue);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
         }
     }
@@ -81,13 +78,12 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2MatchmakingOwnRatingFetcher>() ?? GetComponentInParent<Gs2MatchmakingOwnRatingFetcher>();
-
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2MatchmakingOwnRatingFetcher>() ?? GetComponentInParent<Gs2MatchmakingOwnRatingFetcher>();
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MatchmakingOwnRatingFetcher.");
                 enabled = false;
             }
-            if (target == null) {
+            if (this.target == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: target is not set.");
                 enabled = false;
             }
@@ -95,14 +91,37 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2MatchmakingOwnRatingFetcher>() ?? GetComponentInParent<Gs2MatchmakingOwnRatingFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2MatchmakingOwnRatingFetcher>() ?? GetComponentInParent<Gs2MatchmakingOwnRatingFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
-            if (target == null) {
+            if (this.target == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 

@@ -40,7 +40,7 @@ namespace Gs2.Unity.UiKit.Gs2LoginReward.Context
     {
         public void Start() {
             if (Namespace == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Namespace is not set in Gs2LoginRewardNamespaceContext.");
+                Debug.LogWarning($"{gameObject.GetFullPath()}: Namespace is not set in Gs2LoginRewardNamespaceContext.");
             }
         }
 

@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
@@ -43,8 +45,12 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Editor
             serializedObject.Update();
 
             if (original.ItemSet == null) {
-                if (original.GetComponentInParent<Gs2InventoryOwnItemSetList>(true) != null) {
-                    EditorGUILayout.HelpBox("OwnItemSet is auto assign from Gs2InventoryOwnItemSetList.", MessageType.Info);
+                var list = original.GetComponentInParent<Gs2InventoryOwnItemSetList>(true);
+                if (list != null) {
+                    EditorGUILayout.HelpBox("ItemSet is auto assign from Gs2InventoryOwnItemSetList.", MessageType.Info);
+                    EditorGUI.BeginDisabledGroup(true);
+                    EditorGUILayout.ObjectField("List", list, typeof(Gs2InventoryOwnItemSetList), false);
+                    EditorGUI.EndDisabledGroup();
                 }
                 else {
                     EditorGUILayout.HelpBox("OwnItemSet not assigned.", MessageType.Error);

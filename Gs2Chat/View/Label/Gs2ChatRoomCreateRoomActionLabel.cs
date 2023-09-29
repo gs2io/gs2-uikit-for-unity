@@ -40,17 +40,40 @@ namespace Gs2.Unity.UiKit.Gs2Chat
 	[AddComponentMenu("GS2 UIKit/Chat/Room/View/Label/Gs2ChatRoomCreateRoomActionLabel")]
     public partial class Gs2ChatRoomCreateRoomActionLabel : MonoBehaviour
     {
-        public void Update()
+        private void OnChange()
         {
-            onUpdate?.Invoke(
-                format.Replace(
-                    "{name}", $"{action?.Name}"
+            this.onUpdate?.Invoke(
+                this.format.Replace(
+                    "{name}", $"{this.action?.Name}"
                 ).Replace(
-                    "{metadata}", $"{action?.Metadata}"
+                    "{metadata}", $"{this.action?.Metadata}"
                 ).Replace(
-                    "{whiteListUserIds}", $"{action?.WhiteListUserIds}"
+                    "{whiteListUserIds}", $"{this.action?.WhiteListUserIds}"
                 )
             );
+        }
+
+        public void Awake() {
+            if (this.action == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2AccountAccountAuthenticationAction.");
+                enabled = false;
+            }
+        }
+
+        public virtual bool HasError()
+        {
+            if (this.action == null) {
+                return true;
+            }
+            return false;
+        }
+
+        public void OnEnable() {
+            this.action.OnChange.AddListener(OnChange);
+        }
+
+        public void OnDisable() {
+            this.action.OnChange.RemoveListener(OnChange);
         }
     }
 

@@ -60,16 +60,17 @@ namespace Gs2.Unity.UiKit.Gs2Account.Fetcher
             yield return new WaitUntil(() => gameSessionHolder.Initialized);
             yield return new WaitUntil(() => Context != null && this.Context.Account != null);
 
-            this._domain = clientHolder.Gs2.Account.Namespace(
+            _domain = clientHolder.Gs2.Account.Namespace(
                 this.Context.Account.NamespaceName
             ).Me(
                 gameSessionHolder.GameSession
-            );;
+            );
             this._callbackId = this._domain.Subscribe(
                 item =>
                 {
                     Account = item;
                     Fetched = true;
+                    this.OnFetched.Invoke();
                 }
             );
 
@@ -83,29 +84,10 @@ namespace Gs2.Unity.UiKit.Gs2Account.Fetcher
                 else {
                     Account = future.Result;
                     Fetched = true;
+                    this.OnFetched.Invoke();
+                    break;
                 }
             }
-        }
-
-        public void OnEnable()
-        {
-            StartCoroutine(nameof(Fetch));
-        }
-
-        public void OnDisable()
-        {
-            StopCoroutine(nameof(Fetch));
-
-            if (this._domain == null) {
-                return;
-            }
-            if (!this._callbackId.HasValue) {
-                return;
-            }
-            this._domain.Unsubscribe(
-                this._callbackId.Value
-            );
-            this._callbackId = null;
         }
     }
 
@@ -134,6 +116,34 @@ namespace Gs2.Unity.UiKit.Gs2Account.Fetcher
             }
             return false;
         }
+
+        public void OnUpdateContext() {
+            OnDisable();
+            Awake();
+            OnEnable();
+        }
+
+        public void OnEnable()
+        {
+            StartCoroutine(nameof(Fetch));
+            Context.OnUpdate.AddListener(OnUpdateContext);
+        }
+
+        public void OnDisable()
+        {
+            Context.OnUpdate.RemoveListener(OnUpdateContext);
+
+            if (this._domain == null) {
+                return;
+            }
+            if (!this._callbackId.HasValue) {
+                return;
+            }
+            this._domain.Unsubscribe(
+                this._callbackId.Value
+            );
+            this._callbackId = null;
+        }
     }
 
     /// <summary>
@@ -144,6 +154,7 @@ namespace Gs2.Unity.UiKit.Gs2Account.Fetcher
     {
         public EzAccount Account { get; protected set; }
         public bool Fetched { get; protected set; }
+        public UnityEvent OnFetched = new UnityEvent();
     }
 
     /// <summary>

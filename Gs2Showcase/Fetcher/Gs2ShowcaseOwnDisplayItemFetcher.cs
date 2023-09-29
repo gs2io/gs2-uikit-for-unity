@@ -33,6 +33,7 @@ using System.Linq;
 using System.Text;
 using Gs2.Core.Exception;
 using Gs2.Unity.Core.Exception;
+using Gs2.Unity.Gs2Showcase.Domain.Model;
 using Gs2.Unity.Gs2Showcase.Model;
 using Gs2.Unity.Gs2Showcase.ScriptableObject;
 using Gs2.Unity.Util;
@@ -53,61 +54,51 @@ namespace Gs2.Unity.UiKit.Gs2Showcase.Fetcher
 	[AddComponentMenu("GS2 UIKit/Showcase/DisplayItem/Fetcher/Gs2ShowcaseOwnDisplayItemFetcher")]
     public partial class Gs2ShowcaseOwnDisplayItemFetcher : MonoBehaviour, IAcquireActionsFetcher, IConsumeActionsFetcher
     {
+        private EzDisplayItemGameSessionDomain _domain;
+        private ulong? _callbackId;
+
         private IEnumerator Fetch()
         {
             var retryWaitSecond = 1;
-            Gs2Exception e;
-            while (true)
-            {
-                if (_gameSessionHolder != null && _gameSessionHolder.Initialized &&
-                    _clientHolder != null && _clientHolder.Initialized &&
-                    Context != null && this.Context.DisplayItem != null)
+            var clientHolder = Gs2ClientHolder.Instance;
+            var gameSessionHolder = Gs2GameSessionHolder.Instance;
+
+            yield return new WaitUntil(() => clientHolder.Initialized);
+            yield return new WaitUntil(() => gameSessionHolder.Initialized);
+            yield return new WaitUntil(() => Context != null && this.Context.DisplayItem != null);
+
+            _domain = clientHolder.Gs2.Showcase.Namespace(
+                this.Context.DisplayItem.NamespaceName
+            ).Me(
+                gameSessionHolder.GameSession
+            ).Showcase(
+                this.Context.DisplayItem.ShowcaseName
+            ).DisplayItem(
+                this.Context.DisplayItem.DisplayItemId
+            );
+            this._callbackId = this._domain.Subscribe(
+                item =>
                 {
-                    
-                    var domain = this._clientHolder.Gs2.Showcase.Namespace(
-                        this.Context.DisplayItem.NamespaceName
-                    ).Me(
-                        this._gameSessionHolder.GameSession
-                    ).Showcase(
-                        this.Context.DisplayItem.ShowcaseName
-                    );
-                    var future = domain.Model();
-                    yield return future;
-                    if (future.Error != null)
-                    {
-                        if (future.Error is BadRequestException || future.Error is NotFoundException)
-                        {
-                            onError.Invoke(e = future.Error, null);
-                        }
-                        else {
-                            onError.Invoke(new CanIgnoreException(future.Error), null);
-                        }
-                        yield return new WaitForSeconds(retryWaitSecond);
-                        retryWaitSecond *= 2;
-                    }
-                    else
-                    {
-                        DisplayItem = future.Result.DisplayItems.FirstOrDefault(
-                            v => v.DisplayItemId == Context.DisplayItem.DisplayItemId
-                        );
-                        Fetched = true;
-                    }
+                    DisplayItem = item;
+                    Fetched = true;
+                    this.OnFetched.Invoke();
+                }
+            );
+
+            while (true) {
+                var future = this._domain.Model();
+                yield return future;
+                if (future.Error != null) {
+                    yield return new WaitForSeconds(retryWaitSecond);
+                    retryWaitSecond *= 2;
                 }
                 else {
-                    yield return new WaitForSeconds(0.1f);
+                    DisplayItem = future.Result;
+                    Fetched = true;
+                    this.OnFetched.Invoke();
+                    break;
                 }
             }
-            // ReSharper disable once IteratorNeverReturns
-        }
-
-        public void OnEnable()
-        {
-            StartCoroutine(nameof(Fetch));
-        }
-
-        public void OnDisable()
-        {
-            StopCoroutine(nameof(Fetch));
         }
 
         public List<EzAcquireAction> AcquireActions(string context = "default") {
@@ -117,11 +108,35 @@ namespace Gs2.Unity.UiKit.Gs2Showcase.Fetcher
             return DisplayItem.SalesItem.AcquireActions;
         }
 
+        bool IAcquireActionsFetcher.IsFetched() {
+            return Fetched;
+        }
+
+        UnityEvent IAcquireActionsFetcher.OnFetchedEvent() {
+            return this.OnFetched;
+        }
+
+        GameObject IAcquireActionsFetcher.GameObject() {
+            return gameObject;
+        }
+
         public List<EzConsumeAction> ConsumeActions(string context = "default") {
             if (!Fetched) {
                 return new List<Unity.Core.Model.EzConsumeAction>();
             }
             return DisplayItem.SalesItem.ConsumeActions;
+        }
+
+        bool IConsumeActionsFetcher.IsFetched() {
+            return Fetched;
+        }
+
+        UnityEvent IConsumeActionsFetcher.OnFetchedEvent() {
+            return this.OnFetched;
+        }
+
+        GameObject IConsumeActionsFetcher.GameObject() {
+            return gameObject;
         }
     }
 
@@ -131,29 +146,52 @@ namespace Gs2.Unity.UiKit.Gs2Showcase.Fetcher
 
     public partial class Gs2ShowcaseOwnDisplayItemFetcher
     {
-        protected Gs2ClientHolder _clientHolder;
-        protected Gs2GameSessionHolder _gameSessionHolder;
         public Gs2ShowcaseOwnDisplayItemContext Context { get; private set; }
 
         public void Awake()
         {
-            _clientHolder = Gs2ClientHolder.Instance;
-            _gameSessionHolder = Gs2GameSessionHolder.Instance;
             Context = GetComponent<Gs2ShowcaseOwnDisplayItemContext>() ?? GetComponentInParent<Gs2ShowcaseOwnDisplayItemContext>();
-
             if (Context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ShowcaseOwnDisplayItemContext.");
                 enabled = false;
             }
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
             Context = GetComponent<Gs2ShowcaseOwnDisplayItemContext>() ?? GetComponentInParent<Gs2ShowcaseOwnDisplayItemContext>(true);
             if (Context == null) {
                 return true;
             }
             return false;
+        }
+
+        public void OnUpdateContext() {
+            OnDisable();
+            Awake();
+            OnEnable();
+        }
+
+        public void OnEnable()
+        {
+            StartCoroutine(nameof(Fetch));
+            Context.OnUpdate.AddListener(OnUpdateContext);
+        }
+
+        public void OnDisable()
+        {
+            Context.OnUpdate.RemoveListener(OnUpdateContext);
+
+            if (this._domain == null) {
+                return;
+            }
+            if (!this._callbackId.HasValue) {
+                return;
+            }
+            this._domain.Unsubscribe(
+                this._callbackId.Value
+            );
+            this._callbackId = null;
         }
     }
 
@@ -165,6 +203,7 @@ namespace Gs2.Unity.UiKit.Gs2Showcase.Fetcher
     {
         public EzDisplayItem DisplayItem { get; protected set; }
         public bool Fetched { get; protected set; }
+        public UnityEvent OnFetched = new UnityEvent();
     }
 
     /// <summary>

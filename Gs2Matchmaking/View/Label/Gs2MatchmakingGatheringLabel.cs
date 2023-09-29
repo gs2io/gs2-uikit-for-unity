@@ -40,89 +40,86 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking
 	[AddComponentMenu("GS2 UIKit/Matchmaking/Gathering/View/Label/Gs2MatchmakingGatheringLabel")]
     public partial class Gs2MatchmakingGatheringLabel : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched && _fetcher.Gathering != null)
-            {
-                var expiresAt = _fetcher.Gathering.ExpiresAt == null ? DateTime.Now : UnixTime.FromUnixTime(_fetcher.Gathering.ExpiresAt).ToLocalTime();
-                var createdAt = _fetcher.Gathering.CreatedAt == null ? DateTime.Now : UnixTime.FromUnixTime(_fetcher.Gathering.CreatedAt).ToLocalTime();
-                var updatedAt = _fetcher.Gathering.UpdatedAt == null ? DateTime.Now : UnixTime.FromUnixTime(_fetcher.Gathering.UpdatedAt).ToLocalTime();
-                onUpdate?.Invoke(
-                    format.Replace(
-                        "{gatheringId}", $"{_fetcher?.Gathering?.GatheringId}"
-                    ).Replace(
-                        "{name}", $"{_fetcher?.Gathering?.Name}"
-                    ).Replace(
-                        "{attributeRanges}", $"{_fetcher?.Gathering?.AttributeRanges}"
-                    ).Replace(
-                        "{capacityOfRoles}", $"{_fetcher?.Gathering?.CapacityOfRoles}"
-                    ).Replace(
-                        "{allowUserIds}", $"{_fetcher?.Gathering?.AllowUserIds}"
-                    ).Replace(
-                        "{metadata}", $"{_fetcher?.Gathering?.Metadata}"
-                    ).Replace(
-                        "{expiresAt:yyyy}", expiresAt.ToString("yyyy")
-                    ).Replace(
-                        "{expiresAt:yy}", expiresAt.ToString("yy")
-                    ).Replace(
-                        "{expiresAt:MM}", expiresAt.ToString("MM")
-                    ).Replace(
-                        "{expiresAt:MMM}", expiresAt.ToString("MMM")
-                    ).Replace(
-                        "{expiresAt:dd}", expiresAt.ToString("dd")
-                    ).Replace(
-                        "{expiresAt:hh}", expiresAt.ToString("hh")
-                    ).Replace(
-                        "{expiresAt:HH}", expiresAt.ToString("HH")
-                    ).Replace(
-                        "{expiresAt:tt}", expiresAt.ToString("tt")
-                    ).Replace(
-                        "{expiresAt:mm}", expiresAt.ToString("mm")
-                    ).Replace(
-                        "{expiresAt:ss}", expiresAt.ToString("ss")
-                    ).Replace(
-                        "{createdAt:yyyy}", createdAt.ToString("yyyy")
-                    ).Replace(
-                        "{createdAt:yy}", createdAt.ToString("yy")
-                    ).Replace(
-                        "{createdAt:MM}", createdAt.ToString("MM")
-                    ).Replace(
-                        "{createdAt:MMM}", createdAt.ToString("MMM")
-                    ).Replace(
-                        "{createdAt:dd}", createdAt.ToString("dd")
-                    ).Replace(
-                        "{createdAt:hh}", createdAt.ToString("hh")
-                    ).Replace(
-                        "{createdAt:HH}", createdAt.ToString("HH")
-                    ).Replace(
-                        "{createdAt:tt}", createdAt.ToString("tt")
-                    ).Replace(
-                        "{createdAt:mm}", createdAt.ToString("mm")
-                    ).Replace(
-                        "{createdAt:ss}", createdAt.ToString("ss")
-                    ).Replace(
-                        "{updatedAt:yyyy}", updatedAt.ToString("yyyy")
-                    ).Replace(
-                        "{updatedAt:yy}", updatedAt.ToString("yy")
-                    ).Replace(
-                        "{updatedAt:MM}", updatedAt.ToString("MM")
-                    ).Replace(
-                        "{updatedAt:MMM}", updatedAt.ToString("MMM")
-                    ).Replace(
-                        "{updatedAt:dd}", updatedAt.ToString("dd")
-                    ).Replace(
-                        "{updatedAt:hh}", updatedAt.ToString("hh")
-                    ).Replace(
-                        "{updatedAt:HH}", updatedAt.ToString("HH")
-                    ).Replace(
-                        "{updatedAt:tt}", updatedAt.ToString("tt")
-                    ).Replace(
-                        "{updatedAt:mm}", updatedAt.ToString("mm")
-                    ).Replace(
-                        "{updatedAt:ss}", updatedAt.ToString("ss")
-                    )
-                );
-            }
+            var expiresAt = this._fetcher.Gathering.ExpiresAt == null ? DateTime.Now : UnixTime.FromUnixTime(_fetcher.Gathering.ExpiresAt).ToLocalTime();
+            var createdAt = this._fetcher.Gathering.CreatedAt == null ? DateTime.Now : UnixTime.FromUnixTime(_fetcher.Gathering.CreatedAt).ToLocalTime();
+            var updatedAt = this._fetcher.Gathering.UpdatedAt == null ? DateTime.Now : UnixTime.FromUnixTime(_fetcher.Gathering.UpdatedAt).ToLocalTime();
+            this.onUpdate?.Invoke(
+                this.format.Replace(
+                    "{gatheringId}", $"{this._fetcher?.Gathering?.GatheringId}"
+                ).Replace(
+                    "{name}", $"{this._fetcher?.Gathering?.Name}"
+                ).Replace(
+                    "{attributeRanges}", $"{this._fetcher?.Gathering?.AttributeRanges}"
+                ).Replace(
+                    "{capacityOfRoles}", $"{this._fetcher?.Gathering?.CapacityOfRoles}"
+                ).Replace(
+                    "{allowUserIds}", $"{this._fetcher?.Gathering?.AllowUserIds}"
+                ).Replace(
+                    "{metadata}", $"{this._fetcher?.Gathering?.Metadata}"
+                ).Replace(
+                    "{expiresAt:yyyy}", expiresAt.ToString("yyyy")
+                ).Replace(
+                    "{expiresAt:yy}", expiresAt.ToString("yy")
+                ).Replace(
+                    "{expiresAt:MM}", expiresAt.ToString("MM")
+                ).Replace(
+                    "{expiresAt:MMM}", expiresAt.ToString("MMM")
+                ).Replace(
+                    "{expiresAt:dd}", expiresAt.ToString("dd")
+                ).Replace(
+                    "{expiresAt:hh}", expiresAt.ToString("hh")
+                ).Replace(
+                    "{expiresAt:HH}", expiresAt.ToString("HH")
+                ).Replace(
+                    "{expiresAt:tt}", expiresAt.ToString("tt")
+                ).Replace(
+                    "{expiresAt:mm}", expiresAt.ToString("mm")
+                ).Replace(
+                    "{expiresAt:ss}", expiresAt.ToString("ss")
+                ).Replace(
+                    "{createdAt:yyyy}", createdAt.ToString("yyyy")
+                ).Replace(
+                    "{createdAt:yy}", createdAt.ToString("yy")
+                ).Replace(
+                    "{createdAt:MM}", createdAt.ToString("MM")
+                ).Replace(
+                    "{createdAt:MMM}", createdAt.ToString("MMM")
+                ).Replace(
+                    "{createdAt:dd}", createdAt.ToString("dd")
+                ).Replace(
+                    "{createdAt:hh}", createdAt.ToString("hh")
+                ).Replace(
+                    "{createdAt:HH}", createdAt.ToString("HH")
+                ).Replace(
+                    "{createdAt:tt}", createdAt.ToString("tt")
+                ).Replace(
+                    "{createdAt:mm}", createdAt.ToString("mm")
+                ).Replace(
+                    "{createdAt:ss}", createdAt.ToString("ss")
+                ).Replace(
+                    "{updatedAt:yyyy}", updatedAt.ToString("yyyy")
+                ).Replace(
+                    "{updatedAt:yy}", updatedAt.ToString("yy")
+                ).Replace(
+                    "{updatedAt:MM}", updatedAt.ToString("MM")
+                ).Replace(
+                    "{updatedAt:MMM}", updatedAt.ToString("MMM")
+                ).Replace(
+                    "{updatedAt:dd}", updatedAt.ToString("dd")
+                ).Replace(
+                    "{updatedAt:hh}", updatedAt.ToString("hh")
+                ).Replace(
+                    "{updatedAt:HH}", updatedAt.ToString("HH")
+                ).Replace(
+                    "{updatedAt:tt}", updatedAt.ToString("tt")
+                ).Replace(
+                    "{updatedAt:mm}", updatedAt.ToString("mm")
+                ).Replace(
+                    "{updatedAt:ss}", updatedAt.ToString("ss")
+                )
+            );
         }
     }
 
@@ -136,23 +133,43 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2MatchmakingGatheringFetcher>() ?? GetComponentInParent<Gs2MatchmakingGatheringFetcher>();
-
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2MatchmakingGatheringFetcher>() ?? GetComponentInParent<Gs2MatchmakingGatheringFetcher>();
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MatchmakingGatheringFetcher.");
                 enabled = false;
             }
-
-            Update();
         }
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2MatchmakingGatheringFetcher>() ?? GetComponentInParent<Gs2MatchmakingGatheringFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2MatchmakingGatheringFetcher>() ?? GetComponentInParent<Gs2MatchmakingGatheringFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 
@@ -190,8 +207,8 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking
 
         public event UnityAction<string> OnUpdate
         {
-            add => onUpdate.AddListener(value);
-            remove => onUpdate.RemoveListener(value);
+            add => this.onUpdate.AddListener(value);
+            remove => this.onUpdate.RemoveListener(value);
         }
     }
 }

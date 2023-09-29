@@ -40,43 +40,42 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking
 	[AddComponentMenu("GS2 UIKit/Matchmaking/Rating/View/SpriteSwitcher/Properties/RateValue/Gs2MatchmakingOwnRatingRateValueSpriteSwitcher")]
     public partial class Gs2MatchmakingOwnRatingRateValueSpriteSwitcher : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched && _fetcher.Rating != null)
+            switch(this.expression)
             {
-                switch(expression)
-                {
-                    case Expression.In:
-                        if (applyRateValues.Contains(_fetcher.Rating.RateValue)) {
-                            this.onUpdate.Invoke(this.sprite);
-                        }
-                        break;
-                    case Expression.NotIn:
-                        if (!applyRateValues.Contains(_fetcher.Rating.RateValue)) {
-                            this.onUpdate.Invoke(this.sprite);
-                        }
-                        break;
-                    case Expression.Less:
-                        if (applyRateValue > _fetcher.Rating.RateValue) {
-                            this.onUpdate.Invoke(this.sprite);
-                        }
-                        break;
-                    case Expression.LessEqual:
-                        if (applyRateValue >= _fetcher.Rating.RateValue) {
-                            this.onUpdate.Invoke(this.sprite);
-                        }
-                        break;
-                    case Expression.Greater:
-                        if (applyRateValue < _fetcher.Rating.RateValue) {
-                            this.onUpdate.Invoke(this.sprite);
-                        }
-                        break;
-                    case Expression.GreaterEqual:
-                        if (applyRateValue <= _fetcher.Rating.RateValue) {
-                            this.onUpdate.Invoke(this.sprite);
-                        }
-                        break;
-                }
+                case Expression.In:
+                    if (this.applyRateValues.Contains(this._fetcher.Rating.RateValue)) {
+                        this.onUpdate.Invoke(this.sprite);
+                    }
+                    break;
+                case Expression.NotIn:
+                    if (!this.applyRateValues.Contains(this._fetcher.Rating.RateValue)) {
+                        this.onUpdate.Invoke(this.sprite);
+                    }
+                    break;
+                case Expression.Less:
+                    if (this.applyRateValue > this._fetcher.Rating.RateValue) {
+                        this.onUpdate.Invoke(this.sprite);
+                    }
+                    break;
+                case Expression.LessEqual:
+                    if (this.applyRateValue >= this._fetcher.Rating.RateValue) {
+                        this.onUpdate.Invoke(this.sprite);
+                    }
+                    break;
+                case Expression.Greater:
+                    if (this.applyRateValue < this._fetcher.Rating.RateValue) {
+                        this.onUpdate.Invoke(this.sprite);
+                    }
+                    break;
+                case Expression.GreaterEqual:
+                    if (this.applyRateValue <= this._fetcher.Rating.RateValue) {
+                        this.onUpdate.Invoke(this.sprite);
+                    }
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
         }
     }
@@ -91,13 +90,12 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2MatchmakingOwnRatingFetcher>() ?? GetComponentInParent<Gs2MatchmakingOwnRatingFetcher>();
-
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2MatchmakingOwnRatingFetcher>() ?? GetComponentInParent<Gs2MatchmakingOwnRatingFetcher>();
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MatchmakingOwnRatingFetcher.");
                 enabled = false;
             }
-            if (sprite == null) {
+            if (this.sprite == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: sprite is not set.");
                 enabled = false;
             }
@@ -105,14 +103,37 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2MatchmakingOwnRatingFetcher>() ?? GetComponentInParent<Gs2MatchmakingOwnRatingFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2MatchmakingOwnRatingFetcher>() ?? GetComponentInParent<Gs2MatchmakingOwnRatingFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
-            if (sprite == null) {
+            if (this.sprite == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 

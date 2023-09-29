@@ -40,7 +40,7 @@ namespace Gs2.Unity.UiKit.Gs2SkillTree.Context
     {
         public void Start() {
             if (NodeModel == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: NodeModel is not set in Gs2SkillTreeNodeModelContext.");
+                Debug.LogWarning($"{gameObject.GetFullPath()}: NodeModel is not set in Gs2SkillTreeNodeModelContext.");
             }
         }
 
@@ -49,9 +49,7 @@ namespace Gs2.Unity.UiKit.Gs2SkillTree.Context
                 if (GetComponentInParent<Gs2SkillTreeNodeModelList>(true) != null) {
                     return false;
                 }
-                else {
-                    return true;
-                }
+                return true;
             }
             return false;
         }

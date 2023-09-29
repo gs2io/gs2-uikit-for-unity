@@ -40,7 +40,7 @@ namespace Gs2.Unity.UiKit.Gs2MegaField.Context
     {
         public void Start() {
             if (Layer == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Layer is not set in Gs2MegaFieldLayerContext.");
+                Debug.LogWarning($"{gameObject.GetFullPath()}: Layer is not set in Gs2MegaFieldLayerContext.");
             }
         }
 

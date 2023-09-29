@@ -42,66 +42,65 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Label
 	[AddComponentMenu("GS2 UIKit/Formation/PropertyForm/View/Label/Transaction/Gs2FormationAcquireActionsToPropertyFormPropertiesLabel")]
     public partial class Gs2FormationAcquireActionsToPropertyFormPropertiesLabel : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched && _fetcher.Request != null &&
-                    _userDataFetcher != null && _userDataFetcher.Fetched && _userDataFetcher.PropertyForm != null) {
-                {
-                    onUpdate?.Invoke(
-                        format.Replace(
-                            "{namespaceName}",
-                            $"{_fetcher.Request.NamespaceName}"
-                        ).Replace(
-                            "{userId}",
-                            $"{_fetcher.Request.UserId}"
-                        ).Replace(
-                            "{propertyFormModelName}",
-                            $"{_fetcher.Request.PropertyFormModelName}"
-                        ).Replace(
-                            "{propertyId}",
-                            $"{_fetcher.Request.PropertyId}"
-                        ).Replace(
-                            "{acquireAction}",
-                            $"{_fetcher.Request.AcquireAction}"
-                        ).Replace(
-                            "{config}",
-                            $"{_fetcher.Request.Config}"
-                        ).Replace(
-                            "{userData:name}",
-                            $"{_userDataFetcher.PropertyForm.Name}"
-                        ).Replace(
-                            "{userData:propertyId}",
-                            $"{_userDataFetcher.PropertyForm.PropertyId}"
-                        ).Replace(
-                            "{userData:slots}",
-                            $"{_userDataFetcher.PropertyForm.Slots}"
-                        )
-                    );
-                }
-            } else if (_fetcher.Fetched && _fetcher.Request != null) {
-                {
-                    onUpdate?.Invoke(
-                        format.Replace(
-                            "{namespaceName}",
-                            $"{_fetcher.Request.NamespaceName}"
-                        ).Replace(
-                            "{userId}",
-                            $"{_fetcher.Request.UserId}"
-                        ).Replace(
-                            "{propertyFormModelName}",
-                            $"{_fetcher.Request.PropertyFormModelName}"
-                        ).Replace(
-                            "{propertyId}",
-                            $"{_fetcher.Request.PropertyId}"
-                        ).Replace(
-                            "{acquireAction}",
-                            $"{_fetcher.Request.AcquireAction}"
-                        ).Replace(
-                            "{config}",
-                            $"{_fetcher.Request.Config}"
-                        )
-                    );
-                }
+            if ((!this._fetcher?.Fetched ?? false) || this._fetcher.Request == null) {
+                return;
+            }
+            if (this._userDataFetcher?.Fetched ?? false)
+            {
+                this.onUpdate?.Invoke(
+                    this.format.Replace(
+                        "{namespaceName}",
+                        $"{this._fetcher.Request.NamespaceName}"
+                    ).Replace(
+                        "{userId}",
+                        $"{this._fetcher.Request.UserId}"
+                    ).Replace(
+                        "{propertyFormModelName}",
+                        $"{this._fetcher.Request.PropertyFormModelName}"
+                    ).Replace(
+                        "{propertyId}",
+                        $"{this._fetcher.Request.PropertyId}"
+                    ).Replace(
+                        "{acquireAction}",
+                        $"{this._fetcher.Request.AcquireAction}"
+                    ).Replace(
+                        "{config}",
+                        $"{this._fetcher.Request.Config}"
+                    ).Replace(
+                        "{userData:name}",
+                        $"{this._userDataFetcher.PropertyForm.Name}"
+                    ).Replace(
+                        "{userData:propertyId}",
+                        $"{this._userDataFetcher.PropertyForm.PropertyId}"
+                    ).Replace(
+                        "{userData:slots}",
+                        $"{this._userDataFetcher.PropertyForm.Slots}"
+                    )
+                );
+            } else {
+                this.onUpdate?.Invoke(
+                    this.format.Replace(
+                        "{namespaceName}",
+                        $"{this._fetcher.Request.NamespaceName}"
+                    ).Replace(
+                        "{userId}",
+                        $"{this._fetcher.Request.UserId}"
+                    ).Replace(
+                        "{propertyFormModelName}",
+                        $"{this._fetcher.Request.PropertyFormModelName}"
+                    ).Replace(
+                        "{propertyId}",
+                        $"{this._fetcher.Request.PropertyId}"
+                    ).Replace(
+                        "{acquireAction}",
+                        $"{this._fetcher.Request.AcquireAction}"
+                    ).Replace(
+                        "{config}",
+                        $"{this._fetcher.Request.Config}"
+                    )
+                );
             }
         }
     }
@@ -117,25 +116,52 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Label
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2FormationAcquireActionsToPropertyFormPropertiesFetcher>() ?? GetComponentInParent<Gs2FormationAcquireActionsToPropertyFormPropertiesFetcher>();
-            _userDataFetcher = GetComponent<Gs2FormationOwnPropertyFormFetcher>() ?? GetComponentInParent<Gs2FormationOwnPropertyFormFetcher>();
-
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2FormationAcquireActionsToPropertyFormPropertiesFetcher>() ?? GetComponentInParent<Gs2FormationAcquireActionsToPropertyFormPropertiesFetcher>();
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2FormationAcquireActionsToPropertyFormPropertiesFetcher.");
                 enabled = false;
             }
-
-            Update();
+            this._userDataFetcher = GetComponent<Gs2FormationOwnPropertyFormFetcher>() ?? GetComponentInParent<Gs2FormationOwnPropertyFormFetcher>();
         }
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2FormationAcquireActionsToPropertyFormPropertiesFetcher>() ?? GetComponentInParent<Gs2FormationAcquireActionsToPropertyFormPropertiesFetcher>(true);
-            _userDataFetcher = GetComponent<Gs2FormationOwnPropertyFormFetcher>() ?? GetComponentInParent<Gs2FormationOwnPropertyFormFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2FormationAcquireActionsToPropertyFormPropertiesFetcher>() ?? GetComponentInParent<Gs2FormationAcquireActionsToPropertyFormPropertiesFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+            if (this._userDataFetcher != null) {
+                this._userDataFetcher.OnFetched.AddListener(this._onFetched);
+                if (this._userDataFetcher.Fetched) {
+                    OnFetched();
+                }
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                if (this._userDataFetcher != null) {
+                    this._userDataFetcher.OnFetched.RemoveListener(this._onFetched);
+                }
+                this._onFetched = null;
+            }
         }
     }
 
@@ -173,8 +199,8 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Label
 
         public event UnityAction<string> OnUpdate
         {
-            add => onUpdate.AddListener(value);
-            remove => onUpdate.RemoveListener(value);
+            add => this.onUpdate.AddListener(value);
+            remove => this.onUpdate.RemoveListener(value);
         }
     }
 }

@@ -76,6 +76,7 @@ namespace Gs2.Unity.UiKit.Gs2Stamina.Fetcher
                 {
                     Stamina = item;
                     Fetched = true;
+                    this.OnFetched.Invoke();
                 }
             );
 
@@ -89,6 +90,7 @@ namespace Gs2.Unity.UiKit.Gs2Stamina.Fetcher
                 else {
                     Stamina = future.Result;
                     Fetched = true;
+                    this.OnFetched.Invoke();
                     break;
                 }
             }
@@ -136,8 +138,6 @@ namespace Gs2.Unity.UiKit.Gs2Stamina.Fetcher
     {
         public Gs2StaminaOwnStaminaContext Context { get; private set; }
 
-        public UnityEvent OnFetched = new UnityEvent();
-
         public void Awake()
         {
             Context = GetComponent<Gs2StaminaOwnStaminaContext>() ?? GetComponentInParent<Gs2StaminaOwnStaminaContext>();
@@ -165,6 +165,7 @@ namespace Gs2.Unity.UiKit.Gs2Stamina.Fetcher
     {
         public Gs2.Unity.Gs2Stamina.Model.EzStamina Stamina { get; protected set; }
         public bool Fetched { get; protected set; }
+        public UnityEvent OnFetched = new UnityEvent();
     }
 
     /// <summary>

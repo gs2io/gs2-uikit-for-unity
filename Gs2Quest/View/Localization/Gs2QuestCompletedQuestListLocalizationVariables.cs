@@ -29,6 +29,7 @@
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Quest.Fetcher;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.Localization.Components;
 using UnityEngine.Localization.SmartFormat.PersistentVariables;
 
@@ -41,15 +42,12 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Localization
     [AddComponentMenu("GS2 UIKit/Quest/CompletedQuestList/View/Localization/Gs2QuestCompletedQuestListLocalizationVariables")]
     public partial class Gs2QuestCompletedQuestListLocalizationVariables : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched) {
-                target.StringReference["questGroupName"] = new StringVariable {
-                    Value = _fetcher?.CompletedQuestList?.QuestGroupName ?? "",
-                };
-                enabled = false;
-                target.enabled = true;
-            }
+            this.target.StringReference["questGroupName"] = new StringVariable {
+                Value = _fetcher?.CompletedQuestList?.QuestGroupName ?? "",
+            };
+            this.target.enabled = true;
         }
     }
 
@@ -62,10 +60,10 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Localization
         private Gs2QuestOwnCompletedQuestListFetcher _fetcher;
 
         public void Awake() {
-            target.enabled = false;
-            _fetcher = GetComponent<Gs2QuestOwnCompletedQuestListFetcher>() ?? GetComponentInParent<Gs2QuestOwnCompletedQuestListFetcher>();
+            this.target.enabled = false;
+            this._fetcher = GetComponent<Gs2QuestOwnCompletedQuestListFetcher>() ?? GetComponentInParent<Gs2QuestOwnCompletedQuestListFetcher>();
 
-            if (_fetcher == null) {
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2QuestCompletedQuestListFetcher.");
                 enabled = false;
             }
@@ -73,11 +71,34 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Localization
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2QuestOwnCompletedQuestListFetcher>() ?? GetComponentInParent<Gs2QuestOwnCompletedQuestListFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2QuestOwnCompletedQuestListFetcher>() ?? GetComponentInParent<Gs2QuestOwnCompletedQuestListFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 

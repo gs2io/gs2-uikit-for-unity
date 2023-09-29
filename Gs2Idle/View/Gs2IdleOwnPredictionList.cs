@@ -25,6 +25,7 @@
 #pragma warning disable CS0472
 
 using System.Collections.Generic;
+using System.Linq;
 using Gs2.Unity.Gs2Idle.ScriptableObject;
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Idle.Context;
@@ -42,17 +43,19 @@ namespace Gs2.Unity.UiKit.Gs2Idle
     {
         private List<Gs2IdleOwnPredictionContext> _children;
 
-        public void Update() {
-            if (_fetcher.Fetched && this._fetcher.Predictions != null) {
-                for (var i = 0; i < this.maximumItems; i++) {
-                    if (i < this._fetcher.Predictions.Count) {
-                        _children[i].Prediction.Status = this._fetcher.Context.Status;
-                        _children[i].Prediction.index = i;
-                        _children[i].gameObject.SetActive(true);
-                    }
-                    else {
-                        _children[i].gameObject.SetActive(false);
-                    }
+        private void OnFetched() {
+            for (var i = 0; i < this._children.Count(); i++) {
+                if (i < this._fetcher.Predictions.Count) {
+                    this._children[i].SetOwnPrediction(
+                        OwnPrediction.New(
+                            this._fetcher.Context.Status,
+                            i
+                        )
+                    );
+                    this._children[i].gameObject.SetActive(true);
+                }
+                else {
+                    this._children[i].gameObject.SetActive(false);
                 }
             }
         }
@@ -65,18 +68,8 @@ namespace Gs2.Unity.UiKit.Gs2Idle
     public partial class Gs2IdleOwnPredictionList
     {
         private Gs2IdleOwnPredictionListFetcher _fetcher;
-        private Gs2IdleOwnStatusContext Context => _fetcher.Context;
 
-        public void Awake()
-        {
-            _fetcher = GetComponent<Gs2IdleOwnPredictionListFetcher>() ?? GetComponentInParent<Gs2IdleOwnPredictionListFetcher>();
-
-            if (_fetcher == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2IdleOwnPredictionListFetcher.");
-                enabled = false;
-            }
-
-            _children = new List<Gs2IdleOwnPredictionContext>();
+        private void Initialize() {
             for (var i = 0; i < this.maximumItems; i++) {
                 var node = Instantiate(this.prefab, transform);
                 node.Prediction = OwnPrediction.New(
@@ -84,15 +77,37 @@ namespace Gs2.Unity.UiKit.Gs2Idle
                     i
                 );
                 node.gameObject.SetActive(false);
-                _children.Add(node);
+                this._children.Add(node);
             }
+        }
+
+        public void Awake()
+        {
+            if (this.prefab == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2IdleOwnPredictionContext Prefab.");
+                enabled = false;
+                return;
+            }
+
+            this._fetcher = GetComponent<Gs2IdleOwnPredictionListFetcher>() ?? GetComponentInParent<Gs2IdleOwnPredictionListFetcher>();
+            if (this._fetcher == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2IdleOwnPredictionListFetcher.");
+                enabled = false;
+            }
+
+            this._children = new List<Gs2IdleOwnPredictionContext>();
             this.prefab.gameObject.SetActive(false);
+
+            Invoke(nameof(Initialize), 0);
         }
 
         public bool HasError()
         {
-            _fetcher = GetComponent<Gs2IdleOwnPredictionListFetcher>() ?? GetComponentInParent<Gs2IdleOwnPredictionListFetcher>(true);
-            if (_fetcher == null) {
+            if (this.prefab == null) {
+                return true;
+            }
+            this._fetcher = GetComponent<Gs2IdleOwnPredictionListFetcher>() ?? GetComponentInParent<Gs2IdleOwnPredictionListFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
             return false;

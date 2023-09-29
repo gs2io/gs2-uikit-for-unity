@@ -48,13 +48,16 @@ namespace Gs2.Unity.UiKit.Gs2SerialKey
     {
         private IEnumerator Process()
         {
-            yield return new WaitUntil(() => this._clientHolder.Initialized);
-            yield return new WaitUntil(() => this._gameSessionHolder.Initialized);
+            var clientHolder = Gs2ClientHolder.Instance;
+            var gameSessionHolder = Gs2GameSessionHolder.Instance;
+
+            yield return new WaitUntil(() => clientHolder.Initialized);
+            yield return new WaitUntil(() => gameSessionHolder.Initialized);
             
-            var domain = this._clientHolder.Gs2.SerialKey.Namespace(
+            var domain = clientHolder.Gs2.SerialKey.Namespace(
                 this._context.SerialKey.NamespaceName
             ).Me(
-                this._gameSessionHolder.GameSession
+                gameSessionHolder.GameSession
             ).SerialKey(
                 this._context.SerialKey.SerialKeyCode
             );
@@ -121,16 +124,11 @@ namespace Gs2.Unity.UiKit.Gs2SerialKey
 
     public partial class Gs2SerialKeySerialKeyUseSerialCodeAction
     {
-        private Gs2ClientHolder _clientHolder;
-        private Gs2GameSessionHolder _gameSessionHolder;
         private Gs2SerialKeySerialKeyContext _context;
 
         public void Awake()
         {
-            this._clientHolder = Gs2ClientHolder.Instance;
-            this._gameSessionHolder = Gs2GameSessionHolder.Instance;
             this._context = GetComponent<Gs2SerialKeySerialKeyContext>() ?? GetComponentInParent<Gs2SerialKeySerialKeyContext>();
-
             if (_context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2SerialKeySerialKeyContext.");
                 enabled = false;
@@ -165,8 +163,9 @@ namespace Gs2.Unity.UiKit.Gs2SerialKey
         public string Code;
 
         public void SetCode(string value) {
-            Code = value;
-            this.onChangeCode.Invoke(Code);
+            this.Code = value;
+            this.onChangeCode.Invoke(this.Code);
+            this.OnChange.Invoke();
         }
     }
 
@@ -203,6 +202,8 @@ namespace Gs2.Unity.UiKit.Gs2SerialKey
             add => this.onUseSerialCodeComplete.AddListener(value);
             remove => this.onUseSerialCodeComplete.RemoveListener(value);
         }
+
+        public UnityEvent OnChange = new UnityEvent();
 
         [SerializeField]
         internal ErrorEvent onError = new ErrorEvent();

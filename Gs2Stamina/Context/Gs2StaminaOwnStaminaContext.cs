@@ -39,9 +39,6 @@ namespace Gs2.Unity.UiKit.Gs2Stamina.Context
     public partial class Gs2StaminaOwnStaminaContext : Gs2StaminaStaminaModelContext
     {
         public new void Start() {
-            if (Stamina == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Stamina is not set in Gs2StaminaOwnStaminaContext.");
-            }
         }
         public override bool HasError() {
             var hasError = base.HasError();
@@ -49,9 +46,10 @@ namespace Gs2.Unity.UiKit.Gs2Stamina.Context
                 if (GetComponentInParent<Gs2StaminaOwnStaminaList>(true) != null) {
                     return false;
                 }
-                else {
-                    return true;
+                if (GetComponentInParent<Gs2StaminaConvertStaminaModelToOwnStamina>(true) != null) {
+                    return false;
                 }
+                return true;
             }
             return false;
         }

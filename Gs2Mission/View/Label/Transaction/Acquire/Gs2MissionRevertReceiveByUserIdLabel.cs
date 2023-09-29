@@ -42,54 +42,53 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Label
 	[AddComponentMenu("GS2 UIKit/Mission/Complete/View/Label/Transaction/Gs2MissionRevertReceiveByUserIdLabel")]
     public partial class Gs2MissionRevertReceiveByUserIdLabel : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched && _fetcher.Request != null &&
-                    _userDataFetcher != null && _userDataFetcher.Fetched && _userDataFetcher.Complete != null) {
-                {
-                    onUpdate?.Invoke(
-                        format.Replace(
-                            "{namespaceName}",
-                            $"{_fetcher.Request.NamespaceName}"
-                        ).Replace(
-                            "{missionGroupName}",
-                            $"{_fetcher.Request.MissionGroupName}"
-                        ).Replace(
-                            "{missionTaskName}",
-                            $"{_fetcher.Request.MissionTaskName}"
-                        ).Replace(
-                            "{userId}",
-                            $"{_fetcher.Request.UserId}"
-                        ).Replace(
-                            "{userData:missionGroupName}",
-                            $"{_userDataFetcher.Complete.MissionGroupName}"
-                        ).Replace(
-                            "{userData:completedMissionTaskNames}",
-                            $"{_userDataFetcher.Complete.CompletedMissionTaskNames}"
-                        ).Replace(
-                            "{userData:receivedMissionTaskNames}",
-                            $"{_userDataFetcher.Complete.ReceivedMissionTaskNames}"
-                        )
-                    );
-                }
-            } else if (_fetcher.Fetched && _fetcher.Request != null) {
-                {
-                    onUpdate?.Invoke(
-                        format.Replace(
-                            "{namespaceName}",
-                            $"{_fetcher.Request.NamespaceName}"
-                        ).Replace(
-                            "{missionGroupName}",
-                            $"{_fetcher.Request.MissionGroupName}"
-                        ).Replace(
-                            "{missionTaskName}",
-                            $"{_fetcher.Request.MissionTaskName}"
-                        ).Replace(
-                            "{userId}",
-                            $"{_fetcher.Request.UserId}"
-                        )
-                    );
-                }
+            if ((!this._fetcher?.Fetched ?? false) || this._fetcher.Request == null) {
+                return;
+            }
+            if (this._userDataFetcher?.Fetched ?? false)
+            {
+                this.onUpdate?.Invoke(
+                    this.format.Replace(
+                        "{namespaceName}",
+                        $"{this._fetcher.Request.NamespaceName}"
+                    ).Replace(
+                        "{missionGroupName}",
+                        $"{this._fetcher.Request.MissionGroupName}"
+                    ).Replace(
+                        "{missionTaskName}",
+                        $"{this._fetcher.Request.MissionTaskName}"
+                    ).Replace(
+                        "{userId}",
+                        $"{this._fetcher.Request.UserId}"
+                    ).Replace(
+                        "{userData:missionGroupName}",
+                        $"{this._userDataFetcher.Complete.MissionGroupName}"
+                    ).Replace(
+                        "{userData:completedMissionTaskNames}",
+                        $"{this._userDataFetcher.Complete.CompletedMissionTaskNames}"
+                    ).Replace(
+                        "{userData:receivedMissionTaskNames}",
+                        $"{this._userDataFetcher.Complete.ReceivedMissionTaskNames}"
+                    )
+                );
+            } else {
+                this.onUpdate?.Invoke(
+                    this.format.Replace(
+                        "{namespaceName}",
+                        $"{this._fetcher.Request.NamespaceName}"
+                    ).Replace(
+                        "{missionGroupName}",
+                        $"{this._fetcher.Request.MissionGroupName}"
+                    ).Replace(
+                        "{missionTaskName}",
+                        $"{this._fetcher.Request.MissionTaskName}"
+                    ).Replace(
+                        "{userId}",
+                        $"{this._fetcher.Request.UserId}"
+                    )
+                );
             }
         }
     }
@@ -105,25 +104,52 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Label
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2MissionRevertReceiveByUserIdFetcher>() ?? GetComponentInParent<Gs2MissionRevertReceiveByUserIdFetcher>();
-            _userDataFetcher = GetComponent<Gs2MissionOwnCompleteFetcher>() ?? GetComponentInParent<Gs2MissionOwnCompleteFetcher>();
-
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2MissionRevertReceiveByUserIdFetcher>() ?? GetComponentInParent<Gs2MissionRevertReceiveByUserIdFetcher>();
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MissionRevertReceiveByUserIdFetcher.");
                 enabled = false;
             }
-
-            Update();
+            this._userDataFetcher = GetComponent<Gs2MissionOwnCompleteFetcher>() ?? GetComponentInParent<Gs2MissionOwnCompleteFetcher>();
         }
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2MissionRevertReceiveByUserIdFetcher>() ?? GetComponentInParent<Gs2MissionRevertReceiveByUserIdFetcher>(true);
-            _userDataFetcher = GetComponent<Gs2MissionOwnCompleteFetcher>() ?? GetComponentInParent<Gs2MissionOwnCompleteFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2MissionRevertReceiveByUserIdFetcher>() ?? GetComponentInParent<Gs2MissionRevertReceiveByUserIdFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+            if (this._userDataFetcher != null) {
+                this._userDataFetcher.OnFetched.AddListener(this._onFetched);
+                if (this._userDataFetcher.Fetched) {
+                    OnFetched();
+                }
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                if (this._userDataFetcher != null) {
+                    this._userDataFetcher.OnFetched.RemoveListener(this._onFetched);
+                }
+                this._onFetched = null;
+            }
         }
     }
 
@@ -161,8 +187,8 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Label
 
         public event UnityAction<string> OnUpdate
         {
-            add => onUpdate.AddListener(value);
-            remove => onUpdate.RemoveListener(value);
+            add => this.onUpdate.AddListener(value);
+            remove => this.onUpdate.RemoveListener(value);
         }
     }
 }

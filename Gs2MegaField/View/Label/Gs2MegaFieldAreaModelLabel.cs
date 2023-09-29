@@ -40,20 +40,17 @@ namespace Gs2.Unity.UiKit.Gs2MegaField
 	[AddComponentMenu("GS2 UIKit/MegaField/AreaModel/View/Label/Gs2MegaFieldAreaModelLabel")]
     public partial class Gs2MegaFieldAreaModelLabel : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched && _fetcher.AreaModel != null)
-            {
-                onUpdate?.Invoke(
-                    format.Replace(
-                        "{name}", $"{_fetcher?.AreaModel?.Name}"
-                    ).Replace(
-                        "{metadata}", $"{_fetcher?.AreaModel?.Metadata}"
-                    ).Replace(
-                        "{layerModels}", $"{_fetcher?.AreaModel?.LayerModels}"
-                    )
-                );
-            }
+            this.onUpdate?.Invoke(
+                this.format.Replace(
+                    "{name}", $"{this._fetcher?.AreaModel?.Name}"
+                ).Replace(
+                    "{metadata}", $"{this._fetcher?.AreaModel?.Metadata}"
+                ).Replace(
+                    "{layerModels}", $"{this._fetcher?.AreaModel?.LayerModels}"
+                )
+            );
         }
     }
 
@@ -67,23 +64,43 @@ namespace Gs2.Unity.UiKit.Gs2MegaField
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2MegaFieldAreaModelFetcher>() ?? GetComponentInParent<Gs2MegaFieldAreaModelFetcher>();
-
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2MegaFieldAreaModelFetcher>() ?? GetComponentInParent<Gs2MegaFieldAreaModelFetcher>();
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MegaFieldAreaModelFetcher.");
                 enabled = false;
             }
-
-            Update();
         }
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2MegaFieldAreaModelFetcher>() ?? GetComponentInParent<Gs2MegaFieldAreaModelFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2MegaFieldAreaModelFetcher>() ?? GetComponentInParent<Gs2MegaFieldAreaModelFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 
@@ -121,8 +138,8 @@ namespace Gs2.Unity.UiKit.Gs2MegaField
 
         public event UnityAction<string> OnUpdate
         {
-            add => onUpdate.AddListener(value);
-            remove => onUpdate.RemoveListener(value);
+            add => this.onUpdate.AddListener(value);
+            remove => this.onUpdate.RemoveListener(value);
         }
     }
 }

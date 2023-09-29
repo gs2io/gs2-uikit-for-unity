@@ -72,6 +72,7 @@ namespace Gs2.Unity.UiKit.Gs2Version.Fetcher
                 {
                     VersionModel = item;
                     Fetched = true;
+                    this.OnFetched.Invoke();
                 }
             );
 
@@ -85,11 +86,10 @@ namespace Gs2.Unity.UiKit.Gs2Version.Fetcher
                 else {
                     VersionModel = future.Result;
                     Fetched = true;
+                    this.OnFetched.Invoke();
                     break;
                 }
             }
-
-            this.OnFetched.Invoke();
         }
 
         public void OnUpdateContext() {
@@ -129,8 +129,6 @@ namespace Gs2.Unity.UiKit.Gs2Version.Fetcher
     {
         public Gs2VersionVersionModelContext Context { get; private set; }
 
-        public UnityEvent OnFetched = new UnityEvent();
-
         public void Awake()
         {
             Context = GetComponent<Gs2VersionVersionModelContext>() ?? GetComponentInParent<Gs2VersionVersionModelContext>();
@@ -158,6 +156,7 @@ namespace Gs2.Unity.UiKit.Gs2Version.Fetcher
     {
         public Gs2.Unity.Gs2Version.Model.EzVersionModel VersionModel { get; protected set; }
         public bool Fetched { get; protected set; }
+        public UnityEvent OnFetched = new UnityEvent();
     }
 
     /// <summary>

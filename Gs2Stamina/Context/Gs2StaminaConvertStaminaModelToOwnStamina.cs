@@ -39,39 +39,55 @@ namespace Gs2.Unity.UiKit.Gs2Stamina.Context
         private Gs2StaminaOwnStaminaContext _context;
 
         public void Awake() {
-            _originalContext = GetComponent<Gs2StaminaStaminaModelContext>() ?? GetComponentInParent<Gs2StaminaStaminaModelContext>();
-            if (_originalContext == null) {
+            this._originalContext = GetComponent<Gs2StaminaStaminaModelContext>() ?? GetComponentInParent<Gs2StaminaStaminaModelContext>();
+            if (this._originalContext == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2StaminaStaminaModelContext.");
                 enabled = false;
             }
-            _context = GetComponent<Gs2StaminaOwnStaminaContext>();
-            if (_context == null) {
+            this._context = GetComponent<Gs2StaminaOwnStaminaContext>();
+            if (this._context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2StaminaOwnStaminaContext.");
                 enabled = false;
             }
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
-            _originalContext = GetComponent<Gs2StaminaStaminaModelContext>() ?? GetComponentInParent<Gs2StaminaStaminaModelContext>(true);
+            this._originalContext = GetComponent<Gs2StaminaStaminaModelContext>() ?? GetComponentInParent<Gs2StaminaStaminaModelContext>();
             if (_originalContext == null) {
                 return true;
             }
-            _context = GetComponent<Gs2StaminaOwnStaminaContext>();
-            if (_context == null) {
+            this._context = GetComponent<Gs2StaminaOwnStaminaContext>();
+            if (this._context == null) {
                 return true;
             }
             return false;
         }
 
-        public void Start() {
-            _context.SetOwnStamina(
+        private UnityAction _onUpdateContext;
+
+        private void OnUpdateContext() {
+            this._context.SetOwnStamina(
                 OwnStamina.New(
                     _originalContext.StaminaModel.Namespace,
                     _originalContext.StaminaModel.staminaName
                 )
             );
-            enabled = false;
+        }
+
+        public void OnEnable() {
+            _onUpdateContext = () =>
+            {
+                OnUpdateContext();
+            };
+            this._originalContext.OnUpdate.AddListener(this._onUpdateContext);
+        }
+
+        public void OnDisable() {
+            if (this._onUpdateContext != null) {
+                this._originalContext.OnUpdate.RemoveListener(this._onUpdateContext);
+                this._onUpdateContext = null;
+            }
         }
     }
 }

@@ -40,23 +40,22 @@ namespace Gs2.Unity.UiKit.Gs2Stamina
 	[AddComponentMenu("GS2 UIKit/Stamina/StaminaModel/View/SpriteSwitcher/Properties/IsOverflow/Gs2StaminaStaminaModelIsOverflowSpriteSwitcher")]
     public partial class Gs2StaminaStaminaModelIsOverflowSpriteSwitcher : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched && _fetcher.StaminaModel != null)
+            switch(this.expression)
             {
-                switch(expression)
-                {
-                    case Expression.True:
-                        if (_fetcher.StaminaModel.IsOverflow) {
-                            this.onUpdate.Invoke(this.sprite);
-                        }
-                        break;
-                    case Expression.False:
-                        if (!_fetcher.StaminaModel.IsOverflow) {
-                            this.onUpdate.Invoke(this.sprite);
-                        }
-                        break;
-                }
+                case Expression.True:
+                    if (this._fetcher.StaminaModel.IsOverflow) {
+                        this.onUpdate.Invoke(this.sprite);
+                    }
+                    break;
+                case Expression.False:
+                    if (!this._fetcher.StaminaModel.IsOverflow) {
+                        this.onUpdate.Invoke(this.sprite);
+                    }
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
         }
     }
@@ -71,13 +70,12 @@ namespace Gs2.Unity.UiKit.Gs2Stamina
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2StaminaStaminaModelFetcher>() ?? GetComponentInParent<Gs2StaminaStaminaModelFetcher>();
-
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2StaminaStaminaModelFetcher>() ?? GetComponentInParent<Gs2StaminaStaminaModelFetcher>();
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2StaminaStaminaModelFetcher.");
                 enabled = false;
             }
-            if (sprite == null) {
+            if (this.sprite == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: sprite is not set.");
                 enabled = false;
             }
@@ -85,14 +83,37 @@ namespace Gs2.Unity.UiKit.Gs2Stamina
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2StaminaStaminaModelFetcher>() ?? GetComponentInParent<Gs2StaminaStaminaModelFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2StaminaStaminaModelFetcher>() ?? GetComponentInParent<Gs2StaminaStaminaModelFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
-            if (sprite == null) {
+            if (this.sprite == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 

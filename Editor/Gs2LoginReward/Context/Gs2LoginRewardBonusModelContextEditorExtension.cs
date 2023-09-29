@@ -43,8 +43,12 @@ namespace Gs2.Unity.UiKit.Gs2LoginReward.Editor
             serializedObject.Update();
 
             if (original.BonusModel == null) {
-                if (original.GetComponentInParent<Gs2LoginRewardBonusModelList>(true) != null) {
+                var list = original.GetComponentInParent<Gs2LoginRewardBonusModelList>(true);
+                if (list != null) {
                     EditorGUILayout.HelpBox("BonusModel is auto assign from Gs2LoginRewardBonusModelList.", MessageType.Info);
+                    EditorGUI.BeginDisabledGroup(true);
+                    EditorGUILayout.ObjectField("List", list, typeof(Gs2LoginRewardBonusModelList), false);
+                    EditorGUI.EndDisabledGroup();
                 }
                 else {
                     EditorGUILayout.HelpBox("BonusModel not assigned.", MessageType.Error);

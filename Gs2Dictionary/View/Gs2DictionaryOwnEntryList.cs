@@ -12,8 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
- * deny overwrite
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
@@ -32,6 +30,7 @@ using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Dictionary.Context;
 using Gs2.Unity.UiKit.Gs2Dictionary.Fetcher;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2Dictionary
 {
@@ -42,18 +41,21 @@ namespace Gs2.Unity.UiKit.Gs2Dictionary
     [AddComponentMenu("GS2 UIKit/Dictionary/Entry/View/Gs2DictionaryOwnEntryList")]
     public partial class Gs2DictionaryOwnEntryList : MonoBehaviour
     {
-        private List<Gs2DictionaryEntryModelContext> _children;
+        private List<Gs2DictionaryOwnEntryContext> _children;
 
-        public void Update() {
-            if (_fetcher.Fetched && this._fetcher.Entries != null) {
-                for (var i = 0; i < this.maximumItems; i++) {
-                    if (i < this._fetcher.Entries.Count) {
-                        _children[i].EntryModel.entryName = this._fetcher.Entries[i].Name;
-                        _children[i].gameObject.SetActive(true);
-                    }
-                    else {
-                        _children[i].gameObject.SetActive(false);
-                    }
+        public void OnFetched() {
+            for (var i = 0; i < this._children.Count; i++) {
+                if (i < this._fetcher.Entries.Count) {
+                    this._children[i].SetOwnEntry(
+                        OwnEntry.New(
+                            this._fetcher.Context.Namespace,
+                            this._fetcher.Entries[i].Name
+                        )
+                    );
+                    this._children[i].gameObject.SetActive(true);
+                }
+                else {
+                    this._children[i].gameObject.SetActive(false);
                 }
             }
         }
@@ -66,37 +68,76 @@ namespace Gs2.Unity.UiKit.Gs2Dictionary
     public partial class Gs2DictionaryOwnEntryList
     {
         private Gs2DictionaryOwnEntryListFetcher _fetcher;
-        private Gs2DictionaryNamespaceContext Context => _fetcher.Context;
+
+        private void Initialize() {
+            for (var i = 0; i < this.maximumItems; i++) {
+                var node = Instantiate(this.prefab, transform);
+                node.EntryModel = EntryModel.New(
+                    this._fetcher.Context.Namespace,
+                    ""
+                );
+                node.Entry = OwnEntry.New(
+                    this._fetcher.Context.Namespace,
+                    ""
+                );
+                node.gameObject.SetActive(false);
+                this._children.Add(node);
+            }
+        }
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2DictionaryOwnEntryListFetcher>() ?? GetComponentInParent<Gs2DictionaryOwnEntryListFetcher>();
+            if (this.prefab == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2DictionaryOwnEntryContext Prefab.");
+                enabled = false;
+                return;
+            }
 
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2DictionaryOwnEntryListFetcher>() ?? GetComponentInParent<Gs2DictionaryOwnEntryListFetcher>();
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2DictionaryOwnEntryListFetcher.");
                 enabled = false;
             }
 
-            _children = new List<Gs2DictionaryEntryModelContext>();
-            for (var i = 0; i < this.maximumItems; i++) {
-                var node = Instantiate(this.prefab, transform);
-                node.EntryModel = EntryModel.New(
-                    _fetcher.Context.Namespace,
-                    ""
-                );
-                node.gameObject.SetActive(false);
-                _children.Add(node);
-            }
+            this._children = new List<Gs2DictionaryOwnEntryContext>();
             this.prefab.gameObject.SetActive(false);
+
+            Invoke(nameof(Initialize), 0);
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2DictionaryOwnEntryListFetcher>() ?? GetComponentInParent<Gs2DictionaryOwnEntryListFetcher>(true);
-            if (_fetcher == null) {
+            if (this.prefab == null) {
+                return true;
+            }
+            this._fetcher = GetComponent<Gs2DictionaryOwnEntryListFetcher>() ?? GetComponentInParent<Gs2DictionaryOwnEntryListFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 
@@ -115,7 +156,7 @@ namespace Gs2.Unity.UiKit.Gs2Dictionary
 
     public partial class Gs2DictionaryOwnEntryList
     {
-        public Gs2DictionaryEntryModelContext prefab;
+        public Gs2DictionaryOwnEntryContext prefab;
         public int maximumItems;
     }
 

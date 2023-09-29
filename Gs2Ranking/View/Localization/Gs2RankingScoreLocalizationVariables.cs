@@ -29,6 +29,7 @@
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Ranking.Fetcher;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.Localization.Components;
 using UnityEngine.Localization.SmartFormat.PersistentVariables;
 
@@ -41,30 +42,27 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Localization
     [AddComponentMenu("GS2 UIKit/Ranking/Score/View/Localization/Gs2RankingScoreLocalizationVariables")]
     public partial class Gs2RankingScoreLocalizationVariables : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched) {
-                target.StringReference["categoryName"] = new StringVariable {
-                    Value = _fetcher?.Score?.CategoryName ?? "",
-                };
-                target.StringReference["userId"] = new StringVariable {
-                    Value = _fetcher?.Score?.UserId ?? "",
-                };
-                target.StringReference["uniqueId"] = new StringVariable {
-                    Value = _fetcher?.Score?.UniqueId ?? "",
-                };
-                target.StringReference["scorerUserId"] = new StringVariable {
-                    Value = _fetcher?.Score?.ScorerUserId ?? "",
-                };
-                target.StringReference["score"] = new LongVariable {
-                    Value = _fetcher?.Score?.Score ?? 0,
-                };
-                target.StringReference["metadata"] = new StringVariable {
-                    Value = _fetcher?.Score?.Metadata ?? "",
-                };
-                enabled = false;
-                target.enabled = true;
-            }
+            this.target.StringReference["categoryName"] = new StringVariable {
+                Value = _fetcher?.Score?.CategoryName ?? "",
+            };
+            this.target.StringReference["userId"] = new StringVariable {
+                Value = _fetcher?.Score?.UserId ?? "",
+            };
+            this.target.StringReference["uniqueId"] = new StringVariable {
+                Value = _fetcher?.Score?.UniqueId ?? "",
+            };
+            this.target.StringReference["scorerUserId"] = new StringVariable {
+                Value = _fetcher?.Score?.ScorerUserId ?? "",
+            };
+            this.target.StringReference["score"] = new LongVariable {
+                Value = _fetcher?.Score?.Score ?? 0,
+            };
+            this.target.StringReference["metadata"] = new StringVariable {
+                Value = _fetcher?.Score?.Metadata ?? "",
+            };
+            this.target.enabled = true;
         }
     }
 
@@ -77,10 +75,10 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Localization
         private Gs2RankingOwnScoreFetcher _fetcher;
 
         public void Awake() {
-            target.enabled = false;
-            _fetcher = GetComponent<Gs2RankingOwnScoreFetcher>() ?? GetComponentInParent<Gs2RankingOwnScoreFetcher>();
+            this.target.enabled = false;
+            this._fetcher = GetComponent<Gs2RankingOwnScoreFetcher>() ?? GetComponentInParent<Gs2RankingOwnScoreFetcher>();
 
-            if (_fetcher == null) {
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2RankingScoreFetcher.");
                 enabled = false;
             }
@@ -88,11 +86,34 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Localization
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2RankingOwnScoreFetcher>() ?? GetComponentInParent<Gs2RankingOwnScoreFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2RankingOwnScoreFetcher>() ?? GetComponentInParent<Gs2RankingOwnScoreFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 

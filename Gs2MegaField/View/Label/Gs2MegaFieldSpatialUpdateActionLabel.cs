@@ -40,15 +40,38 @@ namespace Gs2.Unity.UiKit.Gs2MegaField
 	[AddComponentMenu("GS2 UIKit/MegaField/Spatial/View/Label/Gs2MegaFieldSpatialUpdateActionLabel")]
     public partial class Gs2MegaFieldSpatialUpdateActionLabel : MonoBehaviour
     {
-        public void Update()
+        private void OnChange()
         {
-            onUpdate?.Invoke(
-                format.Replace(
-                    "{position}", $"{action?.Position}"
+            this.onUpdate?.Invoke(
+                this.format.Replace(
+                    "{position}", $"{this.action?.Position}"
                 ).Replace(
-                    "{scopes}", $"{action?.Scopes}"
+                    "{scopes}", $"{this.action?.Scopes}"
                 )
             );
+        }
+
+        public void Awake() {
+            if (this.action == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2AccountAccountAuthenticationAction.");
+                enabled = false;
+            }
+        }
+
+        public virtual bool HasError()
+        {
+            if (this.action == null) {
+                return true;
+            }
+            return false;
+        }
+
+        public void OnEnable() {
+            this.action.OnChange.AddListener(OnChange);
+        }
+
+        public void OnDisable() {
+            this.action.OnChange.RemoveListener(OnChange);
         }
     }
 

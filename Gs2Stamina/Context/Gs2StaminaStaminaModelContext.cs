@@ -40,7 +40,7 @@ namespace Gs2.Unity.UiKit.Gs2Stamina.Context
     {
         public void Start() {
             if (StaminaModel == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: StaminaModel is not set in Gs2StaminaStaminaModelContext.");
+                Debug.LogWarning($"{gameObject.GetFullPath()}: StaminaModel is not set in Gs2StaminaStaminaModelContext.");
             }
         }
 
@@ -49,9 +49,7 @@ namespace Gs2.Unity.UiKit.Gs2Stamina.Context
                 if (GetComponentInParent<Gs2StaminaStaminaModelList>(true) != null) {
                     return false;
                 }
-                else {
-                    return true;
-                }
+                return true;
             }
             return false;
         }

@@ -60,17 +60,18 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Fetcher
             yield return new WaitUntil(() => gameSessionHolder.Initialized);
             yield return new WaitUntil(() => Context != null && this.Context.BlackList != null);
 
-            this._domain = clientHolder.Gs2.Friend.Namespace(
+            _domain = clientHolder.Gs2.Friend.Namespace(
                 this.Context.BlackList.NamespaceName
             ).Me(
                 gameSessionHolder.GameSession
             ).BlackList(
-            );;
+            );
             this._callbackId = this._domain.Subscribe(
                 item =>
                 {
                     BlackList = item;
                     Fetched = true;
+                    this.OnFetched.Invoke();
                 }
             );
 
@@ -84,29 +85,10 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Fetcher
                 else {
                     BlackList = future.Result;
                     Fetched = true;
+                    this.OnFetched.Invoke();
+                    break;
                 }
             }
-        }
-
-        public void OnEnable()
-        {
-            StartCoroutine(nameof(Fetch));
-        }
-
-        public void OnDisable()
-        {
-            StopCoroutine(nameof(Fetch));
-
-            if (this._domain == null) {
-                return;
-            }
-            if (!this._callbackId.HasValue) {
-                return;
-            }
-            this._domain.Unsubscribe(
-                this._callbackId.Value
-            );
-            this._callbackId = null;
         }
     }
 
@@ -135,6 +117,34 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Fetcher
             }
             return false;
         }
+
+        public void OnUpdateContext() {
+            OnDisable();
+            Awake();
+            OnEnable();
+        }
+
+        public void OnEnable()
+        {
+            StartCoroutine(nameof(Fetch));
+            Context.OnUpdate.AddListener(OnUpdateContext);
+        }
+
+        public void OnDisable()
+        {
+            Context.OnUpdate.RemoveListener(OnUpdateContext);
+
+            if (this._domain == null) {
+                return;
+            }
+            if (!this._callbackId.HasValue) {
+                return;
+            }
+            this._domain.Unsubscribe(
+                this._callbackId.Value
+            );
+            this._callbackId = null;
+        }
     }
 
     /// <summary>
@@ -145,6 +155,7 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Fetcher
     {
         public EzBlackList BlackList { get; protected set; }
         public bool Fetched { get; protected set; }
+        public UnityEvent OnFetched = new UnityEvent();
     }
 
     /// <summary>

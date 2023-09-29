@@ -24,10 +24,12 @@
 
 #pragma warning disable CS0472
 
+using System;
 using System.Collections.Generic;
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Chat.Fetcher;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2Chat
 {
@@ -38,35 +40,30 @@ namespace Gs2.Unity.UiKit.Gs2Chat
 	[AddComponentMenu("GS2 UIKit/Chat/Message/View/Enabler/Properties/Category/Gs2ChatMessageCategoryEnabler")]
     public partial class Gs2ChatMessageCategoryEnabler : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched && _fetcher.Message != null)
+            switch(this.expression)
             {
-                switch(expression)
-                {
-                    case Expression.In:
-                        target.SetActive(enableCategories.Contains(_fetcher.Message.Category));
-                        break;
-                    case Expression.NotIn:
-                        target.SetActive(!enableCategories.Contains(_fetcher.Message.Category));
-                        break;
-                    case Expression.Less:
-                        target.SetActive(enableCategory > _fetcher.Message.Category);
-                        break;
-                    case Expression.LessEqual:
-                        target.SetActive(enableCategory >= _fetcher.Message.Category);
-                        break;
-                    case Expression.Greater:
-                        target.SetActive(enableCategory < _fetcher.Message.Category);
-                        break;
-                    case Expression.GreaterEqual:
-                        target.SetActive(enableCategory <= _fetcher.Message.Category);
-                        break;
-                }
-            }
-            else
-            {
-                target.SetActive(false);
+                case Expression.In:
+                    this.target.SetActive(this.enableCategories.Contains(this._fetcher.Message.Category));
+                    break;
+                case Expression.NotIn:
+                    this.target.SetActive(!this.enableCategories.Contains(this._fetcher.Message.Category));
+                    break;
+                case Expression.Less:
+                    this.target.SetActive(this.enableCategory > this._fetcher.Message.Category);
+                    break;
+                case Expression.LessEqual:
+                    this.target.SetActive(this.enableCategory >= this._fetcher.Message.Category);
+                    break;
+                case Expression.Greater:
+                    this.target.SetActive(this.enableCategory < this._fetcher.Message.Category);
+                    break;
+                case Expression.GreaterEqual:
+                    this.target.SetActive(this.enableCategory <= this._fetcher.Message.Category);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
         }
     }
@@ -81,13 +78,12 @@ namespace Gs2.Unity.UiKit.Gs2Chat
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2ChatMessageFetcher>() ?? GetComponentInParent<Gs2ChatMessageFetcher>();
-
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2ChatMessageFetcher>() ?? GetComponentInParent<Gs2ChatMessageFetcher>();
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ChatMessageFetcher.");
                 enabled = false;
             }
-            if (target == null) {
+            if (this.target == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: target is not set.");
                 enabled = false;
             }
@@ -95,14 +91,37 @@ namespace Gs2.Unity.UiKit.Gs2Chat
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2ChatMessageFetcher>() ?? GetComponentInParent<Gs2ChatMessageFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2ChatMessageFetcher>() ?? GetComponentInParent<Gs2ChatMessageFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
-            if (target == null) {
+            if (this.target == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 

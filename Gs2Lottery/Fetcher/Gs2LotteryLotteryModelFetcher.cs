@@ -72,6 +72,7 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.Fetcher
                 {
                     LotteryModel = item;
                     Fetched = true;
+                    this.OnFetched.Invoke();
                 }
             );
 
@@ -85,11 +86,10 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.Fetcher
                 else {
                     LotteryModel = future.Result;
                     Fetched = true;
+                    this.OnFetched.Invoke();
                     break;
                 }
             }
-
-            this.OnFetched.Invoke();
         }
 
         public void OnUpdateContext() {
@@ -129,8 +129,6 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.Fetcher
     {
         public Gs2LotteryLotteryModelContext Context { get; private set; }
 
-        public UnityEvent OnFetched = new UnityEvent();
-
         public void Awake()
         {
             Context = GetComponent<Gs2LotteryLotteryModelContext>() ?? GetComponentInParent<Gs2LotteryLotteryModelContext>();
@@ -158,6 +156,7 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.Fetcher
     {
         public Gs2.Unity.Gs2Lottery.Model.EzLotteryModel LotteryModel { get; protected set; }
         public bool Fetched { get; protected set; }
+        public UnityEvent OnFetched = new UnityEvent();
     }
 
     /// <summary>

@@ -40,23 +40,22 @@ namespace Gs2.Unity.UiKit.Gs2SerialKey
 	[AddComponentMenu("GS2 UIKit/SerialKey/CampaignModel/View/SpriteSwitcher/Properties/EnableCampaignCode/Gs2SerialKeyCampaignModelEnableCampaignCodeSpriteSwitcher")]
     public partial class Gs2SerialKeyCampaignModelEnableCampaignCodeSpriteSwitcher : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched && _fetcher.CampaignModel != null)
+            switch(this.expression)
             {
-                switch(expression)
-                {
-                    case Expression.True:
-                        if (_fetcher.CampaignModel.EnableCampaignCode) {
-                            this.onUpdate.Invoke(this.sprite);
-                        }
-                        break;
-                    case Expression.False:
-                        if (!_fetcher.CampaignModel.EnableCampaignCode) {
-                            this.onUpdate.Invoke(this.sprite);
-                        }
-                        break;
-                }
+                case Expression.True:
+                    if (this._fetcher.CampaignModel.EnableCampaignCode) {
+                        this.onUpdate.Invoke(this.sprite);
+                    }
+                    break;
+                case Expression.False:
+                    if (!this._fetcher.CampaignModel.EnableCampaignCode) {
+                        this.onUpdate.Invoke(this.sprite);
+                    }
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
         }
     }
@@ -71,13 +70,12 @@ namespace Gs2.Unity.UiKit.Gs2SerialKey
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2SerialKeyCampaignModelFetcher>() ?? GetComponentInParent<Gs2SerialKeyCampaignModelFetcher>();
-
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2SerialKeyCampaignModelFetcher>() ?? GetComponentInParent<Gs2SerialKeyCampaignModelFetcher>();
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2SerialKeyCampaignModelFetcher.");
                 enabled = false;
             }
-            if (sprite == null) {
+            if (this.sprite == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: sprite is not set.");
                 enabled = false;
             }
@@ -85,14 +83,37 @@ namespace Gs2.Unity.UiKit.Gs2SerialKey
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2SerialKeyCampaignModelFetcher>() ?? GetComponentInParent<Gs2SerialKeyCampaignModelFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2SerialKeyCampaignModelFetcher>() ?? GetComponentInParent<Gs2SerialKeyCampaignModelFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
-            if (sprite == null) {
+            if (this.sprite == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 

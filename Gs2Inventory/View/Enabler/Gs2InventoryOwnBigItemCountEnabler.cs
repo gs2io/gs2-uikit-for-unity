@@ -24,11 +24,13 @@
 
 #pragma warning disable CS0472
 
+using System;
 using System.Collections.Generic;
 using System.Numerics;
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Inventory.Fetcher;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2Inventory
 {
@@ -39,35 +41,30 @@ namespace Gs2.Unity.UiKit.Gs2Inventory
 	[AddComponentMenu("GS2 UIKit/Inventory/BigItem/View/Enabler/Properties/Count/Gs2InventoryOwnBigItemCountEnabler")]
     public partial class Gs2InventoryOwnBigItemCountEnabler : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched && _fetcher.BigItem != null)
+            switch(this.expression)
             {
-                switch(expression)
-                {
-                    case Expression.In:
-                        target.SetActive(enableCounts.Contains(_fetcher.BigItem.Count.ToString("0")));
-                        break;
-                    case Expression.NotIn:
-                        target.SetActive(!enableCounts.Contains(_fetcher.BigItem.Count.ToString("0")));
-                        break;
-                    case Expression.Less:
-                        target.SetActive(BigInteger.Parse(enableCount) > _fetcher.BigItem.Count);
-                        break;
-                    case Expression.LessEqual:
-                        target.SetActive(BigInteger.Parse(enableCount) >= _fetcher.BigItem.Count);
-                        break;
-                    case Expression.Greater:
-                        target.SetActive(BigInteger.Parse(enableCount) < _fetcher.BigItem.Count);
-                        break;
-                    case Expression.GreaterEqual:
-                        target.SetActive(BigInteger.Parse(enableCount) <= _fetcher.BigItem.Count);
-                        break;
-                }
-            }
-            else
-            {
-                target.SetActive(false);
+                case Expression.In:
+                    this.target.SetActive(this.enableCounts.Contains(this._fetcher.BigItem.Count.ToString("0")));
+                    break;
+                case Expression.NotIn:
+                    this.target.SetActive(!this.enableCounts.Contains(this._fetcher.BigItem.Count.ToString("0")));
+                    break;
+                case Expression.Less:
+                    this.target.SetActive(BigInteger.Parse(this.enableCount) > this._fetcher.BigItem.Count);
+                    break;
+                case Expression.LessEqual:
+                    this.target.SetActive(BigInteger.Parse(this.enableCount) >= this._fetcher.BigItem.Count);
+                    break;
+                case Expression.Greater:
+                    this.target.SetActive(BigInteger.Parse(this.enableCount) < this._fetcher.BigItem.Count);
+                    break;
+                case Expression.GreaterEqual:
+                    this.target.SetActive(BigInteger.Parse(this.enableCount) <= this._fetcher.BigItem.Count);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
         }
     }
@@ -82,13 +79,12 @@ namespace Gs2.Unity.UiKit.Gs2Inventory
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2InventoryOwnBigItemFetcher>() ?? GetComponentInParent<Gs2InventoryOwnBigItemFetcher>();
-
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2InventoryOwnBigItemFetcher>() ?? GetComponentInParent<Gs2InventoryOwnBigItemFetcher>();
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2InventoryOwnBigItemFetcher.");
                 enabled = false;
             }
-            if (target == null) {
+            if (this.target == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: target is not set.");
                 enabled = false;
             }
@@ -96,14 +92,37 @@ namespace Gs2.Unity.UiKit.Gs2Inventory
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2InventoryOwnBigItemFetcher>() ?? GetComponentInParent<Gs2InventoryOwnBigItemFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2InventoryOwnBigItemFetcher>() ?? GetComponentInParent<Gs2InventoryOwnBigItemFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
-            if (target == null) {
+            if (this.target == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 

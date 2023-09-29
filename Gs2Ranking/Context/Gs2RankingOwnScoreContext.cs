@@ -40,7 +40,7 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Context
     {
         public void Start() {
             if (Score == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Score is not set in Gs2RankingOwnScoreContext.");
+                Debug.LogWarning($"{gameObject.GetFullPath()}: Score is not set in Gs2RankingOwnScoreContext.");
             }
         }
         public virtual bool HasError() {
@@ -48,9 +48,7 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Context
                 if (GetComponentInParent<Gs2RankingOwnScoreList>(true) != null) {
                     return false;
                 }
-                else {
-                    return true;
-                }
+                return true;
             }
             return false;
         }

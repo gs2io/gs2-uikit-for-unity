@@ -39,9 +39,6 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Context
     public partial class Gs2FormationOwnMoldContext : Gs2FormationMoldModelContext
     {
         public new void Start() {
-            if (Mold == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Mold is not set in Gs2FormationOwnMoldContext.");
-            }
         }
         public override bool HasError() {
             var hasError = base.HasError();
@@ -49,9 +46,10 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Context
                 if (GetComponentInParent<Gs2FormationOwnMoldList>(true) != null) {
                     return false;
                 }
-                else {
-                    return true;
+                if (GetComponentInParent<Gs2FormationConvertMoldModelToOwnMold>(true) != null) {
+                    return false;
                 }
+                return true;
             }
             return false;
         }

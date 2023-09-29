@@ -40,13 +40,36 @@ namespace Gs2.Unity.UiKit.Gs2SerialKey
 	[AddComponentMenu("GS2 UIKit/SerialKey/SerialKey/View/Label/Gs2SerialKeySerialKeyUseSerialCodeActionLabel")]
     public partial class Gs2SerialKeySerialKeyUseSerialCodeActionLabel : MonoBehaviour
     {
-        public void Update()
+        private void OnChange()
         {
-            onUpdate?.Invoke(
-                format.Replace(
-                    "{code}", $"{action?.Code}"
+            this.onUpdate?.Invoke(
+                this.format.Replace(
+                    "{code}", $"{this.action?.Code}"
                 )
             );
+        }
+
+        public void Awake() {
+            if (this.action == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2AccountAccountAuthenticationAction.");
+                enabled = false;
+            }
+        }
+
+        public virtual bool HasError()
+        {
+            if (this.action == null) {
+                return true;
+            }
+            return false;
+        }
+
+        public void OnEnable() {
+            this.action.OnChange.AddListener(OnChange);
+        }
+
+        public void OnDisable() {
+            this.action.OnChange.RemoveListener(OnChange);
         }
     }
 

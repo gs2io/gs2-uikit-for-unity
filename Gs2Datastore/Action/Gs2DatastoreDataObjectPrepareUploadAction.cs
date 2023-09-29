@@ -48,13 +48,16 @@ namespace Gs2.Unity.UiKit.Gs2Datastore
     {
         private IEnumerator Process()
         {
-            yield return new WaitUntil(() => this._clientHolder.Initialized);
-            yield return new WaitUntil(() => this._gameSessionHolder.Initialized);
+            var clientHolder = Gs2ClientHolder.Instance;
+            var gameSessionHolder = Gs2GameSessionHolder.Instance;
+
+            yield return new WaitUntil(() => clientHolder.Initialized);
+            yield return new WaitUntil(() => gameSessionHolder.Initialized);
             
-            var domain = this._clientHolder.Gs2.Datastore.Namespace(
+            var domain = clientHolder.Gs2.Datastore.Namespace(
                 this._context.DataObject.NamespaceName
             ).Me(
-                this._gameSessionHolder.GameSession
+                gameSessionHolder.GameSession
             );
             var future = domain.PrepareUpload(
                 Name,
@@ -123,16 +126,11 @@ namespace Gs2.Unity.UiKit.Gs2Datastore
 
     public partial class Gs2DatastoreDataObjectPrepareUploadAction
     {
-        private Gs2ClientHolder _clientHolder;
-        private Gs2GameSessionHolder _gameSessionHolder;
         private Gs2DatastoreOwnDataObjectContext _context;
 
         public void Awake()
         {
-            this._clientHolder = Gs2ClientHolder.Instance;
-            this._gameSessionHolder = Gs2GameSessionHolder.Instance;
             this._context = GetComponent<Gs2DatastoreOwnDataObjectContext>() ?? GetComponentInParent<Gs2DatastoreOwnDataObjectContext>();
-
             if (_context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2DatastoreOwnDataObjectContext.");
                 enabled = false;
@@ -171,28 +169,33 @@ namespace Gs2.Unity.UiKit.Gs2Datastore
         public bool UpdateIfExists;
 
         public void SetName(string value) {
-            Name = value;
-            this.onChangeName.Invoke(Name);
+            this.Name = value;
+            this.onChangeName.Invoke(this.Name);
+            this.OnChange.Invoke();
         }
 
         public void SetScope(string value) {
-            Scope = value;
-            this.onChangeScope.Invoke(Scope);
+            this.Scope = value;
+            this.onChangeScope.Invoke(this.Scope);
+            this.OnChange.Invoke();
         }
 
         public void SetContentType(string value) {
-            ContentType = value;
-            this.onChangeContentType.Invoke(ContentType);
+            this.ContentType = value;
+            this.onChangeContentType.Invoke(this.ContentType);
+            this.OnChange.Invoke();
         }
 
         public void SetAllowUserIds(List<string> value) {
-            AllowUserIds = value;
-            this.onChangeAllowUserIds.Invoke(AllowUserIds);
+            this.AllowUserIds = value;
+            this.onChangeAllowUserIds.Invoke(this.AllowUserIds);
+            this.OnChange.Invoke();
         }
 
         public void SetUpdateIfExists(bool value) {
-            UpdateIfExists = value;
-            this.onChangeUpdateIfExists.Invoke(UpdateIfExists);
+            this.UpdateIfExists = value;
+            this.onChangeUpdateIfExists.Invoke(this.UpdateIfExists);
+            this.OnChange.Invoke();
         }
     }
 
@@ -285,6 +288,8 @@ namespace Gs2.Unity.UiKit.Gs2Datastore
             add => this.onPrepareUploadComplete.AddListener(value);
             remove => this.onPrepareUploadComplete.RemoveListener(value);
         }
+
+        public UnityEvent OnChange = new UnityEvent();
 
         [SerializeField]
         internal ErrorEvent onError = new ErrorEvent();

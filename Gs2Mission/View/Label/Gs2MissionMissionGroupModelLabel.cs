@@ -40,30 +40,27 @@ namespace Gs2.Unity.UiKit.Gs2Mission
 	[AddComponentMenu("GS2 UIKit/Mission/MissionGroupModel/View/Label/Gs2MissionMissionGroupModelLabel")]
     public partial class Gs2MissionMissionGroupModelLabel : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched && _fetcher.MissionGroupModel != null)
-            {
-                onUpdate?.Invoke(
-                    format.Replace(
-                        "{name}", $"{_fetcher?.MissionGroupModel?.Name}"
-                    ).Replace(
-                        "{metadata}", $"{_fetcher?.MissionGroupModel?.Metadata}"
-                    ).Replace(
-                        "{tasks}", $"{_fetcher?.MissionGroupModel?.Tasks}"
-                    ).Replace(
-                        "{resetType}", $"{_fetcher?.MissionGroupModel?.ResetType}"
-                    ).Replace(
-                        "{resetDayOfMonth}", $"{_fetcher?.MissionGroupModel?.ResetDayOfMonth}"
-                    ).Replace(
-                        "{resetDayOfWeek}", $"{_fetcher?.MissionGroupModel?.ResetDayOfWeek}"
-                    ).Replace(
-                        "{resetHour}", $"{_fetcher?.MissionGroupModel?.ResetHour}"
-                    ).Replace(
-                        "{completeNotificationNamespaceId}", $"{_fetcher?.MissionGroupModel?.CompleteNotificationNamespaceId}"
-                    )
-                );
-            }
+            this.onUpdate?.Invoke(
+                this.format.Replace(
+                    "{name}", $"{this._fetcher?.MissionGroupModel?.Name}"
+                ).Replace(
+                    "{metadata}", $"{this._fetcher?.MissionGroupModel?.Metadata}"
+                ).Replace(
+                    "{tasks}", $"{this._fetcher?.MissionGroupModel?.Tasks}"
+                ).Replace(
+                    "{resetType}", $"{this._fetcher?.MissionGroupModel?.ResetType}"
+                ).Replace(
+                    "{resetDayOfMonth}", $"{this._fetcher?.MissionGroupModel?.ResetDayOfMonth}"
+                ).Replace(
+                    "{resetDayOfWeek}", $"{this._fetcher?.MissionGroupModel?.ResetDayOfWeek}"
+                ).Replace(
+                    "{resetHour}", $"{this._fetcher?.MissionGroupModel?.ResetHour}"
+                ).Replace(
+                    "{completeNotificationNamespaceId}", $"{this._fetcher?.MissionGroupModel?.CompleteNotificationNamespaceId}"
+                )
+            );
         }
     }
 
@@ -77,23 +74,43 @@ namespace Gs2.Unity.UiKit.Gs2Mission
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2MissionMissionGroupModelFetcher>() ?? GetComponentInParent<Gs2MissionMissionGroupModelFetcher>();
-
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2MissionMissionGroupModelFetcher>() ?? GetComponentInParent<Gs2MissionMissionGroupModelFetcher>();
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MissionMissionGroupModelFetcher.");
                 enabled = false;
             }
-
-            Update();
         }
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2MissionMissionGroupModelFetcher>() ?? GetComponentInParent<Gs2MissionMissionGroupModelFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2MissionMissionGroupModelFetcher>() ?? GetComponentInParent<Gs2MissionMissionGroupModelFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 
@@ -131,8 +148,8 @@ namespace Gs2.Unity.UiKit.Gs2Mission
 
         public event UnityAction<string> OnUpdate
         {
-            add => onUpdate.AddListener(value);
-            remove => onUpdate.RemoveListener(value);
+            add => this.onUpdate.AddListener(value);
+            remove => this.onUpdate.RemoveListener(value);
         }
     }
 }

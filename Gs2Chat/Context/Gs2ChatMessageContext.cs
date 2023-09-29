@@ -12,8 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
- * deny overwrite
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
@@ -27,7 +25,9 @@
 #pragma warning disable CS0472
 
 using Gs2.Unity.Gs2Chat.ScriptableObject;
+using Gs2.Unity.UiKit.Core;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2Chat.Context
 {
@@ -40,18 +40,16 @@ namespace Gs2.Unity.UiKit.Gs2Chat.Context
     {
         public void Start() {
             if (Message == null) {
-                Debug.LogError("Message is not set in Gs2ChatMessageContext.");
+                Debug.LogWarning($"{gameObject.GetFullPath()}: Message is not set in Gs2ChatMessageContext.");
             }
         }
 
-        public bool HasError() {
+        public virtual bool HasError() {
             if (Message == null) {
                 if (GetComponentInParent<Gs2ChatMessageList>(true) != null) {
                     return false;
                 }
-                else {
-                    return true;
-                }
+                return true;
             }
             return false;
         }
@@ -81,11 +79,21 @@ namespace Gs2.Unity.UiKit.Gs2Chat.Context
 
     public partial class Gs2ChatMessageContext
     {
-        public Message Message;
+        [SerializeField]
+        private Message _message;
+        public Message Message
+        {
+            get => _message;
+            set => SetMessage(value);
+        }
 
         public void SetMessage(Message Message) {
-            this.Message = Message;
+            this._message = Message;
+
+            this.OnUpdate.Invoke();
         }
+
+        public UnityEvent OnUpdate = new UnityEvent();
     }
 
     /// <summary>

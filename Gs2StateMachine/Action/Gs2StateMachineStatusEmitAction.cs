@@ -48,13 +48,16 @@ namespace Gs2.Unity.UiKit.Gs2StateMachine
     {
         private IEnumerator Process()
         {
-            yield return new WaitUntil(() => this._clientHolder.Initialized);
-            yield return new WaitUntil(() => this._gameSessionHolder.Initialized);
+            var clientHolder = Gs2ClientHolder.Instance;
+            var gameSessionHolder = Gs2GameSessionHolder.Instance;
+
+            yield return new WaitUntil(() => clientHolder.Initialized);
+            yield return new WaitUntil(() => gameSessionHolder.Initialized);
             
-            var domain = this._clientHolder.Gs2.StateMachine.Namespace(
+            var domain = clientHolder.Gs2.StateMachine.Namespace(
                 this._context.Status.NamespaceName
             ).Me(
-                this._gameSessionHolder.GameSession
+                gameSessionHolder.GameSession
             ).Status(
                 this._context.Status.StatusName
             );
@@ -122,16 +125,11 @@ namespace Gs2.Unity.UiKit.Gs2StateMachine
 
     public partial class Gs2StateMachineStatusEmitAction
     {
-        private Gs2ClientHolder _clientHolder;
-        private Gs2GameSessionHolder _gameSessionHolder;
         private Gs2StateMachineOwnStatusContext _context;
 
         public void Awake()
         {
-            this._clientHolder = Gs2ClientHolder.Instance;
-            this._gameSessionHolder = Gs2GameSessionHolder.Instance;
             this._context = GetComponent<Gs2StateMachineOwnStatusContext>() ?? GetComponentInParent<Gs2StateMachineOwnStatusContext>();
-
             if (_context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2StateMachineOwnStatusContext.");
                 enabled = false;
@@ -167,13 +165,15 @@ namespace Gs2.Unity.UiKit.Gs2StateMachine
         public string Args;
 
         public void SetEventName(string value) {
-            EventName = value;
-            this.onChangeEventName.Invoke(EventName);
+            this.EventName = value;
+            this.onChangeEventName.Invoke(this.EventName);
+            this.OnChange.Invoke();
         }
 
         public void SetArgs(string value) {
-            Args = value;
-            this.onChangeArgs.Invoke(Args);
+            this.Args = value;
+            this.onChangeArgs.Invoke(this.Args);
+            this.OnChange.Invoke();
         }
     }
 
@@ -224,6 +224,8 @@ namespace Gs2.Unity.UiKit.Gs2StateMachine
             add => this.onEmitComplete.AddListener(value);
             remove => this.onEmitComplete.RemoveListener(value);
         }
+
+        public UnityEvent OnChange = new UnityEvent();
 
         [SerializeField]
         internal ErrorEvent onError = new ErrorEvent();

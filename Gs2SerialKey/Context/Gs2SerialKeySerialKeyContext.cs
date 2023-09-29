@@ -40,7 +40,7 @@ namespace Gs2.Unity.UiKit.Gs2SerialKey.Context
     {
         public void Start() {
             if (SerialKey == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: SerialKey is not set in Gs2SerialKeySerialKeyContext.");
+                Debug.LogWarning($"{gameObject.GetFullPath()}: SerialKey is not set in Gs2SerialKeySerialKeyContext.");
             }
         }
 

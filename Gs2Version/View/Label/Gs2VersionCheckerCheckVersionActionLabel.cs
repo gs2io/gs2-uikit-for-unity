@@ -40,13 +40,36 @@ namespace Gs2.Unity.UiKit.Gs2Version
 	[AddComponentMenu("GS2 UIKit/Version/Checker/View/Label/Gs2VersionCheckerCheckVersionActionLabel")]
     public partial class Gs2VersionCheckerCheckVersionActionLabel : MonoBehaviour
     {
-        public void Update()
+        private void OnChange()
         {
-            onUpdate?.Invoke(
-                format.Replace(
-                    "{targetVersions}", $"{action?.TargetVersions}"
+            this.onUpdate?.Invoke(
+                this.format.Replace(
+                    "{targetVersions}", $"{this.action?.TargetVersions}"
                 )
             );
+        }
+
+        public void Awake() {
+            if (this.action == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2AccountAccountAuthenticationAction.");
+                enabled = false;
+            }
+        }
+
+        public virtual bool HasError()
+        {
+            if (this.action == null) {
+                return true;
+            }
+            return false;
+        }
+
+        public void OnEnable() {
+            this.action.OnChange.AddListener(OnChange);
+        }
+
+        public void OnDisable() {
+            this.action.OnChange.RemoveListener(OnChange);
         }
     }
 

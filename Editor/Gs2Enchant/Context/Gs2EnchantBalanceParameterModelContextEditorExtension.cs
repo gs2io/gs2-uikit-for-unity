@@ -43,8 +43,12 @@ namespace Gs2.Unity.UiKit.Gs2Enchant.Editor
             serializedObject.Update();
 
             if (original.BalanceParameterModel == null) {
-                if (original.GetComponentInParent<Gs2EnchantBalanceParameterModelList>(true) != null) {
+                var list = original.GetComponentInParent<Gs2EnchantBalanceParameterModelList>(true);
+                if (list != null) {
                     EditorGUILayout.HelpBox("BalanceParameterModel is auto assign from Gs2EnchantBalanceParameterModelList.", MessageType.Info);
+                    EditorGUI.BeginDisabledGroup(true);
+                    EditorGUILayout.ObjectField("List", list, typeof(Gs2EnchantBalanceParameterModelList), false);
+                    EditorGUI.EndDisabledGroup();
                 }
                 else {
                     EditorGUILayout.HelpBox("BalanceParameterModel not assigned.", MessageType.Error);

@@ -33,20 +33,20 @@ namespace Gs2.Unity.UiKit.Gs2Mission
 	[AddComponentMenu("GS2 UIKit/Mission/Counter/View/Progress/Gs2MissionMissionTaskProgress")]
     public partial class Gs2MissionMissionTaskProgress : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched && _fetcher.Counter != null && 
-                _groupModelFetcher.Fetched && _groupModelFetcher.MissionGroupModel != null && 
-                _modelFetcher.Fetched && _modelFetcher.MissionTaskModel != null) {
-                var scopedValue = this._fetcher.Counter.Values.FirstOrDefault(v => v.ResetType == this._groupModelFetcher.MissionGroupModel.ResetType);
-                if (scopedValue.Value >= this._modelFetcher.MissionTaskModel.TargetValue) {
-                    onUpdate?.Invoke(1);
-                }
-                else {
-                    onUpdate?.Invoke(
-                        Math.Min((float)scopedValue.Value / this._modelFetcher.MissionTaskModel.TargetValue, 1)
-                    );
-                }
+            if (_fetcher?.Counter == null) return;
+            if (_groupModelFetcher?.MissionGroupModel == null) return;
+            if (_modelFetcher?.MissionTaskModel == null) return;
+            
+            var scopedValue = this._fetcher.Counter.Values.FirstOrDefault(v => v.ResetType == this._groupModelFetcher.MissionGroupModel.ResetType);
+            if (scopedValue.Value >= this._modelFetcher.MissionTaskModel.TargetValue) {
+                onUpdate?.Invoke(1);
+            }
+            else {
+                onUpdate?.Invoke(
+                    Math.Min((float)scopedValue.Value / this._modelFetcher.MissionTaskModel.TargetValue, 1)
+                );
             }
         }
     }
@@ -63,42 +63,80 @@ namespace Gs2.Unity.UiKit.Gs2Mission
 
         public void Awake()
         {
-            _groupModelFetcher = GetComponent<Gs2MissionMissionGroupModelFetcher>() ?? GetComponentInParent<Gs2MissionMissionGroupModelFetcher>();
-            if (_groupModelFetcher == null) {
+            this._groupModelFetcher = GetComponent<Gs2MissionMissionGroupModelFetcher>() ?? GetComponentInParent<Gs2MissionMissionGroupModelFetcher>();
+            if (this._groupModelFetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MissionMissionGroupModelFetcher.");
                 enabled = false;
             }
 
-            _modelFetcher = GetComponent<Gs2MissionMissionTaskModelFetcher>() ?? GetComponentInParent<Gs2MissionMissionTaskModelFetcher>();
-            if (_modelFetcher == null) {
+            this._modelFetcher = GetComponent<Gs2MissionMissionTaskModelFetcher>() ?? GetComponentInParent<Gs2MissionMissionTaskModelFetcher>();
+            if (this._modelFetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MissionMissionTaskModelFetcher.");
                 enabled = false;
             }
 
-            _fetcher = GetComponent<Gs2MissionOwnCounterFetcher>() ?? GetComponentInParent<Gs2MissionOwnCounterFetcher>();
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2MissionOwnCounterFetcher>() ?? GetComponentInParent<Gs2MissionOwnCounterFetcher>();
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MissionOwnCounterFetcher.");
                 enabled = false;
             }
-
-            Update();
         }
 
         public bool HasError()
         {
-            _groupModelFetcher = GetComponent<Gs2MissionMissionGroupModelFetcher>() ?? GetComponentInParent<Gs2MissionMissionGroupModelFetcher>(true);
-            if (_groupModelFetcher == null) {
+            this._groupModelFetcher = GetComponent<Gs2MissionMissionGroupModelFetcher>() ?? GetComponentInParent<Gs2MissionMissionGroupModelFetcher>(true);
+            if (this._groupModelFetcher == null) {
                 return true;
             }
-            _modelFetcher = GetComponent<Gs2MissionMissionTaskModelFetcher>() ?? GetComponentInParent<Gs2MissionMissionTaskModelFetcher>(true);
-            if (_modelFetcher == null) {
+            this._modelFetcher = GetComponent<Gs2MissionMissionTaskModelFetcher>() ?? GetComponentInParent<Gs2MissionMissionTaskModelFetcher>(true);
+            if (this._modelFetcher == null) {
                 return true;
             }
-            _fetcher = GetComponent<Gs2MissionOwnCounterFetcher>() ?? GetComponentInParent<Gs2MissionOwnCounterFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2MissionOwnCounterFetcher>() ?? GetComponentInParent<Gs2MissionOwnCounterFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+            if (this._groupModelFetcher != null) {
+                this._groupModelFetcher.OnFetched.AddListener(this._onFetched);
+                if (this._groupModelFetcher.Fetched) {
+                    OnFetched();
+                }
+            }
+            if (this._modelFetcher != null) {
+                this._modelFetcher.OnFetched.AddListener(this._onFetched);
+                if (this._modelFetcher.Fetched) {
+                    OnFetched();
+                }
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                if (this._groupModelFetcher != null) {
+                    this._groupModelFetcher.OnFetched.RemoveListener(this._onFetched);
+                }
+                if (this._modelFetcher != null) {
+                    this._modelFetcher.OnFetched.RemoveListener(this._onFetched);
+                }
+                this._onFetched = null;
+            }
         }
     }
 

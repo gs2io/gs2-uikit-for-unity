@@ -27,6 +27,7 @@
 using Gs2.Unity.Gs2Formation.ScriptableObject;
 using Gs2.Unity.UiKit.Core;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2Formation.Context
 {
@@ -83,11 +84,21 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Context
 
     public partial class Gs2FormationSlotModelContext
     {
-        public SlotModel SlotModel;
+        [SerializeField]
+        private SlotModel _formModel;
+        public SlotModel SlotModel
+        {
+            get => _formModel;
+            set => SetSlotModel(value);
+        }
 
         public void SetSlotModel(SlotModel SlotModel) {
-            this.SlotModel = SlotModel;
+            this._formModel = SlotModel;
+
+            this.OnUpdate.Invoke();
         }
+
+        public UnityEvent OnUpdate = new UnityEvent();
     }
 
     /// <summary>

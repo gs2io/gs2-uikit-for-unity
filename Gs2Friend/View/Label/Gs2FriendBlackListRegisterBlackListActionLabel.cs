@@ -40,13 +40,36 @@ namespace Gs2.Unity.UiKit.Gs2Friend
 	[AddComponentMenu("GS2 UIKit/Friend/BlackList/View/Label/Gs2FriendBlackListRegisterBlackListActionLabel")]
     public partial class Gs2FriendBlackListRegisterBlackListActionLabel : MonoBehaviour
     {
-        public void Update()
+        private void OnChange()
         {
-            onUpdate?.Invoke(
-                format.Replace(
-                    "{targetUserId}", $"{action?.TargetUserId}"
+            this.onUpdate?.Invoke(
+                this.format.Replace(
+                    "{targetUserId}", $"{this.action?.TargetUserId}"
                 )
             );
+        }
+
+        public void Awake() {
+            if (this.action == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2AccountAccountAuthenticationAction.");
+                enabled = false;
+            }
+        }
+
+        public virtual bool HasError()
+        {
+            if (this.action == null) {
+                return true;
+            }
+            return false;
+        }
+
+        public void OnEnable() {
+            this.action.OnChange.AddListener(OnChange);
+        }
+
+        public void OnDisable() {
+            this.action.OnChange.RemoveListener(OnChange);
         }
     }
 

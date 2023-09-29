@@ -40,7 +40,7 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Context
     {
         public void Start() {
             if (CounterModel == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: CounterModel is not set in Gs2MissionCounterModelContext.");
+                Debug.LogWarning($"{gameObject.GetFullPath()}: CounterModel is not set in Gs2MissionCounterModelContext.");
             }
         }
 
@@ -49,9 +49,7 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Context
                 if (GetComponentInParent<Gs2MissionCounterModelList>(true) != null) {
                     return false;
                 }
-                else {
-                    return true;
-                }
+                return true;
             }
             return false;
         }

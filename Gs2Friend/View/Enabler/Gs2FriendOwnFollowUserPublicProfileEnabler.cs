@@ -24,10 +24,12 @@
 
 #pragma warning disable CS0472
 
+using System;
 using System.Collections.Generic;
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Friend.Fetcher;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2Friend.Enabler
 {
@@ -38,29 +40,24 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Enabler
 	[AddComponentMenu("GS2 UIKit/Friend/FollowUser/View/Enabler/Properties/PublicProfile/Gs2FriendOwnFollowUserPublicProfileEnabler")]
     public partial class Gs2FriendOwnFollowUserPublicProfileEnabler : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched && _fetcher.FollowUser != null)
+            switch(this.expression)
             {
-                switch(expression)
-                {
-                    case Expression.In:
-                        target.SetActive(enablePublicProfiles.Contains(_fetcher.FollowUser.PublicProfile));
-                        break;
-                    case Expression.NotIn:
-                        target.SetActive(!enablePublicProfiles.Contains(_fetcher.FollowUser.PublicProfile));
-                        break;
-                    case Expression.StartsWith:
-                        target.SetActive(_fetcher.FollowUser.PublicProfile.StartsWith(enablePublicProfile));
-                        break;
-                    case Expression.EndsWith:
-                        target.SetActive(_fetcher.FollowUser.PublicProfile.EndsWith(enablePublicProfile));
-                        break;
-                }
-            }
-            else
-            {
-                target.SetActive(false);
+                case Expression.In:
+                    this.target.SetActive(this.enablePublicProfiles.Contains(this._fetcher.FollowUser.PublicProfile));
+                    break;
+                case Expression.NotIn:
+                    this.target.SetActive(!this.enablePublicProfiles.Contains(this._fetcher.FollowUser.PublicProfile));
+                    break;
+                case Expression.StartsWith:
+                    this.target.SetActive(this._fetcher.FollowUser.PublicProfile.StartsWith(this.enablePublicProfile));
+                    break;
+                case Expression.EndsWith:
+                    this.target.SetActive(this._fetcher.FollowUser.PublicProfile.EndsWith(this.enablePublicProfile));
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
         }
     }
@@ -75,13 +72,12 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Enabler
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2FriendOwnFollowUserFetcher>() ?? GetComponentInParent<Gs2FriendOwnFollowUserFetcher>();
-
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2FriendOwnFollowUserFetcher>() ?? GetComponentInParent<Gs2FriendOwnFollowUserFetcher>();
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2FriendOwnFollowUserFetcher.");
                 enabled = false;
             }
-            if (target == null) {
+            if (this.target == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: target is not set.");
                 enabled = false;
             }
@@ -89,14 +85,37 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Enabler
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2FriendOwnFollowUserFetcher>() ?? GetComponentInParent<Gs2FriendOwnFollowUserFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2FriendOwnFollowUserFetcher>() ?? GetComponentInParent<Gs2FriendOwnFollowUserFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
-            if (target == null) {
+            if (this.target == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 

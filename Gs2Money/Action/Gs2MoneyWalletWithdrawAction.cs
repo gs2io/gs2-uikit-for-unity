@@ -48,13 +48,16 @@ namespace Gs2.Unity.UiKit.Gs2Money
     {
         private IEnumerator Process()
         {
-            yield return new WaitUntil(() => this._clientHolder.Initialized);
-            yield return new WaitUntil(() => this._gameSessionHolder.Initialized);
+            var clientHolder = Gs2ClientHolder.Instance;
+            var gameSessionHolder = Gs2GameSessionHolder.Instance;
+
+            yield return new WaitUntil(() => clientHolder.Initialized);
+            yield return new WaitUntil(() => gameSessionHolder.Initialized);
             
-            var domain = this._clientHolder.Gs2.Money.Namespace(
+            var domain = clientHolder.Gs2.Money.Namespace(
                 this._context.Wallet.NamespaceName
             ).Me(
-                this._gameSessionHolder.GameSession
+                gameSessionHolder.GameSession
             ).Wallet(
                 this._context.Wallet.Slot
             );
@@ -122,16 +125,11 @@ namespace Gs2.Unity.UiKit.Gs2Money
 
     public partial class Gs2MoneyWalletWithdrawAction
     {
-        private Gs2ClientHolder _clientHolder;
-        private Gs2GameSessionHolder _gameSessionHolder;
         private Gs2MoneyOwnWalletContext _context;
 
         public void Awake()
         {
-            this._clientHolder = Gs2ClientHolder.Instance;
-            this._gameSessionHolder = Gs2GameSessionHolder.Instance;
             this._context = GetComponent<Gs2MoneyOwnWalletContext>() ?? GetComponentInParent<Gs2MoneyOwnWalletContext>();
-
             if (_context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MoneyOwnWalletContext.");
                 enabled = false;
@@ -167,23 +165,27 @@ namespace Gs2.Unity.UiKit.Gs2Money
         public bool PaidOnly;
 
         public void SetCount(int value) {
-            Count = value;
-            this.onChangeCount.Invoke(Count);
+            this.Count = value;
+            this.onChangeCount.Invoke(this.Count);
+            this.OnChange.Invoke();
         }
 
         public void DecreaseCount() {
-            Count -= 1;
-            this.onChangeCount.Invoke(Count);
+            this.Count -= 1;
+            this.onChangeCount.Invoke(this.Count);
+            this.OnChange.Invoke();
         }
 
         public void IncreaseCount() {
-            Count += 1;
-            this.onChangeCount.Invoke(Count);
+            this.Count += 1;
+            this.onChangeCount.Invoke(this.Count);
+            this.OnChange.Invoke();
         }
 
         public void SetPaidOnly(bool value) {
-            PaidOnly = value;
-            this.onChangePaidOnly.Invoke(PaidOnly);
+            this.PaidOnly = value;
+            this.onChangePaidOnly.Invoke(this.PaidOnly);
+            this.OnChange.Invoke();
         }
     }
 
@@ -234,6 +236,8 @@ namespace Gs2.Unity.UiKit.Gs2Money
             add => this.onWithdrawComplete.AddListener(value);
             remove => this.onWithdrawComplete.RemoveListener(value);
         }
+
+        public UnityEvent OnChange = new UnityEvent();
 
         [SerializeField]
         internal ErrorEvent onError = new ErrorEvent();

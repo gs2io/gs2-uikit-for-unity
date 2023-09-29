@@ -40,43 +40,42 @@ namespace Gs2.Unity.UiKit.Gs2Money
 	[AddComponentMenu("GS2 UIKit/Money/Wallet/View/SpriteSwitcher/Properties/Slot/Gs2MoneyOwnWalletSlotSpriteSwitcher")]
     public partial class Gs2MoneyOwnWalletSlotSpriteSwitcher : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched && _fetcher.Wallet != null)
+            switch(this.expression)
             {
-                switch(expression)
-                {
-                    case Expression.In:
-                        if (applySlots.Contains(_fetcher.Wallet.Slot)) {
-                            this.onUpdate.Invoke(this.sprite);
-                        }
-                        break;
-                    case Expression.NotIn:
-                        if (!applySlots.Contains(_fetcher.Wallet.Slot)) {
-                            this.onUpdate.Invoke(this.sprite);
-                        }
-                        break;
-                    case Expression.Less:
-                        if (applySlot > _fetcher.Wallet.Slot) {
-                            this.onUpdate.Invoke(this.sprite);
-                        }
-                        break;
-                    case Expression.LessEqual:
-                        if (applySlot >= _fetcher.Wallet.Slot) {
-                            this.onUpdate.Invoke(this.sprite);
-                        }
-                        break;
-                    case Expression.Greater:
-                        if (applySlot < _fetcher.Wallet.Slot) {
-                            this.onUpdate.Invoke(this.sprite);
-                        }
-                        break;
-                    case Expression.GreaterEqual:
-                        if (applySlot <= _fetcher.Wallet.Slot) {
-                            this.onUpdate.Invoke(this.sprite);
-                        }
-                        break;
-                }
+                case Expression.In:
+                    if (this.applySlots.Contains(this._fetcher.Wallet.Slot)) {
+                        this.onUpdate.Invoke(this.sprite);
+                    }
+                    break;
+                case Expression.NotIn:
+                    if (!this.applySlots.Contains(this._fetcher.Wallet.Slot)) {
+                        this.onUpdate.Invoke(this.sprite);
+                    }
+                    break;
+                case Expression.Less:
+                    if (this.applySlot > this._fetcher.Wallet.Slot) {
+                        this.onUpdate.Invoke(this.sprite);
+                    }
+                    break;
+                case Expression.LessEqual:
+                    if (this.applySlot >= this._fetcher.Wallet.Slot) {
+                        this.onUpdate.Invoke(this.sprite);
+                    }
+                    break;
+                case Expression.Greater:
+                    if (this.applySlot < this._fetcher.Wallet.Slot) {
+                        this.onUpdate.Invoke(this.sprite);
+                    }
+                    break;
+                case Expression.GreaterEqual:
+                    if (this.applySlot <= this._fetcher.Wallet.Slot) {
+                        this.onUpdate.Invoke(this.sprite);
+                    }
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
         }
     }
@@ -91,13 +90,12 @@ namespace Gs2.Unity.UiKit.Gs2Money
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2MoneyOwnWalletFetcher>() ?? GetComponentInParent<Gs2MoneyOwnWalletFetcher>();
-
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2MoneyOwnWalletFetcher>() ?? GetComponentInParent<Gs2MoneyOwnWalletFetcher>();
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MoneyOwnWalletFetcher.");
                 enabled = false;
             }
-            if (sprite == null) {
+            if (this.sprite == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: sprite is not set.");
                 enabled = false;
             }
@@ -105,14 +103,37 @@ namespace Gs2.Unity.UiKit.Gs2Money
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2MoneyOwnWalletFetcher>() ?? GetComponentInParent<Gs2MoneyOwnWalletFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2MoneyOwnWalletFetcher>() ?? GetComponentInParent<Gs2MoneyOwnWalletFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
-            if (sprite == null) {
+            if (this.sprite == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 

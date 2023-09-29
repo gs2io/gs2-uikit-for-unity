@@ -48,13 +48,16 @@ namespace Gs2.Unity.UiKit.Gs2Formation
     {
         private IEnumerator Process()
         {
-            yield return new WaitUntil(() => this._clientHolder.Initialized);
-            yield return new WaitUntil(() => this._gameSessionHolder.Initialized);
+            var clientHolder = Gs2ClientHolder.Instance;
+            var gameSessionHolder = Gs2GameSessionHolder.Instance;
+
+            yield return new WaitUntil(() => clientHolder.Initialized);
+            yield return new WaitUntil(() => gameSessionHolder.Initialized);
             
-            var domain = this._clientHolder.Gs2.Formation.Namespace(
+            var domain = clientHolder.Gs2.Formation.Namespace(
                 this._context.Form.NamespaceName
             ).Me(
-                this._gameSessionHolder.GameSession
+                gameSessionHolder.GameSession
             ).Mold(
                 this._context.Form.MoldModelName
             ).Form(
@@ -124,16 +127,11 @@ namespace Gs2.Unity.UiKit.Gs2Formation
 
     public partial class Gs2FormationFormSetFormAction
     {
-        private Gs2ClientHolder _clientHolder;
-        private Gs2GameSessionHolder _gameSessionHolder;
         private Gs2FormationOwnFormContext _context;
 
         public void Awake()
         {
-            this._clientHolder = Gs2ClientHolder.Instance;
-            this._gameSessionHolder = Gs2GameSessionHolder.Instance;
             this._context = GetComponent<Gs2FormationOwnFormContext>() ?? GetComponentInParent<Gs2FormationOwnFormContext>();
-
             if (_context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2FormationOwnFormContext.");
                 enabled = false;
@@ -169,13 +167,15 @@ namespace Gs2.Unity.UiKit.Gs2Formation
         public string KeyId;
 
         public void SetSlots(List<Gs2.Unity.Gs2Formation.Model.EzSlotWithSignature> value) {
-            Slots = value;
-            this.onChangeSlots.Invoke(Slots);
+            this.Slots = value;
+            this.onChangeSlots.Invoke(this.Slots);
+            this.OnChange.Invoke();
         }
 
         public void SetKeyId(string value) {
-            KeyId = value;
-            this.onChangeKeyId.Invoke(KeyId);
+            this.KeyId = value;
+            this.onChangeKeyId.Invoke(this.KeyId);
+            this.OnChange.Invoke();
         }
     }
 
@@ -226,6 +226,8 @@ namespace Gs2.Unity.UiKit.Gs2Formation
             add => this.onSetFormComplete.AddListener(value);
             remove => this.onSetFormComplete.RemoveListener(value);
         }
+
+        public UnityEvent OnChange = new UnityEvent();
 
         [SerializeField]
         internal ErrorEvent onError = new ErrorEvent();

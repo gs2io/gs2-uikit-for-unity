@@ -40,7 +40,7 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking.Context
     {
         public void Start() {
             if (RatingModel == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: RatingModel is not set in Gs2MatchmakingRatingModelContext.");
+                Debug.LogWarning($"{gameObject.GetFullPath()}: RatingModel is not set in Gs2MatchmakingRatingModelContext.");
             }
         }
 
@@ -49,9 +49,7 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking.Context
                 if (GetComponentInParent<Gs2MatchmakingRatingModelList>(true) != null) {
                     return false;
                 }
-                else {
-                    return true;
-                }
+                return true;
             }
             return false;
         }

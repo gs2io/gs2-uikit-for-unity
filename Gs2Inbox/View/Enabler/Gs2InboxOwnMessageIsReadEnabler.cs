@@ -28,6 +28,7 @@ using System.Collections.Generic;
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Inbox.Fetcher;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2Inbox
 {
@@ -38,23 +39,16 @@ namespace Gs2.Unity.UiKit.Gs2Inbox
 	[AddComponentMenu("GS2 UIKit/Inbox/Message/View/Enabler/Properties/IsRead/Gs2InboxOwnMessageIsReadEnabler")]
     public partial class Gs2InboxOwnMessageIsReadEnabler : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched && _fetcher.Message != null)
+            switch(this.expression)
             {
-                switch(expression)
-                {
-                    case Expression.True:
-                        target.SetActive(_fetcher.Message.IsRead);
-                        break;
-                    case Expression.False:
-                        target.SetActive(!_fetcher.Message.IsRead);
-                        break;
-                }
-            }
-            else
-            {
-                target.SetActive(false);
+                case Expression.True:
+                    this.target.SetActive(this._fetcher.Message.IsRead);
+                    break;
+                case Expression.False:
+                    this.target.SetActive(!this._fetcher.Message.IsRead);
+                    break;
             }
         }
     }
@@ -69,13 +63,13 @@ namespace Gs2.Unity.UiKit.Gs2Inbox
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2InboxOwnMessageFetcher>() ?? GetComponentInParent<Gs2InboxOwnMessageFetcher>();
+            this._fetcher = GetComponent<Gs2InboxOwnMessageFetcher>() ?? GetComponentInParent<Gs2InboxOwnMessageFetcher>();
 
-            if (_fetcher == null) {
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2InboxOwnMessageFetcher.");
                 enabled = false;
             }
-            if (target == null) {
+            if (this.target == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: target is not set.");
                 enabled = false;
             }
@@ -83,14 +77,37 @@ namespace Gs2.Unity.UiKit.Gs2Inbox
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2InboxOwnMessageFetcher>() ?? GetComponentInParent<Gs2InboxOwnMessageFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2InboxOwnMessageFetcher>() ?? GetComponentInParent<Gs2InboxOwnMessageFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
-            if (target == null) {
+            if (this.target == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 

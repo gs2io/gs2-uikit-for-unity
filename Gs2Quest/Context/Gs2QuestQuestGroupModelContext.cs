@@ -40,7 +40,7 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Context
     {
         public void Start() {
             if (QuestGroupModel == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: QuestGroupModel is not set in Gs2QuestQuestGroupModelContext.");
+                Debug.LogWarning($"{gameObject.GetFullPath()}: QuestGroupModel is not set in Gs2QuestQuestGroupModelContext.");
             }
         }
 
@@ -49,9 +49,7 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Context
                 if (GetComponentInParent<Gs2QuestQuestGroupModelList>(true) != null) {
                     return false;
                 }
-                else {
-                    return true;
-                }
+                return true;
             }
             return false;
         }

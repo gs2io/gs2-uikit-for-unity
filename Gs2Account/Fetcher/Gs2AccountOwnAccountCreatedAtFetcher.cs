@@ -40,14 +40,11 @@ namespace Gs2.Unity.UiKit.Gs2Account
 	[AddComponentMenu("GS2 UIKit/Account/Account/Fetcher/Properties/CreatedAt/Gs2AccountOwnAccountCreatedAtFetcher")]
     public partial class Gs2AccountOwnAccountCreatedAtFetcher : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched && _fetcher.Account != null)
-            {
-                onUpdate?.Invoke(
-                    _fetcher.Account.CreatedAt
-                );
-            }
+            onUpdate?.Invoke(
+                _fetcher.Account.CreatedAt
+            );
         }
     }
 
@@ -61,9 +58,9 @@ namespace Gs2.Unity.UiKit.Gs2Account
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2AccountOwnAccountFetcher>() ?? GetComponentInParent<Gs2AccountOwnAccountFetcher>();
+            this._fetcher = GetComponent<Gs2AccountOwnAccountFetcher>() ?? GetComponentInParent<Gs2AccountOwnAccountFetcher>();
 
-            if (_fetcher == null) {
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2AccountOwnAccountFetcher.");
                 enabled = false;
             }
@@ -71,11 +68,34 @@ namespace Gs2.Unity.UiKit.Gs2Account
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2AccountOwnAccountFetcher>() ?? GetComponentInParent<Gs2AccountOwnAccountFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2AccountOwnAccountFetcher>() ?? GetComponentInParent<Gs2AccountOwnAccountFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 

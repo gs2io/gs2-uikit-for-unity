@@ -24,10 +24,12 @@
 
 #pragma warning disable CS0472
 
+using System;
 using System.Collections.Generic;
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Enchant.Fetcher;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2Enchant.Enabler
 {
@@ -38,29 +40,24 @@ namespace Gs2.Unity.UiKit.Gs2Enchant.Enabler
 	[AddComponentMenu("GS2 UIKit/Enchant/BalanceParameterStatus/View/Enabler/Properties/PropertyId/Gs2EnchantOwnBalanceParameterStatusPropertyIdEnabler")]
     public partial class Gs2EnchantOwnBalanceParameterStatusPropertyIdEnabler : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched && _fetcher.BalanceParameterStatus != null)
+            switch(this.expression)
             {
-                switch(expression)
-                {
-                    case Expression.In:
-                        target.SetActive(enablePropertyIds.Contains(_fetcher.BalanceParameterStatus.PropertyId));
-                        break;
-                    case Expression.NotIn:
-                        target.SetActive(!enablePropertyIds.Contains(_fetcher.BalanceParameterStatus.PropertyId));
-                        break;
-                    case Expression.StartsWith:
-                        target.SetActive(_fetcher.BalanceParameterStatus.PropertyId.StartsWith(enablePropertyId));
-                        break;
-                    case Expression.EndsWith:
-                        target.SetActive(_fetcher.BalanceParameterStatus.PropertyId.EndsWith(enablePropertyId));
-                        break;
-                }
-            }
-            else
-            {
-                target.SetActive(false);
+                case Expression.In:
+                    this.target.SetActive(this.enablePropertyIds.Contains(this._fetcher.BalanceParameterStatus.PropertyId));
+                    break;
+                case Expression.NotIn:
+                    this.target.SetActive(!this.enablePropertyIds.Contains(this._fetcher.BalanceParameterStatus.PropertyId));
+                    break;
+                case Expression.StartsWith:
+                    this.target.SetActive(this._fetcher.BalanceParameterStatus.PropertyId.StartsWith(this.enablePropertyId));
+                    break;
+                case Expression.EndsWith:
+                    this.target.SetActive(this._fetcher.BalanceParameterStatus.PropertyId.EndsWith(this.enablePropertyId));
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
         }
     }
@@ -75,13 +72,12 @@ namespace Gs2.Unity.UiKit.Gs2Enchant.Enabler
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2EnchantOwnBalanceParameterStatusFetcher>() ?? GetComponentInParent<Gs2EnchantOwnBalanceParameterStatusFetcher>();
-
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2EnchantOwnBalanceParameterStatusFetcher>() ?? GetComponentInParent<Gs2EnchantOwnBalanceParameterStatusFetcher>();
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2EnchantOwnBalanceParameterStatusFetcher.");
                 enabled = false;
             }
-            if (target == null) {
+            if (this.target == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: target is not set.");
                 enabled = false;
             }
@@ -89,14 +85,37 @@ namespace Gs2.Unity.UiKit.Gs2Enchant.Enabler
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2EnchantOwnBalanceParameterStatusFetcher>() ?? GetComponentInParent<Gs2EnchantOwnBalanceParameterStatusFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2EnchantOwnBalanceParameterStatusFetcher>() ?? GetComponentInParent<Gs2EnchantOwnBalanceParameterStatusFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
-            if (target == null) {
+            if (this.target == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 

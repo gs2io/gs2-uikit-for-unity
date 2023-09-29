@@ -43,8 +43,18 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Editor
             serializedObject.Update();
 
             if (original.Form == null) {
-                if (original.GetComponentInParent<Gs2FormationOwnFormList>(true) != null) {
-                    EditorGUILayout.HelpBox("OwnForm is auto assign from Gs2FormationOwnFormList.", MessageType.Info);
+                var list = original.GetComponentInParent<Gs2FormationOwnFormList>(true);
+                if (list != null) {
+                    EditorGUILayout.HelpBox("Form is auto assign from Gs2FormationOwnFormList.", MessageType.Info);
+                    EditorGUI.BeginDisabledGroup(true);
+                    EditorGUILayout.ObjectField("List", list, typeof(Gs2FormationOwnFormList), false);
+                    EditorGUI.EndDisabledGroup();
+                }
+                else if (original.GetComponentInParent<Gs2FormationConvertFormModelToOwnForm>(true) != null) {
+                    EditorGUILayout.HelpBox("Form is auto assign from Gs2FormationConvertFormModelToOwnForm.", MessageType.Info);
+                    EditorGUI.BeginDisabledGroup(true);
+                    EditorGUILayout.ObjectField("Converter", original.GetComponentInParent<Gs2FormationConvertFormModelToOwnForm>(true), typeof(Gs2FormationConvertFormModelToOwnForm), false);
+                    EditorGUI.EndDisabledGroup();
                 }
                 else {
                     EditorGUILayout.HelpBox("OwnForm not assigned.", MessageType.Error);

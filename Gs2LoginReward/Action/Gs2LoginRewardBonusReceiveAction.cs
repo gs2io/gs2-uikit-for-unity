@@ -48,13 +48,16 @@ namespace Gs2.Unity.UiKit.Gs2LoginReward
     {
         private IEnumerator Process()
         {
-            yield return new WaitUntil(() => this._clientHolder.Initialized);
-            yield return new WaitUntil(() => this._gameSessionHolder.Initialized);
+            var clientHolder = Gs2ClientHolder.Instance;
+            var gameSessionHolder = Gs2GameSessionHolder.Instance;
+
+            yield return new WaitUntil(() => clientHolder.Initialized);
+            yield return new WaitUntil(() => gameSessionHolder.Initialized);
             
-            var domain = this._clientHolder.Gs2.LoginReward.Namespace(
+            var domain = clientHolder.Gs2.LoginReward.Namespace(
                 this._context.Namespace.NamespaceName
             ).Me(
-                this._gameSessionHolder.GameSession
+                gameSessionHolder.GameSession
             ).Bonus(
             );
             var future = domain.Receive(
@@ -110,16 +113,11 @@ namespace Gs2.Unity.UiKit.Gs2LoginReward
 
     public partial class Gs2LoginRewardBonusReceiveAction
     {
-        private Gs2ClientHolder _clientHolder;
-        private Gs2GameSessionHolder _gameSessionHolder;
         private Gs2LoginRewardNamespaceContext _context;
 
         public void Awake()
         {
-            this._clientHolder = Gs2ClientHolder.Instance;
-            this._gameSessionHolder = Gs2GameSessionHolder.Instance;
             this._context = GetComponent<Gs2LoginRewardNamespaceContext>() ?? GetComponentInParent<Gs2LoginRewardNamespaceContext>();
-
             if (_context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2LoginRewardNamespaceContext.");
                 enabled = false;
@@ -155,13 +153,15 @@ namespace Gs2.Unity.UiKit.Gs2LoginReward
         public List<Gs2.Unity.Gs2LoginReward.Model.EzConfig> Config;
 
         public void SetBonusModelName(string value) {
-            BonusModelName = value;
-            this.onChangeBonusModelName.Invoke(BonusModelName);
+            this.BonusModelName = value;
+            this.onChangeBonusModelName.Invoke(this.BonusModelName);
+            this.OnChange.Invoke();
         }
 
         public void SetConfig(List<Gs2.Unity.Gs2LoginReward.Model.EzConfig> value) {
-            Config = value;
-            this.onChangeConfig.Invoke(Config);
+            this.Config = value;
+            this.onChangeConfig.Invoke(this.Config);
+            this.OnChange.Invoke();
         }
     }
 
@@ -212,6 +212,8 @@ namespace Gs2.Unity.UiKit.Gs2LoginReward
             add => this.onReceiveComplete.AddListener(value);
             remove => this.onReceiveComplete.RemoveListener(value);
         }
+
+        public UnityEvent OnChange = new UnityEvent();
 
         [SerializeField]
         internal ErrorEvent onError = new ErrorEvent();

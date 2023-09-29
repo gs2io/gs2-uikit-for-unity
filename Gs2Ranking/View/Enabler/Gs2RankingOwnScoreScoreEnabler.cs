@@ -24,10 +24,12 @@
 
 #pragma warning disable CS0472
 
+using System;
 using System.Collections.Generic;
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Ranking.Fetcher;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2Ranking
 {
@@ -38,35 +40,30 @@ namespace Gs2.Unity.UiKit.Gs2Ranking
 	[AddComponentMenu("GS2 UIKit/Ranking/Score/View/Enabler/Properties/Score/Gs2RankingOwnScoreScoreEnabler")]
     public partial class Gs2RankingOwnScoreScoreEnabler : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched && _fetcher.Score != null)
+            switch(this.expression)
             {
-                switch(expression)
-                {
-                    case Expression.In:
-                        target.SetActive(enableScores.Contains(_fetcher.Score.Score));
-                        break;
-                    case Expression.NotIn:
-                        target.SetActive(!enableScores.Contains(_fetcher.Score.Score));
-                        break;
-                    case Expression.Less:
-                        target.SetActive(enableScore > _fetcher.Score.Score);
-                        break;
-                    case Expression.LessEqual:
-                        target.SetActive(enableScore >= _fetcher.Score.Score);
-                        break;
-                    case Expression.Greater:
-                        target.SetActive(enableScore < _fetcher.Score.Score);
-                        break;
-                    case Expression.GreaterEqual:
-                        target.SetActive(enableScore <= _fetcher.Score.Score);
-                        break;
-                }
-            }
-            else
-            {
-                target.SetActive(false);
+                case Expression.In:
+                    this.target.SetActive(this.enableScores.Contains(this._fetcher.Score.Score));
+                    break;
+                case Expression.NotIn:
+                    this.target.SetActive(!this.enableScores.Contains(this._fetcher.Score.Score));
+                    break;
+                case Expression.Less:
+                    this.target.SetActive(this.enableScore > this._fetcher.Score.Score);
+                    break;
+                case Expression.LessEqual:
+                    this.target.SetActive(this.enableScore >= this._fetcher.Score.Score);
+                    break;
+                case Expression.Greater:
+                    this.target.SetActive(this.enableScore < this._fetcher.Score.Score);
+                    break;
+                case Expression.GreaterEqual:
+                    this.target.SetActive(this.enableScore <= this._fetcher.Score.Score);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
         }
     }
@@ -81,13 +78,12 @@ namespace Gs2.Unity.UiKit.Gs2Ranking
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2RankingOwnScoreFetcher>() ?? GetComponentInParent<Gs2RankingOwnScoreFetcher>();
-
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2RankingOwnScoreFetcher>() ?? GetComponentInParent<Gs2RankingOwnScoreFetcher>();
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2RankingOwnScoreFetcher.");
                 enabled = false;
             }
-            if (target == null) {
+            if (this.target == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: target is not set.");
                 enabled = false;
             }
@@ -95,14 +91,37 @@ namespace Gs2.Unity.UiKit.Gs2Ranking
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2RankingOwnScoreFetcher>() ?? GetComponentInParent<Gs2RankingOwnScoreFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2RankingOwnScoreFetcher>() ?? GetComponentInParent<Gs2RankingOwnScoreFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
-            if (target == null) {
+            if (this.target == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 

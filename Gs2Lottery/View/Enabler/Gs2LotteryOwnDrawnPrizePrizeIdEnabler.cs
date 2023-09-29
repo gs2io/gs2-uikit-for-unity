@@ -28,6 +28,7 @@ using System.Collections.Generic;
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Lottery.Fetcher;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2Lottery.Enabler
 {
@@ -38,29 +39,22 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.Enabler
 	[AddComponentMenu("GS2 UIKit/Lottery/DrawnPrize/View/Enabler/Properties/PrizeId/Gs2LotteryDrawnPrizePrizeIdEnabler")]
     public partial class Gs2LotteryOwnDrawnPrizePrizeIdEnabler : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched && _fetcher.DrawnPrize != null)
+            switch(this.expression)
             {
-                switch(expression)
-                {
-                    case Expression.In:
-                        target.SetActive(enablePrizeIds.Contains(_fetcher.DrawnPrize.PrizeId));
-                        break;
-                    case Expression.NotIn:
-                        target.SetActive(!enablePrizeIds.Contains(_fetcher.DrawnPrize.PrizeId));
-                        break;
-                    case Expression.StartsWith:
-                        target.SetActive(_fetcher.DrawnPrize.PrizeId.StartsWith(enablePrizeId));
-                        break;
-                    case Expression.EndsWith:
-                        target.SetActive(_fetcher.DrawnPrize.PrizeId.EndsWith(enablePrizeId));
-                        break;
-                }
-            }
-            else
-            {
-                target.SetActive(false);
+                case Expression.In:
+                    this.target.SetActive(this.enablePrizeIds.Contains(this._fetcher.DrawnPrize.PrizeId));
+                    break;
+                case Expression.NotIn:
+                    this.target.SetActive(!this.enablePrizeIds.Contains(this._fetcher.DrawnPrize.PrizeId));
+                    break;
+                case Expression.StartsWith:
+                    this.target.SetActive(this._fetcher.DrawnPrize.PrizeId.StartsWith(this.enablePrizeId));
+                    break;
+                case Expression.EndsWith:
+                    this.target.SetActive(this._fetcher.DrawnPrize.PrizeId.EndsWith(this.enablePrizeId));
+                    break;
             }
         }
     }
@@ -75,13 +69,12 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.Enabler
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2LotteryOwnDrawnPrizeFetcher>() ?? GetComponentInParent<Gs2LotteryOwnDrawnPrizeFetcher>();
-
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2LotteryOwnDrawnPrizeFetcher>() ?? GetComponentInParent<Gs2LotteryOwnDrawnPrizeFetcher>();
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2LotteryOwnDrawnPrizeFetcher.");
                 enabled = false;
             }
-            if (target == null) {
+            if (this.target == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: target is not set.");
                 enabled = false;
             }
@@ -89,14 +82,37 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.Enabler
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2LotteryOwnDrawnPrizeFetcher>() ?? GetComponentInParent<Gs2LotteryOwnDrawnPrizeFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2LotteryOwnDrawnPrizeFetcher>() ?? GetComponentInParent<Gs2LotteryOwnDrawnPrizeFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
-            if (target == null) {
+            if (this.target == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 

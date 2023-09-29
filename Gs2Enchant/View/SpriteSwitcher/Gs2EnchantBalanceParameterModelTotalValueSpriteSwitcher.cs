@@ -40,43 +40,42 @@ namespace Gs2.Unity.UiKit.Gs2Enchant
 	[AddComponentMenu("GS2 UIKit/Enchant/BalanceParameterModel/View/SpriteSwitcher/Properties/TotalValue/Gs2EnchantBalanceParameterModelTotalValueSpriteSwitcher")]
     public partial class Gs2EnchantBalanceParameterModelTotalValueSpriteSwitcher : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched && _fetcher.BalanceParameterModel != null)
+            switch(this.expression)
             {
-                switch(expression)
-                {
-                    case Expression.In:
-                        if (applyTotalValues.Contains(_fetcher.BalanceParameterModel.TotalValue)) {
-                            this.onUpdate.Invoke(this.sprite);
-                        }
-                        break;
-                    case Expression.NotIn:
-                        if (!applyTotalValues.Contains(_fetcher.BalanceParameterModel.TotalValue)) {
-                            this.onUpdate.Invoke(this.sprite);
-                        }
-                        break;
-                    case Expression.Less:
-                        if (applyTotalValue > _fetcher.BalanceParameterModel.TotalValue) {
-                            this.onUpdate.Invoke(this.sprite);
-                        }
-                        break;
-                    case Expression.LessEqual:
-                        if (applyTotalValue >= _fetcher.BalanceParameterModel.TotalValue) {
-                            this.onUpdate.Invoke(this.sprite);
-                        }
-                        break;
-                    case Expression.Greater:
-                        if (applyTotalValue < _fetcher.BalanceParameterModel.TotalValue) {
-                            this.onUpdate.Invoke(this.sprite);
-                        }
-                        break;
-                    case Expression.GreaterEqual:
-                        if (applyTotalValue <= _fetcher.BalanceParameterModel.TotalValue) {
-                            this.onUpdate.Invoke(this.sprite);
-                        }
-                        break;
-                }
+                case Expression.In:
+                    if (this.applyTotalValues.Contains(this._fetcher.BalanceParameterModel.TotalValue)) {
+                        this.onUpdate.Invoke(this.sprite);
+                    }
+                    break;
+                case Expression.NotIn:
+                    if (!this.applyTotalValues.Contains(this._fetcher.BalanceParameterModel.TotalValue)) {
+                        this.onUpdate.Invoke(this.sprite);
+                    }
+                    break;
+                case Expression.Less:
+                    if (this.applyTotalValue > this._fetcher.BalanceParameterModel.TotalValue) {
+                        this.onUpdate.Invoke(this.sprite);
+                    }
+                    break;
+                case Expression.LessEqual:
+                    if (this.applyTotalValue >= this._fetcher.BalanceParameterModel.TotalValue) {
+                        this.onUpdate.Invoke(this.sprite);
+                    }
+                    break;
+                case Expression.Greater:
+                    if (this.applyTotalValue < this._fetcher.BalanceParameterModel.TotalValue) {
+                        this.onUpdate.Invoke(this.sprite);
+                    }
+                    break;
+                case Expression.GreaterEqual:
+                    if (this.applyTotalValue <= this._fetcher.BalanceParameterModel.TotalValue) {
+                        this.onUpdate.Invoke(this.sprite);
+                    }
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
         }
     }
@@ -91,13 +90,12 @@ namespace Gs2.Unity.UiKit.Gs2Enchant
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2EnchantBalanceParameterModelFetcher>() ?? GetComponentInParent<Gs2EnchantBalanceParameterModelFetcher>();
-
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2EnchantBalanceParameterModelFetcher>() ?? GetComponentInParent<Gs2EnchantBalanceParameterModelFetcher>();
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2EnchantBalanceParameterModelFetcher.");
                 enabled = false;
             }
-            if (sprite == null) {
+            if (this.sprite == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: sprite is not set.");
                 enabled = false;
             }
@@ -105,14 +103,37 @@ namespace Gs2.Unity.UiKit.Gs2Enchant
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2EnchantBalanceParameterModelFetcher>() ?? GetComponentInParent<Gs2EnchantBalanceParameterModelFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2EnchantBalanceParameterModelFetcher>() ?? GetComponentInParent<Gs2EnchantBalanceParameterModelFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
-            if (sprite == null) {
+            if (this.sprite == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 

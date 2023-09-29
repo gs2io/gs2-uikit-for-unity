@@ -40,17 +40,40 @@ namespace Gs2.Unity.UiKit.Gs2LoginReward
 	[AddComponentMenu("GS2 UIKit/LoginReward/Bonus/View/Label/Gs2LoginRewardBonusMissedReceiveActionLabel")]
     public partial class Gs2LoginRewardBonusMissedReceiveActionLabel : MonoBehaviour
     {
-        public void Update()
+        private void OnChange()
         {
-            onUpdate?.Invoke(
-                format.Replace(
-                    "{bonusModelName}", $"{action?.BonusModelName}"
+            this.onUpdate?.Invoke(
+                this.format.Replace(
+                    "{bonusModelName}", $"{this.action?.BonusModelName}"
                 ).Replace(
-                    "{stepNumber}", $"{action?.StepNumber}"
+                    "{stepNumber}", $"{this.action?.StepNumber}"
                 ).Replace(
-                    "{config}", $"{action?.Config}"
+                    "{config}", $"{this.action?.Config}"
                 )
             );
+        }
+
+        public void Awake() {
+            if (this.action == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2AccountAccountAuthenticationAction.");
+                enabled = false;
+            }
+        }
+
+        public virtual bool HasError()
+        {
+            if (this.action == null) {
+                return true;
+            }
+            return false;
+        }
+
+        public void OnEnable() {
+            this.action.OnChange.AddListener(OnChange);
+        }
+
+        public void OnDisable() {
+            this.action.OnChange.RemoveListener(OnChange);
         }
     }
 

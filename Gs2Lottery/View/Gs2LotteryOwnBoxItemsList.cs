@@ -32,6 +32,7 @@ using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Lottery.Context;
 using Gs2.Unity.UiKit.Gs2Lottery.Fetcher;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2Lottery
 {
@@ -42,18 +43,21 @@ namespace Gs2.Unity.UiKit.Gs2Lottery
     [AddComponentMenu("GS2 UIKit/Lottery/BoxItems/View/Gs2LotteryOwnBoxItemsList")]
     public partial class Gs2LotteryOwnBoxItemsList : MonoBehaviour
     {
-        private List<Gs2LotteryOwnBoxItemsContext> _children;
+        private List<Gs2LotteryOwnBoxItemContext> _children;
 
-        public void Update() {
-            if (_fetcher.Fetched && this._fetcher.BoxItems != null) {
-                for (var i = 0; i < this.maximumItems; i++) {
-                    if (i < this._fetcher.BoxItems.Count) {
-                        _children[i].BoxItems.prizeTableName = this._fetcher.Context.PrizeTable.PrizeTableName;
-                        _children[i].gameObject.SetActive(true);
-                    }
-                    else {
-                        _children[i].gameObject.SetActive(false);
-                    }
+        public void OnFetched() {
+            for (var i = 0; i < this.maximumItems; i++) {
+                if (i < this._fetcher.BoxItems.Count) {
+                    this._children[i].SetOwnBoxItem(
+                        OwnBoxItem.New(
+                            this._fetcher.Context.BoxItems,
+                            this._fetcher.BoxItems[i].PrizeId
+                        )
+                    );
+                    this._children[i].gameObject.SetActive(true);
+                }
+                else {
+                    this._children[i].gameObject.SetActive(false);
                 }
             }
         }
@@ -66,50 +70,67 @@ namespace Gs2.Unity.UiKit.Gs2Lottery
     public partial class Gs2LotteryOwnBoxItemsList
     {
         private Gs2LotteryOwnBoxItemsListFetcher _fetcher;
-        private Gs2LotteryPrizeTableContext Context => _fetcher.Context;
 
         public void Awake()
         {
-            if (prefab == null) {
+            if (this.prefab == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2LotteryOwnBoxItemsContext Prefab.");
                 enabled = false;
                 return;
             }
 
-            _fetcher = GetComponent<Gs2LotteryOwnBoxItemsListFetcher>() ?? GetComponentInParent<Gs2LotteryOwnBoxItemsListFetcher>();
-
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2LotteryOwnBoxItemsListFetcher>() ?? GetComponentInParent<Gs2LotteryOwnBoxItemsListFetcher>();
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2LotteryOwnBoxItemsListFetcher.");
                 enabled = false;
             }
 
-            var context = GetComponent<Gs2LotteryPrizeTableContext>() ?? GetComponentInParent<Gs2LotteryPrizeTableContext>(true);
-            if (context == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2LotteryOwnBoxItemsListFetcher::Context.");
-                enabled = false;
-                return;
-            }
-
-            _children = new List<Gs2LotteryOwnBoxItemsContext>();
+            _children = new List<Gs2LotteryOwnBoxItemContext>();
             for (var i = 0; i < this.maximumItems; i++) {
                 var node = Instantiate(this.prefab, transform);
-                node.BoxItems = OwnBoxItems.New(
-                    context.PrizeTable.Namespace,
-                    context.PrizeTable.PrizeTableName
+                node.BoxItem = OwnBoxItem.New(
+                    this._fetcher.Context.BoxItems,
+                    ""
                 );
                 node.gameObject.SetActive(false);
-                _children.Add(node);
+                this._children.Add(node);
             }
             this.prefab.gameObject.SetActive(false);
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2LotteryOwnBoxItemsListFetcher>() ?? GetComponentInParent<Gs2LotteryOwnBoxItemsListFetcher>(true);
-            if (_fetcher == null) {
+            if (this.prefab == null) {
+                return true;
+            }
+            this._fetcher = GetComponent<Gs2LotteryOwnBoxItemsListFetcher>() ?? GetComponentInParent<Gs2LotteryOwnBoxItemsListFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 
@@ -128,7 +149,7 @@ namespace Gs2.Unity.UiKit.Gs2Lottery
 
     public partial class Gs2LotteryOwnBoxItemsList
     {
-        public Gs2LotteryOwnBoxItemsContext prefab;
+        public Gs2LotteryOwnBoxItemContext prefab;
         public int maximumItems;
     }
 

@@ -29,6 +29,7 @@
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2SerialKey.Fetcher;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.Localization.Components;
 using UnityEngine.Localization.SmartFormat.PersistentVariables;
 
@@ -41,21 +42,18 @@ namespace Gs2.Unity.UiKit.Gs2SerialKey.Localization
     [AddComponentMenu("GS2 UIKit/SerialKey/CampaignModel/View/Localization/Gs2SerialKeyCampaignModelLocalizationVariables")]
     public partial class Gs2SerialKeyCampaignModelLocalizationVariables : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched) {
-                target.StringReference["name"] = new StringVariable {
-                    Value = _fetcher?.CampaignModel?.Name ?? "",
-                };
-                target.StringReference["metadata"] = new StringVariable {
-                    Value = _fetcher?.CampaignModel?.Metadata ?? "",
-                };
-                target.StringReference["enableCampaignCode"] = new BoolVariable {
-                    Value = _fetcher?.CampaignModel?.EnableCampaignCode ?? false,
-                };
-                enabled = false;
-                target.enabled = true;
-            }
+            this.target.StringReference["name"] = new StringVariable {
+                Value = _fetcher?.CampaignModel?.Name ?? "",
+            };
+            this.target.StringReference["metadata"] = new StringVariable {
+                Value = _fetcher?.CampaignModel?.Metadata ?? "",
+            };
+            this.target.StringReference["enableCampaignCode"] = new BoolVariable {
+                Value = _fetcher?.CampaignModel?.EnableCampaignCode ?? false,
+            };
+            this.target.enabled = true;
         }
     }
 
@@ -68,10 +66,10 @@ namespace Gs2.Unity.UiKit.Gs2SerialKey.Localization
         private Gs2SerialKeyCampaignModelFetcher _fetcher;
 
         public void Awake() {
-            target.enabled = false;
-            _fetcher = GetComponent<Gs2SerialKeyCampaignModelFetcher>() ?? GetComponentInParent<Gs2SerialKeyCampaignModelFetcher>();
+            this.target.enabled = false;
+            this._fetcher = GetComponent<Gs2SerialKeyCampaignModelFetcher>() ?? GetComponentInParent<Gs2SerialKeyCampaignModelFetcher>();
 
-            if (_fetcher == null) {
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2SerialKeyCampaignModelFetcher.");
                 enabled = false;
             }
@@ -79,11 +77,34 @@ namespace Gs2.Unity.UiKit.Gs2SerialKey.Localization
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2SerialKeyCampaignModelFetcher>() ?? GetComponentInParent<Gs2SerialKeyCampaignModelFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2SerialKeyCampaignModelFetcher>() ?? GetComponentInParent<Gs2SerialKeyCampaignModelFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 

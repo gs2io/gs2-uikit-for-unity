@@ -30,6 +30,7 @@ using System.Collections.Generic;
 using System.Text;
 using Gs2.Core.Exception;
 using Gs2.Unity.Core.Exception;
+using Gs2.Unity.Gs2Lottery.Domain.Model;
 using Gs2.Unity.Gs2Lottery.Model;
 using Gs2.Unity.Gs2Lottery.ScriptableObject;
 using Gs2.Unity.Util;
@@ -49,62 +50,77 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.Fetcher
 	[AddComponentMenu("GS2 UIKit/Lottery/DrawnPrize/Fetcher/Gs2LotteryOwnDrawnPrizeFetcher")]
     public partial class Gs2LotteryOwnDrawnPrizeFetcher : MonoBehaviour, IAcquireActionsFetcher
     {
+        private EzDrawnPrizeGameSessionDomain _domain;
+        private ulong? _callbackId;
+
         private IEnumerator Fetch()
         {
             var retryWaitSecond = 1;
-            Gs2Exception e;
-            while (true)
-            {
-                if (_gameSessionHolder != null && _gameSessionHolder.Initialized &&
-                    _clientHolder != null && _clientHolder.Initialized &&
-                    Context != null && this.Context.DrawnPrize != null)
+            var clientHolder = Gs2ClientHolder.Instance;
+            var gameSessionHolder = Gs2GameSessionHolder.Instance;
+
+            yield return new WaitUntil(() => clientHolder.Initialized);
+            yield return new WaitUntil(() => gameSessionHolder.Initialized);
+            yield return new WaitUntil(() => Context != null && this.Context.DrawnPrize != null);
+
+            this._domain = clientHolder.Gs2.Lottery.Namespace(
+                this.Context.DrawnPrize.NamespaceName
+            ).Me(
+                gameSessionHolder.GameSession
+            ).Lottery().DrawnPrize(
+                this.Context.DrawnPrize.Index
+            );
+            this._callbackId = this._domain.Subscribe(
+                item =>
                 {
-                    
-                    var domain = this._clientHolder.Gs2.Lottery.Namespace(
-                        this.Context.DrawnPrize.NamespaceName
-                    ).Me(
-                        this._gameSessionHolder.GameSession
-                    ).Lottery().DrawnPrize(
-                        this.Context.DrawnPrize.Index
-                    );
-                    var future = domain.Model();
-                    yield return future;
-                    if (future.Error != null)
-                    {
-                        if (future.Error is BadRequestException || future.Error is NotFoundException)
-                        {
-                            onError.Invoke(e = future.Error, null);
-                            Debug.LogError($"{gameObject.GetFullPath()}: {future.Error.Message}");
-                            break;
-                        }
-                        else {
-                            onError.Invoke(new CanIgnoreException(future.Error), null);
-                        }
-                        yield return new WaitForSeconds(retryWaitSecond);
-                        retryWaitSecond *= 2;
-                    }
-                    else
-                    {
-                        retryWaitSecond = 1;
-                        DrawnPrize = future.Result;
-                        Fetched = true;
-                    }
+                    DrawnPrize = item;
+                    Fetched = true;
+                    this.OnFetched.Invoke();
+                }
+            );
+
+            while (true) {
+                var future = this._domain.Model();
+                yield return future;
+                if (future.Error != null) {
+                    yield return new WaitForSeconds(retryWaitSecond);
+                    retryWaitSecond *= 2;
                 }
                 else {
-                    yield return new WaitForSeconds(0.1f);
+                    DrawnPrize = future.Result;
+                    Fetched = true;
+                    this.OnFetched.Invoke();
+                    break;
                 }
             }
-            // ReSharper disable once IteratorNeverReturns
+        }
+
+        public void OnUpdateContext() {
+            OnDisable();
+            Awake();
+            OnEnable();
         }
 
         public void OnEnable()
         {
             StartCoroutine(nameof(Fetch));
+            Context.OnUpdate.AddListener(OnUpdateContext);
         }
 
         public void OnDisable()
         {
-            StopCoroutine(nameof(Fetch));
+            Context.OnUpdate.RemoveListener(OnUpdateContext);
+
+            if (this._domain == null) {
+                return;
+            }
+            if (!this._callbackId.HasValue) {
+                return;
+            }
+            this._domain.Unsubscribe(
+                this._callbackId.Value
+            );
+            this._callbackId = null;
         }
 
         public List<EzAcquireAction> AcquireActions(string context = "default") {
@@ -112,6 +128,18 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.Fetcher
                 return new List<Unity.Core.Model.EzAcquireAction>();
             }
             return DrawnPrize.AcquireActions;
+        }
+
+        public bool IsFetched() {
+            return Fetched;
+        }
+
+        UnityEvent IAcquireActionsFetcher.OnFetchedEvent() {
+            return this.OnFetched;
+        }
+
+        public GameObject GameObject() {
+            return this.gameObject;
         }
     }
 
@@ -121,16 +149,11 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.Fetcher
 
     public partial class Gs2LotteryOwnDrawnPrizeFetcher
     {
-        protected Gs2ClientHolder _clientHolder;
-        protected Gs2GameSessionHolder _gameSessionHolder;
         public Gs2LotteryOwnDrawnPrizeContext Context { get; private set; }
 
         public void Awake()
         {
-            _clientHolder = Gs2ClientHolder.Instance;
-            _gameSessionHolder = Gs2GameSessionHolder.Instance;
             Context = GetComponent<Gs2LotteryOwnDrawnPrizeContext>() ?? GetComponentInParent<Gs2LotteryOwnDrawnPrizeContext>();
-
             if (Context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2LotteryOwnDrawnPrizeContext.");
                 enabled = false;
@@ -155,6 +178,7 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.Fetcher
     {
         public Gs2.Unity.Gs2Lottery.Model.EzDrawnPrize DrawnPrize { get; protected set; }
         public bool Fetched { get; protected set; }
+        public UnityEvent OnFetched = new UnityEvent();
     }
 
     /// <summary>

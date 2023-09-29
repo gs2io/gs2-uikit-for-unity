@@ -24,10 +24,12 @@
 
 #pragma warning disable CS0472
 
+using System;
 using System.Collections.Generic;
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2MegaField.Fetcher;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2MegaField.Enabler
 {
@@ -38,29 +40,24 @@ namespace Gs2.Unity.UiKit.Gs2MegaField.Enabler
 	[AddComponentMenu("GS2 UIKit/MegaField/Spatial/View/Enabler/Properties/UserId/Gs2MegaFieldOwnSpatialUserIdEnabler")]
     public partial class Gs2MegaFieldOwnSpatialUserIdEnabler : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched && _fetcher.Spatial != null)
+            switch(this.expression)
             {
-                switch(expression)
-                {
-                    case Expression.In:
-                        target.SetActive(enableUserIds.Contains(_fetcher.Spatial.UserId));
-                        break;
-                    case Expression.NotIn:
-                        target.SetActive(!enableUserIds.Contains(_fetcher.Spatial.UserId));
-                        break;
-                    case Expression.StartsWith:
-                        target.SetActive(_fetcher.Spatial.UserId.StartsWith(enableUserId));
-                        break;
-                    case Expression.EndsWith:
-                        target.SetActive(_fetcher.Spatial.UserId.EndsWith(enableUserId));
-                        break;
-                }
-            }
-            else
-            {
-                target.SetActive(false);
+                case Expression.In:
+                    this.target.SetActive(this.enableUserIds.Contains(this._fetcher.Spatial.UserId));
+                    break;
+                case Expression.NotIn:
+                    this.target.SetActive(!this.enableUserIds.Contains(this._fetcher.Spatial.UserId));
+                    break;
+                case Expression.StartsWith:
+                    this.target.SetActive(this._fetcher.Spatial.UserId.StartsWith(this.enableUserId));
+                    break;
+                case Expression.EndsWith:
+                    this.target.SetActive(this._fetcher.Spatial.UserId.EndsWith(this.enableUserId));
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
         }
     }
@@ -75,13 +72,12 @@ namespace Gs2.Unity.UiKit.Gs2MegaField.Enabler
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2MegaFieldSpatialFetcher>() ?? GetComponentInParent<Gs2MegaFieldSpatialFetcher>();
-
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2MegaFieldSpatialFetcher>() ?? GetComponentInParent<Gs2MegaFieldSpatialFetcher>();
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MegaFieldSpatialFetcher.");
                 enabled = false;
             }
-            if (target == null) {
+            if (this.target == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: target is not set.");
                 enabled = false;
             }
@@ -89,14 +85,37 @@ namespace Gs2.Unity.UiKit.Gs2MegaField.Enabler
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2MegaFieldSpatialFetcher>() ?? GetComponentInParent<Gs2MegaFieldSpatialFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2MegaFieldSpatialFetcher>() ?? GetComponentInParent<Gs2MegaFieldSpatialFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
-            if (target == null) {
+            if (this.target == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 

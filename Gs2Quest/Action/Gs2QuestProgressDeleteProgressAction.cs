@@ -48,13 +48,16 @@ namespace Gs2.Unity.UiKit.Gs2Quest
     {
         private IEnumerator Process()
         {
-            yield return new WaitUntil(() => this._clientHolder.Initialized);
-            yield return new WaitUntil(() => this._gameSessionHolder.Initialized);
+            var clientHolder = Gs2ClientHolder.Instance;
+            var gameSessionHolder = Gs2GameSessionHolder.Instance;
+
+            yield return new WaitUntil(() => clientHolder.Initialized);
+            yield return new WaitUntil(() => gameSessionHolder.Initialized);
             
-            var domain = this._clientHolder.Gs2.Quest.Namespace(
+            var domain = clientHolder.Gs2.Quest.Namespace(
                 this._context.Progress.NamespaceName
             ).Me(
-                this._gameSessionHolder.GameSession
+                gameSessionHolder.GameSession
             ).Progress(
             );
             var future = domain.DeleteProgress(
@@ -119,16 +122,11 @@ namespace Gs2.Unity.UiKit.Gs2Quest
 
     public partial class Gs2QuestProgressDeleteProgressAction
     {
-        private Gs2ClientHolder _clientHolder;
-        private Gs2GameSessionHolder _gameSessionHolder;
         private Gs2QuestOwnProgressContext _context;
 
         public void Awake()
         {
-            this._clientHolder = Gs2ClientHolder.Instance;
-            this._gameSessionHolder = Gs2GameSessionHolder.Instance;
             this._context = GetComponent<Gs2QuestOwnProgressContext>() ?? GetComponentInParent<Gs2QuestOwnProgressContext>();
-
             if (_context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2QuestOwnProgressContext.");
                 enabled = false;
@@ -181,6 +179,8 @@ namespace Gs2.Unity.UiKit.Gs2Quest
             add => this.onDeleteProgressComplete.AddListener(value);
             remove => this.onDeleteProgressComplete.RemoveListener(value);
         }
+
+        public UnityEvent OnChange = new UnityEvent();
 
         [SerializeField]
         internal ErrorEvent onError = new ErrorEvent();

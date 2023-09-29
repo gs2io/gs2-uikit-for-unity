@@ -40,7 +40,7 @@ namespace Gs2.Unity.UiKit.Gs2Enchant.Context
     {
         public void Start() {
             if (BalanceParameterModel == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: BalanceParameterModel is not set in Gs2EnchantBalanceParameterModelContext.");
+                Debug.LogWarning($"{gameObject.GetFullPath()}: BalanceParameterModel is not set in Gs2EnchantBalanceParameterModelContext.");
             }
         }
 
@@ -49,9 +49,7 @@ namespace Gs2.Unity.UiKit.Gs2Enchant.Context
                 if (GetComponentInParent<Gs2EnchantBalanceParameterModelList>(true) != null) {
                     return false;
                 }
-                else {
-                    return true;
-                }
+                return true;
             }
             return false;
         }

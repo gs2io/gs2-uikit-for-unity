@@ -43,8 +43,12 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Editor
             serializedObject.Update();
 
             if (original.CompletedQuestList == null) {
-                if (original.GetComponentInParent<Gs2QuestOwnCompletedQuestListList>(true) != null) {
-                    EditorGUILayout.HelpBox("OwnCompletedQuestList is auto assign from Gs2QuestOwnCompletedQuestListList.", MessageType.Info);
+                var list = original.GetComponentInParent<Gs2QuestOwnCompletedQuestListList>(true);
+                if (list != null) {
+                    EditorGUILayout.HelpBox("CompletedQuestList is auto assign from Gs2QuestOwnCompletedQuestListList.", MessageType.Info);
+                    EditorGUI.BeginDisabledGroup(true);
+                    EditorGUILayout.ObjectField("List", list, typeof(Gs2QuestOwnCompletedQuestListList), false);
+                    EditorGUI.EndDisabledGroup();
                 }
                 else {
                     EditorGUILayout.HelpBox("OwnCompletedQuestList not assigned.", MessageType.Error);

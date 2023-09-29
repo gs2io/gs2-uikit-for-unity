@@ -40,7 +40,7 @@ namespace Gs2.Unity.UiKit.Gs2Dictionary.Context
     {
         public void Start() {
             if (EntryModel == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: EntryModel is not set in Gs2DictionaryEntryModelContext.");
+                Debug.LogWarning($"{gameObject.GetFullPath()}: EntryModel is not set in Gs2DictionaryEntryModelContext.");
             }
         }
 
@@ -49,9 +49,7 @@ namespace Gs2.Unity.UiKit.Gs2Dictionary.Context
                 if (GetComponentInParent<Gs2DictionaryEntryModelList>(true) != null) {
                     return false;
                 }
-                else {
-                    return true;
-                }
+                return true;
             }
             return false;
         }

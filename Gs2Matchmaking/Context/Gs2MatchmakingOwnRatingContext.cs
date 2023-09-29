@@ -39,9 +39,6 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking.Context
     public partial class Gs2MatchmakingOwnRatingContext : Gs2MatchmakingRatingModelContext
     {
         public new void Start() {
-            if (Rating == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Rating is not set in Gs2MatchmakingOwnRatingContext.");
-            }
         }
         public override bool HasError() {
             var hasError = base.HasError();
@@ -49,9 +46,10 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking.Context
                 if (GetComponentInParent<Gs2MatchmakingOwnRatingList>(true) != null) {
                     return false;
                 }
-                else {
-                    return true;
+                if (GetComponentInParent<Gs2MatchmakingConvertRatingModelToOwnRating>(true) != null) {
+                    return false;
                 }
+                return true;
             }
             return false;
         }

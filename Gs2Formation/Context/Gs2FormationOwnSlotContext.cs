@@ -27,6 +27,7 @@
 #pragma warning disable CS0472
 
 using Gs2.Unity.Gs2Formation.ScriptableObject;
+using Gs2.Unity.UiKit.Core;
 using UnityEngine;
 
 namespace Gs2.Unity.UiKit.Gs2Formation.Context
@@ -35,40 +36,26 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Context
     /// Main
     /// </summary>
 
-	[AddComponentMenu("GS2 UIKit/Formation/Slot/Context/Gs2FormationOwnSlotContext")]
+    [AddComponentMenu("GS2 UIKit/Formation/Slot/Context/Gs2FormationOwnSlotContext")]
     public partial class Gs2FormationOwnSlotContext : Gs2FormationFormModelContext
     {
         public new void Start() {
-            base.Start();
             if (Slot == null) {
-                var ownFormContext = GetComponentInParent<Gs2FormationOwnFormContext>(true);
-                var slotModelContext = GetComponentInParent<Gs2FormationSlotModelContext>(true);
-                if (ownFormContext != null && slotModelContext != null) {
-                    this.Slot = OwnSlot.New(
-                        ownFormContext.Form,
-                        slotModelContext.SlotModel.SlotModelName
-                    );
-                }
-                else {
-                    Debug.LogError("Slot is not set in Gs2FormationOwnSlotContext.");
-                }
+                Debug.LogError($"{gameObject.GetFullPath()}: Slot is not set in Gs2FormationOwnSlotContext.");
             }
         }
 
         public override bool HasError() {
-            if (!base.HasError()) {
-                return false;
-            }
             if (Slot == null) {
                 if (GetComponentInParent<Gs2FormationOwnSlotList>(true) != null) {
                     return false;
                 }
-                var ownFormContext = GetComponentInParent<Gs2FormationOwnFormContext>(true);
-                var slotModelContext = GetComponentInParent<Gs2FormationSlotModelContext>(true);
-                if (ownFormContext != null && slotModelContext != null) {
+                else if (GetComponentInParent<Gs2FormationOwnSlotList>(true) != null) {
                     return false;
                 }
-                return true;
+                else {
+                    return true;
+                }
             }
             return false;
         }

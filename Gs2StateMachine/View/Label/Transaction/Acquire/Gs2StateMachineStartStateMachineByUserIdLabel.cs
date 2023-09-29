@@ -42,66 +42,65 @@ namespace Gs2.Unity.UiKit.Gs2StateMachine.Label
 	[AddComponentMenu("GS2 UIKit/StateMachine/Status/View/Label/Transaction/Gs2StateMachineStartStateMachineByUserIdLabel")]
     public partial class Gs2StateMachineStartStateMachineByUserIdLabel : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched && _fetcher.Request != null &&
-                    _userDataFetcher != null && _userDataFetcher.Fetched && _userDataFetcher.Status != null) {
-                {
-                    onUpdate?.Invoke(
-                        format.Replace(
-                            "{namespaceName}",
-                            $"{_fetcher.Request.NamespaceName}"
-                        ).Replace(
-                            "{userId}",
-                            $"{_fetcher.Request.UserId}"
-                        ).Replace(
-                            "{args}",
-                            $"{_fetcher.Request.Args}"
-                        ).Replace(
-                            "{ttl}",
-                            $"{_fetcher.Request.Ttl}"
-                        ).Replace(
-                            "{userData:statusId}",
-                            $"{_userDataFetcher.Status.StatusId}"
-                        ).Replace(
-                            "{userData:name}",
-                            $"{_userDataFetcher.Status.Name}"
-                        ).Replace(
-                            "{userData:stacks}",
-                            $"{_userDataFetcher.Status.Stacks}"
-                        ).Replace(
-                            "{userData:variables}",
-                            $"{_userDataFetcher.Status.Variables}"
-                        ).Replace(
-                            "{userData:status}",
-                            $"{_userDataFetcher.Status.Status}"
-                        ).Replace(
-                            "{userData:lastError}",
-                            $"{_userDataFetcher.Status.LastError}"
-                        ).Replace(
-                            "{userData:transitionCount}",
-                            $"{_userDataFetcher.Status.TransitionCount}"
-                        )
-                    );
-                }
-            } else if (_fetcher.Fetched && _fetcher.Request != null) {
-                {
-                    onUpdate?.Invoke(
-                        format.Replace(
-                            "{namespaceName}",
-                            $"{_fetcher.Request.NamespaceName}"
-                        ).Replace(
-                            "{userId}",
-                            $"{_fetcher.Request.UserId}"
-                        ).Replace(
-                            "{args}",
-                            $"{_fetcher.Request.Args}"
-                        ).Replace(
-                            "{ttl}",
-                            $"{_fetcher.Request.Ttl}"
-                        )
-                    );
-                }
+            if ((!this._fetcher?.Fetched ?? false) || this._fetcher.Request == null) {
+                return;
+            }
+            if (this._userDataFetcher?.Fetched ?? false)
+            {
+                this.onUpdate?.Invoke(
+                    this.format.Replace(
+                        "{namespaceName}",
+                        $"{this._fetcher.Request.NamespaceName}"
+                    ).Replace(
+                        "{userId}",
+                        $"{this._fetcher.Request.UserId}"
+                    ).Replace(
+                        "{args}",
+                        $"{this._fetcher.Request.Args}"
+                    ).Replace(
+                        "{ttl}",
+                        $"{this._fetcher.Request.Ttl}"
+                    ).Replace(
+                        "{userData:statusId}",
+                        $"{this._userDataFetcher.Status.StatusId}"
+                    ).Replace(
+                        "{userData:name}",
+                        $"{this._userDataFetcher.Status.Name}"
+                    ).Replace(
+                        "{userData:stacks}",
+                        $"{this._userDataFetcher.Status.Stacks}"
+                    ).Replace(
+                        "{userData:variables}",
+                        $"{this._userDataFetcher.Status.Variables}"
+                    ).Replace(
+                        "{userData:status}",
+                        $"{this._userDataFetcher.Status.Status}"
+                    ).Replace(
+                        "{userData:lastError}",
+                        $"{this._userDataFetcher.Status.LastError}"
+                    ).Replace(
+                        "{userData:transitionCount}",
+                        $"{this._userDataFetcher.Status.TransitionCount}"
+                    )
+                );
+            } else {
+                this.onUpdate?.Invoke(
+                    this.format.Replace(
+                        "{namespaceName}",
+                        $"{this._fetcher.Request.NamespaceName}"
+                    ).Replace(
+                        "{userId}",
+                        $"{this._fetcher.Request.UserId}"
+                    ).Replace(
+                        "{args}",
+                        $"{this._fetcher.Request.Args}"
+                    ).Replace(
+                        "{ttl}",
+                        $"{this._fetcher.Request.Ttl}"
+                    )
+                );
             }
         }
     }
@@ -117,25 +116,52 @@ namespace Gs2.Unity.UiKit.Gs2StateMachine.Label
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2StateMachineStartStateMachineByUserIdFetcher>() ?? GetComponentInParent<Gs2StateMachineStartStateMachineByUserIdFetcher>();
-            _userDataFetcher = GetComponent<Gs2StateMachineOwnStatusFetcher>() ?? GetComponentInParent<Gs2StateMachineOwnStatusFetcher>();
-
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2StateMachineStartStateMachineByUserIdFetcher>() ?? GetComponentInParent<Gs2StateMachineStartStateMachineByUserIdFetcher>();
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2StateMachineStartStateMachineByUserIdFetcher.");
                 enabled = false;
             }
-
-            Update();
+            this._userDataFetcher = GetComponent<Gs2StateMachineOwnStatusFetcher>() ?? GetComponentInParent<Gs2StateMachineOwnStatusFetcher>();
         }
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2StateMachineStartStateMachineByUserIdFetcher>() ?? GetComponentInParent<Gs2StateMachineStartStateMachineByUserIdFetcher>(true);
-            _userDataFetcher = GetComponent<Gs2StateMachineOwnStatusFetcher>() ?? GetComponentInParent<Gs2StateMachineOwnStatusFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2StateMachineStartStateMachineByUserIdFetcher>() ?? GetComponentInParent<Gs2StateMachineStartStateMachineByUserIdFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+            if (this._userDataFetcher != null) {
+                this._userDataFetcher.OnFetched.AddListener(this._onFetched);
+                if (this._userDataFetcher.Fetched) {
+                    OnFetched();
+                }
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                if (this._userDataFetcher != null) {
+                    this._userDataFetcher.OnFetched.RemoveListener(this._onFetched);
+                }
+                this._onFetched = null;
+            }
         }
     }
 
@@ -173,8 +199,8 @@ namespace Gs2.Unity.UiKit.Gs2StateMachine.Label
 
         public event UnityAction<string> OnUpdate
         {
-            add => onUpdate.AddListener(value);
-            remove => onUpdate.RemoveListener(value);
+            add => this.onUpdate.AddListener(value);
+            remove => this.onUpdate.RemoveListener(value);
         }
     }
 }

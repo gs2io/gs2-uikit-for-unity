@@ -74,6 +74,7 @@ namespace Gs2.Unity.UiKit.Gs2Showcase.Fetcher
                 {
                     Showcase = item;
                     Fetched = true;
+                    this.OnFetched.Invoke();
                 }
             );
 
@@ -87,11 +88,10 @@ namespace Gs2.Unity.UiKit.Gs2Showcase.Fetcher
                 else {
                     Showcase = future.Result;
                     Fetched = true;
+                    this.OnFetched.Invoke();
                     break;
                 }
             }
-
-            this.OnFetched.Invoke();
         }
 
         public void OnUpdateContext() {
@@ -131,8 +131,6 @@ namespace Gs2.Unity.UiKit.Gs2Showcase.Fetcher
     {
         public Gs2ShowcaseOwnShowcaseContext Context { get; private set; }
 
-        public UnityEvent OnFetched = new UnityEvent();
-
         public void Awake()
         {
             Context = GetComponent<Gs2ShowcaseOwnShowcaseContext>() ?? GetComponentInParent<Gs2ShowcaseOwnShowcaseContext>();
@@ -160,6 +158,7 @@ namespace Gs2.Unity.UiKit.Gs2Showcase.Fetcher
     {
         public Gs2.Unity.Gs2Showcase.Model.EzShowcase Showcase { get; protected set; }
         public bool Fetched { get; protected set; }
+        public UnityEvent OnFetched = new UnityEvent();
     }
 
     /// <summary>

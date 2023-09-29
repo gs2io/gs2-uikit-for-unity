@@ -72,6 +72,7 @@ namespace Gs2.Unity.UiKit.Gs2SkillTree.Fetcher
                 {
                     NodeModel = item;
                     Fetched = true;
+                    this.OnFetched.Invoke();
                 }
             );
 
@@ -85,11 +86,10 @@ namespace Gs2.Unity.UiKit.Gs2SkillTree.Fetcher
                 else {
                     NodeModel = future.Result;
                     Fetched = true;
+                    this.OnFetched.Invoke();
                     break;
                 }
             }
-
-            this.OnFetched.Invoke();
         }
 
         public void OnUpdateContext() {
@@ -127,11 +127,35 @@ namespace Gs2.Unity.UiKit.Gs2SkillTree.Fetcher
             return NodeModel.ReturnAcquireActions;
         }
 
+        bool IAcquireActionsFetcher.IsFetched() {
+            return this.Fetched;
+        }
+
+        UnityEvent IAcquireActionsFetcher.OnFetchedEvent() {
+            return this.OnFetched;
+        }
+
+        GameObject IAcquireActionsFetcher.GameObject() {
+            return gameObject;
+        }
+
         public List<Unity.Core.Model.EzConsumeAction> ConsumeActions(string context = "default") {
             if (!Fetched) {
                 return new List<Unity.Core.Model.EzConsumeAction>();
             }
             return NodeModel.ReleaseConsumeActions;
+        }
+
+        bool IConsumeActionsFetcher.IsFetched() {
+            return this.Fetched;
+        }
+
+        UnityEvent IConsumeActionsFetcher.OnFetchedEvent() {
+            return this.OnFetched;
+        }
+
+        GameObject IConsumeActionsFetcher.GameObject() {
+            return gameObject;
         }
     }
 
@@ -142,8 +166,6 @@ namespace Gs2.Unity.UiKit.Gs2SkillTree.Fetcher
     public partial class Gs2SkillTreeNodeModelFetcher
     {
         public Gs2SkillTreeNodeModelContext Context { get; private set; }
-
-        public UnityEvent OnFetched = new UnityEvent();
 
         public void Awake()
         {
@@ -172,6 +194,7 @@ namespace Gs2.Unity.UiKit.Gs2SkillTree.Fetcher
     {
         public Gs2.Unity.Gs2SkillTree.Model.EzNodeModel NodeModel { get; protected set; }
         public bool Fetched { get; protected set; }
+        public UnityEvent OnFetched = new UnityEvent();
     }
 
     /// <summary>

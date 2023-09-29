@@ -40,33 +40,32 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.SpriteSwitcher
 	[AddComponentMenu("GS2 UIKit/Inventory/SimpleItemModel/View/SpriteSwitcher/Properties/Metadata/Gs2InventorySimpleItemModelMetadataSpriteSwitcher")]
     public partial class Gs2InventorySimpleItemModelMetadataSpriteSwitcher : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched && _fetcher.SimpleItemModel != null)
+            switch(this.expression)
             {
-                switch(expression)
-                {
-                    case Expression.In:
-                        if (applyMetadatas.Contains(_fetcher.SimpleItemModel.Metadata)) {
-                            this.onUpdate.Invoke(this.sprite);
-                        }
-                        break;
-                    case Expression.NotIn:
-                        if (!applyMetadatas.Contains(_fetcher.SimpleItemModel.Metadata)) {
-                            this.onUpdate.Invoke(this.sprite);
-                        }
-                        break;
-                    case Expression.StartsWith:
-                        if (_fetcher.SimpleItemModel.Metadata.StartsWith(applyMetadata)) {
-                            this.onUpdate.Invoke(this.sprite);
-                        }
-                        break;
-                    case Expression.EndsWith:
-                        if (_fetcher.SimpleItemModel.Metadata.EndsWith(applyMetadata)) {
-                            this.onUpdate.Invoke(this.sprite);
-                        }
-                        break;
-                }
+                case Expression.In:
+                    if (this.applyMetadatas.Contains(this._fetcher.SimpleItemModel.Metadata)) {
+                        this.onUpdate.Invoke(this.sprite);
+                    }
+                    break;
+                case Expression.NotIn:
+                    if (!this.applyMetadatas.Contains(this._fetcher.SimpleItemModel.Metadata)) {
+                        this.onUpdate.Invoke(this.sprite);
+                    }
+                    break;
+                case Expression.StartsWith:
+                    if (this._fetcher.SimpleItemModel.Metadata.StartsWith(this.applyMetadata)) {
+                        this.onUpdate.Invoke(this.sprite);
+                    }
+                    break;
+                case Expression.EndsWith:
+                    if (this._fetcher.SimpleItemModel.Metadata.EndsWith(this.applyMetadata)) {
+                        this.onUpdate.Invoke(this.sprite);
+                    }
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
         }
     }
@@ -81,13 +80,12 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.SpriteSwitcher
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2InventorySimpleItemModelFetcher>() ?? GetComponentInParent<Gs2InventorySimpleItemModelFetcher>();
-
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2InventorySimpleItemModelFetcher>() ?? GetComponentInParent<Gs2InventorySimpleItemModelFetcher>();
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2InventorySimpleItemModelFetcher.");
                 enabled = false;
             }
-            if (sprite == null) {
+            if (this.sprite == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: sprite is not set.");
                 enabled = false;
             }
@@ -95,14 +93,37 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.SpriteSwitcher
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2InventorySimpleItemModelFetcher>() ?? GetComponentInParent<Gs2InventorySimpleItemModelFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2InventorySimpleItemModelFetcher>() ?? GetComponentInParent<Gs2InventorySimpleItemModelFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
-            if (sprite == null) {
+            if (this.sprite == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 

@@ -29,6 +29,7 @@
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Version.Fetcher;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.Localization.Components;
 using UnityEngine.Localization.SmartFormat.PersistentVariables;
 
@@ -41,24 +42,21 @@ namespace Gs2.Unity.UiKit.Gs2Version.Localization
     [AddComponentMenu("GS2 UIKit/Version/VersionModel/View/Localization/Gs2VersionVersionModelLocalizationVariables")]
     public partial class Gs2VersionVersionModelLocalizationVariables : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched) {
-                target.StringReference["name"] = new StringVariable {
-                    Value = _fetcher?.VersionModel?.Name ?? "",
-                };
-                target.StringReference["metadata"] = new StringVariable {
-                    Value = _fetcher?.VersionModel?.Metadata ?? "",
-                };
-                target.StringReference["scope"] = new StringVariable {
-                    Value = _fetcher?.VersionModel?.Scope ?? "",
-                };
-                target.StringReference["needSignature"] = new BoolVariable {
-                    Value = _fetcher?.VersionModel?.NeedSignature ?? false,
-                };
-                enabled = false;
-                target.enabled = true;
-            }
+            this.target.StringReference["name"] = new StringVariable {
+                Value = _fetcher?.VersionModel?.Name ?? "",
+            };
+            this.target.StringReference["metadata"] = new StringVariable {
+                Value = _fetcher?.VersionModel?.Metadata ?? "",
+            };
+            this.target.StringReference["scope"] = new StringVariable {
+                Value = _fetcher?.VersionModel?.Scope ?? "",
+            };
+            this.target.StringReference["needSignature"] = new BoolVariable {
+                Value = _fetcher?.VersionModel?.NeedSignature ?? false,
+            };
+            this.target.enabled = true;
         }
     }
 
@@ -71,10 +69,10 @@ namespace Gs2.Unity.UiKit.Gs2Version.Localization
         private Gs2VersionVersionModelFetcher _fetcher;
 
         public void Awake() {
-            target.enabled = false;
-            _fetcher = GetComponent<Gs2VersionVersionModelFetcher>() ?? GetComponentInParent<Gs2VersionVersionModelFetcher>();
+            this.target.enabled = false;
+            this._fetcher = GetComponent<Gs2VersionVersionModelFetcher>() ?? GetComponentInParent<Gs2VersionVersionModelFetcher>();
 
-            if (_fetcher == null) {
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2VersionVersionModelFetcher.");
                 enabled = false;
             }
@@ -82,11 +80,34 @@ namespace Gs2.Unity.UiKit.Gs2Version.Localization
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2VersionVersionModelFetcher>() ?? GetComponentInParent<Gs2VersionVersionModelFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2VersionVersionModelFetcher>() ?? GetComponentInParent<Gs2VersionVersionModelFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 

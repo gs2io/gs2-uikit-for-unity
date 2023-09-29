@@ -40,7 +40,7 @@ namespace Gs2.Unity.UiKit.Gs2Datastore.Context
     {
         public void Start() {
             if (DataObjectHistory == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: DataObjectHistory is not set in Gs2DatastoreOwnDataObjectHistoryContext.");
+                Debug.LogWarning($"{gameObject.GetFullPath()}: DataObjectHistory is not set in Gs2DatastoreOwnDataObjectHistoryContext.");
             }
         }
         public virtual bool HasError() {
@@ -48,9 +48,7 @@ namespace Gs2.Unity.UiKit.Gs2Datastore.Context
                 if (GetComponentInParent<Gs2DatastoreOwnDataObjectHistoryList>(true) != null) {
                     return false;
                 }
-                else {
-                    return true;
-                }
+                return true;
             }
             return false;
         }

@@ -60,17 +60,18 @@ namespace Gs2.Unity.UiKit.Gs2Gateway.Fetcher
             yield return new WaitUntil(() => gameSessionHolder.Initialized);
             yield return new WaitUntil(() => Context != null && this.Context.WebSocketSession != null);
 
-            this._domain = clientHolder.Gs2.Gateway.Namespace(
+            _domain = clientHolder.Gs2.Gateway.Namespace(
                 this.Context.WebSocketSession.NamespaceName
             ).Me(
                 gameSessionHolder.GameSession
             ).WebSocketSession(
-            );;
+            );
             this._callbackId = this._domain.Subscribe(
                 item =>
                 {
                     WebSocketSession = item;
                     Fetched = true;
+                    this.OnFetched.Invoke();
                 }
             );
 
@@ -84,29 +85,10 @@ namespace Gs2.Unity.UiKit.Gs2Gateway.Fetcher
                 else {
                     WebSocketSession = future.Result;
                     Fetched = true;
+                    this.OnFetched.Invoke();
+                    break;
                 }
             }
-        }
-
-        public void OnEnable()
-        {
-            StartCoroutine(nameof(Fetch));
-        }
-
-        public void OnDisable()
-        {
-            StopCoroutine(nameof(Fetch));
-
-            if (this._domain == null) {
-                return;
-            }
-            if (!this._callbackId.HasValue) {
-                return;
-            }
-            this._domain.Unsubscribe(
-                this._callbackId.Value
-            );
-            this._callbackId = null;
         }
     }
 
@@ -135,6 +117,34 @@ namespace Gs2.Unity.UiKit.Gs2Gateway.Fetcher
             }
             return false;
         }
+
+        public void OnUpdateContext() {
+            OnDisable();
+            Awake();
+            OnEnable();
+        }
+
+        public void OnEnable()
+        {
+            StartCoroutine(nameof(Fetch));
+            Context.OnUpdate.AddListener(OnUpdateContext);
+        }
+
+        public void OnDisable()
+        {
+            Context.OnUpdate.RemoveListener(OnUpdateContext);
+
+            if (this._domain == null) {
+                return;
+            }
+            if (!this._callbackId.HasValue) {
+                return;
+            }
+            this._domain.Unsubscribe(
+                this._callbackId.Value
+            );
+            this._callbackId = null;
+        }
     }
 
     /// <summary>
@@ -145,6 +155,7 @@ namespace Gs2.Unity.UiKit.Gs2Gateway.Fetcher
     {
         public EzWebSocketSession WebSocketSession { get; protected set; }
         public bool Fetched { get; protected set; }
+        public UnityEvent OnFetched = new UnityEvent();
     }
 
     /// <summary>

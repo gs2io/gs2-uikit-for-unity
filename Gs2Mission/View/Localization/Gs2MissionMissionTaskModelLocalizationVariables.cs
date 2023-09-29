@@ -29,6 +29,7 @@
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Mission.Fetcher;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.Localization.Components;
 using UnityEngine.Localization.SmartFormat.PersistentVariables;
 
@@ -41,33 +42,30 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Localization
     [AddComponentMenu("GS2 UIKit/Mission/MissionTaskModel/View/Localization/Gs2MissionMissionTaskModelLocalizationVariables")]
     public partial class Gs2MissionMissionTaskModelLocalizationVariables : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched) {
-                target.StringReference["name"] = new StringVariable {
-                    Value = _fetcher?.MissionTaskModel?.Name ?? "",
-                };
-                target.StringReference["metadata"] = new StringVariable {
-                    Value = _fetcher?.MissionTaskModel?.Metadata ?? "",
-                };
-                target.StringReference["counterName"] = new StringVariable {
-                    Value = _fetcher?.MissionTaskModel?.CounterName ?? "",
-                };
-                target.StringReference["targetResetType"] = new StringVariable {
-                    Value = _fetcher?.MissionTaskModel?.TargetResetType ?? "",
-                };
-                target.StringReference["targetValue"] = new LongVariable {
-                    Value = _fetcher?.MissionTaskModel?.TargetValue ?? 0,
-                };
-                target.StringReference["challengePeriodEventId"] = new StringVariable {
-                    Value = _fetcher?.MissionTaskModel?.ChallengePeriodEventId ?? "",
-                };
-                target.StringReference["premiseMissionTaskName"] = new StringVariable {
-                    Value = _fetcher?.MissionTaskModel?.PremiseMissionTaskName ?? "",
-                };
-                enabled = false;
-                target.enabled = true;
-            }
+            this.target.StringReference["name"] = new StringVariable {
+                Value = _fetcher?.MissionTaskModel?.Name ?? "",
+            };
+            this.target.StringReference["metadata"] = new StringVariable {
+                Value = _fetcher?.MissionTaskModel?.Metadata ?? "",
+            };
+            this.target.StringReference["counterName"] = new StringVariable {
+                Value = _fetcher?.MissionTaskModel?.CounterName ?? "",
+            };
+            this.target.StringReference["targetResetType"] = new StringVariable {
+                Value = _fetcher?.MissionTaskModel?.TargetResetType ?? "",
+            };
+            this.target.StringReference["targetValue"] = new LongVariable {
+                Value = _fetcher?.MissionTaskModel?.TargetValue ?? 0,
+            };
+            this.target.StringReference["challengePeriodEventId"] = new StringVariable {
+                Value = _fetcher?.MissionTaskModel?.ChallengePeriodEventId ?? "",
+            };
+            this.target.StringReference["premiseMissionTaskName"] = new StringVariable {
+                Value = _fetcher?.MissionTaskModel?.PremiseMissionTaskName ?? "",
+            };
+            this.target.enabled = true;
         }
     }
 
@@ -80,10 +78,10 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Localization
         private Gs2MissionMissionTaskModelFetcher _fetcher;
 
         public void Awake() {
-            target.enabled = false;
-            _fetcher = GetComponent<Gs2MissionMissionTaskModelFetcher>() ?? GetComponentInParent<Gs2MissionMissionTaskModelFetcher>();
+            this.target.enabled = false;
+            this._fetcher = GetComponent<Gs2MissionMissionTaskModelFetcher>() ?? GetComponentInParent<Gs2MissionMissionTaskModelFetcher>();
 
-            if (_fetcher == null) {
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MissionMissionTaskModelFetcher.");
                 enabled = false;
             }
@@ -91,11 +89,34 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Localization
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2MissionMissionTaskModelFetcher>() ?? GetComponentInParent<Gs2MissionMissionTaskModelFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2MissionMissionTaskModelFetcher>() ?? GetComponentInParent<Gs2MissionMissionTaskModelFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 

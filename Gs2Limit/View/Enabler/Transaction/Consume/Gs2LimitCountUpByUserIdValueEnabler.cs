@@ -43,34 +43,33 @@ namespace Gs2.Unity.UiKit.Gs2Limit.Enabler
 	[AddComponentMenu("GS2 UIKit/Limit/Counter/View/Enabler/Transaction/Gs2LimitCountUpByUserIdValueEnabler")]
     public partial class Gs2LimitCountUpByUserIdValueEnabler : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched && _fetcher.Request != null) {
-                switch(expression)
-                {
-                    case Expression.In:
-                        target.SetActive(_fetcher.Request.CountUpValue != null && enableCountUpValues.Contains(_fetcher.Request.CountUpValue.Value));
-                        break;
-                    case Expression.NotIn:
-                        target.SetActive(_fetcher.Request.CountUpValue != null && !enableCountUpValues.Contains(_fetcher.Request.CountUpValue.Value));
-                        break;
-                    case Expression.Less:
-                        target.SetActive(enableCountUpValue > _fetcher.Request.CountUpValue);
-                        break;
-                    case Expression.LessEqual:
-                        target.SetActive(enableCountUpValue >= _fetcher.Request.CountUpValue);
-                        break;
-                    case Expression.Greater:
-                        target.SetActive(enableCountUpValue < _fetcher.Request.CountUpValue);
-                        break;
-                    case Expression.GreaterEqual:
-                        target.SetActive(enableCountUpValue <= _fetcher.Request.CountUpValue);
-                        break;
-                }
+            if (!this._fetcher.Fetched || this._fetcher.Request == null) {
+                return;
             }
-            else
+            switch(this.expression)
             {
-                target.SetActive(enableCountUpValues.Contains(0));
+                case Expression.In:
+                    this.target.SetActive(this._fetcher.Request.CountUpValue != null && this.enableCountUpValues.Contains(this._fetcher.Request.CountUpValue.Value));
+                    break;
+                case Expression.NotIn:
+                    this.target.SetActive(this._fetcher.Request.CountUpValue != null && !this.enableCountUpValues.Contains(this._fetcher.Request.CountUpValue.Value));
+                    break;
+                case Expression.Less:
+                    this.target.SetActive(this.enableCountUpValue > this._fetcher.Request.CountUpValue);
+                    break;
+                case Expression.LessEqual:
+                    this.target.SetActive(this.enableCountUpValue >= this._fetcher.Request.CountUpValue);
+                    break;
+                case Expression.Greater:
+                    this.target.SetActive(this.enableCountUpValue < this._fetcher.Request.CountUpValue);
+                    break;
+                case Expression.GreaterEqual:
+                    this.target.SetActive(this.enableCountUpValue <= this._fetcher.Request.CountUpValue);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
         }
     }
@@ -85,30 +84,50 @@ namespace Gs2.Unity.UiKit.Gs2Limit.Enabler
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2LimitCountUpByUserIdFetcher>() ?? GetComponentInParent<Gs2LimitCountUpByUserIdFetcher>();
-
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2LimitCountUpByUserIdFetcher>() ?? GetComponentInParent<Gs2LimitCountUpByUserIdFetcher>();
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2LimitCountUpByUserIdFetcher.");
                 enabled = false;
             }
-            if (target == null) {
+            if (this.target == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: target is not set.");
                 enabled = false;
             }
-
-            Update();
         }
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2LimitCountUpByUserIdFetcher>() ?? GetComponentInParent<Gs2LimitCountUpByUserIdFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2LimitCountUpByUserIdFetcher>() ?? GetComponentInParent<Gs2LimitCountUpByUserIdFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
-            if (target == null) {
+            if (this.target == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 

@@ -53,8 +53,11 @@ namespace Gs2.Unity.UiKit.Gs2Showcase
     {
         private IEnumerator Process()
         {
-            yield return new WaitUntil(() => this._clientHolder.Initialized);
-            yield return new WaitUntil(() => this._gameSessionHolder.Initialized);
+            var clientHolder = Gs2ClientHolder.Instance;
+            var gameSessionHolder = Gs2GameSessionHolder.Instance;
+
+            yield return new WaitUntil(() => clientHolder.Initialized);
+            yield return new WaitUntil(() => gameSessionHolder.Initialized);
             
             var config = new List<Gs2.Unity.Gs2Showcase.Model.EzConfig>(Config);
 
@@ -81,10 +84,10 @@ namespace Gs2.Unity.UiKit.Gs2Showcase
 
 #endif
 
-            var domain = this._clientHolder.Gs2.Showcase.Namespace(
+            var domain = clientHolder.Gs2.Showcase.Namespace(
                 this._fetcher.Context.RandomDisplayItem.NamespaceName
             ).Me(
-                this._gameSessionHolder.GameSession
+                gameSessionHolder.GameSession
             ).RandomShowcase(
                 this._fetcher.Context.RandomDisplayItem.ShowcaseName
             ).RandomDisplayItem(
@@ -124,13 +127,17 @@ namespace Gs2.Unity.UiKit.Gs2Showcase
                 this.onError.Invoke(future.Error, null);
                 yield break;
             }
+            if (this.WaitAsyncProcessComplete) {
+                var transaction = future.Result;
+                var future2 = transaction.Wait();
+                yield return future2;
+            }
             
 #if GS2_ENABLE_PURCHASING
             if (purchaseParameters != null) {
                 purchaseParameters.controller.ConfirmPendingPurchase(purchaseParameters.product);
             }
 #endif
-
             this.onRandomShowcaseBuyComplete.Invoke(future.Result.TransactionId);
         }
 
@@ -151,26 +158,21 @@ namespace Gs2.Unity.UiKit.Gs2Showcase
 
     public partial class Gs2ShowcaseRandomDisplayItemRandomShowcaseBuyAction
     {
-        private Gs2ClientHolder _clientHolder;
-        private Gs2GameSessionHolder _gameSessionHolder;
         private Gs2ShowcaseOwnRandomDisplayItemFetcher _fetcher;
 
         public void Awake()
         {
-            this._clientHolder = Gs2ClientHolder.Instance;
-            this._gameSessionHolder = Gs2GameSessionHolder.Instance;
             this._fetcher = GetComponent<Gs2ShowcaseOwnRandomDisplayItemFetcher>() ?? GetComponentInParent<Gs2ShowcaseOwnRandomDisplayItemFetcher>();
-
-            if (_fetcher == null) {
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ShowcaseOwnRandomDisplayItemFetcher.");
                 enabled = false;
             }
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
             this._fetcher = GetComponent<Gs2ShowcaseOwnRandomDisplayItemFetcher>() ?? GetComponentInParent<Gs2ShowcaseOwnRandomDisplayItemFetcher>(true);
-            if (_fetcher == null) {
+            if (this._fetcher == null) {
                 return true;
             }
             return false;
@@ -191,27 +193,32 @@ namespace Gs2.Unity.UiKit.Gs2Showcase
     /// </summary>
     public partial class Gs2ShowcaseRandomDisplayItemRandomShowcaseBuyAction
     {
+        public bool WaitAsyncProcessComplete;
         public int Quantity;
         public List<Gs2.Unity.Gs2Showcase.Model.EzConfig> Config;
 
         public void SetQuantity(int value) {
-            Quantity = value;
-            this.onChangeQuantity.Invoke(Quantity);
+            this.Quantity = value;
+            this.onChangeQuantity.Invoke(this.Quantity);
+            this.OnChange.Invoke();
         }
 
         public void DecreaseQuantity() {
-            Quantity -= 1;
-            this.onChangeQuantity.Invoke(Quantity);
+            this.Quantity -= 1;
+            this.onChangeQuantity.Invoke(this.Quantity);
+            this.OnChange.Invoke();
         }
 
         public void IncreaseQuantity() {
-            Quantity += 1;
-            this.onChangeQuantity.Invoke(Quantity);
+            this.Quantity += 1;
+            this.onChangeQuantity.Invoke(this.Quantity);
+            this.OnChange.Invoke();
         }
 
         public void SetConfig(List<Gs2.Unity.Gs2Showcase.Model.EzConfig> value) {
-            Config = value;
-            this.onChangeConfig.Invoke(Config);
+            this.Config = value;
+            this.onChangeConfig.Invoke(this.Config);
+            this.OnChange.Invoke();
         }
     }
 
@@ -262,6 +269,8 @@ namespace Gs2.Unity.UiKit.Gs2Showcase
             add => this.onRandomShowcaseBuyComplete.AddListener(value);
             remove => this.onRandomShowcaseBuyComplete.RemoveListener(value);
         }
+
+        public UnityEvent OnChange = new UnityEvent();
 
         [SerializeField]
         internal ErrorEvent onError = new ErrorEvent();

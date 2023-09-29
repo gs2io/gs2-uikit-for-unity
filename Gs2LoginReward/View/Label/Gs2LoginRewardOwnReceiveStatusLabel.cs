@@ -40,39 +40,36 @@ namespace Gs2.Unity.UiKit.Gs2LoginReward
 	[AddComponentMenu("GS2 UIKit/LoginReward/ReceiveStatus/View/Label/Gs2LoginRewardOwnReceiveStatusLabel")]
     public partial class Gs2LoginRewardOwnReceiveStatusLabel : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched && _fetcher.ReceiveStatus != null)
-            {
-                var lastReceivedAt = _fetcher.ReceiveStatus.LastReceivedAt == null ? DateTime.Now : UnixTime.FromUnixTime(_fetcher.ReceiveStatus.LastReceivedAt).ToLocalTime();
-                onUpdate?.Invoke(
-                    format.Replace(
-                        "{bonusModelName}", $"{_fetcher?.ReceiveStatus?.BonusModelName}"
-                    ).Replace(
-                        "{receivedSteps}", $"{_fetcher?.ReceiveStatus?.ReceivedSteps}"
-                    ).Replace(
-                        "{lastReceivedAt:yyyy}", lastReceivedAt.ToString("yyyy")
-                    ).Replace(
-                        "{lastReceivedAt:yy}", lastReceivedAt.ToString("yy")
-                    ).Replace(
-                        "{lastReceivedAt:MM}", lastReceivedAt.ToString("MM")
-                    ).Replace(
-                        "{lastReceivedAt:MMM}", lastReceivedAt.ToString("MMM")
-                    ).Replace(
-                        "{lastReceivedAt:dd}", lastReceivedAt.ToString("dd")
-                    ).Replace(
-                        "{lastReceivedAt:hh}", lastReceivedAt.ToString("hh")
-                    ).Replace(
-                        "{lastReceivedAt:HH}", lastReceivedAt.ToString("HH")
-                    ).Replace(
-                        "{lastReceivedAt:tt}", lastReceivedAt.ToString("tt")
-                    ).Replace(
-                        "{lastReceivedAt:mm}", lastReceivedAt.ToString("mm")
-                    ).Replace(
-                        "{lastReceivedAt:ss}", lastReceivedAt.ToString("ss")
-                    )
-                );
-            }
+            var lastReceivedAt = this._fetcher.ReceiveStatus.LastReceivedAt == null ? DateTime.Now : UnixTime.FromUnixTime(_fetcher.ReceiveStatus.LastReceivedAt).ToLocalTime();
+            this.onUpdate?.Invoke(
+                this.format.Replace(
+                    "{bonusModelName}", $"{this._fetcher?.ReceiveStatus?.BonusModelName}"
+                ).Replace(
+                    "{receivedSteps}", $"{this._fetcher?.ReceiveStatus?.ReceivedSteps}"
+                ).Replace(
+                    "{lastReceivedAt:yyyy}", lastReceivedAt.ToString("yyyy")
+                ).Replace(
+                    "{lastReceivedAt:yy}", lastReceivedAt.ToString("yy")
+                ).Replace(
+                    "{lastReceivedAt:MM}", lastReceivedAt.ToString("MM")
+                ).Replace(
+                    "{lastReceivedAt:MMM}", lastReceivedAt.ToString("MMM")
+                ).Replace(
+                    "{lastReceivedAt:dd}", lastReceivedAt.ToString("dd")
+                ).Replace(
+                    "{lastReceivedAt:hh}", lastReceivedAt.ToString("hh")
+                ).Replace(
+                    "{lastReceivedAt:HH}", lastReceivedAt.ToString("HH")
+                ).Replace(
+                    "{lastReceivedAt:tt}", lastReceivedAt.ToString("tt")
+                ).Replace(
+                    "{lastReceivedAt:mm}", lastReceivedAt.ToString("mm")
+                ).Replace(
+                    "{lastReceivedAt:ss}", lastReceivedAt.ToString("ss")
+                )
+            );
         }
     }
 
@@ -86,23 +83,43 @@ namespace Gs2.Unity.UiKit.Gs2LoginReward
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2LoginRewardOwnReceiveStatusFetcher>() ?? GetComponentInParent<Gs2LoginRewardOwnReceiveStatusFetcher>();
-
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2LoginRewardOwnReceiveStatusFetcher>() ?? GetComponentInParent<Gs2LoginRewardOwnReceiveStatusFetcher>();
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2LoginRewardOwnReceiveStatusFetcher.");
                 enabled = false;
             }
-
-            Update();
         }
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2LoginRewardOwnReceiveStatusFetcher>() ?? GetComponentInParent<Gs2LoginRewardOwnReceiveStatusFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2LoginRewardOwnReceiveStatusFetcher>() ?? GetComponentInParent<Gs2LoginRewardOwnReceiveStatusFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 
@@ -140,8 +157,8 @@ namespace Gs2.Unity.UiKit.Gs2LoginReward
 
         public event UnityAction<string> OnUpdate
         {
-            add => onUpdate.AddListener(value);
-            remove => onUpdate.RemoveListener(value);
+            add => this.onUpdate.AddListener(value);
+            remove => this.onUpdate.RemoveListener(value);
         }
     }
 }

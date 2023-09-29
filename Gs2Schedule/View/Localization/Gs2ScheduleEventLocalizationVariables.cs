@@ -29,6 +29,7 @@
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Schedule.Fetcher;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.Localization.Components;
 using UnityEngine.Localization.SmartFormat.PersistentVariables;
 
@@ -41,51 +42,48 @@ namespace Gs2.Unity.UiKit.Gs2Schedule.Localization
     [AddComponentMenu("GS2 UIKit/Schedule/Event/View/Localization/Gs2ScheduleEventLocalizationVariables")]
     public partial class Gs2ScheduleEventLocalizationVariables : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched) {
-                target.StringReference["name"] = new StringVariable {
-                    Value = _fetcher?.Event?.Name ?? "",
-                };
-                target.StringReference["metadata"] = new StringVariable {
-                    Value = _fetcher?.Event?.Metadata ?? "",
-                };
-                target.StringReference["scheduleType"] = new StringVariable {
-                    Value = _fetcher?.Event?.ScheduleType ?? "",
-                };
-                target.StringReference["repeatType"] = new StringVariable {
-                    Value = _fetcher?.Event?.RepeatType ?? "",
-                };
-                target.StringReference["absoluteBegin"] = new LongVariable {
-                    Value = _fetcher?.Event?.AbsoluteBegin ?? 0,
-                };
-                target.StringReference["absoluteEnd"] = new LongVariable {
-                    Value = _fetcher?.Event?.AbsoluteEnd ?? 0,
-                };
-                target.StringReference["repeatBeginDayOfMonth"] = new IntVariable {
-                    Value = _fetcher?.Event?.RepeatBeginDayOfMonth ?? 0,
-                };
-                target.StringReference["repeatEndDayOfMonth"] = new IntVariable {
-                    Value = _fetcher?.Event?.RepeatEndDayOfMonth ?? 0,
-                };
-                target.StringReference["repeatBeginDayOfWeek"] = new StringVariable {
-                    Value = _fetcher?.Event?.RepeatBeginDayOfWeek ?? "",
-                };
-                target.StringReference["repeatEndDayOfWeek"] = new StringVariable {
-                    Value = _fetcher?.Event?.RepeatEndDayOfWeek ?? "",
-                };
-                target.StringReference["repeatBeginHour"] = new IntVariable {
-                    Value = _fetcher?.Event?.RepeatBeginHour ?? 0,
-                };
-                target.StringReference["repeatEndHour"] = new IntVariable {
-                    Value = _fetcher?.Event?.RepeatEndHour ?? 0,
-                };
-                target.StringReference["relativeTriggerName"] = new StringVariable {
-                    Value = _fetcher?.Event?.RelativeTriggerName ?? "",
-                };
-                enabled = false;
-                target.enabled = true;
-            }
+            this.target.StringReference["name"] = new StringVariable {
+                Value = _fetcher?.Event?.Name ?? "",
+            };
+            this.target.StringReference["metadata"] = new StringVariable {
+                Value = _fetcher?.Event?.Metadata ?? "",
+            };
+            this.target.StringReference["scheduleType"] = new StringVariable {
+                Value = _fetcher?.Event?.ScheduleType ?? "",
+            };
+            this.target.StringReference["repeatType"] = new StringVariable {
+                Value = _fetcher?.Event?.RepeatType ?? "",
+            };
+            this.target.StringReference["absoluteBegin"] = new LongVariable {
+                Value = _fetcher?.Event?.AbsoluteBegin ?? 0,
+            };
+            this.target.StringReference["absoluteEnd"] = new LongVariable {
+                Value = _fetcher?.Event?.AbsoluteEnd ?? 0,
+            };
+            this.target.StringReference["repeatBeginDayOfMonth"] = new IntVariable {
+                Value = _fetcher?.Event?.RepeatBeginDayOfMonth ?? 0,
+            };
+            this.target.StringReference["repeatEndDayOfMonth"] = new IntVariable {
+                Value = _fetcher?.Event?.RepeatEndDayOfMonth ?? 0,
+            };
+            this.target.StringReference["repeatBeginDayOfWeek"] = new StringVariable {
+                Value = _fetcher?.Event?.RepeatBeginDayOfWeek ?? "",
+            };
+            this.target.StringReference["repeatEndDayOfWeek"] = new StringVariable {
+                Value = _fetcher?.Event?.RepeatEndDayOfWeek ?? "",
+            };
+            this.target.StringReference["repeatBeginHour"] = new IntVariable {
+                Value = _fetcher?.Event?.RepeatBeginHour ?? 0,
+            };
+            this.target.StringReference["repeatEndHour"] = new IntVariable {
+                Value = _fetcher?.Event?.RepeatEndHour ?? 0,
+            };
+            this.target.StringReference["relativeTriggerName"] = new StringVariable {
+                Value = _fetcher?.Event?.RelativeTriggerName ?? "",
+            };
+            this.target.enabled = true;
         }
     }
 
@@ -98,10 +96,10 @@ namespace Gs2.Unity.UiKit.Gs2Schedule.Localization
         private Gs2ScheduleOwnEventFetcher _fetcher;
 
         public void Awake() {
-            target.enabled = false;
-            _fetcher = GetComponent<Gs2ScheduleOwnEventFetcher>() ?? GetComponentInParent<Gs2ScheduleOwnEventFetcher>();
+            this.target.enabled = false;
+            this._fetcher = GetComponent<Gs2ScheduleOwnEventFetcher>() ?? GetComponentInParent<Gs2ScheduleOwnEventFetcher>();
 
-            if (_fetcher == null) {
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ScheduleEventFetcher.");
                 enabled = false;
             }
@@ -109,11 +107,34 @@ namespace Gs2.Unity.UiKit.Gs2Schedule.Localization
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2ScheduleOwnEventFetcher>() ?? GetComponentInParent<Gs2ScheduleOwnEventFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2ScheduleOwnEventFetcher>() ?? GetComponentInParent<Gs2ScheduleOwnEventFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 

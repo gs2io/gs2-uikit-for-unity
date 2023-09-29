@@ -40,28 +40,25 @@ namespace Gs2.Unity.UiKit.Gs2Version
 	[AddComponentMenu("GS2 UIKit/Version/VersionModel/View/Label/Gs2VersionVersionModelLabel")]
     public partial class Gs2VersionVersionModelLabel : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched && _fetcher.VersionModel != null)
-            {
-                onUpdate?.Invoke(
-                    format.Replace(
-                        "{name}", $"{_fetcher?.VersionModel?.Name}"
-                    ).Replace(
-                        "{metadata}", $"{_fetcher?.VersionModel?.Metadata}"
-                    ).Replace(
-                        "{warningVersion}", $"{_fetcher?.VersionModel?.WarningVersion}"
-                    ).Replace(
-                        "{errorVersion}", $"{_fetcher?.VersionModel?.ErrorVersion}"
-                    ).Replace(
-                        "{scope}", $"{_fetcher?.VersionModel?.Scope}"
-                    ).Replace(
-                        "{currentVersion}", $"{_fetcher?.VersionModel?.CurrentVersion}"
-                    ).Replace(
-                        "{needSignature}", $"{_fetcher?.VersionModel?.NeedSignature}"
-                    )
-                );
-            }
+            this.onUpdate?.Invoke(
+                this.format.Replace(
+                    "{name}", $"{this._fetcher?.VersionModel?.Name}"
+                ).Replace(
+                    "{metadata}", $"{this._fetcher?.VersionModel?.Metadata}"
+                ).Replace(
+                    "{warningVersion}", $"{this._fetcher?.VersionModel?.WarningVersion}"
+                ).Replace(
+                    "{errorVersion}", $"{this._fetcher?.VersionModel?.ErrorVersion}"
+                ).Replace(
+                    "{scope}", $"{this._fetcher?.VersionModel?.Scope}"
+                ).Replace(
+                    "{currentVersion}", $"{this._fetcher?.VersionModel?.CurrentVersion}"
+                ).Replace(
+                    "{needSignature}", $"{this._fetcher?.VersionModel?.NeedSignature}"
+                )
+            );
         }
     }
 
@@ -75,23 +72,43 @@ namespace Gs2.Unity.UiKit.Gs2Version
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2VersionVersionModelFetcher>() ?? GetComponentInParent<Gs2VersionVersionModelFetcher>();
-
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2VersionVersionModelFetcher>() ?? GetComponentInParent<Gs2VersionVersionModelFetcher>();
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2VersionVersionModelFetcher.");
                 enabled = false;
             }
-
-            Update();
         }
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2VersionVersionModelFetcher>() ?? GetComponentInParent<Gs2VersionVersionModelFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2VersionVersionModelFetcher>() ?? GetComponentInParent<Gs2VersionVersionModelFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 
@@ -129,8 +146,8 @@ namespace Gs2.Unity.UiKit.Gs2Version
 
         public event UnityAction<string> OnUpdate
         {
-            add => onUpdate.AddListener(value);
-            remove => onUpdate.RemoveListener(value);
+            add => this.onUpdate.AddListener(value);
+            remove => this.onUpdate.RemoveListener(value);
         }
     }
 }

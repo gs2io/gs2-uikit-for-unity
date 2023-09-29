@@ -43,8 +43,12 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Editor
             serializedObject.Update();
 
             if (original.BlackList == null) {
-                if (original.GetComponentInParent<Gs2FriendOwnBlackListList>(true) != null) {
-                    EditorGUILayout.HelpBox("OwnBlackList is auto assign from Gs2FriendOwnBlackListList.", MessageType.Info);
+                var list = original.GetComponentInParent<Gs2FriendOwnBlackListList>(true);
+                if (list != null) {
+                    EditorGUILayout.HelpBox("BlackList is auto assign from Gs2FriendOwnBlackListList.", MessageType.Info);
+                    EditorGUI.BeginDisabledGroup(true);
+                    EditorGUILayout.ObjectField("List", list, typeof(Gs2FriendOwnBlackListList), false);
+                    EditorGUI.EndDisabledGroup();
                 }
                 else {
                     EditorGUILayout.HelpBox("OwnBlackList not assigned.", MessageType.Error);

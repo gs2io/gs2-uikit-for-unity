@@ -43,8 +43,12 @@ namespace Gs2.Unity.UiKit.Gs2Datastore.Editor
             serializedObject.Update();
 
             if (original.DataObject == null) {
-                if (original.GetComponentInParent<Gs2DatastoreOwnDataObjectList>(true) != null) {
-                    EditorGUILayout.HelpBox("OwnDataObject is auto assign from Gs2DatastoreOwnDataObjectList.", MessageType.Info);
+                var list = original.GetComponentInParent<Gs2DatastoreOwnDataObjectList>(true);
+                if (list != null) {
+                    EditorGUILayout.HelpBox("DataObject is auto assign from Gs2DatastoreOwnDataObjectList.", MessageType.Info);
+                    EditorGUI.BeginDisabledGroup(true);
+                    EditorGUILayout.ObjectField("List", list, typeof(Gs2DatastoreOwnDataObjectList), false);
+                    EditorGUI.EndDisabledGroup();
                 }
                 else {
                     EditorGUILayout.HelpBox("OwnDataObject not assigned.", MessageType.Error);

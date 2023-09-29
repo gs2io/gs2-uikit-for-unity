@@ -43,8 +43,12 @@ namespace Gs2.Unity.UiKit.Gs2Stamina.Editor
             serializedObject.Update();
 
             if (original.StaminaModel == null) {
-                if (original.GetComponentInParent<Gs2StaminaStaminaModelList>(true) != null) {
+                var list = original.GetComponentInParent<Gs2StaminaStaminaModelList>(true);
+                if (list != null) {
                     EditorGUILayout.HelpBox("StaminaModel is auto assign from Gs2StaminaStaminaModelList.", MessageType.Info);
+                    EditorGUI.BeginDisabledGroup(true);
+                    EditorGUILayout.ObjectField("List", list, typeof(Gs2StaminaStaminaModelList), false);
+                    EditorGUI.EndDisabledGroup();
                 }
                 else {
                     EditorGUILayout.HelpBox("StaminaModel not assigned.", MessageType.Error);

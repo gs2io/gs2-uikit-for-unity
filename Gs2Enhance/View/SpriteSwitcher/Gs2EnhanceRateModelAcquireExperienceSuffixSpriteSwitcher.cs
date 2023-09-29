@@ -40,33 +40,32 @@ namespace Gs2.Unity.UiKit.Gs2Enhance.SpriteSwitcher
 	[AddComponentMenu("GS2 UIKit/Enhance/RateModel/View/SpriteSwitcher/Properties/AcquireExperienceSuffix/Gs2EnhanceRateModelAcquireExperienceSuffixSpriteSwitcher")]
     public partial class Gs2EnhanceRateModelAcquireExperienceSuffixSpriteSwitcher : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched && _fetcher.RateModel != null)
+            switch(this.expression)
             {
-                switch(expression)
-                {
-                    case Expression.In:
-                        if (applyAcquireExperienceSuffixes.Contains(_fetcher.RateModel.AcquireExperienceSuffix)) {
-                            this.onUpdate.Invoke(this.sprite);
-                        }
-                        break;
-                    case Expression.NotIn:
-                        if (!applyAcquireExperienceSuffixes.Contains(_fetcher.RateModel.AcquireExperienceSuffix)) {
-                            this.onUpdate.Invoke(this.sprite);
-                        }
-                        break;
-                    case Expression.StartsWith:
-                        if (_fetcher.RateModel.AcquireExperienceSuffix.StartsWith(applyAcquireExperienceSuffix)) {
-                            this.onUpdate.Invoke(this.sprite);
-                        }
-                        break;
-                    case Expression.EndsWith:
-                        if (_fetcher.RateModel.AcquireExperienceSuffix.EndsWith(applyAcquireExperienceSuffix)) {
-                            this.onUpdate.Invoke(this.sprite);
-                        }
-                        break;
-                }
+                case Expression.In:
+                    if (this.applyAcquireExperienceSuffixes.Contains(this._fetcher.RateModel.AcquireExperienceSuffix)) {
+                        this.onUpdate.Invoke(this.sprite);
+                    }
+                    break;
+                case Expression.NotIn:
+                    if (!this.applyAcquireExperienceSuffixes.Contains(this._fetcher.RateModel.AcquireExperienceSuffix)) {
+                        this.onUpdate.Invoke(this.sprite);
+                    }
+                    break;
+                case Expression.StartsWith:
+                    if (this._fetcher.RateModel.AcquireExperienceSuffix.StartsWith(this.applyAcquireExperienceSuffix)) {
+                        this.onUpdate.Invoke(this.sprite);
+                    }
+                    break;
+                case Expression.EndsWith:
+                    if (this._fetcher.RateModel.AcquireExperienceSuffix.EndsWith(this.applyAcquireExperienceSuffix)) {
+                        this.onUpdate.Invoke(this.sprite);
+                    }
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
         }
     }
@@ -81,13 +80,12 @@ namespace Gs2.Unity.UiKit.Gs2Enhance.SpriteSwitcher
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2EnhanceRateModelFetcher>() ?? GetComponentInParent<Gs2EnhanceRateModelFetcher>();
-
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2EnhanceRateModelFetcher>() ?? GetComponentInParent<Gs2EnhanceRateModelFetcher>();
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2EnhanceRateModelFetcher.");
                 enabled = false;
             }
-            if (sprite == null) {
+            if (this.sprite == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: sprite is not set.");
                 enabled = false;
             }
@@ -95,14 +93,37 @@ namespace Gs2.Unity.UiKit.Gs2Enhance.SpriteSwitcher
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2EnhanceRateModelFetcher>() ?? GetComponentInParent<Gs2EnhanceRateModelFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2EnhanceRateModelFetcher>() ?? GetComponentInParent<Gs2EnhanceRateModelFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
-            if (sprite == null) {
+            if (this.sprite == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 

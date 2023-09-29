@@ -29,6 +29,7 @@
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2AdReward.Fetcher;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.Localization.Components;
 using UnityEngine.Localization.SmartFormat.PersistentVariables;
 
@@ -41,15 +42,12 @@ namespace Gs2.Unity.UiKit.Gs2AdReward.Localization
     [AddComponentMenu("GS2 UIKit/AdReward/Point/View/Localization/Gs2AdRewardPointLocalizationVariables")]
     public partial class Gs2AdRewardPointLocalizationVariables : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched) {
-                target.StringReference["point"] = new LongVariable {
-                    Value = _fetcher?.Point?.Point ?? 0,
-                };
-                enabled = false;
-                target.enabled = true;
-            }
+            this.target.StringReference["point"] = new LongVariable {
+                Value = _fetcher?.Point?.Point ?? 0,
+            };
+            this.target.enabled = true;
         }
     }
 
@@ -62,10 +60,10 @@ namespace Gs2.Unity.UiKit.Gs2AdReward.Localization
         private Gs2AdRewardOwnPointFetcher _fetcher;
 
         public void Awake() {
-            target.enabled = false;
-            _fetcher = GetComponent<Gs2AdRewardOwnPointFetcher>() ?? GetComponentInParent<Gs2AdRewardOwnPointFetcher>();
+            this.target.enabled = false;
+            this._fetcher = GetComponent<Gs2AdRewardOwnPointFetcher>() ?? GetComponentInParent<Gs2AdRewardOwnPointFetcher>();
 
-            if (_fetcher == null) {
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2AdRewardPointFetcher.");
                 enabled = false;
             }
@@ -73,11 +71,34 @@ namespace Gs2.Unity.UiKit.Gs2AdReward.Localization
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2AdRewardOwnPointFetcher>() ?? GetComponentInParent<Gs2AdRewardOwnPointFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2AdRewardOwnPointFetcher>() ?? GetComponentInParent<Gs2AdRewardOwnPointFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 

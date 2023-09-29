@@ -40,22 +40,19 @@ namespace Gs2.Unity.UiKit.Gs2Idle
 	[AddComponentMenu("GS2 UIKit/Idle/Status/View/Label/Gs2IdleOwnStatusLabel")]
     public partial class Gs2IdleOwnStatusLabel : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched && _fetcher.Status != null)
-            {
-                onUpdate?.Invoke(
-                    format.Replace(
-                        "{categoryName}", $"{_fetcher?.Status?.CategoryName}"
-                    ).Replace(
-                        "{randomSeed}", $"{_fetcher?.Status?.RandomSeed}"
-                    ).Replace(
-                        "{idleMinutes}", $"{_fetcher?.Status?.IdleMinutes}"
-                    ).Replace(
-                        "{maximumIdleMinutes}", $"{_fetcher?.Status?.MaximumIdleMinutes}"
-                    )
-                );
-            }
+            this.onUpdate?.Invoke(
+                this.format.Replace(
+                    "{categoryName}", $"{this._fetcher?.Status?.CategoryName}"
+                ).Replace(
+                    "{randomSeed}", $"{this._fetcher?.Status?.RandomSeed}"
+                ).Replace(
+                    "{idleMinutes}", $"{this._fetcher?.Status?.IdleMinutes}"
+                ).Replace(
+                    "{maximumIdleMinutes}", $"{this._fetcher?.Status?.MaximumIdleMinutes}"
+                )
+            );
         }
     }
 
@@ -69,23 +66,43 @@ namespace Gs2.Unity.UiKit.Gs2Idle
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2IdleOwnStatusFetcher>() ?? GetComponentInParent<Gs2IdleOwnStatusFetcher>();
-
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2IdleOwnStatusFetcher>() ?? GetComponentInParent<Gs2IdleOwnStatusFetcher>();
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2IdleOwnStatusFetcher.");
                 enabled = false;
             }
-
-            Update();
         }
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2IdleOwnStatusFetcher>() ?? GetComponentInParent<Gs2IdleOwnStatusFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2IdleOwnStatusFetcher>() ?? GetComponentInParent<Gs2IdleOwnStatusFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 
@@ -123,8 +140,8 @@ namespace Gs2.Unity.UiKit.Gs2Idle
 
         public event UnityAction<string> OnUpdate
         {
-            add => onUpdate.AddListener(value);
-            remove => onUpdate.RemoveListener(value);
+            add => this.onUpdate.AddListener(value);
+            remove => this.onUpdate.RemoveListener(value);
         }
     }
 }

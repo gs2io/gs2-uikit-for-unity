@@ -30,6 +30,7 @@ using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Formation.Context;
 using Gs2.Unity.UiKit.Gs2Formation.Fetcher;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2Formation
 {
@@ -42,21 +43,19 @@ namespace Gs2.Unity.UiKit.Gs2Formation
     {
         private List<Gs2FormationSlotModelContext> _children;
 
-        public void Update() {
-            if (_fetcher.Fetched && this._fetcher.SlotModels != null) {
-                for (var i = 0; i < this.maximumItems; i++) {
-                    if (i < this._fetcher.SlotModels.Count) {
-                        _children[i].SetSlotModel(
-                            SlotModel.New(
-                                this._fetcher.Context.FormModel,
-                                this._fetcher.SlotModels[i].Name
-                            )
-                        );
-                        _children[i].gameObject.SetActive(true);
-                    }
-                    else {
-                        _children[i].gameObject.SetActive(false);
-                    }
+        private void OnFetched() {
+            for (var i = 0; i < this._children.Count; i++) {
+                if (i < this._fetcher.SlotModels.Count) {
+                    this._children[i].SetSlotModel(
+                        SlotModel.New(
+                            this._fetcher.Context.FormModel,
+                            this._fetcher.SlotModels[i].Name
+                        )
+                    );
+                    this._children[i].gameObject.SetActive(true);
+                }
+                else {
+                    this._children[i].gameObject.SetActive(false);
                 }
             }
         }
@@ -69,50 +68,73 @@ namespace Gs2.Unity.UiKit.Gs2Formation
     public partial class Gs2FormationSlotModelList
     {
         private Gs2FormationSlotModelListFetcher _fetcher;
-        public Gs2FormationFormModelContext Context => _fetcher.Context;
+
+        private void Initialize() {
+            for (var i = 0; i < this.maximumItems; i++) {
+                var node = Instantiate(this.prefab, transform);
+                node.SlotModel = SlotModel.New(
+                    this._fetcher.Context.FormModel,
+                    ""
+                );
+                node.gameObject.SetActive(false);
+                this._children.Add(node);
+            }
+        }
 
         public void Awake()
         {
-            if (prefab == null) {
+            if (this.prefab == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2FormationSlotModelContext Prefab.");
                 enabled = false;
                 return;
             }
 
-            _fetcher = GetComponent<Gs2FormationSlotModelListFetcher>() ?? GetComponentInParent<Gs2FormationSlotModelListFetcher>();
-
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2FormationSlotModelListFetcher>() ?? GetComponentInParent<Gs2FormationSlotModelListFetcher>();
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2FormationSlotModelListFetcher.");
                 enabled = false;
                 return;
             }
-            var context = GetComponent<Gs2FormationFormModelContext>() ?? GetComponentInParent<Gs2FormationFormModelContext>(true);
-            if (context == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2FormationSlotModelListFetcher::Context.");
-                enabled = false;
-                return;
-            }
 
-            _children = new List<Gs2FormationSlotModelContext>();
-            for (var i = 0; i < this.maximumItems; i++) {
-                var node = Instantiate(this.prefab, transform);
-                node.SlotModel = SlotModel.New(
-                    context.FormModel,
-                    ""
-                );
-                node.gameObject.SetActive(false);
-                _children.Add(node);
-            }
+            this._children = new List<Gs2FormationSlotModelContext>();
             this.prefab.gameObject.SetActive(false);
+
+            Invoke(nameof(Initialize), 0);
         }
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2FormationSlotModelListFetcher>() ?? GetComponentInParent<Gs2FormationSlotModelListFetcher>(true);
-            if (_fetcher == null) {
+            if (this.prefab == null) {
+                return true;
+            }
+            this._fetcher = GetComponent<Gs2FormationSlotModelListFetcher>() ?? GetComponentInParent<Gs2FormationSlotModelListFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
             return false;
+        }
+        
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 

@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
@@ -27,6 +29,7 @@
 using Gs2.Unity.Gs2Datastore.ScriptableObject;
 using Gs2.Unity.UiKit.Core;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2Datastore.Context
 {
@@ -39,11 +42,10 @@ namespace Gs2.Unity.UiKit.Gs2Datastore.Context
     {
         public void Start() {
             if (DataObject == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: DataObject is not set in Gs2DatastoreDataObjectContext.");
+                Debug.LogWarning($"{gameObject.GetFullPath()}: DataObject is not set in Gs2DatastoreDataObjectContext.");
             }
         }
-
-        public bool HasError() {
+        public virtual bool HasError() {
             if (DataObject == null) {
                 return true;
             }
@@ -75,11 +77,21 @@ namespace Gs2.Unity.UiKit.Gs2Datastore.Context
 
     public partial class Gs2DatastoreDataObjectContext
     {
-        public DataObject DataObject;
-
-        public void SetDataObject(DataObject DataObject) {
-            this.DataObject = DataObject;
+        [SerializeField]
+        private DataObject _dataObject;
+        public DataObject DataObject
+        {
+            get => _dataObject;
+            set => SetDataObject(value);
         }
+
+        public void SetDataObject(DataObject dataObject) {
+            this._dataObject = dataObject;
+
+            this.OnUpdate.Invoke();
+        }
+
+        public UnityEvent OnUpdate = new UnityEvent();
     }
 
     /// <summary>

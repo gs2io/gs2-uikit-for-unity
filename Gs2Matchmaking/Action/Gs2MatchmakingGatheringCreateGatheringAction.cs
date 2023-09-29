@@ -48,13 +48,16 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking
     {
         private IEnumerator Process()
         {
-            yield return new WaitUntil(() => this._clientHolder.Initialized);
-            yield return new WaitUntil(() => this._gameSessionHolder.Initialized);
+            var clientHolder = Gs2ClientHolder.Instance;
+            var gameSessionHolder = Gs2GameSessionHolder.Instance;
+
+            yield return new WaitUntil(() => clientHolder.Initialized);
+            yield return new WaitUntil(() => gameSessionHolder.Initialized);
             
-            var domain = this._clientHolder.Gs2.Matchmaking.Namespace(
+            var domain = clientHolder.Gs2.Matchmaking.Namespace(
                 this._context.Namespace.NamespaceName
             ).Me(
-                this._gameSessionHolder.GameSession
+                gameSessionHolder.GameSession
             );
             var future = domain.CreateGathering(
                 Player,
@@ -124,16 +127,11 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking
 
     public partial class Gs2MatchmakingGatheringCreateGatheringAction
     {
-        private Gs2ClientHolder _clientHolder;
-        private Gs2GameSessionHolder _gameSessionHolder;
         private Gs2MatchmakingNamespaceContext _context;
 
         public void Awake()
         {
-            this._clientHolder = Gs2ClientHolder.Instance;
-            this._gameSessionHolder = Gs2GameSessionHolder.Instance;
             this._context = GetComponent<Gs2MatchmakingNamespaceContext>() ?? GetComponentInParent<Gs2MatchmakingNamespaceContext>();
-
             if (_context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MatchmakingNamespaceContext.");
                 enabled = false;
@@ -173,43 +171,51 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking
         public Gs2.Unity.Gs2Matchmaking.Model.EzTimeSpan ExpiresAtTimeSpan;
 
         public void SetPlayer(Gs2.Unity.Gs2Matchmaking.Model.EzPlayer value) {
-            Player = value;
-            this.onChangePlayer.Invoke(Player);
+            this.Player = value;
+            this.onChangePlayer.Invoke(this.Player);
+            this.OnChange.Invoke();
         }
 
         public void SetAttributeRanges(List<Gs2.Unity.Gs2Matchmaking.Model.EzAttributeRange> value) {
-            AttributeRanges = value;
-            this.onChangeAttributeRanges.Invoke(AttributeRanges);
+            this.AttributeRanges = value;
+            this.onChangeAttributeRanges.Invoke(this.AttributeRanges);
+            this.OnChange.Invoke();
         }
 
         public void SetCapacityOfRoles(List<Gs2.Unity.Gs2Matchmaking.Model.EzCapacityOfRole> value) {
-            CapacityOfRoles = value;
-            this.onChangeCapacityOfRoles.Invoke(CapacityOfRoles);
+            this.CapacityOfRoles = value;
+            this.onChangeCapacityOfRoles.Invoke(this.CapacityOfRoles);
+            this.OnChange.Invoke();
         }
 
         public void SetAllowUserIds(List<string> value) {
-            AllowUserIds = value;
-            this.onChangeAllowUserIds.Invoke(AllowUserIds);
+            this.AllowUserIds = value;
+            this.onChangeAllowUserIds.Invoke(this.AllowUserIds);
+            this.OnChange.Invoke();
         }
 
         public void SetExpiresAt(long value) {
-            ExpiresAt = value;
-            this.onChangeExpiresAt.Invoke(ExpiresAt);
+            this.ExpiresAt = value;
+            this.onChangeExpiresAt.Invoke(this.ExpiresAt);
+            this.OnChange.Invoke();
         }
 
         public void DecreaseExpiresAt() {
-            ExpiresAt -= 1;
-            this.onChangeExpiresAt.Invoke(ExpiresAt);
+            this.ExpiresAt -= 1;
+            this.onChangeExpiresAt.Invoke(this.ExpiresAt);
+            this.OnChange.Invoke();
         }
 
         public void IncreaseExpiresAt() {
-            ExpiresAt += 1;
-            this.onChangeExpiresAt.Invoke(ExpiresAt);
+            this.ExpiresAt += 1;
+            this.onChangeExpiresAt.Invoke(this.ExpiresAt);
+            this.OnChange.Invoke();
         }
 
         public void SetExpiresAtTimeSpan(Gs2.Unity.Gs2Matchmaking.Model.EzTimeSpan value) {
-            ExpiresAtTimeSpan = value;
-            this.onChangeExpiresAtTimeSpan.Invoke(ExpiresAtTimeSpan);
+            this.ExpiresAtTimeSpan = value;
+            this.onChangeExpiresAtTimeSpan.Invoke(this.ExpiresAtTimeSpan);
+            this.OnChange.Invoke();
         }
     }
 
@@ -316,6 +322,8 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking
             add => this.onCreateGatheringComplete.AddListener(value);
             remove => this.onCreateGatheringComplete.RemoveListener(value);
         }
+
+        public UnityEvent OnChange = new UnityEvent();
 
         [SerializeField]
         internal ErrorEvent onError = new ErrorEvent();

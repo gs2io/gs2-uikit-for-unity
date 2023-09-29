@@ -42,54 +42,53 @@ namespace Gs2.Unity.UiKit.Gs2JobQueue.Label
 	[AddComponentMenu("GS2 UIKit/JobQueue/Job/View/Label/Transaction/Gs2JobQueuePushByUserIdLabel")]
     public partial class Gs2JobQueuePushByUserIdLabel : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched && _fetcher.Request != null &&
-                    _userDataFetcher != null && _userDataFetcher.Fetched && _userDataFetcher.Job != null) {
-                {
-                    onUpdate?.Invoke(
-                        format.Replace(
-                            "{namespaceName}",
-                            $"{_fetcher.Request.NamespaceName}"
-                        ).Replace(
-                            "{userId}",
-                            $"{_fetcher.Request.UserId}"
-                        ).Replace(
-                            "{jobs}",
-                            $"{_fetcher.Request.Jobs}"
-                        ).Replace(
-                            "{userData:jobId}",
-                            $"{_userDataFetcher.Job.JobId}"
-                        ).Replace(
-                            "{userData:scriptId}",
-                            $"{_userDataFetcher.Job.ScriptId}"
-                        ).Replace(
-                            "{userData:args}",
-                            $"{_userDataFetcher.Job.Args}"
-                        ).Replace(
-                            "{userData:currentRetryCount}",
-                            $"{_userDataFetcher.Job.CurrentRetryCount}"
-                        ).Replace(
-                            "{userData:maxTryCount}",
-                            $"{_userDataFetcher.Job.MaxTryCount}"
-                        )
-                    );
-                }
-            } else if (_fetcher.Fetched && _fetcher.Request != null) {
-                {
-                    onUpdate?.Invoke(
-                        format.Replace(
-                            "{namespaceName}",
-                            $"{_fetcher.Request.NamespaceName}"
-                        ).Replace(
-                            "{userId}",
-                            $"{_fetcher.Request.UserId}"
-                        ).Replace(
-                            "{jobs}",
-                            $"{_fetcher.Request.Jobs}"
-                        )
-                    );
-                }
+            if ((!this._fetcher?.Fetched ?? false) || this._fetcher.Request == null) {
+                return;
+            }
+            if (this._userDataFetcher?.Fetched ?? false)
+            {
+                this.onUpdate?.Invoke(
+                    this.format.Replace(
+                        "{namespaceName}",
+                        $"{this._fetcher.Request.NamespaceName}"
+                    ).Replace(
+                        "{userId}",
+                        $"{this._fetcher.Request.UserId}"
+                    ).Replace(
+                        "{jobs}",
+                        $"{this._fetcher.Request.Jobs}"
+                    ).Replace(
+                        "{userData:jobId}",
+                        $"{this._userDataFetcher.Job.JobId}"
+                    ).Replace(
+                        "{userData:scriptId}",
+                        $"{this._userDataFetcher.Job.ScriptId}"
+                    ).Replace(
+                        "{userData:args}",
+                        $"{this._userDataFetcher.Job.Args}"
+                    ).Replace(
+                        "{userData:currentRetryCount}",
+                        $"{this._userDataFetcher.Job.CurrentRetryCount}"
+                    ).Replace(
+                        "{userData:maxTryCount}",
+                        $"{this._userDataFetcher.Job.MaxTryCount}"
+                    )
+                );
+            } else {
+                this.onUpdate?.Invoke(
+                    this.format.Replace(
+                        "{namespaceName}",
+                        $"{this._fetcher.Request.NamespaceName}"
+                    ).Replace(
+                        "{userId}",
+                        $"{this._fetcher.Request.UserId}"
+                    ).Replace(
+                        "{jobs}",
+                        $"{this._fetcher.Request.Jobs}"
+                    )
+                );
             }
         }
     }
@@ -105,25 +104,52 @@ namespace Gs2.Unity.UiKit.Gs2JobQueue.Label
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2JobQueuePushByUserIdFetcher>() ?? GetComponentInParent<Gs2JobQueuePushByUserIdFetcher>();
-            _userDataFetcher = GetComponent<Gs2JobQueueOwnJobFetcher>() ?? GetComponentInParent<Gs2JobQueueOwnJobFetcher>();
-
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2JobQueuePushByUserIdFetcher>() ?? GetComponentInParent<Gs2JobQueuePushByUserIdFetcher>();
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2JobQueuePushByUserIdFetcher.");
                 enabled = false;
             }
-
-            Update();
+            this._userDataFetcher = GetComponent<Gs2JobQueueOwnJobFetcher>() ?? GetComponentInParent<Gs2JobQueueOwnJobFetcher>();
         }
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2JobQueuePushByUserIdFetcher>() ?? GetComponentInParent<Gs2JobQueuePushByUserIdFetcher>(true);
-            _userDataFetcher = GetComponent<Gs2JobQueueOwnJobFetcher>() ?? GetComponentInParent<Gs2JobQueueOwnJobFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2JobQueuePushByUserIdFetcher>() ?? GetComponentInParent<Gs2JobQueuePushByUserIdFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+            if (this._userDataFetcher != null) {
+                this._userDataFetcher.OnFetched.AddListener(this._onFetched);
+                if (this._userDataFetcher.Fetched) {
+                    OnFetched();
+                }
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                if (this._userDataFetcher != null) {
+                    this._userDataFetcher.OnFetched.RemoveListener(this._onFetched);
+                }
+                this._onFetched = null;
+            }
         }
     }
 
@@ -161,8 +187,8 @@ namespace Gs2.Unity.UiKit.Gs2JobQueue.Label
 
         public event UnityAction<string> OnUpdate
         {
-            add => onUpdate.AddListener(value);
-            remove => onUpdate.RemoveListener(value);
+            add => this.onUpdate.AddListener(value);
+            remove => this.onUpdate.RemoveListener(value);
         }
     }
 }

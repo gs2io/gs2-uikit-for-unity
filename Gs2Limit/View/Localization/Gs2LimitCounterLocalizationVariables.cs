@@ -29,6 +29,7 @@
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Limit.Fetcher;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.Localization.Components;
 using UnityEngine.Localization.SmartFormat.PersistentVariables;
 
@@ -41,30 +42,27 @@ namespace Gs2.Unity.UiKit.Gs2Limit.Localization
     [AddComponentMenu("GS2 UIKit/Limit/Counter/View/Localization/Gs2LimitCounterLocalizationVariables")]
     public partial class Gs2LimitCounterLocalizationVariables : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched) {
-                target.StringReference["counterId"] = new StringVariable {
-                    Value = _fetcher?.Counter?.CounterId ?? "",
-                };
-                target.StringReference["limitName"] = new StringVariable {
-                    Value = _fetcher?.Counter?.LimitName ?? "",
-                };
-                target.StringReference["name"] = new StringVariable {
-                    Value = _fetcher?.Counter?.Name ?? "",
-                };
-                target.StringReference["count"] = new IntVariable {
-                    Value = _fetcher?.Counter?.Count ?? 0,
-                };
-                target.StringReference["createdAt"] = new LongVariable {
-                    Value = _fetcher?.Counter?.CreatedAt ?? 0,
-                };
-                target.StringReference["updatedAt"] = new LongVariable {
-                    Value = _fetcher?.Counter?.UpdatedAt ?? 0,
-                };
-                enabled = false;
-                target.enabled = true;
-            }
+            this.target.StringReference["counterId"] = new StringVariable {
+                Value = _fetcher?.Counter?.CounterId ?? "",
+            };
+            this.target.StringReference["limitName"] = new StringVariable {
+                Value = _fetcher?.Counter?.LimitName ?? "",
+            };
+            this.target.StringReference["name"] = new StringVariable {
+                Value = _fetcher?.Counter?.Name ?? "",
+            };
+            this.target.StringReference["count"] = new IntVariable {
+                Value = _fetcher?.Counter?.Count ?? 0,
+            };
+            this.target.StringReference["createdAt"] = new LongVariable {
+                Value = _fetcher?.Counter?.CreatedAt ?? 0,
+            };
+            this.target.StringReference["updatedAt"] = new LongVariable {
+                Value = _fetcher?.Counter?.UpdatedAt ?? 0,
+            };
+            this.target.enabled = true;
         }
     }
 
@@ -77,10 +75,10 @@ namespace Gs2.Unity.UiKit.Gs2Limit.Localization
         private Gs2LimitOwnCounterFetcher _fetcher;
 
         public void Awake() {
-            target.enabled = false;
-            _fetcher = GetComponent<Gs2LimitOwnCounterFetcher>() ?? GetComponentInParent<Gs2LimitOwnCounterFetcher>();
+            this.target.enabled = false;
+            this._fetcher = GetComponent<Gs2LimitOwnCounterFetcher>() ?? GetComponentInParent<Gs2LimitOwnCounterFetcher>();
 
-            if (_fetcher == null) {
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2LimitCounterFetcher.");
                 enabled = false;
             }
@@ -88,11 +86,34 @@ namespace Gs2.Unity.UiKit.Gs2Limit.Localization
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2LimitOwnCounterFetcher>() ?? GetComponentInParent<Gs2LimitOwnCounterFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2LimitOwnCounterFetcher>() ?? GetComponentInParent<Gs2LimitOwnCounterFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 

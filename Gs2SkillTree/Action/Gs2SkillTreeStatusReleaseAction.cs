@@ -48,13 +48,16 @@ namespace Gs2.Unity.UiKit.Gs2SkillTree
     {
         private IEnumerator Process()
         {
-            yield return new WaitUntil(() => this._clientHolder.Initialized);
-            yield return new WaitUntil(() => this._gameSessionHolder.Initialized);
+            var clientHolder = Gs2ClientHolder.Instance;
+            var gameSessionHolder = Gs2GameSessionHolder.Instance;
+
+            yield return new WaitUntil(() => clientHolder.Initialized);
+            yield return new WaitUntil(() => gameSessionHolder.Initialized);
             
-            var domain = this._clientHolder.Gs2.SkillTree.Namespace(
+            var domain = clientHolder.Gs2.SkillTree.Namespace(
                 this._context.Status.NamespaceName
             ).Me(
-                this._gameSessionHolder.GameSession
+                gameSessionHolder.GameSession
             ).Status(
             );
             var future = domain.Release(
@@ -109,16 +112,11 @@ namespace Gs2.Unity.UiKit.Gs2SkillTree
 
     public partial class Gs2SkillTreeStatusReleaseAction
     {
-        private Gs2ClientHolder _clientHolder;
-        private Gs2GameSessionHolder _gameSessionHolder;
         private Gs2SkillTreeOwnStatusContext _context;
 
         public void Awake()
         {
-            this._clientHolder = Gs2ClientHolder.Instance;
-            this._gameSessionHolder = Gs2GameSessionHolder.Instance;
             this._context = GetComponent<Gs2SkillTreeOwnStatusContext>() ?? GetComponentInParent<Gs2SkillTreeOwnStatusContext>();
-
             if (_context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2SkillTreeOwnStatusContext.");
                 enabled = false;
@@ -153,8 +151,9 @@ namespace Gs2.Unity.UiKit.Gs2SkillTree
         public List<string> NodeModelNames;
 
         public void SetNodeModelNames(List<string> value) {
-            NodeModelNames = value;
-            this.onChangeNodeModelNames.Invoke(NodeModelNames);
+            this.NodeModelNames = value;
+            this.onChangeNodeModelNames.Invoke(this.NodeModelNames);
+            this.OnChange.Invoke();
         }
     }
 
@@ -191,6 +190,8 @@ namespace Gs2.Unity.UiKit.Gs2SkillTree
             add => this.onReleaseComplete.AddListener(value);
             remove => this.onReleaseComplete.RemoveListener(value);
         }
+
+        public UnityEvent OnChange = new UnityEvent();
 
         [SerializeField]
         internal ErrorEvent onError = new ErrorEvent();

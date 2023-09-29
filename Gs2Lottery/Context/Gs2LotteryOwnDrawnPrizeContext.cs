@@ -27,6 +27,7 @@
 using Gs2.Unity.Gs2Lottery.ScriptableObject;
 using Gs2.Unity.UiKit.Core;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2Lottery.Context
 {
@@ -47,9 +48,7 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.Context
                 if (GetComponentInParent<Gs2LotteryOwnDrawnPrizeList>(true) != null) {
                     return false;
                 }
-                else {
-                    return true;
-                }
+                return true;
             }
             return false;
         }
@@ -79,11 +78,21 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.Context
 
     public partial class Gs2LotteryOwnDrawnPrizeContext
     {
-        public OwnDrawnPrize DrawnPrize;
-
-        public void SetOwnDrawnPrize(OwnDrawnPrize boxItems) {
-            this.DrawnPrize = boxItems;
+        [SerializeField]
+        private OwnDrawnPrize _pdrawnPrize;
+        public OwnDrawnPrize DrawnPrize
+        {
+            get => _pdrawnPrize;
+            set => SetOwnDrawnPrize(value);
         }
+
+        public void SetOwnDrawnPrize(OwnDrawnPrize pdrawnPrize) {
+            this._pdrawnPrize = pdrawnPrize;
+
+            this.OnUpdate.Invoke();
+        }
+
+        public UnityEvent OnUpdate = new UnityEvent();
     }
 
     /// <summary>

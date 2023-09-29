@@ -30,6 +30,7 @@ using System.Collections.Generic;
 using System.Text;
 using Gs2.Core.Exception;
 using Gs2.Unity.Core.Exception;
+using Gs2.Unity.Gs2Formation.Domain.Model;
 using Gs2.Unity.Gs2Formation.Model;
 using Gs2.Unity.Gs2Formation.ScriptableObject;
 using Gs2.Unity.Util;
@@ -47,61 +48,78 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Fetcher
 	[AddComponentMenu("GS2 UIKit/Formation/SlotModel/Fetcher/Gs2FormationSlotModelListFetcher")]
     public partial class Gs2FormationSlotModelListFetcher : MonoBehaviour
     {
+        private EzFormModelDomain _domain;
+        private ulong? _callbackId;
+
         private IEnumerator Fetch()
         {
-            var retryWaitSecond = 1;
-            Gs2Exception e;
-            while (true)
-            {
-                if (_gameSessionHolder != null && _gameSessionHolder.Initialized && 
-                    _clientHolder != null && _clientHolder.Initialized &&
-                    Context != null)
+            var clientHolder = Gs2ClientHolder.Instance;
+            var gameSessionHolder = Gs2GameSessionHolder.Instance;
+
+            yield return new WaitUntil(() => clientHolder.Initialized);
+            yield return new WaitUntil(() => gameSessionHolder.Initialized);
+            yield return new WaitUntil(() => Context != null && Context.FormModel != null);
+
+            this._domain = clientHolder.Gs2.Formation.Namespace(
+                this.Context.FormModel.NamespaceName
+            ).MoldModel(
+                this.Context.FormModel.MoldModelName
+            ).FormModel(
+            );
+            this._callbackId = this._domain.Subscribe(
+                item =>
                 {
-                    
-                    var domain = this._clientHolder.Gs2.Formation.Namespace(
-                        this.Context.FormModel.NamespaceName
-                    ).MoldModel(
-                        this.Context.FormModel.MoldModelName
-                    ).FormModel(
-                    );
-                    var future = domain.Model();
-                    yield return future;
-                    if (future.Error != null)
-                    {
-                        if (future.Error is BadRequestException || future.Error is NotFoundException)
-                        {
-                            onError.Invoke(e = future.Error, null);
-                            Debug.LogError($"{gameObject.GetFullPath()}: {future.Error.Message}");
-                            break;
-                        }
-                        else {
-                            onError.Invoke(new CanIgnoreException(future.Error), null);
-                        }
-                        yield return new WaitForSeconds(retryWaitSecond);
-                        retryWaitSecond *= 2;
-                    }
-                    else
-                    {
-                        retryWaitSecond = 1;
-                        SlotModels = future.Result.Slots;
-                        Fetched = true;
-                    }
+                    SlotModels = item.Slots;
+                    Fetched = true;
+                    this.OnFetched.Invoke();
+                }
+            );
+            var future = this._domain.Model();
+            yield return future;
+            if (future.Error != null)
+            {
+                if (future.Error is BadRequestException || future.Error is NotFoundException)
+                {
+                    onError.Invoke(future.Error, null);
+                    Debug.LogError($"{gameObject.GetFullPath()}: {future.Error.Message}");
                 }
                 else {
-                    yield return new WaitForSeconds(0.1f);
+                    onError.Invoke(new CanIgnoreException(future.Error), null);
                 }
+                yield break;
             }
-            // ReSharper disable once IteratorNeverReturns
+
+            SlotModels = future.Result.Slots;
+            Fetched = true;
+            this.OnFetched.Invoke();
+        }
+
+        public void OnUpdateContext() {
+            OnDisable();
+            Awake();
+            OnEnable();
         }
 
         public void OnEnable()
         {
             StartCoroutine(nameof(Fetch));
+            Context.OnUpdate.AddListener(OnUpdateContext);
         }
 
         public void OnDisable()
         {
-            StopCoroutine(nameof(Fetch));
+            Context.OnUpdate.RemoveListener(OnUpdateContext);
+
+            if (this._domain == null) {
+                return;
+            }
+            if (!this._callbackId.HasValue) {
+                return;
+            }
+            this._domain.Unsubscribe(
+                this._callbackId.Value
+            );
+            this._callbackId = null;
         }
     }
 
@@ -111,16 +129,13 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Fetcher
     
     public partial class Gs2FormationSlotModelListFetcher
     {
-        private Gs2ClientHolder _clientHolder;
-        private Gs2GameSessionHolder _gameSessionHolder;
         public Gs2FormationFormModelContext Context { get; private set; }
+
+        public UnityEvent OnFetched = new UnityEvent();
 
         public void Awake()
         {
-            _clientHolder = Gs2ClientHolder.Instance;
-            _gameSessionHolder = Gs2GameSessionHolder.Instance;
             Context = GetComponent<Gs2FormationFormModelContext>() ?? GetComponentInParent<Gs2FormationFormModelContext>();
-
             if (Context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2FormationFormModelContext.");
                 enabled = false;

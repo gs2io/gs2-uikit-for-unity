@@ -30,6 +30,7 @@ using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Mission.Context;
 using Gs2.Unity.UiKit.Gs2Mission.Fetcher;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2Mission
 {
@@ -42,19 +43,19 @@ namespace Gs2.Unity.UiKit.Gs2Mission
     {
         private List<Gs2MissionOwnCompleteContext> _children;
 
-        public void OnFetched() {
-            for (var i = 0; i < this.maximumItems; i++) {
+        private void OnFetched() {
+            for (var i = 0; i < this._children.Count; i++) {
                 if (i < this._fetcher.Completes.Count) {
-                    _children[i].SetOwnComplete(
+                    this._children[i].SetOwnComplete(
                         OwnComplete.New(
-                                this._fetcher.Context.Namespace,
-                                this._fetcher.Completes[i].MissionGroupName
-                            )
+                            this._fetcher.Context.Namespace,
+                            this._fetcher.Completes[i].MissionGroupName
+                        )
                     );
-                    _children[i].gameObject.SetActive(true);
+                    this._children[i].gameObject.SetActive(true);
                 }
                 else {
-                    _children[i].gameObject.SetActive(false);
+                    this._children[i].gameObject.SetActive(false);
                 }
             }
         }
@@ -68,47 +69,71 @@ namespace Gs2.Unity.UiKit.Gs2Mission
     {
         private Gs2MissionOwnCompleteListFetcher _fetcher;
 
+        private void Initialize() {
+            for (var i = 0; i < this.maximumItems; i++) {
+                var node = Instantiate(this.prefab, transform);
+                node.Complete = OwnComplete.New(
+                    this._fetcher.Context.Namespace,
+                    ""
+                );
+                node.gameObject.SetActive(false);
+                this._children.Add(node);
+            }
+        }
+
         public void Awake()
         {
-            if (prefab == null) {
+            if (this.prefab == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MissionOwnCompleteContext Prefab.");
                 enabled = false;
                 return;
             }
 
-            _fetcher = GetComponent<Gs2MissionOwnCompleteListFetcher>() ?? GetComponentInParent<Gs2MissionOwnCompleteListFetcher>();
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2MissionOwnCompleteListFetcher>() ?? GetComponentInParent<Gs2MissionOwnCompleteListFetcher>();
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MissionOwnCompleteListFetcher.");
                 enabled = false;
             }
 
-            var context = GetComponent<Gs2MissionNamespaceContext>() ?? GetComponentInParent<Gs2MissionNamespaceContext>(true);
-            if (context == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MissionOwnCompleteListFetcher::Context.");
-                enabled = false;
-                return;
-            }
-
-            _children = new List<Gs2MissionOwnCompleteContext>();
-            for (var i = 0; i < this.maximumItems; i++) {
-                var node = Instantiate(this.prefab, transform);
-                node.Complete = OwnComplete.New(
-                    context.Namespace,
-                    ""
-                );
-                node.gameObject.SetActive(false);
-                _children.Add(node);
-            }
+            this._children = new List<Gs2MissionOwnCompleteContext>();
             this.prefab.gameObject.SetActive(false);
+
+            Invoke(nameof(Initialize), 0);
         }
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2MissionOwnCompleteListFetcher>() ?? GetComponentInParent<Gs2MissionOwnCompleteListFetcher>(true);
-            if (_fetcher == null) {
+            if (this.prefab == null) {
+                return true;
+            }
+            this._fetcher = GetComponent<Gs2MissionOwnCompleteListFetcher>() ?? GetComponentInParent<Gs2MissionOwnCompleteListFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 
@@ -118,16 +143,6 @@ namespace Gs2.Unity.UiKit.Gs2Mission
 
     public partial class Gs2MissionOwnCompleteList
     {
-
-        public void OnEnable()
-        {
-            _fetcher.OnFetched.AddListener(OnFetched);
-        }
-
-        public void OnDisable()
-        {
-            _fetcher.OnFetched.RemoveListener(OnFetched);
-        }
 
     }
 

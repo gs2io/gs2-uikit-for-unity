@@ -40,33 +40,32 @@ namespace Gs2.Unity.UiKit.Gs2Formation.SpriteSwitcher
 	[AddComponentMenu("GS2 UIKit/Formation/FormModel/View/SpriteSwitcher/Properties/Metadata/Gs2FormationFormModelMetadataSpriteSwitcher")]
     public partial class Gs2FormationFormModelMetadataSpriteSwitcher : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched && _fetcher.FormModel != null)
+            switch(this.expression)
             {
-                switch(expression)
-                {
-                    case Expression.In:
-                        if (applyMetadatas.Contains(_fetcher.FormModel.Metadata)) {
-                            this.onUpdate.Invoke(this.sprite);
-                        }
-                        break;
-                    case Expression.NotIn:
-                        if (!applyMetadatas.Contains(_fetcher.FormModel.Metadata)) {
-                            this.onUpdate.Invoke(this.sprite);
-                        }
-                        break;
-                    case Expression.StartsWith:
-                        if (_fetcher.FormModel.Metadata.StartsWith(applyMetadata)) {
-                            this.onUpdate.Invoke(this.sprite);
-                        }
-                        break;
-                    case Expression.EndsWith:
-                        if (_fetcher.FormModel.Metadata.EndsWith(applyMetadata)) {
-                            this.onUpdate.Invoke(this.sprite);
-                        }
-                        break;
-                }
+                case Expression.In:
+                    if (this.applyMetadatas.Contains(this._fetcher.FormModel.Metadata)) {
+                        this.onUpdate.Invoke(this.sprite);
+                    }
+                    break;
+                case Expression.NotIn:
+                    if (!this.applyMetadatas.Contains(this._fetcher.FormModel.Metadata)) {
+                        this.onUpdate.Invoke(this.sprite);
+                    }
+                    break;
+                case Expression.StartsWith:
+                    if (this._fetcher.FormModel.Metadata.StartsWith(this.applyMetadata)) {
+                        this.onUpdate.Invoke(this.sprite);
+                    }
+                    break;
+                case Expression.EndsWith:
+                    if (this._fetcher.FormModel.Metadata.EndsWith(this.applyMetadata)) {
+                        this.onUpdate.Invoke(this.sprite);
+                    }
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
         }
     }
@@ -81,13 +80,12 @@ namespace Gs2.Unity.UiKit.Gs2Formation.SpriteSwitcher
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2FormationFormModelFetcher>() ?? GetComponentInParent<Gs2FormationFormModelFetcher>();
-
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2FormationFormModelFetcher>() ?? GetComponentInParent<Gs2FormationFormModelFetcher>();
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2FormationFormModelFetcher.");
                 enabled = false;
             }
-            if (sprite == null) {
+            if (this.sprite == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: sprite is not set.");
                 enabled = false;
             }
@@ -95,14 +93,37 @@ namespace Gs2.Unity.UiKit.Gs2Formation.SpriteSwitcher
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2FormationFormModelFetcher>() ?? GetComponentInParent<Gs2FormationFormModelFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2FormationFormModelFetcher>() ?? GetComponentInParent<Gs2FormationFormModelFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
-            if (sprite == null) {
+            if (this.sprite == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 

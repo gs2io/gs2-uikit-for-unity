@@ -40,7 +40,7 @@ namespace Gs2.Unity.UiKit.Gs2Gateway.Context
     {
         public void Start() {
             if (WebSocketSession == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: WebSocketSession is not set in Gs2GatewayOwnWebSocketSessionContext.");
+                Debug.LogWarning($"{gameObject.GetFullPath()}: WebSocketSession is not set in Gs2GatewayOwnWebSocketSessionContext.");
             }
         }
         public virtual bool HasError() {

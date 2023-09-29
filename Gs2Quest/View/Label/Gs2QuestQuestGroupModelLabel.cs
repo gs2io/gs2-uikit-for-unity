@@ -40,22 +40,19 @@ namespace Gs2.Unity.UiKit.Gs2Quest
 	[AddComponentMenu("GS2 UIKit/Quest/QuestGroupModel/View/Label/Gs2QuestQuestGroupModelLabel")]
     public partial class Gs2QuestQuestGroupModelLabel : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched && _fetcher.QuestGroupModel != null)
-            {
-                onUpdate?.Invoke(
-                    format.Replace(
-                        "{name}", $"{_fetcher?.QuestGroupModel?.Name}"
-                    ).Replace(
-                        "{metadata}", $"{_fetcher?.QuestGroupModel?.Metadata}"
-                    ).Replace(
-                        "{quests}", $"{_fetcher?.QuestGroupModel?.Quests}"
-                    ).Replace(
-                        "{challengePeriodEventId}", $"{_fetcher?.QuestGroupModel?.ChallengePeriodEventId}"
-                    )
-                );
-            }
+            this.onUpdate?.Invoke(
+                this.format.Replace(
+                    "{name}", $"{this._fetcher?.QuestGroupModel?.Name}"
+                ).Replace(
+                    "{metadata}", $"{this._fetcher?.QuestGroupModel?.Metadata}"
+                ).Replace(
+                    "{quests}", $"{this._fetcher?.QuestGroupModel?.Quests}"
+                ).Replace(
+                    "{challengePeriodEventId}", $"{this._fetcher?.QuestGroupModel?.ChallengePeriodEventId}"
+                )
+            );
         }
     }
 
@@ -69,23 +66,43 @@ namespace Gs2.Unity.UiKit.Gs2Quest
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2QuestQuestGroupModelFetcher>() ?? GetComponentInParent<Gs2QuestQuestGroupModelFetcher>();
-
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2QuestQuestGroupModelFetcher>() ?? GetComponentInParent<Gs2QuestQuestGroupModelFetcher>();
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2QuestQuestGroupModelFetcher.");
                 enabled = false;
             }
-
-            Update();
         }
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2QuestQuestGroupModelFetcher>() ?? GetComponentInParent<Gs2QuestQuestGroupModelFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2QuestQuestGroupModelFetcher>() ?? GetComponentInParent<Gs2QuestQuestGroupModelFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 
@@ -123,8 +140,8 @@ namespace Gs2.Unity.UiKit.Gs2Quest
 
         public event UnityAction<string> OnUpdate
         {
-            add => onUpdate.AddListener(value);
-            remove => onUpdate.RemoveListener(value);
+            add => this.onUpdate.AddListener(value);
+            remove => this.onUpdate.RemoveListener(value);
         }
     }
 }

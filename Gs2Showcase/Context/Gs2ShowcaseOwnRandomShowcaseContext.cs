@@ -40,7 +40,7 @@ namespace Gs2.Unity.UiKit.Gs2Showcase.Context
     {
         public void Start() {
             if (RandomShowcase == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: RandomShowcase is not set in Gs2ShowcaseOwnRandomShowcaseContext.");
+                Debug.LogWarning($"{gameObject.GetFullPath()}: RandomShowcase is not set in Gs2ShowcaseOwnRandomShowcaseContext.");
             }
         }
         public virtual bool HasError() {

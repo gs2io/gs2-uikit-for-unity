@@ -40,7 +40,7 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Context
     {
         public void Start() {
             if (CompletedQuestList == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: CompletedQuestList is not set in Gs2QuestOwnCompletedQuestListContext.");
+                Debug.LogWarning($"{gameObject.GetFullPath()}: CompletedQuestList is not set in Gs2QuestOwnCompletedQuestListContext.");
             }
         }
         public virtual bool HasError() {
@@ -48,9 +48,7 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Context
                 if (GetComponentInParent<Gs2QuestOwnCompletedQuestListList>(true) != null) {
                     return false;
                 }
-                else {
-                    return true;
-                }
+                return true;
             }
             return false;
         }

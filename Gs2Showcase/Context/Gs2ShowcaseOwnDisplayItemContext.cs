@@ -29,6 +29,7 @@
 using Gs2.Unity.Gs2Showcase.ScriptableObject;
 using Gs2.Unity.UiKit.Core;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2Showcase.Context
 {
@@ -44,8 +45,7 @@ namespace Gs2.Unity.UiKit.Gs2Showcase.Context
                 Debug.LogError($"{gameObject.GetFullPath()}: DisplayItem is not set in Gs2ShowcaseOwnDisplayItemContext.");
             }
         }
-
-        public bool HasError() {
+        public virtual bool HasError() {
             if (DisplayItem == null) {
                 if (transform.parent != null && transform.parent.GetComponent<Gs2ShowcaseOwnDisplayItemList>() != null) {
                     return false;
@@ -80,11 +80,21 @@ namespace Gs2.Unity.UiKit.Gs2Showcase.Context
 
     public partial class Gs2ShowcaseOwnDisplayItemContext
     {
-        public OwnDisplayItem DisplayItem;
-
-        public void SetOwnDisplayItem(OwnDisplayItem DisplayItem) {
-            this.DisplayItem = DisplayItem;
+        [SerializeField]
+        private OwnDisplayItem _displayItem;
+        public OwnDisplayItem DisplayItem
+        {
+            get => _displayItem;
+            set => SetOwnDisplayItem(value);
         }
+
+        public void SetOwnDisplayItem(OwnDisplayItem displayItem) {
+            this._displayItem = displayItem;
+
+            this.OnUpdate.Invoke();
+        }
+
+        public UnityEvent OnUpdate = new UnityEvent();
     }
 
     /// <summary>

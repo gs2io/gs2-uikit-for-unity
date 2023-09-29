@@ -40,23 +40,46 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking
 	[AddComponentMenu("GS2 UIKit/Matchmaking/Gathering/View/Label/Gs2MatchmakingGatheringCreateGatheringActionLabel")]
     public partial class Gs2MatchmakingGatheringCreateGatheringActionLabel : MonoBehaviour
     {
-        public void Update()
+        private void OnChange()
         {
-            onUpdate?.Invoke(
-                format.Replace(
-                    "{player}", $"{action?.Player}"
+            this.onUpdate?.Invoke(
+                this.format.Replace(
+                    "{player}", $"{this.action?.Player}"
                 ).Replace(
-                    "{attributeRanges}", $"{action?.AttributeRanges}"
+                    "{attributeRanges}", $"{this.action?.AttributeRanges}"
                 ).Replace(
-                    "{capacityOfRoles}", $"{action?.CapacityOfRoles}"
+                    "{capacityOfRoles}", $"{this.action?.CapacityOfRoles}"
                 ).Replace(
-                    "{allowUserIds}", $"{action?.AllowUserIds}"
+                    "{allowUserIds}", $"{this.action?.AllowUserIds}"
                 ).Replace(
-                    "{expiresAt}", $"{action?.ExpiresAt}"
+                    "{expiresAt}", $"{this.action?.ExpiresAt}"
                 ).Replace(
-                    "{expiresAtTimeSpan}", $"{action?.ExpiresAtTimeSpan}"
+                    "{expiresAtTimeSpan}", $"{this.action?.ExpiresAtTimeSpan}"
                 )
             );
+        }
+
+        public void Awake() {
+            if (this.action == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2AccountAccountAuthenticationAction.");
+                enabled = false;
+            }
+        }
+
+        public virtual bool HasError()
+        {
+            if (this.action == null) {
+                return true;
+            }
+            return false;
+        }
+
+        public void OnEnable() {
+            this.action.OnChange.AddListener(OnChange);
+        }
+
+        public void OnDisable() {
+            this.action.OnChange.RemoveListener(OnChange);
         }
     }
 

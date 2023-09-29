@@ -50,13 +50,16 @@ namespace Gs2.Unity.UiKit.Gs2Inventory
     {
         private IEnumerator Process()
         {
-            yield return new WaitUntil(() => this._clientHolder.Initialized);
-            yield return new WaitUntil(() => this._gameSessionHolder.Initialized);
+            var clientHolder = Gs2ClientHolder.Instance;
+            var gameSessionHolder = Gs2GameSessionHolder.Instance;
+
+            yield return new WaitUntil(() => clientHolder.Initialized);
+            yield return new WaitUntil(() => gameSessionHolder.Initialized);
             
-            var domain = this._clientHolder.Gs2.Inventory.Namespace(
+            var domain = clientHolder.Gs2.Inventory.Namespace(
                 this._context.SimpleItem.NamespaceName
             ).Me(
-                this._gameSessionHolder.GameSession
+                gameSessionHolder.GameSession
             ).SimpleInventory(
                 this._context.SimpleItem.InventoryName
             );
@@ -129,23 +132,18 @@ namespace Gs2.Unity.UiKit.Gs2Inventory
 
     public partial class Gs2InventorySimpleItemConsumeSimpleItemsAction
     {
-        private Gs2ClientHolder _clientHolder;
-        private Gs2GameSessionHolder _gameSessionHolder;
         private Gs2InventoryOwnSimpleItemContext _context;
 
         public void Awake()
         {
-            this._clientHolder = Gs2ClientHolder.Instance;
-            this._gameSessionHolder = Gs2GameSessionHolder.Instance;
             this._context = GetComponent<Gs2InventoryOwnSimpleItemContext>() ?? GetComponentInParent<Gs2InventoryOwnSimpleItemContext>();
-
             if (_context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2InventoryOwnSimpleItemContext.");
                 enabled = false;
             }
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
             this._context = GetComponent<Gs2InventoryOwnSimpleItemContext>() ?? GetComponentInParent<Gs2InventoryOwnSimpleItemContext>(true);
             if (_context == null) {
@@ -169,11 +167,13 @@ namespace Gs2.Unity.UiKit.Gs2Inventory
     /// </summary>
     public partial class Gs2InventorySimpleItemConsumeSimpleItemsAction
     {
+        public bool WaitAsyncProcessComplete;
         public List<Gs2.Unity.Gs2Inventory.Model.EzConsumeCount> ConsumeCounts;
 
         public void SetConsumeCounts(List<Gs2.Unity.Gs2Inventory.Model.EzConsumeCount> value) {
-            ConsumeCounts = value;
-            this.onChangeConsumeCounts.Invoke(ConsumeCounts);
+            this.ConsumeCounts = value;
+            this.onChangeConsumeCounts.Invoke(this.ConsumeCounts);
+            this.OnChange.Invoke();
         }
     }
 
@@ -210,6 +210,8 @@ namespace Gs2.Unity.UiKit.Gs2Inventory
             add => this.onConsumeSimpleItemsComplete.AddListener(value);
             remove => this.onConsumeSimpleItemsComplete.RemoveListener(value);
         }
+
+        public UnityEvent OnChange = new UnityEvent();
 
         [SerializeField]
         internal ErrorEvent onError = new ErrorEvent();

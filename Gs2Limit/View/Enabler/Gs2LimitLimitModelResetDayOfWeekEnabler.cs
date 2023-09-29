@@ -24,10 +24,12 @@
 
 #pragma warning disable CS0472
 
+using System;
 using System.Collections.Generic;
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Limit.Fetcher;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2Limit.Enabler
 {
@@ -38,29 +40,24 @@ namespace Gs2.Unity.UiKit.Gs2Limit.Enabler
 	[AddComponentMenu("GS2 UIKit/Limit/LimitModel/View/Enabler/Properties/ResetDayOfWeek/Gs2LimitLimitModelResetDayOfWeekEnabler")]
     public partial class Gs2LimitLimitModelResetDayOfWeekEnabler : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched && _fetcher.LimitModel != null)
+            switch(this.expression)
             {
-                switch(expression)
-                {
-                    case Expression.In:
-                        target.SetActive(enableResetDayOfWeeks.Contains(_fetcher.LimitModel.ResetDayOfWeek));
-                        break;
-                    case Expression.NotIn:
-                        target.SetActive(!enableResetDayOfWeeks.Contains(_fetcher.LimitModel.ResetDayOfWeek));
-                        break;
-                    case Expression.StartsWith:
-                        target.SetActive(_fetcher.LimitModel.ResetDayOfWeek.StartsWith(enableResetDayOfWeek));
-                        break;
-                    case Expression.EndsWith:
-                        target.SetActive(_fetcher.LimitModel.ResetDayOfWeek.EndsWith(enableResetDayOfWeek));
-                        break;
-                }
-            }
-            else
-            {
-                target.SetActive(false);
+                case Expression.In:
+                    this.target.SetActive(this.enableResetDayOfWeeks.Contains(this._fetcher.LimitModel.ResetDayOfWeek));
+                    break;
+                case Expression.NotIn:
+                    this.target.SetActive(!this.enableResetDayOfWeeks.Contains(this._fetcher.LimitModel.ResetDayOfWeek));
+                    break;
+                case Expression.StartsWith:
+                    this.target.SetActive(this._fetcher.LimitModel.ResetDayOfWeek.StartsWith(this.enableResetDayOfWeek));
+                    break;
+                case Expression.EndsWith:
+                    this.target.SetActive(this._fetcher.LimitModel.ResetDayOfWeek.EndsWith(this.enableResetDayOfWeek));
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
         }
     }
@@ -75,13 +72,12 @@ namespace Gs2.Unity.UiKit.Gs2Limit.Enabler
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2LimitLimitModelFetcher>() ?? GetComponentInParent<Gs2LimitLimitModelFetcher>();
-
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2LimitLimitModelFetcher>() ?? GetComponentInParent<Gs2LimitLimitModelFetcher>();
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2LimitLimitModelFetcher.");
                 enabled = false;
             }
-            if (target == null) {
+            if (this.target == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: target is not set.");
                 enabled = false;
             }
@@ -89,14 +85,37 @@ namespace Gs2.Unity.UiKit.Gs2Limit.Enabler
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2LimitLimitModelFetcher>() ?? GetComponentInParent<Gs2LimitLimitModelFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2LimitLimitModelFetcher>() ?? GetComponentInParent<Gs2LimitLimitModelFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
-            if (target == null) {
+            if (this.target == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 

@@ -40,7 +40,7 @@ namespace Gs2.Unity.UiKit.Gs2Enhance.Context
     {
         public void Start() {
             if (RateModel == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: RateModel is not set in Gs2EnhanceRateModelContext.");
+                Debug.LogWarning($"{gameObject.GetFullPath()}: RateModel is not set in Gs2EnhanceRateModelContext.");
             }
         }
 
@@ -49,9 +49,7 @@ namespace Gs2.Unity.UiKit.Gs2Enhance.Context
                 if (GetComponentInParent<Gs2EnhanceRateModelList>(true) != null) {
                     return false;
                 }
-                else {
-                    return true;
-                }
+                return true;
             }
             return false;
         }

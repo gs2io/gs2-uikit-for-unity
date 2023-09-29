@@ -17,6 +17,14 @@
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
+// ReSharper disable RedundantNameQualifier
+// ReSharper disable RedundantAssignment
+// ReSharper disable NotAccessedVariable
+// ReSharper disable RedundantUsingDirective
+// ReSharper disable Unity.NoNullPropagation
+// ReSharper disable InconsistentNaming
+
+#pragma warning disable CS0472
 
 using System;
 using System.Collections;
@@ -24,10 +32,12 @@ using System.Collections.Generic;
 using System.Text;
 using Gs2.Core.Exception;
 using Gs2.Unity.Core.Exception;
+using Gs2.Unity.Gs2Ranking.Domain.Model;
 using Gs2.Unity.Gs2Ranking.Model;
 using Gs2.Unity.Gs2Ranking.ScriptableObject;
 using Gs2.Unity.Util;
 using Gs2.Unity.UiKit.Core;
+using Gs2.Unity.UiKit.Gs2Core.Fetcher;
 using Gs2.Unity.UiKit.Gs2Ranking.Context;
 using UnityEngine;
 using UnityEngine.Events;
@@ -41,65 +51,81 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Fetcher
 	[AddComponentMenu("GS2 UIKit/Ranking/Ranking/Fetcher/Gs2RankingRankingFetcher")]
     public partial class Gs2RankingRankingFetcher : MonoBehaviour
     {
+        private EzRankingGameSessionDomain _domain;
+        private ulong? _callbackId;
+
         private IEnumerator Fetch()
         {
             var retryWaitSecond = 1;
-            Gs2Exception e;
-            while (true)
-            {
-                if (_gameSessionHolder != null && _gameSessionHolder.Initialized &&
-                    _clientHolder != null && _clientHolder.Initialized &&
-                    _context != null && this._context.Ranking != null)
+            var clientHolder = Gs2ClientHolder.Instance;
+            var gameSessionHolder = Gs2GameSessionHolder.Instance;
+
+            yield return new WaitUntil(() => clientHolder.Initialized);
+            yield return new WaitUntil(() => gameSessionHolder.Initialized);
+            yield return new WaitUntil(() => Context != null && this.Context.Ranking != null);
+
+            this._domain = clientHolder.Gs2.Ranking.Namespace(
+                this.Context.Ranking.NamespaceName
+            ).Me(
+                gameSessionHolder.GameSession
+            ).Ranking(
+                this.Context.Ranking.CategoryName
+            );;
+            this._callbackId = this._domain.Subscribe(
+                item =>
                 {
-                    
-                    var domain = this._clientHolder.Gs2.Ranking.Namespace(
-                        this._context.Ranking.NamespaceName
-                    ).Me(
-                        this._gameSessionHolder.GameSession
-                    ).Ranking(
-                        this._context.Ranking.CategoryName
-                    );
-                    var future = domain.Model(
-                        this._context.Ranking.UserId,
-                        _context.Ranking.index
-                    );
-                    yield return future;
-                    if (future.Error != null)
-                    {
-                        if (future.Error is BadRequestException || future.Error is NotFoundException)
-                        {
-                            onError.Invoke(e = future.Error, null);
-                            Debug.LogError($"{gameObject.GetFullPath()}: {future.Error.Message}");
-                            break;
-                        }
-                        else {
-                            onError.Invoke(new CanIgnoreException(future.Error), null);
-                        }
-                        yield return new WaitForSeconds(retryWaitSecond);
-                        retryWaitSecond *= 2;
-                    }
-                    else
-                    {
-                        retryWaitSecond = 1;
-                        Ranking = future.Result;
-                        Fetched = true;
-                    }
+                    Ranking = item;
+                    Fetched = true;
+                    this.OnFetched.Invoke();
+                },
+                Context.Ranking.UserId
+            );
+
+            while (true) {
+                var future = this._domain.Model(
+                    Context.Ranking.UserId
+                );
+                yield return future;
+                if (future.Error != null) {
+                    yield return new WaitForSeconds(retryWaitSecond);
+                    retryWaitSecond *= 2;
                 }
                 else {
-                    yield return new WaitForSeconds(1);
+                    Ranking = future.Result;
+                    Fetched = true;
+                    this.OnFetched.Invoke();
+                    break;
                 }
             }
-            // ReSharper disable once IteratorNeverReturns
+        }
+
+        public void OnUpdateContext() {
+            OnDisable();
+            Awake();
+            OnEnable();
         }
 
         public void OnEnable()
         {
             StartCoroutine(nameof(Fetch));
+            Context.OnUpdate.AddListener(OnUpdateContext);
         }
 
         public void OnDisable()
         {
-            StopCoroutine(nameof(Fetch));
+            Context.OnUpdate.RemoveListener(OnUpdateContext);
+
+            if (this._domain == null) {
+                return;
+            }
+            if (!this._callbackId.HasValue) {
+                return;
+            }
+            this._domain.Unsubscribe(
+                this._callbackId.Value,
+                Context.Ranking.UserId
+            );
+            this._callbackId = null;
         }
     }
 
@@ -109,20 +135,24 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Fetcher
 
     public partial class Gs2RankingRankingFetcher
     {
-        protected Gs2ClientHolder _clientHolder;
-        protected Gs2GameSessionHolder _gameSessionHolder;
-        private Gs2RankingRankingContext _context;
+        public Gs2RankingRankingContext Context { get; private set; }
 
         public void Awake()
         {
-            _clientHolder = Gs2ClientHolder.Instance;
-            _gameSessionHolder = Gs2GameSessionHolder.Instance;
-            _context = GetComponentInParent<Gs2RankingRankingContext>();
-
-            if (_context == null) {
+            Context = GetComponent<Gs2RankingRankingContext>() ?? GetComponentInParent<Gs2RankingRankingContext>();
+            if (Context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2RankingRankingContext.");
                 enabled = false;
             }
+        }
+
+        public virtual bool HasError()
+        {
+            Context = GetComponent<Gs2RankingRankingContext>() ?? GetComponentInParent<Gs2RankingRankingContext>(true);
+            if (Context == null) {
+                return true;
+            }
+            return false;
         }
     }
 
@@ -134,6 +164,7 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Fetcher
     {
         public Gs2.Unity.Gs2Ranking.Model.EzRanking Ranking { get; protected set; }
         public bool Fetched { get; protected set; }
+        public UnityEvent OnFetched = new UnityEvent();
     }
 
     /// <summary>

@@ -40,7 +40,7 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.Context
     {
         public void Start() {
             if (PrizeTable == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: PrizeTable is not set in Gs2LotteryPrizeTableContext.");
+                Debug.LogWarning($"{gameObject.GetFullPath()}: PrizeTable is not set in Gs2LotteryPrizeTableContext.");
             }
         }
 

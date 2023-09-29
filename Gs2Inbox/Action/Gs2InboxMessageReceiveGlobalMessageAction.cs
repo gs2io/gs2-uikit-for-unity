@@ -18,6 +18,14 @@
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable UnusedAutoPropertyAccessor.Local
 // ReSharper disable CheckNamespace
+// ReSharper disable RedundantNameQualifier
+// ReSharper disable RedundantAssignment
+// ReSharper disable NotAccessedVariable
+// ReSharper disable RedundantUsingDirective
+// ReSharper disable Unity.NoNullPropagation
+// ReSharper disable InconsistentNaming
+
+#pragma warning disable CS0472
 
 using System;
 using System.Collections;
@@ -26,6 +34,7 @@ using System.Linq;
 using Gs2.Core.Exception;
 using Gs2.Unity.Gs2Inbox.Model;
 using Gs2.Unity.Util;
+using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Inbox.Context;
 using UnityEngine;
 using UnityEngine.Events;
@@ -42,13 +51,16 @@ namespace Gs2.Unity.UiKit.Gs2Inbox
     {
         private IEnumerator Process()
         {
-            yield return new WaitUntil(() => this._clientHolder.Initialized);
-            yield return new WaitUntil(() => this._gameSessionHolder.Initialized);
+            var clientHolder = Gs2ClientHolder.Instance;
+            var gameSessionHolder = Gs2GameSessionHolder.Instance;
+
+            yield return new WaitUntil(() => clientHolder.Initialized);
+            yield return new WaitUntil(() => gameSessionHolder.Initialized);
             
-            var domain = this._clientHolder.Gs2.Inbox.Namespace(
+            var domain = clientHolder.Gs2.Inbox.Namespace(
                 this._context.Message.NamespaceName
             ).Me(
-                this._gameSessionHolder.GameSession
+                gameSessionHolder.GameSession
             );
             var future = domain.ReceiveGlobalMessage(
             );
@@ -120,15 +132,24 @@ namespace Gs2.Unity.UiKit.Gs2Inbox
 
     public partial class Gs2InboxMessageReceiveGlobalMessageAction
     {
-        private Gs2ClientHolder _clientHolder;
-        private Gs2GameSessionHolder _gameSessionHolder;
         private Gs2InboxOwnMessageContext _context;
 
         public void Awake()
         {
-            this._clientHolder = Gs2ClientHolder.Instance;
-            this._gameSessionHolder = Gs2GameSessionHolder.Instance;
-            this._context = GetComponentInParent<Gs2InboxOwnMessageContext>();
+            this._context = GetComponent<Gs2InboxOwnMessageContext>() ?? GetComponentInParent<Gs2InboxOwnMessageContext>();
+            if (_context == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2InboxOwnMessageContext.");
+                enabled = false;
+            }
+        }
+
+        public virtual bool HasError()
+        {
+            this._context = GetComponent<Gs2InboxOwnMessageContext>() ?? GetComponentInParent<Gs2InboxOwnMessageContext>(true);
+            if (_context == null) {
+                return true;
+            }
+            return false;
         }
     }
 
@@ -146,6 +167,7 @@ namespace Gs2.Unity.UiKit.Gs2Inbox
     /// </summary>
     public partial class Gs2InboxMessageReceiveGlobalMessageAction
     {
+        public bool WaitAsyncProcessComplete;
     }
 
     /// <summary>
@@ -153,6 +175,7 @@ namespace Gs2.Unity.UiKit.Gs2Inbox
     /// </summary>
     public partial class Gs2InboxMessageReceiveGlobalMessageAction
     {
+
         [Serializable]
         private class ReceiveGlobalMessageCompleteEvent : UnityEvent<List<EzMessage>>
         {
@@ -166,6 +189,8 @@ namespace Gs2.Unity.UiKit.Gs2Inbox
             add => this.onReceiveGlobalMessageComplete.AddListener(value);
             remove => this.onReceiveGlobalMessageComplete.RemoveListener(value);
         }
+
+        public UnityEvent OnChange = new UnityEvent();
 
         [SerializeField]
         internal ErrorEvent onError = new ErrorEvent();

@@ -29,6 +29,7 @@
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Mission.Fetcher;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.Localization.Components;
 using UnityEngine.Localization.SmartFormat.PersistentVariables;
 
@@ -41,33 +42,30 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Localization
     [AddComponentMenu("GS2 UIKit/Mission/MissionGroupModel/View/Localization/Gs2MissionMissionGroupModelLocalizationVariables")]
     public partial class Gs2MissionMissionGroupModelLocalizationVariables : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched) {
-                target.StringReference["name"] = new StringVariable {
-                    Value = _fetcher?.MissionGroupModel?.Name ?? "",
-                };
-                target.StringReference["metadata"] = new StringVariable {
-                    Value = _fetcher?.MissionGroupModel?.Metadata ?? "",
-                };
-                target.StringReference["resetType"] = new StringVariable {
-                    Value = _fetcher?.MissionGroupModel?.ResetType ?? "",
-                };
-                target.StringReference["resetDayOfMonth"] = new IntVariable {
-                    Value = _fetcher?.MissionGroupModel?.ResetDayOfMonth ?? 0,
-                };
-                target.StringReference["resetDayOfWeek"] = new StringVariable {
-                    Value = _fetcher?.MissionGroupModel?.ResetDayOfWeek ?? "",
-                };
-                target.StringReference["resetHour"] = new IntVariable {
-                    Value = _fetcher?.MissionGroupModel?.ResetHour ?? 0,
-                };
-                target.StringReference["completeNotificationNamespaceId"] = new StringVariable {
-                    Value = _fetcher?.MissionGroupModel?.CompleteNotificationNamespaceId ?? "",
-                };
-                enabled = false;
-                target.enabled = true;
-            }
+            this.target.StringReference["name"] = new StringVariable {
+                Value = _fetcher?.MissionGroupModel?.Name ?? "",
+            };
+            this.target.StringReference["metadata"] = new StringVariable {
+                Value = _fetcher?.MissionGroupModel?.Metadata ?? "",
+            };
+            this.target.StringReference["resetType"] = new StringVariable {
+                Value = _fetcher?.MissionGroupModel?.ResetType ?? "",
+            };
+            this.target.StringReference["resetDayOfMonth"] = new IntVariable {
+                Value = _fetcher?.MissionGroupModel?.ResetDayOfMonth ?? 0,
+            };
+            this.target.StringReference["resetDayOfWeek"] = new StringVariable {
+                Value = _fetcher?.MissionGroupModel?.ResetDayOfWeek ?? "",
+            };
+            this.target.StringReference["resetHour"] = new IntVariable {
+                Value = _fetcher?.MissionGroupModel?.ResetHour ?? 0,
+            };
+            this.target.StringReference["completeNotificationNamespaceId"] = new StringVariable {
+                Value = _fetcher?.MissionGroupModel?.CompleteNotificationNamespaceId ?? "",
+            };
+            this.target.enabled = true;
         }
     }
 
@@ -80,10 +78,10 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Localization
         private Gs2MissionMissionGroupModelFetcher _fetcher;
 
         public void Awake() {
-            target.enabled = false;
-            _fetcher = GetComponent<Gs2MissionMissionGroupModelFetcher>() ?? GetComponentInParent<Gs2MissionMissionGroupModelFetcher>();
+            this.target.enabled = false;
+            this._fetcher = GetComponent<Gs2MissionMissionGroupModelFetcher>() ?? GetComponentInParent<Gs2MissionMissionGroupModelFetcher>();
 
-            if (_fetcher == null) {
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MissionMissionGroupModelFetcher.");
                 enabled = false;
             }
@@ -91,11 +89,34 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Localization
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2MissionMissionGroupModelFetcher>() ?? GetComponentInParent<Gs2MissionMissionGroupModelFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2MissionMissionGroupModelFetcher>() ?? GetComponentInParent<Gs2MissionMissionGroupModelFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 

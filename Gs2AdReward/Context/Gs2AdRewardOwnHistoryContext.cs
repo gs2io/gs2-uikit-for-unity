@@ -40,7 +40,7 @@ namespace Gs2.Unity.UiKit.Gs2AdReward.Context
     {
         public void Start() {
             if (History == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: History is not set in Gs2AdRewardOwnHistoryContext.");
+                Debug.LogWarning($"{gameObject.GetFullPath()}: History is not set in Gs2AdRewardOwnHistoryContext.");
             }
         }
         public virtual bool HasError() {

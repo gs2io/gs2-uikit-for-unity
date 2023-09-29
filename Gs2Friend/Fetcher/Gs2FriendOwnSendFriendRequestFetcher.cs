@@ -12,8 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
- * deny overwrite
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
@@ -32,6 +30,7 @@ using System.Collections.Generic;
 using System.Text;
 using Gs2.Core.Exception;
 using Gs2.Unity.Core.Exception;
+using Gs2.Unity.Gs2Friend.Domain.Model;
 using Gs2.Unity.Gs2Friend.Model;
 using Gs2.Unity.Gs2Friend.ScriptableObject;
 using Gs2.Unity.Util;
@@ -50,71 +49,77 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Fetcher
 	[AddComponentMenu("GS2 UIKit/Friend/SendFriendRequest/Fetcher/Gs2FriendOwnSendFriendRequestFetcher")]
     public partial class Gs2FriendOwnSendFriendRequestFetcher : MonoBehaviour
     {
+        private EzSendFriendRequestGameSessionDomain _domain;
+        private ulong? _callbackId;
+
         private IEnumerator Fetch()
         {
             var retryWaitSecond = 1;
-            Gs2Exception e;
-            while (true)
-            {
-                if (_gameSessionHolder != null && _gameSessionHolder.Initialized &&
-                    _clientHolder != null && _clientHolder.Initialized &&
-                    Context != null && this.Context.FriendUser != null)
+            var clientHolder = Gs2ClientHolder.Instance;
+            var gameSessionHolder = Gs2GameSessionHolder.Instance;
+
+            yield return new WaitUntil(() => clientHolder.Initialized);
+            yield return new WaitUntil(() => gameSessionHolder.Initialized);
+            yield return new WaitUntil(() => Context != null && this.Context.SendFriendRequest != null);
+
+            this._domain = clientHolder.Gs2.Friend.Namespace(
+                this.Context.SendFriendRequest.NamespaceName
+            ).Me(
+                gameSessionHolder.GameSession
+            ).SendFriendRequest(
+                this.Context.SendFriendRequest.TargetUserId
+            );;
+            this._callbackId = this._domain.Subscribe(
+                item =>
                 {
-                    
-                    var domain = this._clientHolder.Gs2.Friend.Namespace(
-                        this.Context.FriendUser.NamespaceName
-                    ).Me(
-                        this._gameSessionHolder.GameSession
-                    );
-                    var it = domain.SendRequests();
-                    var items = new List<Gs2.Unity.Gs2Friend.Model.EzFriendRequest>();
-                    while (it.HasNext())
-                    {
-                        yield return it.Next();
-                        if (it.Error != null)
-                        {
-                            if (it.Error is BadRequestException || it.Error is NotFoundException)
-                            {
-                                onError.Invoke(e = it.Error, null);
-                                Debug.LogError($"{gameObject.GetFullPath()}: {it.Error.Message}");
-                                break;
-                            }
-                            else {
-                                onError.Invoke(new CanIgnoreException(it.Error), null);
-                            }
-                            yield return new WaitForSeconds(retryWaitSecond);
-                            retryWaitSecond *= 2;
-                        }
-                        else {
-                            if (it.Current != null)
-                            {
-                                if (it.Current.TargetUserId == this.Context.FriendUser.targetUserId) {
-                                    retryWaitSecond = 1;
-                                    SendFriendRequest = it.Current;
-                                    Fetched = true;
-                                    break;
-                                }
-                            } else {
-                                break;
-                            }
-                        }
-                    }
+                    SendFriendRequest = item;
+                    Fetched = true;
+                    this.OnFetched.Invoke();
+                }
+            );
+
+            while (true) {
+                var future = this._domain.Model();
+                yield return future;
+                if (future.Error != null) {
+                    yield return new WaitForSeconds(retryWaitSecond);
+                    retryWaitSecond *= 2;
                 }
                 else {
-                    yield return new WaitForSeconds(0.1f);
+                    SendFriendRequest = future.Result;
+                    Fetched = true;
+                    this.OnFetched.Invoke();
+                    break;
                 }
             }
-            // ReSharper disable once IteratorNeverReturns
+        }
+
+        public void OnUpdateContext() {
+            OnDisable();
+            Awake();
+            OnEnable();
         }
 
         public void OnEnable()
         {
             StartCoroutine(nameof(Fetch));
+            Context.OnUpdate.AddListener(OnUpdateContext);
         }
 
         public void OnDisable()
         {
-            StopCoroutine(nameof(Fetch));
+            Context.OnUpdate.RemoveListener(OnUpdateContext);
+
+            if (this._domain == null) {
+                return;
+            }
+            if (!this._callbackId.HasValue) {
+                return;
+            }
+            this._domain.Unsubscribe(
+                this._callbackId.Value
+            );
+            this._callbackId = null;
         }
     }
 
@@ -124,25 +129,20 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Fetcher
 
     public partial class Gs2FriendOwnSendFriendRequestFetcher
     {
-        protected Gs2ClientHolder _clientHolder;
-        protected Gs2GameSessionHolder _gameSessionHolder;
-        public Gs2FriendOwnFriendUserContext Context { get; private set; }
+        public Gs2FriendOwnSendFriendRequestContext Context { get; private set; }
 
         public void Awake()
         {
-            _clientHolder = Gs2ClientHolder.Instance;
-            _gameSessionHolder = Gs2GameSessionHolder.Instance;
-            Context = GetComponent<Gs2FriendOwnFriendUserContext>() ?? GetComponentInParent<Gs2FriendOwnFriendUserContext>();
-
+            Context = GetComponent<Gs2FriendOwnSendFriendRequestContext>() ?? GetComponentInParent<Gs2FriendOwnSendFriendRequestContext>();
             if (Context == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2FriendOwnFriendUserContext.");
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2FriendOwnSendFriendRequestContext.");
                 enabled = false;
             }
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
-            Context = GetComponent<Gs2FriendOwnFriendUserContext>() ?? GetComponentInParent<Gs2FriendOwnFriendUserContext>(true);
+            Context = GetComponent<Gs2FriendOwnSendFriendRequestContext>() ?? GetComponentInParent<Gs2FriendOwnSendFriendRequestContext>(true);
             if (Context == null) {
                 return true;
             }
@@ -158,6 +158,7 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Fetcher
     {
         public Gs2.Unity.Gs2Friend.Model.EzFriendRequest SendFriendRequest { get; protected set; }
         public bool Fetched { get; protected set; }
+        public UnityEvent OnFetched = new UnityEvent();
     }
 
     /// <summary>

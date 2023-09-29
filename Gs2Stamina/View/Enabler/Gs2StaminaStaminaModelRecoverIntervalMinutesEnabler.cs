@@ -24,10 +24,12 @@
 
 #pragma warning disable CS0472
 
+using System;
 using System.Collections.Generic;
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Stamina.Fetcher;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2Stamina
 {
@@ -38,35 +40,30 @@ namespace Gs2.Unity.UiKit.Gs2Stamina
 	[AddComponentMenu("GS2 UIKit/Stamina/StaminaModel/View/Enabler/Properties/RecoverIntervalMinutes/Gs2StaminaStaminaModelRecoverIntervalMinutesEnabler")]
     public partial class Gs2StaminaStaminaModelRecoverIntervalMinutesEnabler : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched && _fetcher.StaminaModel != null)
+            switch(this.expression)
             {
-                switch(expression)
-                {
-                    case Expression.In:
-                        target.SetActive(enableRecoverIntervalMinuteses.Contains(_fetcher.StaminaModel.RecoverIntervalMinutes));
-                        break;
-                    case Expression.NotIn:
-                        target.SetActive(!enableRecoverIntervalMinuteses.Contains(_fetcher.StaminaModel.RecoverIntervalMinutes));
-                        break;
-                    case Expression.Less:
-                        target.SetActive(enableRecoverIntervalMinutes > _fetcher.StaminaModel.RecoverIntervalMinutes);
-                        break;
-                    case Expression.LessEqual:
-                        target.SetActive(enableRecoverIntervalMinutes >= _fetcher.StaminaModel.RecoverIntervalMinutes);
-                        break;
-                    case Expression.Greater:
-                        target.SetActive(enableRecoverIntervalMinutes < _fetcher.StaminaModel.RecoverIntervalMinutes);
-                        break;
-                    case Expression.GreaterEqual:
-                        target.SetActive(enableRecoverIntervalMinutes <= _fetcher.StaminaModel.RecoverIntervalMinutes);
-                        break;
-                }
-            }
-            else
-            {
-                target.SetActive(false);
+                case Expression.In:
+                    this.target.SetActive(this.enableRecoverIntervalMinuteses.Contains(this._fetcher.StaminaModel.RecoverIntervalMinutes));
+                    break;
+                case Expression.NotIn:
+                    this.target.SetActive(!this.enableRecoverIntervalMinuteses.Contains(this._fetcher.StaminaModel.RecoverIntervalMinutes));
+                    break;
+                case Expression.Less:
+                    this.target.SetActive(this.enableRecoverIntervalMinutes > this._fetcher.StaminaModel.RecoverIntervalMinutes);
+                    break;
+                case Expression.LessEqual:
+                    this.target.SetActive(this.enableRecoverIntervalMinutes >= this._fetcher.StaminaModel.RecoverIntervalMinutes);
+                    break;
+                case Expression.Greater:
+                    this.target.SetActive(this.enableRecoverIntervalMinutes < this._fetcher.StaminaModel.RecoverIntervalMinutes);
+                    break;
+                case Expression.GreaterEqual:
+                    this.target.SetActive(this.enableRecoverIntervalMinutes <= this._fetcher.StaminaModel.RecoverIntervalMinutes);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
         }
     }
@@ -81,13 +78,12 @@ namespace Gs2.Unity.UiKit.Gs2Stamina
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2StaminaStaminaModelFetcher>() ?? GetComponentInParent<Gs2StaminaStaminaModelFetcher>();
-
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2StaminaStaminaModelFetcher>() ?? GetComponentInParent<Gs2StaminaStaminaModelFetcher>();
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2StaminaStaminaModelFetcher.");
                 enabled = false;
             }
-            if (target == null) {
+            if (this.target == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: target is not set.");
                 enabled = false;
             }
@@ -95,14 +91,37 @@ namespace Gs2.Unity.UiKit.Gs2Stamina
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2StaminaStaminaModelFetcher>() ?? GetComponentInParent<Gs2StaminaStaminaModelFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2StaminaStaminaModelFetcher>() ?? GetComponentInParent<Gs2StaminaStaminaModelFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
-            if (target == null) {
+            if (this.target == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 

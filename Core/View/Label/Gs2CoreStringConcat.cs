@@ -14,14 +14,14 @@ namespace Gs2.Unity.UiKit.Gs2Stamina.Editor
         private string _value1;
         private string _value2;
 
-        public void Update()
+        public void OnChangeValue()
         {
             if (this._value1 != null && this._value2 != null)
             {
-                onUpdate?.Invoke(this._value1 + this.delimiter + this._value2);
+                this.onUpdate?.Invoke(this._value1 + this.delimiter + this._value2);
             }
             else {
-                onUpdate?.Invoke("");
+                this.onUpdate?.Invoke("");
             }
         }
     }
@@ -34,7 +34,7 @@ namespace Gs2.Unity.UiKit.Gs2Stamina.Editor
     {
         public void Awake()
         {
-            Update();
+            OnChangeValue();
         }
     }
 
@@ -46,12 +46,12 @@ namespace Gs2.Unity.UiKit.Gs2Stamina.Editor
     {
         public void SetValue1(string value) {
             this._value1 = value;
-            Update();
+            OnChangeValue();
         }
         
         public void SetValue2(string value) {
             this._value2 = value;
-            Update();
+            OnChangeValue();
         }
     }
     
@@ -80,8 +80,8 @@ namespace Gs2.Unity.UiKit.Gs2Stamina.Editor
 
         public event UnityAction<string> OnUpdate
         {
-            add => onUpdate.AddListener(value);
-            remove => onUpdate.RemoveListener(value);
+            add => this.onUpdate.AddListener(value);
+            remove => this.onUpdate.RemoveListener(value);
         }
     }
 }

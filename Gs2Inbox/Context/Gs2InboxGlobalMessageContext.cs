@@ -40,7 +40,7 @@ namespace Gs2.Unity.UiKit.Gs2Inbox.Context
     {
         public void Start() {
             if (GlobalMessage == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: GlobalMessage is not set in Gs2InboxGlobalMessageContext.");
+                Debug.LogWarning($"{gameObject.GetFullPath()}: GlobalMessage is not set in Gs2InboxGlobalMessageContext.");
             }
         }
 

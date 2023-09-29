@@ -43,8 +43,12 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Editor
             serializedObject.Update();
 
             if (original.MissionTaskModel == null) {
-                if (original.GetComponentInParent<Gs2MissionMissionTaskModelList>(true) != null) {
+                var list = original.GetComponentInParent<Gs2MissionMissionTaskModelList>(true);
+                if (list != null) {
                     EditorGUILayout.HelpBox("MissionTaskModel is auto assign from Gs2MissionMissionTaskModelList.", MessageType.Info);
+                    EditorGUI.BeginDisabledGroup(true);
+                    EditorGUILayout.ObjectField("List", list, typeof(Gs2MissionMissionTaskModelList), false);
+                    EditorGUI.EndDisabledGroup();
                 }
                 else {
                     EditorGUILayout.HelpBox("MissionTaskModel not assigned.", MessageType.Error);

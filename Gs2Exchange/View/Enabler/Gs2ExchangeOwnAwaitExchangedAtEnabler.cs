@@ -24,10 +24,12 @@
 
 #pragma warning disable CS0472
 
+using System;
 using System.Collections.Generic;
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Exchange.Fetcher;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2Exchange
 {
@@ -38,35 +40,30 @@ namespace Gs2.Unity.UiKit.Gs2Exchange
 	[AddComponentMenu("GS2 UIKit/Exchange/Await/View/Enabler/Properties/ExchangedAt/Gs2ExchangeOwnAwaitExchangedAtEnabler")]
     public partial class Gs2ExchangeOwnAwaitExchangedAtEnabler : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched && _fetcher.Await != null)
+            switch(this.expression)
             {
-                switch(expression)
-                {
-                    case Expression.In:
-                        target.SetActive(enableExchangedAts.Contains(_fetcher.Await.ExchangedAt));
-                        break;
-                    case Expression.NotIn:
-                        target.SetActive(!enableExchangedAts.Contains(_fetcher.Await.ExchangedAt));
-                        break;
-                    case Expression.Less:
-                        target.SetActive(enableExchangedAt > _fetcher.Await.ExchangedAt);
-                        break;
-                    case Expression.LessEqual:
-                        target.SetActive(enableExchangedAt >= _fetcher.Await.ExchangedAt);
-                        break;
-                    case Expression.Greater:
-                        target.SetActive(enableExchangedAt < _fetcher.Await.ExchangedAt);
-                        break;
-                    case Expression.GreaterEqual:
-                        target.SetActive(enableExchangedAt <= _fetcher.Await.ExchangedAt);
-                        break;
-                }
-            }
-            else
-            {
-                target.SetActive(false);
+                case Expression.In:
+                    this.target.SetActive(this.enableExchangedAts.Contains(this._fetcher.Await.ExchangedAt));
+                    break;
+                case Expression.NotIn:
+                    this.target.SetActive(!this.enableExchangedAts.Contains(this._fetcher.Await.ExchangedAt));
+                    break;
+                case Expression.Less:
+                    this.target.SetActive(this.enableExchangedAt > this._fetcher.Await.ExchangedAt);
+                    break;
+                case Expression.LessEqual:
+                    this.target.SetActive(this.enableExchangedAt >= this._fetcher.Await.ExchangedAt);
+                    break;
+                case Expression.Greater:
+                    this.target.SetActive(this.enableExchangedAt < this._fetcher.Await.ExchangedAt);
+                    break;
+                case Expression.GreaterEqual:
+                    this.target.SetActive(this.enableExchangedAt <= this._fetcher.Await.ExchangedAt);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
         }
     }
@@ -81,13 +78,12 @@ namespace Gs2.Unity.UiKit.Gs2Exchange
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2ExchangeOwnAwaitFetcher>() ?? GetComponentInParent<Gs2ExchangeOwnAwaitFetcher>();
-
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2ExchangeOwnAwaitFetcher>() ?? GetComponentInParent<Gs2ExchangeOwnAwaitFetcher>();
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ExchangeOwnAwaitFetcher.");
                 enabled = false;
             }
-            if (target == null) {
+            if (this.target == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: target is not set.");
                 enabled = false;
             }
@@ -95,14 +91,37 @@ namespace Gs2.Unity.UiKit.Gs2Exchange
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2ExchangeOwnAwaitFetcher>() ?? GetComponentInParent<Gs2ExchangeOwnAwaitFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2ExchangeOwnAwaitFetcher>() ?? GetComponentInParent<Gs2ExchangeOwnAwaitFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
-            if (target == null) {
+            if (this.target == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 

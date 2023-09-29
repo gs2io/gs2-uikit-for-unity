@@ -39,39 +39,55 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking.Context
         private Gs2MatchmakingOwnRatingContext _context;
 
         public void Awake() {
-            _originalContext = GetComponent<Gs2MatchmakingRatingModelContext>() ?? GetComponentInParent<Gs2MatchmakingRatingModelContext>();
-            if (_originalContext == null) {
+            this._originalContext = GetComponent<Gs2MatchmakingRatingModelContext>() ?? GetComponentInParent<Gs2MatchmakingRatingModelContext>();
+            if (this._originalContext == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MatchmakingRatingModelContext.");
                 enabled = false;
             }
-            _context = GetComponent<Gs2MatchmakingOwnRatingContext>();
-            if (_context == null) {
+            this._context = GetComponent<Gs2MatchmakingOwnRatingContext>();
+            if (this._context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MatchmakingOwnRatingContext.");
                 enabled = false;
             }
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
-            _originalContext = GetComponent<Gs2MatchmakingRatingModelContext>() ?? GetComponentInParent<Gs2MatchmakingRatingModelContext>(true);
+            this._originalContext = GetComponent<Gs2MatchmakingRatingModelContext>() ?? GetComponentInParent<Gs2MatchmakingRatingModelContext>();
             if (_originalContext == null) {
                 return true;
             }
-            _context = GetComponent<Gs2MatchmakingOwnRatingContext>();
-            if (_context == null) {
+            this._context = GetComponent<Gs2MatchmakingOwnRatingContext>();
+            if (this._context == null) {
                 return true;
             }
             return false;
         }
 
-        public void Start() {
-            _context.SetOwnRating(
+        private UnityAction _onUpdateContext;
+
+        private void OnUpdateContext() {
+            this._context.SetOwnRating(
                 OwnRating.New(
                     _originalContext.RatingModel.Namespace,
                     _originalContext.RatingModel.ratingName
                 )
             );
-            enabled = false;
+        }
+
+        public void OnEnable() {
+            _onUpdateContext = () =>
+            {
+                OnUpdateContext();
+            };
+            this._originalContext.OnUpdate.AddListener(this._onUpdateContext);
+        }
+
+        public void OnDisable() {
+            if (this._onUpdateContext != null) {
+                this._originalContext.OnUpdate.RemoveListener(this._onUpdateContext);
+                this._onUpdateContext = null;
+            }
         }
     }
 }

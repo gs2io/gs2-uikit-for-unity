@@ -40,7 +40,7 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Context
     {
         public void Start() {
             if (FollowUser == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: FollowUser is not set in Gs2FriendOwnFollowUserContext.");
+                Debug.LogWarning($"{gameObject.GetFullPath()}: FollowUser is not set in Gs2FriendOwnFollowUserContext.");
             }
         }
         public virtual bool HasError() {
@@ -48,9 +48,7 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Context
                 if (GetComponentInParent<Gs2FriendOwnFollowUserList>(true) != null) {
                     return false;
                 }
-                else {
-                    return true;
-                }
+                return true;
             }
             return false;
         }

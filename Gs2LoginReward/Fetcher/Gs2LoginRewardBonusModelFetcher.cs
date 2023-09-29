@@ -72,6 +72,7 @@ namespace Gs2.Unity.UiKit.Gs2LoginReward.Fetcher
                 {
                     BonusModel = item;
                     Fetched = true;
+                    this.OnFetched.Invoke();
                 }
             );
 
@@ -85,11 +86,10 @@ namespace Gs2.Unity.UiKit.Gs2LoginReward.Fetcher
                 else {
                     BonusModel = future.Result;
                     Fetched = true;
+                    this.OnFetched.Invoke();
                     break;
                 }
             }
-
-            this.OnFetched.Invoke();
         }
 
         public void OnUpdateContext() {
@@ -126,6 +126,18 @@ namespace Gs2.Unity.UiKit.Gs2LoginReward.Fetcher
             }
             return BonusModel.MissedReceiveReliefConsumeActions;
         }
+
+        bool IConsumeActionsFetcher.IsFetched() {
+            return this.Fetched;
+        }
+
+        UnityEvent IConsumeActionsFetcher.OnFetchedEvent() {
+            return this.OnFetched;
+        }
+
+        GameObject IConsumeActionsFetcher.GameObject() {
+            return gameObject;
+        }
     }
 
     /// <summary>
@@ -135,8 +147,6 @@ namespace Gs2.Unity.UiKit.Gs2LoginReward.Fetcher
     public partial class Gs2LoginRewardBonusModelFetcher
     {
         public Gs2LoginRewardBonusModelContext Context { get; private set; }
-
-        public UnityEvent OnFetched = new UnityEvent();
 
         public void Awake()
         {
@@ -165,6 +175,7 @@ namespace Gs2.Unity.UiKit.Gs2LoginReward.Fetcher
     {
         public Gs2.Unity.Gs2LoginReward.Model.EzBonusModel BonusModel { get; protected set; }
         public bool Fetched { get; protected set; }
+        public UnityEvent OnFetched = new UnityEvent();
     }
 
     /// <summary>

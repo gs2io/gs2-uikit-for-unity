@@ -43,8 +43,12 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.Editor
             serializedObject.Update();
 
             if (original.BoxItems == null) {
-                if (original.GetComponentInParent<Gs2LotteryOwnBoxItemsList>(true) != null) {
-                    EditorGUILayout.HelpBox("OwnBoxItems is auto assign from Gs2LotteryOwnBoxItemsList.", MessageType.Info);
+                var list = original.GetComponentInParent<Gs2LotteryOwnBoxItemsList>(true);
+                if (list != null) {
+                    EditorGUILayout.HelpBox("BoxItems is auto assign from Gs2LotteryOwnBoxItemsList.", MessageType.Info);
+                    EditorGUI.BeginDisabledGroup(true);
+                    EditorGUILayout.ObjectField("List", list, typeof(Gs2LotteryOwnBoxItemsList), false);
+                    EditorGUI.EndDisabledGroup();
                 }
                 else {
                     EditorGUILayout.HelpBox("OwnBoxItems not assigned.", MessageType.Error);

@@ -40,15 +40,38 @@ namespace Gs2.Unity.UiKit.Gs2Chat
 	[AddComponentMenu("GS2 UIKit/Chat/Message/View/Label/Gs2ChatMessagePostActionLabel")]
     public partial class Gs2ChatMessagePostActionLabel : MonoBehaviour
     {
-        public void Update()
+        private void OnChange()
         {
-            onUpdate?.Invoke(
-                format.Replace(
-                    "{category}", $"{action?.Category}"
+            this.onUpdate?.Invoke(
+                this.format.Replace(
+                    "{category}", $"{this.action?.Category}"
                 ).Replace(
-                    "{metadata}", $"{action?.Metadata}"
+                    "{metadata}", $"{this.action?.Metadata}"
                 )
             );
+        }
+
+        public void Awake() {
+            if (this.action == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2AccountAccountAuthenticationAction.");
+                enabled = false;
+            }
+        }
+
+        public virtual bool HasError()
+        {
+            if (this.action == null) {
+                return true;
+            }
+            return false;
+        }
+
+        public void OnEnable() {
+            this.action.OnChange.AddListener(OnChange);
+        }
+
+        public void OnDisable() {
+            this.action.OnChange.RemoveListener(OnChange);
         }
     }
 

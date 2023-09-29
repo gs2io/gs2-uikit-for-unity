@@ -27,6 +27,7 @@
 using Gs2.Unity.Gs2Friend.ScriptableObject;
 using Gs2.Unity.UiKit.Core;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2Friend.Context
 {
@@ -42,8 +43,7 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Context
                 Debug.LogError($"{gameObject.GetFullPath()}: PublicProfile is not set in Gs2FriendPublicProfileContext.");
             }
         }
-
-        public bool HasError() {
+        public virtual bool HasError() {
             if (PublicProfile == null) {
                 return true;
             }
@@ -75,11 +75,21 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Context
 
     public partial class Gs2FriendPublicProfileContext
     {
-        public PublicProfile PublicProfile;
-
-        public void SetPublicProfile(PublicProfile PublicProfile) {
-            this.PublicProfile = PublicProfile;
+        [SerializeField]
+        private PublicProfile _spatial;
+        public PublicProfile PublicProfile
+        {
+            get => _spatial;
+            set => SetPublicProfile(value);
         }
+
+        public void SetPublicProfile(PublicProfile spatial) {
+            this._spatial = spatial;
+
+            this.OnUpdate.Invoke();
+        }
+
+        public UnityEvent OnUpdate = new UnityEvent();
     }
 
     /// <summary>

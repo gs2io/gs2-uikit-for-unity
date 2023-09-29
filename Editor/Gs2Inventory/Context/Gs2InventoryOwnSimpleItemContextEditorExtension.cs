@@ -43,8 +43,18 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Editor
             serializedObject.Update();
 
             if (original.SimpleItem == null) {
-                if (original.GetComponentInParent<Gs2InventoryOwnSimpleItemList>(true) != null) {
-                    EditorGUILayout.HelpBox("OwnSimpleItem is auto assign from Gs2InventoryOwnSimpleItemList.", MessageType.Info);
+                var list = original.GetComponentInParent<Gs2InventoryOwnSimpleItemList>(true);
+                if (list != null) {
+                    EditorGUILayout.HelpBox("SimpleItem is auto assign from Gs2InventoryOwnSimpleItemList.", MessageType.Info);
+                    EditorGUI.BeginDisabledGroup(true);
+                    EditorGUILayout.ObjectField("List", list, typeof(Gs2InventoryOwnSimpleItemList), false);
+                    EditorGUI.EndDisabledGroup();
+                }
+                else if (original.GetComponentInParent<Gs2InventoryConvertSimpleItemModelToOwnSimpleItem>(true) != null) {
+                    EditorGUILayout.HelpBox("SimpleItem is auto assign from Gs2InventoryConvertSimpleItemModelToOwnSimpleItem.", MessageType.Info);
+                    EditorGUI.BeginDisabledGroup(true);
+                    EditorGUILayout.ObjectField("Converter", original.GetComponentInParent<Gs2InventoryConvertSimpleItemModelToOwnSimpleItem>(true), typeof(Gs2InventoryConvertSimpleItemModelToOwnSimpleItem), false);
+                    EditorGUI.EndDisabledGroup();
                 }
                 else {
                     EditorGUILayout.HelpBox("OwnSimpleItem not assigned.", MessageType.Error);

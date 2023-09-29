@@ -40,17 +40,40 @@ namespace Gs2.Unity.UiKit.Gs2Stamina
 	[AddComponentMenu("GS2 UIKit/Stamina/Stamina/View/Label/Gs2StaminaStaminaSetRecoverIntervalActionLabel")]
     public partial class Gs2StaminaStaminaSetRecoverIntervalActionLabel : MonoBehaviour
     {
-        public void Update()
+        private void OnChange()
         {
-            onUpdate?.Invoke(
-                format.Replace(
-                    "{keyId}", $"{action?.KeyId}"
+            this.onUpdate?.Invoke(
+                this.format.Replace(
+                    "{keyId}", $"{this.action?.KeyId}"
                 ).Replace(
-                    "{signedStatusBody}", $"{action?.SignedStatusBody}"
+                    "{signedStatusBody}", $"{this.action?.SignedStatusBody}"
                 ).Replace(
-                    "{signedStatusSignature}", $"{action?.SignedStatusSignature}"
+                    "{signedStatusSignature}", $"{this.action?.SignedStatusSignature}"
                 )
             );
+        }
+
+        public void Awake() {
+            if (this.action == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2AccountAccountAuthenticationAction.");
+                enabled = false;
+            }
+        }
+
+        public virtual bool HasError()
+        {
+            if (this.action == null) {
+                return true;
+            }
+            return false;
+        }
+
+        public void OnEnable() {
+            this.action.OnChange.AddListener(OnChange);
+        }
+
+        public void OnDisable() {
+            this.action.OnChange.RemoveListener(OnChange);
         }
     }
 

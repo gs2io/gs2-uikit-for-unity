@@ -43,8 +43,18 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Editor
             serializedObject.Update();
 
             if (original.Inventory == null) {
-                if (original.GetComponentInParent<Gs2InventoryOwnInventoryList>(true) != null) {
-                    EditorGUILayout.HelpBox("OwnInventory is auto assign from Gs2InventoryOwnInventoryList.", MessageType.Info);
+                var list = original.GetComponentInParent<Gs2InventoryOwnInventoryList>(true);
+                if (list != null) {
+                    EditorGUILayout.HelpBox("Inventory is auto assign from Gs2InventoryOwnInventoryList.", MessageType.Info);
+                    EditorGUI.BeginDisabledGroup(true);
+                    EditorGUILayout.ObjectField("List", list, typeof(Gs2InventoryOwnInventoryList), false);
+                    EditorGUI.EndDisabledGroup();
+                }
+                else if (original.GetComponentInParent<Gs2InventoryConvertInventoryModelToOwnInventory>(true) != null) {
+                    EditorGUILayout.HelpBox("Inventory is auto assign from Gs2InventoryConvertInventoryModelToOwnInventory.", MessageType.Info);
+                    EditorGUI.BeginDisabledGroup(true);
+                    EditorGUILayout.ObjectField("Converter", original.GetComponentInParent<Gs2InventoryConvertInventoryModelToOwnInventory>(true), typeof(Gs2InventoryConvertInventoryModelToOwnInventory), false);
+                    EditorGUI.EndDisabledGroup();
                 }
                 else {
                     EditorGUILayout.HelpBox("OwnInventory not assigned.", MessageType.Error);

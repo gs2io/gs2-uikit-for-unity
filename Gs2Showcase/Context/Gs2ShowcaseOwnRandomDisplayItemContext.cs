@@ -40,7 +40,7 @@ namespace Gs2.Unity.UiKit.Gs2Showcase.Context
     {
         public void Start() {
             if (RandomDisplayItem == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: RandomDisplayItem is not set in Gs2ShowcaseOwnRandomDisplayItemContext.");
+                Debug.LogWarning($"{gameObject.GetFullPath()}: RandomDisplayItem is not set in Gs2ShowcaseOwnRandomDisplayItemContext.");
             }
         }
         public virtual bool HasError() {
@@ -48,9 +48,7 @@ namespace Gs2.Unity.UiKit.Gs2Showcase.Context
                 if (GetComponentInParent<Gs2ShowcaseOwnRandomDisplayItemList>(true) != null) {
                     return false;
                 }
-                else {
-                    return true;
-                }
+                return true;
             }
             return false;
         }

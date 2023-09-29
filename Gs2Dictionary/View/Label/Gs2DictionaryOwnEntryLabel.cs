@@ -40,41 +40,38 @@ namespace Gs2.Unity.UiKit.Gs2Dictionary
 	[AddComponentMenu("GS2 UIKit/Dictionary/Entry/View/Label/Gs2DictionaryOwnEntryLabel")]
     public partial class Gs2DictionaryOwnEntryLabel : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched && _fetcher.Entry != null)
-            {
-                var acquiredAt = _fetcher.Entry.AcquiredAt == null ? DateTime.Now : UnixTime.FromUnixTime(_fetcher.Entry.AcquiredAt).ToLocalTime();
-                onUpdate?.Invoke(
-                    format.Replace(
-                        "{entryId}", $"{_fetcher?.Entry?.EntryId}"
-                    ).Replace(
-                        "{userId}", $"{_fetcher?.Entry?.UserId}"
-                    ).Replace(
-                        "{name}", $"{_fetcher?.Entry?.Name}"
-                    ).Replace(
-                        "{acquiredAt:yyyy}", acquiredAt.ToString("yyyy")
-                    ).Replace(
-                        "{acquiredAt:yy}", acquiredAt.ToString("yy")
-                    ).Replace(
-                        "{acquiredAt:MM}", acquiredAt.ToString("MM")
-                    ).Replace(
-                        "{acquiredAt:MMM}", acquiredAt.ToString("MMM")
-                    ).Replace(
-                        "{acquiredAt:dd}", acquiredAt.ToString("dd")
-                    ).Replace(
-                        "{acquiredAt:hh}", acquiredAt.ToString("hh")
-                    ).Replace(
-                        "{acquiredAt:HH}", acquiredAt.ToString("HH")
-                    ).Replace(
-                        "{acquiredAt:tt}", acquiredAt.ToString("tt")
-                    ).Replace(
-                        "{acquiredAt:mm}", acquiredAt.ToString("mm")
-                    ).Replace(
-                        "{acquiredAt:ss}", acquiredAt.ToString("ss")
-                    )
-                );
-            }
+            var acquiredAt = this._fetcher.Entry.AcquiredAt == null ? DateTime.Now : UnixTime.FromUnixTime(_fetcher.Entry.AcquiredAt).ToLocalTime();
+            this.onUpdate?.Invoke(
+                this.format.Replace(
+                    "{entryId}", $"{this._fetcher?.Entry?.EntryId}"
+                ).Replace(
+                    "{userId}", $"{this._fetcher?.Entry?.UserId}"
+                ).Replace(
+                    "{name}", $"{this._fetcher?.Entry?.Name}"
+                ).Replace(
+                    "{acquiredAt:yyyy}", acquiredAt.ToString("yyyy")
+                ).Replace(
+                    "{acquiredAt:yy}", acquiredAt.ToString("yy")
+                ).Replace(
+                    "{acquiredAt:MM}", acquiredAt.ToString("MM")
+                ).Replace(
+                    "{acquiredAt:MMM}", acquiredAt.ToString("MMM")
+                ).Replace(
+                    "{acquiredAt:dd}", acquiredAt.ToString("dd")
+                ).Replace(
+                    "{acquiredAt:hh}", acquiredAt.ToString("hh")
+                ).Replace(
+                    "{acquiredAt:HH}", acquiredAt.ToString("HH")
+                ).Replace(
+                    "{acquiredAt:tt}", acquiredAt.ToString("tt")
+                ).Replace(
+                    "{acquiredAt:mm}", acquiredAt.ToString("mm")
+                ).Replace(
+                    "{acquiredAt:ss}", acquiredAt.ToString("ss")
+                )
+            );
         }
     }
 
@@ -88,23 +85,43 @@ namespace Gs2.Unity.UiKit.Gs2Dictionary
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2DictionaryOwnEntryFetcher>() ?? GetComponentInParent<Gs2DictionaryOwnEntryFetcher>();
-
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2DictionaryOwnEntryFetcher>() ?? GetComponentInParent<Gs2DictionaryOwnEntryFetcher>();
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2DictionaryOwnEntryFetcher.");
                 enabled = false;
             }
-
-            Update();
         }
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2DictionaryOwnEntryFetcher>() ?? GetComponentInParent<Gs2DictionaryOwnEntryFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2DictionaryOwnEntryFetcher>() ?? GetComponentInParent<Gs2DictionaryOwnEntryFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 
@@ -142,8 +159,8 @@ namespace Gs2.Unity.UiKit.Gs2Dictionary
 
         public event UnityAction<string> OnUpdate
         {
-            add => onUpdate.AddListener(value);
-            remove => onUpdate.RemoveListener(value);
+            add => this.onUpdate.AddListener(value);
+            remove => this.onUpdate.RemoveListener(value);
         }
     }
 }

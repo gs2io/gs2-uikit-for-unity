@@ -40,7 +40,7 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Context
     {
         public void Start() {
             if (Subscribe == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Subscribe is not set in Gs2RankingOwnSubscribeContext.");
+                Debug.LogWarning($"{gameObject.GetFullPath()}: Subscribe is not set in Gs2RankingOwnSubscribeContext.");
             }
         }
         public virtual bool HasError() {

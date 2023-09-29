@@ -48,20 +48,17 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Fetcher
 	[AddComponentMenu("GS2 UIKit/Inventory/BigItem/Fetcher/Consume/Gs2InventoryConsumeBigItemByUserIdFetcher")]
     public partial class Gs2InventoryConsumeBigItemByUserIdFetcher : Gs2InventoryOwnBigItemContext
     {
-        private IEnumerator Fetch()
+        private void Fetch()
         {
-            while (true)
-            {
-                if (_fetcher != null) {
-                    var action = _fetcher.ConsumeActions().FirstOrDefault(v => v.Action == "Gs2Inventory:ConsumeBigItemByUserId");
-                    if (action != null) {
-                        Request = ConsumeBigItemByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
-                        if (BigItem == null || (
-                                BigItem.NamespaceName == Request.NamespaceName &&
-                                BigItem.InventoryName == Request.InventoryName &&
-                                BigItem.ItemName == Request.ItemName)
-                           ) {
-                            BigItem = OwnBigItem.New(
+            var action = _fetcher.ConsumeActions().FirstOrDefault(v => v.Action == "Gs2Inventory:ConsumeBigItemByUserId");
+            if (action != null) {
+                Request = ConsumeBigItemByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
+                if (BigItem == null || (
+                        BigItem.NamespaceName == Request.NamespaceName &&
+                        BigItem.InventoryName == Request.InventoryName &&
+                        BigItem.ItemName == Request.ItemName)
+                   ) {
+                    BigItem = OwnBigItem.New(
                                 OwnBigInventory.New(
                                     Namespace.New(
                                         Request.NamespaceName
@@ -70,23 +67,10 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Fetcher
                                 ),
                                 Request.ItemName
                             );
-                        }
-                        Fetched = true;
-                    }
                 }
-                yield return new WaitForSeconds(0.1f);
             }
-            // ReSharper disable once IteratorNeverReturns
-        }
-
-        public void OnEnable()
-        {
-            StartCoroutine(nameof(Fetch));
-        }
-
-        public void OnDisable()
-        {
-            StopCoroutine(nameof(Fetch));
+            Fetched = true;
+            this.OnFetched.Invoke();
         }
     }
 
@@ -104,9 +88,8 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Fetcher
 
         public void Awake()
         {
-            _fetcher = GetComponent<IConsumeActionsFetcher>() ?? GetComponentInParent<IConsumeActionsFetcher>();
-
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<IConsumeActionsFetcher>() ?? GetComponentInParent<IConsumeActionsFetcher>();
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the IConsumeActionFetcher.");
                 enabled = false;
             }
@@ -114,11 +97,24 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Fetcher
 
         public override bool HasError()
         {
-            _fetcher = GetComponent<IConsumeActionsFetcher>() ?? GetComponentInParent<IConsumeActionsFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<IConsumeActionsFetcher>() ?? GetComponentInParent<IConsumeActionsFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
             return false;
+        }
+
+        public void OnEnable()
+        {
+            this._fetcher.OnFetchedEvent().AddListener(Fetch);
+            if (this._fetcher.IsFetched()) {
+                Fetch();
+            }
+        }
+
+        public void OnDisable()
+        {
+            this._fetcher.OnFetchedEvent().RemoveListener(Fetch);
         }
     }
 
@@ -130,6 +126,7 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Fetcher
     {
         public ConsumeBigItemByUserIdRequest Request { get; protected set; }
         public bool Fetched { get; protected set; }
+        public UnityEvent OnFetched = new UnityEvent();
     }
 
     /// <summary>
@@ -146,13 +143,6 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Fetcher
     /// </summary>
     public partial class Gs2InventoryConsumeBigItemByUserIdFetcher
     {
-        [SerializeField]
-        internal ErrorEvent onError = new ErrorEvent();
 
-        public event UnityAction<Gs2Exception, Func<IEnumerator>> OnError
-        {
-            add => onError.AddListener(value);
-            remove => onError.RemoveListener(value);
-        }
     }
 }

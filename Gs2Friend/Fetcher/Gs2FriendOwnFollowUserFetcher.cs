@@ -26,6 +26,7 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Text;
 using Gs2.Core.Exception;
 using Gs2.Unity.Core.Exception;
@@ -34,6 +35,7 @@ using Gs2.Unity.Gs2Friend.Model;
 using Gs2.Unity.Gs2Friend.ScriptableObject;
 using Gs2.Unity.Util;
 using Gs2.Unity.UiKit.Core;
+using Gs2.Unity.UiKit.Gs2Core.Fetcher;
 using Gs2.Unity.UiKit.Gs2Friend.Context;
 using UnityEngine;
 using UnityEngine.Events;
@@ -73,6 +75,7 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Fetcher
                 {
                     FollowUser = item;
                     Fetched = true;
+                    this.OnFetched.Invoke();
                 }
             );
 
@@ -86,18 +89,27 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Fetcher
                 else {
                     FollowUser = future.Result;
                     Fetched = true;
+                    this.OnFetched.Invoke();
+                    break;
                 }
             }
+        }
+
+        public void OnUpdateContext() {
+            OnDisable();
+            Awake();
+            OnEnable();
         }
 
         public void OnEnable()
         {
             StartCoroutine(nameof(Fetch));
+            Context.OnUpdate.AddListener(OnUpdateContext);
         }
 
         public void OnDisable()
         {
-            StopCoroutine(nameof(Fetch));
+            Context.OnUpdate.RemoveListener(OnUpdateContext);
 
             if (this._domain == null) {
                 return;
@@ -145,8 +157,9 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Fetcher
 
     public partial class Gs2FriendOwnFollowUserFetcher
     {
-        public EzFollowUser FollowUser { get; protected set; }
+        public Gs2.Unity.Gs2Friend.Model.EzFollowUser FollowUser { get; protected set; }
         public bool Fetched { get; protected set; }
+        public UnityEvent OnFetched = new UnityEvent();
     }
 
     /// <summary>

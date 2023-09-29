@@ -40,7 +40,7 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Context
     {
         public void Start() {
             if (Complete == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Complete is not set in Gs2MissionOwnCompleteContext.");
+                Debug.LogWarning($"{gameObject.GetFullPath()}: Complete is not set in Gs2MissionOwnCompleteContext.");
             }
         }
         public virtual bool HasError() {
@@ -48,9 +48,7 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Context
                 if (GetComponentInParent<Gs2MissionOwnCompleteList>(true) != null) {
                     return false;
                 }
-                else {
-                    return true;
-                }
+                return true;
             }
             return false;
         }

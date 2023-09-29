@@ -29,6 +29,7 @@
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Mission.Fetcher;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.Localization.Components;
 using UnityEngine.Localization.SmartFormat.PersistentVariables;
 
@@ -41,15 +42,12 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Localization
     [AddComponentMenu("GS2 UIKit/Mission/Complete/View/Localization/Gs2MissionCompleteLocalizationVariables")]
     public partial class Gs2MissionCompleteLocalizationVariables : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched) {
-                target.StringReference["missionGroupName"] = new StringVariable {
-                    Value = _fetcher?.Complete?.MissionGroupName ?? "",
-                };
-                enabled = false;
-                target.enabled = true;
-            }
+            this.target.StringReference["missionGroupName"] = new StringVariable {
+                Value = _fetcher?.Complete?.MissionGroupName ?? "",
+            };
+            this.target.enabled = true;
         }
     }
 
@@ -62,10 +60,10 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Localization
         private Gs2MissionOwnCompleteFetcher _fetcher;
 
         public void Awake() {
-            target.enabled = false;
-            _fetcher = GetComponent<Gs2MissionOwnCompleteFetcher>() ?? GetComponentInParent<Gs2MissionOwnCompleteFetcher>();
+            this.target.enabled = false;
+            this._fetcher = GetComponent<Gs2MissionOwnCompleteFetcher>() ?? GetComponentInParent<Gs2MissionOwnCompleteFetcher>();
 
-            if (_fetcher == null) {
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MissionCompleteFetcher.");
                 enabled = false;
             }
@@ -73,11 +71,34 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Localization
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2MissionOwnCompleteFetcher>() ?? GetComponentInParent<Gs2MissionOwnCompleteFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2MissionOwnCompleteFetcher>() ?? GetComponentInParent<Gs2MissionOwnCompleteFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 

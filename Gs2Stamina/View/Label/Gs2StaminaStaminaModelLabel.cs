@@ -40,34 +40,31 @@ namespace Gs2.Unity.UiKit.Gs2Stamina
 	[AddComponentMenu("GS2 UIKit/Stamina/StaminaModel/View/Label/Gs2StaminaStaminaModelLabel")]
     public partial class Gs2StaminaStaminaModelLabel : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched && _fetcher.StaminaModel != null)
-            {
-                onUpdate?.Invoke(
-                    format.Replace(
-                        "{name}", $"{_fetcher?.StaminaModel?.Name}"
-                    ).Replace(
-                        "{metadata}", $"{_fetcher?.StaminaModel?.Metadata}"
-                    ).Replace(
-                        "{recoverIntervalMinutes}", $"{_fetcher?.StaminaModel?.RecoverIntervalMinutes}"
-                    ).Replace(
-                        "{recoverValue}", $"{_fetcher?.StaminaModel?.RecoverValue}"
-                    ).Replace(
-                        "{initialCapacity}", $"{_fetcher?.StaminaModel?.InitialCapacity}"
-                    ).Replace(
-                        "{isOverflow}", $"{_fetcher?.StaminaModel?.IsOverflow}"
-                    ).Replace(
-                        "{maxCapacity}", $"{_fetcher?.StaminaModel?.MaxCapacity}"
-                    ).Replace(
-                        "{maxStaminaTable}", $"{_fetcher?.StaminaModel?.MaxStaminaTable}"
-                    ).Replace(
-                        "{recoverIntervalTable}", $"{_fetcher?.StaminaModel?.RecoverIntervalTable}"
-                    ).Replace(
-                        "{recoverValueTable}", $"{_fetcher?.StaminaModel?.RecoverValueTable}"
-                    )
-                );
-            }
+            this.onUpdate?.Invoke(
+                this.format.Replace(
+                    "{name}", $"{this._fetcher?.StaminaModel?.Name}"
+                ).Replace(
+                    "{metadata}", $"{this._fetcher?.StaminaModel?.Metadata}"
+                ).Replace(
+                    "{recoverIntervalMinutes}", $"{this._fetcher?.StaminaModel?.RecoverIntervalMinutes}"
+                ).Replace(
+                    "{recoverValue}", $"{this._fetcher?.StaminaModel?.RecoverValue}"
+                ).Replace(
+                    "{initialCapacity}", $"{this._fetcher?.StaminaModel?.InitialCapacity}"
+                ).Replace(
+                    "{isOverflow}", $"{this._fetcher?.StaminaModel?.IsOverflow}"
+                ).Replace(
+                    "{maxCapacity}", $"{this._fetcher?.StaminaModel?.MaxCapacity}"
+                ).Replace(
+                    "{maxStaminaTable}", $"{this._fetcher?.StaminaModel?.MaxStaminaTable}"
+                ).Replace(
+                    "{recoverIntervalTable}", $"{this._fetcher?.StaminaModel?.RecoverIntervalTable}"
+                ).Replace(
+                    "{recoverValueTable}", $"{this._fetcher?.StaminaModel?.RecoverValueTable}"
+                )
+            );
         }
     }
 
@@ -81,23 +78,43 @@ namespace Gs2.Unity.UiKit.Gs2Stamina
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2StaminaStaminaModelFetcher>() ?? GetComponentInParent<Gs2StaminaStaminaModelFetcher>();
-
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2StaminaStaminaModelFetcher>() ?? GetComponentInParent<Gs2StaminaStaminaModelFetcher>();
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2StaminaStaminaModelFetcher.");
                 enabled = false;
             }
-
-            Update();
         }
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2StaminaStaminaModelFetcher>() ?? GetComponentInParent<Gs2StaminaStaminaModelFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2StaminaStaminaModelFetcher>() ?? GetComponentInParent<Gs2StaminaStaminaModelFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 
@@ -135,8 +152,8 @@ namespace Gs2.Unity.UiKit.Gs2Stamina
 
         public event UnityAction<string> OnUpdate
         {
-            add => onUpdate.AddListener(value);
-            remove => onUpdate.RemoveListener(value);
+            add => this.onUpdate.AddListener(value);
+            remove => this.onUpdate.RemoveListener(value);
         }
     }
 }

@@ -40,7 +40,7 @@ namespace Gs2.Unity.UiKit.Gs2Account.Context
     {
         public void Start() {
             if (Account == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Account is not set in Gs2AccountOwnAccountContext.");
+                Debug.LogWarning($"{gameObject.GetFullPath()}: Account is not set in Gs2AccountOwnAccountContext.");
             }
         }
         public virtual bool HasError() {

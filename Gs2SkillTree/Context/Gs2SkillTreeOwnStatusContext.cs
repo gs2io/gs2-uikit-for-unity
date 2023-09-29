@@ -40,7 +40,7 @@ namespace Gs2.Unity.UiKit.Gs2SkillTree.Context
     {
         public void Start() {
             if (Status == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Status is not set in Gs2SkillTreeOwnStatusContext.");
+                Debug.LogWarning($"{gameObject.GetFullPath()}: Status is not set in Gs2SkillTreeOwnStatusContext.");
             }
         }
         public virtual bool HasError() {

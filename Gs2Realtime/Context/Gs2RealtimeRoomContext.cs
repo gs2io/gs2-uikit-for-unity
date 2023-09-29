@@ -40,7 +40,7 @@ namespace Gs2.Unity.UiKit.Gs2Realtime.Context
     {
         public void Start() {
             if (Room == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Room is not set in Gs2RealtimeRoomContext.");
+                Debug.LogWarning($"{gameObject.GetFullPath()}: Room is not set in Gs2RealtimeRoomContext.");
             }
         }
 

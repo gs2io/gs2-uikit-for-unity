@@ -40,43 +40,42 @@ namespace Gs2.Unity.UiKit.Gs2Formation
 	[AddComponentMenu("GS2 UIKit/Formation/MoldModel/View/SpriteSwitcher/Properties/MaxCapacity/Gs2FormationMoldModelMaxCapacitySpriteSwitcher")]
     public partial class Gs2FormationMoldModelMaxCapacitySpriteSwitcher : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched && _fetcher.MoldModel != null)
+            switch(this.expression)
             {
-                switch(expression)
-                {
-                    case Expression.In:
-                        if (applyMaxCapacities.Contains(_fetcher.MoldModel.MaxCapacity)) {
-                            this.onUpdate.Invoke(this.sprite);
-                        }
-                        break;
-                    case Expression.NotIn:
-                        if (!applyMaxCapacities.Contains(_fetcher.MoldModel.MaxCapacity)) {
-                            this.onUpdate.Invoke(this.sprite);
-                        }
-                        break;
-                    case Expression.Less:
-                        if (applyMaxCapacity > _fetcher.MoldModel.MaxCapacity) {
-                            this.onUpdate.Invoke(this.sprite);
-                        }
-                        break;
-                    case Expression.LessEqual:
-                        if (applyMaxCapacity >= _fetcher.MoldModel.MaxCapacity) {
-                            this.onUpdate.Invoke(this.sprite);
-                        }
-                        break;
-                    case Expression.Greater:
-                        if (applyMaxCapacity < _fetcher.MoldModel.MaxCapacity) {
-                            this.onUpdate.Invoke(this.sprite);
-                        }
-                        break;
-                    case Expression.GreaterEqual:
-                        if (applyMaxCapacity <= _fetcher.MoldModel.MaxCapacity) {
-                            this.onUpdate.Invoke(this.sprite);
-                        }
-                        break;
-                }
+                case Expression.In:
+                    if (this.applyMaxCapacities.Contains(this._fetcher.MoldModel.MaxCapacity)) {
+                        this.onUpdate.Invoke(this.sprite);
+                    }
+                    break;
+                case Expression.NotIn:
+                    if (!this.applyMaxCapacities.Contains(this._fetcher.MoldModel.MaxCapacity)) {
+                        this.onUpdate.Invoke(this.sprite);
+                    }
+                    break;
+                case Expression.Less:
+                    if (this.applyMaxCapacity > this._fetcher.MoldModel.MaxCapacity) {
+                        this.onUpdate.Invoke(this.sprite);
+                    }
+                    break;
+                case Expression.LessEqual:
+                    if (this.applyMaxCapacity >= this._fetcher.MoldModel.MaxCapacity) {
+                        this.onUpdate.Invoke(this.sprite);
+                    }
+                    break;
+                case Expression.Greater:
+                    if (this.applyMaxCapacity < this._fetcher.MoldModel.MaxCapacity) {
+                        this.onUpdate.Invoke(this.sprite);
+                    }
+                    break;
+                case Expression.GreaterEqual:
+                    if (this.applyMaxCapacity <= this._fetcher.MoldModel.MaxCapacity) {
+                        this.onUpdate.Invoke(this.sprite);
+                    }
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
         }
     }
@@ -91,13 +90,12 @@ namespace Gs2.Unity.UiKit.Gs2Formation
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2FormationMoldModelFetcher>() ?? GetComponentInParent<Gs2FormationMoldModelFetcher>();
-
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2FormationMoldModelFetcher>() ?? GetComponentInParent<Gs2FormationMoldModelFetcher>();
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2FormationMoldModelFetcher.");
                 enabled = false;
             }
-            if (sprite == null) {
+            if (this.sprite == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: sprite is not set.");
                 enabled = false;
             }
@@ -105,14 +103,37 @@ namespace Gs2.Unity.UiKit.Gs2Formation
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2FormationMoldModelFetcher>() ?? GetComponentInParent<Gs2FormationMoldModelFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2FormationMoldModelFetcher>() ?? GetComponentInParent<Gs2FormationMoldModelFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
-            if (sprite == null) {
+            if (this.sprite == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 

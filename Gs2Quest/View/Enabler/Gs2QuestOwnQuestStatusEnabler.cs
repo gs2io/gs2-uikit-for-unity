@@ -28,6 +28,7 @@ using System.Linq;
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Quest.Fetcher;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2Quest
 {
@@ -38,27 +39,22 @@ namespace Gs2.Unity.UiKit.Gs2Quest
 	[AddComponentMenu("GS2 UIKit/Quest/QuestModel/View/Enabler/Gs2QuestQuestStatusEnabler")]
     public partial class Gs2QuestOwnQuestStatusEnabler : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (!this._completedQuestListFetcher.Fetched 
-                || !this._questModelFetcher.Fetched
-                || this._questModelFetcher.QuestModel == null)
-            {
-                target.SetActive(loading);
+            if (this._completedQuestListFetcher?.CompletedQuestList == null) return;
+            if (this._questModelFetcher?.QuestModel == null) return;
+        
+            var completedQuestNames = this._completedQuestListFetcher.CompletedQuestList.CompleteQuestNames;
+            var premiseQuestNames = this._questModelFetcher.QuestModel.PremiseQuestNames;
+            if (premiseQuestNames.Count(v => completedQuestNames.Contains(v)) != premiseQuestNames.Count) {
+                this.target.SetActive(this.cantChallenge);
             }
             else {
-                var completedQuestNames = this._completedQuestListFetcher.CompletedQuestList.CompleteQuestNames;
-                var premiseQuestNames = this._questModelFetcher.QuestModel.PremiseQuestNames;
-                if (premiseQuestNames.Count(v => completedQuestNames.Contains(v)) != premiseQuestNames.Count) {
-                    target.SetActive(this.cantChallenge);
+                if (completedQuestNames.Contains(this._questModelFetcher.QuestModel.Name)) {
+                    this.target.SetActive(this.completed);
                 }
                 else {
-                    if (completedQuestNames.Contains(this._questModelFetcher.QuestModel.Name)) {
-                        target.SetActive(this.completed);
-                    }
-                    else {
-                        target.SetActive(this.notCompleted);
-                    }
+                    this.target.SetActive(this.notCompleted);
                 }
             }
         }
@@ -86,7 +82,7 @@ namespace Gs2.Unity.UiKit.Gs2Quest
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2QuestQuestModelFetcher.");
                 enabled = false;
             }
-            if (target == null) {
+            if (this.target == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: target is not set.");
                 enabled = false;
             }
@@ -102,10 +98,34 @@ namespace Gs2.Unity.UiKit.Gs2Quest
             if (this._questModelFetcher == null) {
                 return true;
             }
-            if (target == null) {
+            if (this.target == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._completedQuestListFetcher.OnFetched.AddListener(this._onFetched);
+            this._questModelFetcher.OnFetched.AddListener(this._onFetched);
+            if (this._completedQuestListFetcher.Fetched && this._questModelFetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._completedQuestListFetcher.OnFetched.RemoveListener(this._onFetched);
+                this._questModelFetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 

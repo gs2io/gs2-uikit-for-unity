@@ -42,74 +42,66 @@ namespace Gs2.Unity.UiKit.Gs2Stamina.Label
 	[AddComponentMenu("GS2 UIKit/Stamina/Stamina/View/Label/Transaction/Gs2StaminaRecoverStaminaByUserIdLabel")]
     public partial class Gs2StaminaRecoverStaminaByUserIdLabel : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched && _fetcher.Request != null &&
-                    _userDataFetcher != null && _userDataFetcher.Fetched && _userDataFetcher.Stamina != null) {
-                {
-                    onUpdate?.Invoke(
-                        format.Replace(
-                            "{namespaceName}",
-                            $"{_fetcher.Request.NamespaceName}"
-                        ).Replace(
-                            "{staminaName}",
-                            $"{_fetcher.Request.StaminaName}"
-                        ).Replace(
-                            "{userId}",
-                            $"{_fetcher.Request.UserId}"
-                        ).Replace(
-                            "{recoverValue}",
-                            $"{_fetcher.Request.RecoverValue}"
-                        ).Replace(
-                            "{userData:staminaName}",
-                            $"{_userDataFetcher.Stamina.StaminaName}"
-                        ).Replace(
-                            "{userData:value}",
-                            $"{_userDataFetcher.Stamina.Value}"
-                        ).Replace(
-                            "{userData:value:changed}",
-                            $"{_userDataFetcher.Stamina.Value + _fetcher.Request.RecoverValue}"
-                        ).Replace(
-                            "{userData:overflowValue}",
-                            $"{_userDataFetcher.Stamina.OverflowValue}"
-                        ).Replace(
-                            "{userData:maxValue}",
-                            $"{_userDataFetcher.Stamina.MaxValue}"
-                        ).Replace(
-                            "{userData:recoverIntervalMinutes}",
-                            $"{_userDataFetcher.Stamina.RecoverIntervalMinutes}"
-                        ).Replace(
-                            "{userData:recoverValue}",
-                            $"{_userDataFetcher.Stamina.RecoverValue}"
-                        ).Replace(
-                            "{userData:nextRecoverAt}",
-                            $"{_userDataFetcher.Stamina.NextRecoverAt}"
-                        )
-                    );
-                }
-            } else if (_fetcher.Fetched && _fetcher.Request != null) {
-                {
-                    onUpdate?.Invoke(
-                        format.Replace(
-                            "{namespaceName}",
-                            $"{_fetcher.Request.NamespaceName}"
-                        ).Replace(
-                            "{staminaName}",
-                            $"{_fetcher.Request.StaminaName}"
-                        ).Replace(
-                            "{userId}",
-                            $"{_fetcher.Request.UserId}"
-                        ).Replace(
-                            "{recoverValue}",
-                            $"{_fetcher.Request.RecoverValue}"
-                        )
-                    );
-                }
+            if ((!this._fetcher?.Fetched ?? false) || this._fetcher.Request == null) {
+                return;
+            }
+            if (this._userDataFetcher?.Fetched ?? false)
+            {
+                this.onUpdate?.Invoke(
+                    this.format.Replace(
+                        "{namespaceName}",
+                        $"{this._fetcher.Request.NamespaceName}"
+                    ).Replace(
+                        "{staminaName}",
+                        $"{this._fetcher.Request.StaminaName}"
+                    ).Replace(
+                        "{userId}",
+                        $"{this._fetcher.Request.UserId}"
+                    ).Replace(
+                        "{recoverValue}",
+                        $"{this._fetcher.Request.RecoverValue}"
+                    ).Replace(
+                        "{userData:staminaName}",
+                        $"{this._userDataFetcher.Stamina.StaminaName}"
+                    ).Replace(
+                        "{userData:value}",
+                        $"{this._userDataFetcher.Stamina.Value}"
+                    ).Replace(
+                        "{userData:value:changed}",
+                        $"{this._userDataFetcher.Stamina.Value + this._fetcher.Request.RecoverValue}"
+                    ).Replace(
+                        "{userData:overflowValue}",
+                        $"{this._userDataFetcher.Stamina.OverflowValue}"
+                    ).Replace(
+                        "{userData:maxValue}",
+                        $"{this._userDataFetcher.Stamina.MaxValue}"
+                    ).Replace(
+                        "{userData:recoverIntervalMinutes}",
+                        $"{this._userDataFetcher.Stamina.RecoverIntervalMinutes}"
+                    ).Replace(
+                        "{userData:recoverValue}",
+                        $"{this._userDataFetcher.Stamina.RecoverValue}"
+                    ).Replace(
+                        "{userData:nextRecoverAt}",
+                        $"{this._userDataFetcher.Stamina.NextRecoverAt}"
+                    )
+                );
             } else {
-                onUpdate?.Invoke(
-                    format.Replace(
-                        "{value}",
-                        "0"
+                this.onUpdate?.Invoke(
+                    this.format.Replace(
+                        "{namespaceName}",
+                        $"{this._fetcher.Request.NamespaceName}"
+                    ).Replace(
+                        "{staminaName}",
+                        $"{this._fetcher.Request.StaminaName}"
+                    ).Replace(
+                        "{userId}",
+                        $"{this._fetcher.Request.UserId}"
+                    ).Replace(
+                        "{recoverValue}",
+                        $"{this._fetcher.Request.RecoverValue}"
                     )
                 );
             }
@@ -127,25 +119,52 @@ namespace Gs2.Unity.UiKit.Gs2Stamina.Label
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2StaminaRecoverStaminaByUserIdFetcher>() ?? GetComponentInParent<Gs2StaminaRecoverStaminaByUserIdFetcher>();
-            _userDataFetcher = GetComponent<Gs2StaminaOwnStaminaFetcher>() ?? GetComponentInParent<Gs2StaminaOwnStaminaFetcher>();
-
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2StaminaRecoverStaminaByUserIdFetcher>() ?? GetComponentInParent<Gs2StaminaRecoverStaminaByUserIdFetcher>();
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2StaminaRecoverStaminaByUserIdFetcher.");
                 enabled = false;
             }
-
-            Update();
+            this._userDataFetcher = GetComponent<Gs2StaminaOwnStaminaFetcher>() ?? GetComponentInParent<Gs2StaminaOwnStaminaFetcher>();
         }
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2StaminaRecoverStaminaByUserIdFetcher>() ?? GetComponentInParent<Gs2StaminaRecoverStaminaByUserIdFetcher>(true);
-            _userDataFetcher = GetComponent<Gs2StaminaOwnStaminaFetcher>() ?? GetComponentInParent<Gs2StaminaOwnStaminaFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2StaminaRecoverStaminaByUserIdFetcher>() ?? GetComponentInParent<Gs2StaminaRecoverStaminaByUserIdFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+            if (this._userDataFetcher != null) {
+                this._userDataFetcher.OnFetched.AddListener(this._onFetched);
+                if (this._userDataFetcher.Fetched) {
+                    OnFetched();
+                }
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                if (this._userDataFetcher != null) {
+                    this._userDataFetcher.OnFetched.RemoveListener(this._onFetched);
+                }
+                this._onFetched = null;
+            }
         }
     }
 
@@ -183,8 +202,8 @@ namespace Gs2.Unity.UiKit.Gs2Stamina.Label
 
         public event UnityAction<string> OnUpdate
         {
-            add => onUpdate.AddListener(value);
-            remove => onUpdate.RemoveListener(value);
+            add => this.onUpdate.AddListener(value);
+            remove => this.onUpdate.RemoveListener(value);
         }
     }
 }

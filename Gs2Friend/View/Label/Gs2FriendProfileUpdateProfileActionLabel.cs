@@ -40,17 +40,40 @@ namespace Gs2.Unity.UiKit.Gs2Friend
 	[AddComponentMenu("GS2 UIKit/Friend/Profile/View/Label/Gs2FriendProfileUpdateProfileActionLabel")]
     public partial class Gs2FriendProfileUpdateProfileActionLabel : MonoBehaviour
     {
-        public void Update()
+        private void OnChange()
         {
-            onUpdate?.Invoke(
-                format.Replace(
-                    "{publicProfile}", $"{action?.PublicProfile}"
+            this.onUpdate?.Invoke(
+                this.format.Replace(
+                    "{publicProfile}", $"{this.action?.PublicProfile}"
                 ).Replace(
-                    "{followerProfile}", $"{action?.FollowerProfile}"
+                    "{followerProfile}", $"{this.action?.FollowerProfile}"
                 ).Replace(
-                    "{friendProfile}", $"{action?.FriendProfile}"
+                    "{friendProfile}", $"{this.action?.FriendProfile}"
                 )
             );
+        }
+
+        public void Awake() {
+            if (this.action == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2AccountAccountAuthenticationAction.");
+                enabled = false;
+            }
+        }
+
+        public virtual bool HasError()
+        {
+            if (this.action == null) {
+                return true;
+            }
+            return false;
+        }
+
+        public void OnEnable() {
+            this.action.OnChange.AddListener(OnChange);
+        }
+
+        public void OnDisable() {
+            this.action.OnChange.RemoveListener(OnChange);
         }
     }
 

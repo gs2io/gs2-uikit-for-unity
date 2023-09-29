@@ -42,51 +42,50 @@ namespace Gs2.Unity.UiKit.Gs2Dictionary.Label
 	[AddComponentMenu("GS2 UIKit/Dictionary/Entry/View/Label/Transaction/Gs2DictionaryDeleteEntriesByUserIdLabel")]
     public partial class Gs2DictionaryDeleteEntriesByUserIdLabel : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched && _fetcher.Request != null &&
-                    _userDataFetcher != null && _userDataFetcher.Fetched && _userDataFetcher.Entry != null) {
-                {
-                    onUpdate?.Invoke(
-                        format.Replace(
-                            "{namespaceName}",
-                            $"{_fetcher.Request.NamespaceName}"
-                        ).Replace(
-                            "{userId}",
-                            $"{_fetcher.Request.UserId}"
-                        ).Replace(
-                            "{entryModelNames}",
-                            $"{_fetcher.Request.EntryModelNames}"
-                        ).Replace(
-                            "{userData:entryId}",
-                            $"{_userDataFetcher.Entry.EntryId}"
-                        ).Replace(
-                            "{userData:userId}",
-                            $"{_userDataFetcher.Entry.UserId}"
-                        ).Replace(
-                            "{userData:name}",
-                            $"{_userDataFetcher.Entry.Name}"
-                        ).Replace(
-                            "{userData:acquiredAt}",
-                            $"{_userDataFetcher.Entry.AcquiredAt}"
-                        )
-                    );
-                }
-            } else if (_fetcher.Fetched && _fetcher.Request != null) {
-                {
-                    onUpdate?.Invoke(
-                        format.Replace(
-                            "{namespaceName}",
-                            $"{_fetcher.Request.NamespaceName}"
-                        ).Replace(
-                            "{userId}",
-                            $"{_fetcher.Request.UserId}"
-                        ).Replace(
-                            "{entryModelNames}",
-                            $"{_fetcher.Request.EntryModelNames}"
-                        )
-                    );
-                }
+            if ((!this._fetcher?.Fetched ?? false) || this._fetcher.Request == null) {
+                return;
+            }
+            if (this._userDataFetcher?.Fetched ?? false)
+            {
+                this.onUpdate?.Invoke(
+                    this.format.Replace(
+                        "{namespaceName}",
+                        $"{this._fetcher.Request.NamespaceName}"
+                    ).Replace(
+                        "{userId}",
+                        $"{this._fetcher.Request.UserId}"
+                    ).Replace(
+                        "{entryModelNames}",
+                        $"{this._fetcher.Request.EntryModelNames}"
+                    ).Replace(
+                        "{userData:entryId}",
+                        $"{this._userDataFetcher.Entry.EntryId}"
+                    ).Replace(
+                        "{userData:userId}",
+                        $"{this._userDataFetcher.Entry.UserId}"
+                    ).Replace(
+                        "{userData:name}",
+                        $"{this._userDataFetcher.Entry.Name}"
+                    ).Replace(
+                        "{userData:acquiredAt}",
+                        $"{this._userDataFetcher.Entry.AcquiredAt}"
+                    )
+                );
+            } else {
+                this.onUpdate?.Invoke(
+                    this.format.Replace(
+                        "{namespaceName}",
+                        $"{this._fetcher.Request.NamespaceName}"
+                    ).Replace(
+                        "{userId}",
+                        $"{this._fetcher.Request.UserId}"
+                    ).Replace(
+                        "{entryModelNames}",
+                        $"{this._fetcher.Request.EntryModelNames}"
+                    )
+                );
             }
         }
     }
@@ -102,25 +101,52 @@ namespace Gs2.Unity.UiKit.Gs2Dictionary.Label
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2DictionaryDeleteEntriesByUserIdFetcher>() ?? GetComponentInParent<Gs2DictionaryDeleteEntriesByUserIdFetcher>();
-            _userDataFetcher = GetComponent<Gs2DictionaryOwnEntryFetcher>() ?? GetComponentInParent<Gs2DictionaryOwnEntryFetcher>();
-
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2DictionaryDeleteEntriesByUserIdFetcher>() ?? GetComponentInParent<Gs2DictionaryDeleteEntriesByUserIdFetcher>();
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2DictionaryDeleteEntriesByUserIdFetcher.");
                 enabled = false;
             }
-
-            Update();
+            this._userDataFetcher = GetComponent<Gs2DictionaryOwnEntryFetcher>() ?? GetComponentInParent<Gs2DictionaryOwnEntryFetcher>();
         }
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2DictionaryDeleteEntriesByUserIdFetcher>() ?? GetComponentInParent<Gs2DictionaryDeleteEntriesByUserIdFetcher>(true);
-            _userDataFetcher = GetComponent<Gs2DictionaryOwnEntryFetcher>() ?? GetComponentInParent<Gs2DictionaryOwnEntryFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2DictionaryDeleteEntriesByUserIdFetcher>() ?? GetComponentInParent<Gs2DictionaryDeleteEntriesByUserIdFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+            if (this._userDataFetcher != null) {
+                this._userDataFetcher.OnFetched.AddListener(this._onFetched);
+                if (this._userDataFetcher.Fetched) {
+                    OnFetched();
+                }
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                if (this._userDataFetcher != null) {
+                    this._userDataFetcher.OnFetched.RemoveListener(this._onFetched);
+                }
+                this._onFetched = null;
+            }
         }
     }
 
@@ -158,8 +184,8 @@ namespace Gs2.Unity.UiKit.Gs2Dictionary.Label
 
         public event UnityAction<string> OnUpdate
         {
-            add => onUpdate.AddListener(value);
-            remove => onUpdate.RemoveListener(value);
+            add => this.onUpdate.AddListener(value);
+            remove => this.onUpdate.RemoveListener(value);
         }
     }
 }

@@ -43,8 +43,12 @@ namespace Gs2.Unity.UiKit.Gs2Dictionary.Editor
             serializedObject.Update();
 
             if (original.EntryModel == null) {
-                if (original.GetComponentInParent<Gs2DictionaryEntryModelList>(true) != null) {
+                var list = original.GetComponentInParent<Gs2DictionaryEntryModelList>(true);
+                if (list != null) {
                     EditorGUILayout.HelpBox("EntryModel is auto assign from Gs2DictionaryEntryModelList.", MessageType.Info);
+                    EditorGUI.BeginDisabledGroup(true);
+                    EditorGUILayout.ObjectField("List", list, typeof(Gs2DictionaryEntryModelList), false);
+                    EditorGUI.EndDisabledGroup();
                 }
                 else {
                     EditorGUILayout.HelpBox("EntryModel not assigned.", MessageType.Error);

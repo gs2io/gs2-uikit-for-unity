@@ -40,7 +40,7 @@ namespace Gs2.Unity.UiKit.Gs2Idle.Context
     {
         public void Start() {
             if (CategoryModel == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: CategoryModel is not set in Gs2IdleCategoryModelContext.");
+                Debug.LogWarning($"{gameObject.GetFullPath()}: CategoryModel is not set in Gs2IdleCategoryModelContext.");
             }
         }
 
@@ -49,9 +49,7 @@ namespace Gs2.Unity.UiKit.Gs2Idle.Context
                 if (GetComponentInParent<Gs2IdleCategoryModelList>(true) != null) {
                     return false;
                 }
-                else {
-                    return true;
-                }
+                return true;
             }
             return false;
         }

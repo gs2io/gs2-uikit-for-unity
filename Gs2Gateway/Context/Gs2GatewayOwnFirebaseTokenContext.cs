@@ -40,7 +40,7 @@ namespace Gs2.Unity.UiKit.Gs2Gateway.Context
     {
         public void Start() {
             if (FirebaseToken == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: FirebaseToken is not set in Gs2GatewayOwnFirebaseTokenContext.");
+                Debug.LogWarning($"{gameObject.GetFullPath()}: FirebaseToken is not set in Gs2GatewayOwnFirebaseTokenContext.");
             }
         }
         public virtual bool HasError() {

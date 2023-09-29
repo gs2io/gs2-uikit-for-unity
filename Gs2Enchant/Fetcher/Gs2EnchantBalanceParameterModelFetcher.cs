@@ -72,6 +72,7 @@ namespace Gs2.Unity.UiKit.Gs2Enchant.Fetcher
                 {
                     BalanceParameterModel = item;
                     Fetched = true;
+                    this.OnFetched.Invoke();
                 }
             );
 
@@ -85,11 +86,10 @@ namespace Gs2.Unity.UiKit.Gs2Enchant.Fetcher
                 else {
                     BalanceParameterModel = future.Result;
                     Fetched = true;
+                    this.OnFetched.Invoke();
                     break;
                 }
             }
-
-            this.OnFetched.Invoke();
         }
 
         public void OnUpdateContext() {
@@ -129,8 +129,6 @@ namespace Gs2.Unity.UiKit.Gs2Enchant.Fetcher
     {
         public Gs2EnchantBalanceParameterModelContext Context { get; private set; }
 
-        public UnityEvent OnFetched = new UnityEvent();
-
         public void Awake()
         {
             Context = GetComponent<Gs2EnchantBalanceParameterModelContext>() ?? GetComponentInParent<Gs2EnchantBalanceParameterModelContext>();
@@ -158,6 +156,7 @@ namespace Gs2.Unity.UiKit.Gs2Enchant.Fetcher
     {
         public Gs2.Unity.Gs2Enchant.Model.EzBalanceParameterModel BalanceParameterModel { get; protected set; }
         public bool Fetched { get; protected set; }
+        public UnityEvent OnFetched = new UnityEvent();
     }
 
     /// <summary>

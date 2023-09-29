@@ -29,6 +29,7 @@
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Stamina.Fetcher;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.Localization.Components;
 using UnityEngine.Localization.SmartFormat.PersistentVariables;
 
@@ -41,33 +42,30 @@ namespace Gs2.Unity.UiKit.Gs2Stamina.Localization
     [AddComponentMenu("GS2 UIKit/Stamina/StaminaModel/View/Localization/Gs2StaminaStaminaModelLocalizationVariables")]
     public partial class Gs2StaminaStaminaModelLocalizationVariables : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched) {
-                target.StringReference["name"] = new StringVariable {
-                    Value = _fetcher?.StaminaModel?.Name ?? "",
-                };
-                target.StringReference["metadata"] = new StringVariable {
-                    Value = _fetcher?.StaminaModel?.Metadata ?? "",
-                };
-                target.StringReference["recoverIntervalMinutes"] = new IntVariable {
-                    Value = _fetcher?.StaminaModel?.RecoverIntervalMinutes ?? 0,
-                };
-                target.StringReference["recoverValue"] = new IntVariable {
-                    Value = _fetcher?.StaminaModel?.RecoverValue ?? 0,
-                };
-                target.StringReference["initialCapacity"] = new IntVariable {
-                    Value = _fetcher?.StaminaModel?.InitialCapacity ?? 0,
-                };
-                target.StringReference["isOverflow"] = new BoolVariable {
-                    Value = _fetcher?.StaminaModel?.IsOverflow ?? false,
-                };
-                target.StringReference["maxCapacity"] = new IntVariable {
-                    Value = _fetcher?.StaminaModel?.MaxCapacity ?? 0,
-                };
-                enabled = false;
-                target.enabled = true;
-            }
+            this.target.StringReference["name"] = new StringVariable {
+                Value = _fetcher?.StaminaModel?.Name ?? "",
+            };
+            this.target.StringReference["metadata"] = new StringVariable {
+                Value = _fetcher?.StaminaModel?.Metadata ?? "",
+            };
+            this.target.StringReference["recoverIntervalMinutes"] = new IntVariable {
+                Value = _fetcher?.StaminaModel?.RecoverIntervalMinutes ?? 0,
+            };
+            this.target.StringReference["recoverValue"] = new IntVariable {
+                Value = _fetcher?.StaminaModel?.RecoverValue ?? 0,
+            };
+            this.target.StringReference["initialCapacity"] = new IntVariable {
+                Value = _fetcher?.StaminaModel?.InitialCapacity ?? 0,
+            };
+            this.target.StringReference["isOverflow"] = new BoolVariable {
+                Value = _fetcher?.StaminaModel?.IsOverflow ?? false,
+            };
+            this.target.StringReference["maxCapacity"] = new IntVariable {
+                Value = _fetcher?.StaminaModel?.MaxCapacity ?? 0,
+            };
+            this.target.enabled = true;
         }
     }
 
@@ -80,10 +78,10 @@ namespace Gs2.Unity.UiKit.Gs2Stamina.Localization
         private Gs2StaminaStaminaModelFetcher _fetcher;
 
         public void Awake() {
-            target.enabled = false;
-            _fetcher = GetComponent<Gs2StaminaStaminaModelFetcher>() ?? GetComponentInParent<Gs2StaminaStaminaModelFetcher>();
+            this.target.enabled = false;
+            this._fetcher = GetComponent<Gs2StaminaStaminaModelFetcher>() ?? GetComponentInParent<Gs2StaminaStaminaModelFetcher>();
 
-            if (_fetcher == null) {
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2StaminaStaminaModelFetcher.");
                 enabled = false;
             }
@@ -91,11 +89,34 @@ namespace Gs2.Unity.UiKit.Gs2Stamina.Localization
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2StaminaStaminaModelFetcher>() ?? GetComponentInParent<Gs2StaminaStaminaModelFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2StaminaStaminaModelFetcher>() ?? GetComponentInParent<Gs2StaminaStaminaModelFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 

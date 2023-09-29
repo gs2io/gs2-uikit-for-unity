@@ -12,8 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
- * deny overwrite
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
@@ -45,15 +43,22 @@ namespace Gs2.Unity.UiKit.Gs2Dictionary.Editor
             serializedObject.Update();
 
             if (original.Entry == null) {
-                if (original.GetComponentInParent<Gs2DictionaryOwnEntryList>(true) != null) {
-                    EditorGUILayout.HelpBox("OwnEntry is auto assign from Gs2DictionaryOwnEntryList.", MessageType.Info);
+                var list = original.GetComponentInParent<Gs2DictionaryOwnEntryList>(true);
+                if (list != null) {
+                    EditorGUILayout.HelpBox("Entry is auto assign from Gs2DictionaryOwnEntryList.", MessageType.Info);
+                    EditorGUI.BeginDisabledGroup(true);
+                    EditorGUILayout.ObjectField("List", list, typeof(Gs2DictionaryOwnEntryList), false);
+                    EditorGUI.EndDisabledGroup();
                 }
-                else if (original.GetComponentInParent<Gs2DictionaryEntryModelContext>(true) != null) {
-                    EditorGUILayout.HelpBox("OwnEntry is auto assign from Gs2DictionaryEntryModelContext.", MessageType.Info);
+                else if (original.GetComponentInParent<Gs2DictionaryConvertEntryModelToOwnEntry>(true) != null) {
+                    EditorGUILayout.HelpBox("Entry is auto assign from Gs2DictionaryConvertEntryModelToOwnEntry.", MessageType.Info);
+                    EditorGUI.BeginDisabledGroup(true);
+                    EditorGUILayout.ObjectField("Converter", original.GetComponentInParent<Gs2DictionaryConvertEntryModelToOwnEntry>(true), typeof(Gs2DictionaryConvertEntryModelToOwnEntry), false);
+                    EditorGUI.EndDisabledGroup();
                 }
                 else {
                     EditorGUILayout.HelpBox("OwnEntry not assigned.", MessageType.Error);
-                    EditorGUILayout.PropertyField(serializedObject.FindProperty("Entry"), true);
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("_entry"), true);
                 }
             }
             else {

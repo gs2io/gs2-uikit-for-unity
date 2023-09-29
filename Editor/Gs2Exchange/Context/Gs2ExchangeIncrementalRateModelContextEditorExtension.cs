@@ -43,8 +43,12 @@ namespace Gs2.Unity.UiKit.Gs2Exchange.Editor
             serializedObject.Update();
 
             if (original.IncrementalRateModel == null) {
-                if (original.GetComponentInParent<Gs2ExchangeIncrementalRateModelList>(true) != null) {
+                var list = original.GetComponentInParent<Gs2ExchangeIncrementalRateModelList>(true);
+                if (list != null) {
                     EditorGUILayout.HelpBox("IncrementalRateModel is auto assign from Gs2ExchangeIncrementalRateModelList.", MessageType.Info);
+                    EditorGUI.BeginDisabledGroup(true);
+                    EditorGUILayout.ObjectField("List", list, typeof(Gs2ExchangeIncrementalRateModelList), false);
+                    EditorGUI.EndDisabledGroup();
                 }
                 else {
                     EditorGUILayout.HelpBox("IncrementalRateModel not assigned.", MessageType.Error);

@@ -40,22 +40,19 @@ namespace Gs2.Unity.UiKit.Gs2Lottery
 	[AddComponentMenu("GS2 UIKit/Lottery/LotteryModel/View/Label/Gs2LotteryLotteryModelLabel")]
     public partial class Gs2LotteryLotteryModelLabel : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched && _fetcher.LotteryModel != null)
-            {
-                onUpdate?.Invoke(
-                    format.Replace(
-                        "{name}", $"{_fetcher?.LotteryModel?.Name}"
-                    ).Replace(
-                        "{metadata}", $"{_fetcher?.LotteryModel?.Metadata}"
-                    ).Replace(
-                        "{mode}", $"{_fetcher?.LotteryModel?.Mode}"
-                    ).Replace(
-                        "{prizeTableName}", $"{_fetcher?.LotteryModel?.PrizeTableName}"
-                    )
-                );
-            }
+            this.onUpdate?.Invoke(
+                this.format.Replace(
+                    "{name}", $"{this._fetcher?.LotteryModel?.Name}"
+                ).Replace(
+                    "{metadata}", $"{this._fetcher?.LotteryModel?.Metadata}"
+                ).Replace(
+                    "{mode}", $"{this._fetcher?.LotteryModel?.Mode}"
+                ).Replace(
+                    "{prizeTableName}", $"{this._fetcher?.LotteryModel?.PrizeTableName}"
+                )
+            );
         }
     }
 
@@ -69,23 +66,43 @@ namespace Gs2.Unity.UiKit.Gs2Lottery
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2LotteryLotteryModelFetcher>() ?? GetComponentInParent<Gs2LotteryLotteryModelFetcher>();
-
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2LotteryLotteryModelFetcher>() ?? GetComponentInParent<Gs2LotteryLotteryModelFetcher>();
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2LotteryLotteryModelFetcher.");
                 enabled = false;
             }
-
-            Update();
         }
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2LotteryLotteryModelFetcher>() ?? GetComponentInParent<Gs2LotteryLotteryModelFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2LotteryLotteryModelFetcher>() ?? GetComponentInParent<Gs2LotteryLotteryModelFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 
@@ -123,8 +140,8 @@ namespace Gs2.Unity.UiKit.Gs2Lottery
 
         public event UnityAction<string> OnUpdate
         {
-            add => onUpdate.AddListener(value);
-            remove => onUpdate.RemoveListener(value);
+            add => this.onUpdate.AddListener(value);
+            remove => this.onUpdate.RemoveListener(value);
         }
     }
 }

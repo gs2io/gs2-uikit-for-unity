@@ -16,11 +16,13 @@
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
 
+using System;
 using System.Collections.Generic;
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Mission.Fetcher;
 using UnityEngine;
 using System.Linq;
+using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2Mission
 {
@@ -31,35 +33,30 @@ namespace Gs2.Unity.UiKit.Gs2Mission
 	[AddComponentMenu("GS2 UIKit/Mission/Counter/View/Properties/Value/Gs2MissionCounterNotResetValueEnabler")]
     public partial class Gs2MissionOwnCounterNotResetValueEnabler : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched && _fetcher.Counter != null)
+            switch(this.expression)
             {
-                switch(expression)
-                {
-                    case Expression.In:
-                        target.SetActive(enableNotResetValues.Contains(this._fetcher.Counter?.Values?.FirstOrDefault(v => v.ResetType == "notReset")?.Value ?? 0));
-                        break;
-                    case Expression.NotIn:
-                        target.SetActive(!enableNotResetValues.Contains(this._fetcher.Counter?.Values?.FirstOrDefault(v => v.ResetType == "notReset")?.Value ?? 0));
-                        break;
-                    case Expression.Less:
-                        target.SetActive(enableNotResetValue > (this._fetcher.Counter?.Values?.FirstOrDefault(v => v.ResetType == "notReset")?.Value ?? 0));
-                        break;
-                    case Expression.LessEqual:
-                        target.SetActive(enableNotResetValue >= (this._fetcher.Counter?.Values?.FirstOrDefault(v => v.ResetType == "notReset")?.Value ?? 0));
-                        break;
-                    case Expression.Greater:
-                        target.SetActive(enableNotResetValue < (this._fetcher.Counter?.Values?.FirstOrDefault(v => v.ResetType == "notReset")?.Value ?? 0));
-                        break;
-                    case Expression.GreaterEqual:
-                        target.SetActive(enableNotResetValue <= (this._fetcher.Counter?.Values?.FirstOrDefault(v => v.ResetType == "notReset")?.Value ?? 0));
-                        break;
-                }
-            }
-            else
-            {
-                target.SetActive(false);
+                case Expression.In:
+                    this.target.SetActive(this.enableNotResetValues.Contains(this._fetcher.Counter?.Values?.FirstOrDefault(v => v.ResetType == "notReset")?.Value ?? 0));
+                    break;
+                case Expression.NotIn:
+                    this.target.SetActive(!this.enableNotResetValues.Contains(this._fetcher.Counter?.Values?.FirstOrDefault(v => v.ResetType == "notReset")?.Value ?? 0));
+                    break;
+                case Expression.Less:
+                    this.target.SetActive(this.enableNotResetValue > (this._fetcher.Counter?.Values?.FirstOrDefault(v => v.ResetType == "notReset")?.Value ?? 0));
+                    break;
+                case Expression.LessEqual:
+                    this.target.SetActive(this.enableNotResetValue >= (this._fetcher.Counter?.Values?.FirstOrDefault(v => v.ResetType == "notReset")?.Value ?? 0));
+                    break;
+                case Expression.Greater:
+                    this.target.SetActive(this.enableNotResetValue < (this._fetcher.Counter?.Values?.FirstOrDefault(v => v.ResetType == "notReset")?.Value ?? 0));
+                    break;
+                case Expression.GreaterEqual:
+                    this.target.SetActive(this.enableNotResetValue <= (this._fetcher.Counter?.Values?.FirstOrDefault(v => v.ResetType == "notReset")?.Value ?? 0));
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
         }
     }
@@ -74,11 +71,49 @@ namespace Gs2.Unity.UiKit.Gs2Mission
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2MissionOwnCounterFetcher>() ?? GetComponentInParent<Gs2MissionOwnCounterFetcher>();
-
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2MissionOwnCounterFetcher>() ?? GetComponentInParent<Gs2MissionOwnCounterFetcher>();
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MissionOwnCounterFetcher.");
                 enabled = false;
+            }
+            if (this.target == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: target is not set.");
+                enabled = false;
+            }
+        }
+        
+        public virtual bool HasError()
+        {
+            this._fetcher = GetComponent<Gs2MissionOwnCounterFetcher>() ?? GetComponentInParent<Gs2MissionOwnCounterFetcher>(true);
+            if (this._fetcher == null) {
+                return true;
+            }
+            if (this.target == null) {
+                return true;
+            }
+            return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
             }
         }
     }

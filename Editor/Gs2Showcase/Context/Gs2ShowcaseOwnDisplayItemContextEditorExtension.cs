@@ -47,6 +47,9 @@ namespace Gs2.Unity.UiKit.Gs2Showcase.Editor
             if (original.DisplayItem == null) {
                 if (original.transform.parent != null && original.transform.parent.GetComponent<Gs2ShowcaseOwnDisplayItemList>() != null) {
                     EditorGUILayout.HelpBox("DisplayItem is auto assign from Gs2ShowcaseDisplayItemList.", MessageType.Info);
+                    EditorGUI.BeginDisabledGroup(true);
+                    EditorGUILayout.ObjectField("List", original.transform.parent.GetComponent<Gs2ShowcaseOwnDisplayItemList>(), typeof(Gs2ShowcaseOwnDisplayItemList), false);
+                    EditorGUI.EndDisabledGroup();
                 }
                 else {
                     EditorGUILayout.HelpBox("DisplayItem not assigned.", MessageType.Error);
@@ -56,8 +59,13 @@ namespace Gs2.Unity.UiKit.Gs2Showcase.Editor
             else {
                 original.DisplayItem = EditorGUILayout.ObjectField("OwnDisplayItem", original.DisplayItem, typeof(OwnDisplayItem), false) as OwnDisplayItem;
                 EditorGUI.BeginDisabledGroup(true);
-                EditorGUI.indentLevel++;
-                EditorGUI.indentLevel--;
+                if (original.DisplayItem != null) {
+                    EditorGUI.indentLevel++;
+                    EditorGUILayout.TextField("NamespaceName", original.DisplayItem?.NamespaceName?.ToString());
+                    EditorGUILayout.TextField("ShowcaseName", original.DisplayItem?.ShowcaseName?.ToString());
+                    EditorGUILayout.TextField("DisplayItemId", original.DisplayItem?.DisplayItemId?.ToString());
+                    EditorGUI.indentLevel--;
+                }
                 EditorGUI.EndDisabledGroup();
             }
 

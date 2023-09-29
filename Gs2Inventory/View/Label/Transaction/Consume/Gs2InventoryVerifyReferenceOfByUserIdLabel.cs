@@ -42,35 +42,36 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Label
 	[AddComponentMenu("GS2 UIKit/Inventory/ReferenceOf/View/Label/Transaction/Gs2InventoryVerifyReferenceOfByUserIdLabel")]
     public partial class Gs2InventoryVerifyReferenceOfByUserIdLabel : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched && _fetcher.Request != null) {
-                {
-                    onUpdate?.Invoke(
-                        format.Replace(
-                            "{namespaceName}",
-                            $"{_fetcher.Request.NamespaceName}"
-                        ).Replace(
-                            "{inventoryName}",
-                            $"{_fetcher.Request.InventoryName}"
-                        ).Replace(
-                            "{userId}",
-                            $"{_fetcher.Request.UserId}"
-                        ).Replace(
-                            "{itemName}",
-                            $"{_fetcher.Request.ItemName}"
-                        ).Replace(
-                            "{itemSetName}",
-                            $"{_fetcher.Request.ItemSetName}"
-                        ).Replace(
-                            "{referenceOf}",
-                            $"{_fetcher.Request.ReferenceOf}"
-                        ).Replace(
-                            "{verifyType}",
-                            $"{_fetcher.Request.VerifyType}"
-                        )
-                    );
-                }
+            if ((!this._fetcher?.Fetched ?? false) || this._fetcher.Request == null) {
+                return;
+            }
+            {
+                this.onUpdate?.Invoke(
+                    this.format.Replace(
+                        "{namespaceName}",
+                        $"{this._fetcher.Request.NamespaceName}"
+                    ).Replace(
+                        "{inventoryName}",
+                        $"{this._fetcher.Request.InventoryName}"
+                    ).Replace(
+                        "{userId}",
+                        $"{this._fetcher.Request.UserId}"
+                    ).Replace(
+                        "{itemName}",
+                        $"{this._fetcher.Request.ItemName}"
+                    ).Replace(
+                        "{itemSetName}",
+                        $"{this._fetcher.Request.ItemSetName}"
+                    ).Replace(
+                        "{referenceOf}",
+                        $"{this._fetcher.Request.ReferenceOf}"
+                    ).Replace(
+                        "{verifyType}",
+                        $"{this._fetcher.Request.VerifyType}"
+                    )
+                );
             }
         }
     }
@@ -85,23 +86,42 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Label
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2InventoryVerifyReferenceOfByUserIdFetcher>() ?? GetComponentInParent<Gs2InventoryVerifyReferenceOfByUserIdFetcher>();
-
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2InventoryVerifyReferenceOfByUserIdFetcher>() ?? GetComponentInParent<Gs2InventoryVerifyReferenceOfByUserIdFetcher>();
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2InventoryVerifyReferenceOfByUserIdFetcher.");
                 enabled = false;
             }
-
-            Update();
         }
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2InventoryVerifyReferenceOfByUserIdFetcher>() ?? GetComponentInParent<Gs2InventoryVerifyReferenceOfByUserIdFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2InventoryVerifyReferenceOfByUserIdFetcher>() ?? GetComponentInParent<Gs2InventoryVerifyReferenceOfByUserIdFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 
@@ -139,8 +159,8 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Label
 
         public event UnityAction<string> OnUpdate
         {
-            add => onUpdate.AddListener(value);
-            remove => onUpdate.RemoveListener(value);
+            add => this.onUpdate.AddListener(value);
+            remove => this.onUpdate.RemoveListener(value);
         }
     }
 }

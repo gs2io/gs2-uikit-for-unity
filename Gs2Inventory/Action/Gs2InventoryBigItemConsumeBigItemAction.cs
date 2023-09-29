@@ -48,13 +48,16 @@ namespace Gs2.Unity.UiKit.Gs2Inventory
     {
         private IEnumerator Process()
         {
-            yield return new WaitUntil(() => this._clientHolder.Initialized);
-            yield return new WaitUntil(() => this._gameSessionHolder.Initialized);
+            var clientHolder = Gs2ClientHolder.Instance;
+            var gameSessionHolder = Gs2GameSessionHolder.Instance;
+
+            yield return new WaitUntil(() => clientHolder.Initialized);
+            yield return new WaitUntil(() => gameSessionHolder.Initialized);
             
-            var domain = this._clientHolder.Gs2.Inventory.Namespace(
+            var domain = clientHolder.Gs2.Inventory.Namespace(
                 this._context.BigItem.NamespaceName
             ).Me(
-                this._gameSessionHolder.GameSession
+                gameSessionHolder.GameSession
             ).BigInventory(
                 this._context.BigItem.InventoryName
             ).BigItem(
@@ -123,16 +126,11 @@ namespace Gs2.Unity.UiKit.Gs2Inventory
 
     public partial class Gs2InventoryBigItemConsumeBigItemAction
     {
-        private Gs2ClientHolder _clientHolder;
-        private Gs2GameSessionHolder _gameSessionHolder;
         private Gs2InventoryOwnBigItemContext _context;
 
         public void Awake()
         {
-            this._clientHolder = Gs2ClientHolder.Instance;
-            this._gameSessionHolder = Gs2GameSessionHolder.Instance;
             this._context = GetComponent<Gs2InventoryOwnBigItemContext>() ?? GetComponentInParent<Gs2InventoryOwnBigItemContext>();
-
             if (_context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2InventoryOwnBigItemContext.");
                 enabled = false;
@@ -167,8 +165,9 @@ namespace Gs2.Unity.UiKit.Gs2Inventory
         public string ConsumeCount;
 
         public void SetConsumeCount(string value) {
-            ConsumeCount = value;
-            this.onChangeConsumeCount.Invoke(ConsumeCount);
+            this.ConsumeCount = value;
+            this.onChangeConsumeCount.Invoke(this.ConsumeCount);
+            this.OnChange.Invoke();
         }
     }
 
@@ -205,6 +204,8 @@ namespace Gs2.Unity.UiKit.Gs2Inventory
             add => this.onConsumeBigItemComplete.AddListener(value);
             remove => this.onConsumeBigItemComplete.RemoveListener(value);
         }
+
+        public UnityEvent OnChange = new UnityEvent();
 
         [SerializeField]
         internal ErrorEvent onError = new ErrorEvent();

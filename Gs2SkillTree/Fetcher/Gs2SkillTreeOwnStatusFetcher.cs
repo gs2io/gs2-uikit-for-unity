@@ -73,6 +73,7 @@ namespace Gs2.Unity.UiKit.Gs2SkillTree.Fetcher
                 {
                     Status = item;
                     Fetched = true;
+                    this.OnFetched.Invoke();
                 }
             );
 
@@ -86,11 +87,10 @@ namespace Gs2.Unity.UiKit.Gs2SkillTree.Fetcher
                 else {
                     Status = future.Result;
                     Fetched = true;
+                    this.OnFetched.Invoke();
                     break;
                 }
             }
-
-            this.OnFetched.Invoke();
         }
 
         public void OnUpdateContext() {
@@ -130,8 +130,6 @@ namespace Gs2.Unity.UiKit.Gs2SkillTree.Fetcher
     {
         public Gs2SkillTreeOwnStatusContext Context { get; private set; }
 
-        public UnityEvent OnFetched = new UnityEvent();
-
         public void Awake()
         {
             Context = GetComponent<Gs2SkillTreeOwnStatusContext>() ?? GetComponentInParent<Gs2SkillTreeOwnStatusContext>();
@@ -159,6 +157,7 @@ namespace Gs2.Unity.UiKit.Gs2SkillTree.Fetcher
     {
         public Gs2.Unity.Gs2SkillTree.Model.EzStatus Status { get; protected set; }
         public bool Fetched { get; protected set; }
+        public UnityEvent OnFetched = new UnityEvent();
     }
 
     /// <summary>

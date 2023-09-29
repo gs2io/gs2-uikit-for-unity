@@ -43,8 +43,18 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Editor
             serializedObject.Update();
 
             if (original.PropertyForm == null) {
-                if (original.GetComponentInParent<Gs2FormationOwnPropertyFormList>(true) != null) {
-                    EditorGUILayout.HelpBox("OwnPropertyForm is auto assign from Gs2FormationOwnPropertyFormList.", MessageType.Info);
+                var list = original.GetComponentInParent<Gs2FormationOwnPropertyFormList>(true);
+                if (list != null) {
+                    EditorGUILayout.HelpBox("PropertyForm is auto assign from Gs2FormationOwnPropertyFormList.", MessageType.Info);
+                    EditorGUI.BeginDisabledGroup(true);
+                    EditorGUILayout.ObjectField("List", list, typeof(Gs2FormationOwnPropertyFormList), false);
+                    EditorGUI.EndDisabledGroup();
+                }
+                else if (original.GetComponentInParent<Gs2FormationConvertPropertyFormModelToOwnPropertyForm>(true) != null) {
+                    EditorGUILayout.HelpBox("PropertyForm is auto assign from Gs2FormationConvertPropertyFormModelToOwnPropertyForm.", MessageType.Info);
+                    EditorGUI.BeginDisabledGroup(true);
+                    EditorGUILayout.ObjectField("Converter", original.GetComponentInParent<Gs2FormationConvertPropertyFormModelToOwnPropertyForm>(true), typeof(Gs2FormationConvertPropertyFormModelToOwnPropertyForm), false);
+                    EditorGUI.EndDisabledGroup();
                 }
                 else {
                     EditorGUILayout.HelpBox("OwnPropertyForm not assigned.", MessageType.Error);

@@ -43,8 +43,12 @@ namespace Gs2.Unity.UiKit.Gs2MegaField.Editor
             serializedObject.Update();
 
             if (original.AreaModel == null) {
-                if (original.GetComponentInParent<Gs2MegaFieldAreaModelList>(true) != null) {
+                var list = original.GetComponentInParent<Gs2MegaFieldAreaModelList>(true);
+                if (list != null) {
                     EditorGUILayout.HelpBox("AreaModel is auto assign from Gs2MegaFieldAreaModelList.", MessageType.Info);
+                    EditorGUI.BeginDisabledGroup(true);
+                    EditorGUILayout.ObjectField("List", list, typeof(Gs2MegaFieldAreaModelList), false);
+                    EditorGUI.EndDisabledGroup();
                 }
                 else {
                     EditorGUILayout.HelpBox("AreaModel not assigned.", MessageType.Error);

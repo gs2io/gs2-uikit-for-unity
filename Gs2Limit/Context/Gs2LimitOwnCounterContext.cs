@@ -40,7 +40,7 @@ namespace Gs2.Unity.UiKit.Gs2Limit.Context
     {
         public void Start() {
             if (Counter == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Counter is not set in Gs2LimitOwnCounterContext.");
+                Debug.LogWarning($"{gameObject.GetFullPath()}: Counter is not set in Gs2LimitOwnCounterContext.");
             }
         }
         public virtual bool HasError() {
@@ -48,9 +48,7 @@ namespace Gs2.Unity.UiKit.Gs2Limit.Context
                 if (GetComponentInParent<Gs2LimitOwnCounterList>(true) != null) {
                     return false;
                 }
-                else {
-                    return true;
-                }
+                return true;
             }
             return false;
         }

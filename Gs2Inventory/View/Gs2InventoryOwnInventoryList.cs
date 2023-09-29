@@ -12,17 +12,25 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
- * deny overwrite
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
+// ReSharper disable RedundantNameQualifier
+// ReSharper disable RedundantAssignment
+// ReSharper disable NotAccessedVariable
+// ReSharper disable RedundantUsingDirective
+// ReSharper disable Unity.NoNullPropagation
+// ReSharper disable InconsistentNaming
+
+#pragma warning disable CS0472
 
 using System.Collections.Generic;
 using Gs2.Unity.Gs2Inventory.ScriptableObject;
+using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Inventory.Context;
 using Gs2.Unity.UiKit.Gs2Inventory.Fetcher;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2Inventory
 {
@@ -35,17 +43,19 @@ namespace Gs2.Unity.UiKit.Gs2Inventory
     {
         private List<Gs2InventoryOwnInventoryContext> _children;
 
-        public void Update() {
-            if (_fetcher.Fetched) {
-                for (var i = 0; i < this.maximumItems; i++) {
-                    if (i < this._fetcher.Inventories.Count) {
-                        _children[i].InventoryModel.inventoryName = this._fetcher.Inventories[i].InventoryName;
-                        _children[i].Inventory.inventoryName = this._fetcher.Inventories[i].InventoryName;
-                        _children[i].gameObject.SetActive(true);
-                    }
-                    else {
-                        _children[i].gameObject.SetActive(false);
-                    }
+        private void OnFetched() {
+            for (var i = 0; i < this._children.Count; i++) {
+                if (i < this._fetcher.Inventories.Count) {
+                    this._children[i].SetOwnInventory(
+                        OwnInventory.New(
+                            this._fetcher.Context.Namespace,
+                            this._fetcher.Inventories[i].InventoryName
+                        )
+                    );
+                    this._children[i].gameObject.SetActive(true);
+                }
+                else {
+                    this._children[i].gameObject.SetActive(false);
                 }
             }
         }
@@ -57,29 +67,77 @@ namespace Gs2.Unity.UiKit.Gs2Inventory
 
     public partial class Gs2InventoryOwnInventoryList
     {
-        private Gs2InventoryNamespaceContext _context;
         private Gs2InventoryOwnInventoryListFetcher _fetcher;
 
-        public void Awake()
-        {
-            _context = GetComponentInParent<Gs2InventoryNamespaceContext>();
-            _fetcher = GetComponentInParent<Gs2InventoryOwnInventoryListFetcher>();
-
-            _children = new List<Gs2InventoryOwnInventoryContext>();
+        private void Initialize() {
             for (var i = 0; i < this.maximumItems; i++) {
                 var node = Instantiate(this.prefab, transform);
                 node.InventoryModel = InventoryModel.New(
-                    _context.Namespace,
+                    this._fetcher.Context.Namespace,
                     ""
                 );
                 node.Inventory = OwnInventory.New(
-                    _context.Namespace,
+                    this._fetcher.Context.Namespace,
                     ""
                 );
                 node.gameObject.SetActive(false);
-                _children.Add(node);
+                this._children.Add(node);
             }
+        }
+
+        public void Awake()
+        {
+            if (this.prefab == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2InventoryOwnInventoryContext Prefab.");
+                enabled = false;
+                return;
+            }
+
+            this._fetcher = GetComponent<Gs2InventoryOwnInventoryListFetcher>() ?? GetComponentInParent<Gs2InventoryOwnInventoryListFetcher>();
+            if (this._fetcher == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2InventoryOwnInventoryListFetcher.");
+                enabled = false;
+            }
+
+            this._children = new List<Gs2InventoryOwnInventoryContext>();
             this.prefab.gameObject.SetActive(false);
+
+            Invoke(nameof(Initialize), 0);
+        }
+
+        public virtual bool HasError()
+        {
+            if (this.prefab == null) {
+                return true;
+            }
+            this._fetcher = GetComponent<Gs2InventoryOwnInventoryListFetcher>() ?? GetComponentInParent<Gs2InventoryOwnInventoryListFetcher>(true);
+            if (this._fetcher == null) {
+                return true;
+            }
+            return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 

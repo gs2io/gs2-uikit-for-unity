@@ -29,6 +29,7 @@ using System.Collections;
 using System.Text;
 using Gs2.Core.Exception;
 using Gs2.Unity.Core.Exception;
+using Gs2.Unity.Gs2Datastore.Domain.Model;
 using Gs2.Unity.Gs2Datastore.Model;
 using Gs2.Unity.Gs2Datastore.ScriptableObject;
 using Gs2.Unity.Util;
@@ -46,60 +47,49 @@ namespace Gs2.Unity.UiKit.Gs2Datastore.Fetcher
 	[AddComponentMenu("GS2 UIKit/Datastore/DataObject/Fetcher/Gs2DatastoreDataObjectFetcher")]
     public partial class Gs2DatastoreDataObjectFetcher : MonoBehaviour
     {
+        private EzDataObjectDomain _domain;
+        private ulong? _callbackId;
+
         private IEnumerator Fetch()
         {
             var retryWaitSecond = 1;
-            Gs2Exception e;
-            while (true)
-            {
-                if (_gameSessionHolder != null && _gameSessionHolder.Initialized &&
-                    _clientHolder != null && _clientHolder.Initialized &&
-                    Context != null && this.Context.DataObject != null)
+            var clientHolder = Gs2ClientHolder.Instance;
+            var gameSessionHolder = Gs2GameSessionHolder.Instance;
+
+            yield return new WaitUntil(() => clientHolder.Initialized);
+            yield return new WaitUntil(() => gameSessionHolder.Initialized);
+            yield return new WaitUntil(() => Context != null && this.Context.DataObject != null);
+
+            _domain = clientHolder.Gs2.Datastore.Namespace(
+                this.Context.DataObject.NamespaceName
+            ).User(
+                this.Context.DataObject.UserId
+            ).DataObject(
+                this.Context.DataObject.DataObjectName
+            );
+            this._callbackId = this._domain.Subscribe(
+                item =>
                 {
-                    
-                    var domain = this._clientHolder.Gs2.Datastore.Namespace(
-                        this.Context.DataObject.NamespaceName
-                    ).Me(
-                        this._gameSessionHolder.GameSession
-                    ).DataObject(
-                        this.Context.DataObject.DataObjectName
-                    );
-                    var future = domain.Model();
-                    yield return future;
-                    if (future.Error != null)
-                    {
-                        if (future.Error is BadRequestException || future.Error is NotFoundException)
-                        {
-                            onError.Invoke(e = future.Error, null);
-                        }
-                        else {
-                            onError.Invoke(new CanIgnoreException(future.Error), null);
-                        }
-                        yield return new WaitForSeconds(retryWaitSecond);
-                        retryWaitSecond *= 2;
-                    }
-                    else
-                    {
-                        retryWaitSecond = 1;
-                        DataObject = future.Result;
-                        Fetched = true;
-                    }
+                    DataObject = item;
+                    Fetched = true;
+                    this.OnFetched.Invoke();
+                }
+            );
+
+            while (true) {
+                var future = this._domain.Model();
+                yield return future;
+                if (future.Error != null) {
+                    yield return new WaitForSeconds(retryWaitSecond);
+                    retryWaitSecond *= 2;
                 }
                 else {
-                    yield return new WaitForSeconds(0.1f);
+                    DataObject = future.Result;
+                    Fetched = true;
+                    this.OnFetched.Invoke();
+                    break;
                 }
             }
-            // ReSharper disable once IteratorNeverReturns
-        }
-
-        public void OnEnable()
-        {
-            StartCoroutine(nameof(Fetch));
-        }
-
-        public void OnDisable()
-        {
-            StopCoroutine(nameof(Fetch));
         }
     }
 
@@ -109,16 +99,11 @@ namespace Gs2.Unity.UiKit.Gs2Datastore.Fetcher
 
     public partial class Gs2DatastoreDataObjectFetcher
     {
-        protected Gs2ClientHolder _clientHolder;
-        protected Gs2GameSessionHolder _gameSessionHolder;
         public Gs2DatastoreDataObjectContext Context { get; private set; }
 
         public void Awake()
         {
-            _clientHolder = Gs2ClientHolder.Instance;
-            _gameSessionHolder = Gs2GameSessionHolder.Instance;
             Context = GetComponent<Gs2DatastoreDataObjectContext>() ?? GetComponentInParent<Gs2DatastoreDataObjectContext>();
-
             if (Context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2DatastoreDataObjectContext.");
                 enabled = false;
@@ -133,6 +118,34 @@ namespace Gs2.Unity.UiKit.Gs2Datastore.Fetcher
             }
             return false;
         }
+
+        public void OnUpdateContext() {
+            OnDisable();
+            Awake();
+            OnEnable();
+        }
+
+        public void OnEnable()
+        {
+            StartCoroutine(nameof(Fetch));
+            Context.OnUpdate.AddListener(OnUpdateContext);
+        }
+
+        public void OnDisable()
+        {
+            Context.OnUpdate.RemoveListener(OnUpdateContext);
+
+            if (this._domain == null) {
+                return;
+            }
+            if (!this._callbackId.HasValue) {
+                return;
+            }
+            this._domain.Unsubscribe(
+                this._callbackId.Value
+            );
+            this._callbackId = null;
+        }
     }
 
     /// <summary>
@@ -143,6 +156,7 @@ namespace Gs2.Unity.UiKit.Gs2Datastore.Fetcher
     {
         public EzDataObject DataObject { get; protected set; }
         public bool Fetched { get; protected set; }
+        public UnityEvent OnFetched = new UnityEvent();
     }
 
     /// <summary>

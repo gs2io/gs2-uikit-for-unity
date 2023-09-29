@@ -43,8 +43,18 @@ namespace Gs2.Unity.UiKit.Gs2Stamina.Editor
             serializedObject.Update();
 
             if (original.Stamina == null) {
-                if (original.GetComponentInParent<Gs2StaminaOwnStaminaList>(true) != null) {
-                    EditorGUILayout.HelpBox("OwnStamina is auto assign from Gs2StaminaOwnStaminaList.", MessageType.Info);
+                var list = original.GetComponentInParent<Gs2StaminaOwnStaminaList>(true);
+                if (list != null) {
+                    EditorGUILayout.HelpBox("Stamina is auto assign from Gs2StaminaOwnStaminaList.", MessageType.Info);
+                    EditorGUI.BeginDisabledGroup(true);
+                    EditorGUILayout.ObjectField("List", list, typeof(Gs2StaminaOwnStaminaList), false);
+                    EditorGUI.EndDisabledGroup();
+                }
+                else if (original.GetComponentInParent<Gs2StaminaConvertStaminaModelToOwnStamina>(true) != null) {
+                    EditorGUILayout.HelpBox("Stamina is auto assign from Gs2StaminaConvertStaminaModelToOwnStamina.", MessageType.Info);
+                    EditorGUI.BeginDisabledGroup(true);
+                    EditorGUILayout.ObjectField("Converter", original.GetComponentInParent<Gs2StaminaConvertStaminaModelToOwnStamina>(true), typeof(Gs2StaminaConvertStaminaModelToOwnStamina), false);
+                    EditorGUI.EndDisabledGroup();
                 }
                 else {
                     EditorGUILayout.HelpBox("OwnStamina not assigned.", MessageType.Error);

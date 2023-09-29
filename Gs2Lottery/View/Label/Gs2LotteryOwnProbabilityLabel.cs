@@ -45,28 +45,25 @@ namespace Gs2.Unity.UiKit.Gs2Lottery
 	[AddComponentMenu("GS2 UIKit/Lottery/Probability/View/Label/Gs2LotteryProbabilityLabel")]
     public partial class Gs2LotteryOwnProbabilityLabel : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched && _fetcher.Probability != null)
-            {
-                onUpdate?.Invoke(
-                    format.Replace(
-                        "{prizeId}", $"{_fetcher?.Probability?.Prize.PrizeId}"
-                    ).Replace(
-                        "{rate:0-1:f2}", $"{_fetcher?.Probability?.Rate:f2}"
-                    ).Replace(
-                        "{rate:0-1:f3}", $"{_fetcher?.Probability?.Rate:f3}"
-                    ).Replace(
-                        "{rate:0-1:f4}", $"{_fetcher?.Probability?.Rate:f4}"
-                    ).Replace(
-                        "{rate:0-100:f2}", $"{_fetcher?.Probability?.Rate*100:f2}"
-                    ).Replace(
-                        "{rate:0-100:f3}", $"{_fetcher?.Probability?.Rate*100:f3}"
-                    ).Replace(
-                        "{rate:0-100:f4}", $"{_fetcher?.Probability?.Rate*100:f4}"
-                    )
-                );
-            }
+            this.onUpdate?.Invoke(
+                this.format.Replace(
+                    "{prizeId}", $"{this._fetcher?.Probability?.Prize.PrizeId}"
+                ).Replace(
+                    "{rate:0-1:f2}", $"{this._fetcher?.Probability?.Rate:f2}"
+                ).Replace(
+                    "{rate:0-1:f3}", $"{this._fetcher?.Probability?.Rate:f3}"
+                ).Replace(
+                    "{rate:0-1:f4}", $"{this._fetcher?.Probability?.Rate:f4}"
+                ).Replace(
+                    "{rate:0-100:f2}", $"{this._fetcher?.Probability?.Rate*100:f2}"
+                ).Replace(
+                    "{rate:0-100:f3}", $"{this._fetcher?.Probability?.Rate*100:f3}"
+                ).Replace(
+                    "{rate:0-100:f4}", $"{this._fetcher?.Probability?.Rate*100:f4}"
+                )
+            );
         }
     }
 
@@ -80,23 +77,43 @@ namespace Gs2.Unity.UiKit.Gs2Lottery
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2LotteryOwnProbabilityFetcher>() ?? GetComponentInParent<Gs2LotteryOwnProbabilityFetcher>();
-
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2LotteryOwnProbabilityFetcher>() ?? GetComponentInParent<Gs2LotteryOwnProbabilityFetcher>();
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2LotteryOwnProbabilityFetcher.");
                 enabled = false;
             }
-
-            Update();
         }
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2LotteryOwnProbabilityFetcher>() ?? GetComponentInParent<Gs2LotteryOwnProbabilityFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2LotteryOwnProbabilityFetcher>() ?? GetComponentInParent<Gs2LotteryOwnProbabilityFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 

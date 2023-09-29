@@ -12,8 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
- * deny overwrite
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
@@ -29,6 +27,7 @@
 using Gs2.Unity.Gs2Dictionary.ScriptableObject;
 using Gs2.Unity.UiKit.Core;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2Dictionary.Context
 {
@@ -40,29 +39,17 @@ namespace Gs2.Unity.UiKit.Gs2Dictionary.Context
     public partial class Gs2DictionaryOwnEntryContext : Gs2DictionaryEntryModelContext
     {
         public new void Start() {
-            var context = GetComponent<Gs2DictionaryEntryModelContext>() ?? GetComponentInParent<Gs2DictionaryEntryModelContext>(true);
-            if (context != null && this.Entry == null) {
-                this.Entry = OwnEntry.New(
-                    context.EntryModel.Namespace,
-                    context.EntryModel.EntryName
-                );
-            }
-            if (Entry == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Entry is not set in Gs2DictionaryOwnEntryContext.");
-            }
         }
-        
         public override bool HasError() {
-            if (!base.HasError()) {
-                return false;
-            }
-            if (Entry == null) {
+            var hasError = base.HasError();
+            if (Entry == null || hasError) {
                 if (GetComponentInParent<Gs2DictionaryOwnEntryList>(true) != null) {
                     return false;
                 }
-                else {
-                    return true;
+                if (GetComponentInParent<Gs2DictionaryConvertEntryModelToOwnEntry>(true) != null) {
+                    return false;
                 }
+                return true;
             }
             return false;
         }
@@ -92,7 +79,13 @@ namespace Gs2.Unity.UiKit.Gs2Dictionary.Context
 
     public partial class Gs2DictionaryOwnEntryContext
     {
-        public OwnEntry Entry;
+        [SerializeField]
+        private OwnEntry _entry;
+        public OwnEntry Entry
+        {
+            get => _entry;
+            set => SetOwnEntry(value);
+        }
 
         public void SetOwnEntry(OwnEntry entry) {
             this.EntryModel = EntryModel.New(
@@ -101,7 +94,9 @@ namespace Gs2.Unity.UiKit.Gs2Dictionary.Context
                 ),
                 entry.EntryName
             );
-            this.Entry = entry;
+            this._entry = entry;
+
+            this.OnUpdate.Invoke();
         }
     }
 

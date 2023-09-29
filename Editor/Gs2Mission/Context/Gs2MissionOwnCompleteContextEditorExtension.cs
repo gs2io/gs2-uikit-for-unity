@@ -43,8 +43,12 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Editor
             serializedObject.Update();
 
             if (original.Complete == null) {
-                if (original.GetComponentInParent<Gs2MissionOwnCompleteList>(true) != null) {
-                    EditorGUILayout.HelpBox("OwnComplete is auto assign from Gs2MissionOwnCompleteList.", MessageType.Info);
+                var list = original.GetComponentInParent<Gs2MissionOwnCompleteList>(true);
+                if (list != null) {
+                    EditorGUILayout.HelpBox("Complete is auto assign from Gs2MissionOwnCompleteList.", MessageType.Info);
+                    EditorGUI.BeginDisabledGroup(true);
+                    EditorGUILayout.ObjectField("List", list, typeof(Gs2MissionOwnCompleteList), false);
+                    EditorGUI.EndDisabledGroup();
                 }
                 else {
                     EditorGUILayout.HelpBox("OwnComplete not assigned.", MessageType.Error);

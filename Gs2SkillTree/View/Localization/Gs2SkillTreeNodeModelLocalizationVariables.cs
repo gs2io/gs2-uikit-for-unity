@@ -29,6 +29,7 @@
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2SkillTree.Fetcher;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.Localization.Components;
 using UnityEngine.Localization.SmartFormat.PersistentVariables;
 
@@ -41,21 +42,18 @@ namespace Gs2.Unity.UiKit.Gs2SkillTree.Localization
     [AddComponentMenu("GS2 UIKit/SkillTree/NodeModel/View/Localization/Gs2SkillTreeNodeModelLocalizationVariables")]
     public partial class Gs2SkillTreeNodeModelLocalizationVariables : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched) {
-                target.StringReference["name"] = new StringVariable {
-                    Value = _fetcher?.NodeModel?.Name ?? "",
-                };
-                target.StringReference["metadata"] = new StringVariable {
-                    Value = _fetcher?.NodeModel?.Metadata ?? "",
-                };
-                target.StringReference["restrainReturnRate"] = new FloatVariable {
-                    Value = _fetcher?.NodeModel?.RestrainReturnRate ?? 0,
-                };
-                enabled = false;
-                target.enabled = true;
-            }
+            this.target.StringReference["name"] = new StringVariable {
+                Value = _fetcher?.NodeModel?.Name ?? "",
+            };
+            this.target.StringReference["metadata"] = new StringVariable {
+                Value = _fetcher?.NodeModel?.Metadata ?? "",
+            };
+            this.target.StringReference["restrainReturnRate"] = new FloatVariable {
+                Value = _fetcher?.NodeModel?.RestrainReturnRate ?? 0,
+            };
+            this.target.enabled = true;
         }
     }
 
@@ -68,10 +66,10 @@ namespace Gs2.Unity.UiKit.Gs2SkillTree.Localization
         private Gs2SkillTreeNodeModelFetcher _fetcher;
 
         public void Awake() {
-            target.enabled = false;
-            _fetcher = GetComponent<Gs2SkillTreeNodeModelFetcher>() ?? GetComponentInParent<Gs2SkillTreeNodeModelFetcher>();
+            this.target.enabled = false;
+            this._fetcher = GetComponent<Gs2SkillTreeNodeModelFetcher>() ?? GetComponentInParent<Gs2SkillTreeNodeModelFetcher>();
 
-            if (_fetcher == null) {
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2SkillTreeNodeModelFetcher.");
                 enabled = false;
             }
@@ -79,11 +77,34 @@ namespace Gs2.Unity.UiKit.Gs2SkillTree.Localization
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2SkillTreeNodeModelFetcher>() ?? GetComponentInParent<Gs2SkillTreeNodeModelFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2SkillTreeNodeModelFetcher>() ?? GetComponentInParent<Gs2SkillTreeNodeModelFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 

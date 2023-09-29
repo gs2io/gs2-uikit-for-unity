@@ -40,7 +40,7 @@ namespace Gs2.Unity.UiKit.Gs2JobQueue.Context
     {
         public void Start() {
             if (JobResult == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: JobResult is not set in Gs2JobQueueOwnJobResultContext.");
+                Debug.LogWarning($"{gameObject.GetFullPath()}: JobResult is not set in Gs2JobQueueOwnJobResultContext.");
             }
         }
         public virtual bool HasError() {

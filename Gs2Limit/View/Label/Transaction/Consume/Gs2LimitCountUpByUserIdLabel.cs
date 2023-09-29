@@ -44,81 +44,80 @@ namespace Gs2.Unity.UiKit.Gs2Limit.Label
 	[AddComponentMenu("GS2 UIKit/Limit/Counter/View/Label/Transaction/Gs2LimitCountUpByUserIdLabel")]
     public partial class Gs2LimitCountUpByUserIdLabel : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched && _fetcher.Request != null &&
-                    _userDataFetcher != null && _userDataFetcher.Fetched && _userDataFetcher.Counter != null) {
-                {
-                    onUpdate?.Invoke(
-                        format.Replace(
-                            "{namespaceName}",
-                            $"{_fetcher.Request.NamespaceName}"
-                        ).Replace(
-                            "{limitName}",
-                            $"{_fetcher.Request.LimitName}"
-                        ).Replace(
-                            "{counterName}",
-                            $"{_fetcher.Request.CounterName}"
-                        ).Replace(
-                            "{userId}",
-                            $"{_fetcher.Request.UserId}"
-                        ).Replace(
-                            "{countUpValue}",
-                            $"{_fetcher.Request.CountUpValue}"
-                        ).Replace(
-                            "{maxValue}",
-                            $"{_fetcher.Request.MaxValue}"
-                        ).Replace(
-                            "{userData:counterId}",
-                            $"{_userDataFetcher.Counter.CounterId}"
-                        ).Replace(
-                            "{userData:limitName}",
-                            $"{_userDataFetcher.Counter.LimitName}"
-                        ).Replace(
-                            "{userData:name}",
-                            $"{_userDataFetcher.Counter.Name}"
-                        ).Replace(
-                            "{userData:count}",
-                            $"{_userDataFetcher.Counter.Count}"
-                        ).Replace(
-                            "{userData:count:changed}",
-                            $"{_userDataFetcher.Counter.Count + _fetcher.Request.CountUpValue}"
-                        ).Replace(
-                            "{userData:count:remain}",
-                            $"{_fetcher.Request.MaxValue - _userDataFetcher.Counter.Count}"
-                        ).Replace(
-                            "{userData:createdAt}",
-                            $"{_userDataFetcher.Counter.CreatedAt}"
-                        ).Replace(
-                            "{userData:updatedAt}",
-                            $"{_userDataFetcher.Counter.UpdatedAt}"
-                        )
-                    );
-                }
-            } else if (_fetcher.Fetched && _fetcher.Request != null) {
-                {
-                    onUpdate?.Invoke(
-                        format.Replace(
-                            "{namespaceName}",
-                            $"{_fetcher.Request.NamespaceName}"
-                        ).Replace(
-                            "{limitName}",
-                            $"{_fetcher.Request.LimitName}"
-                        ).Replace(
-                            "{counterName}",
-                            $"{_fetcher.Request.CounterName}"
-                        ).Replace(
-                            "{userId}",
-                            $"{_fetcher.Request.UserId}"
-                        ).Replace(
-                            "{countUpValue}",
-                            $"{_fetcher.Request.CountUpValue}"
-                        ).Replace(
-                            "{maxValue}",
-                            $"{_fetcher.Request.MaxValue}"
-                        )
-                    );
-                }
+            if (!this._fetcher.Fetched || this._fetcher.Request == null) {
+                return;
+            }
+            if (this._userDataFetcher != null && this._userDataFetcher.Fetched)
+            {
+                this.onUpdate?.Invoke(
+                    this.format.Replace(
+                        "{namespaceName}",
+                        $"{this._fetcher.Request.NamespaceName}"
+                    ).Replace(
+                        "{limitName}",
+                        $"{this._fetcher.Request.LimitName}"
+                    ).Replace(
+                        "{counterName}",
+                        $"{this._fetcher.Request.CounterName}"
+                    ).Replace(
+                        "{userId}",
+                        $"{this._fetcher.Request.UserId}"
+                    ).Replace(
+                        "{countUpValue}",
+                        $"{this._fetcher.Request.CountUpValue}"
+                    ).Replace(
+                        "{maxValue}",
+                        $"{this._fetcher.Request.MaxValue}"
+                    ).Replace(
+                        "{userData:counterId}",
+                        $"{this._userDataFetcher.Counter.CounterId}"
+                    ).Replace(
+                        "{userData:limitName}",
+                        $"{this._userDataFetcher.Counter.LimitName}"
+                    ).Replace(
+                        "{userData:name}",
+                        $"{this._userDataFetcher.Counter.Name}"
+                    ).Replace(
+                        "{userData:count}",
+                        $"{this._userDataFetcher.Counter.Count}"
+                    ).Replace(
+                        "{userData:count:changed}",
+                        $"{this._userDataFetcher.Counter.Count + this._fetcher.Request.CountUpValue}"
+                    ).Replace(
+                        "{userData:count:remain}",
+                        $"{this._fetcher.Request.MaxValue - this._userDataFetcher.Counter.Count}"
+                    ).Replace(
+                        "{userData:createdAt}",
+                        $"{this._userDataFetcher.Counter.CreatedAt}"
+                    ).Replace(
+                        "{userData:updatedAt}",
+                        $"{this._userDataFetcher.Counter.UpdatedAt}"
+                    )
+                );
+            } else {
+                this.onUpdate?.Invoke(
+                    this.format.Replace(
+                        "{namespaceName}",
+                        $"{this._fetcher.Request.NamespaceName}"
+                    ).Replace(
+                        "{limitName}",
+                        $"{this._fetcher.Request.LimitName}"
+                    ).Replace(
+                        "{counterName}",
+                        $"{this._fetcher.Request.CounterName}"
+                    ).Replace(
+                        "{userId}",
+                        $"{this._fetcher.Request.UserId}"
+                    ).Replace(
+                        "{countUpValue}",
+                        $"{this._fetcher.Request.CountUpValue}"
+                    ).Replace(
+                        "{maxValue}",
+                        $"{this._fetcher.Request.MaxValue}"
+                    )
+                );
             }
         }
     }
@@ -134,25 +133,48 @@ namespace Gs2.Unity.UiKit.Gs2Limit.Label
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2LimitCountUpByUserIdFetcher>() ?? GetComponentInParent<Gs2LimitCountUpByUserIdFetcher>();
-            _userDataFetcher = GetComponent<Gs2LimitOwnCounterFetcher>() ?? GetComponentInParent<Gs2LimitOwnCounterFetcher>();
-
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2LimitCountUpByUserIdFetcher>() ?? GetComponentInParent<Gs2LimitCountUpByUserIdFetcher>();
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2LimitCountUpByUserIdFetcher.");
                 enabled = false;
             }
-
-            Update();
+            this._userDataFetcher = GetComponent<Gs2LimitOwnCounterFetcher>() ?? GetComponentInParent<Gs2LimitOwnCounterFetcher>();
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2LimitCountUpByUserIdFetcher>() ?? GetComponentInParent<Gs2LimitCountUpByUserIdFetcher>(true);
-            _userDataFetcher = GetComponent<Gs2LimitOwnCounterFetcher>() ?? GetComponentInParent<Gs2LimitOwnCounterFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2LimitCountUpByUserIdFetcher>() ?? GetComponentInParent<Gs2LimitCountUpByUserIdFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+            this._userDataFetcher.OnFetched.AddListener(this._onFetched);
+            if (this._userDataFetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._userDataFetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 
@@ -190,8 +212,8 @@ namespace Gs2.Unity.UiKit.Gs2Limit.Label
 
         public event UnityAction<string> OnUpdate
         {
-            add => onUpdate.AddListener(value);
-            remove => onUpdate.RemoveListener(value);
+            add => this.onUpdate.AddListener(value);
+            remove => this.onUpdate.RemoveListener(value);
         }
     }
 }

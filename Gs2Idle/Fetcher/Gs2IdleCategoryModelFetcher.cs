@@ -72,6 +72,7 @@ namespace Gs2.Unity.UiKit.Gs2Idle.Fetcher
                 {
                     CategoryModel = item;
                     Fetched = true;
+                    this.OnFetched.Invoke();
                 }
             );
 
@@ -85,11 +86,10 @@ namespace Gs2.Unity.UiKit.Gs2Idle.Fetcher
                 else {
                     CategoryModel = future.Result;
                     Fetched = true;
+                    this.OnFetched.Invoke();
                     break;
                 }
             }
-
-            this.OnFetched.Invoke();
         }
 
         public void OnUpdateContext() {
@@ -129,8 +129,6 @@ namespace Gs2.Unity.UiKit.Gs2Idle.Fetcher
     {
         public Gs2IdleCategoryModelContext Context { get; private set; }
 
-        public UnityEvent OnFetched = new UnityEvent();
-
         public void Awake()
         {
             Context = GetComponent<Gs2IdleCategoryModelContext>() ?? GetComponentInParent<Gs2IdleCategoryModelContext>();
@@ -158,6 +156,7 @@ namespace Gs2.Unity.UiKit.Gs2Idle.Fetcher
     {
         public Gs2.Unity.Gs2Idle.Model.EzCategoryModel CategoryModel { get; protected set; }
         public bool Fetched { get; protected set; }
+        public UnityEvent OnFetched = new UnityEvent();
     }
 
     /// <summary>

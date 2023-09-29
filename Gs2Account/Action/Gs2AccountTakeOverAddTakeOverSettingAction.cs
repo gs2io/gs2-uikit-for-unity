@@ -18,6 +18,14 @@
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable UnusedAutoPropertyAccessor.Local
 // ReSharper disable CheckNamespace
+// ReSharper disable RedundantNameQualifier
+// ReSharper disable RedundantAssignment
+// ReSharper disable NotAccessedVariable
+// ReSharper disable RedundantUsingDirective
+// ReSharper disable Unity.NoNullPropagation
+// ReSharper disable InconsistentNaming
+
+#pragma warning disable CS0472
 
 using System;
 using System.Collections;
@@ -26,10 +34,11 @@ using System.Linq;
 using Gs2.Core.Exception;
 using Gs2.Unity.Gs2Account.Model;
 using Gs2.Unity.Util;
+using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Account.Context;
 using UnityEngine;
 using UnityEngine.Events;
-using Account = Gs2.Unity.Gs2Account.ScriptableObject.Account;
+using Account = Gs2.Unity.Gs2Account.ScriptableObject.OwnAccount;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -41,13 +50,16 @@ namespace Gs2.Unity.UiKit.Gs2Account
     {
         private IEnumerator Process()
         {
-            yield return new WaitUntil(() => this._clientHolder.Initialized);
-            yield return new WaitUntil(() => this._gameSessionHolder.Initialized);
+            var clientHolder = Gs2ClientHolder.Instance;
+            var gameSessionHolder = Gs2GameSessionHolder.Instance;
+
+            yield return new WaitUntil(() => clientHolder.Initialized);
+            yield return new WaitUntil(() => gameSessionHolder.Initialized);
             
-            var domain = this._clientHolder.Gs2.Account.Namespace(
+            var domain = clientHolder.Gs2.Account.Namespace(
                 this._context.Account.NamespaceName
             ).Me(
-                this._gameSessionHolder.GameSession
+                gameSessionHolder.GameSession
             ).TakeOver(
                 this.Type
             );
@@ -115,15 +127,24 @@ namespace Gs2.Unity.UiKit.Gs2Account
 
     public partial class Gs2AccountTakeOverAddTakeOverSettingAction
     {
-        private Gs2ClientHolder _clientHolder;
-        private Gs2GameSessionHolder _gameSessionHolder;
         private Gs2AccountOwnAccountContext _context;
 
         public void Awake()
         {
-            this._clientHolder = Gs2ClientHolder.Instance;
-            this._gameSessionHolder = Gs2GameSessionHolder.Instance;
-            this._context = GetComponentInParent<Gs2AccountOwnAccountContext>();
+            this._context = GetComponent<Gs2AccountOwnAccountContext>() ?? GetComponentInParent<Gs2AccountOwnAccountContext>();
+            if (_context == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2AccountOwnAccountContext.");
+                enabled = false;
+            }
+        }
+
+        public virtual bool HasError()
+        {
+            this._context = GetComponent<Gs2AccountOwnAccountContext>() ?? GetComponentInParent<Gs2AccountOwnAccountContext>(true);
+            if (_context == null) {
+                return true;
+            }
+            return false;
         }
     }
 
@@ -141,20 +162,39 @@ namespace Gs2.Unity.UiKit.Gs2Account
     /// </summary>
     public partial class Gs2AccountTakeOverAddTakeOverSettingAction
     {
+        public bool WaitAsyncProcessComplete;
         public int Type;
         public string UserIdentifier;
         public string Password;
 
         public void SetType(int value) {
-            Type = value;
+            this.Type = value;
+            this.onChangeType.Invoke(this.Type);
+            this.OnChange.Invoke();
+        }
+
+        public void DecreaseType() {
+            this.Type -= 1;
+            this.onChangeType.Invoke(this.Type);
+            this.OnChange.Invoke();
+        }
+
+        public void IncreaseType() {
+            this.Type += 1;
+            this.onChangeType.Invoke(this.Type);
+            this.OnChange.Invoke();
         }
 
         public void SetUserIdentifier(string value) {
-            UserIdentifier = value;
+            this.UserIdentifier = value;
+            this.onChangeUserIdentifier.Invoke(this.UserIdentifier);
+            this.OnChange.Invoke();
         }
 
         public void SetPassword(string value) {
-            Password = value;
+            this.Password = value;
+            this.onChangePassword.Invoke(this.Password);
+            this.OnChange.Invoke();
         }
     }
 
@@ -163,6 +203,49 @@ namespace Gs2.Unity.UiKit.Gs2Account
     /// </summary>
     public partial class Gs2AccountTakeOverAddTakeOverSettingAction
     {
+
+        [Serializable]
+        private class ChangeTypeEvent : UnityEvent<int>
+        {
+
+        }
+
+        [SerializeField]
+        private ChangeTypeEvent onChangeType = new ChangeTypeEvent();
+        public event UnityAction<int> OnChangeType
+        {
+            add => this.onChangeType.AddListener(value);
+            remove => this.onChangeType.RemoveListener(value);
+        }
+
+        [Serializable]
+        private class ChangeUserIdentifierEvent : UnityEvent<string>
+        {
+
+        }
+
+        [SerializeField]
+        private ChangeUserIdentifierEvent onChangeUserIdentifier = new ChangeUserIdentifierEvent();
+        public event UnityAction<string> OnChangeUserIdentifier
+        {
+            add => this.onChangeUserIdentifier.AddListener(value);
+            remove => this.onChangeUserIdentifier.RemoveListener(value);
+        }
+
+        [Serializable]
+        private class ChangePasswordEvent : UnityEvent<string>
+        {
+
+        }
+
+        [SerializeField]
+        private ChangePasswordEvent onChangePassword = new ChangePasswordEvent();
+        public event UnityAction<string> OnChangePassword
+        {
+            add => this.onChangePassword.AddListener(value);
+            remove => this.onChangePassword.RemoveListener(value);
+        }
+
         [Serializable]
         private class AddTakeOverSettingCompleteEvent : UnityEvent<EzTakeOver>
         {
@@ -176,6 +259,8 @@ namespace Gs2.Unity.UiKit.Gs2Account
             add => this.onAddTakeOverSettingComplete.AddListener(value);
             remove => this.onAddTakeOverSettingComplete.RemoveListener(value);
         }
+
+        public UnityEvent OnChange = new UnityEvent();
 
         [SerializeField]
         internal ErrorEvent onError = new ErrorEvent();

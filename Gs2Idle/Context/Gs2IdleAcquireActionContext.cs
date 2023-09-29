@@ -40,7 +40,7 @@ namespace Gs2.Unity.UiKit.Gs2Idle.Context
     {
         public void Start() {
             if (AcquireAction == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: AcquireAction is not set in Gs2IdleAcquireActionContext.");
+                Debug.LogWarning($"{gameObject.GetFullPath()}: AcquireAction is not set in Gs2IdleAcquireActionContext.");
             }
         }
 

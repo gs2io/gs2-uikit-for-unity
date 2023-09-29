@@ -29,6 +29,7 @@
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Money.Fetcher;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.Localization.Components;
 using UnityEngine.Localization.SmartFormat.PersistentVariables;
 
@@ -41,24 +42,21 @@ namespace Gs2.Unity.UiKit.Gs2Money.Localization
     [AddComponentMenu("GS2 UIKit/Money/Wallet/View/Localization/Gs2MoneyWalletLocalizationVariables")]
     public partial class Gs2MoneyWalletLocalizationVariables : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched) {
-                target.StringReference["slot"] = new IntVariable {
-                    Value = _fetcher?.Wallet?.Slot ?? 0,
-                };
-                target.StringReference["paid"] = new IntVariable {
-                    Value = _fetcher?.Wallet?.Paid ?? 0,
-                };
-                target.StringReference["free"] = new IntVariable {
-                    Value = _fetcher?.Wallet?.Free ?? 0,
-                };
-                target.StringReference["updatedAt"] = new LongVariable {
-                    Value = _fetcher?.Wallet?.UpdatedAt ?? 0,
-                };
-                enabled = false;
-                target.enabled = true;
-            }
+            this.target.StringReference["slot"] = new IntVariable {
+                Value = _fetcher?.Wallet?.Slot ?? 0,
+            };
+            this.target.StringReference["paid"] = new IntVariable {
+                Value = _fetcher?.Wallet?.Paid ?? 0,
+            };
+            this.target.StringReference["free"] = new IntVariable {
+                Value = _fetcher?.Wallet?.Free ?? 0,
+            };
+            this.target.StringReference["updatedAt"] = new LongVariable {
+                Value = _fetcher?.Wallet?.UpdatedAt ?? 0,
+            };
+            this.target.enabled = true;
         }
     }
 
@@ -71,10 +69,10 @@ namespace Gs2.Unity.UiKit.Gs2Money.Localization
         private Gs2MoneyOwnWalletFetcher _fetcher;
 
         public void Awake() {
-            target.enabled = false;
-            _fetcher = GetComponent<Gs2MoneyOwnWalletFetcher>() ?? GetComponentInParent<Gs2MoneyOwnWalletFetcher>();
+            this.target.enabled = false;
+            this._fetcher = GetComponent<Gs2MoneyOwnWalletFetcher>() ?? GetComponentInParent<Gs2MoneyOwnWalletFetcher>();
 
-            if (_fetcher == null) {
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MoneyWalletFetcher.");
                 enabled = false;
             }
@@ -82,11 +80,34 @@ namespace Gs2.Unity.UiKit.Gs2Money.Localization
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2MoneyOwnWalletFetcher>() ?? GetComponentInParent<Gs2MoneyOwnWalletFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2MoneyOwnWalletFetcher>() ?? GetComponentInParent<Gs2MoneyOwnWalletFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 

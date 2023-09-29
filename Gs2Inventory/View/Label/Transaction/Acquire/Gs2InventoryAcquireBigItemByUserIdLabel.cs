@@ -42,68 +42,60 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Label
 	[AddComponentMenu("GS2 UIKit/Inventory/BigItem/View/Label/Transaction/Gs2InventoryAcquireBigItemByUserIdLabel")]
     public partial class Gs2InventoryAcquireBigItemByUserIdLabel : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched && _fetcher.Request != null &&
-                    _userDataFetcher != null && _userDataFetcher.Fetched && _userDataFetcher.BigItem != null) {
-                {
-                    onUpdate?.Invoke(
-                        format.Replace(
-                            "{namespaceName}",
-                            $"{_fetcher.Request.NamespaceName}"
-                        ).Replace(
-                            "{inventoryName}",
-                            $"{_fetcher.Request.InventoryName}"
-                        ).Replace(
-                            "{userId}",
-                            $"{_fetcher.Request.UserId}"
-                        ).Replace(
-                            "{itemName}",
-                            $"{_fetcher.Request.ItemName}"
-                        ).Replace(
-                            "{acquireCount}",
-                            $"{_fetcher.Request.AcquireCount}"
-                        ).Replace(
-                            "{userData:itemId}",
-                            $"{_userDataFetcher.BigItem.ItemId}"
-                        ).Replace(
-                            "{userData:itemName}",
-                            $"{_userDataFetcher.BigItem.ItemName}"
-                        ).Replace(
-                            "{userData:count}",
-                            $"{_userDataFetcher.BigItem.Count}"
-                        ).Replace(
-                            "{userData:count:changed}",
-                            $"{_userDataFetcher.BigItem.Count + _fetcher.Request.AcquireCount}"
-                        )
-                    );
-                }
-            } else if (_fetcher.Fetched && _fetcher.Request != null) {
-                {
-                    onUpdate?.Invoke(
-                        format.Replace(
-                            "{namespaceName}",
-                            $"{_fetcher.Request.NamespaceName}"
-                        ).Replace(
-                            "{inventoryName}",
-                            $"{_fetcher.Request.InventoryName}"
-                        ).Replace(
-                            "{userId}",
-                            $"{_fetcher.Request.UserId}"
-                        ).Replace(
-                            "{itemName}",
-                            $"{_fetcher.Request.ItemName}"
-                        ).Replace(
-                            "{acquireCount}",
-                            $"{_fetcher.Request.AcquireCount}"
-                        )
-                    );
-                }
+            if ((!this._fetcher?.Fetched ?? false) || this._fetcher.Request == null) {
+                return;
+            }
+            if (this._userDataFetcher?.Fetched ?? false)
+            {
+                this.onUpdate?.Invoke(
+                    this.format.Replace(
+                        "{namespaceName}",
+                        $"{this._fetcher.Request.NamespaceName}"
+                    ).Replace(
+                        "{inventoryName}",
+                        $"{this._fetcher.Request.InventoryName}"
+                    ).Replace(
+                        "{userId}",
+                        $"{this._fetcher.Request.UserId}"
+                    ).Replace(
+                        "{itemName}",
+                        $"{this._fetcher.Request.ItemName}"
+                    ).Replace(
+                        "{acquireCount}",
+                        $"{this._fetcher.Request.AcquireCount}"
+                    ).Replace(
+                        "{userData:itemId}",
+                        $"{this._userDataFetcher.BigItem.ItemId}"
+                    ).Replace(
+                        "{userData:itemName}",
+                        $"{this._userDataFetcher.BigItem.ItemName}"
+                    ).Replace(
+                        "{userData:count}",
+                        $"{this._userDataFetcher.BigItem.Count}"
+                    ).Replace(
+                        "{userData:count:changed}",
+                        $"{this._userDataFetcher.BigItem.Count + this._fetcher.Request.AcquireCount}"
+                    )
+                );
             } else {
-                onUpdate?.Invoke(
-                    format.Replace(
-                        "{count}",
-                        "0"
+                this.onUpdate?.Invoke(
+                    this.format.Replace(
+                        "{namespaceName}",
+                        $"{this._fetcher.Request.NamespaceName}"
+                    ).Replace(
+                        "{inventoryName}",
+                        $"{this._fetcher.Request.InventoryName}"
+                    ).Replace(
+                        "{userId}",
+                        $"{this._fetcher.Request.UserId}"
+                    ).Replace(
+                        "{itemName}",
+                        $"{this._fetcher.Request.ItemName}"
+                    ).Replace(
+                        "{acquireCount}",
+                        $"{this._fetcher.Request.AcquireCount}"
                     )
                 );
             }
@@ -121,25 +113,52 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Label
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2InventoryAcquireBigItemByUserIdFetcher>() ?? GetComponentInParent<Gs2InventoryAcquireBigItemByUserIdFetcher>();
-            _userDataFetcher = GetComponent<Gs2InventoryOwnBigItemFetcher>() ?? GetComponentInParent<Gs2InventoryOwnBigItemFetcher>();
-
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2InventoryAcquireBigItemByUserIdFetcher>() ?? GetComponentInParent<Gs2InventoryAcquireBigItemByUserIdFetcher>();
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2InventoryAcquireBigItemByUserIdFetcher.");
                 enabled = false;
             }
-
-            Update();
+            this._userDataFetcher = GetComponent<Gs2InventoryOwnBigItemFetcher>() ?? GetComponentInParent<Gs2InventoryOwnBigItemFetcher>();
         }
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2InventoryAcquireBigItemByUserIdFetcher>() ?? GetComponentInParent<Gs2InventoryAcquireBigItemByUserIdFetcher>(true);
-            _userDataFetcher = GetComponent<Gs2InventoryOwnBigItemFetcher>() ?? GetComponentInParent<Gs2InventoryOwnBigItemFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2InventoryAcquireBigItemByUserIdFetcher>() ?? GetComponentInParent<Gs2InventoryAcquireBigItemByUserIdFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+            if (this._userDataFetcher != null) {
+                this._userDataFetcher.OnFetched.AddListener(this._onFetched);
+                if (this._userDataFetcher.Fetched) {
+                    OnFetched();
+                }
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                if (this._userDataFetcher != null) {
+                    this._userDataFetcher.OnFetched.RemoveListener(this._onFetched);
+                }
+                this._onFetched = null;
+            }
         }
     }
 
@@ -177,8 +196,8 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Label
 
         public event UnityAction<string> OnUpdate
         {
-            add => onUpdate.AddListener(value);
-            remove => onUpdate.RemoveListener(value);
+            add => this.onUpdate.AddListener(value);
+            remove => this.onUpdate.RemoveListener(value);
         }
     }
 }

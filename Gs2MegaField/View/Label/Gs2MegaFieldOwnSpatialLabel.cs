@@ -40,24 +40,21 @@ namespace Gs2.Unity.UiKit.Gs2MegaField
 	[AddComponentMenu("GS2 UIKit/MegaField/Spatial/View/Label/Gs2MegaFieldOwnSpatialLabel")]
     public partial class Gs2MegaFieldOwnSpatialLabel : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched && _fetcher.Spatial != null)
-            {
-                onUpdate?.Invoke(
-                    format.Replace(
-                        "{userId}", $"{_fetcher?.Spatial?.UserId}"
-                    ).Replace(
-                        "{areaModelName}", $"{_fetcher?.Spatial?.AreaModelName}"
-                    ).Replace(
-                        "{layerModelName}", $"{_fetcher?.Spatial?.LayerModelName}"
-                    ).Replace(
-                        "{position}", $"{_fetcher?.Spatial?.Position}"
-                    ).Replace(
-                        "{vector}", $"{_fetcher?.Spatial?.Vector}"
-                    )
-                );
-            }
+            this.onUpdate?.Invoke(
+                this.format.Replace(
+                    "{userId}", $"{this._fetcher?.Spatial?.UserId}"
+                ).Replace(
+                    "{areaModelName}", $"{this._fetcher?.Spatial?.AreaModelName}"
+                ).Replace(
+                    "{layerModelName}", $"{this._fetcher?.Spatial?.LayerModelName}"
+                ).Replace(
+                    "{position}", $"{this._fetcher?.Spatial?.Position}"
+                ).Replace(
+                    "{vector}", $"{this._fetcher?.Spatial?.Vector}"
+                )
+            );
         }
     }
 
@@ -71,23 +68,43 @@ namespace Gs2.Unity.UiKit.Gs2MegaField
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2MegaFieldSpatialFetcher>() ?? GetComponentInParent<Gs2MegaFieldSpatialFetcher>();
-
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2MegaFieldSpatialFetcher>() ?? GetComponentInParent<Gs2MegaFieldSpatialFetcher>();
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MegaFieldSpatialFetcher.");
                 enabled = false;
             }
-
-            Update();
         }
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2MegaFieldSpatialFetcher>() ?? GetComponentInParent<Gs2MegaFieldSpatialFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2MegaFieldSpatialFetcher>() ?? GetComponentInParent<Gs2MegaFieldSpatialFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 
@@ -125,8 +142,8 @@ namespace Gs2.Unity.UiKit.Gs2MegaField
 
         public event UnityAction<string> OnUpdate
         {
-            add => onUpdate.AddListener(value);
-            remove => onUpdate.RemoveListener(value);
+            add => this.onUpdate.AddListener(value);
+            remove => this.onUpdate.RemoveListener(value);
         }
     }
 }

@@ -43,8 +43,12 @@ namespace Gs2.Unity.UiKit.Gs2Account.Editor
             serializedObject.Update();
 
             if (original.TakeOver == null) {
-                if (original.GetComponentInParent<Gs2AccountOwnTakeOverList>(true) != null) {
-                    EditorGUILayout.HelpBox("OwnTakeOver is auto assign from Gs2AccountOwnTakeOverList.", MessageType.Info);
+                var list = original.GetComponentInParent<Gs2AccountOwnTakeOverList>(true);
+                if (list != null) {
+                    EditorGUILayout.HelpBox("TakeOver is auto assign from Gs2AccountOwnTakeOverList.", MessageType.Info);
+                    EditorGUI.BeginDisabledGroup(true);
+                    EditorGUILayout.ObjectField("List", list, typeof(Gs2AccountOwnTakeOverList), false);
+                    EditorGUI.EndDisabledGroup();
                 }
                 else {
                     EditorGUILayout.HelpBox("OwnTakeOver not assigned.", MessageType.Error);

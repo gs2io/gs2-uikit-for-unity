@@ -40,16 +40,13 @@ namespace Gs2.Unity.UiKit.Gs2AdReward
 	[AddComponentMenu("GS2 UIKit/AdReward/Point/View/Label/Gs2AdRewardOwnPointLabel")]
     public partial class Gs2AdRewardOwnPointLabel : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched && _fetcher.Point != null)
-            {
-                onUpdate?.Invoke(
-                    format.Replace(
-                        "{point}", $"{_fetcher?.Point?.Point}"
-                    )
-                );
-            }
+            this.onUpdate?.Invoke(
+                this.format.Replace(
+                    "{point}", $"{this._fetcher?.Point?.Point}"
+                )
+            );
         }
     }
 
@@ -63,23 +60,43 @@ namespace Gs2.Unity.UiKit.Gs2AdReward
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2AdRewardOwnPointFetcher>() ?? GetComponentInParent<Gs2AdRewardOwnPointFetcher>();
-
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2AdRewardOwnPointFetcher>() ?? GetComponentInParent<Gs2AdRewardOwnPointFetcher>();
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2AdRewardOwnPointFetcher.");
                 enabled = false;
             }
-
-            Update();
         }
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2AdRewardOwnPointFetcher>() ?? GetComponentInParent<Gs2AdRewardOwnPointFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2AdRewardOwnPointFetcher>() ?? GetComponentInParent<Gs2AdRewardOwnPointFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 
@@ -117,8 +134,8 @@ namespace Gs2.Unity.UiKit.Gs2AdReward
 
         public event UnityAction<string> OnUpdate
         {
-            add => onUpdate.AddListener(value);
-            remove => onUpdate.RemoveListener(value);
+            add => this.onUpdate.AddListener(value);
+            remove => this.onUpdate.RemoveListener(value);
         }
     }
 }

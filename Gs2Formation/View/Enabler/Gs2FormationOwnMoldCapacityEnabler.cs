@@ -24,10 +24,12 @@
 
 #pragma warning disable CS0472
 
+using System;
 using System.Collections.Generic;
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Formation.Fetcher;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2Formation
 {
@@ -38,35 +40,30 @@ namespace Gs2.Unity.UiKit.Gs2Formation
 	[AddComponentMenu("GS2 UIKit/Formation/Mold/View/Enabler/Properties/Capacity/Gs2FormationOwnMoldCapacityEnabler")]
     public partial class Gs2FormationOwnMoldCapacityEnabler : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched && _fetcher.Mold != null)
+            switch(this.expression)
             {
-                switch(expression)
-                {
-                    case Expression.In:
-                        target.SetActive(enableCapacities.Contains(_fetcher.Mold.Capacity));
-                        break;
-                    case Expression.NotIn:
-                        target.SetActive(!enableCapacities.Contains(_fetcher.Mold.Capacity));
-                        break;
-                    case Expression.Less:
-                        target.SetActive(enableCapacity > _fetcher.Mold.Capacity);
-                        break;
-                    case Expression.LessEqual:
-                        target.SetActive(enableCapacity >= _fetcher.Mold.Capacity);
-                        break;
-                    case Expression.Greater:
-                        target.SetActive(enableCapacity < _fetcher.Mold.Capacity);
-                        break;
-                    case Expression.GreaterEqual:
-                        target.SetActive(enableCapacity <= _fetcher.Mold.Capacity);
-                        break;
-                }
-            }
-            else
-            {
-                target.SetActive(false);
+                case Expression.In:
+                    this.target.SetActive(this.enableCapacities.Contains(this._fetcher.Mold.Capacity));
+                    break;
+                case Expression.NotIn:
+                    this.target.SetActive(!this.enableCapacities.Contains(this._fetcher.Mold.Capacity));
+                    break;
+                case Expression.Less:
+                    this.target.SetActive(this.enableCapacity > this._fetcher.Mold.Capacity);
+                    break;
+                case Expression.LessEqual:
+                    this.target.SetActive(this.enableCapacity >= this._fetcher.Mold.Capacity);
+                    break;
+                case Expression.Greater:
+                    this.target.SetActive(this.enableCapacity < this._fetcher.Mold.Capacity);
+                    break;
+                case Expression.GreaterEqual:
+                    this.target.SetActive(this.enableCapacity <= this._fetcher.Mold.Capacity);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
         }
     }
@@ -81,13 +78,12 @@ namespace Gs2.Unity.UiKit.Gs2Formation
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2FormationOwnMoldFetcher>() ?? GetComponentInParent<Gs2FormationOwnMoldFetcher>();
-
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2FormationOwnMoldFetcher>() ?? GetComponentInParent<Gs2FormationOwnMoldFetcher>();
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2FormationOwnMoldFetcher.");
                 enabled = false;
             }
-            if (target == null) {
+            if (this.target == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: target is not set.");
                 enabled = false;
             }
@@ -95,14 +91,37 @@ namespace Gs2.Unity.UiKit.Gs2Formation
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2FormationOwnMoldFetcher>() ?? GetComponentInParent<Gs2FormationOwnMoldFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2FormationOwnMoldFetcher>() ?? GetComponentInParent<Gs2FormationOwnMoldFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
-            if (target == null) {
+            if (this.target == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 

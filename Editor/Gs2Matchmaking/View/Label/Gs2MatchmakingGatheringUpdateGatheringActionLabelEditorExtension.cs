@@ -37,6 +37,14 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking.Editor
 
             if (original == null) return;
 
+            if (original.action == null) {
+                EditorGUILayout.HelpBox("Gs2MatchmakingGatheringUpdateGatheringAction not found.", MessageType.Error);
+                if (GUILayout.Button("Add Context")) {
+                    original.gameObject.AddComponent<Gs2MatchmakingGatheringUpdateGatheringAction>();
+                }
+                return;
+            }
+
             serializedObject.Update();
             EditorGUILayout.PropertyField(serializedObject.FindProperty("action"), true);
             original.format = EditorGUILayout.TextField("Format", original.format);

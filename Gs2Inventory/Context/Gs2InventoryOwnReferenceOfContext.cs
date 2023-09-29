@@ -40,7 +40,7 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Context
     {
         public void Start() {
             if (ReferenceOf == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: ReferenceOf is not set in Gs2InventoryOwnReferenceOfContext.");
+                Debug.LogWarning($"{gameObject.GetFullPath()}: ReferenceOf is not set in Gs2InventoryOwnReferenceOfContext.");
             }
         }
         public virtual bool HasError() {

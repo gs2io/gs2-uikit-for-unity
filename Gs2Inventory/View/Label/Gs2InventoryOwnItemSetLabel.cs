@@ -40,49 +40,46 @@ namespace Gs2.Unity.UiKit.Gs2Inventory
 	[AddComponentMenu("GS2 UIKit/Inventory/ItemSet/View/Label/Gs2InventoryOwnItemSetLabel")]
     public partial class Gs2InventoryOwnItemSetLabel : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched && _fetcher.ItemSet != null)
-            {
-                var expiresAt = _fetcher.ItemSet[index].ExpiresAt == null ? DateTime.Now : UnixTime.FromUnixTime(_fetcher.ItemSet[index].ExpiresAt).ToLocalTime();
-                onUpdate?.Invoke(
-                    format.Replace(
-                        "{itemSetId}", $"{_fetcher?.ItemSet?[index].ItemSetId}"
-                    ).Replace(
-                        "{name}", $"{_fetcher?.ItemSet?[index].Name}"
-                    ).Replace(
-                        "{inventoryName}", $"{_fetcher?.ItemSet?[index].InventoryName}"
-                    ).Replace(
-                        "{itemName}", $"{_fetcher?.ItemSet?[index].ItemName}"
-                    ).Replace(
-                        "{count}", $"{_fetcher?.ItemSet?[index].Count}"
-                    ).Replace(
-                        "{sortValue}", $"{_fetcher?.ItemSet?[index].SortValue}"
-                    ).Replace(
-                        "{expiresAt:yyyy}", expiresAt.ToString("yyyy")
-                    ).Replace(
-                        "{expiresAt:yy}", expiresAt.ToString("yy")
-                    ).Replace(
-                        "{expiresAt:MM}", expiresAt.ToString("MM")
-                    ).Replace(
-                        "{expiresAt:MMM}", expiresAt.ToString("MMM")
-                    ).Replace(
-                        "{expiresAt:dd}", expiresAt.ToString("dd")
-                    ).Replace(
-                        "{expiresAt:hh}", expiresAt.ToString("hh")
-                    ).Replace(
-                        "{expiresAt:HH}", expiresAt.ToString("HH")
-                    ).Replace(
-                        "{expiresAt:tt}", expiresAt.ToString("tt")
-                    ).Replace(
-                        "{expiresAt:mm}", expiresAt.ToString("mm")
-                    ).Replace(
-                        "{expiresAt:ss}", expiresAt.ToString("ss")
-                    ).Replace(
-                        "{referenceOf}", $"{_fetcher?.ItemSet?[index].ReferenceOf}"
-                    )
-                );
-            }
+            var expiresAt = this._fetcher.ItemSet[index].ExpiresAt == null ? DateTime.Now : UnixTime.FromUnixTime(_fetcher.ItemSet[index].ExpiresAt).ToLocalTime();
+            this.onUpdate?.Invoke(
+                this.format.Replace(
+                    "{itemSetId}", $"{this._fetcher?.ItemSet?[index].ItemSetId}"
+                ).Replace(
+                    "{name}", $"{this._fetcher?.ItemSet?[index].Name}"
+                ).Replace(
+                    "{inventoryName}", $"{this._fetcher?.ItemSet?[index].InventoryName}"
+                ).Replace(
+                    "{itemName}", $"{this._fetcher?.ItemSet?[index].ItemName}"
+                ).Replace(
+                    "{count}", $"{this._fetcher?.ItemSet?[index].Count}"
+                ).Replace(
+                    "{sortValue}", $"{this._fetcher?.ItemSet?[index].SortValue}"
+                ).Replace(
+                    "{expiresAt:yyyy}", expiresAt.ToString("yyyy")
+                ).Replace(
+                    "{expiresAt:yy}", expiresAt.ToString("yy")
+                ).Replace(
+                    "{expiresAt:MM}", expiresAt.ToString("MM")
+                ).Replace(
+                    "{expiresAt:MMM}", expiresAt.ToString("MMM")
+                ).Replace(
+                    "{expiresAt:dd}", expiresAt.ToString("dd")
+                ).Replace(
+                    "{expiresAt:hh}", expiresAt.ToString("hh")
+                ).Replace(
+                    "{expiresAt:HH}", expiresAt.ToString("HH")
+                ).Replace(
+                    "{expiresAt:tt}", expiresAt.ToString("tt")
+                ).Replace(
+                    "{expiresAt:mm}", expiresAt.ToString("mm")
+                ).Replace(
+                    "{expiresAt:ss}", expiresAt.ToString("ss")
+                ).Replace(
+                    "{referenceOf}", $"{this._fetcher?.ItemSet?[index].ReferenceOf}"
+                )
+            );
         }
     }
 
@@ -96,23 +93,43 @@ namespace Gs2.Unity.UiKit.Gs2Inventory
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2InventoryOwnItemSetFetcher>() ?? GetComponentInParent<Gs2InventoryOwnItemSetFetcher>();
-
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2InventoryOwnItemSetFetcher>() ?? GetComponentInParent<Gs2InventoryOwnItemSetFetcher>();
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2InventoryOwnItemSetFetcher.");
                 enabled = false;
             }
-
-            Update();
         }
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2InventoryOwnItemSetFetcher>() ?? GetComponentInParent<Gs2InventoryOwnItemSetFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2InventoryOwnItemSetFetcher>() ?? GetComponentInParent<Gs2InventoryOwnItemSetFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 
@@ -152,8 +169,8 @@ namespace Gs2.Unity.UiKit.Gs2Inventory
 
         public event UnityAction<string> OnUpdate
         {
-            add => onUpdate.AddListener(value);
-            remove => onUpdate.RemoveListener(value);
+            add => this.onUpdate.AddListener(value);
+            remove => this.onUpdate.RemoveListener(value);
         }
     }
 }

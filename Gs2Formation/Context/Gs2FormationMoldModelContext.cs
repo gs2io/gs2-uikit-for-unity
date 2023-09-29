@@ -40,7 +40,7 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Context
     {
         public void Start() {
             if (MoldModel == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: MoldModel is not set in Gs2FormationMoldModelContext.");
+                Debug.LogWarning($"{gameObject.GetFullPath()}: MoldModel is not set in Gs2FormationMoldModelContext.");
             }
         }
 
@@ -49,9 +49,7 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Context
                 if (GetComponentInParent<Gs2FormationMoldModelList>(true) != null) {
                     return false;
                 }
-                else {
-                    return true;
-                }
+                return true;
             }
             return false;
         }

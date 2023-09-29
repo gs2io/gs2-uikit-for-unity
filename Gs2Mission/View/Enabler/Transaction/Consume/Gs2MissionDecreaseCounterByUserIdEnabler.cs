@@ -44,7 +44,7 @@ namespace Gs2.Unity.UiKit.Gs2Mission
 	[AddComponentMenu("GS2 UIKit/Mission/Counter/View/Enabler/Transaction/Gs2MissionDecreaseCounterByUserIdEnabler")]
     public partial class Gs2MissionDecreaseCounterByUserIdEnabler : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
             if (this._fetcher.ConsumeActions().Count(v => v.Action == "Gs2Mission:DecreaseCounterByUserId") == 0) {
                 target.SetActive(this.notIncludeConsumeActions);
@@ -65,29 +65,49 @@ namespace Gs2.Unity.UiKit.Gs2Mission
 
         public void Awake()
         {
-            _fetcher = GetComponent<IConsumeActionsFetcher>() ?? GetComponentInParent<IConsumeActionsFetcher>();
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<IConsumeActionsFetcher>() ?? GetComponentInParent<IConsumeActionsFetcher>();
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the IConsumeActionsFetcher.");
                 enabled = false;
             }
-            if (target == null) {
+            if (this.target == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: target is not set.");
                 enabled = false;
             }
-
-            Update();
         }
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<IConsumeActionsFetcher>() ?? GetComponentInParent<IConsumeActionsFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<IConsumeActionsFetcher>() ?? GetComponentInParent<IConsumeActionsFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
-            if (target == null) {
+            if (this.target == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetchedEvent().AddListener(this._onFetched);
+            if (this._fetcher.IsFetched()) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetchedEvent().RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 

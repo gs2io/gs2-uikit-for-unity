@@ -18,6 +18,14 @@
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable UnusedAutoPropertyAccessor.Local
 // ReSharper disable CheckNamespace
+// ReSharper disable RedundantNameQualifier
+// ReSharper disable RedundantAssignment
+// ReSharper disable NotAccessedVariable
+// ReSharper disable RedundantUsingDirective
+// ReSharper disable Unity.NoNullPropagation
+// ReSharper disable InconsistentNaming
+
+#pragma warning disable CS0472
 
 using System;
 using System.Collections;
@@ -26,9 +34,11 @@ using System.Linq;
 using Gs2.Core.Exception;
 using Gs2.Unity.Gs2Friend.Model;
 using Gs2.Unity.Util;
+using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Friend.Context;
 using UnityEngine;
 using UnityEngine.Events;
+using ReceiveFriendRequest = Gs2.Unity.Gs2Friend.ScriptableObject.OwnReceiveFriendRequest;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -40,13 +50,16 @@ namespace Gs2.Unity.UiKit.Gs2Friend
     {
         private IEnumerator Process()
         {
-            yield return new WaitUntil(() => this._clientHolder.Initialized);
-            yield return new WaitUntil(() => this._gameSessionHolder.Initialized);
+            var clientHolder = Gs2ClientHolder.Instance;
+            var gameSessionHolder = Gs2GameSessionHolder.Instance;
+
+            yield return new WaitUntil(() => clientHolder.Initialized);
+            yield return new WaitUntil(() => gameSessionHolder.Initialized);
             
-            var domain = this._clientHolder.Gs2.Friend.Namespace(
+            var domain = clientHolder.Gs2.Friend.Namespace(
                 this._context.FriendUser.NamespaceName
             ).Me(
-                this._gameSessionHolder.GameSession
+                gameSessionHolder.GameSession
             ).ReceiveFriendRequest(
                 this._context.FriendUser.TargetUserId
             );
@@ -112,15 +125,24 @@ namespace Gs2.Unity.UiKit.Gs2Friend
 
     public partial class Gs2FriendReceiveFriendRequestRejectAction
     {
-        private Gs2ClientHolder _clientHolder;
-        private Gs2GameSessionHolder _gameSessionHolder;
         private Gs2FriendOwnFriendUserContext _context;
 
         public void Awake()
         {
-            this._clientHolder = Gs2ClientHolder.Instance;
-            this._gameSessionHolder = Gs2GameSessionHolder.Instance;
-            this._context = GetComponentInParent<Gs2FriendOwnFriendUserContext>();
+            this._context = GetComponent<Gs2FriendOwnFriendUserContext>() ?? GetComponentInParent<Gs2FriendOwnFriendUserContext>();
+            if (_context == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2FriendOwnFriendUserContext.");
+                enabled = false;
+            }
+        }
+
+        public virtual bool HasError()
+        {
+            this._context = GetComponent<Gs2FriendOwnFriendUserContext>() ?? GetComponentInParent<Gs2FriendOwnFriendUserContext>(true);
+            if (_context == null) {
+                return true;
+            }
+            return false;
         }
     }
 
@@ -138,6 +160,7 @@ namespace Gs2.Unity.UiKit.Gs2Friend
     /// </summary>
     public partial class Gs2FriendReceiveFriendRequestRejectAction
     {
+        
     }
 
     /// <summary>
@@ -145,6 +168,7 @@ namespace Gs2.Unity.UiKit.Gs2Friend
     /// </summary>
     public partial class Gs2FriendReceiveFriendRequestRejectAction
     {
+
         [Serializable]
         private class RejectCompleteEvent : UnityEvent<EzFriendRequest>
         {
@@ -158,6 +182,8 @@ namespace Gs2.Unity.UiKit.Gs2Friend
             add => this.onRejectComplete.AddListener(value);
             remove => this.onRejectComplete.RemoveListener(value);
         }
+
+        public UnityEvent OnChange = new UnityEvent();
 
         [SerializeField]
         internal ErrorEvent onError = new ErrorEvent();

@@ -43,8 +43,12 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Editor
             serializedObject.Update();
 
             if (original.FollowUser == null) {
-                if (original.GetComponentInParent<Gs2FriendOwnFollowUserList>(true) != null) {
-                    EditorGUILayout.HelpBox("OwnFollowUser is auto assign from Gs2FriendOwnFollowUserList.", MessageType.Info);
+                var list = original.GetComponentInParent<Gs2FriendOwnFollowUserList>(true);
+                if (list != null) {
+                    EditorGUILayout.HelpBox("FollowUser is auto assign from Gs2FriendOwnFollowUserList.", MessageType.Info);
+                    EditorGUI.BeginDisabledGroup(true);
+                    EditorGUILayout.ObjectField("List", list, typeof(Gs2FriendOwnFollowUserList), false);
+                    EditorGUI.EndDisabledGroup();
                 }
                 else {
                     EditorGUILayout.HelpBox("OwnFollowUser not assigned.", MessageType.Error);

@@ -40,15 +40,38 @@ namespace Gs2.Unity.UiKit.Gs2Showcase
 	[AddComponentMenu("GS2 UIKit/Showcase/RandomDisplayItem/View/Label/Gs2ShowcaseRandomDisplayItemRandomShowcaseBuyActionLabel")]
     public partial class Gs2ShowcaseRandomDisplayItemRandomShowcaseBuyActionLabel : MonoBehaviour
     {
-        public void Update()
+        private void OnChange()
         {
-            onUpdate?.Invoke(
-                format.Replace(
-                    "{quantity}", $"{action?.Quantity}"
+            this.onUpdate?.Invoke(
+                this.format.Replace(
+                    "{quantity}", $"{this.action?.Quantity}"
                 ).Replace(
-                    "{config}", $"{action?.Config}"
+                    "{config}", $"{this.action?.Config}"
                 )
             );
+        }
+
+        public void Awake() {
+            if (this.action == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2AccountAccountAuthenticationAction.");
+                enabled = false;
+            }
+        }
+
+        public virtual bool HasError()
+        {
+            if (this.action == null) {
+                return true;
+            }
+            return false;
+        }
+
+        public void OnEnable() {
+            this.action.OnChange.AddListener(OnChange);
+        }
+
+        public void OnDisable() {
+            this.action.OnChange.RemoveListener(OnChange);
         }
     }
 

@@ -40,28 +40,25 @@ namespace Gs2.Unity.UiKit.Gs2Limit
 	[AddComponentMenu("GS2 UIKit/Limit/LimitModel/View/Label/Gs2LimitLimitModelLabel")]
     public partial class Gs2LimitLimitModelLabel : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched && _fetcher.LimitModel != null)
-            {
-                onUpdate?.Invoke(
-                    format.Replace(
-                        "{limitModelId}", $"{_fetcher?.LimitModel?.LimitModelId}"
-                    ).Replace(
-                        "{name}", $"{_fetcher?.LimitModel?.Name}"
-                    ).Replace(
-                        "{metadata}", $"{_fetcher?.LimitModel?.Metadata}"
-                    ).Replace(
-                        "{resetType}", $"{_fetcher?.LimitModel?.ResetType}"
-                    ).Replace(
-                        "{resetDayOfMonth}", $"{_fetcher?.LimitModel?.ResetDayOfMonth}"
-                    ).Replace(
-                        "{resetDayOfWeek}", $"{_fetcher?.LimitModel?.ResetDayOfWeek}"
-                    ).Replace(
-                        "{resetHour}", $"{_fetcher?.LimitModel?.ResetHour}"
-                    )
-                );
-            }
+            this.onUpdate?.Invoke(
+                this.format.Replace(
+                    "{limitModelId}", $"{this._fetcher?.LimitModel?.LimitModelId}"
+                ).Replace(
+                    "{name}", $"{this._fetcher?.LimitModel?.Name}"
+                ).Replace(
+                    "{metadata}", $"{this._fetcher?.LimitModel?.Metadata}"
+                ).Replace(
+                    "{resetType}", $"{this._fetcher?.LimitModel?.ResetType}"
+                ).Replace(
+                    "{resetDayOfMonth}", $"{this._fetcher?.LimitModel?.ResetDayOfMonth}"
+                ).Replace(
+                    "{resetDayOfWeek}", $"{this._fetcher?.LimitModel?.ResetDayOfWeek}"
+                ).Replace(
+                    "{resetHour}", $"{this._fetcher?.LimitModel?.ResetHour}"
+                )
+            );
         }
     }
 
@@ -75,23 +72,43 @@ namespace Gs2.Unity.UiKit.Gs2Limit
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2LimitLimitModelFetcher>() ?? GetComponentInParent<Gs2LimitLimitModelFetcher>();
-
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2LimitLimitModelFetcher>() ?? GetComponentInParent<Gs2LimitLimitModelFetcher>();
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2LimitLimitModelFetcher.");
                 enabled = false;
             }
-
-            Update();
         }
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2LimitLimitModelFetcher>() ?? GetComponentInParent<Gs2LimitLimitModelFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2LimitLimitModelFetcher>() ?? GetComponentInParent<Gs2LimitLimitModelFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 
@@ -129,8 +146,8 @@ namespace Gs2.Unity.UiKit.Gs2Limit
 
         public event UnityAction<string> OnUpdate
         {
-            add => onUpdate.AddListener(value);
-            remove => onUpdate.RemoveListener(value);
+            add => this.onUpdate.AddListener(value);
+            remove => this.onUpdate.RemoveListener(value);
         }
     }
 }

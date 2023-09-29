@@ -40,17 +40,40 @@ namespace Gs2.Unity.UiKit.Gs2Enchant
 	[AddComponentMenu("GS2 UIKit/Enchant/RarityParameterStatus/View/Label/Gs2EnchantRarityParameterStatusVerifyRarityParameterStatusActionLabel")]
     public partial class Gs2EnchantRarityParameterStatusVerifyRarityParameterStatusActionLabel : MonoBehaviour
     {
-        public void Update()
+        private void OnChange()
         {
-            onUpdate?.Invoke(
-                format.Replace(
-                    "{verifyType}", $"{action?.VerifyType}"
+            this.onUpdate?.Invoke(
+                this.format.Replace(
+                    "{verifyType}", $"{this.action?.VerifyType}"
                 ).Replace(
-                    "{parameterValueName}", $"{action?.ParameterValueName}"
+                    "{parameterValueName}", $"{this.action?.ParameterValueName}"
                 ).Replace(
-                    "{parameterCount}", $"{action?.ParameterCount}"
+                    "{parameterCount}", $"{this.action?.ParameterCount}"
                 )
             );
+        }
+
+        public void Awake() {
+            if (this.action == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2AccountAccountAuthenticationAction.");
+                enabled = false;
+            }
+        }
+
+        public virtual bool HasError()
+        {
+            if (this.action == null) {
+                return true;
+            }
+            return false;
+        }
+
+        public void OnEnable() {
+            this.action.OnChange.AddListener(OnChange);
+        }
+
+        public void OnDisable() {
+            this.action.OnChange.RemoveListener(OnChange);
         }
     }
 

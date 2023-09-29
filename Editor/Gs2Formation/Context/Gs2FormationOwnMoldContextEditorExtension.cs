@@ -43,8 +43,18 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Editor
             serializedObject.Update();
 
             if (original.Mold == null) {
-                if (original.GetComponentInParent<Gs2FormationOwnMoldList>(true) != null) {
-                    EditorGUILayout.HelpBox("OwnMold is auto assign from Gs2FormationOwnMoldList.", MessageType.Info);
+                var list = original.GetComponentInParent<Gs2FormationOwnMoldList>(true);
+                if (list != null) {
+                    EditorGUILayout.HelpBox("Mold is auto assign from Gs2FormationOwnMoldList.", MessageType.Info);
+                    EditorGUI.BeginDisabledGroup(true);
+                    EditorGUILayout.ObjectField("List", list, typeof(Gs2FormationOwnMoldList), false);
+                    EditorGUI.EndDisabledGroup();
+                }
+                else if (original.GetComponentInParent<Gs2FormationConvertMoldModelToOwnMold>(true) != null) {
+                    EditorGUILayout.HelpBox("Mold is auto assign from Gs2FormationConvertMoldModelToOwnMold.", MessageType.Info);
+                    EditorGUI.BeginDisabledGroup(true);
+                    EditorGUILayout.ObjectField("Converter", original.GetComponentInParent<Gs2FormationConvertMoldModelToOwnMold>(true), typeof(Gs2FormationConvertMoldModelToOwnMold), false);
+                    EditorGUI.EndDisabledGroup();
                 }
                 else {
                     EditorGUILayout.HelpBox("OwnMold not assigned.", MessageType.Error);

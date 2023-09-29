@@ -29,6 +29,7 @@
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Realtime.Fetcher;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.Localization.Components;
 using UnityEngine.Localization.SmartFormat.PersistentVariables;
 
@@ -41,24 +42,21 @@ namespace Gs2.Unity.UiKit.Gs2Realtime.Localization
     [AddComponentMenu("GS2 UIKit/Realtime/Room/View/Localization/Gs2RealtimeRoomLocalizationVariables")]
     public partial class Gs2RealtimeRoomLocalizationVariables : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched) {
-                target.StringReference["name"] = new StringVariable {
-                    Value = _fetcher?.Room?.Name ?? "",
-                };
-                target.StringReference["ipAddress"] = new StringVariable {
-                    Value = _fetcher?.Room?.IpAddress ?? "",
-                };
-                target.StringReference["port"] = new IntVariable {
-                    Value = _fetcher?.Room?.Port ?? 0,
-                };
-                target.StringReference["encryptionKey"] = new StringVariable {
-                    Value = _fetcher?.Room?.EncryptionKey ?? "",
-                };
-                enabled = false;
-                target.enabled = true;
-            }
+            this.target.StringReference["name"] = new StringVariable {
+                Value = _fetcher?.Room?.Name ?? "",
+            };
+            this.target.StringReference["ipAddress"] = new StringVariable {
+                Value = _fetcher?.Room?.IpAddress ?? "",
+            };
+            this.target.StringReference["port"] = new IntVariable {
+                Value = _fetcher?.Room?.Port ?? 0,
+            };
+            this.target.StringReference["encryptionKey"] = new StringVariable {
+                Value = _fetcher?.Room?.EncryptionKey ?? "",
+            };
+            this.target.enabled = true;
         }
     }
 
@@ -71,10 +69,10 @@ namespace Gs2.Unity.UiKit.Gs2Realtime.Localization
         private Gs2RealtimeRoomFetcher _fetcher;
 
         public void Awake() {
-            target.enabled = false;
-            _fetcher = GetComponent<Gs2RealtimeRoomFetcher>() ?? GetComponentInParent<Gs2RealtimeRoomFetcher>();
+            this.target.enabled = false;
+            this._fetcher = GetComponent<Gs2RealtimeRoomFetcher>() ?? GetComponentInParent<Gs2RealtimeRoomFetcher>();
 
-            if (_fetcher == null) {
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2RealtimeRoomFetcher.");
                 enabled = false;
             }
@@ -82,11 +80,34 @@ namespace Gs2.Unity.UiKit.Gs2Realtime.Localization
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2RealtimeRoomFetcher>() ?? GetComponentInParent<Gs2RealtimeRoomFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2RealtimeRoomFetcher>() ?? GetComponentInParent<Gs2RealtimeRoomFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 

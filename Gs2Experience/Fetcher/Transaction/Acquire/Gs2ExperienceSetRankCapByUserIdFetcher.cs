@@ -34,7 +34,6 @@ using Gs2.Unity.Gs2Experience.ScriptableObject;
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Core.Fetcher;
 using Gs2.Unity.UiKit.Gs2Experience.Context;
-using Gs2.Unity.UiKit.Gs2Experience.Fetcher;
 using Gs2.Unity.Util;
 using Gs2.Util.LitJson;
 using UnityEngine;
@@ -49,43 +48,27 @@ namespace Gs2.Unity.UiKit.Gs2Experience.Fetcher
 	[AddComponentMenu("GS2 UIKit/Experience/Status/Fetcher/Acquire/Gs2ExperienceSetRankCapByUserIdFetcher")]
     public partial class Gs2ExperienceSetRankCapByUserIdFetcher : Gs2ExperienceOwnStatusContext
     {
-        private IEnumerator Fetch()
+        private void Fetch()
         {
-            while (true)
-            {
-                if (_fetcher != null) {
-                    var action = _fetcher.AcquireActions().FirstOrDefault(v => v.Action == "Gs2Experience:SetRankCapByUserId");
-                    if (action != null) {
-                        Request = SetRankCapByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
-                        if (Status == null || (
-                                Status.NamespaceName == Request.NamespaceName &&
-                                Status.ExperienceName == Request.ExperienceName &&
-                                Status.PropertyId == Request.PropertyId)
-                           ) {
-                            Status = OwnStatus.New(
+            var action = _fetcher.AcquireActions().FirstOrDefault(v => v.Action == "Gs2Experience:SetRankCapByUserId");
+            if (action != null) {
+                Request = SetRankCapByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
+                if (Status == null || (
+                        Status.NamespaceName == Request.NamespaceName &&
+                        Status.ExperienceName == Request.ExperienceName &&
+                        Status.PropertyId == Request.PropertyId)
+                   ) {
+                    Status = OwnStatus.New(
                                 Namespace.New(
                                     Request.NamespaceName
                                 ),
                                 Request.ExperienceName,
                                 Request.PropertyId
                             );
-                        }
-                        Fetched = true;
-                    }
                 }
-                yield return new WaitForSeconds(0.1f);
             }
-            // ReSharper disable once IteratorNeverReturns
-        }
-
-        public void OnEnable()
-        {
-            StartCoroutine(nameof(Fetch));
-        }
-
-        public void OnDisable()
-        {
-            StopCoroutine(nameof(Fetch));
+            Fetched = true;
+            this.OnFetched.Invoke();
         }
     }
 
@@ -103,9 +86,8 @@ namespace Gs2.Unity.UiKit.Gs2Experience.Fetcher
 
         public void Awake()
         {
-            _fetcher = GetComponent<IAcquireActionsFetcher>() ?? GetComponentInParent<IAcquireActionsFetcher>();
-
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<IAcquireActionsFetcher>() ?? GetComponentInParent<IAcquireActionsFetcher>();
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the IAcquireActionFetcher.");
                 enabled = false;
             }
@@ -113,11 +95,24 @@ namespace Gs2.Unity.UiKit.Gs2Experience.Fetcher
 
         public override bool HasError()
         {
-            _fetcher = GetComponent<IAcquireActionsFetcher>() ?? GetComponentInParent<IAcquireActionsFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<IAcquireActionsFetcher>() ?? GetComponentInParent<IAcquireActionsFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
             return false;
+        }
+
+        public void OnEnable()
+        {
+            this._fetcher.OnFetchedEvent().AddListener(Fetch);
+            if (this._fetcher.IsFetched()) {
+                Fetch();
+            }
+        }
+
+        public void OnDisable()
+        {
+            this._fetcher.OnFetchedEvent().RemoveListener(Fetch);
         }
     }
 
@@ -129,6 +124,7 @@ namespace Gs2.Unity.UiKit.Gs2Experience.Fetcher
     {
         public SetRankCapByUserIdRequest Request { get; protected set; }
         public bool Fetched { get; protected set; }
+        public UnityEvent OnFetched = new UnityEvent();
     }
 
     /// <summary>
@@ -145,13 +141,6 @@ namespace Gs2.Unity.UiKit.Gs2Experience.Fetcher
     /// </summary>
     public partial class Gs2ExperienceSetRankCapByUserIdFetcher
     {
-        [SerializeField]
-        internal ErrorEvent onError = new ErrorEvent();
 
-        public event UnityAction<Gs2Exception, Func<IEnumerator>> OnError
-        {
-            add => onError.AddListener(value);
-            remove => onError.RemoveListener(value);
-        }
     }
 }

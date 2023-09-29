@@ -40,7 +40,7 @@ namespace Gs2.Unity.UiKit.Gs2Limit.Context
     {
         public void Start() {
             if (LimitModel == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: LimitModel is not set in Gs2LimitLimitModelContext.");
+                Debug.LogWarning($"{gameObject.GetFullPath()}: LimitModel is not set in Gs2LimitLimitModelContext.");
             }
         }
 
@@ -49,9 +49,7 @@ namespace Gs2.Unity.UiKit.Gs2Limit.Context
                 if (GetComponentInParent<Gs2LimitLimitModelList>(true) != null) {
                     return false;
                 }
-                else {
-                    return true;
-                }
+                return true;
             }
             return false;
         }

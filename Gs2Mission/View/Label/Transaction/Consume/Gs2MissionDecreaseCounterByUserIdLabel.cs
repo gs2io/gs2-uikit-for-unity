@@ -27,6 +27,7 @@
 #pragma warning disable CS0472
 
 using System;
+using System.Linq;
 using Gs2.Gs2Mission.Request;
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Core.Fetcher;
@@ -44,56 +45,69 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Label
 	[AddComponentMenu("GS2 UIKit/Mission/Counter/View/Label/Transaction/Gs2MissionDecreaseCounterByUserIdLabel")]
     public partial class Gs2MissionDecreaseCounterByUserIdLabel : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched && _fetcher.Request != null &&
-                    _userDataFetcher != null && _userDataFetcher.Fetched && _userDataFetcher.Counter != null) {
-                {
-                    onUpdate?.Invoke(
-                        format.Replace(
-                            "{namespaceName}",
-                            $"{_fetcher.Request.NamespaceName}"
-                        ).Replace(
-                            "{counterName}",
-                            $"{_fetcher.Request.CounterName}"
-                        ).Replace(
-                            "{userId}",
-                            $"{_fetcher.Request.UserId}"
-                        ).Replace(
-                            "{value}",
-                            $"{_fetcher.Request.Value}"
-                        ).Replace(
-                            "{userData:name}",
-                            $"{_userDataFetcher.Counter.Name}"
-                        ).Replace(
-                            "{userData:values}",
-                            $"{_userDataFetcher.Counter.Values}"
-                        )
-                    );
-                }
-            } else if (_fetcher.Fetched && _fetcher.Request != null) {
-                {
-                    onUpdate?.Invoke(
-                        format.Replace(
-                            "{namespaceName}",
-                            $"{_fetcher.Request.NamespaceName}"
-                        ).Replace(
-                            "{counterName}",
-                            $"{_fetcher.Request.CounterName}"
-                        ).Replace(
-                            "{userId}",
-                            $"{_fetcher.Request.UserId}"
-                        ).Replace(
-                            "{value}",
-                            $"{_fetcher.Request.Value}"
-                        )
-                    );
-                }
+            if ((!this._fetcher?.Fetched ?? false) || this._fetcher.Request == null) {
+                return;
+            }
+            if (this._userDataFetcher?.Fetched ?? false)
+            {
+                this.onUpdate?.Invoke(
+                    this.format.Replace(
+                        "{namespaceName}",
+                        $"{this._fetcher.Request.NamespaceName}"
+                    ).Replace(
+                        "{counterName}",
+                        $"{this._fetcher.Request.CounterName}"
+                    ).Replace(
+                        "{userId}",
+                        $"{this._fetcher.Request.UserId}"
+                    ).Replace(
+                        "{value}",
+                        $"{this._fetcher.Request.Value}"
+                    ).Replace(
+                        "{userData:name}",
+                        $"{this._userDataFetcher.Counter.Name}"
+                    ).Replace(
+                        "{userData:values:notReset}",
+                        $"{_userDataFetcher.Counter.Values.FirstOrDefault(v => v.ResetType == "notReset")?.Value}"
+                    ).Replace(
+                        "{userData:values:daily}",
+                        $"{_userDataFetcher.Counter.Values.FirstOrDefault(v => v.ResetType == "daily")?.Value}"
+                    ).Replace(
+                        "{userData:values:weekly}",
+                        $"{_userDataFetcher.Counter.Values.FirstOrDefault(v => v.ResetType == "weekly")?.Value}"
+                    ).Replace(
+                        "{userData:values:monthly}",
+                        $"{_userDataFetcher.Counter.Values.FirstOrDefault(v => v.ResetType == "monthly")?.Value}"
+                    ).Replace(
+                        "{userData:values:notReset:changed}",
+                        $"{(_userDataFetcher.Counter.Values.FirstOrDefault(v => v.ResetType == "notReset")?.Value ?? 0) - this._fetcher.Request.Value}"
+                    ).Replace(
+                        "{userData:values:daily:changed}",
+                        $"{(_userDataFetcher.Counter.Values.FirstOrDefault(v => v.ResetType == "daily")?.Value ?? 0) - this._fetcher.Request.Value}"
+                    ).Replace(
+                        "{userData:values:weekly:changed}",
+                        $"{(_userDataFetcher.Counter.Values.FirstOrDefault(v => v.ResetType == "weekly")?.Value ?? 0) - this._fetcher.Request.Value}"
+                    ).Replace(
+                        "{userData:values:monthly:changed}",
+                        $"{(_userDataFetcher.Counter.Values.FirstOrDefault(v => v.ResetType == "monthly")?.Value ?? 0) - this._fetcher.Request.Value}"
+                    )
+                );
             } else {
-                onUpdate?.Invoke(
-                    format.Replace(
-                        "{values}",
-                        "0"
+                this.onUpdate?.Invoke(
+                    this.format.Replace(
+                        "{namespaceName}",
+                        $"{this._fetcher.Request.NamespaceName}"
+                    ).Replace(
+                        "{counterName}",
+                        $"{this._fetcher.Request.CounterName}"
+                    ).Replace(
+                        "{userId}",
+                        $"{this._fetcher.Request.UserId}"
+                    ).Replace(
+                        "{value}",
+                        $"{this._fetcher.Request.Value}"
                     )
                 );
             }
@@ -111,25 +125,52 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Label
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2MissionDecreaseCounterByUserIdFetcher>() ?? GetComponentInParent<Gs2MissionDecreaseCounterByUserIdFetcher>();
-            _userDataFetcher = GetComponent<Gs2MissionOwnCounterFetcher>() ?? GetComponentInParent<Gs2MissionOwnCounterFetcher>();
-
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2MissionDecreaseCounterByUserIdFetcher>() ?? GetComponentInParent<Gs2MissionDecreaseCounterByUserIdFetcher>();
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MissionDecreaseCounterByUserIdFetcher.");
                 enabled = false;
             }
-
-            Update();
+            this._userDataFetcher = GetComponent<Gs2MissionOwnCounterFetcher>() ?? GetComponentInParent<Gs2MissionOwnCounterFetcher>();
         }
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2MissionDecreaseCounterByUserIdFetcher>() ?? GetComponentInParent<Gs2MissionDecreaseCounterByUserIdFetcher>(true);
-            _userDataFetcher = GetComponent<Gs2MissionOwnCounterFetcher>() ?? GetComponentInParent<Gs2MissionOwnCounterFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2MissionDecreaseCounterByUserIdFetcher>() ?? GetComponentInParent<Gs2MissionDecreaseCounterByUserIdFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+            if (this._userDataFetcher != null) {
+                this._userDataFetcher.OnFetched.AddListener(this._onFetched);
+                if (this._userDataFetcher.Fetched) {
+                    OnFetched();
+                }
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                if (this._userDataFetcher != null) {
+                    this._userDataFetcher.OnFetched.RemoveListener(this._onFetched);
+                }
+                this._onFetched = null;
+            }
         }
     }
 
@@ -167,8 +208,8 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Label
 
         public event UnityAction<string> OnUpdate
         {
-            add => onUpdate.AddListener(value);
-            remove => onUpdate.RemoveListener(value);
+            add => this.onUpdate.AddListener(value);
+            remove => this.onUpdate.RemoveListener(value);
         }
     }
 }

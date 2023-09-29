@@ -19,8 +19,10 @@
 // ReSharper disable CheckNamespace
 
 using System.Collections.Generic;
+using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Stamina.Fetcher;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2Stamina
 {
@@ -31,19 +33,12 @@ namespace Gs2.Unity.UiKit.Gs2Stamina
 	[AddComponentMenu("GS2 UIKit/Stamina/Stamina/View/Enabler/Gs2StaminaStaminaReachMaxEnabler")]
     public partial class Gs2StaminaOwnStaminaReachMaxEnabler : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched && _fetcher.Stamina != null)
-            {
-                if (notReachMax) {
-                    this.target.SetActive(this._fetcher.Stamina.Value < this._fetcher.Stamina.MaxValue);
-                } else if (reachMax) {
-                    this.target.SetActive(this._fetcher.Stamina.Value >= this._fetcher.Stamina.MaxValue);
-                }
-            }
-            else
-            {
-                target.SetActive(false);
+            if (this.notReachMax) {
+                this.target.SetActive(this._fetcher.Stamina.Value < this._fetcher.Stamina.MaxValue);
+            } else if (this.reachMax) {
+                this.target.SetActive(this._fetcher.Stamina.Value >= this._fetcher.Stamina.MaxValue);
             }
         }
     }
@@ -58,7 +53,53 @@ namespace Gs2.Unity.UiKit.Gs2Stamina
 
         public void Awake()
         {
-            _fetcher = GetComponentInParent<Gs2StaminaOwnStaminaFetcher>();
+            this._fetcher = GetComponentInParent<Gs2StaminaOwnStaminaFetcher>();
+            if (this._fetcher == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2StaminaOwnStaminaFetcher.");
+                enabled = false;
+            }
+            if (this.target == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: target is not set.");
+                enabled = false;
+            }
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+        
+        public virtual bool HasError()
+        {
+            this._fetcher = GetComponent<Gs2StaminaOwnStaminaFetcher>() ?? GetComponentInParent<Gs2StaminaOwnStaminaFetcher>(true);
+            if (this._fetcher == null) {
+                return true;
+            }
+            if (this.target == null) {
+                return true;
+            }
+            return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 

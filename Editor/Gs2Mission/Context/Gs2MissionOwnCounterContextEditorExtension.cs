@@ -43,8 +43,18 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Editor
             serializedObject.Update();
 
             if (original.Counter == null) {
-                if (original.GetComponentInParent<Gs2MissionOwnCounterList>(true) != null) {
-                    EditorGUILayout.HelpBox("OwnCounter is auto assign from Gs2MissionOwnCounterList.", MessageType.Info);
+                var list = original.GetComponentInParent<Gs2MissionOwnCounterList>(true);
+                if (list != null) {
+                    EditorGUILayout.HelpBox("Counter is auto assign from Gs2MissionOwnCounterList.", MessageType.Info);
+                    EditorGUI.BeginDisabledGroup(true);
+                    EditorGUILayout.ObjectField("List", list, typeof(Gs2MissionOwnCounterList), false);
+                    EditorGUI.EndDisabledGroup();
+                }
+                else if (original.GetComponentInParent<Gs2MissionConvertCounterModelToOwnCounter>(true) != null) {
+                    EditorGUILayout.HelpBox("Counter is auto assign from Gs2MissionConvertCounterModelToOwnCounter.", MessageType.Info);
+                    EditorGUI.BeginDisabledGroup(true);
+                    EditorGUILayout.ObjectField("Converter", original.GetComponentInParent<Gs2MissionConvertCounterModelToOwnCounter>(true), typeof(Gs2MissionConvertCounterModelToOwnCounter), false);
+                    EditorGUI.EndDisabledGroup();
                 }
                 else {
                     EditorGUILayout.HelpBox("OwnCounter not assigned.", MessageType.Error);

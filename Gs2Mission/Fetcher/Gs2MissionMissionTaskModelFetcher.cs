@@ -74,6 +74,7 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Fetcher
                 {
                     MissionTaskModel = item;
                     Fetched = true;
+                    this.OnFetched.Invoke();
                 }
             );
 
@@ -87,11 +88,10 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Fetcher
                 else {
                     MissionTaskModel = future.Result;
                     Fetched = true;
+                    this.OnFetched.Invoke();
                     break;
                 }
             }
-
-            this.OnFetched.Invoke();
         }
 
         public void OnUpdateContext() {
@@ -128,6 +128,18 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Fetcher
             }
             return MissionTaskModel.CompleteAcquireActions;
         }
+
+        bool IAcquireActionsFetcher.IsFetched() {
+            return this.Fetched;
+        }
+
+        UnityEvent IAcquireActionsFetcher.OnFetchedEvent() {
+            return this.OnFetched;
+        }
+
+        GameObject IAcquireActionsFetcher.GameObject() {
+            return gameObject;
+        }
     }
 
     /// <summary>
@@ -137,8 +149,6 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Fetcher
     public partial class Gs2MissionMissionTaskModelFetcher
     {
         public Gs2MissionMissionTaskModelContext Context { get; private set; }
-
-        public UnityEvent OnFetched = new UnityEvent();
 
         public void Awake()
         {
@@ -167,6 +177,7 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Fetcher
     {
         public Gs2.Unity.Gs2Mission.Model.EzMissionTaskModel MissionTaskModel { get; protected set; }
         public bool Fetched { get; protected set; }
+        public UnityEvent OnFetched = new UnityEvent();
     }
 
     /// <summary>

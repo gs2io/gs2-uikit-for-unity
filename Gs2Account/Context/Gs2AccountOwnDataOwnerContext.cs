@@ -40,7 +40,7 @@ namespace Gs2.Unity.UiKit.Gs2Account.Context
     {
         public void Start() {
             if (DataOwner == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: DataOwner is not set in Gs2AccountOwnDataOwnerContext.");
+                Debug.LogWarning($"{gameObject.GetFullPath()}: DataOwner is not set in Gs2AccountOwnDataOwnerContext.");
             }
         }
         public virtual bool HasError() {

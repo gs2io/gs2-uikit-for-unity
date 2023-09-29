@@ -39,39 +39,55 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Context
         private Gs2InventoryOwnInventoryContext _context;
 
         public void Awake() {
-            _originalContext = GetComponent<Gs2InventoryInventoryModelContext>() ?? GetComponentInParent<Gs2InventoryInventoryModelContext>();
-            if (_originalContext == null) {
+            this._originalContext = GetComponent<Gs2InventoryInventoryModelContext>() ?? GetComponentInParent<Gs2InventoryInventoryModelContext>();
+            if (this._originalContext == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2InventoryInventoryModelContext.");
                 enabled = false;
             }
-            _context = GetComponent<Gs2InventoryOwnInventoryContext>();
-            if (_context == null) {
+            this._context = GetComponent<Gs2InventoryOwnInventoryContext>();
+            if (this._context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2InventoryOwnInventoryContext.");
                 enabled = false;
             }
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
-            _originalContext = GetComponent<Gs2InventoryInventoryModelContext>() ?? GetComponentInParent<Gs2InventoryInventoryModelContext>(true);
+            this._originalContext = GetComponent<Gs2InventoryInventoryModelContext>() ?? GetComponentInParent<Gs2InventoryInventoryModelContext>();
             if (_originalContext == null) {
                 return true;
             }
-            _context = GetComponent<Gs2InventoryOwnInventoryContext>();
-            if (_context == null) {
+            this._context = GetComponent<Gs2InventoryOwnInventoryContext>();
+            if (this._context == null) {
                 return true;
             }
             return false;
         }
 
-        public void Start() {
-            _context.SetOwnInventory(
+        private UnityAction _onUpdateContext;
+
+        private void OnUpdateContext() {
+            this._context.SetOwnInventory(
                 OwnInventory.New(
                     _originalContext.InventoryModel.Namespace,
                     _originalContext.InventoryModel.inventoryName
                 )
             );
-            enabled = false;
+        }
+
+        public void OnEnable() {
+            _onUpdateContext = () =>
+            {
+                OnUpdateContext();
+            };
+            this._originalContext.OnUpdate.AddListener(this._onUpdateContext);
+        }
+
+        public void OnDisable() {
+            if (this._onUpdateContext != null) {
+                this._originalContext.OnUpdate.RemoveListener(this._onUpdateContext);
+                this._onUpdateContext = null;
+            }
         }
     }
 }

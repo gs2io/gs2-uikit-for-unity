@@ -40,7 +40,7 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Context
     {
         public void Start() {
             if (PropertyFormModel == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: PropertyFormModel is not set in Gs2FormationPropertyFormModelContext.");
+                Debug.LogWarning($"{gameObject.GetFullPath()}: PropertyFormModel is not set in Gs2FormationPropertyFormModelContext.");
             }
         }
 
@@ -49,9 +49,7 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Context
                 if (GetComponentInParent<Gs2FormationPropertyFormModelList>(true) != null) {
                     return false;
                 }
-                else {
-                    return true;
-                }
+                return true;
             }
             return false;
         }

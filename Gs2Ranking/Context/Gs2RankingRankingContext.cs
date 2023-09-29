@@ -40,7 +40,7 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Context
     {
         public void Start() {
             if (Ranking == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Ranking is not set in Gs2RankingRankingContext.");
+                Debug.LogWarning($"{gameObject.GetFullPath()}: Ranking is not set in Gs2RankingRankingContext.");
             }
         }
 
@@ -49,9 +49,7 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Context
                 if (GetComponentInParent<Gs2RankingRankingList>(true) != null) {
                     return false;
                 }
-                else {
-                    return true;
-                }
+                return true;
             }
             return false;
         }

@@ -40,7 +40,7 @@ namespace Gs2.Unity.UiKit.Gs2Account.Context
     {
         public void Start() {
             if (BanStatus == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: BanStatus is not set in Gs2AccountBanStatusContext.");
+                Debug.LogWarning($"{gameObject.GetFullPath()}: BanStatus is not set in Gs2AccountBanStatusContext.");
             }
         }
 

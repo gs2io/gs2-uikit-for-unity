@@ -29,6 +29,7 @@
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Friend.Fetcher;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.Localization.Components;
 using UnityEngine.Localization.SmartFormat.PersistentVariables;
 
@@ -41,15 +42,12 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Localization
     [AddComponentMenu("GS2 UIKit/Friend/BlackList/View/Localization/Gs2FriendBlackListLocalizationVariables")]
     public partial class Gs2FriendBlackListLocalizationVariables : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched) {
-                target.StringReference["userId"] = new StringVariable {
-                    Value = _fetcher?.BlackList?.UserId ?? "",
-                };
-                enabled = false;
-                target.enabled = true;
-            }
+            this.target.StringReference["userId"] = new StringVariable {
+                Value = _fetcher?.BlackList?.UserId ?? "",
+            };
+            this.target.enabled = true;
         }
     }
 
@@ -62,10 +60,10 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Localization
         private Gs2FriendOwnBlackListFetcher _fetcher;
 
         public void Awake() {
-            target.enabled = false;
-            _fetcher = GetComponent<Gs2FriendOwnBlackListFetcher>() ?? GetComponentInParent<Gs2FriendOwnBlackListFetcher>();
+            this.target.enabled = false;
+            this._fetcher = GetComponent<Gs2FriendOwnBlackListFetcher>() ?? GetComponentInParent<Gs2FriendOwnBlackListFetcher>();
 
-            if (_fetcher == null) {
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2FriendBlackListFetcher.");
                 enabled = false;
             }
@@ -73,11 +71,34 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Localization
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2FriendOwnBlackListFetcher>() ?? GetComponentInParent<Gs2FriendOwnBlackListFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2FriendOwnBlackListFetcher>() ?? GetComponentInParent<Gs2FriendOwnBlackListFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 

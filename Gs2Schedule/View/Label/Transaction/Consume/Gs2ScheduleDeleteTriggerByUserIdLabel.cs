@@ -42,51 +42,50 @@ namespace Gs2.Unity.UiKit.Gs2Schedule.Label
 	[AddComponentMenu("GS2 UIKit/Schedule/Trigger/View/Label/Transaction/Gs2ScheduleDeleteTriggerByUserIdLabel")]
     public partial class Gs2ScheduleDeleteTriggerByUserIdLabel : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched && _fetcher.Request != null &&
-                    _userDataFetcher != null && _userDataFetcher.Fetched && _userDataFetcher.Trigger != null) {
-                {
-                    onUpdate?.Invoke(
-                        format.Replace(
-                            "{namespaceName}",
-                            $"{_fetcher.Request.NamespaceName}"
-                        ).Replace(
-                            "{userId}",
-                            $"{_fetcher.Request.UserId}"
-                        ).Replace(
-                            "{triggerName}",
-                            $"{_fetcher.Request.TriggerName}"
-                        ).Replace(
-                            "{userData:triggerId}",
-                            $"{_userDataFetcher.Trigger.TriggerId}"
-                        ).Replace(
-                            "{userData:name}",
-                            $"{_userDataFetcher.Trigger.Name}"
-                        ).Replace(
-                            "{userData:createdAt}",
-                            $"{_userDataFetcher.Trigger.CreatedAt}"
-                        ).Replace(
-                            "{userData:expiresAt}",
-                            $"{_userDataFetcher.Trigger.ExpiresAt}"
-                        )
-                    );
-                }
-            } else if (_fetcher.Fetched && _fetcher.Request != null) {
-                {
-                    onUpdate?.Invoke(
-                        format.Replace(
-                            "{namespaceName}",
-                            $"{_fetcher.Request.NamespaceName}"
-                        ).Replace(
-                            "{userId}",
-                            $"{_fetcher.Request.UserId}"
-                        ).Replace(
-                            "{triggerName}",
-                            $"{_fetcher.Request.TriggerName}"
-                        )
-                    );
-                }
+            if ((!this._fetcher?.Fetched ?? false) || this._fetcher.Request == null) {
+                return;
+            }
+            if (this._userDataFetcher?.Fetched ?? false)
+            {
+                this.onUpdate?.Invoke(
+                    this.format.Replace(
+                        "{namespaceName}",
+                        $"{this._fetcher.Request.NamespaceName}"
+                    ).Replace(
+                        "{userId}",
+                        $"{this._fetcher.Request.UserId}"
+                    ).Replace(
+                        "{triggerName}",
+                        $"{this._fetcher.Request.TriggerName}"
+                    ).Replace(
+                        "{userData:triggerId}",
+                        $"{this._userDataFetcher.Trigger.TriggerId}"
+                    ).Replace(
+                        "{userData:name}",
+                        $"{this._userDataFetcher.Trigger.Name}"
+                    ).Replace(
+                        "{userData:createdAt}",
+                        $"{this._userDataFetcher.Trigger.CreatedAt}"
+                    ).Replace(
+                        "{userData:expiresAt}",
+                        $"{this._userDataFetcher.Trigger.ExpiresAt}"
+                    )
+                );
+            } else {
+                this.onUpdate?.Invoke(
+                    this.format.Replace(
+                        "{namespaceName}",
+                        $"{this._fetcher.Request.NamespaceName}"
+                    ).Replace(
+                        "{userId}",
+                        $"{this._fetcher.Request.UserId}"
+                    ).Replace(
+                        "{triggerName}",
+                        $"{this._fetcher.Request.TriggerName}"
+                    )
+                );
             }
         }
     }
@@ -102,25 +101,52 @@ namespace Gs2.Unity.UiKit.Gs2Schedule.Label
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2ScheduleDeleteTriggerByUserIdFetcher>() ?? GetComponentInParent<Gs2ScheduleDeleteTriggerByUserIdFetcher>();
-            _userDataFetcher = GetComponent<Gs2ScheduleOwnTriggerFetcher>() ?? GetComponentInParent<Gs2ScheduleOwnTriggerFetcher>();
-
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2ScheduleDeleteTriggerByUserIdFetcher>() ?? GetComponentInParent<Gs2ScheduleDeleteTriggerByUserIdFetcher>();
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ScheduleDeleteTriggerByUserIdFetcher.");
                 enabled = false;
             }
-
-            Update();
+            this._userDataFetcher = GetComponent<Gs2ScheduleOwnTriggerFetcher>() ?? GetComponentInParent<Gs2ScheduleOwnTriggerFetcher>();
         }
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2ScheduleDeleteTriggerByUserIdFetcher>() ?? GetComponentInParent<Gs2ScheduleDeleteTriggerByUserIdFetcher>(true);
-            _userDataFetcher = GetComponent<Gs2ScheduleOwnTriggerFetcher>() ?? GetComponentInParent<Gs2ScheduleOwnTriggerFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2ScheduleDeleteTriggerByUserIdFetcher>() ?? GetComponentInParent<Gs2ScheduleDeleteTriggerByUserIdFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+            if (this._userDataFetcher != null) {
+                this._userDataFetcher.OnFetched.AddListener(this._onFetched);
+                if (this._userDataFetcher.Fetched) {
+                    OnFetched();
+                }
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                if (this._userDataFetcher != null) {
+                    this._userDataFetcher.OnFetched.RemoveListener(this._onFetched);
+                }
+                this._onFetched = null;
+            }
         }
     }
 
@@ -158,8 +184,8 @@ namespace Gs2.Unity.UiKit.Gs2Schedule.Label
 
         public event UnityAction<string> OnUpdate
         {
-            add => onUpdate.AddListener(value);
-            remove => onUpdate.RemoveListener(value);
+            add => this.onUpdate.AddListener(value);
+            remove => this.onUpdate.RemoveListener(value);
         }
     }
 }

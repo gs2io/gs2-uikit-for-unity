@@ -42,81 +42,80 @@ namespace Gs2.Unity.UiKit.Gs2Inbox.Label
 	[AddComponentMenu("GS2 UIKit/Inbox/Message/View/Label/Transaction/Gs2InboxSendMessageByUserIdLabel")]
     public partial class Gs2InboxSendMessageByUserIdLabel : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched && _fetcher.Request != null &&
-                    _userDataFetcher != null && _userDataFetcher.Fetched && _userDataFetcher.Message != null) {
-                {
-                    onUpdate?.Invoke(
-                        format.Replace(
-                            "{namespaceName}",
-                            $"{_fetcher.Request.NamespaceName}"
-                        ).Replace(
-                            "{userId}",
-                            $"{_fetcher.Request.UserId}"
-                        ).Replace(
-                            "{metadata}",
-                            $"{_fetcher.Request.Metadata}"
-                        ).Replace(
-                            "{readAcquireActions}",
-                            $"{_fetcher.Request.ReadAcquireActions}"
-                        ).Replace(
-                            "{expiresAt}",
-                            $"{_fetcher.Request.ExpiresAt}"
-                        ).Replace(
-                            "{expiresTimeSpan}",
-                            $"{_fetcher.Request.ExpiresTimeSpan}"
-                        ).Replace(
-                            "{userData:messageId}",
-                            $"{_userDataFetcher.Message.MessageId}"
-                        ).Replace(
-                            "{userData:name}",
-                            $"{_userDataFetcher.Message.Name}"
-                        ).Replace(
-                            "{userData:metadata}",
-                            $"{_userDataFetcher.Message.Metadata}"
-                        ).Replace(
-                            "{userData:isRead}",
-                            $"{_userDataFetcher.Message.IsRead}"
-                        ).Replace(
-                            "{userData:readAcquireActions}",
-                            $"{_userDataFetcher.Message.ReadAcquireActions}"
-                        ).Replace(
-                            "{userData:receivedAt}",
-                            $"{_userDataFetcher.Message.ReceivedAt}"
-                        ).Replace(
-                            "{userData:readAt}",
-                            $"{_userDataFetcher.Message.ReadAt}"
-                        ).Replace(
-                            "{userData:expiresAt}",
-                            $"{_userDataFetcher.Message.ExpiresAt}"
-                        )
-                    );
-                }
-            } else if (_fetcher.Fetched && _fetcher.Request != null) {
-                {
-                    onUpdate?.Invoke(
-                        format.Replace(
-                            "{namespaceName}",
-                            $"{_fetcher.Request.NamespaceName}"
-                        ).Replace(
-                            "{userId}",
-                            $"{_fetcher.Request.UserId}"
-                        ).Replace(
-                            "{metadata}",
-                            $"{_fetcher.Request.Metadata}"
-                        ).Replace(
-                            "{readAcquireActions}",
-                            $"{_fetcher.Request.ReadAcquireActions}"
-                        ).Replace(
-                            "{expiresAt}",
-                            $"{_fetcher.Request.ExpiresAt}"
-                        ).Replace(
-                            "{expiresTimeSpan}",
-                            $"{_fetcher.Request.ExpiresTimeSpan}"
-                        )
-                    );
-                }
+            if ((!this._fetcher?.Fetched ?? false) || this._fetcher.Request == null) {
+                return;
+            }
+            if (this._userDataFetcher?.Fetched ?? false)
+            {
+                this.onUpdate?.Invoke(
+                    this.format.Replace(
+                        "{namespaceName}",
+                        $"{this._fetcher.Request.NamespaceName}"
+                    ).Replace(
+                        "{userId}",
+                        $"{this._fetcher.Request.UserId}"
+                    ).Replace(
+                        "{metadata}",
+                        $"{this._fetcher.Request.Metadata}"
+                    ).Replace(
+                        "{readAcquireActions}",
+                        $"{this._fetcher.Request.ReadAcquireActions}"
+                    ).Replace(
+                        "{expiresAt}",
+                        $"{this._fetcher.Request.ExpiresAt}"
+                    ).Replace(
+                        "{expiresTimeSpan}",
+                        $"{this._fetcher.Request.ExpiresTimeSpan}"
+                    ).Replace(
+                        "{userData:messageId}",
+                        $"{this._userDataFetcher.Message.MessageId}"
+                    ).Replace(
+                        "{userData:name}",
+                        $"{this._userDataFetcher.Message.Name}"
+                    ).Replace(
+                        "{userData:metadata}",
+                        $"{this._userDataFetcher.Message.Metadata}"
+                    ).Replace(
+                        "{userData:isRead}",
+                        $"{this._userDataFetcher.Message.IsRead}"
+                    ).Replace(
+                        "{userData:readAcquireActions}",
+                        $"{this._userDataFetcher.Message.ReadAcquireActions}"
+                    ).Replace(
+                        "{userData:receivedAt}",
+                        $"{this._userDataFetcher.Message.ReceivedAt}"
+                    ).Replace(
+                        "{userData:readAt}",
+                        $"{this._userDataFetcher.Message.ReadAt}"
+                    ).Replace(
+                        "{userData:expiresAt}",
+                        $"{this._userDataFetcher.Message.ExpiresAt}"
+                    )
+                );
+            } else {
+                this.onUpdate?.Invoke(
+                    this.format.Replace(
+                        "{namespaceName}",
+                        $"{this._fetcher.Request.NamespaceName}"
+                    ).Replace(
+                        "{userId}",
+                        $"{this._fetcher.Request.UserId}"
+                    ).Replace(
+                        "{metadata}",
+                        $"{this._fetcher.Request.Metadata}"
+                    ).Replace(
+                        "{readAcquireActions}",
+                        $"{this._fetcher.Request.ReadAcquireActions}"
+                    ).Replace(
+                        "{expiresAt}",
+                        $"{this._fetcher.Request.ExpiresAt}"
+                    ).Replace(
+                        "{expiresTimeSpan}",
+                        $"{this._fetcher.Request.ExpiresTimeSpan}"
+                    )
+                );
             }
         }
     }
@@ -132,25 +131,52 @@ namespace Gs2.Unity.UiKit.Gs2Inbox.Label
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2InboxSendMessageByUserIdFetcher>() ?? GetComponentInParent<Gs2InboxSendMessageByUserIdFetcher>();
-            _userDataFetcher = GetComponent<Gs2InboxOwnMessageFetcher>() ?? GetComponentInParent<Gs2InboxOwnMessageFetcher>();
-
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2InboxSendMessageByUserIdFetcher>() ?? GetComponentInParent<Gs2InboxSendMessageByUserIdFetcher>();
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2InboxSendMessageByUserIdFetcher.");
                 enabled = false;
             }
-
-            Update();
+            this._userDataFetcher = GetComponent<Gs2InboxOwnMessageFetcher>() ?? GetComponentInParent<Gs2InboxOwnMessageFetcher>();
         }
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2InboxSendMessageByUserIdFetcher>() ?? GetComponentInParent<Gs2InboxSendMessageByUserIdFetcher>(true);
-            _userDataFetcher = GetComponent<Gs2InboxOwnMessageFetcher>() ?? GetComponentInParent<Gs2InboxOwnMessageFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2InboxSendMessageByUserIdFetcher>() ?? GetComponentInParent<Gs2InboxSendMessageByUserIdFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+            if (this._userDataFetcher != null) {
+                this._userDataFetcher.OnFetched.AddListener(this._onFetched);
+                if (this._userDataFetcher.Fetched) {
+                    OnFetched();
+                }
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                if (this._userDataFetcher != null) {
+                    this._userDataFetcher.OnFetched.RemoveListener(this._onFetched);
+                }
+                this._onFetched = null;
+            }
         }
     }
 
@@ -188,8 +214,8 @@ namespace Gs2.Unity.UiKit.Gs2Inbox.Label
 
         public event UnityAction<string> OnUpdate
         {
-            add => onUpdate.AddListener(value);
-            remove => onUpdate.RemoveListener(value);
+            add => this.onUpdate.AddListener(value);
+            remove => this.onUpdate.RemoveListener(value);
         }
     }
 }

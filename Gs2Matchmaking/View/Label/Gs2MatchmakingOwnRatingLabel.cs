@@ -40,64 +40,61 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking
 	[AddComponentMenu("GS2 UIKit/Matchmaking/Rating/View/Label/Gs2MatchmakingOwnRatingLabel")]
     public partial class Gs2MatchmakingOwnRatingLabel : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched && _fetcher.Rating != null)
-            {
-                var createdAt = _fetcher.Rating.CreatedAt == null ? DateTime.Now : UnixTime.FromUnixTime(_fetcher.Rating.CreatedAt).ToLocalTime();
-                var updatedAt = _fetcher.Rating.UpdatedAt == null ? DateTime.Now : UnixTime.FromUnixTime(_fetcher.Rating.UpdatedAt).ToLocalTime();
-                onUpdate?.Invoke(
-                    format.Replace(
-                        "{ratingId}", $"{_fetcher?.Rating?.RatingId}"
-                    ).Replace(
-                        "{name}", $"{_fetcher?.Rating?.Name}"
-                    ).Replace(
-                        "{userId}", $"{_fetcher?.Rating?.UserId}"
-                    ).Replace(
-                        "{rateValue}", $"{_fetcher?.Rating?.RateValue}"
-                    ).Replace(
-                        "{createdAt:yyyy}", createdAt.ToString("yyyy")
-                    ).Replace(
-                        "{createdAt:yy}", createdAt.ToString("yy")
-                    ).Replace(
-                        "{createdAt:MM}", createdAt.ToString("MM")
-                    ).Replace(
-                        "{createdAt:MMM}", createdAt.ToString("MMM")
-                    ).Replace(
-                        "{createdAt:dd}", createdAt.ToString("dd")
-                    ).Replace(
-                        "{createdAt:hh}", createdAt.ToString("hh")
-                    ).Replace(
-                        "{createdAt:HH}", createdAt.ToString("HH")
-                    ).Replace(
-                        "{createdAt:tt}", createdAt.ToString("tt")
-                    ).Replace(
-                        "{createdAt:mm}", createdAt.ToString("mm")
-                    ).Replace(
-                        "{createdAt:ss}", createdAt.ToString("ss")
-                    ).Replace(
-                        "{updatedAt:yyyy}", updatedAt.ToString("yyyy")
-                    ).Replace(
-                        "{updatedAt:yy}", updatedAt.ToString("yy")
-                    ).Replace(
-                        "{updatedAt:MM}", updatedAt.ToString("MM")
-                    ).Replace(
-                        "{updatedAt:MMM}", updatedAt.ToString("MMM")
-                    ).Replace(
-                        "{updatedAt:dd}", updatedAt.ToString("dd")
-                    ).Replace(
-                        "{updatedAt:hh}", updatedAt.ToString("hh")
-                    ).Replace(
-                        "{updatedAt:HH}", updatedAt.ToString("HH")
-                    ).Replace(
-                        "{updatedAt:tt}", updatedAt.ToString("tt")
-                    ).Replace(
-                        "{updatedAt:mm}", updatedAt.ToString("mm")
-                    ).Replace(
-                        "{updatedAt:ss}", updatedAt.ToString("ss")
-                    )
-                );
-            }
+            var createdAt = this._fetcher.Rating.CreatedAt == null ? DateTime.Now : UnixTime.FromUnixTime(_fetcher.Rating.CreatedAt).ToLocalTime();
+            var updatedAt = this._fetcher.Rating.UpdatedAt == null ? DateTime.Now : UnixTime.FromUnixTime(_fetcher.Rating.UpdatedAt).ToLocalTime();
+            this.onUpdate?.Invoke(
+                this.format.Replace(
+                    "{ratingId}", $"{this._fetcher?.Rating?.RatingId}"
+                ).Replace(
+                    "{name}", $"{this._fetcher?.Rating?.Name}"
+                ).Replace(
+                    "{userId}", $"{this._fetcher?.Rating?.UserId}"
+                ).Replace(
+                    "{rateValue}", $"{this._fetcher?.Rating?.RateValue}"
+                ).Replace(
+                    "{createdAt:yyyy}", createdAt.ToString("yyyy")
+                ).Replace(
+                    "{createdAt:yy}", createdAt.ToString("yy")
+                ).Replace(
+                    "{createdAt:MM}", createdAt.ToString("MM")
+                ).Replace(
+                    "{createdAt:MMM}", createdAt.ToString("MMM")
+                ).Replace(
+                    "{createdAt:dd}", createdAt.ToString("dd")
+                ).Replace(
+                    "{createdAt:hh}", createdAt.ToString("hh")
+                ).Replace(
+                    "{createdAt:HH}", createdAt.ToString("HH")
+                ).Replace(
+                    "{createdAt:tt}", createdAt.ToString("tt")
+                ).Replace(
+                    "{createdAt:mm}", createdAt.ToString("mm")
+                ).Replace(
+                    "{createdAt:ss}", createdAt.ToString("ss")
+                ).Replace(
+                    "{updatedAt:yyyy}", updatedAt.ToString("yyyy")
+                ).Replace(
+                    "{updatedAt:yy}", updatedAt.ToString("yy")
+                ).Replace(
+                    "{updatedAt:MM}", updatedAt.ToString("MM")
+                ).Replace(
+                    "{updatedAt:MMM}", updatedAt.ToString("MMM")
+                ).Replace(
+                    "{updatedAt:dd}", updatedAt.ToString("dd")
+                ).Replace(
+                    "{updatedAt:hh}", updatedAt.ToString("hh")
+                ).Replace(
+                    "{updatedAt:HH}", updatedAt.ToString("HH")
+                ).Replace(
+                    "{updatedAt:tt}", updatedAt.ToString("tt")
+                ).Replace(
+                    "{updatedAt:mm}", updatedAt.ToString("mm")
+                ).Replace(
+                    "{updatedAt:ss}", updatedAt.ToString("ss")
+                )
+            );
         }
     }
 
@@ -111,23 +108,43 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2MatchmakingOwnRatingFetcher>() ?? GetComponentInParent<Gs2MatchmakingOwnRatingFetcher>();
-
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2MatchmakingOwnRatingFetcher>() ?? GetComponentInParent<Gs2MatchmakingOwnRatingFetcher>();
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MatchmakingOwnRatingFetcher.");
                 enabled = false;
             }
-
-            Update();
         }
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2MatchmakingOwnRatingFetcher>() ?? GetComponentInParent<Gs2MatchmakingOwnRatingFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2MatchmakingOwnRatingFetcher>() ?? GetComponentInParent<Gs2MatchmakingOwnRatingFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 
@@ -165,8 +182,8 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking
 
         public event UnityAction<string> OnUpdate
         {
-            add => onUpdate.AddListener(value);
-            remove => onUpdate.RemoveListener(value);
+            add => this.onUpdate.AddListener(value);
+            remove => this.onUpdate.RemoveListener(value);
         }
     }
 }

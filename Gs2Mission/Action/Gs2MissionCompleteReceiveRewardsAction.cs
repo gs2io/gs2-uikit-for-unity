@@ -48,13 +48,16 @@ namespace Gs2.Unity.UiKit.Gs2Mission
     {
         private IEnumerator Process()
         {
-            yield return new WaitUntil(() => this._clientHolder.Initialized);
-            yield return new WaitUntil(() => this._gameSessionHolder.Initialized);
+            var clientHolder = Gs2ClientHolder.Instance;
+            var gameSessionHolder = Gs2GameSessionHolder.Instance;
+
+            yield return new WaitUntil(() => clientHolder.Initialized);
+            yield return new WaitUntil(() => gameSessionHolder.Initialized);
             
-            var domain = this._clientHolder.Gs2.Mission.Namespace(
+            var domain = clientHolder.Gs2.Mission.Namespace(
                 this._context.Complete.NamespaceName
             ).Me(
-                this._gameSessionHolder.GameSession
+                gameSessionHolder.GameSession
             ).Complete(
                 this._context.Complete.MissionGroupName
             );
@@ -110,16 +113,11 @@ namespace Gs2.Unity.UiKit.Gs2Mission
 
     public partial class Gs2MissionCompleteReceiveRewardsAction
     {
-        private Gs2ClientHolder _clientHolder;
-        private Gs2GameSessionHolder _gameSessionHolder;
         private Gs2MissionOwnCompleteContext _context;
 
         public void Awake()
         {
-            this._clientHolder = Gs2ClientHolder.Instance;
-            this._gameSessionHolder = Gs2GameSessionHolder.Instance;
             this._context = GetComponent<Gs2MissionOwnCompleteContext>() ?? GetComponentInParent<Gs2MissionOwnCompleteContext>();
-
             if (_context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MissionOwnCompleteContext.");
                 enabled = false;
@@ -154,8 +152,9 @@ namespace Gs2.Unity.UiKit.Gs2Mission
         public string MissionTaskName;
 
         public void SetMissionTaskName(string value) {
-            MissionTaskName = value;
-            this.onChangeMissionTaskName.Invoke(MissionTaskName);
+            this.MissionTaskName = value;
+            this.onChangeMissionTaskName.Invoke(this.MissionTaskName);
+            this.OnChange.Invoke();
         }
     }
 
@@ -192,6 +191,8 @@ namespace Gs2.Unity.UiKit.Gs2Mission
             add => this.onReceiveRewardsComplete.AddListener(value);
             remove => this.onReceiveRewardsComplete.RemoveListener(value);
         }
+
+        public UnityEvent OnChange = new UnityEvent();
 
         [SerializeField]
         internal ErrorEvent onError = new ErrorEvent();

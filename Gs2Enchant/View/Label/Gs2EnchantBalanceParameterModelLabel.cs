@@ -40,24 +40,21 @@ namespace Gs2.Unity.UiKit.Gs2Enchant
 	[AddComponentMenu("GS2 UIKit/Enchant/BalanceParameterModel/View/Label/Gs2EnchantBalanceParameterModelLabel")]
     public partial class Gs2EnchantBalanceParameterModelLabel : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched && _fetcher.BalanceParameterModel != null)
-            {
-                onUpdate?.Invoke(
-                    format.Replace(
-                        "{name}", $"{_fetcher?.BalanceParameterModel?.Name}"
-                    ).Replace(
-                        "{metadata}", $"{_fetcher?.BalanceParameterModel?.Metadata}"
-                    ).Replace(
-                        "{totalValue}", $"{_fetcher?.BalanceParameterModel?.TotalValue}"
-                    ).Replace(
-                        "{initialValueStrategy}", $"{_fetcher?.BalanceParameterModel?.InitialValueStrategy}"
-                    ).Replace(
-                        "{parameters}", $"{_fetcher?.BalanceParameterModel?.Parameters}"
-                    )
-                );
-            }
+            this.onUpdate?.Invoke(
+                this.format.Replace(
+                    "{name}", $"{this._fetcher?.BalanceParameterModel?.Name}"
+                ).Replace(
+                    "{metadata}", $"{this._fetcher?.BalanceParameterModel?.Metadata}"
+                ).Replace(
+                    "{totalValue}", $"{this._fetcher?.BalanceParameterModel?.TotalValue}"
+                ).Replace(
+                    "{initialValueStrategy}", $"{this._fetcher?.BalanceParameterModel?.InitialValueStrategy}"
+                ).Replace(
+                    "{parameters}", $"{this._fetcher?.BalanceParameterModel?.Parameters}"
+                )
+            );
         }
     }
 
@@ -71,23 +68,43 @@ namespace Gs2.Unity.UiKit.Gs2Enchant
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2EnchantBalanceParameterModelFetcher>() ?? GetComponentInParent<Gs2EnchantBalanceParameterModelFetcher>();
-
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2EnchantBalanceParameterModelFetcher>() ?? GetComponentInParent<Gs2EnchantBalanceParameterModelFetcher>();
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2EnchantBalanceParameterModelFetcher.");
                 enabled = false;
             }
-
-            Update();
         }
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2EnchantBalanceParameterModelFetcher>() ?? GetComponentInParent<Gs2EnchantBalanceParameterModelFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2EnchantBalanceParameterModelFetcher>() ?? GetComponentInParent<Gs2EnchantBalanceParameterModelFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 
@@ -125,8 +142,8 @@ namespace Gs2.Unity.UiKit.Gs2Enchant
 
         public event UnityAction<string> OnUpdate
         {
-            add => onUpdate.AddListener(value);
-            remove => onUpdate.RemoveListener(value);
+            add => this.onUpdate.AddListener(value);
+            remove => this.onUpdate.RemoveListener(value);
         }
     }
 }

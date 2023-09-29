@@ -40,28 +40,25 @@ namespace Gs2.Unity.UiKit.Gs2Experience
 	[AddComponentMenu("GS2 UIKit/Experience/ExperienceModel/View/Label/Gs2ExperienceExperienceModelLabel")]
     public partial class Gs2ExperienceExperienceModelLabel : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched && _fetcher.ExperienceModel != null)
-            {
-                onUpdate?.Invoke(
-                    format.Replace(
-                        "{name}", $"{_fetcher?.ExperienceModel?.Name}"
-                    ).Replace(
-                        "{metadata}", $"{_fetcher?.ExperienceModel?.Metadata}"
-                    ).Replace(
-                        "{defaultExperience}", $"{_fetcher?.ExperienceModel?.DefaultExperience}"
-                    ).Replace(
-                        "{defaultRankCap}", $"{_fetcher?.ExperienceModel?.DefaultRankCap}"
-                    ).Replace(
-                        "{maxRankCap}", $"{_fetcher?.ExperienceModel?.MaxRankCap}"
-                    ).Replace(
-                        "{rankThreshold}", $"{_fetcher?.ExperienceModel?.RankThreshold}"
-                    ).Replace(
-                        "{acquireActionRates}", $"{_fetcher?.ExperienceModel?.AcquireActionRates}"
-                    )
-                );
-            }
+            this.onUpdate?.Invoke(
+                this.format.Replace(
+                    "{name}", $"{this._fetcher?.ExperienceModel?.Name}"
+                ).Replace(
+                    "{metadata}", $"{this._fetcher?.ExperienceModel?.Metadata}"
+                ).Replace(
+                    "{defaultExperience}", $"{this._fetcher?.ExperienceModel?.DefaultExperience}"
+                ).Replace(
+                    "{defaultRankCap}", $"{this._fetcher?.ExperienceModel?.DefaultRankCap}"
+                ).Replace(
+                    "{maxRankCap}", $"{this._fetcher?.ExperienceModel?.MaxRankCap}"
+                ).Replace(
+                    "{rankThreshold}", $"{this._fetcher?.ExperienceModel?.RankThreshold}"
+                ).Replace(
+                    "{acquireActionRates}", $"{this._fetcher?.ExperienceModel?.AcquireActionRates}"
+                )
+            );
         }
     }
 
@@ -75,23 +72,43 @@ namespace Gs2.Unity.UiKit.Gs2Experience
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2ExperienceExperienceModelFetcher>() ?? GetComponentInParent<Gs2ExperienceExperienceModelFetcher>();
-
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2ExperienceExperienceModelFetcher>() ?? GetComponentInParent<Gs2ExperienceExperienceModelFetcher>();
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ExperienceExperienceModelFetcher.");
                 enabled = false;
             }
-
-            Update();
         }
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2ExperienceExperienceModelFetcher>() ?? GetComponentInParent<Gs2ExperienceExperienceModelFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2ExperienceExperienceModelFetcher>() ?? GetComponentInParent<Gs2ExperienceExperienceModelFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 
@@ -129,8 +146,8 @@ namespace Gs2.Unity.UiKit.Gs2Experience
 
         public event UnityAction<string> OnUpdate
         {
-            add => onUpdate.AddListener(value);
-            remove => onUpdate.RemoveListener(value);
+            add => this.onUpdate.AddListener(value);
+            remove => this.onUpdate.RemoveListener(value);
         }
     }
 }

@@ -30,6 +30,7 @@ using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Mission.Context;
 using Gs2.Unity.UiKit.Gs2Mission.Fetcher;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2Mission
 {
@@ -42,19 +43,19 @@ namespace Gs2.Unity.UiKit.Gs2Mission
     {
         private List<Gs2MissionMissionGroupModelContext> _children;
 
-        public void OnFetched() {
-            for (var i = 0; i < this.maximumItems; i++) {
+        private void OnFetched() {
+            for (var i = 0; i < this._children.Count; i++) {
                 if (i < this._fetcher.MissionGroupModels.Count) {
-                    _children[i].SetMissionGroupModel(
+                    this._children[i].SetMissionGroupModel(
                         MissionGroupModel.New(
-                                this._fetcher.Context.Namespace,
-                                this._fetcher.MissionGroupModels[i].Name
-                            )
+                            this._fetcher.Context.Namespace,
+                            this._fetcher.MissionGroupModels[i].Name
+                        )
                     );
-                    _children[i].gameObject.SetActive(true);
+                    this._children[i].gameObject.SetActive(true);
                 }
                 else {
-                    _children[i].gameObject.SetActive(false);
+                    this._children[i].gameObject.SetActive(false);
                 }
             }
         }
@@ -67,49 +68,72 @@ namespace Gs2.Unity.UiKit.Gs2Mission
     public partial class Gs2MissionMissionGroupModelList
     {
         private Gs2MissionMissionGroupModelListFetcher _fetcher;
-        public Gs2MissionNamespaceContext Context => _fetcher.Context;
+
+        private void Initialize() {
+            for (var i = 0; i < this.maximumItems; i++) {
+                var node = Instantiate(this.prefab, transform);
+                node.MissionGroupModel = MissionGroupModel.New(
+                    this._fetcher.Context.Namespace,
+                    ""
+                );
+                node.gameObject.SetActive(false);
+                this._children.Add(node);
+            }
+        }
 
         public void Awake()
         {
-            if (prefab == null) {
+            if (this.prefab == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MissionMissionGroupModelContext Prefab.");
                 enabled = false;
                 return;
             }
 
-            _fetcher = GetComponent<Gs2MissionMissionGroupModelListFetcher>() ?? GetComponentInParent<Gs2MissionMissionGroupModelListFetcher>();
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2MissionMissionGroupModelListFetcher>() ?? GetComponentInParent<Gs2MissionMissionGroupModelListFetcher>();
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MissionMissionGroupModelListFetcher.");
                 enabled = false;
-                return;
-            }
-            var context = GetComponent<Gs2MissionNamespaceContext>() ?? GetComponentInParent<Gs2MissionNamespaceContext>(true);
-            if (context == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MissionMissionGroupModelListFetcher::Context.");
-                enabled = false;
-                return;
             }
 
-            _children = new List<Gs2MissionMissionGroupModelContext>();
-            for (var i = 0; i < this.maximumItems; i++) {
-                var node = Instantiate(this.prefab, transform);
-                node.MissionGroupModel = MissionGroupModel.New(
-                    context.Namespace,
-                    ""
-                );
-                node.gameObject.SetActive(false);
-                _children.Add(node);
-            }
+            this._children = new List<Gs2MissionMissionGroupModelContext>();
             this.prefab.gameObject.SetActive(false);
+
+            Invoke(nameof(Initialize), 0);
         }
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2MissionMissionGroupModelListFetcher>() ?? GetComponentInParent<Gs2MissionMissionGroupModelListFetcher>(true);
-            if (_fetcher == null) {
+            if (this.prefab == null) {
+                return true;
+            }
+            this._fetcher = GetComponent<Gs2MissionMissionGroupModelListFetcher>() ?? GetComponentInParent<Gs2MissionMissionGroupModelListFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 
@@ -119,15 +143,7 @@ namespace Gs2.Unity.UiKit.Gs2Mission
 
     public partial class Gs2MissionMissionGroupModelList
     {
-        public void OnEnable()
-        {
-            _fetcher.OnFetched.AddListener(OnFetched);
-        }
 
-        public void OnDisable()
-        {
-            _fetcher.OnFetched.RemoveListener(OnFetched);
-        }
     }
 
     /// <summary>

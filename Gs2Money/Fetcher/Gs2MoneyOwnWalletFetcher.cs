@@ -74,6 +74,7 @@ namespace Gs2.Unity.UiKit.Gs2Money.Fetcher
                 {
                     Wallet = item;
                     Fetched = true;
+                    this.OnFetched.Invoke();
                 }
             );
 
@@ -87,11 +88,10 @@ namespace Gs2.Unity.UiKit.Gs2Money.Fetcher
                 else {
                     Wallet = future.Result;
                     Fetched = true;
+                    this.OnFetched.Invoke();
                     break;
                 }
             }
-
-            this.OnFetched.Invoke();
         }
 
         public void OnUpdateContext() {
@@ -131,8 +131,6 @@ namespace Gs2.Unity.UiKit.Gs2Money.Fetcher
     {
         public Gs2MoneyOwnWalletContext Context { get; private set; }
 
-        public UnityEvent OnFetched = new UnityEvent();
-
         public void Awake()
         {
             Context = GetComponent<Gs2MoneyOwnWalletContext>() ?? GetComponentInParent<Gs2MoneyOwnWalletContext>();
@@ -160,6 +158,7 @@ namespace Gs2.Unity.UiKit.Gs2Money.Fetcher
     {
         public Gs2.Unity.Gs2Money.Model.EzWallet Wallet { get; protected set; }
         public bool Fetched { get; protected set; }
+        public UnityEvent OnFetched = new UnityEvent();
     }
 
     /// <summary>

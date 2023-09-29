@@ -48,13 +48,16 @@ namespace Gs2.Unity.UiKit.Gs2Limit
     {
         private IEnumerator Process()
         {
-            yield return new WaitUntil(() => this._clientHolder.Initialized);
-            yield return new WaitUntil(() => this._gameSessionHolder.Initialized);
+            var clientHolder = Gs2ClientHolder.Instance;
+            var gameSessionHolder = Gs2GameSessionHolder.Instance;
+
+            yield return new WaitUntil(() => clientHolder.Initialized);
+            yield return new WaitUntil(() => gameSessionHolder.Initialized);
             
-            var domain = this._clientHolder.Gs2.Limit.Namespace(
+            var domain = clientHolder.Gs2.Limit.Namespace(
                 this._context.Counter.NamespaceName
             ).Me(
-                this._gameSessionHolder.GameSession
+                gameSessionHolder.GameSession
             ).Counter(
                 this._context.Counter.LimitName,
                 this._context.Counter.CounterName
@@ -123,16 +126,11 @@ namespace Gs2.Unity.UiKit.Gs2Limit
 
     public partial class Gs2LimitCounterCountUpAction
     {
-        private Gs2ClientHolder _clientHolder;
-        private Gs2GameSessionHolder _gameSessionHolder;
         private Gs2LimitOwnCounterContext _context;
 
         public void Awake()
         {
-            this._clientHolder = Gs2ClientHolder.Instance;
-            this._gameSessionHolder = Gs2GameSessionHolder.Instance;
             this._context = GetComponent<Gs2LimitOwnCounterContext>() ?? GetComponentInParent<Gs2LimitOwnCounterContext>();
-
             if (_context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2LimitOwnCounterContext.");
                 enabled = false;
@@ -168,33 +166,39 @@ namespace Gs2.Unity.UiKit.Gs2Limit
         public int MaxValue;
 
         public void SetCountUpValue(int value) {
-            CountUpValue = value;
-            this.onChangeCountUpValue.Invoke(CountUpValue);
+            this.CountUpValue = value;
+            this.onChangeCountUpValue.Invoke(this.CountUpValue);
+            this.OnChange.Invoke();
         }
 
         public void DecreaseCountUpValue() {
-            CountUpValue -= 1;
-            this.onChangeCountUpValue.Invoke(CountUpValue);
+            this.CountUpValue -= 1;
+            this.onChangeCountUpValue.Invoke(this.CountUpValue);
+            this.OnChange.Invoke();
         }
 
         public void IncreaseCountUpValue() {
-            CountUpValue += 1;
-            this.onChangeCountUpValue.Invoke(CountUpValue);
+            this.CountUpValue += 1;
+            this.onChangeCountUpValue.Invoke(this.CountUpValue);
+            this.OnChange.Invoke();
         }
 
         public void SetMaxValue(int value) {
-            MaxValue = value;
-            this.onChangeMaxValue.Invoke(MaxValue);
+            this.MaxValue = value;
+            this.onChangeMaxValue.Invoke(this.MaxValue);
+            this.OnChange.Invoke();
         }
 
         public void DecreaseMaxValue() {
-            MaxValue -= 1;
-            this.onChangeMaxValue.Invoke(MaxValue);
+            this.MaxValue -= 1;
+            this.onChangeMaxValue.Invoke(this.MaxValue);
+            this.OnChange.Invoke();
         }
 
         public void IncreaseMaxValue() {
-            MaxValue += 1;
-            this.onChangeMaxValue.Invoke(MaxValue);
+            this.MaxValue += 1;
+            this.onChangeMaxValue.Invoke(this.MaxValue);
+            this.OnChange.Invoke();
         }
     }
 
@@ -245,6 +249,8 @@ namespace Gs2.Unity.UiKit.Gs2Limit
             add => this.onCountUpComplete.AddListener(value);
             remove => this.onCountUpComplete.RemoveListener(value);
         }
+
+        public UnityEvent OnChange = new UnityEvent();
 
         [SerializeField]
         internal ErrorEvent onError = new ErrorEvent();

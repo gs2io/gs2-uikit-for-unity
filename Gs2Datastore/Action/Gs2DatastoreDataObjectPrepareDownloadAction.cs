@@ -48,13 +48,16 @@ namespace Gs2.Unity.UiKit.Gs2Datastore
     {
         private IEnumerator Process()
         {
-            yield return new WaitUntil(() => this._clientHolder.Initialized);
-            yield return new WaitUntil(() => this._gameSessionHolder.Initialized);
+            var clientHolder = Gs2ClientHolder.Instance;
+            var gameSessionHolder = Gs2GameSessionHolder.Instance;
+
+            yield return new WaitUntil(() => clientHolder.Initialized);
+            yield return new WaitUntil(() => gameSessionHolder.Initialized);
             
-            var domain = this._clientHolder.Gs2.Datastore.Namespace(
+            var domain = clientHolder.Gs2.Datastore.Namespace(
                 this._context.DataObject.NamespaceName
             ).Me(
-                this._gameSessionHolder.GameSession
+                gameSessionHolder.GameSession
             );
             var future = domain.PrepareDownload(
                 DataObjectId
@@ -119,16 +122,11 @@ namespace Gs2.Unity.UiKit.Gs2Datastore
 
     public partial class Gs2DatastoreDataObjectPrepareDownloadAction
     {
-        private Gs2ClientHolder _clientHolder;
-        private Gs2GameSessionHolder _gameSessionHolder;
         private Gs2DatastoreOwnDataObjectContext _context;
 
         public void Awake()
         {
-            this._clientHolder = Gs2ClientHolder.Instance;
-            this._gameSessionHolder = Gs2GameSessionHolder.Instance;
             this._context = GetComponent<Gs2DatastoreOwnDataObjectContext>() ?? GetComponentInParent<Gs2DatastoreOwnDataObjectContext>();
-
             if (_context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2DatastoreOwnDataObjectContext.");
                 enabled = false;
@@ -163,8 +161,9 @@ namespace Gs2.Unity.UiKit.Gs2Datastore
         public string DataObjectId;
 
         public void SetDataObjectId(string value) {
-            DataObjectId = value;
-            this.onChangeDataObjectId.Invoke(DataObjectId);
+            this.DataObjectId = value;
+            this.onChangeDataObjectId.Invoke(this.DataObjectId);
+            this.OnChange.Invoke();
         }
     }
 
@@ -201,6 +200,8 @@ namespace Gs2.Unity.UiKit.Gs2Datastore
             add => this.onPrepareDownloadComplete.AddListener(value);
             remove => this.onPrepareDownloadComplete.RemoveListener(value);
         }
+
+        public UnityEvent OnChange = new UnityEvent();
 
         [SerializeField]
         internal ErrorEvent onError = new ErrorEvent();

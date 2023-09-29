@@ -43,8 +43,12 @@ namespace Gs2.Unity.UiKit.Gs2Limit.Editor
             serializedObject.Update();
 
             if (original.Counter == null) {
-                if (original.GetComponentInParent<Gs2LimitOwnCounterList>(true) != null) {
-                    EditorGUILayout.HelpBox("OwnCounter is auto assign from Gs2LimitOwnCounterList.", MessageType.Info);
+                var list = original.GetComponentInParent<Gs2LimitOwnCounterList>(true);
+                if (list != null) {
+                    EditorGUILayout.HelpBox("Counter is auto assign from Gs2LimitOwnCounterList.", MessageType.Info);
+                    EditorGUI.BeginDisabledGroup(true);
+                    EditorGUILayout.ObjectField("List", list, typeof(Gs2LimitOwnCounterList), false);
+                    EditorGUI.EndDisabledGroup();
                 }
                 else {
                     EditorGUILayout.HelpBox("OwnCounter not assigned.", MessageType.Error);

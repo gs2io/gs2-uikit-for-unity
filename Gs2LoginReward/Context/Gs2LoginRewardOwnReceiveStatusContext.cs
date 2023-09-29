@@ -40,7 +40,7 @@ namespace Gs2.Unity.UiKit.Gs2LoginReward.Context
     {
         public void Start() {
             if (ReceiveStatus == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: ReceiveStatus is not set in Gs2LoginRewardOwnReceiveStatusContext.");
+                Debug.LogWarning($"{gameObject.GetFullPath()}: ReceiveStatus is not set in Gs2LoginRewardOwnReceiveStatusContext.");
             }
         }
         public virtual bool HasError() {
@@ -48,9 +48,7 @@ namespace Gs2.Unity.UiKit.Gs2LoginReward.Context
                 if (GetComponentInParent<Gs2LoginRewardOwnReceiveStatusList>(true) != null) {
                     return false;
                 }
-                else {
-                    return true;
-                }
+                return true;
             }
             return false;
         }

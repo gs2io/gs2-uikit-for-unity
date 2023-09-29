@@ -75,6 +75,7 @@ namespace Gs2.Unity.UiKit.Gs2Experience.Fetcher
                 {
                     Status = item;
                     Fetched = true;
+                    this.OnFetched.Invoke();
                 }
             );
 
@@ -88,11 +89,10 @@ namespace Gs2.Unity.UiKit.Gs2Experience.Fetcher
                 else {
                     Status = future.Result;
                     Fetched = true;
+                    this.OnFetched.Invoke();
                     break;
                 }
             }
-
-            this.OnFetched.Invoke();
         }
 
         public void OnUpdateContext() {
@@ -132,8 +132,6 @@ namespace Gs2.Unity.UiKit.Gs2Experience.Fetcher
     {
         public Gs2ExperienceOwnStatusContext Context { get; private set; }
 
-        public UnityEvent OnFetched = new UnityEvent();
-
         public void Awake()
         {
             Context = GetComponent<Gs2ExperienceOwnStatusContext>() ?? GetComponentInParent<Gs2ExperienceOwnStatusContext>();
@@ -161,6 +159,7 @@ namespace Gs2.Unity.UiKit.Gs2Experience.Fetcher
     {
         public Gs2.Unity.Gs2Experience.Model.EzStatus Status { get; protected set; }
         public bool Fetched { get; protected set; }
+        public UnityEvent OnFetched = new UnityEvent();
     }
 
     /// <summary>

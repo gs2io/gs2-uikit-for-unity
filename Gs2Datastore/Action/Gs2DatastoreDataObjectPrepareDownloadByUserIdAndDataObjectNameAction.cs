@@ -50,10 +50,13 @@ namespace Gs2.Unity.UiKit.Gs2Datastore
     {
         private IEnumerator Process()
         {
-            yield return new WaitUntil(() => this._clientHolder.Initialized);
-            yield return new WaitUntil(() => this._gameSessionHolder.Initialized);
+            var clientHolder = Gs2ClientHolder.Instance;
+            var gameSessionHolder = Gs2GameSessionHolder.Instance;
+
+            yield return new WaitUntil(() => clientHolder.Initialized);
+            yield return new WaitUntil(() => gameSessionHolder.Initialized);
             
-            var domain = this._clientHolder.Gs2.Datastore.Namespace(
+            var domain = clientHolder.Gs2.Datastore.Namespace(
                 this._context.DataObject.NamespaceName
             ).User(
                 this._context.DataObject.UserId
@@ -122,23 +125,18 @@ namespace Gs2.Unity.UiKit.Gs2Datastore
 
     public partial class Gs2DatastoreDataObjectPrepareDownloadByUserIdAndDataObjectNameAction
     {
-        private Gs2ClientHolder _clientHolder;
-        private Gs2GameSessionHolder _gameSessionHolder;
         private Gs2DatastoreDataObjectContext _context;
 
         public void Awake()
         {
-            this._clientHolder = Gs2ClientHolder.Instance;
-            this._gameSessionHolder = Gs2GameSessionHolder.Instance;
             this._context = GetComponent<Gs2DatastoreDataObjectContext>() ?? GetComponentInParent<Gs2DatastoreDataObjectContext>();
-
             if (_context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2DatastoreDataObjectContext.");
                 enabled = false;
             }
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
             this._context = GetComponent<Gs2DatastoreDataObjectContext>() ?? GetComponentInParent<Gs2DatastoreDataObjectContext>(true);
             if (_context == null) {
@@ -162,6 +160,7 @@ namespace Gs2.Unity.UiKit.Gs2Datastore
     /// </summary>
     public partial class Gs2DatastoreDataObjectPrepareDownloadByUserIdAndDataObjectNameAction
     {
+        public bool WaitAsyncProcessComplete;
     }
 
     /// <summary>
@@ -183,6 +182,8 @@ namespace Gs2.Unity.UiKit.Gs2Datastore
             add => this.onPrepareDownloadByUserIdAndDataObjectNameComplete.AddListener(value);
             remove => this.onPrepareDownloadByUserIdAndDataObjectNameComplete.RemoveListener(value);
         }
+
+        public UnityEvent OnChange = new UnityEvent();
 
         [SerializeField]
         internal ErrorEvent onError = new ErrorEvent();

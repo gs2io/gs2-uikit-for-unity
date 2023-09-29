@@ -74,6 +74,7 @@ namespace Gs2.Unity.UiKit.Gs2Account.Fetcher
                 {
                     TakeOver = item;
                     Fetched = true;
+                    this.OnFetched.Invoke();
                 }
             );
 
@@ -87,11 +88,10 @@ namespace Gs2.Unity.UiKit.Gs2Account.Fetcher
                 else {
                     TakeOver = future.Result;
                     Fetched = true;
+                    this.OnFetched.Invoke();
                     break;
                 }
             }
-
-            this.OnFetched.Invoke();
         }
 
         public void OnUpdateContext() {
@@ -131,8 +131,6 @@ namespace Gs2.Unity.UiKit.Gs2Account.Fetcher
     {
         public Gs2AccountOwnTakeOverContext Context { get; private set; }
 
-        public UnityEvent OnFetched = new UnityEvent();
-
         public void Awake()
         {
             Context = GetComponent<Gs2AccountOwnTakeOverContext>() ?? GetComponentInParent<Gs2AccountOwnTakeOverContext>();
@@ -160,6 +158,7 @@ namespace Gs2.Unity.UiKit.Gs2Account.Fetcher
     {
         public Gs2.Unity.Gs2Account.Model.EzTakeOver TakeOver { get; protected set; }
         public bool Fetched { get; protected set; }
+        public UnityEvent OnFetched = new UnityEvent();
     }
 
     /// <summary>

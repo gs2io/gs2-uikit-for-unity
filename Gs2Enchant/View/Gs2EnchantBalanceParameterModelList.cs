@@ -30,6 +30,7 @@ using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Enchant.Context;
 using Gs2.Unity.UiKit.Gs2Enchant.Fetcher;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2Enchant
 {
@@ -43,18 +44,18 @@ namespace Gs2.Unity.UiKit.Gs2Enchant
         private List<Gs2EnchantBalanceParameterModelContext> _children;
 
         public void OnFetched() {
-            for (var i = 0; i < this.maximumItems; i++) {
+            for (var i = 0; i < this._children.Count; i++) {
                 if (i < this._fetcher.BalanceParameterModels.Count) {
-                    _children[i].SetBalanceParameterModel(
+                    this._children[i].SetBalanceParameterModel(
                         BalanceParameterModel.New(
-                                this._fetcher.Context.Namespace,
-                                this._fetcher.BalanceParameterModels[i].Name
-                            )
+                            this._fetcher.Context.Namespace,
+                            this._fetcher.BalanceParameterModels[i].Name
+                        )
                     );
-                    _children[i].gameObject.SetActive(true);
+                    this._children[i].gameObject.SetActive(true);
                 }
                 else {
-                    _children[i].gameObject.SetActive(false);
+                    this._children[i].gameObject.SetActive(false);
                 }
             }
         }
@@ -67,49 +68,72 @@ namespace Gs2.Unity.UiKit.Gs2Enchant
     public partial class Gs2EnchantBalanceParameterModelList
     {
         private Gs2EnchantBalanceParameterModelListFetcher _fetcher;
-        public Gs2EnchantNamespaceContext Context => _fetcher.Context;
+
+        private void Initialize() {
+            for (var i = 0; i < this.maximumItems; i++) {
+                var node = Instantiate(this.prefab, transform);
+                node.BalanceParameterModel = BalanceParameterModel.New(
+                    this._fetcher.Context.Namespace,
+                    ""
+                );
+                node.gameObject.SetActive(false);
+                this._children.Add(node);
+            }
+        }
 
         public void Awake()
         {
-            if (prefab == null) {
+            if (this.prefab == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2EnchantBalanceParameterModelContext Prefab.");
                 enabled = false;
                 return;
             }
 
-            _fetcher = GetComponent<Gs2EnchantBalanceParameterModelListFetcher>() ?? GetComponentInParent<Gs2EnchantBalanceParameterModelListFetcher>();
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2EnchantBalanceParameterModelListFetcher>() ?? GetComponentInParent<Gs2EnchantBalanceParameterModelListFetcher>();
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2EnchantBalanceParameterModelListFetcher.");
                 enabled = false;
-                return;
-            }
-            var context = GetComponent<Gs2EnchantNamespaceContext>() ?? GetComponentInParent<Gs2EnchantNamespaceContext>(true);
-            if (context == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2EnchantBalanceParameterModelListFetcher::Context.");
-                enabled = false;
-                return;
             }
 
-            _children = new List<Gs2EnchantBalanceParameterModelContext>();
-            for (var i = 0; i < this.maximumItems; i++) {
-                var node = Instantiate(this.prefab, transform);
-                node.BalanceParameterModel = BalanceParameterModel.New(
-                    context.Namespace,
-                    ""
-                );
-                node.gameObject.SetActive(false);
-                _children.Add(node);
-            }
+            this._children = new List<Gs2EnchantBalanceParameterModelContext>();
             this.prefab.gameObject.SetActive(false);
+
+            Invoke(nameof(Initialize), 0);
         }
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2EnchantBalanceParameterModelListFetcher>() ?? GetComponentInParent<Gs2EnchantBalanceParameterModelListFetcher>(true);
-            if (_fetcher == null) {
+            if (this.prefab == null) {
+                return true;
+            }
+            this._fetcher = GetComponent<Gs2EnchantBalanceParameterModelListFetcher>() ?? GetComponentInParent<Gs2EnchantBalanceParameterModelListFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 
@@ -119,15 +143,7 @@ namespace Gs2.Unity.UiKit.Gs2Enchant
 
     public partial class Gs2EnchantBalanceParameterModelList
     {
-        public void OnEnable()
-        {
-            _fetcher.OnFetched.AddListener(OnFetched);
-        }
 
-        public void OnDisable()
-        {
-            _fetcher.OnFetched.RemoveListener(OnFetched);
-        }
     }
 
     /// <summary>

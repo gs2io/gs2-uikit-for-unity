@@ -34,7 +34,6 @@ using Gs2.Unity.Gs2SerialKey.ScriptableObject;
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Core.Fetcher;
 using Gs2.Unity.UiKit.Gs2SerialKey.Context;
-using Gs2.Unity.UiKit.Gs2SerialKey.Fetcher;
 using Gs2.Unity.Util;
 using Gs2.Util.LitJson;
 using UnityEngine;
@@ -49,37 +48,21 @@ namespace Gs2.Unity.UiKit.Gs2SerialKey.Fetcher
 	[AddComponentMenu("GS2 UIKit/SerialKey/SerialKey/Fetcher/Acquire/Gs2SerialKeyRevertUseByUserIdFetcher")]
     public partial class Gs2SerialKeyRevertUseByUserIdFetcher : Gs2SerialKeyNamespaceContext
     {
-        private IEnumerator Fetch()
+        private void Fetch()
         {
-            while (true)
-            {
-                if (_fetcher != null) {
-                    var action = _fetcher.AcquireActions().FirstOrDefault(v => v.Action == "Gs2SerialKey:RevertUseByUserId");
-                    if (action != null) {
-                        Request = RevertUseByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
-                        if (Namespace == null || (
-                                Namespace.NamespaceName == Request.NamespaceName)
-                           ) {
-                            Namespace = Namespace.New(
+            var action = _fetcher.AcquireActions().FirstOrDefault(v => v.Action == "Gs2SerialKey:RevertUseByUserId");
+            if (action != null) {
+                Request = RevertUseByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
+                if (Namespace == null || (
+                        Namespace.NamespaceName == Request.NamespaceName)
+                   ) {
+                    Namespace = Namespace.New(
                                 Request.NamespaceName
                             );
-                        }
-                        Fetched = true;
-                    }
                 }
-                yield return new WaitForSeconds(0.1f);
             }
-            // ReSharper disable once IteratorNeverReturns
-        }
-
-        public void OnEnable()
-        {
-            StartCoroutine(nameof(Fetch));
-        }
-
-        public void OnDisable()
-        {
-            StopCoroutine(nameof(Fetch));
+            Fetched = true;
+            this.OnFetched.Invoke();
         }
     }
 
@@ -97,9 +80,8 @@ namespace Gs2.Unity.UiKit.Gs2SerialKey.Fetcher
 
         public void Awake()
         {
-            _fetcher = GetComponent<IAcquireActionsFetcher>() ?? GetComponentInParent<IAcquireActionsFetcher>();
-
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<IAcquireActionsFetcher>() ?? GetComponentInParent<IAcquireActionsFetcher>();
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the IAcquireActionFetcher.");
                 enabled = false;
             }
@@ -107,11 +89,24 @@ namespace Gs2.Unity.UiKit.Gs2SerialKey.Fetcher
 
         public override bool HasError()
         {
-            _fetcher = GetComponent<IAcquireActionsFetcher>() ?? GetComponentInParent<IAcquireActionsFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<IAcquireActionsFetcher>() ?? GetComponentInParent<IAcquireActionsFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
             return false;
+        }
+
+        public void OnEnable()
+        {
+            this._fetcher.OnFetchedEvent().AddListener(Fetch);
+            if (this._fetcher.IsFetched()) {
+                Fetch();
+            }
+        }
+
+        public void OnDisable()
+        {
+            this._fetcher.OnFetchedEvent().RemoveListener(Fetch);
         }
     }
 
@@ -123,6 +118,7 @@ namespace Gs2.Unity.UiKit.Gs2SerialKey.Fetcher
     {
         public RevertUseByUserIdRequest Request { get; protected set; }
         public bool Fetched { get; protected set; }
+        public UnityEvent OnFetched = new UnityEvent();
     }
 
     /// <summary>
@@ -139,13 +135,6 @@ namespace Gs2.Unity.UiKit.Gs2SerialKey.Fetcher
     /// </summary>
     public partial class Gs2SerialKeyRevertUseByUserIdFetcher
     {
-        [SerializeField]
-        internal ErrorEvent onError = new ErrorEvent();
 
-        public event UnityAction<Gs2Exception, Func<IEnumerator>> OnError
-        {
-            add => onError.AddListener(value);
-            remove => onError.RemoveListener(value);
-        }
     }
 }

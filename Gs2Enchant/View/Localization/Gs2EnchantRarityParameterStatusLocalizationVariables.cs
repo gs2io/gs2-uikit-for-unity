@@ -29,6 +29,7 @@
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Enchant.Fetcher;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.Localization.Components;
 using UnityEngine.Localization.SmartFormat.PersistentVariables;
 
@@ -41,18 +42,15 @@ namespace Gs2.Unity.UiKit.Gs2Enchant.Localization
     [AddComponentMenu("GS2 UIKit/Enchant/RarityParameterStatus/View/Localization/Gs2EnchantRarityParameterStatusLocalizationVariables")]
     public partial class Gs2EnchantRarityParameterStatusLocalizationVariables : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched) {
-                target.StringReference["parameterName"] = new StringVariable {
-                    Value = _fetcher?.RarityParameterStatus?.ParameterName ?? "",
-                };
-                target.StringReference["propertyId"] = new StringVariable {
-                    Value = _fetcher?.RarityParameterStatus?.PropertyId ?? "",
-                };
-                enabled = false;
-                target.enabled = true;
-            }
+            this.target.StringReference["parameterName"] = new StringVariable {
+                Value = _fetcher?.RarityParameterStatus?.ParameterName ?? "",
+            };
+            this.target.StringReference["propertyId"] = new StringVariable {
+                Value = _fetcher?.RarityParameterStatus?.PropertyId ?? "",
+            };
+            this.target.enabled = true;
         }
     }
 
@@ -65,10 +63,10 @@ namespace Gs2.Unity.UiKit.Gs2Enchant.Localization
         private Gs2EnchantOwnRarityParameterStatusFetcher _fetcher;
 
         public void Awake() {
-            target.enabled = false;
-            _fetcher = GetComponent<Gs2EnchantOwnRarityParameterStatusFetcher>() ?? GetComponentInParent<Gs2EnchantOwnRarityParameterStatusFetcher>();
+            this.target.enabled = false;
+            this._fetcher = GetComponent<Gs2EnchantOwnRarityParameterStatusFetcher>() ?? GetComponentInParent<Gs2EnchantOwnRarityParameterStatusFetcher>();
 
-            if (_fetcher == null) {
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2EnchantRarityParameterStatusFetcher.");
                 enabled = false;
             }
@@ -76,11 +74,34 @@ namespace Gs2.Unity.UiKit.Gs2Enchant.Localization
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2EnchantOwnRarityParameterStatusFetcher>() ?? GetComponentInParent<Gs2EnchantOwnRarityParameterStatusFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2EnchantOwnRarityParameterStatusFetcher>() ?? GetComponentInParent<Gs2EnchantOwnRarityParameterStatusFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 

@@ -24,10 +24,12 @@
 
 #pragma warning disable CS0472
 
+using System;
 using System.Collections.Generic;
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Schedule.Fetcher;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2Schedule
 {
@@ -38,35 +40,30 @@ namespace Gs2.Unity.UiKit.Gs2Schedule
 	[AddComponentMenu("GS2 UIKit/Schedule/Event/View/Enabler/Properties/RepeatBeginHour/Gs2ScheduleOwnEventRepeatBeginHourEnabler")]
     public partial class Gs2ScheduleOwnEventRepeatBeginHourEnabler : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched && _fetcher.Event != null)
+            switch(this.expression)
             {
-                switch(expression)
-                {
-                    case Expression.In:
-                        target.SetActive(enableRepeatBeginHours.Contains(_fetcher.Event.RepeatBeginHour));
-                        break;
-                    case Expression.NotIn:
-                        target.SetActive(!enableRepeatBeginHours.Contains(_fetcher.Event.RepeatBeginHour));
-                        break;
-                    case Expression.Less:
-                        target.SetActive(enableRepeatBeginHour > _fetcher.Event.RepeatBeginHour);
-                        break;
-                    case Expression.LessEqual:
-                        target.SetActive(enableRepeatBeginHour >= _fetcher.Event.RepeatBeginHour);
-                        break;
-                    case Expression.Greater:
-                        target.SetActive(enableRepeatBeginHour < _fetcher.Event.RepeatBeginHour);
-                        break;
-                    case Expression.GreaterEqual:
-                        target.SetActive(enableRepeatBeginHour <= _fetcher.Event.RepeatBeginHour);
-                        break;
-                }
-            }
-            else
-            {
-                target.SetActive(false);
+                case Expression.In:
+                    this.target.SetActive(this.enableRepeatBeginHours.Contains(this._fetcher.Event.RepeatBeginHour));
+                    break;
+                case Expression.NotIn:
+                    this.target.SetActive(!this.enableRepeatBeginHours.Contains(this._fetcher.Event.RepeatBeginHour));
+                    break;
+                case Expression.Less:
+                    this.target.SetActive(this.enableRepeatBeginHour > this._fetcher.Event.RepeatBeginHour);
+                    break;
+                case Expression.LessEqual:
+                    this.target.SetActive(this.enableRepeatBeginHour >= this._fetcher.Event.RepeatBeginHour);
+                    break;
+                case Expression.Greater:
+                    this.target.SetActive(this.enableRepeatBeginHour < this._fetcher.Event.RepeatBeginHour);
+                    break;
+                case Expression.GreaterEqual:
+                    this.target.SetActive(this.enableRepeatBeginHour <= this._fetcher.Event.RepeatBeginHour);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
         }
     }
@@ -81,13 +78,12 @@ namespace Gs2.Unity.UiKit.Gs2Schedule
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2ScheduleOwnEventFetcher>() ?? GetComponentInParent<Gs2ScheduleOwnEventFetcher>();
-
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2ScheduleOwnEventFetcher>() ?? GetComponentInParent<Gs2ScheduleOwnEventFetcher>();
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ScheduleOwnEventFetcher.");
                 enabled = false;
             }
-            if (target == null) {
+            if (this.target == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: target is not set.");
                 enabled = false;
             }
@@ -95,14 +91,37 @@ namespace Gs2.Unity.UiKit.Gs2Schedule
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2ScheduleOwnEventFetcher>() ?? GetComponentInParent<Gs2ScheduleOwnEventFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2ScheduleOwnEventFetcher>() ?? GetComponentInParent<Gs2ScheduleOwnEventFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
-            if (target == null) {
+            if (this.target == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 

@@ -40,24 +40,21 @@ namespace Gs2.Unity.UiKit.Gs2JobQueue
 	[AddComponentMenu("GS2 UIKit/JobQueue/Job/View/Label/Gs2JobQueueOwnJobLabel")]
     public partial class Gs2JobQueueOwnJobLabel : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched && _fetcher.Job != null)
-            {
-                onUpdate?.Invoke(
-                    format.Replace(
-                        "{jobId}", $"{_fetcher?.Job?.JobId}"
-                    ).Replace(
-                        "{scriptId}", $"{_fetcher?.Job?.ScriptId}"
-                    ).Replace(
-                        "{args}", $"{_fetcher?.Job?.Args}"
-                    ).Replace(
-                        "{currentRetryCount}", $"{_fetcher?.Job?.CurrentRetryCount}"
-                    ).Replace(
-                        "{maxTryCount}", $"{_fetcher?.Job?.MaxTryCount}"
-                    )
-                );
-            }
+            this.onUpdate?.Invoke(
+                this.format.Replace(
+                    "{jobId}", $"{this._fetcher?.Job?.JobId}"
+                ).Replace(
+                    "{scriptId}", $"{this._fetcher?.Job?.ScriptId}"
+                ).Replace(
+                    "{args}", $"{this._fetcher?.Job?.Args}"
+                ).Replace(
+                    "{currentRetryCount}", $"{this._fetcher?.Job?.CurrentRetryCount}"
+                ).Replace(
+                    "{maxTryCount}", $"{this._fetcher?.Job?.MaxTryCount}"
+                )
+            );
         }
     }
 
@@ -71,23 +68,43 @@ namespace Gs2.Unity.UiKit.Gs2JobQueue
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2JobQueueOwnJobFetcher>() ?? GetComponentInParent<Gs2JobQueueOwnJobFetcher>();
-
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2JobQueueOwnJobFetcher>() ?? GetComponentInParent<Gs2JobQueueOwnJobFetcher>();
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2JobQueueOwnJobFetcher.");
                 enabled = false;
             }
-
-            Update();
         }
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2JobQueueOwnJobFetcher>() ?? GetComponentInParent<Gs2JobQueueOwnJobFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2JobQueueOwnJobFetcher>() ?? GetComponentInParent<Gs2JobQueueOwnJobFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 
@@ -125,8 +142,8 @@ namespace Gs2.Unity.UiKit.Gs2JobQueue
 
         public event UnityAction<string> OnUpdate
         {
-            add => onUpdate.AddListener(value);
-            remove => onUpdate.RemoveListener(value);
+            add => this.onUpdate.AddListener(value);
+            remove => this.onUpdate.RemoveListener(value);
         }
     }
 }

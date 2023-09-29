@@ -48,13 +48,16 @@ namespace Gs2.Unity.UiKit.Gs2Ranking
     {
         private IEnumerator Process()
         {
-            yield return new WaitUntil(() => this._clientHolder.Initialized);
-            yield return new WaitUntil(() => this._gameSessionHolder.Initialized);
+            var clientHolder = Gs2ClientHolder.Instance;
+            var gameSessionHolder = Gs2GameSessionHolder.Instance;
+
+            yield return new WaitUntil(() => clientHolder.Initialized);
+            yield return new WaitUntil(() => gameSessionHolder.Initialized);
             
-            var domain = this._clientHolder.Gs2.Ranking.Namespace(
+            var domain = clientHolder.Gs2.Ranking.Namespace(
                 this._context.Subscribe.NamespaceName
             ).Me(
-                this._gameSessionHolder.GameSession
+                gameSessionHolder.GameSession
             );
             var future = domain.Subscribe(
                 this._context.Subscribe.CategoryName,
@@ -120,16 +123,11 @@ namespace Gs2.Unity.UiKit.Gs2Ranking
 
     public partial class Gs2RankingSubscribeSubscribeAction
     {
-        private Gs2ClientHolder _clientHolder;
-        private Gs2GameSessionHolder _gameSessionHolder;
         private Gs2RankingOwnSubscribeContext _context;
 
         public void Awake()
         {
-            this._clientHolder = Gs2ClientHolder.Instance;
-            this._gameSessionHolder = Gs2GameSessionHolder.Instance;
             this._context = GetComponent<Gs2RankingOwnSubscribeContext>() ?? GetComponentInParent<Gs2RankingOwnSubscribeContext>();
-
             if (_context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2RankingOwnSubscribeContext.");
                 enabled = false;
@@ -164,8 +162,9 @@ namespace Gs2.Unity.UiKit.Gs2Ranking
         public string TargetUserId;
 
         public void SetTargetUserId(string value) {
-            TargetUserId = value;
-            this.onChangeTargetUserId.Invoke(TargetUserId);
+            this.TargetUserId = value;
+            this.onChangeTargetUserId.Invoke(this.TargetUserId);
+            this.OnChange.Invoke();
         }
     }
 
@@ -202,6 +201,8 @@ namespace Gs2.Unity.UiKit.Gs2Ranking
             add => this.onSubscribeComplete.AddListener(value);
             remove => this.onSubscribeComplete.RemoveListener(value);
         }
+
+        public UnityEvent OnChange = new UnityEvent();
 
         [SerializeField]
         internal ErrorEvent onError = new ErrorEvent();

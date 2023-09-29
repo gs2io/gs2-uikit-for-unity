@@ -48,9 +48,12 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking
     {
         private IEnumerator Process()
         {
-            yield return new WaitUntil(() => this._clientHolder.Initialized);
+            var clientHolder = Gs2ClientHolder.Instance;
+            var gameSessionHolder = Gs2GameSessionHolder.Instance;
+
+            yield return new WaitUntil(() => clientHolder.Initialized);
             
-            var domain = this._clientHolder.Gs2.Matchmaking.Namespace(
+            var domain = clientHolder.Gs2.Matchmaking.Namespace(
                 this._context.Vote.NamespaceName
             );
             var future = domain.Vote(
@@ -119,16 +122,11 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking
 
     public partial class Gs2MatchmakingVoteVoteAction
     {
-        private Gs2ClientHolder _clientHolder;
-        private Gs2GameSessionHolder _gameSessionHolder;
         private Gs2MatchmakingVoteContext _context;
 
         public void Awake()
         {
-            this._clientHolder = Gs2ClientHolder.Instance;
-            this._gameSessionHolder = Gs2GameSessionHolder.Instance;
             this._context = GetComponent<Gs2MatchmakingVoteContext>() ?? GetComponentInParent<Gs2MatchmakingVoteContext>();
-
             if (_context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MatchmakingVoteContext.");
                 enabled = false;
@@ -166,23 +164,27 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking
         public string KeyId;
 
         public void SetBallotBody(string value) {
-            BallotBody = value;
-            this.onChangeBallotBody.Invoke(BallotBody);
+            this.BallotBody = value;
+            this.onChangeBallotBody.Invoke(this.BallotBody);
+            this.OnChange.Invoke();
         }
 
         public void SetBallotSignature(string value) {
-            BallotSignature = value;
-            this.onChangeBallotSignature.Invoke(BallotSignature);
+            this.BallotSignature = value;
+            this.onChangeBallotSignature.Invoke(this.BallotSignature);
+            this.OnChange.Invoke();
         }
 
         public void SetGameResults(List<Gs2.Unity.Gs2Matchmaking.Model.EzGameResult> value) {
-            GameResults = value;
-            this.onChangeGameResults.Invoke(GameResults);
+            this.GameResults = value;
+            this.onChangeGameResults.Invoke(this.GameResults);
+            this.OnChange.Invoke();
         }
 
         public void SetKeyId(string value) {
-            KeyId = value;
-            this.onChangeKeyId.Invoke(KeyId);
+            this.KeyId = value;
+            this.onChangeKeyId.Invoke(this.KeyId);
+            this.OnChange.Invoke();
         }
     }
 
@@ -261,6 +263,8 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking
             add => this.onVoteComplete.AddListener(value);
             remove => this.onVoteComplete.RemoveListener(value);
         }
+
+        public UnityEvent OnChange = new UnityEvent();
 
         [SerializeField]
         internal ErrorEvent onError = new ErrorEvent();

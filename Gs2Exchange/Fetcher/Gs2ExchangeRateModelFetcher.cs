@@ -72,6 +72,7 @@ namespace Gs2.Unity.UiKit.Gs2Exchange.Fetcher
                 {
                     RateModel = item;
                     Fetched = true;
+                    this.OnFetched.Invoke();
                 }
             );
 
@@ -85,11 +86,10 @@ namespace Gs2.Unity.UiKit.Gs2Exchange.Fetcher
                 else {
                     RateModel = future.Result;
                     Fetched = true;
+                    this.OnFetched.Invoke();
                     break;
                 }
             }
-
-            this.OnFetched.Invoke();
         }
 
         public void OnUpdateContext() {
@@ -127,11 +127,35 @@ namespace Gs2.Unity.UiKit.Gs2Exchange.Fetcher
             return RateModel.AcquireActions;
         }
 
+        bool IAcquireActionsFetcher.IsFetched() {
+            return this.Fetched;
+        }
+
+        UnityEvent IAcquireActionsFetcher.OnFetchedEvent() {
+            return this.OnFetched;
+        }
+
+        GameObject IAcquireActionsFetcher.GameObject() {
+            return gameObject;
+        }
+
         public List<Unity.Core.Model.EzConsumeAction> ConsumeActions(string context = "default") {
             if (!Fetched) {
                 return new List<Unity.Core.Model.EzConsumeAction>();
             }
             return RateModel.ConsumeActions;
+        }
+
+        bool IConsumeActionsFetcher.IsFetched() {
+            return this.Fetched;
+        }
+
+        UnityEvent IConsumeActionsFetcher.OnFetchedEvent() {
+            return this.OnFetched;
+        }
+
+        GameObject IConsumeActionsFetcher.GameObject() {
+            return gameObject;
         }
     }
 
@@ -142,8 +166,6 @@ namespace Gs2.Unity.UiKit.Gs2Exchange.Fetcher
     public partial class Gs2ExchangeRateModelFetcher
     {
         public Gs2ExchangeRateModelContext Context { get; private set; }
-
-        public UnityEvent OnFetched = new UnityEvent();
 
         public void Awake()
         {
@@ -172,6 +194,7 @@ namespace Gs2.Unity.UiKit.Gs2Exchange.Fetcher
     {
         public Gs2.Unity.Gs2Exchange.Model.EzRateModel RateModel { get; protected set; }
         public bool Fetched { get; protected set; }
+        public UnityEvent OnFetched = new UnityEvent();
     }
 
     /// <summary>

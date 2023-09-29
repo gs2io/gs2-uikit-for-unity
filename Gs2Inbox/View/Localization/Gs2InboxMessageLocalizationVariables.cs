@@ -29,6 +29,7 @@
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Inbox.Fetcher;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.Localization.Components;
 using UnityEngine.Localization.SmartFormat.PersistentVariables;
 
@@ -41,33 +42,30 @@ namespace Gs2.Unity.UiKit.Gs2Inbox.Localization
     [AddComponentMenu("GS2 UIKit/Inbox/Message/View/Localization/Gs2InboxMessageLocalizationVariables")]
     public partial class Gs2InboxMessageLocalizationVariables : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched) {
-                target.StringReference["messageId"] = new StringVariable {
-                    Value = _fetcher?.Message?.MessageId ?? "",
-                };
-                target.StringReference["name"] = new StringVariable {
-                    Value = _fetcher?.Message?.Name ?? "",
-                };
-                target.StringReference["metadata"] = new StringVariable {
-                    Value = _fetcher?.Message?.Metadata ?? "",
-                };
-                target.StringReference["isRead"] = new BoolVariable {
-                    Value = _fetcher?.Message?.IsRead ?? false,
-                };
-                target.StringReference["receivedAt"] = new LongVariable {
-                    Value = _fetcher?.Message?.ReceivedAt ?? 0,
-                };
-                target.StringReference["readAt"] = new LongVariable {
-                    Value = _fetcher?.Message?.ReadAt ?? 0,
-                };
-                target.StringReference["expiresAt"] = new LongVariable {
-                    Value = _fetcher?.Message?.ExpiresAt ?? 0,
-                };
-                enabled = false;
-                target.enabled = true;
-            }
+            this.target.StringReference["messageId"] = new StringVariable {
+                Value = _fetcher?.Message?.MessageId ?? "",
+            };
+            this.target.StringReference["name"] = new StringVariable {
+                Value = _fetcher?.Message?.Name ?? "",
+            };
+            this.target.StringReference["metadata"] = new StringVariable {
+                Value = _fetcher?.Message?.Metadata ?? "",
+            };
+            this.target.StringReference["isRead"] = new BoolVariable {
+                Value = _fetcher?.Message?.IsRead ?? false,
+            };
+            this.target.StringReference["receivedAt"] = new LongVariable {
+                Value = _fetcher?.Message?.ReceivedAt ?? 0,
+            };
+            this.target.StringReference["readAt"] = new LongVariable {
+                Value = _fetcher?.Message?.ReadAt ?? 0,
+            };
+            this.target.StringReference["expiresAt"] = new LongVariable {
+                Value = _fetcher?.Message?.ExpiresAt ?? 0,
+            };
+            this.target.enabled = true;
         }
     }
 
@@ -80,10 +78,10 @@ namespace Gs2.Unity.UiKit.Gs2Inbox.Localization
         private Gs2InboxOwnMessageFetcher _fetcher;
 
         public void Awake() {
-            target.enabled = false;
-            _fetcher = GetComponent<Gs2InboxOwnMessageFetcher>() ?? GetComponentInParent<Gs2InboxOwnMessageFetcher>();
+            this.target.enabled = false;
+            this._fetcher = GetComponent<Gs2InboxOwnMessageFetcher>() ?? GetComponentInParent<Gs2InboxOwnMessageFetcher>();
 
-            if (_fetcher == null) {
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2InboxMessageFetcher.");
                 enabled = false;
             }
@@ -91,11 +89,34 @@ namespace Gs2.Unity.UiKit.Gs2Inbox.Localization
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2InboxOwnMessageFetcher>() ?? GetComponentInParent<Gs2InboxOwnMessageFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2InboxOwnMessageFetcher>() ?? GetComponentInParent<Gs2InboxOwnMessageFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 

@@ -31,6 +31,7 @@ using System.Collections;
 using System.Text;
 using Gs2.Core.Exception;
 using Gs2.Unity.Core.Exception;
+using Gs2.Unity.Gs2Ranking.Domain.Model;
 using Gs2.Unity.Gs2Ranking.Model;
 using Gs2.Unity.Gs2Ranking.ScriptableObject;
 using Gs2.Unity.Util;
@@ -48,61 +49,50 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Fetcher
 	[AddComponentMenu("GS2 UIKit/Ranking/Subscribe/Fetcher/Gs2RankingOwnSubscribeFetcher")]
     public partial class Gs2RankingOwnSubscribeFetcher : MonoBehaviour
     {
+        private EzSubscribeUserGameSessionDomain _domain;
+        private ulong? _callbackId;
+
         private IEnumerator Fetch()
         {
             var retryWaitSecond = 1;
-            Gs2Exception e;
-            while (true)
-            {
-                if (_gameSessionHolder != null && _gameSessionHolder.Initialized &&
-                    _clientHolder != null && _clientHolder.Initialized &&
-                    Context != null && this.Context.Subscribe != null)
+            var clientHolder = Gs2ClientHolder.Instance;
+            var gameSessionHolder = Gs2GameSessionHolder.Instance;
+
+            yield return new WaitUntil(() => clientHolder.Initialized);
+            yield return new WaitUntil(() => gameSessionHolder.Initialized);
+            yield return new WaitUntil(() => Context != null && this.Context.Subscribe != null);
+
+            _domain = clientHolder.Gs2.Ranking.Namespace(
+                this.Context.Subscribe.NamespaceName
+            ).Me(
+                gameSessionHolder.GameSession
+            ).SubscribeUser(
+                this.Context.Subscribe.CategoryName,
+                this.Context.Subscribe.TargetUserId
+            );
+            this._callbackId = this._domain.Subscribe(
+                item =>
                 {
-                    
-                    var domain = this._clientHolder.Gs2.Ranking.Namespace(
-                        this.Context.Subscribe.NamespaceName
-                    ).Me(
-                        this._gameSessionHolder.GameSession
-                    ).SubscribeUser(
-                        this.Context.Subscribe.CategoryName,
-                        this.Context.Subscribe.TargetUserId
-                    );
-                    var future = domain.Model();
-                    yield return future;
-                    if (future.Error != null)
-                    {
-                        if (future.Error is BadRequestException || future.Error is NotFoundException)
-                        {
-                            onError.Invoke(e = future.Error, null);
-                        }
-                        else {
-                            onError.Invoke(new CanIgnoreException(future.Error), null);
-                        }
-                        yield return new WaitForSeconds(retryWaitSecond);
-                        retryWaitSecond *= 2;
-                    }
-                    else
-                    {
-                        retryWaitSecond = 1;
-                        Subscribe = future.Result;
-                        Fetched = true;
-                    }
+                    Subscribe = item;
+                    Fetched = true;
+                    this.OnFetched.Invoke();
+                }
+            );
+
+            while (true) {
+                var future = this._domain.Model();
+                yield return future;
+                if (future.Error != null) {
+                    yield return new WaitForSeconds(retryWaitSecond);
+                    retryWaitSecond *= 2;
                 }
                 else {
-                    yield return new WaitForSeconds(0.1f);
+                    Subscribe = future.Result;
+                    Fetched = true;
+                    this.OnFetched.Invoke();
+                    break;
                 }
             }
-            // ReSharper disable once IteratorNeverReturns
-        }
-
-        public void OnEnable()
-        {
-            StartCoroutine(nameof(Fetch));
-        }
-
-        public void OnDisable()
-        {
-            StopCoroutine(nameof(Fetch));
         }
     }
 
@@ -112,29 +102,52 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Fetcher
 
     public partial class Gs2RankingOwnSubscribeFetcher
     {
-        protected Gs2ClientHolder _clientHolder;
-        protected Gs2GameSessionHolder _gameSessionHolder;
         public Gs2RankingOwnSubscribeContext Context { get; private set; }
 
         public void Awake()
         {
-            _clientHolder = Gs2ClientHolder.Instance;
-            _gameSessionHolder = Gs2GameSessionHolder.Instance;
             Context = GetComponent<Gs2RankingOwnSubscribeContext>() ?? GetComponentInParent<Gs2RankingOwnSubscribeContext>();
-
             if (Context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2RankingOwnSubscribeContext.");
                 enabled = false;
             }
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
             Context = GetComponent<Gs2RankingOwnSubscribeContext>() ?? GetComponentInParent<Gs2RankingOwnSubscribeContext>(true);
             if (Context == null) {
                 return true;
             }
             return false;
+        }
+
+        public void OnUpdateContext() {
+            OnDisable();
+            Awake();
+            OnEnable();
+        }
+
+        public void OnEnable()
+        {
+            StartCoroutine(nameof(Fetch));
+            Context.OnUpdate.AddListener(OnUpdateContext);
+        }
+
+        public void OnDisable()
+        {
+            Context.OnUpdate.RemoveListener(OnUpdateContext);
+
+            if (this._domain == null) {
+                return;
+            }
+            if (!this._callbackId.HasValue) {
+                return;
+            }
+            this._domain.Unsubscribe(
+                this._callbackId.Value
+            );
+            this._callbackId = null;
         }
     }
 
@@ -146,6 +159,7 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Fetcher
     {
         public EzSubscribeUser Subscribe { get; protected set; }
         public bool Fetched { get; protected set; }
+        public UnityEvent OnFetched = new UnityEvent();
     }
 
     /// <summary>

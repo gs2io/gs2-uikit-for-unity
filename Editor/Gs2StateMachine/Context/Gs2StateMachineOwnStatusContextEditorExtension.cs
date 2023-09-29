@@ -43,8 +43,12 @@ namespace Gs2.Unity.UiKit.Gs2StateMachine.Editor
             serializedObject.Update();
 
             if (original.Status == null) {
-                if (original.GetComponentInParent<Gs2StateMachineOwnStatusList>(true) != null) {
-                    EditorGUILayout.HelpBox("OwnStatus is auto assign from Gs2StateMachineOwnStatusList.", MessageType.Info);
+                var list = original.GetComponentInParent<Gs2StateMachineOwnStatusList>(true);
+                if (list != null) {
+                    EditorGUILayout.HelpBox("Status is auto assign from Gs2StateMachineOwnStatusList.", MessageType.Info);
+                    EditorGUI.BeginDisabledGroup(true);
+                    EditorGUILayout.ObjectField("List", list, typeof(Gs2StateMachineOwnStatusList), false);
+                    EditorGUI.EndDisabledGroup();
                 }
                 else {
                     EditorGUILayout.HelpBox("OwnStatus not assigned.", MessageType.Error);

@@ -40,7 +40,7 @@ namespace Gs2.Unity.UiKit.Gs2Datastore.Context
     {
         public void Start() {
             if (DataObject == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: DataObject is not set in Gs2DatastoreOwnDataObjectContext.");
+                Debug.LogWarning($"{gameObject.GetFullPath()}: DataObject is not set in Gs2DatastoreOwnDataObjectContext.");
             }
         }
         public virtual bool HasError() {
@@ -48,9 +48,7 @@ namespace Gs2.Unity.UiKit.Gs2Datastore.Context
                 if (GetComponentInParent<Gs2DatastoreOwnDataObjectList>(true) != null) {
                     return false;
                 }
-                else {
-                    return true;
-                }
+                return true;
             }
             return false;
         }

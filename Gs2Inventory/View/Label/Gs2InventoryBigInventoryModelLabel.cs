@@ -40,18 +40,15 @@ namespace Gs2.Unity.UiKit.Gs2Inventory
 	[AddComponentMenu("GS2 UIKit/Inventory/BigInventoryModel/View/Label/Gs2InventoryBigInventoryModelLabel")]
     public partial class Gs2InventoryBigInventoryModelLabel : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched && _fetcher.BigInventoryModel != null)
-            {
-                onUpdate?.Invoke(
-                    format.Replace(
-                        "{name}", $"{_fetcher?.BigInventoryModel?.Name}"
-                    ).Replace(
-                        "{metadata}", $"{_fetcher?.BigInventoryModel?.Metadata}"
-                    )
-                );
-            }
+            this.onUpdate?.Invoke(
+                this.format.Replace(
+                    "{name}", $"{this._fetcher?.BigInventoryModel?.Name}"
+                ).Replace(
+                    "{metadata}", $"{this._fetcher?.BigInventoryModel?.Metadata}"
+                )
+            );
         }
     }
 
@@ -65,23 +62,43 @@ namespace Gs2.Unity.UiKit.Gs2Inventory
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2InventoryBigInventoryModelFetcher>() ?? GetComponentInParent<Gs2InventoryBigInventoryModelFetcher>();
-
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2InventoryBigInventoryModelFetcher>() ?? GetComponentInParent<Gs2InventoryBigInventoryModelFetcher>();
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2InventoryBigInventoryModelFetcher.");
                 enabled = false;
             }
-
-            Update();
         }
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2InventoryBigInventoryModelFetcher>() ?? GetComponentInParent<Gs2InventoryBigInventoryModelFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2InventoryBigInventoryModelFetcher>() ?? GetComponentInParent<Gs2InventoryBigInventoryModelFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 
@@ -119,8 +136,8 @@ namespace Gs2.Unity.UiKit.Gs2Inventory
 
         public event UnityAction<string> OnUpdate
         {
-            add => onUpdate.AddListener(value);
-            remove => onUpdate.RemoveListener(value);
+            add => this.onUpdate.AddListener(value);
+            remove => this.onUpdate.RemoveListener(value);
         }
     }
 }

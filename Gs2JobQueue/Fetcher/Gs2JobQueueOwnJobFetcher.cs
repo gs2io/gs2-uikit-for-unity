@@ -60,18 +60,19 @@ namespace Gs2.Unity.UiKit.Gs2JobQueue.Fetcher
             yield return new WaitUntil(() => gameSessionHolder.Initialized);
             yield return new WaitUntil(() => Context != null && this.Context.Job != null);
 
-            this._domain = clientHolder.Gs2.JobQueue.Namespace(
+            _domain = clientHolder.Gs2.JobQueue.Namespace(
                 this.Context.Job.NamespaceName
             ).Me(
                 gameSessionHolder.GameSession
             ).Job(
                 this.Context.Job.JobName
-            );;
+            );
             this._callbackId = this._domain.Subscribe(
                 item =>
                 {
                     Job = item;
                     Fetched = true;
+                    this.OnFetched.Invoke();
                 }
             );
 
@@ -85,29 +86,10 @@ namespace Gs2.Unity.UiKit.Gs2JobQueue.Fetcher
                 else {
                     Job = future.Result;
                     Fetched = true;
+                    this.OnFetched.Invoke();
+                    break;
                 }
             }
-        }
-
-        public void OnEnable()
-        {
-            StartCoroutine(nameof(Fetch));
-        }
-
-        public void OnDisable()
-        {
-            StopCoroutine(nameof(Fetch));
-
-            if (this._domain == null) {
-                return;
-            }
-            if (!this._callbackId.HasValue) {
-                return;
-            }
-            this._domain.Unsubscribe(
-                this._callbackId.Value
-            );
-            this._callbackId = null;
         }
     }
 
@@ -136,6 +118,34 @@ namespace Gs2.Unity.UiKit.Gs2JobQueue.Fetcher
             }
             return false;
         }
+
+        public void OnUpdateContext() {
+            OnDisable();
+            Awake();
+            OnEnable();
+        }
+
+        public void OnEnable()
+        {
+            StartCoroutine(nameof(Fetch));
+            Context.OnUpdate.AddListener(OnUpdateContext);
+        }
+
+        public void OnDisable()
+        {
+            Context.OnUpdate.RemoveListener(OnUpdateContext);
+
+            if (this._domain == null) {
+                return;
+            }
+            if (!this._callbackId.HasValue) {
+                return;
+            }
+            this._domain.Unsubscribe(
+                this._callbackId.Value
+            );
+            this._callbackId = null;
+        }
     }
 
     /// <summary>
@@ -146,6 +156,7 @@ namespace Gs2.Unity.UiKit.Gs2JobQueue.Fetcher
     {
         public EzJob Job { get; protected set; }
         public bool Fetched { get; protected set; }
+        public UnityEvent OnFetched = new UnityEvent();
     }
 
     /// <summary>

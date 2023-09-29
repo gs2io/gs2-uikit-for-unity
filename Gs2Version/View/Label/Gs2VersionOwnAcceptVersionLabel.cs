@@ -40,20 +40,17 @@ namespace Gs2.Unity.UiKit.Gs2Version
 	[AddComponentMenu("GS2 UIKit/Version/AcceptVersion/View/Label/Gs2VersionOwnAcceptVersionLabel")]
     public partial class Gs2VersionOwnAcceptVersionLabel : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched && _fetcher.AcceptVersion != null)
-            {
-                onUpdate?.Invoke(
-                    format.Replace(
-                        "{versionName}", $"{_fetcher?.AcceptVersion?.VersionName}"
-                    ).Replace(
-                        "{userId}", $"{_fetcher?.AcceptVersion?.UserId}"
-                    ).Replace(
-                        "{version}", $"{_fetcher?.AcceptVersion?.Version}"
-                    )
-                );
-            }
+            this.onUpdate?.Invoke(
+                this.format.Replace(
+                    "{versionName}", $"{this._fetcher?.AcceptVersion?.VersionName}"
+                ).Replace(
+                    "{userId}", $"{this._fetcher?.AcceptVersion?.UserId}"
+                ).Replace(
+                    "{version}", $"{this._fetcher?.AcceptVersion?.Version}"
+                )
+            );
         }
     }
 
@@ -67,23 +64,43 @@ namespace Gs2.Unity.UiKit.Gs2Version
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2VersionOwnAcceptVersionFetcher>() ?? GetComponentInParent<Gs2VersionOwnAcceptVersionFetcher>();
-
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2VersionOwnAcceptVersionFetcher>() ?? GetComponentInParent<Gs2VersionOwnAcceptVersionFetcher>();
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2VersionOwnAcceptVersionFetcher.");
                 enabled = false;
             }
-
-            Update();
         }
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2VersionOwnAcceptVersionFetcher>() ?? GetComponentInParent<Gs2VersionOwnAcceptVersionFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2VersionOwnAcceptVersionFetcher>() ?? GetComponentInParent<Gs2VersionOwnAcceptVersionFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 
@@ -121,8 +138,8 @@ namespace Gs2.Unity.UiKit.Gs2Version
 
         public event UnityAction<string> OnUpdate
         {
-            add => onUpdate.AddListener(value);
-            remove => onUpdate.RemoveListener(value);
+            add => this.onUpdate.AddListener(value);
+            remove => this.onUpdate.RemoveListener(value);
         }
     }
 }

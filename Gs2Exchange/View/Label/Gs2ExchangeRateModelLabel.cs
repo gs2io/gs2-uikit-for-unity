@@ -40,26 +40,23 @@ namespace Gs2.Unity.UiKit.Gs2Exchange
 	[AddComponentMenu("GS2 UIKit/Exchange/RateModel/View/Label/Gs2ExchangeRateModelLabel")]
     public partial class Gs2ExchangeRateModelLabel : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched && _fetcher.RateModel != null)
-            {
-                onUpdate?.Invoke(
-                    format.Replace(
-                        "{name}", $"{_fetcher?.RateModel?.Name}"
-                    ).Replace(
-                        "{metadata}", $"{_fetcher?.RateModel?.Metadata}"
-                    ).Replace(
-                        "{timingType}", $"{_fetcher?.RateModel?.TimingType}"
-                    ).Replace(
-                        "{lockTime}", $"{_fetcher?.RateModel?.LockTime}"
-                    ).Replace(
-                        "{consumeActions}", $"{_fetcher?.RateModel?.ConsumeActions}"
-                    ).Replace(
-                        "{acquireActions}", $"{_fetcher?.RateModel?.AcquireActions}"
-                    )
-                );
-            }
+            this.onUpdate?.Invoke(
+                this.format.Replace(
+                    "{name}", $"{this._fetcher?.RateModel?.Name}"
+                ).Replace(
+                    "{metadata}", $"{this._fetcher?.RateModel?.Metadata}"
+                ).Replace(
+                    "{timingType}", $"{this._fetcher?.RateModel?.TimingType}"
+                ).Replace(
+                    "{lockTime}", $"{this._fetcher?.RateModel?.LockTime}"
+                ).Replace(
+                    "{consumeActions}", $"{this._fetcher?.RateModel?.ConsumeActions}"
+                ).Replace(
+                    "{acquireActions}", $"{this._fetcher?.RateModel?.AcquireActions}"
+                )
+            );
         }
     }
 
@@ -73,23 +70,43 @@ namespace Gs2.Unity.UiKit.Gs2Exchange
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2ExchangeRateModelFetcher>() ?? GetComponentInParent<Gs2ExchangeRateModelFetcher>();
-
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2ExchangeRateModelFetcher>() ?? GetComponentInParent<Gs2ExchangeRateModelFetcher>();
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ExchangeRateModelFetcher.");
                 enabled = false;
             }
-
-            Update();
         }
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2ExchangeRateModelFetcher>() ?? GetComponentInParent<Gs2ExchangeRateModelFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2ExchangeRateModelFetcher>() ?? GetComponentInParent<Gs2ExchangeRateModelFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 
@@ -127,8 +144,8 @@ namespace Gs2.Unity.UiKit.Gs2Exchange
 
         public event UnityAction<string> OnUpdate
         {
-            add => onUpdate.AddListener(value);
-            remove => onUpdate.RemoveListener(value);
+            add => this.onUpdate.AddListener(value);
+            remove => this.onUpdate.RemoveListener(value);
         }
     }
 }

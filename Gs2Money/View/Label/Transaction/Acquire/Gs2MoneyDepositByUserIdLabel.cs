@@ -12,8 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
- * deny overwrite
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
@@ -44,74 +42,60 @@ namespace Gs2.Unity.UiKit.Gs2Money.Label
 	[AddComponentMenu("GS2 UIKit/Money/Wallet/View/Label/Transaction/Gs2MoneyDepositByUserIdLabel")]
     public partial class Gs2MoneyDepositByUserIdLabel : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched && _fetcher.Request != null &&
-                    _userDataFetcher != null && _userDataFetcher.Fetched && _userDataFetcher.Wallet != null) {
-                {
-                    onUpdate?.Invoke(
-                        format.Replace(
-                            "{namespaceName}",
-                            $"{_fetcher.Request.NamespaceName}"
-                        ).Replace(
-                            "{userId}",
-                            $"{_fetcher.Request.UserId}"
-                        ).Replace(
-                            "{slot}",
-                            $"{_fetcher.Request.Slot}"
-                        ).Replace(
-                            "{price}",
-                            $"{_fetcher.Request.Price}"
-                        ).Replace(
-                            "{count}",
-                            $"{_fetcher.Request.Count}"
-                        ).Replace(
-                            "{userData:slot}",
-                            $"{_userDataFetcher.Wallet.Slot}"
-                        ).Replace(
-                            "{userData:paid}",
-                            $"{_userDataFetcher.Wallet.Paid}"
-                        ).Replace(
-                            "{userData:free}",
-                            $"{_userDataFetcher.Wallet.Free}"
-                        ).Replace(
-                            "{userData:total}",
-                            $"{_userDataFetcher.Wallet.Free + _userDataFetcher.Wallet.Paid}"
-                        ).Replace(
-                            "{userData:updatedAt}",
-                            $"{_userDataFetcher.Wallet.UpdatedAt}"
-                        )
-                    );
-                }
-            } else if (_fetcher.Fetched && _fetcher.Request != null) {
-                {
-                    onUpdate?.Invoke(
-                        format.Replace(
-                            "{namespaceName}",
-                            $"{_fetcher.Request.NamespaceName}"
-                        ).Replace(
-                            "{userId}",
-                            $"{_fetcher.Request.UserId}"
-                        ).Replace(
-                            "{slot}",
-                            $"{_fetcher.Request.Slot}"
-                        ).Replace(
-                            "{price}",
-                            $"{_fetcher.Request.Price}"
-                        ).Replace(
-                            "{count}",
-                            $"{_fetcher.Request.Count}"
-                        )
-                    );
-                }
-            } else {
-                onUpdate?.Invoke(
-                    format.Replace(
+            if ((!this._fetcher?.Fetched ?? false) || this._fetcher.Request == null) {
+                return;
+            }
+            if (this._userDataFetcher?.Fetched ?? false)
+            {
+                this.onUpdate?.Invoke(
+                    this.format.Replace(
+                        "{namespaceName}",
+                        $"{this._fetcher.Request.NamespaceName}"
+                    ).Replace(
+                        "{userId}",
+                        $"{this._fetcher.Request.UserId}"
+                    ).Replace(
+                        "{slot}",
+                        $"{this._fetcher.Request.Slot}"
+                    ).Replace(
                         "{price}",
-                        ""
+                        $"{this._fetcher.Request.Price}"
                     ).Replace(
                         "{count}",
-                        "0"
+                        $"{this._fetcher.Request.Count}"
+                    ).Replace(
+                        "{userData:slot}",
+                        $"{this._userDataFetcher.Wallet.Slot}"
+                    ).Replace(
+                        "{userData:paid}",
+                        $"{this._userDataFetcher.Wallet.Paid}"
+                    ).Replace(
+                        "{userData:free}",
+                        $"{this._userDataFetcher.Wallet.Free}"
+                    ).Replace(
+                        "{userData:updatedAt}",
+                        $"{this._userDataFetcher.Wallet.UpdatedAt}"
+                    )
+                );
+            } else {
+                this.onUpdate?.Invoke(
+                    this.format.Replace(
+                        "{namespaceName}",
+                        $"{this._fetcher.Request.NamespaceName}"
+                    ).Replace(
+                        "{userId}",
+                        $"{this._fetcher.Request.UserId}"
+                    ).Replace(
+                        "{slot}",
+                        $"{this._fetcher.Request.Slot}"
+                    ).Replace(
+                        "{price}",
+                        $"{this._fetcher.Request.Price}"
+                    ).Replace(
+                        "{count}",
+                        $"{this._fetcher.Request.Count}"
                     )
                 );
             }
@@ -129,25 +113,52 @@ namespace Gs2.Unity.UiKit.Gs2Money.Label
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2MoneyDepositByUserIdFetcher>() ?? GetComponentInParent<Gs2MoneyDepositByUserIdFetcher>();
-            _userDataFetcher = GetComponent<Gs2MoneyOwnWalletFetcher>() ?? GetComponentInParent<Gs2MoneyOwnWalletFetcher>();
-
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2MoneyDepositByUserIdFetcher>() ?? GetComponentInParent<Gs2MoneyDepositByUserIdFetcher>();
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MoneyDepositByUserIdFetcher.");
                 enabled = false;
             }
-
-            Update();
+            this._userDataFetcher = GetComponent<Gs2MoneyOwnWalletFetcher>() ?? GetComponentInParent<Gs2MoneyOwnWalletFetcher>();
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2MoneyDepositByUserIdFetcher>() ?? GetComponentInParent<Gs2MoneyDepositByUserIdFetcher>(true);
-            _userDataFetcher = GetComponent<Gs2MoneyOwnWalletFetcher>() ?? GetComponentInParent<Gs2MoneyOwnWalletFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2MoneyDepositByUserIdFetcher>() ?? GetComponentInParent<Gs2MoneyDepositByUserIdFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+            if (this._userDataFetcher != null) {
+                this._userDataFetcher.OnFetched.AddListener(this._onFetched);
+                if (this._userDataFetcher.Fetched) {
+                    OnFetched();
+                }
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                if (this._userDataFetcher != null) {
+                    this._userDataFetcher.OnFetched.RemoveListener(this._onFetched);
+                }
+                this._onFetched = null;
+            }
         }
     }
 
@@ -185,8 +196,8 @@ namespace Gs2.Unity.UiKit.Gs2Money.Label
 
         public event UnityAction<string> OnUpdate
         {
-            add => onUpdate.AddListener(value);
-            remove => onUpdate.RemoveListener(value);
+            add => this.onUpdate.AddListener(value);
+            remove => this.onUpdate.RemoveListener(value);
         }
     }
 }

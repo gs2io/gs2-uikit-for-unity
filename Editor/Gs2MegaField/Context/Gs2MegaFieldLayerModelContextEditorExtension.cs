@@ -43,8 +43,12 @@ namespace Gs2.Unity.UiKit.Gs2MegaField.Editor
             serializedObject.Update();
 
             if (original.LayerModel == null) {
-                if (original.GetComponentInParent<Gs2MegaFieldLayerModelList>(true) != null) {
+                var list = original.GetComponentInParent<Gs2MegaFieldLayerModelList>(true);
+                if (list != null) {
                     EditorGUILayout.HelpBox("LayerModel is auto assign from Gs2MegaFieldLayerModelList.", MessageType.Info);
+                    EditorGUI.BeginDisabledGroup(true);
+                    EditorGUILayout.ObjectField("List", list, typeof(Gs2MegaFieldLayerModelList), false);
+                    EditorGUI.EndDisabledGroup();
                 }
                 else {
                     EditorGUILayout.HelpBox("LayerModel not assigned.", MessageType.Error);

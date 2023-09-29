@@ -17,6 +17,14 @@
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
+// ReSharper disable RedundantNameQualifier
+// ReSharper disable RedundantAssignment
+// ReSharper disable NotAccessedVariable
+// ReSharper disable RedundantUsingDirective
+// ReSharper disable Unity.NoNullPropagation
+// ReSharper disable InconsistentNaming
+
+#pragma warning disable CS0472
 
 using System.Collections.Generic;
 using Gs2.Unity.Gs2Ranking.ScriptableObject;
@@ -24,6 +32,7 @@ using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Ranking.Context;
 using Gs2.Unity.UiKit.Gs2Ranking.Fetcher;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2Ranking
 {
@@ -36,17 +45,20 @@ namespace Gs2.Unity.UiKit.Gs2Ranking
     {
         private List<Gs2RankingOwnScoreContext> _children;
 
-        public void Update() {
-            if (_fetcher.Fetched && _fetcher.Scores != null) {
-                for (var i = 0; i < this.maximumItems; i++) {
-                    if (i < this._fetcher.Scores.Count) {
-                        _children[i].Score.scorerUserId = this._fetcher.Scores[i].ScorerUserId;
-                        _children[i].Score.uniqueId = this._fetcher.Scores[i].UniqueId;
-                        _children[i].gameObject.SetActive(true);
-                    }
-                    else {
-                        _children[i].gameObject.SetActive(false);
-                    }
+        public void OnFetched() {
+            for (var i = 0; i < this.maximumItems; i++) {
+                if (i < this._fetcher.Scores.Count) {
+                    this._children[i].SetOwnScore(
+                        OwnScore.New(
+                            this._fetcher.Context.CategoryModel,
+                            this._fetcher.Scores[i].ScorerUserId,
+                            this._fetcher.Scores[i].UniqueId
+                        )
+                    );
+                    this._children[i].gameObject.SetActive(true);
+                }
+                else {
+                    this._children[i].gameObject.SetActive(false);
                 }
             }
         }
@@ -58,19 +70,18 @@ namespace Gs2.Unity.UiKit.Gs2Ranking
 
     public partial class Gs2RankingOwnScoreList
     {
-        private Gs2RankingCategoryModelContext _context;
         private Gs2RankingOwnScoreListFetcher _fetcher;
 
         public void Awake()
         {
-            _context = GetComponentInParent<Gs2RankingCategoryModelContext>();
-            _fetcher = GetComponentInParent<Gs2RankingOwnScoreListFetcher>();
-
-            if (_context == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2RankingCategoryModelContext.");
+            if (this.prefab == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2RankingOwnScoreContext Prefab.");
                 enabled = false;
+                return;
             }
-            if (_fetcher == null) {
+
+            this._fetcher = GetComponent<Gs2RankingOwnScoreListFetcher>() ?? GetComponentInParent<Gs2RankingOwnScoreListFetcher>();
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2RankingOwnScoreListFetcher.");
                 enabled = false;
             }
@@ -79,14 +90,49 @@ namespace Gs2.Unity.UiKit.Gs2Ranking
             for (var i = 0; i < this.maximumItems; i++) {
                 var node = Instantiate(this.prefab, transform);
                 node.Score = OwnScore.New(
-                    _context.CategoryModel,
+                    this._fetcher.Context.CategoryModel,
                     "",
                     ""
                 );
                 node.gameObject.SetActive(false);
-                _children.Add(node);
+                this._children.Add(node);
             }
             this.prefab.gameObject.SetActive(false);
+        }
+
+        public virtual bool HasError()
+        {
+            if (this.prefab == null) {
+                return true;
+            }
+            this._fetcher = GetComponent<Gs2RankingOwnScoreListFetcher>() ?? GetComponentInParent<Gs2RankingOwnScoreListFetcher>(true);
+            if (this._fetcher == null) {
+                return true;
+            }
+            return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 

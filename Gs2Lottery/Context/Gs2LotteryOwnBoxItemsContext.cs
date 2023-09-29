@@ -40,7 +40,7 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.Context
     {
         public void Start() {
             if (BoxItems == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: BoxItems is not set in Gs2LotteryOwnBoxItemsContext.");
+                Debug.LogWarning($"{gameObject.GetFullPath()}: BoxItems is not set in Gs2LotteryOwnBoxItemsContext.");
             }
         }
         public virtual bool HasError() {
@@ -48,9 +48,7 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.Context
                 if (GetComponentInParent<Gs2LotteryOwnBoxItemsList>(true) != null) {
                     return false;
                 }
-                else {
-                    return true;
-                }
+                return true;
             }
             return false;
         }

@@ -29,6 +29,7 @@
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Gateway.Fetcher;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.Localization.Components;
 using UnityEngine.Localization.SmartFormat.PersistentVariables;
 
@@ -41,21 +42,18 @@ namespace Gs2.Unity.UiKit.Gs2Gateway.Localization
     [AddComponentMenu("GS2 UIKit/Gateway/WebSocketSession/View/Localization/Gs2GatewayWebSocketSessionLocalizationVariables")]
     public partial class Gs2GatewayWebSocketSessionLocalizationVariables : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched) {
-                target.StringReference["connectionId"] = new StringVariable {
-                    Value = _fetcher?.WebSocketSession?.ConnectionId ?? "",
-                };
-                target.StringReference["namespaceName"] = new StringVariable {
-                    Value = _fetcher?.WebSocketSession?.NamespaceName ?? "",
-                };
-                target.StringReference["userId"] = new StringVariable {
-                    Value = _fetcher?.WebSocketSession?.UserId ?? "",
-                };
-                enabled = false;
-                target.enabled = true;
-            }
+            this.target.StringReference["connectionId"] = new StringVariable {
+                Value = _fetcher?.WebSocketSession?.ConnectionId ?? "",
+            };
+            this.target.StringReference["namespaceName"] = new StringVariable {
+                Value = _fetcher?.WebSocketSession?.NamespaceName ?? "",
+            };
+            this.target.StringReference["userId"] = new StringVariable {
+                Value = _fetcher?.WebSocketSession?.UserId ?? "",
+            };
+            this.target.enabled = true;
         }
     }
 
@@ -68,10 +66,10 @@ namespace Gs2.Unity.UiKit.Gs2Gateway.Localization
         private Gs2GatewayOwnWebSocketSessionFetcher _fetcher;
 
         public void Awake() {
-            target.enabled = false;
-            _fetcher = GetComponent<Gs2GatewayOwnWebSocketSessionFetcher>() ?? GetComponentInParent<Gs2GatewayOwnWebSocketSessionFetcher>();
+            this.target.enabled = false;
+            this._fetcher = GetComponent<Gs2GatewayOwnWebSocketSessionFetcher>() ?? GetComponentInParent<Gs2GatewayOwnWebSocketSessionFetcher>();
 
-            if (_fetcher == null) {
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2GatewayWebSocketSessionFetcher.");
                 enabled = false;
             }
@@ -79,11 +77,34 @@ namespace Gs2.Unity.UiKit.Gs2Gateway.Localization
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2GatewayOwnWebSocketSessionFetcher>() ?? GetComponentInParent<Gs2GatewayOwnWebSocketSessionFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2GatewayOwnWebSocketSessionFetcher>() ?? GetComponentInParent<Gs2GatewayOwnWebSocketSessionFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 

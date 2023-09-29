@@ -42,62 +42,54 @@ namespace Gs2.Unity.UiKit.Gs2Idle.Label
 	[AddComponentMenu("GS2 UIKit/Idle/Status/View/Label/Transaction/Gs2IdleIncreaseMaximumIdleMinutesByUserIdLabel")]
     public partial class Gs2IdleIncreaseMaximumIdleMinutesByUserIdLabel : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched && _fetcher.Request != null &&
-                    _userDataFetcher != null && _userDataFetcher.Fetched && _userDataFetcher.Status != null) {
-                {
-                    onUpdate?.Invoke(
-                        format.Replace(
-                            "{namespaceName}",
-                            $"{_fetcher.Request.NamespaceName}"
-                        ).Replace(
-                            "{userId}",
-                            $"{_fetcher.Request.UserId}"
-                        ).Replace(
-                            "{categoryName}",
-                            $"{_fetcher.Request.CategoryName}"
-                        ).Replace(
-                            "{increaseMinutes}",
-                            $"{_fetcher.Request.IncreaseMinutes}"
-                        ).Replace(
-                            "{userData:categoryName}",
-                            $"{_userDataFetcher.Status.CategoryName}"
-                        ).Replace(
-                            "{userData:randomSeed}",
-                            $"{_userDataFetcher.Status.RandomSeed}"
-                        ).Replace(
-                            "{userData:idleMinutes}",
-                            $"{_userDataFetcher.Status.IdleMinutes}"
-                        ).Replace(
-                            "{userData:maximumIdleMinutes}",
-                            $"{_userDataFetcher.Status.MaximumIdleMinutes}"
-                        )
-                    );
-                }
-            } else if (_fetcher.Fetched && _fetcher.Request != null) {
-                {
-                    onUpdate?.Invoke(
-                        format.Replace(
-                            "{namespaceName}",
-                            $"{_fetcher.Request.NamespaceName}"
-                        ).Replace(
-                            "{userId}",
-                            $"{_fetcher.Request.UserId}"
-                        ).Replace(
-                            "{categoryName}",
-                            $"{_fetcher.Request.CategoryName}"
-                        ).Replace(
-                            "{increaseMinutes}",
-                            $"{_fetcher.Request.IncreaseMinutes}"
-                        )
-                    );
-                }
-            } else {
-                onUpdate?.Invoke(
-                    format.Replace(
+            if ((!this._fetcher?.Fetched ?? false) || this._fetcher.Request == null) {
+                return;
+            }
+            if (this._userDataFetcher?.Fetched ?? false)
+            {
+                this.onUpdate?.Invoke(
+                    this.format.Replace(
+                        "{namespaceName}",
+                        $"{this._fetcher.Request.NamespaceName}"
+                    ).Replace(
+                        "{userId}",
+                        $"{this._fetcher.Request.UserId}"
+                    ).Replace(
+                        "{categoryName}",
+                        $"{this._fetcher.Request.CategoryName}"
+                    ).Replace(
                         "{increaseMinutes}",
-                        "0"
+                        $"{this._fetcher.Request.IncreaseMinutes}"
+                    ).Replace(
+                        "{userData:categoryName}",
+                        $"{this._userDataFetcher.Status.CategoryName}"
+                    ).Replace(
+                        "{userData:randomSeed}",
+                        $"{this._userDataFetcher.Status.RandomSeed}"
+                    ).Replace(
+                        "{userData:idleMinutes}",
+                        $"{this._userDataFetcher.Status.IdleMinutes}"
+                    ).Replace(
+                        "{userData:maximumIdleMinutes}",
+                        $"{this._userDataFetcher.Status.MaximumIdleMinutes}"
+                    )
+                );
+            } else {
+                this.onUpdate?.Invoke(
+                    this.format.Replace(
+                        "{namespaceName}",
+                        $"{this._fetcher.Request.NamespaceName}"
+                    ).Replace(
+                        "{userId}",
+                        $"{this._fetcher.Request.UserId}"
+                    ).Replace(
+                        "{categoryName}",
+                        $"{this._fetcher.Request.CategoryName}"
+                    ).Replace(
+                        "{increaseMinutes}",
+                        $"{this._fetcher.Request.IncreaseMinutes}"
                     )
                 );
             }
@@ -115,25 +107,52 @@ namespace Gs2.Unity.UiKit.Gs2Idle.Label
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2IdleIncreaseMaximumIdleMinutesByUserIdFetcher>() ?? GetComponentInParent<Gs2IdleIncreaseMaximumIdleMinutesByUserIdFetcher>();
-            _userDataFetcher = GetComponent<Gs2IdleOwnStatusFetcher>() ?? GetComponentInParent<Gs2IdleOwnStatusFetcher>();
-
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2IdleIncreaseMaximumIdleMinutesByUserIdFetcher>() ?? GetComponentInParent<Gs2IdleIncreaseMaximumIdleMinutesByUserIdFetcher>();
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2IdleIncreaseMaximumIdleMinutesByUserIdFetcher.");
                 enabled = false;
             }
-
-            Update();
+            this._userDataFetcher = GetComponent<Gs2IdleOwnStatusFetcher>() ?? GetComponentInParent<Gs2IdleOwnStatusFetcher>();
         }
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2IdleIncreaseMaximumIdleMinutesByUserIdFetcher>() ?? GetComponentInParent<Gs2IdleIncreaseMaximumIdleMinutesByUserIdFetcher>(true);
-            _userDataFetcher = GetComponent<Gs2IdleOwnStatusFetcher>() ?? GetComponentInParent<Gs2IdleOwnStatusFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2IdleIncreaseMaximumIdleMinutesByUserIdFetcher>() ?? GetComponentInParent<Gs2IdleIncreaseMaximumIdleMinutesByUserIdFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+            if (this._userDataFetcher != null) {
+                this._userDataFetcher.OnFetched.AddListener(this._onFetched);
+                if (this._userDataFetcher.Fetched) {
+                    OnFetched();
+                }
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                if (this._userDataFetcher != null) {
+                    this._userDataFetcher.OnFetched.RemoveListener(this._onFetched);
+                }
+                this._onFetched = null;
+            }
         }
     }
 
@@ -171,8 +190,8 @@ namespace Gs2.Unity.UiKit.Gs2Idle.Label
 
         public event UnityAction<string> OnUpdate
         {
-            add => onUpdate.AddListener(value);
-            remove => onUpdate.RemoveListener(value);
+            add => this.onUpdate.AddListener(value);
+            remove => this.onUpdate.RemoveListener(value);
         }
     }
 }

@@ -40,7 +40,7 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Context
     {
         public void Start() {
             if (SendFriendRequest == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: SendFriendRequest is not set in Gs2FriendOwnSendFriendRequestContext.");
+                Debug.LogWarning($"{gameObject.GetFullPath()}: SendFriendRequest is not set in Gs2FriendOwnSendFriendRequestContext.");
             }
         }
         public virtual bool HasError() {
@@ -48,9 +48,7 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Context
                 if (GetComponentInParent<Gs2FriendOwnSendFriendRequestList>(true) != null) {
                     return false;
                 }
-                else {
-                    return true;
-                }
+                return true;
             }
             return false;
         }

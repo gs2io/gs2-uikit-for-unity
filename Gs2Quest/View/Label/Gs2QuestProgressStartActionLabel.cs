@@ -40,19 +40,42 @@ namespace Gs2.Unity.UiKit.Gs2Quest
 	[AddComponentMenu("GS2 UIKit/Quest/Progress/View/Label/Gs2QuestProgressStartActionLabel")]
     public partial class Gs2QuestProgressStartActionLabel : MonoBehaviour
     {
-        public void Update()
+        private void OnChange()
         {
-            onUpdate?.Invoke(
-                format.Replace(
-                    "{questGroupName}", $"{action?.QuestGroupName}"
+            this.onUpdate?.Invoke(
+                this.format.Replace(
+                    "{questGroupName}", $"{this.action?.QuestGroupName}"
                 ).Replace(
-                    "{questName}", $"{action?.QuestName}"
+                    "{questName}", $"{this.action?.QuestName}"
                 ).Replace(
-                    "{force}", $"{action?.Force}"
+                    "{force}", $"{this.action?.Force}"
                 ).Replace(
-                    "{config}", $"{action?.Config}"
+                    "{config}", $"{this.action?.Config}"
                 )
             );
+        }
+
+        public void Awake() {
+            if (this.action == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2AccountAccountAuthenticationAction.");
+                enabled = false;
+            }
+        }
+
+        public virtual bool HasError()
+        {
+            if (this.action == null) {
+                return true;
+            }
+            return false;
+        }
+
+        public void OnEnable() {
+            this.action.OnChange.AddListener(OnChange);
+        }
+
+        public void OnDisable() {
+            this.action.OnChange.RemoveListener(OnChange);
         }
     }
 

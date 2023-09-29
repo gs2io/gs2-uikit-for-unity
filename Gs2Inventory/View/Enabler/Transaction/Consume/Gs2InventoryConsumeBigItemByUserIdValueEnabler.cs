@@ -44,34 +44,33 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Enabler
 	[AddComponentMenu("GS2 UIKit/Inventory/BigItem/View/Enabler/Transaction/Gs2InventoryConsumeBigItemByUserIdValueEnabler")]
     public partial class Gs2InventoryConsumeBigItemByUserIdValueEnabler : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched && _fetcher.Request != null) {
-                switch(expression)
-                {
-                    case Expression.In:
-                        target.SetActive(_fetcher.Request.ConsumeCount != null && enableConsumeCounts.Contains(_fetcher.Request.ConsumeCount));
-                        break;
-                    case Expression.NotIn:
-                        target.SetActive(_fetcher.Request.ConsumeCount != null && !enableConsumeCounts.Contains(_fetcher.Request.ConsumeCount));
-                        break;
-                    case Expression.Less:
-                        target.SetActive(BigInteger.Parse(enableConsumeCount) > BigInteger.Parse(_fetcher.Request.ConsumeCount));
-                        break;
-                    case Expression.LessEqual:
-                        target.SetActive(BigInteger.Parse(enableConsumeCount) >= BigInteger.Parse(_fetcher.Request.ConsumeCount));
-                        break;
-                    case Expression.Greater:
-                        target.SetActive(BigInteger.Parse(enableConsumeCount) < BigInteger.Parse(_fetcher.Request.ConsumeCount));
-                        break;
-                    case Expression.GreaterEqual:
-                        target.SetActive(BigInteger.Parse(enableConsumeCount) <= BigInteger.Parse(_fetcher.Request.ConsumeCount));
-                        break;
-                }
+            if (!this._fetcher.Fetched || this._fetcher.Request == null) {
+                return;
             }
-            else
+            switch(this.expression)
             {
-                target.SetActive(enableConsumeCounts.Contains("0"));
+                case Expression.In:
+                    this.target.SetActive(this._fetcher.Request.ConsumeCount != null && this.enableConsumeCounts.Contains(this._fetcher.Request.ConsumeCount));
+                    break;
+                case Expression.NotIn:
+                    this.target.SetActive(this._fetcher.Request.ConsumeCount != null && !this.enableConsumeCounts.Contains(this._fetcher.Request.ConsumeCount));
+                    break;
+                case Expression.Less:
+                    this.target.SetActive(BigInteger.Parse(this.enableConsumeCount) > BigInteger.Parse(this._fetcher.Request.ConsumeCount));
+                    break;
+                case Expression.LessEqual:
+                    this.target.SetActive(BigInteger.Parse(this.enableConsumeCount) >= BigInteger.Parse(this._fetcher.Request.ConsumeCount));
+                    break;
+                case Expression.Greater:
+                    this.target.SetActive(BigInteger.Parse(this.enableConsumeCount) < BigInteger.Parse(this._fetcher.Request.ConsumeCount));
+                    break;
+                case Expression.GreaterEqual:
+                    this.target.SetActive(BigInteger.Parse(this.enableConsumeCount) <= BigInteger.Parse(this._fetcher.Request.ConsumeCount));
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
         }
     }
@@ -86,30 +85,50 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Enabler
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2InventoryConsumeBigItemByUserIdFetcher>() ?? GetComponentInParent<Gs2InventoryConsumeBigItemByUserIdFetcher>();
-
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2InventoryConsumeBigItemByUserIdFetcher>() ?? GetComponentInParent<Gs2InventoryConsumeBigItemByUserIdFetcher>();
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2InventoryConsumeBigItemByUserIdFetcher.");
                 enabled = false;
             }
-            if (target == null) {
+            if (this.target == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: target is not set.");
                 enabled = false;
             }
-
-            Update();
         }
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2InventoryConsumeBigItemByUserIdFetcher>() ?? GetComponentInParent<Gs2InventoryConsumeBigItemByUserIdFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2InventoryConsumeBigItemByUserIdFetcher>() ?? GetComponentInParent<Gs2InventoryConsumeBigItemByUserIdFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
-            if (target == null) {
+            if (this.target == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 

@@ -40,7 +40,7 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Context
     {
         public void Start() {
             if (MissionGroupModel == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: MissionGroupModel is not set in Gs2MissionMissionGroupModelContext.");
+                Debug.LogWarning($"{gameObject.GetFullPath()}: MissionGroupModel is not set in Gs2MissionMissionGroupModelContext.");
             }
         }
 
@@ -49,9 +49,7 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Context
                 if (GetComponentInParent<Gs2MissionMissionGroupModelList>(true) != null) {
                     return false;
                 }
-                else {
-                    return true;
-                }
+                return true;
             }
             return false;
         }

@@ -48,13 +48,16 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking
     {
         private IEnumerator Process()
         {
-            yield return new WaitUntil(() => this._clientHolder.Initialized);
-            yield return new WaitUntil(() => this._gameSessionHolder.Initialized);
+            var clientHolder = Gs2ClientHolder.Instance;
+            var gameSessionHolder = Gs2GameSessionHolder.Instance;
+
+            yield return new WaitUntil(() => clientHolder.Initialized);
+            yield return new WaitUntil(() => gameSessionHolder.Initialized);
             
-            var domain = this._clientHolder.Gs2.Matchmaking.Namespace(
+            var domain = clientHolder.Gs2.Matchmaking.Namespace(
                 this._context.Gathering.NamespaceName
             ).Me(
-                this._gameSessionHolder.GameSession
+                gameSessionHolder.GameSession
             ).Gathering(
                 this._context.Gathering.GatheringName
             );
@@ -121,16 +124,11 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking
 
     public partial class Gs2MatchmakingGatheringUpdateGatheringAction
     {
-        private Gs2ClientHolder _clientHolder;
-        private Gs2GameSessionHolder _gameSessionHolder;
         private Gs2MatchmakingGatheringContext _context;
 
         public void Awake()
         {
-            this._clientHolder = Gs2ClientHolder.Instance;
-            this._gameSessionHolder = Gs2GameSessionHolder.Instance;
             this._context = GetComponent<Gs2MatchmakingGatheringContext>() ?? GetComponentInParent<Gs2MatchmakingGatheringContext>();
-
             if (_context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MatchmakingGatheringContext.");
                 enabled = false;
@@ -165,8 +163,9 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking
         public List<Gs2.Unity.Gs2Matchmaking.Model.EzAttributeRange> AttributeRanges;
 
         public void SetAttributeRanges(List<Gs2.Unity.Gs2Matchmaking.Model.EzAttributeRange> value) {
-            AttributeRanges = value;
-            this.onChangeAttributeRanges.Invoke(AttributeRanges);
+            this.AttributeRanges = value;
+            this.onChangeAttributeRanges.Invoke(this.AttributeRanges);
+            this.OnChange.Invoke();
         }
     }
 
@@ -203,6 +202,8 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking
             add => this.onUpdateGatheringComplete.AddListener(value);
             remove => this.onUpdateGatheringComplete.RemoveListener(value);
         }
+
+        public UnityEvent OnChange = new UnityEvent();
 
         [SerializeField]
         internal ErrorEvent onError = new ErrorEvent();

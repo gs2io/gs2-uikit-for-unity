@@ -74,6 +74,7 @@ namespace Gs2.Unity.UiKit.Gs2Schedule.Fetcher
                 {
                     Trigger = item;
                     Fetched = true;
+                    this.OnFetched.Invoke();
                 }
             );
 
@@ -87,11 +88,10 @@ namespace Gs2.Unity.UiKit.Gs2Schedule.Fetcher
                 else {
                     Trigger = future.Result;
                     Fetched = true;
+                    this.OnFetched.Invoke();
                     break;
                 }
             }
-
-            this.OnFetched.Invoke();
         }
 
         public void OnUpdateContext() {
@@ -131,8 +131,6 @@ namespace Gs2.Unity.UiKit.Gs2Schedule.Fetcher
     {
         public Gs2ScheduleOwnTriggerContext Context { get; private set; }
 
-        public UnityEvent OnFetched = new UnityEvent();
-
         public void Awake()
         {
             Context = GetComponent<Gs2ScheduleOwnTriggerContext>() ?? GetComponentInParent<Gs2ScheduleOwnTriggerContext>();
@@ -160,6 +158,7 @@ namespace Gs2.Unity.UiKit.Gs2Schedule.Fetcher
     {
         public Gs2.Unity.Gs2Schedule.Model.EzTrigger Trigger { get; protected set; }
         public bool Fetched { get; protected set; }
+        public UnityEvent OnFetched = new UnityEvent();
     }
 
     /// <summary>

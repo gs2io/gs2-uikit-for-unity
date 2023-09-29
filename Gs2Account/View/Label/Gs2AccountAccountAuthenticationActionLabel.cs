@@ -40,15 +40,38 @@ namespace Gs2.Unity.UiKit.Gs2Account
 	[AddComponentMenu("GS2 UIKit/Account/Account/View/Label/Gs2AccountAccountAuthenticationActionLabel")]
     public partial class Gs2AccountAccountAuthenticationActionLabel : MonoBehaviour
     {
-        public void Update()
+        private void OnChange()
         {
-            onUpdate?.Invoke(
-                format.Replace(
-                    "{keyId}", $"{action?.KeyId}"
+            this.onUpdate?.Invoke(
+                this.format.Replace(
+                    "{keyId}", $"{this.action?.KeyId}"
                 ).Replace(
-                    "{password}", $"{action?.Password}"
+                    "{password}", $"{this.action?.Password}"
                 )
             );
+        }
+
+        public void Awake() {
+            if (this.action == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2AccountAccountAuthenticationAction.");
+                enabled = false;
+            }
+        }
+
+        public virtual bool HasError()
+        {
+            if (this.action == null) {
+                return true;
+            }
+            return false;
+        }
+
+        public void OnEnable() {
+            this.action.OnChange.AddListener(OnChange);
+        }
+
+        public void OnDisable() {
+            this.action.OnChange.RemoveListener(OnChange);
         }
     }
 

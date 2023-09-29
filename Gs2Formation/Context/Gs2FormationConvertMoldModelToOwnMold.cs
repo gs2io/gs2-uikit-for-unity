@@ -39,39 +39,55 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Context
         private Gs2FormationOwnMoldContext _context;
 
         public void Awake() {
-            _originalContext = GetComponent<Gs2FormationMoldModelContext>() ?? GetComponentInParent<Gs2FormationMoldModelContext>();
-            if (_originalContext == null) {
+            this._originalContext = GetComponent<Gs2FormationMoldModelContext>() ?? GetComponentInParent<Gs2FormationMoldModelContext>();
+            if (this._originalContext == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2FormationMoldModelContext.");
                 enabled = false;
             }
-            _context = GetComponent<Gs2FormationOwnMoldContext>();
-            if (_context == null) {
+            this._context = GetComponent<Gs2FormationOwnMoldContext>();
+            if (this._context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2FormationOwnMoldContext.");
                 enabled = false;
             }
         }
 
-        public bool HasError()
+        public virtual bool HasError()
         {
-            _originalContext = GetComponent<Gs2FormationMoldModelContext>() ?? GetComponentInParent<Gs2FormationMoldModelContext>(true);
+            this._originalContext = GetComponent<Gs2FormationMoldModelContext>() ?? GetComponentInParent<Gs2FormationMoldModelContext>();
             if (_originalContext == null) {
                 return true;
             }
-            _context = GetComponent<Gs2FormationOwnMoldContext>();
-            if (_context == null) {
+            this._context = GetComponent<Gs2FormationOwnMoldContext>();
+            if (this._context == null) {
                 return true;
             }
             return false;
         }
 
-        public void Start() {
-            _context.SetOwnMold(
+        private UnityAction _onUpdateContext;
+
+        private void OnUpdateContext() {
+            this._context.SetOwnMold(
                 OwnMold.New(
                     _originalContext.MoldModel.Namespace,
                     _originalContext.MoldModel.moldModelName
                 )
             );
-            enabled = false;
+        }
+
+        public void OnEnable() {
+            _onUpdateContext = () =>
+            {
+                OnUpdateContext();
+            };
+            this._originalContext.OnUpdate.AddListener(this._onUpdateContext);
+        }
+
+        public void OnDisable() {
+            if (this._onUpdateContext != null) {
+                this._originalContext.OnUpdate.RemoveListener(this._onUpdateContext);
+                this._onUpdateContext = null;
+            }
         }
     }
 }

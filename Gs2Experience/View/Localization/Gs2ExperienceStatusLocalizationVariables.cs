@@ -29,6 +29,7 @@
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Experience.Fetcher;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.Localization.Components;
 using UnityEngine.Localization.SmartFormat.PersistentVariables;
 
@@ -41,30 +42,27 @@ namespace Gs2.Unity.UiKit.Gs2Experience.Localization
     [AddComponentMenu("GS2 UIKit/Experience/Status/View/Localization/Gs2ExperienceStatusLocalizationVariables")]
     public partial class Gs2ExperienceStatusLocalizationVariables : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched) {
-                target.StringReference["experienceName"] = new StringVariable {
-                    Value = _fetcher?.Status?.ExperienceName ?? "",
-                };
-                target.StringReference["propertyId"] = new StringVariable {
-                    Value = _fetcher?.Status?.PropertyId ?? "",
-                };
-                target.StringReference["experienceValue"] = new LongVariable {
-                    Value = _fetcher?.Status?.ExperienceValue ?? 0,
-                };
-                target.StringReference["rankValue"] = new LongVariable {
-                    Value = _fetcher?.Status?.RankValue ?? 0,
-                };
-                target.StringReference["rankCapValue"] = new LongVariable {
-                    Value = _fetcher?.Status?.RankCapValue ?? 0,
-                };
-                target.StringReference["nextRankUpExperienceValue"] = new LongVariable {
-                    Value = _fetcher?.Status?.NextRankUpExperienceValue ?? 0,
-                };
-                enabled = false;
-                target.enabled = true;
-            }
+            this.target.StringReference["experienceName"] = new StringVariable {
+                Value = _fetcher?.Status?.ExperienceName ?? "",
+            };
+            this.target.StringReference["propertyId"] = new StringVariable {
+                Value = _fetcher?.Status?.PropertyId ?? "",
+            };
+            this.target.StringReference["experienceValue"] = new LongVariable {
+                Value = _fetcher?.Status?.ExperienceValue ?? 0,
+            };
+            this.target.StringReference["rankValue"] = new LongVariable {
+                Value = _fetcher?.Status?.RankValue ?? 0,
+            };
+            this.target.StringReference["rankCapValue"] = new LongVariable {
+                Value = _fetcher?.Status?.RankCapValue ?? 0,
+            };
+            this.target.StringReference["nextRankUpExperienceValue"] = new LongVariable {
+                Value = _fetcher?.Status?.NextRankUpExperienceValue ?? 0,
+            };
+            this.target.enabled = true;
         }
     }
 
@@ -77,10 +75,10 @@ namespace Gs2.Unity.UiKit.Gs2Experience.Localization
         private Gs2ExperienceOwnStatusFetcher _fetcher;
 
         public void Awake() {
-            target.enabled = false;
-            _fetcher = GetComponent<Gs2ExperienceOwnStatusFetcher>() ?? GetComponentInParent<Gs2ExperienceOwnStatusFetcher>();
+            this.target.enabled = false;
+            this._fetcher = GetComponent<Gs2ExperienceOwnStatusFetcher>() ?? GetComponentInParent<Gs2ExperienceOwnStatusFetcher>();
 
-            if (_fetcher == null) {
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ExperienceStatusFetcher.");
                 enabled = false;
             }
@@ -88,11 +86,34 @@ namespace Gs2.Unity.UiKit.Gs2Experience.Localization
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2ExperienceOwnStatusFetcher>() ?? GetComponentInParent<Gs2ExperienceOwnStatusFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2ExperienceOwnStatusFetcher>() ?? GetComponentInParent<Gs2ExperienceOwnStatusFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 

@@ -40,7 +40,7 @@ namespace Gs2.Unity.UiKit.Gs2Enhance.Context
     {
         public void Start() {
             if (Progress == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Progress is not set in Gs2EnhanceOwnProgressContext.");
+                Debug.LogWarning($"{gameObject.GetFullPath()}: Progress is not set in Gs2EnhanceOwnProgressContext.");
             }
         }
         public virtual bool HasError() {

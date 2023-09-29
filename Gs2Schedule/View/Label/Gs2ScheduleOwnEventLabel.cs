@@ -40,78 +40,75 @@ namespace Gs2.Unity.UiKit.Gs2Schedule
 	[AddComponentMenu("GS2 UIKit/Schedule/Event/View/Label/Gs2ScheduleOwnEventLabel")]
     public partial class Gs2ScheduleOwnEventLabel : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched && _fetcher.Event != null)
-            {
-                var absoluteBegin = _fetcher.Event.AbsoluteBegin == null ? DateTime.Now : UnixTime.FromUnixTime(_fetcher.Event.AbsoluteBegin).ToLocalTime();
-                var absoluteEnd = _fetcher.Event.AbsoluteEnd == null ? DateTime.Now : UnixTime.FromUnixTime(_fetcher.Event.AbsoluteEnd).ToLocalTime();
-                onUpdate?.Invoke(
-                    format.Replace(
-                        "{name}", $"{_fetcher?.Event?.Name}"
-                    ).Replace(
-                        "{metadata}", $"{_fetcher?.Event?.Metadata}"
-                    ).Replace(
-                        "{scheduleType}", $"{_fetcher?.Event?.ScheduleType}"
-                    ).Replace(
-                        "{repeatType}", $"{_fetcher?.Event?.RepeatType}"
-                    ).Replace(
-                        "{absoluteBegin:yyyy}", absoluteBegin.ToString("yyyy")
-                    ).Replace(
-                        "{absoluteBegin:yy}", absoluteBegin.ToString("yy")
-                    ).Replace(
-                        "{absoluteBegin:MM}", absoluteBegin.ToString("MM")
-                    ).Replace(
-                        "{absoluteBegin:MMM}", absoluteBegin.ToString("MMM")
-                    ).Replace(
-                        "{absoluteBegin:dd}", absoluteBegin.ToString("dd")
-                    ).Replace(
-                        "{absoluteBegin:hh}", absoluteBegin.ToString("hh")
-                    ).Replace(
-                        "{absoluteBegin:HH}", absoluteBegin.ToString("HH")
-                    ).Replace(
-                        "{absoluteBegin:tt}", absoluteBegin.ToString("tt")
-                    ).Replace(
-                        "{absoluteBegin:mm}", absoluteBegin.ToString("mm")
-                    ).Replace(
-                        "{absoluteBegin:ss}", absoluteBegin.ToString("ss")
-                    ).Replace(
-                        "{absoluteEnd:yyyy}", absoluteEnd.ToString("yyyy")
-                    ).Replace(
-                        "{absoluteEnd:yy}", absoluteEnd.ToString("yy")
-                    ).Replace(
-                        "{absoluteEnd:MM}", absoluteEnd.ToString("MM")
-                    ).Replace(
-                        "{absoluteEnd:MMM}", absoluteEnd.ToString("MMM")
-                    ).Replace(
-                        "{absoluteEnd:dd}", absoluteEnd.ToString("dd")
-                    ).Replace(
-                        "{absoluteEnd:hh}", absoluteEnd.ToString("hh")
-                    ).Replace(
-                        "{absoluteEnd:HH}", absoluteEnd.ToString("HH")
-                    ).Replace(
-                        "{absoluteEnd:tt}", absoluteEnd.ToString("tt")
-                    ).Replace(
-                        "{absoluteEnd:mm}", absoluteEnd.ToString("mm")
-                    ).Replace(
-                        "{absoluteEnd:ss}", absoluteEnd.ToString("ss")
-                    ).Replace(
-                        "{repeatBeginDayOfMonth}", $"{_fetcher?.Event?.RepeatBeginDayOfMonth}"
-                    ).Replace(
-                        "{repeatEndDayOfMonth}", $"{_fetcher?.Event?.RepeatEndDayOfMonth}"
-                    ).Replace(
-                        "{repeatBeginDayOfWeek}", $"{_fetcher?.Event?.RepeatBeginDayOfWeek}"
-                    ).Replace(
-                        "{repeatEndDayOfWeek}", $"{_fetcher?.Event?.RepeatEndDayOfWeek}"
-                    ).Replace(
-                        "{repeatBeginHour}", $"{_fetcher?.Event?.RepeatBeginHour}"
-                    ).Replace(
-                        "{repeatEndHour}", $"{_fetcher?.Event?.RepeatEndHour}"
-                    ).Replace(
-                        "{relativeTriggerName}", $"{_fetcher?.Event?.RelativeTriggerName}"
-                    )
-                );
-            }
+            var absoluteBegin = this._fetcher.Event.AbsoluteBegin == null ? DateTime.Now : UnixTime.FromUnixTime(_fetcher.Event.AbsoluteBegin).ToLocalTime();
+            var absoluteEnd = this._fetcher.Event.AbsoluteEnd == null ? DateTime.Now : UnixTime.FromUnixTime(_fetcher.Event.AbsoluteEnd).ToLocalTime();
+            this.onUpdate?.Invoke(
+                this.format.Replace(
+                    "{name}", $"{this._fetcher?.Event?.Name}"
+                ).Replace(
+                    "{metadata}", $"{this._fetcher?.Event?.Metadata}"
+                ).Replace(
+                    "{scheduleType}", $"{this._fetcher?.Event?.ScheduleType}"
+                ).Replace(
+                    "{repeatType}", $"{this._fetcher?.Event?.RepeatType}"
+                ).Replace(
+                    "{absoluteBegin:yyyy}", absoluteBegin.ToString("yyyy")
+                ).Replace(
+                    "{absoluteBegin:yy}", absoluteBegin.ToString("yy")
+                ).Replace(
+                    "{absoluteBegin:MM}", absoluteBegin.ToString("MM")
+                ).Replace(
+                    "{absoluteBegin:MMM}", absoluteBegin.ToString("MMM")
+                ).Replace(
+                    "{absoluteBegin:dd}", absoluteBegin.ToString("dd")
+                ).Replace(
+                    "{absoluteBegin:hh}", absoluteBegin.ToString("hh")
+                ).Replace(
+                    "{absoluteBegin:HH}", absoluteBegin.ToString("HH")
+                ).Replace(
+                    "{absoluteBegin:tt}", absoluteBegin.ToString("tt")
+                ).Replace(
+                    "{absoluteBegin:mm}", absoluteBegin.ToString("mm")
+                ).Replace(
+                    "{absoluteBegin:ss}", absoluteBegin.ToString("ss")
+                ).Replace(
+                    "{absoluteEnd:yyyy}", absoluteEnd.ToString("yyyy")
+                ).Replace(
+                    "{absoluteEnd:yy}", absoluteEnd.ToString("yy")
+                ).Replace(
+                    "{absoluteEnd:MM}", absoluteEnd.ToString("MM")
+                ).Replace(
+                    "{absoluteEnd:MMM}", absoluteEnd.ToString("MMM")
+                ).Replace(
+                    "{absoluteEnd:dd}", absoluteEnd.ToString("dd")
+                ).Replace(
+                    "{absoluteEnd:hh}", absoluteEnd.ToString("hh")
+                ).Replace(
+                    "{absoluteEnd:HH}", absoluteEnd.ToString("HH")
+                ).Replace(
+                    "{absoluteEnd:tt}", absoluteEnd.ToString("tt")
+                ).Replace(
+                    "{absoluteEnd:mm}", absoluteEnd.ToString("mm")
+                ).Replace(
+                    "{absoluteEnd:ss}", absoluteEnd.ToString("ss")
+                ).Replace(
+                    "{repeatBeginDayOfMonth}", $"{this._fetcher?.Event?.RepeatBeginDayOfMonth}"
+                ).Replace(
+                    "{repeatEndDayOfMonth}", $"{this._fetcher?.Event?.RepeatEndDayOfMonth}"
+                ).Replace(
+                    "{repeatBeginDayOfWeek}", $"{this._fetcher?.Event?.RepeatBeginDayOfWeek}"
+                ).Replace(
+                    "{repeatEndDayOfWeek}", $"{this._fetcher?.Event?.RepeatEndDayOfWeek}"
+                ).Replace(
+                    "{repeatBeginHour}", $"{this._fetcher?.Event?.RepeatBeginHour}"
+                ).Replace(
+                    "{repeatEndHour}", $"{this._fetcher?.Event?.RepeatEndHour}"
+                ).Replace(
+                    "{relativeTriggerName}", $"{this._fetcher?.Event?.RelativeTriggerName}"
+                )
+            );
         }
     }
 
@@ -125,23 +122,43 @@ namespace Gs2.Unity.UiKit.Gs2Schedule
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2ScheduleOwnEventFetcher>() ?? GetComponentInParent<Gs2ScheduleOwnEventFetcher>();
-
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2ScheduleOwnEventFetcher>() ?? GetComponentInParent<Gs2ScheduleOwnEventFetcher>();
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ScheduleOwnEventFetcher.");
                 enabled = false;
             }
-
-            Update();
         }
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2ScheduleOwnEventFetcher>() ?? GetComponentInParent<Gs2ScheduleOwnEventFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2ScheduleOwnEventFetcher>() ?? GetComponentInParent<Gs2ScheduleOwnEventFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 
@@ -179,8 +196,8 @@ namespace Gs2.Unity.UiKit.Gs2Schedule
 
         public event UnityAction<string> OnUpdate
         {
-            add => onUpdate.AddListener(value);
-            remove => onUpdate.RemoveListener(value);
+            add => this.onUpdate.AddListener(value);
+            remove => this.onUpdate.RemoveListener(value);
         }
     }
 }

@@ -39,9 +39,6 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Context
     public partial class Gs2InventoryOwnInventoryContext : Gs2InventoryInventoryModelContext
     {
         public new void Start() {
-            if (Inventory == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Inventory is not set in Gs2InventoryOwnInventoryContext.");
-            }
         }
         public override bool HasError() {
             var hasError = base.HasError();
@@ -49,9 +46,10 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Context
                 if (GetComponentInParent<Gs2InventoryOwnInventoryList>(true) != null) {
                     return false;
                 }
-                else {
-                    return true;
+                if (GetComponentInParent<Gs2InventoryConvertInventoryModelToOwnInventory>(true) != null) {
+                    return false;
                 }
+                return true;
             }
             return false;
         }

@@ -40,7 +40,7 @@ namespace Gs2.Unity.UiKit.Gs2Experience.Context
     {
         public void Start() {
             if (ExperienceModel == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: ExperienceModel is not set in Gs2ExperienceExperienceModelContext.");
+                Debug.LogWarning($"{gameObject.GetFullPath()}: ExperienceModel is not set in Gs2ExperienceExperienceModelContext.");
             }
         }
 
@@ -49,9 +49,7 @@ namespace Gs2.Unity.UiKit.Gs2Experience.Context
                 if (GetComponentInParent<Gs2ExperienceExperienceModelList>(true) != null) {
                     return false;
                 }
-                else {
-                    return true;
-                }
+                return true;
             }
             return false;
         }

@@ -24,10 +24,12 @@
 
 #pragma warning disable CS0472
 
+using System;
 using System.Collections.Generic;
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Formation.Fetcher;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2Formation.Enabler
 {
@@ -38,29 +40,24 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Enabler
 	[AddComponentMenu("GS2 UIKit/Formation/PropertyForm/View/Enabler/Properties/PropertyId/Gs2FormationOwnPropertyFormPropertyIdEnabler")]
     public partial class Gs2FormationOwnPropertyFormPropertyIdEnabler : MonoBehaviour
     {
-        public void Update()
+        private void OnFetched()
         {
-            if (_fetcher.Fetched && _fetcher.PropertyForm != null)
+            switch(this.expression)
             {
-                switch(expression)
-                {
-                    case Expression.In:
-                        target.SetActive(enablePropertyIds.Contains(_fetcher.PropertyForm.PropertyId));
-                        break;
-                    case Expression.NotIn:
-                        target.SetActive(!enablePropertyIds.Contains(_fetcher.PropertyForm.PropertyId));
-                        break;
-                    case Expression.StartsWith:
-                        target.SetActive(_fetcher.PropertyForm.PropertyId.StartsWith(enablePropertyId));
-                        break;
-                    case Expression.EndsWith:
-                        target.SetActive(_fetcher.PropertyForm.PropertyId.EndsWith(enablePropertyId));
-                        break;
-                }
-            }
-            else
-            {
-                target.SetActive(false);
+                case Expression.In:
+                    this.target.SetActive(this.enablePropertyIds.Contains(this._fetcher.PropertyForm.PropertyId));
+                    break;
+                case Expression.NotIn:
+                    this.target.SetActive(!this.enablePropertyIds.Contains(this._fetcher.PropertyForm.PropertyId));
+                    break;
+                case Expression.StartsWith:
+                    this.target.SetActive(this._fetcher.PropertyForm.PropertyId.StartsWith(this.enablePropertyId));
+                    break;
+                case Expression.EndsWith:
+                    this.target.SetActive(this._fetcher.PropertyForm.PropertyId.EndsWith(this.enablePropertyId));
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
         }
     }
@@ -75,13 +72,12 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Enabler
 
         public void Awake()
         {
-            _fetcher = GetComponent<Gs2FormationOwnPropertyFormFetcher>() ?? GetComponentInParent<Gs2FormationOwnPropertyFormFetcher>();
-
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2FormationOwnPropertyFormFetcher>() ?? GetComponentInParent<Gs2FormationOwnPropertyFormFetcher>();
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2FormationOwnPropertyFormFetcher.");
                 enabled = false;
             }
-            if (target == null) {
+            if (this.target == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: target is not set.");
                 enabled = false;
             }
@@ -89,14 +85,37 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Enabler
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2FormationOwnPropertyFormFetcher>() ?? GetComponentInParent<Gs2FormationOwnPropertyFormFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2FormationOwnPropertyFormFetcher>() ?? GetComponentInParent<Gs2FormationOwnPropertyFormFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
-            if (target == null) {
+            if (this.target == null) {
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 

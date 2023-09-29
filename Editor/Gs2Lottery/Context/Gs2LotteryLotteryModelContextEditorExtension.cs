@@ -43,8 +43,12 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.Editor
             serializedObject.Update();
 
             if (original.LotteryModel == null) {
-                if (original.GetComponentInParent<Gs2LotteryLotteryModelList>(true) != null) {
+                var list = original.GetComponentInParent<Gs2LotteryLotteryModelList>(true);
+                if (list != null) {
                     EditorGUILayout.HelpBox("LotteryModel is auto assign from Gs2LotteryLotteryModelList.", MessageType.Info);
+                    EditorGUI.BeginDisabledGroup(true);
+                    EditorGUILayout.ObjectField("List", list, typeof(Gs2LotteryLotteryModelList), false);
+                    EditorGUI.EndDisabledGroup();
                 }
                 else {
                     EditorGUILayout.HelpBox("LotteryModel not assigned.", MessageType.Error);

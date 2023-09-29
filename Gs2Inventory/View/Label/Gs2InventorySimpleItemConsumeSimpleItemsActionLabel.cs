@@ -40,13 +40,36 @@ namespace Gs2.Unity.UiKit.Gs2Inventory
 	[AddComponentMenu("GS2 UIKit/Inventory/SimpleItem/View/Label/Gs2InventorySimpleItemConsumeSimpleItemsActionLabel")]
     public partial class Gs2InventorySimpleItemConsumeSimpleItemsActionLabel : MonoBehaviour
     {
-        public void Update()
+        private void OnChange()
         {
-            onUpdate?.Invoke(
-                format.Replace(
-                    "{consumeCounts}", $"{action?.ConsumeCounts}"
+            this.onUpdate?.Invoke(
+                this.format.Replace(
+                    "{consumeCounts}", $"{this.action?.ConsumeCounts}"
                 )
             );
+        }
+
+        public void Awake() {
+            if (this.action == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2AccountAccountAuthenticationAction.");
+                enabled = false;
+            }
+        }
+
+        public virtual bool HasError()
+        {
+            if (this.action == null) {
+                return true;
+            }
+            return false;
+        }
+
+        public void OnEnable() {
+            this.action.OnChange.AddListener(OnChange);
+        }
+
+        public void OnDisable() {
+            this.action.OnChange.RemoveListener(OnChange);
         }
     }
 

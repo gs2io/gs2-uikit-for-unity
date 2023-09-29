@@ -48,13 +48,16 @@ namespace Gs2.Unity.UiKit.Gs2Friend
     {
         private IEnumerator Process()
         {
-            yield return new WaitUntil(() => this._clientHolder.Initialized);
-            yield return new WaitUntil(() => this._gameSessionHolder.Initialized);
+            var clientHolder = Gs2ClientHolder.Instance;
+            var gameSessionHolder = Gs2GameSessionHolder.Instance;
+
+            yield return new WaitUntil(() => clientHolder.Initialized);
+            yield return new WaitUntil(() => gameSessionHolder.Initialized);
             
-            var domain = this._clientHolder.Gs2.Friend.Namespace(
+            var domain = clientHolder.Gs2.Friend.Namespace(
                 this._context.FriendUser.NamespaceName
             ).Me(
-                this._gameSessionHolder.GameSession
+                gameSessionHolder.GameSession
             ).Friend(
                 this._context.FriendUser.WithProfile
             ).FriendUser(
@@ -122,16 +125,11 @@ namespace Gs2.Unity.UiKit.Gs2Friend
 
     public partial class Gs2FriendFriendUserDeleteFriendAction
     {
-        private Gs2ClientHolder _clientHolder;
-        private Gs2GameSessionHolder _gameSessionHolder;
         private Gs2FriendOwnFriendUserContext _context;
 
         public void Awake()
         {
-            this._clientHolder = Gs2ClientHolder.Instance;
-            this._gameSessionHolder = Gs2GameSessionHolder.Instance;
             this._context = GetComponent<Gs2FriendOwnFriendUserContext>() ?? GetComponentInParent<Gs2FriendOwnFriendUserContext>();
-
             if (_context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2FriendOwnFriendUserContext.");
                 enabled = false;
@@ -184,6 +182,8 @@ namespace Gs2.Unity.UiKit.Gs2Friend
             add => this.onDeleteFriendComplete.AddListener(value);
             remove => this.onDeleteFriendComplete.RemoveListener(value);
         }
+
+        public UnityEvent OnChange = new UnityEvent();
 
         [SerializeField]
         internal ErrorEvent onError = new ErrorEvent();

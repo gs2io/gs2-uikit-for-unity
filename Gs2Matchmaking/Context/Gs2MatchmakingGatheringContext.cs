@@ -40,7 +40,7 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking.Context
     {
         public void Start() {
             if (Gathering == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Gathering is not set in Gs2MatchmakingGatheringContext.");
+                Debug.LogWarning($"{gameObject.GetFullPath()}: Gathering is not set in Gs2MatchmakingGatheringContext.");
             }
         }
 
