@@ -132,7 +132,7 @@ namespace Gs2.Unity.UiKit.Gs2Formation
         public void Awake()
         {
             this._context = GetComponent<Gs2FormationOwnFormContext>() ?? GetComponentInParent<Gs2FormationOwnFormContext>();
-            if (_context == null) {
+            if (this._context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2FormationOwnFormContext.");
                 enabled = false;
             }
@@ -141,7 +141,7 @@ namespace Gs2.Unity.UiKit.Gs2Formation
         public virtual bool HasError()
         {
             this._context = GetComponent<Gs2FormationOwnFormContext>() ?? GetComponentInParent<Gs2FormationOwnFormContext>(true);
-            if (_context == null) {
+            if (this._context == null) {
                 return true;
             }
             return false;

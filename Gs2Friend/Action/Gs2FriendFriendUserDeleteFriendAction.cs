@@ -130,7 +130,7 @@ namespace Gs2.Unity.UiKit.Gs2Friend
         public void Awake()
         {
             this._context = GetComponent<Gs2FriendOwnFriendUserContext>() ?? GetComponentInParent<Gs2FriendOwnFriendUserContext>();
-            if (_context == null) {
+            if (this._context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2FriendOwnFriendUserContext.");
                 enabled = false;
             }
@@ -139,7 +139,7 @@ namespace Gs2.Unity.UiKit.Gs2Friend
         public virtual bool HasError()
         {
             this._context = GetComponent<Gs2FriendOwnFriendUserContext>() ?? GetComponentInParent<Gs2FriendOwnFriendUserContext>(true);
-            if (_context == null) {
+            if (this._context == null) {
                 return true;
             }
             return false;

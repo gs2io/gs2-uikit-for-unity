@@ -43,7 +43,7 @@ namespace Gs2.Unity.UiKit.Gs2Formation
     {
         private List<Gs2FormationMoldModelContext> _children;
 
-        public void OnFetched() {
+        private void OnFetched() {
             for (var i = 0; i < this._children.Count; i++) {
                 if (i < this._fetcher.MoldModels.Count) {
                     this._children[i].SetMoldModel(

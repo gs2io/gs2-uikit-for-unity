@@ -43,7 +43,7 @@ namespace Gs2.Unity.UiKit.Gs2Lottery
     {
         private List<Gs2LotteryLotteryModelContext> _children;
 
-        public void OnFetched() {
+        private void OnFetched() {
             for (var i = 0; i < this._children.Count; i++) {
                 if (i < this._fetcher.LotteryModels.Count) {
                     this._children[i].SetLotteryModel(

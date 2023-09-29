@@ -128,7 +128,7 @@ namespace Gs2.Unity.UiKit.Gs2Friend
         public void Awake()
         {
             this._context = GetComponent<Gs2FriendOwnBlackListContext>() ?? GetComponentInParent<Gs2FriendOwnBlackListContext>();
-            if (_context == null) {
+            if (this._context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2FriendOwnBlackListContext.");
                 enabled = false;
             }
@@ -137,7 +137,7 @@ namespace Gs2.Unity.UiKit.Gs2Friend
         public virtual bool HasError()
         {
             this._context = GetComponent<Gs2FriendOwnBlackListContext>() ?? GetComponentInParent<Gs2FriendOwnBlackListContext>(true);
-            if (_context == null) {
+            if (this._context == null) {
                 return true;
             }
             return false;
