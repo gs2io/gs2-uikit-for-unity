@@ -130,7 +130,7 @@ namespace Gs2.Unity.UiKit.Gs2Money
         public void Awake()
         {
             this._context = GetComponent<Gs2MoneyOwnWalletContext>() ?? GetComponentInParent<Gs2MoneyOwnWalletContext>();
-            if (_context == null) {
+            if (this._context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MoneyOwnWalletContext.");
                 enabled = false;
             }
@@ -139,7 +139,7 @@ namespace Gs2.Unity.UiKit.Gs2Money
         public virtual bool HasError()
         {
             this._context = GetComponent<Gs2MoneyOwnWalletContext>() ?? GetComponentInParent<Gs2MoneyOwnWalletContext>(true);
-            if (_context == null) {
+            if (this._context == null) {
                 return true;
             }
             return false;

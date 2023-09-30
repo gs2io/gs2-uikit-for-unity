@@ -124,7 +124,7 @@ namespace Gs2.Unity.UiKit.Gs2Datastore
         public void Awake()
         {
             this._context = GetComponent<Gs2DatastoreOwnDataObjectContext>() ?? GetComponentInParent<Gs2DatastoreOwnDataObjectContext>();
-            if (_context == null) {
+            if (this._context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2DatastoreOwnDataObjectContext.");
                 enabled = false;
             }
@@ -133,7 +133,7 @@ namespace Gs2.Unity.UiKit.Gs2Datastore
         public virtual bool HasError()
         {
             this._context = GetComponent<Gs2DatastoreOwnDataObjectContext>() ?? GetComponentInParent<Gs2DatastoreOwnDataObjectContext>(true);
-            if (_context == null) {
+            if (this._context == null) {
                 return true;
             }
             return false;

@@ -131,7 +131,7 @@ namespace Gs2.Unity.UiKit.Gs2Stamina
         public void Awake()
         {
             this._context = GetComponent<Gs2StaminaOwnStaminaContext>() ?? GetComponentInParent<Gs2StaminaOwnStaminaContext>();
-            if (_context == null) {
+            if (this._context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2StaminaOwnStaminaContext.");
                 enabled = false;
             }
@@ -140,7 +140,7 @@ namespace Gs2.Unity.UiKit.Gs2Stamina
         public virtual bool HasError()
         {
             this._context = GetComponent<Gs2StaminaOwnStaminaContext>() ?? GetComponentInParent<Gs2StaminaOwnStaminaContext>(true);
-            if (_context == null) {
+            if (this._context == null) {
                 return true;
             }
             return false;

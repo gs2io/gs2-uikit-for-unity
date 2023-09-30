@@ -65,12 +65,12 @@ namespace Gs2.Unity.UiKit.Gs2Quest
 
         public void Awake()
         {
-            _fetcher = GetComponent<IConsumeActionsFetcher>() ?? GetComponentInParent<IConsumeActionsFetcher>();
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<IConsumeActionsFetcher>() ?? GetComponentInParent<IConsumeActionsFetcher>();
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the IConsumeActionsFetcher.");
                 enabled = false;
             }
-            if (target == null) {
+            if (this.target == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: target is not set.");
                 enabled = false;
             }
@@ -78,11 +78,11 @@ namespace Gs2.Unity.UiKit.Gs2Quest
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<IConsumeActionsFetcher>() ?? GetComponentInParent<IConsumeActionsFetcher>(true);
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<IConsumeActionsFetcher>() ?? GetComponentInParent<IConsumeActionsFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
-            if (target == null) {
+            if (this.target == null) {
                 return true;
             }
             return false;

@@ -119,7 +119,7 @@ namespace Gs2.Unity.UiKit.Gs2Quest
         public void Awake()
         {
             this._context = GetComponent<Gs2QuestOwnProgressContext>() ?? GetComponentInParent<Gs2QuestOwnProgressContext>();
-            if (_context == null) {
+            if (this._context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2QuestOwnProgressContext.");
                 enabled = false;
             }
@@ -128,7 +128,7 @@ namespace Gs2.Unity.UiKit.Gs2Quest
         public virtual bool HasError()
         {
             this._context = GetComponent<Gs2QuestOwnProgressContext>() ?? GetComponentInParent<Gs2QuestOwnProgressContext>(true);
-            if (_context == null) {
+            if (this._context == null) {
                 return true;
             }
             return false;

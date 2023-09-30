@@ -118,7 +118,7 @@ namespace Gs2.Unity.UiKit.Gs2Version
         public void Awake()
         {
             this._context = GetComponent<Gs2VersionNamespaceContext>() ?? GetComponentInParent<Gs2VersionNamespaceContext>();
-            if (_context == null) {
+            if (this._context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2VersionNamespaceContext.");
                 enabled = false;
             }
@@ -127,7 +127,7 @@ namespace Gs2.Unity.UiKit.Gs2Version
         public virtual bool HasError()
         {
             this._context = GetComponent<Gs2VersionNamespaceContext>() ?? GetComponentInParent<Gs2VersionNamespaceContext>(true);
-            if (_context == null) {
+            if (this._context == null) {
                 return true;
             }
             return false;

@@ -131,7 +131,7 @@ namespace Gs2.Unity.UiKit.Gs2Inventory
         public void Awake()
         {
             this._context = GetComponent<Gs2InventoryOwnBigItemContext>() ?? GetComponentInParent<Gs2InventoryOwnBigItemContext>();
-            if (_context == null) {
+            if (this._context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2InventoryOwnBigItemContext.");
                 enabled = false;
             }
@@ -140,7 +140,7 @@ namespace Gs2.Unity.UiKit.Gs2Inventory
         public virtual bool HasError()
         {
             this._context = GetComponent<Gs2InventoryOwnBigItemContext>() ?? GetComponentInParent<Gs2InventoryOwnBigItemContext>(true);
-            if (_context == null) {
+            if (this._context == null) {
                 return true;
             }
             return false;

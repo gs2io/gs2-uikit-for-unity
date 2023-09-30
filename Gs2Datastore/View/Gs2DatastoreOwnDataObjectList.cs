@@ -43,7 +43,7 @@ namespace Gs2.Unity.UiKit.Gs2Datastore
     {
         private List<Gs2DatastoreOwnDataObjectContext> _children;
 
-        public void OnFetched() {
+        private void OnFetched() {
             for (var i = 0; i < this._children.Count; i++) {
                 if (i < this._fetcher.DataObjects.Count) {
                     this._children[i].SetOwnDataObject(

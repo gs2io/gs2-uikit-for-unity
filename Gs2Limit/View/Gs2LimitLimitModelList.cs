@@ -43,7 +43,7 @@ namespace Gs2.Unity.UiKit.Gs2Limit
     {
         private List<Gs2LimitLimitModelContext> _children;
 
-        public void OnFetched() {
+        private void OnFetched() {
             for (var i = 0; i < this._children.Count; i++) {
                 if (i < this._fetcher.LimitModels.Count) {
                     this._children[i].SetLimitModel(

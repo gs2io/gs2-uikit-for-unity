@@ -126,7 +126,7 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking
         public void Awake()
         {
             this._context = GetComponent<Gs2MatchmakingVoteContext>() ?? GetComponentInParent<Gs2MatchmakingVoteContext>();
-            if (_context == null) {
+            if (this._context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MatchmakingVoteContext.");
                 enabled = false;
             }
@@ -135,7 +135,7 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking
         public virtual bool HasError()
         {
             this._context = GetComponent<Gs2MatchmakingVoteContext>() ?? GetComponentInParent<Gs2MatchmakingVoteContext>(true);
-            if (_context == null) {
+            if (this._context == null) {
                 return true;
             }
             return false;

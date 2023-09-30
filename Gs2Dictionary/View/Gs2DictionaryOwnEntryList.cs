@@ -43,7 +43,7 @@ namespace Gs2.Unity.UiKit.Gs2Dictionary
     {
         private List<Gs2DictionaryOwnEntryContext> _children;
 
-        public void OnFetched() {
+        private void OnFetched() {
             for (var i = 0; i < this._children.Count; i++) {
                 if (i < this._fetcher.Entries.Count) {
                     this._children[i].SetOwnEntry(

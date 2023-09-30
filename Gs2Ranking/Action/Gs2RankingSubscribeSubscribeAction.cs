@@ -128,7 +128,7 @@ namespace Gs2.Unity.UiKit.Gs2Ranking
         public void Awake()
         {
             this._context = GetComponent<Gs2RankingOwnSubscribeContext>() ?? GetComponentInParent<Gs2RankingOwnSubscribeContext>();
-            if (_context == null) {
+            if (this._context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2RankingOwnSubscribeContext.");
                 enabled = false;
             }
@@ -137,7 +137,7 @@ namespace Gs2.Unity.UiKit.Gs2Ranking
         public virtual bool HasError()
         {
             this._context = GetComponent<Gs2RankingOwnSubscribeContext>() ?? GetComponentInParent<Gs2RankingOwnSubscribeContext>(true);
-            if (_context == null) {
+            if (this._context == null) {
                 return true;
             }
             return false;

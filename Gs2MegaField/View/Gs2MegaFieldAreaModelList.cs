@@ -43,7 +43,7 @@ namespace Gs2.Unity.UiKit.Gs2MegaField
     {
         private List<Gs2MegaFieldAreaModelContext> _children;
 
-        public void OnFetched() {
+        private void OnFetched() {
             for (var i = 0; i < this._children.Count; i++) {
                 if (i < this._fetcher.AreaModels.Count) {
                     this._children[i].SetAreaModel(

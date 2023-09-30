@@ -131,7 +131,7 @@ namespace Gs2.Unity.UiKit.Gs2Chat
         public void Awake()
         {
             this._context = GetComponent<Gs2ChatRoomContext>() ?? GetComponentInParent<Gs2ChatRoomContext>();
-            if (_context == null) {
+            if (this._context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ChatRoomContext.");
                 enabled = false;
             }
@@ -140,7 +140,7 @@ namespace Gs2.Unity.UiKit.Gs2Chat
         public virtual bool HasError()
         {
             this._context = GetComponent<Gs2ChatRoomContext>() ?? GetComponentInParent<Gs2ChatRoomContext>(true);
-            if (_context == null) {
+            if (this._context == null) {
                 return true;
             }
             return false;

@@ -128,7 +128,7 @@ namespace Gs2.Unity.UiKit.Gs2Gateway
         public void Awake()
         {
             this._context = GetComponent<Gs2GatewayOwnWebSocketSessionContext>() ?? GetComponentInParent<Gs2GatewayOwnWebSocketSessionContext>();
-            if (_context == null) {
+            if (this._context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2GatewayOwnWebSocketSessionContext.");
                 enabled = false;
             }
@@ -137,7 +137,7 @@ namespace Gs2.Unity.UiKit.Gs2Gateway
         public virtual bool HasError()
         {
             this._context = GetComponent<Gs2GatewayOwnWebSocketSessionContext>() ?? GetComponentInParent<Gs2GatewayOwnWebSocketSessionContext>(true);
-            if (_context == null) {
+            if (this._context == null) {
                 return true;
             }
             return false;

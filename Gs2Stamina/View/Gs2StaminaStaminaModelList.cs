@@ -43,7 +43,7 @@ namespace Gs2.Unity.UiKit.Gs2Stamina
     {
         private List<Gs2StaminaStaminaModelContext> _children;
 
-        public void OnFetched() {
+        private void OnFetched() {
             for (var i = 0; i < this._children.Count; i++) {
                 if (i < this._fetcher.StaminaModels.Count) {
                     this._children[i].SetStaminaModel(

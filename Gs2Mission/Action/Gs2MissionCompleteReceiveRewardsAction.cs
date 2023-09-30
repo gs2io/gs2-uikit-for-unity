@@ -118,7 +118,7 @@ namespace Gs2.Unity.UiKit.Gs2Mission
         public void Awake()
         {
             this._context = GetComponent<Gs2MissionOwnCompleteContext>() ?? GetComponentInParent<Gs2MissionOwnCompleteContext>();
-            if (_context == null) {
+            if (this._context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MissionOwnCompleteContext.");
                 enabled = false;
             }
@@ -127,7 +127,7 @@ namespace Gs2.Unity.UiKit.Gs2Mission
         public virtual bool HasError()
         {
             this._context = GetComponent<Gs2MissionOwnCompleteContext>() ?? GetComponentInParent<Gs2MissionOwnCompleteContext>(true);
-            if (_context == null) {
+            if (this._context == null) {
                 return true;
             }
             return false;

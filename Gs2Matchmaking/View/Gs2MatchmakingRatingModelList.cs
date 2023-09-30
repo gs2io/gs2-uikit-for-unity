@@ -43,7 +43,7 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking
     {
         private List<Gs2MatchmakingRatingModelContext> _children;
 
-        public void OnFetched() {
+        private void OnFetched() {
             for (var i = 0; i < this._children.Count; i++) {
                 if (i < this._fetcher.RatingModels.Count) {
                     this._children[i].SetRatingModel(

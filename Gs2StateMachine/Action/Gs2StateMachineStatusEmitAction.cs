@@ -130,7 +130,7 @@ namespace Gs2.Unity.UiKit.Gs2StateMachine
         public void Awake()
         {
             this._context = GetComponent<Gs2StateMachineOwnStatusContext>() ?? GetComponentInParent<Gs2StateMachineOwnStatusContext>();
-            if (_context == null) {
+            if (this._context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2StateMachineOwnStatusContext.");
                 enabled = false;
             }
@@ -139,7 +139,7 @@ namespace Gs2.Unity.UiKit.Gs2StateMachine
         public virtual bool HasError()
         {
             this._context = GetComponent<Gs2StateMachineOwnStatusContext>() ?? GetComponentInParent<Gs2StateMachineOwnStatusContext>(true);
-            if (_context == null) {
+            if (this._context == null) {
                 return true;
             }
             return false;

@@ -132,7 +132,7 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking
         public void Awake()
         {
             this._context = GetComponent<Gs2MatchmakingNamespaceContext>() ?? GetComponentInParent<Gs2MatchmakingNamespaceContext>();
-            if (_context == null) {
+            if (this._context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MatchmakingNamespaceContext.");
                 enabled = false;
             }
@@ -141,7 +141,7 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking
         public virtual bool HasError()
         {
             this._context = GetComponent<Gs2MatchmakingNamespaceContext>() ?? GetComponentInParent<Gs2MatchmakingNamespaceContext>(true);
-            if (_context == null) {
+            if (this._context == null) {
                 return true;
             }
             return false;

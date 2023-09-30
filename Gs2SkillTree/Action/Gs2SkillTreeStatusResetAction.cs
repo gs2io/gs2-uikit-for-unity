@@ -116,7 +116,7 @@ namespace Gs2.Unity.UiKit.Gs2SkillTree
         public void Awake()
         {
             this._context = GetComponent<Gs2SkillTreeOwnStatusContext>() ?? GetComponentInParent<Gs2SkillTreeOwnStatusContext>();
-            if (_context == null) {
+            if (this._context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2SkillTreeOwnStatusContext.");
                 enabled = false;
             }
@@ -125,7 +125,7 @@ namespace Gs2.Unity.UiKit.Gs2SkillTree
         public virtual bool HasError()
         {
             this._context = GetComponent<Gs2SkillTreeOwnStatusContext>() ?? GetComponentInParent<Gs2SkillTreeOwnStatusContext>(true);
-            if (_context == null) {
+            if (this._context == null) {
                 return true;
             }
             return false;

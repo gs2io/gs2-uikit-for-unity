@@ -43,7 +43,7 @@ namespace Gs2.Unity.UiKit.Gs2Quest
     {
         private List<Gs2QuestQuestModelContext> _children;
 
-        public void OnFetched() {
+        private void OnFetched() {
             for (var i = 0; i < this._children.Count; i++) {
                 if (i < this._fetcher.QuestModels.Count) {
                     this._children[i].SetQuestModel(

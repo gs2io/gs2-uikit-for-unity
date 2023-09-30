@@ -43,7 +43,7 @@ namespace Gs2.Unity.UiKit.Gs2Limit
     {
         private List<Gs2LimitOwnCounterContext> _children;
 
-        public void OnFetched() {
+        private void OnFetched() {
             for (var i = 0; i < this._children.Count; i++) {
                 if (i < this._fetcher.Counters.Count) {
                     this._children[i].SetOwnCounter(

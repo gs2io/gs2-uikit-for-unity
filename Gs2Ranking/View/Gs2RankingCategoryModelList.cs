@@ -43,7 +43,7 @@ namespace Gs2.Unity.UiKit.Gs2Ranking
     {
         private List<Gs2RankingCategoryModelContext> _children;
 
-        public void OnFetched() {
+        private void OnFetched() {
             for (var i = 0; i < this._children.Count; i++) {
                 if (i < this._fetcher.CategoryModels.Count) {
                     this._children[i].SetCategoryModel(

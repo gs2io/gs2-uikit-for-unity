@@ -129,7 +129,7 @@ namespace Gs2.Unity.UiKit.Gs2SerialKey
         public void Awake()
         {
             this._context = GetComponent<Gs2SerialKeySerialKeyContext>() ?? GetComponentInParent<Gs2SerialKeySerialKeyContext>();
-            if (_context == null) {
+            if (this._context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2SerialKeySerialKeyContext.");
                 enabled = false;
             }
@@ -138,7 +138,7 @@ namespace Gs2.Unity.UiKit.Gs2SerialKey
         public virtual bool HasError()
         {
             this._context = GetComponent<Gs2SerialKeySerialKeyContext>() ?? GetComponentInParent<Gs2SerialKeySerialKeyContext>(true);
-            if (_context == null) {
+            if (this._context == null) {
                 return true;
             }
             return false;

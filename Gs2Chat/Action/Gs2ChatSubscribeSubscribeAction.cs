@@ -129,7 +129,7 @@ namespace Gs2.Unity.UiKit.Gs2Chat
         public void Awake()
         {
             this._context = GetComponent<Gs2ChatOwnSubscribeContext>() ?? GetComponentInParent<Gs2ChatOwnSubscribeContext>();
-            if (_context == null) {
+            if (this._context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ChatOwnSubscribeContext.");
                 enabled = false;
             }
@@ -138,7 +138,7 @@ namespace Gs2.Unity.UiKit.Gs2Chat
         public virtual bool HasError()
         {
             this._context = GetComponent<Gs2ChatOwnSubscribeContext>() ?? GetComponentInParent<Gs2ChatOwnSubscribeContext>(true);
-            if (_context == null) {
+            if (this._context == null) {
                 return true;
             }
             return false;

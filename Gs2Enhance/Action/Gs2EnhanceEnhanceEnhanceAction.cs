@@ -120,7 +120,7 @@ namespace Gs2.Unity.UiKit.Gs2Enhance
         public void Awake()
         {
             this._context = GetComponent<Gs2EnhanceNamespaceContext>() ?? GetComponentInParent<Gs2EnhanceNamespaceContext>();
-            if (_context == null) {
+            if (this._context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2EnhanceNamespaceContext.");
                 enabled = false;
             }
@@ -129,7 +129,7 @@ namespace Gs2.Unity.UiKit.Gs2Enhance
         public virtual bool HasError()
         {
             this._context = GetComponent<Gs2EnhanceNamespaceContext>() ?? GetComponentInParent<Gs2EnhanceNamespaceContext>(true);
-            if (_context == null) {
+            if (this._context == null) {
                 return true;
             }
             return false;

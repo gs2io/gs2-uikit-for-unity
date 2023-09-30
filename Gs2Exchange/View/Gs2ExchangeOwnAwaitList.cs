@@ -43,7 +43,7 @@ namespace Gs2.Unity.UiKit.Gs2Exchange
     {
         private List<Gs2ExchangeOwnAwaitContext> _children;
 
-        public void OnFetched() {
+        private void OnFetched() {
             for (var i = 0; i < this._children.Count; i++) {
                 if (i < this._fetcher.Awaits.Count) {
                     this._children[i].SetOwnAwait(
