@@ -45,16 +45,16 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Enabler
             switch(this.expression)
             {
                 case Expression.In:
-                    this.target.SetActive(this.enableCounterNames.Contains(this._fetcher.MissionTaskModel.CounterName));
+                    this.target.SetActive(this.enableCounterNames.Contains(this._fetcher.MissionTaskModel?.CounterName ?? ""));
                     break;
                 case Expression.NotIn:
-                    this.target.SetActive(!this.enableCounterNames.Contains(this._fetcher.MissionTaskModel.CounterName));
+                    this.target.SetActive(!this.enableCounterNames.Contains(this._fetcher.MissionTaskModel?.CounterName ?? ""));
                     break;
                 case Expression.StartsWith:
-                    this.target.SetActive(this._fetcher.MissionTaskModel.CounterName.StartsWith(this.enableCounterName));
+                    this.target.SetActive((this._fetcher.MissionTaskModel?.CounterName ?? "").StartsWith(this.enableCounterName));
                     break;
                 case Expression.EndsWith:
-                    this.target.SetActive(this._fetcher.MissionTaskModel.CounterName.EndsWith(this.enableCounterName));
+                    this.target.SetActive((this._fetcher.MissionTaskModel?.CounterName ?? "").EndsWith(this.enableCounterName));
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();

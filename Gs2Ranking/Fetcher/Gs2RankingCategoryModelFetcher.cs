@@ -119,6 +119,18 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Fetcher
             );
             this._callbackId = null;
         }
+
+        public void SetTemporarySlot(
+            Gs2.Unity.Gs2Ranking.Model.EzCategoryModel categoryModel
+        ) {
+            CategoryModel = categoryModel;
+            this.OnFetched.Invoke();
+        }
+
+        public void RollbackTemporarySlot(
+        ) {
+            OnUpdateContext();
+        }
     }
 
     /// <summary>

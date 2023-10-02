@@ -45,22 +45,22 @@ namespace Gs2.Unity.UiKit.Gs2Datastore.SpriteSwitcher
             switch(this.expression)
             {
                 case Expression.In:
-                    if (this.applyGenerations.Contains(this._fetcher.DataObjectHistory.Generation)) {
+                    if (this.applyGenerations.Contains(this._fetcher.DataObjectHistory?.Generation ?? "")) {
                         this.onUpdate.Invoke(this.sprite);
                     }
                     break;
                 case Expression.NotIn:
-                    if (!this.applyGenerations.Contains(this._fetcher.DataObjectHistory.Generation)) {
+                    if (!this.applyGenerations.Contains(this._fetcher.DataObjectHistory?.Generation ?? "")) {
                         this.onUpdate.Invoke(this.sprite);
                     }
                     break;
                 case Expression.StartsWith:
-                    if (this._fetcher.DataObjectHistory.Generation.StartsWith(this.applyGeneration)) {
+                    if ((this._fetcher.DataObjectHistory?.Generation ?? "").StartsWith(this.applyGeneration)) {
                         this.onUpdate.Invoke(this.sprite);
                     }
                     break;
                 case Expression.EndsWith:
-                    if (this._fetcher.DataObjectHistory.Generation.EndsWith(this.applyGeneration)) {
+                    if ((this._fetcher.DataObjectHistory?.Generation ?? "").EndsWith(this.applyGeneration)) {
                         this.onUpdate.Invoke(this.sprite);
                     }
                     break;

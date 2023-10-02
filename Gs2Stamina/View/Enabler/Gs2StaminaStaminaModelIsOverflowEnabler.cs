@@ -45,10 +45,10 @@ namespace Gs2.Unity.UiKit.Gs2Stamina
             switch(this.expression)
             {
                 case Expression.True:
-                    this.target.SetActive(this._fetcher.StaminaModel.IsOverflow);
+                    this.target.SetActive(this._fetcher.StaminaModel?.IsOverflow ?? false);
                     break;
                 case Expression.False:
-                    this.target.SetActive(!this._fetcher.StaminaModel.IsOverflow);
+                    this.target.SetActive(!this._fetcher.StaminaModel?.IsOverflow ?? false);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();

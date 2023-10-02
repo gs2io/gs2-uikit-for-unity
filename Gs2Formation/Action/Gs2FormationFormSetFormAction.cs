@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable UnusedAutoPropertyAccessor.Local
@@ -31,6 +33,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Gs2.Core.Exception;
 using Gs2.Unity.Gs2Formation.Model;
+using Gs2.Unity.Gs2Key.ScriptableObject;
 using Gs2.Unity.Util;
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Formation.Context;
@@ -65,7 +68,7 @@ namespace Gs2.Unity.UiKit.Gs2Formation
             );
             var future = domain.SetForm(
                 Slots.ToArray(),
-                KeyId
+                Key.Grn
             );
             yield return future;
             if (future.Error != null)
@@ -164,7 +167,7 @@ namespace Gs2.Unity.UiKit.Gs2Formation
     {
         public bool WaitAsyncProcessComplete;
         public List<Gs2.Unity.Gs2Formation.Model.EzSlotWithSignature> Slots;
-        public string KeyId;
+        public Key Key;
 
         public void SetSlots(List<Gs2.Unity.Gs2Formation.Model.EzSlotWithSignature> value) {
             this.Slots = value;
@@ -172,9 +175,9 @@ namespace Gs2.Unity.UiKit.Gs2Formation
             this.OnChange.Invoke();
         }
 
-        public void SetKeyId(string value) {
-            this.KeyId = value;
-            this.onChangeKeyId.Invoke(this.KeyId);
+        public void SetKeyId(Key value) {
+            this.Key = value;
+            this.onChangeKeyId.Invoke(this.Key);
             this.OnChange.Invoke();
         }
     }
@@ -200,14 +203,14 @@ namespace Gs2.Unity.UiKit.Gs2Formation
         }
 
         [Serializable]
-        private class ChangeKeyIdEvent : UnityEvent<string>
+        private class ChangeKeyIdEvent : UnityEvent<Key>
         {
 
         }
 
         [SerializeField]
         private ChangeKeyIdEvent onChangeKeyId = new ChangeKeyIdEvent();
-        public event UnityAction<string> OnChangeKeyId
+        public event UnityAction<Key> OnChangeKeyId
         {
             add => this.onChangeKeyId.AddListener(value);
             remove => this.onChangeKeyId.RemoveListener(value);

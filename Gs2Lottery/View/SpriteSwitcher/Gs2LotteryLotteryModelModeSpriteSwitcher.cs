@@ -45,22 +45,22 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.SpriteSwitcher
             switch(this.expression)
             {
                 case Expression.In:
-                    if (this.applyModes.Contains(this._fetcher.LotteryModel.Mode)) {
+                    if (this.applyModes.Contains(this._fetcher.LotteryModel?.Mode ?? "")) {
                         this.onUpdate.Invoke(this.sprite);
                     }
                     break;
                 case Expression.NotIn:
-                    if (!this.applyModes.Contains(this._fetcher.LotteryModel.Mode)) {
+                    if (!this.applyModes.Contains(this._fetcher.LotteryModel?.Mode ?? "")) {
                         this.onUpdate.Invoke(this.sprite);
                     }
                     break;
                 case Expression.StartsWith:
-                    if (this._fetcher.LotteryModel.Mode.StartsWith(this.applyMode)) {
+                    if ((this._fetcher.LotteryModel?.Mode ?? "").StartsWith(this.applyMode)) {
                         this.onUpdate.Invoke(this.sprite);
                     }
                     break;
                 case Expression.EndsWith:
-                    if (this._fetcher.LotteryModel.Mode.EndsWith(this.applyMode)) {
+                    if ((this._fetcher.LotteryModel?.Mode ?? "").EndsWith(this.applyMode)) {
                         this.onUpdate.Invoke(this.sprite);
                     }
                     break;

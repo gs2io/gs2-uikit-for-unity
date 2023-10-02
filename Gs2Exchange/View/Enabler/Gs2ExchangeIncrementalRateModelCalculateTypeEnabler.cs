@@ -45,16 +45,16 @@ namespace Gs2.Unity.UiKit.Gs2Exchange.Enabler
             switch(this.expression)
             {
                 case Expression.In:
-                    this.target.SetActive(this.enableCalculateTypes.Contains(this._fetcher.IncrementalRateModel.CalculateType));
+                    this.target.SetActive(this.enableCalculateTypes.Contains(this._fetcher.IncrementalRateModel?.CalculateType ?? ""));
                     break;
                 case Expression.NotIn:
-                    this.target.SetActive(!this.enableCalculateTypes.Contains(this._fetcher.IncrementalRateModel.CalculateType));
+                    this.target.SetActive(!this.enableCalculateTypes.Contains(this._fetcher.IncrementalRateModel?.CalculateType ?? ""));
                     break;
                 case Expression.StartsWith:
-                    this.target.SetActive(this._fetcher.IncrementalRateModel.CalculateType.StartsWith(this.enableCalculateType));
+                    this.target.SetActive((this._fetcher.IncrementalRateModel?.CalculateType ?? "").StartsWith(this.enableCalculateType));
                     break;
                 case Expression.EndsWith:
-                    this.target.SetActive(this._fetcher.IncrementalRateModel.CalculateType.EndsWith(this.enableCalculateType));
+                    this.target.SetActive((this._fetcher.IncrementalRateModel?.CalculateType ?? "").EndsWith(this.enableCalculateType));
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();

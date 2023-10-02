@@ -45,22 +45,22 @@ namespace Gs2.Unity.UiKit.Gs2Mission.SpriteSwitcher
             switch(this.expression)
             {
                 case Expression.In:
-                    if (this.applyResetTypes.Contains(this._fetcher.MissionGroupModel.ResetType)) {
+                    if (this.applyResetTypes.Contains(this._fetcher.MissionGroupModel?.ResetType ?? "")) {
                         this.onUpdate.Invoke(this.sprite);
                     }
                     break;
                 case Expression.NotIn:
-                    if (!this.applyResetTypes.Contains(this._fetcher.MissionGroupModel.ResetType)) {
+                    if (!this.applyResetTypes.Contains(this._fetcher.MissionGroupModel?.ResetType ?? "")) {
                         this.onUpdate.Invoke(this.sprite);
                     }
                     break;
                 case Expression.StartsWith:
-                    if (this._fetcher.MissionGroupModel.ResetType.StartsWith(this.applyResetType)) {
+                    if ((this._fetcher.MissionGroupModel?.ResetType ?? "").StartsWith(this.applyResetType)) {
                         this.onUpdate.Invoke(this.sprite);
                     }
                     break;
                 case Expression.EndsWith:
-                    if (this._fetcher.MissionGroupModel.ResetType.EndsWith(this.applyResetType)) {
+                    if ((this._fetcher.MissionGroupModel?.ResetType ?? "").EndsWith(this.applyResetType)) {
                         this.onUpdate.Invoke(this.sprite);
                     }
                     break;

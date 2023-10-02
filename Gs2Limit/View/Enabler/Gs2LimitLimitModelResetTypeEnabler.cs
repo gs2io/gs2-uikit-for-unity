@@ -45,16 +45,16 @@ namespace Gs2.Unity.UiKit.Gs2Limit.Enabler
             switch(this.expression)
             {
                 case Expression.In:
-                    this.target.SetActive(this.enableResetTypes.Contains(this._fetcher.LimitModel.ResetType));
+                    this.target.SetActive(this.enableResetTypes.Contains(this._fetcher.LimitModel?.ResetType ?? ""));
                     break;
                 case Expression.NotIn:
-                    this.target.SetActive(!this.enableResetTypes.Contains(this._fetcher.LimitModel.ResetType));
+                    this.target.SetActive(!this.enableResetTypes.Contains(this._fetcher.LimitModel?.ResetType ?? ""));
                     break;
                 case Expression.StartsWith:
-                    this.target.SetActive(this._fetcher.LimitModel.ResetType.StartsWith(this.enableResetType));
+                    this.target.SetActive((this._fetcher.LimitModel?.ResetType ?? "").StartsWith(this.enableResetType));
                     break;
                 case Expression.EndsWith:
-                    this.target.SetActive(this._fetcher.LimitModel.ResetType.EndsWith(this.enableResetType));
+                    this.target.SetActive((this._fetcher.LimitModel?.ResetType ?? "").EndsWith(this.enableResetType));
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();

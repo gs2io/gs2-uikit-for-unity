@@ -45,16 +45,16 @@ namespace Gs2.Unity.UiKit.Gs2Gateway.Enabler
             switch(this.expression)
             {
                 case Expression.In:
-                    this.target.SetActive(this.enableNamespaceNames.Contains(this._fetcher.WebSocketSession.NamespaceName));
+                    this.target.SetActive(this.enableNamespaceNames.Contains(this._fetcher.WebSocketSession?.NamespaceName ?? ""));
                     break;
                 case Expression.NotIn:
-                    this.target.SetActive(!this.enableNamespaceNames.Contains(this._fetcher.WebSocketSession.NamespaceName));
+                    this.target.SetActive(!this.enableNamespaceNames.Contains(this._fetcher.WebSocketSession?.NamespaceName ?? ""));
                     break;
                 case Expression.StartsWith:
-                    this.target.SetActive(this._fetcher.WebSocketSession.NamespaceName.StartsWith(this.enableNamespaceName));
+                    this.target.SetActive((this._fetcher.WebSocketSession?.NamespaceName ?? "").StartsWith(this.enableNamespaceName));
                     break;
                 case Expression.EndsWith:
-                    this.target.SetActive(this._fetcher.WebSocketSession.NamespaceName.EndsWith(this.enableNamespaceName));
+                    this.target.SetActive((this._fetcher.WebSocketSession?.NamespaceName ?? "").EndsWith(this.enableNamespaceName));
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();

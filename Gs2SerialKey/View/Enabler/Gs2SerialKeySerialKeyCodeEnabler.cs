@@ -45,16 +45,16 @@ namespace Gs2.Unity.UiKit.Gs2SerialKey.Enabler
             switch(this.expression)
             {
                 case Expression.In:
-                    this.target.SetActive(this.enableCodes.Contains(this._fetcher.SerialKey.Code));
+                    this.target.SetActive(this.enableCodes.Contains(this._fetcher.SerialKey?.Code ?? ""));
                     break;
                 case Expression.NotIn:
-                    this.target.SetActive(!this.enableCodes.Contains(this._fetcher.SerialKey.Code));
+                    this.target.SetActive(!this.enableCodes.Contains(this._fetcher.SerialKey?.Code ?? ""));
                     break;
                 case Expression.StartsWith:
-                    this.target.SetActive(this._fetcher.SerialKey.Code.StartsWith(this.enableCode));
+                    this.target.SetActive((this._fetcher.SerialKey?.Code ?? "").StartsWith(this.enableCode));
                     break;
                 case Expression.EndsWith:
-                    this.target.SetActive(this._fetcher.SerialKey.Code.EndsWith(this.enableCode));
+                    this.target.SetActive((this._fetcher.SerialKey?.Code ?? "").EndsWith(this.enableCode));
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();

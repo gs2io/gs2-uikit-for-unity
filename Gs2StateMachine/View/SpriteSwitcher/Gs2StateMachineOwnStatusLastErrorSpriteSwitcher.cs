@@ -45,22 +45,22 @@ namespace Gs2.Unity.UiKit.Gs2StateMachine.SpriteSwitcher
             switch(this.expression)
             {
                 case Expression.In:
-                    if (this.applyLastErrors.Contains(this._fetcher.Status.LastError)) {
+                    if (this.applyLastErrors.Contains(this._fetcher.Status?.LastError ?? "")) {
                         this.onUpdate.Invoke(this.sprite);
                     }
                     break;
                 case Expression.NotIn:
-                    if (!this.applyLastErrors.Contains(this._fetcher.Status.LastError)) {
+                    if (!this.applyLastErrors.Contains(this._fetcher.Status?.LastError ?? "")) {
                         this.onUpdate.Invoke(this.sprite);
                     }
                     break;
                 case Expression.StartsWith:
-                    if (this._fetcher.Status.LastError.StartsWith(this.applyLastError)) {
+                    if ((this._fetcher.Status?.LastError ?? "").StartsWith(this.applyLastError)) {
                         this.onUpdate.Invoke(this.sprite);
                     }
                     break;
                 case Expression.EndsWith:
-                    if (this._fetcher.Status.LastError.EndsWith(this.applyLastError)) {
+                    if ((this._fetcher.Status?.LastError ?? "").EndsWith(this.applyLastError)) {
                         this.onUpdate.Invoke(this.sprite);
                     }
                     break;

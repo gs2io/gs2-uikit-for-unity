@@ -45,16 +45,16 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.Enabler
             switch(this.expression)
             {
                 case Expression.In:
-                    this.target.SetActive(this.enablePrizeTableNames.Contains(this._fetcher.BoxItems.PrizeTableName));
+                    this.target.SetActive(this.enablePrizeTableNames.Contains(this._fetcher.BoxItems?.PrizeTableName ?? ""));
                     break;
                 case Expression.NotIn:
-                    this.target.SetActive(!this.enablePrizeTableNames.Contains(this._fetcher.BoxItems.PrizeTableName));
+                    this.target.SetActive(!this.enablePrizeTableNames.Contains(this._fetcher.BoxItems?.PrizeTableName ?? ""));
                     break;
                 case Expression.StartsWith:
-                    this.target.SetActive(this._fetcher.BoxItems.PrizeTableName.StartsWith(this.enablePrizeTableName));
+                    this.target.SetActive((this._fetcher.BoxItems?.PrizeTableName ?? "").StartsWith(this.enablePrizeTableName));
                     break;
                 case Expression.EndsWith:
-                    this.target.SetActive(this._fetcher.BoxItems.PrizeTableName.EndsWith(this.enablePrizeTableName));
+                    this.target.SetActive((this._fetcher.BoxItems?.PrizeTableName ?? "").EndsWith(this.enablePrizeTableName));
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();

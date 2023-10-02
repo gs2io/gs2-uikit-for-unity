@@ -45,16 +45,16 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.Enabler
             switch(this.expression)
             {
                 case Expression.In:
-                    this.target.SetActive(this.enableModes.Contains(this._fetcher.LotteryModel.Mode));
+                    this.target.SetActive(this.enableModes.Contains(this._fetcher.LotteryModel?.Mode ?? ""));
                     break;
                 case Expression.NotIn:
-                    this.target.SetActive(!this.enableModes.Contains(this._fetcher.LotteryModel.Mode));
+                    this.target.SetActive(!this.enableModes.Contains(this._fetcher.LotteryModel?.Mode ?? ""));
                     break;
                 case Expression.StartsWith:
-                    this.target.SetActive(this._fetcher.LotteryModel.Mode.StartsWith(this.enableMode));
+                    this.target.SetActive((this._fetcher.LotteryModel?.Mode ?? "").StartsWith(this.enableMode));
                     break;
                 case Expression.EndsWith:
-                    this.target.SetActive(this._fetcher.LotteryModel.Mode.EndsWith(this.enableMode));
+                    this.target.SetActive((this._fetcher.LotteryModel?.Mode ?? "").EndsWith(this.enableMode));
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();

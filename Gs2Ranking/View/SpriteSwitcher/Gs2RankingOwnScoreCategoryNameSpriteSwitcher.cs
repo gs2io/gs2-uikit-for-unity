@@ -45,22 +45,22 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.SpriteSwitcher
             switch(this.expression)
             {
                 case Expression.In:
-                    if (this.applyCategoryNames.Contains(this._fetcher.Score.CategoryName)) {
+                    if (this.applyCategoryNames.Contains(this._fetcher.Score?.CategoryName ?? "")) {
                         this.onUpdate.Invoke(this.sprite);
                     }
                     break;
                 case Expression.NotIn:
-                    if (!this.applyCategoryNames.Contains(this._fetcher.Score.CategoryName)) {
+                    if (!this.applyCategoryNames.Contains(this._fetcher.Score?.CategoryName ?? "")) {
                         this.onUpdate.Invoke(this.sprite);
                     }
                     break;
                 case Expression.StartsWith:
-                    if (this._fetcher.Score.CategoryName.StartsWith(this.applyCategoryName)) {
+                    if ((this._fetcher.Score?.CategoryName ?? "").StartsWith(this.applyCategoryName)) {
                         this.onUpdate.Invoke(this.sprite);
                     }
                     break;
                 case Expression.EndsWith:
-                    if (this._fetcher.Score.CategoryName.EndsWith(this.applyCategoryName)) {
+                    if ((this._fetcher.Score?.CategoryName ?? "").EndsWith(this.applyCategoryName)) {
                         this.onUpdate.Invoke(this.sprite);
                     }
                     break;

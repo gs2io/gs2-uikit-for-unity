@@ -45,22 +45,22 @@ namespace Gs2.Unity.UiKit.Gs2MegaField.SpriteSwitcher
             switch(this.expression)
             {
                 case Expression.In:
-                    if (this.applyLayerModelNames.Contains(this._fetcher.Spatial.LayerModelName)) {
+                    if (this.applyLayerModelNames.Contains(this._fetcher.Spatial?.LayerModelName ?? "")) {
                         this.onUpdate.Invoke(this.sprite);
                     }
                     break;
                 case Expression.NotIn:
-                    if (!this.applyLayerModelNames.Contains(this._fetcher.Spatial.LayerModelName)) {
+                    if (!this.applyLayerModelNames.Contains(this._fetcher.Spatial?.LayerModelName ?? "")) {
                         this.onUpdate.Invoke(this.sprite);
                     }
                     break;
                 case Expression.StartsWith:
-                    if (this._fetcher.Spatial.LayerModelName.StartsWith(this.applyLayerModelName)) {
+                    if ((this._fetcher.Spatial?.LayerModelName ?? "").StartsWith(this.applyLayerModelName)) {
                         this.onUpdate.Invoke(this.sprite);
                     }
                     break;
                 case Expression.EndsWith:
-                    if (this._fetcher.Spatial.LayerModelName.EndsWith(this.applyLayerModelName)) {
+                    if ((this._fetcher.Spatial?.LayerModelName ?? "").EndsWith(this.applyLayerModelName)) {
                         this.onUpdate.Invoke(this.sprite);
                     }
                     break;

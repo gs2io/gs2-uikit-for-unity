@@ -45,12 +45,12 @@ namespace Gs2.Unity.UiKit.Gs2Inventory
             switch(this.expression)
             {
                 case Expression.True:
-                    if (this._fetcher.ItemModel.AllowMultipleStacks) {
+                    if (this._fetcher.ItemModel?.AllowMultipleStacks ?? false) {
                         this.onUpdate.Invoke(this.sprite);
                     }
                     break;
                 case Expression.False:
-                    if (!this._fetcher.ItemModel.AllowMultipleStacks) {
+                    if (!this._fetcher.ItemModel?.AllowMultipleStacks ?? false) {
                         this.onUpdate.Invoke(this.sprite);
                     }
                     break;

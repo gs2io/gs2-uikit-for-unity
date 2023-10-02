@@ -42,9 +42,11 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking
     {
         private void OnFetched()
         {
-            onUpdate?.Invoke(
-                this._fetcher.Gathering.UpdatedAt
-            );
+            if (this._fetcher.Gathering.UpdatedAt != null) {
+                onUpdate?.Invoke(
+                    this._fetcher.Gathering.UpdatedAt
+                );
+            }
         }
     }
 

@@ -45,16 +45,16 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Enabler
             switch(this.expression)
             {
                 case Expression.In:
-                    this.target.SetActive(this.enableFriendProfiles.Contains(this._fetcher.FriendUser.FriendProfile));
+                    this.target.SetActive(this.enableFriendProfiles.Contains(this._fetcher.FriendUser?.FriendProfile ?? ""));
                     break;
                 case Expression.NotIn:
-                    this.target.SetActive(!this.enableFriendProfiles.Contains(this._fetcher.FriendUser.FriendProfile));
+                    this.target.SetActive(!this.enableFriendProfiles.Contains(this._fetcher.FriendUser?.FriendProfile ?? ""));
                     break;
                 case Expression.StartsWith:
-                    this.target.SetActive(this._fetcher.FriendUser.FriendProfile.StartsWith(this.enableFriendProfile));
+                    this.target.SetActive((this._fetcher.FriendUser?.FriendProfile ?? "").StartsWith(this.enableFriendProfile));
                     break;
                 case Expression.EndsWith:
-                    this.target.SetActive(this._fetcher.FriendUser.FriendProfile.EndsWith(this.enableFriendProfile));
+                    this.target.SetActive((this._fetcher.FriendUser?.FriendProfile ?? "").EndsWith(this.enableFriendProfile));
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();

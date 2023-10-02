@@ -45,16 +45,16 @@ namespace Gs2.Unity.UiKit.Gs2MegaField.Enabler
             switch(this.expression)
             {
                 case Expression.In:
-                    this.target.SetActive(this.enableUserIds.Contains(this._fetcher.Spatial.UserId));
+                    this.target.SetActive(this.enableUserIds.Contains(this._fetcher.Spatial?.UserId ?? ""));
                     break;
                 case Expression.NotIn:
-                    this.target.SetActive(!this.enableUserIds.Contains(this._fetcher.Spatial.UserId));
+                    this.target.SetActive(!this.enableUserIds.Contains(this._fetcher.Spatial?.UserId ?? ""));
                     break;
                 case Expression.StartsWith:
-                    this.target.SetActive(this._fetcher.Spatial.UserId.StartsWith(this.enableUserId));
+                    this.target.SetActive((this._fetcher.Spatial?.UserId ?? "").StartsWith(this.enableUserId));
                     break;
                 case Expression.EndsWith:
-                    this.target.SetActive(this._fetcher.Spatial.UserId.EndsWith(this.enableUserId));
+                    this.target.SetActive((this._fetcher.Spatial?.UserId ?? "").EndsWith(this.enableUserId));
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();

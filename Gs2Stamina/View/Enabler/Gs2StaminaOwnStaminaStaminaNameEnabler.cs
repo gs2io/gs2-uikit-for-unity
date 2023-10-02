@@ -45,16 +45,16 @@ namespace Gs2.Unity.UiKit.Gs2Stamina.Enabler
             switch(this.expression)
             {
                 case Expression.In:
-                    this.target.SetActive(this.enableStaminaNames.Contains(this._fetcher.Stamina.StaminaName));
+                    this.target.SetActive(this.enableStaminaNames.Contains(this._fetcher.Stamina?.StaminaName ?? ""));
                     break;
                 case Expression.NotIn:
-                    this.target.SetActive(!this.enableStaminaNames.Contains(this._fetcher.Stamina.StaminaName));
+                    this.target.SetActive(!this.enableStaminaNames.Contains(this._fetcher.Stamina?.StaminaName ?? ""));
                     break;
                 case Expression.StartsWith:
-                    this.target.SetActive(this._fetcher.Stamina.StaminaName.StartsWith(this.enableStaminaName));
+                    this.target.SetActive((this._fetcher.Stamina?.StaminaName ?? "").StartsWith(this.enableStaminaName));
                     break;
                 case Expression.EndsWith:
-                    this.target.SetActive(this._fetcher.Stamina.StaminaName.EndsWith(this.enableStaminaName));
+                    this.target.SetActive((this._fetcher.Stamina?.StaminaName ?? "").EndsWith(this.enableStaminaName));
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();

@@ -119,6 +119,18 @@ namespace Gs2.Unity.UiKit.Gs2Enhance.Fetcher
             );
             this._callbackId = null;
         }
+
+        public void SetTemporarySlot(
+            Gs2.Unity.Gs2Enhance.Model.EzRateModel rateModel
+        ) {
+            RateModel = rateModel;
+            this.OnFetched.Invoke();
+        }
+
+        public void RollbackTemporarySlot(
+        ) {
+            OnUpdateContext();
+        }
     }
 
     /// <summary>

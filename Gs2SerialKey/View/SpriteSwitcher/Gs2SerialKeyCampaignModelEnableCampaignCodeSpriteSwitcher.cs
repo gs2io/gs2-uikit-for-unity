@@ -45,12 +45,12 @@ namespace Gs2.Unity.UiKit.Gs2SerialKey
             switch(this.expression)
             {
                 case Expression.True:
-                    if (this._fetcher.CampaignModel.EnableCampaignCode) {
+                    if (this._fetcher.CampaignModel?.EnableCampaignCode ?? false) {
                         this.onUpdate.Invoke(this.sprite);
                     }
                     break;
                 case Expression.False:
-                    if (!this._fetcher.CampaignModel.EnableCampaignCode) {
+                    if (!this._fetcher.CampaignModel?.EnableCampaignCode ?? false) {
                         this.onUpdate.Invoke(this.sprite);
                     }
                     break;

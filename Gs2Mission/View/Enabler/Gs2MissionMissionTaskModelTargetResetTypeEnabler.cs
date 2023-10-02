@@ -45,16 +45,16 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Enabler
             switch(this.expression)
             {
                 case Expression.In:
-                    this.target.SetActive(this.enableTargetResetTypes.Contains(this._fetcher.MissionTaskModel.TargetResetType));
+                    this.target.SetActive(this.enableTargetResetTypes.Contains(this._fetcher.MissionTaskModel?.TargetResetType ?? ""));
                     break;
                 case Expression.NotIn:
-                    this.target.SetActive(!this.enableTargetResetTypes.Contains(this._fetcher.MissionTaskModel.TargetResetType));
+                    this.target.SetActive(!this.enableTargetResetTypes.Contains(this._fetcher.MissionTaskModel?.TargetResetType ?? ""));
                     break;
                 case Expression.StartsWith:
-                    this.target.SetActive(this._fetcher.MissionTaskModel.TargetResetType.StartsWith(this.enableTargetResetType));
+                    this.target.SetActive((this._fetcher.MissionTaskModel?.TargetResetType ?? "").StartsWith(this.enableTargetResetType));
                     break;
                 case Expression.EndsWith:
-                    this.target.SetActive(this._fetcher.MissionTaskModel.TargetResetType.EndsWith(this.enableTargetResetType));
+                    this.target.SetActive((this._fetcher.MissionTaskModel?.TargetResetType ?? "").EndsWith(this.enableTargetResetType));
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();

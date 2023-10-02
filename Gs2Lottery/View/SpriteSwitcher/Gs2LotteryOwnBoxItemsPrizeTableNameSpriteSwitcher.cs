@@ -45,22 +45,22 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.SpriteSwitcher
             switch(this.expression)
             {
                 case Expression.In:
-                    if (this.applyPrizeTableNames.Contains(this._fetcher.BoxItems.PrizeTableName)) {
+                    if (this.applyPrizeTableNames.Contains(this._fetcher.BoxItems?.PrizeTableName ?? "")) {
                         this.onUpdate.Invoke(this.sprite);
                     }
                     break;
                 case Expression.NotIn:
-                    if (!this.applyPrizeTableNames.Contains(this._fetcher.BoxItems.PrizeTableName)) {
+                    if (!this.applyPrizeTableNames.Contains(this._fetcher.BoxItems?.PrizeTableName ?? "")) {
                         this.onUpdate.Invoke(this.sprite);
                     }
                     break;
                 case Expression.StartsWith:
-                    if (this._fetcher.BoxItems.PrizeTableName.StartsWith(this.applyPrizeTableName)) {
+                    if ((this._fetcher.BoxItems?.PrizeTableName ?? "").StartsWith(this.applyPrizeTableName)) {
                         this.onUpdate.Invoke(this.sprite);
                     }
                     break;
                 case Expression.EndsWith:
-                    if (this._fetcher.BoxItems.PrizeTableName.EndsWith(this.applyPrizeTableName)) {
+                    if ((this._fetcher.BoxItems?.PrizeTableName ?? "").EndsWith(this.applyPrizeTableName)) {
                         this.onUpdate.Invoke(this.sprite);
                     }
                     break;

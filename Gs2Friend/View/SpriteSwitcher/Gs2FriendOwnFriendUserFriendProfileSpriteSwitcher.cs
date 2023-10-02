@@ -45,22 +45,22 @@ namespace Gs2.Unity.UiKit.Gs2Friend.SpriteSwitcher
             switch(this.expression)
             {
                 case Expression.In:
-                    if (this.applyFriendProfiles.Contains(this._fetcher.FriendUser.FriendProfile)) {
+                    if (this.applyFriendProfiles.Contains(this._fetcher.FriendUser?.FriendProfile ?? "")) {
                         this.onUpdate.Invoke(this.sprite);
                     }
                     break;
                 case Expression.NotIn:
-                    if (!this.applyFriendProfiles.Contains(this._fetcher.FriendUser.FriendProfile)) {
+                    if (!this.applyFriendProfiles.Contains(this._fetcher.FriendUser?.FriendProfile ?? "")) {
                         this.onUpdate.Invoke(this.sprite);
                     }
                     break;
                 case Expression.StartsWith:
-                    if (this._fetcher.FriendUser.FriendProfile.StartsWith(this.applyFriendProfile)) {
+                    if ((this._fetcher.FriendUser?.FriendProfile ?? "").StartsWith(this.applyFriendProfile)) {
                         this.onUpdate.Invoke(this.sprite);
                     }
                     break;
                 case Expression.EndsWith:
-                    if (this._fetcher.FriendUser.FriendProfile.EndsWith(this.applyFriendProfile)) {
+                    if ((this._fetcher.FriendUser?.FriendProfile ?? "").EndsWith(this.applyFriendProfile)) {
                         this.onUpdate.Invoke(this.sprite);
                     }
                     break;

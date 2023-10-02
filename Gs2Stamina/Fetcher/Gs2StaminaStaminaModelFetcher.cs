@@ -119,6 +119,18 @@ namespace Gs2.Unity.UiKit.Gs2Stamina.Fetcher
             );
             this._callbackId = null;
         }
+
+        public void SetTemporarySlot(
+            Gs2.Unity.Gs2Stamina.Model.EzStaminaModel staminaModel
+        ) {
+            StaminaModel = staminaModel;
+            this.OnFetched.Invoke();
+        }
+
+        public void RollbackTemporarySlot(
+        ) {
+            OnUpdateContext();
+        }
     }
 
     /// <summary>

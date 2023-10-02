@@ -45,16 +45,16 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Enabler
             switch(this.expression)
             {
                 case Expression.In:
-                    this.target.SetActive(this.enableQuestGroupNames.Contains(this._fetcher.CompletedQuestList.QuestGroupName));
+                    this.target.SetActive(this.enableQuestGroupNames.Contains(this._fetcher.CompletedQuestList?.QuestGroupName ?? ""));
                     break;
                 case Expression.NotIn:
-                    this.target.SetActive(!this.enableQuestGroupNames.Contains(this._fetcher.CompletedQuestList.QuestGroupName));
+                    this.target.SetActive(!this.enableQuestGroupNames.Contains(this._fetcher.CompletedQuestList?.QuestGroupName ?? ""));
                     break;
                 case Expression.StartsWith:
-                    this.target.SetActive(this._fetcher.CompletedQuestList.QuestGroupName.StartsWith(this.enableQuestGroupName));
+                    this.target.SetActive((this._fetcher.CompletedQuestList?.QuestGroupName ?? "").StartsWith(this.enableQuestGroupName));
                     break;
                 case Expression.EndsWith:
-                    this.target.SetActive(this._fetcher.CompletedQuestList.QuestGroupName.EndsWith(this.enableQuestGroupName));
+                    this.target.SetActive((this._fetcher.CompletedQuestList?.QuestGroupName ?? "").EndsWith(this.enableQuestGroupName));
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();

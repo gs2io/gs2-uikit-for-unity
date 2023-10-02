@@ -45,16 +45,16 @@ namespace Gs2.Unity.UiKit.Gs2Exchange.Enabler
             switch(this.expression)
             {
                 case Expression.In:
-                    this.target.SetActive(this.enableTimingTypes.Contains(this._fetcher.RateModel.TimingType));
+                    this.target.SetActive(this.enableTimingTypes.Contains(this._fetcher.RateModel?.TimingType ?? ""));
                     break;
                 case Expression.NotIn:
-                    this.target.SetActive(!this.enableTimingTypes.Contains(this._fetcher.RateModel.TimingType));
+                    this.target.SetActive(!this.enableTimingTypes.Contains(this._fetcher.RateModel?.TimingType ?? ""));
                     break;
                 case Expression.StartsWith:
-                    this.target.SetActive(this._fetcher.RateModel.TimingType.StartsWith(this.enableTimingType));
+                    this.target.SetActive((this._fetcher.RateModel?.TimingType ?? "").StartsWith(this.enableTimingType));
                     break;
                 case Expression.EndsWith:
-                    this.target.SetActive(this._fetcher.RateModel.TimingType.EndsWith(this.enableTimingType));
+                    this.target.SetActive((this._fetcher.RateModel?.TimingType ?? "").EndsWith(this.enableTimingType));
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();

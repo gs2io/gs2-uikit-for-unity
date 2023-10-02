@@ -45,16 +45,16 @@ namespace Gs2.Unity.UiKit.Gs2Account.Enabler
             switch(this.expression)
             {
                 case Expression.In:
-                    this.target.SetActive(this.enableUserIds.Contains(this._fetcher.Account.UserId));
+                    this.target.SetActive(this.enableUserIds.Contains(this._fetcher.Account?.UserId ?? ""));
                     break;
                 case Expression.NotIn:
-                    this.target.SetActive(!this.enableUserIds.Contains(this._fetcher.Account.UserId));
+                    this.target.SetActive(!this.enableUserIds.Contains(this._fetcher.Account?.UserId ?? ""));
                     break;
                 case Expression.StartsWith:
-                    this.target.SetActive(this._fetcher.Account.UserId.StartsWith(this.enableUserId));
+                    this.target.SetActive((this._fetcher.Account?.UserId ?? "").StartsWith(this.enableUserId));
                     break;
                 case Expression.EndsWith:
-                    this.target.SetActive(this._fetcher.Account.UserId.EndsWith(this.enableUserId));
+                    this.target.SetActive((this._fetcher.Account?.UserId ?? "").EndsWith(this.enableUserId));
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();

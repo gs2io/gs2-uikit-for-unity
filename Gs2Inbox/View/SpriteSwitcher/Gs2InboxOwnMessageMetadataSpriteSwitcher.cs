@@ -45,22 +45,22 @@ namespace Gs2.Unity.UiKit.Gs2Inbox.SpriteSwitcher
             switch(this.expression)
             {
                 case Expression.In:
-                    if (this.applyMetadatas.Contains(this._fetcher.Message.Metadata)) {
+                    if (this.applyMetadatas.Contains(this._fetcher.Message?.Metadata ?? "")) {
                         this.onUpdate.Invoke(this.sprite);
                     }
                     break;
                 case Expression.NotIn:
-                    if (!this.applyMetadatas.Contains(this._fetcher.Message.Metadata)) {
+                    if (!this.applyMetadatas.Contains(this._fetcher.Message?.Metadata ?? "")) {
                         this.onUpdate.Invoke(this.sprite);
                     }
                     break;
                 case Expression.StartsWith:
-                    if (this._fetcher.Message.Metadata.StartsWith(this.applyMetadata)) {
+                    if ((this._fetcher.Message?.Metadata ?? "").StartsWith(this.applyMetadata)) {
                         this.onUpdate.Invoke(this.sprite);
                     }
                     break;
                 case Expression.EndsWith:
-                    if (this._fetcher.Message.Metadata.EndsWith(this.applyMetadata)) {
+                    if ((this._fetcher.Message?.Metadata ?? "").EndsWith(this.applyMetadata)) {
                         this.onUpdate.Invoke(this.sprite);
                     }
                     break;

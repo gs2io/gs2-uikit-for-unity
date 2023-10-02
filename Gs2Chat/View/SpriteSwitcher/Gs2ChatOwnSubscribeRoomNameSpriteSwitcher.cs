@@ -45,22 +45,22 @@ namespace Gs2.Unity.UiKit.Gs2Chat.SpriteSwitcher
             switch(this.expression)
             {
                 case Expression.In:
-                    if (this.applyRoomNames.Contains(this._fetcher.Subscribe.RoomName)) {
+                    if (this.applyRoomNames.Contains(this._fetcher.Subscribe?.RoomName ?? "")) {
                         this.onUpdate.Invoke(this.sprite);
                     }
                     break;
                 case Expression.NotIn:
-                    if (!this.applyRoomNames.Contains(this._fetcher.Subscribe.RoomName)) {
+                    if (!this.applyRoomNames.Contains(this._fetcher.Subscribe?.RoomName ?? "")) {
                         this.onUpdate.Invoke(this.sprite);
                     }
                     break;
                 case Expression.StartsWith:
-                    if (this._fetcher.Subscribe.RoomName.StartsWith(this.applyRoomName)) {
+                    if ((this._fetcher.Subscribe?.RoomName ?? "").StartsWith(this.applyRoomName)) {
                         this.onUpdate.Invoke(this.sprite);
                     }
                     break;
                 case Expression.EndsWith:
-                    if (this._fetcher.Subscribe.RoomName.EndsWith(this.applyRoomName)) {
+                    if ((this._fetcher.Subscribe?.RoomName ?? "").EndsWith(this.applyRoomName)) {
                         this.onUpdate.Invoke(this.sprite);
                     }
                     break;

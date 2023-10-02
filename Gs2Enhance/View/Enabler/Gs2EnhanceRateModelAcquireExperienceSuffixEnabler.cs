@@ -45,16 +45,16 @@ namespace Gs2.Unity.UiKit.Gs2Enhance.Enabler
             switch(this.expression)
             {
                 case Expression.In:
-                    this.target.SetActive(this.enableAcquireExperienceSuffixes.Contains(this._fetcher.RateModel.AcquireExperienceSuffix));
+                    this.target.SetActive(this.enableAcquireExperienceSuffixes.Contains(this._fetcher.RateModel?.AcquireExperienceSuffix ?? ""));
                     break;
                 case Expression.NotIn:
-                    this.target.SetActive(!this.enableAcquireExperienceSuffixes.Contains(this._fetcher.RateModel.AcquireExperienceSuffix));
+                    this.target.SetActive(!this.enableAcquireExperienceSuffixes.Contains(this._fetcher.RateModel?.AcquireExperienceSuffix ?? ""));
                     break;
                 case Expression.StartsWith:
-                    this.target.SetActive(this._fetcher.RateModel.AcquireExperienceSuffix.StartsWith(this.enableAcquireExperienceSuffix));
+                    this.target.SetActive((this._fetcher.RateModel?.AcquireExperienceSuffix ?? "").StartsWith(this.enableAcquireExperienceSuffix));
                     break;
                 case Expression.EndsWith:
-                    this.target.SetActive(this._fetcher.RateModel.AcquireExperienceSuffix.EndsWith(this.enableAcquireExperienceSuffix));
+                    this.target.SetActive((this._fetcher.RateModel?.AcquireExperienceSuffix ?? "").EndsWith(this.enableAcquireExperienceSuffix));
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();

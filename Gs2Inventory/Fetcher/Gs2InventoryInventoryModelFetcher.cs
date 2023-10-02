@@ -119,6 +119,18 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Fetcher
             );
             this._callbackId = null;
         }
+
+        public void SetTemporarySlot(
+            Gs2.Unity.Gs2Inventory.Model.EzInventoryModel inventoryModel
+        ) {
+            InventoryModel = inventoryModel;
+            this.OnFetched.Invoke();
+        }
+
+        public void RollbackTemporarySlot(
+        ) {
+            OnUpdateContext();
+        }
     }
 
     /// <summary>

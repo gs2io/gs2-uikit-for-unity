@@ -122,6 +122,18 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Fetcher
             this._callbackId = null;
         }
 
+        public void SetTemporarySlot(
+            Gs2.Unity.Gs2Quest.Model.EzQuestModel questModel
+        ) {
+            QuestModel = questModel;
+            this.OnFetched.Invoke();
+        }
+
+        public void RollbackTemporarySlot(
+        ) {
+            OnUpdateContext();
+        }
+
         public List<Unity.Core.Model.EzAcquireAction> AcquireActions(string context = "default") {
             if (!Fetched) {
                 return new List<Unity.Core.Model.EzAcquireAction>();

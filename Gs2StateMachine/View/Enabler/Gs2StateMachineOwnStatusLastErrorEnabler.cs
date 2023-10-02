@@ -45,16 +45,16 @@ namespace Gs2.Unity.UiKit.Gs2StateMachine.Enabler
             switch(this.expression)
             {
                 case Expression.In:
-                    this.target.SetActive(this.enableLastErrors.Contains(this._fetcher.Status.LastError));
+                    this.target.SetActive(this.enableLastErrors.Contains(this._fetcher.Status?.LastError ?? ""));
                     break;
                 case Expression.NotIn:
-                    this.target.SetActive(!this.enableLastErrors.Contains(this._fetcher.Status.LastError));
+                    this.target.SetActive(!this.enableLastErrors.Contains(this._fetcher.Status?.LastError ?? ""));
                     break;
                 case Expression.StartsWith:
-                    this.target.SetActive(this._fetcher.Status.LastError.StartsWith(this.enableLastError));
+                    this.target.SetActive((this._fetcher.Status?.LastError ?? "").StartsWith(this.enableLastError));
                     break;
                 case Expression.EndsWith:
-                    this.target.SetActive(this._fetcher.Status.LastError.EndsWith(this.enableLastError));
+                    this.target.SetActive((this._fetcher.Status?.LastError ?? "").EndsWith(this.enableLastError));
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();

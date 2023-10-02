@@ -119,6 +119,18 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking.Fetcher
             );
             this._callbackId = null;
         }
+
+        public void SetTemporarySlot(
+            Gs2.Unity.Gs2Matchmaking.Model.EzRatingModel ratingModel
+        ) {
+            RatingModel = ratingModel;
+            this.OnFetched.Invoke();
+        }
+
+        public void RollbackTemporarySlot(
+        ) {
+            OnUpdateContext();
+        }
     }
 
     /// <summary>

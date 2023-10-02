@@ -45,22 +45,22 @@ namespace Gs2.Unity.UiKit.Gs2Stamina.SpriteSwitcher
             switch(this.expression)
             {
                 case Expression.In:
-                    if (this.applyStaminaNames.Contains(this._fetcher.Stamina.StaminaName)) {
+                    if (this.applyStaminaNames.Contains(this._fetcher.Stamina?.StaminaName ?? "")) {
                         this.onUpdate.Invoke(this.sprite);
                     }
                     break;
                 case Expression.NotIn:
-                    if (!this.applyStaminaNames.Contains(this._fetcher.Stamina.StaminaName)) {
+                    if (!this.applyStaminaNames.Contains(this._fetcher.Stamina?.StaminaName ?? "")) {
                         this.onUpdate.Invoke(this.sprite);
                     }
                     break;
                 case Expression.StartsWith:
-                    if (this._fetcher.Stamina.StaminaName.StartsWith(this.applyStaminaName)) {
+                    if ((this._fetcher.Stamina?.StaminaName ?? "").StartsWith(this.applyStaminaName)) {
                         this.onUpdate.Invoke(this.sprite);
                     }
                     break;
                 case Expression.EndsWith:
-                    if (this._fetcher.Stamina.StaminaName.EndsWith(this.applyStaminaName)) {
+                    if ((this._fetcher.Stamina?.StaminaName ?? "").EndsWith(this.applyStaminaName)) {
                         this.onUpdate.Invoke(this.sprite);
                     }
                     break;

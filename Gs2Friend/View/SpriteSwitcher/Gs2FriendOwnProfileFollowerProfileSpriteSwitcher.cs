@@ -45,22 +45,22 @@ namespace Gs2.Unity.UiKit.Gs2Friend.SpriteSwitcher
             switch(this.expression)
             {
                 case Expression.In:
-                    if (this.applyFollowerProfiles.Contains(this._fetcher.Profile.FollowerProfile)) {
+                    if (this.applyFollowerProfiles.Contains(this._fetcher.Profile?.FollowerProfile ?? "")) {
                         this.onUpdate.Invoke(this.sprite);
                     }
                     break;
                 case Expression.NotIn:
-                    if (!this.applyFollowerProfiles.Contains(this._fetcher.Profile.FollowerProfile)) {
+                    if (!this.applyFollowerProfiles.Contains(this._fetcher.Profile?.FollowerProfile ?? "")) {
                         this.onUpdate.Invoke(this.sprite);
                     }
                     break;
                 case Expression.StartsWith:
-                    if (this._fetcher.Profile.FollowerProfile.StartsWith(this.applyFollowerProfile)) {
+                    if ((this._fetcher.Profile?.FollowerProfile ?? "").StartsWith(this.applyFollowerProfile)) {
                         this.onUpdate.Invoke(this.sprite);
                     }
                     break;
                 case Expression.EndsWith:
-                    if (this._fetcher.Profile.FollowerProfile.EndsWith(this.applyFollowerProfile)) {
+                    if ((this._fetcher.Profile?.FollowerProfile ?? "").EndsWith(this.applyFollowerProfile)) {
                         this.onUpdate.Invoke(this.sprite);
                     }
                     break;

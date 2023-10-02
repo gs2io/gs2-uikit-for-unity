@@ -45,16 +45,16 @@ namespace Gs2.Unity.UiKit.Gs2JobQueue.Enabler
             switch(this.expression)
             {
                 case Expression.In:
-                    this.target.SetActive(this.enableResults.Contains(this._fetcher.JobResult.Result));
+                    this.target.SetActive(this.enableResults.Contains(this._fetcher.JobResult?.Result ?? ""));
                     break;
                 case Expression.NotIn:
-                    this.target.SetActive(!this.enableResults.Contains(this._fetcher.JobResult.Result));
+                    this.target.SetActive(!this.enableResults.Contains(this._fetcher.JobResult?.Result ?? ""));
                     break;
                 case Expression.StartsWith:
-                    this.target.SetActive(this._fetcher.JobResult.Result.StartsWith(this.enableResult));
+                    this.target.SetActive((this._fetcher.JobResult?.Result ?? "").StartsWith(this.enableResult));
                     break;
                 case Expression.EndsWith:
-                    this.target.SetActive(this._fetcher.JobResult.Result.EndsWith(this.enableResult));
+                    this.target.SetActive((this._fetcher.JobResult?.Result ?? "").EndsWith(this.enableResult));
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();

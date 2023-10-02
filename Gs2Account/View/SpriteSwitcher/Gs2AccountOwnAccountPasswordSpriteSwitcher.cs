@@ -45,22 +45,22 @@ namespace Gs2.Unity.UiKit.Gs2Account.SpriteSwitcher
             switch(this.expression)
             {
                 case Expression.In:
-                    if (this.applyPasswords.Contains(this._fetcher.Account.Password)) {
+                    if (this.applyPasswords.Contains(this._fetcher.Account?.Password ?? "")) {
                         this.onUpdate.Invoke(this.sprite);
                     }
                     break;
                 case Expression.NotIn:
-                    if (!this.applyPasswords.Contains(this._fetcher.Account.Password)) {
+                    if (!this.applyPasswords.Contains(this._fetcher.Account?.Password ?? "")) {
                         this.onUpdate.Invoke(this.sprite);
                     }
                     break;
                 case Expression.StartsWith:
-                    if (this._fetcher.Account.Password.StartsWith(this.applyPassword)) {
+                    if ((this._fetcher.Account?.Password ?? "").StartsWith(this.applyPassword)) {
                         this.onUpdate.Invoke(this.sprite);
                     }
                     break;
                 case Expression.EndsWith:
-                    if (this._fetcher.Account.Password.EndsWith(this.applyPassword)) {
+                    if ((this._fetcher.Account?.Password ?? "").EndsWith(this.applyPassword)) {
                         this.onUpdate.Invoke(this.sprite);
                     }
                     break;

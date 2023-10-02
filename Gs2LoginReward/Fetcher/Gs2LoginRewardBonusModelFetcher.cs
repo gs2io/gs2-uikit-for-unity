@@ -120,6 +120,18 @@ namespace Gs2.Unity.UiKit.Gs2LoginReward.Fetcher
             this._callbackId = null;
         }
 
+        public void SetTemporarySlot(
+            Gs2.Unity.Gs2LoginReward.Model.EzBonusModel bonusModel
+        ) {
+            BonusModel = bonusModel;
+            this.OnFetched.Invoke();
+        }
+
+        public void RollbackTemporarySlot(
+        ) {
+            OnUpdateContext();
+        }
+
         public List<Unity.Core.Model.EzConsumeAction> ConsumeActions(string context = "default") {
             if (!Fetched) {
                 return new List<Unity.Core.Model.EzConsumeAction>();

@@ -85,15 +85,15 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Context
     public partial class Gs2FormationSlotModelContext
     {
         [SerializeField]
-        private SlotModel _formModel;
+        private SlotModel _slotModel;
         public SlotModel SlotModel
         {
-            get => _formModel;
+            get => _slotModel;
             set => SetSlotModel(value);
         }
 
         public void SetSlotModel(SlotModel SlotModel) {
-            this._formModel = SlotModel;
+            this._slotModel = SlotModel;
 
             this.OnUpdate.Invoke();
         }

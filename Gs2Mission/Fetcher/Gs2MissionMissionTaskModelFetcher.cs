@@ -122,6 +122,18 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Fetcher
             this._callbackId = null;
         }
 
+        public void SetTemporarySlot(
+            Gs2.Unity.Gs2Mission.Model.EzMissionTaskModel missionTaskModel
+        ) {
+            MissionTaskModel = missionTaskModel;
+            this.OnFetched.Invoke();
+        }
+
+        public void RollbackTemporarySlot(
+        ) {
+            OnUpdateContext();
+        }
+
         public List<Unity.Core.Model.EzAcquireAction> AcquireActions(string context = "default") {
             if (!Fetched) {
                 return new List<Unity.Core.Model.EzAcquireAction>();

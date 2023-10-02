@@ -121,6 +121,18 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Fetcher
             );
             this._callbackId = null;
         }
+
+        public void SetTemporarySlot(
+            Gs2.Unity.Gs2Inventory.Model.EzSimpleItemModel simpleItemModel
+        ) {
+            SimpleItemModel = simpleItemModel;
+            this.OnFetched.Invoke();
+        }
+
+        public void RollbackTemporarySlot(
+        ) {
+            OnUpdateContext();
+        }
     }
 
     /// <summary>

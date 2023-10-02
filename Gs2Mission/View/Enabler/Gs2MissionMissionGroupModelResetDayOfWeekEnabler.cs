@@ -45,16 +45,16 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Enabler
             switch(this.expression)
             {
                 case Expression.In:
-                    this.target.SetActive(this.enableResetDayOfWeeks.Contains(this._fetcher.MissionGroupModel.ResetDayOfWeek));
+                    this.target.SetActive(this.enableResetDayOfWeeks.Contains(this._fetcher.MissionGroupModel?.ResetDayOfWeek ?? ""));
                     break;
                 case Expression.NotIn:
-                    this.target.SetActive(!this.enableResetDayOfWeeks.Contains(this._fetcher.MissionGroupModel.ResetDayOfWeek));
+                    this.target.SetActive(!this.enableResetDayOfWeeks.Contains(this._fetcher.MissionGroupModel?.ResetDayOfWeek ?? ""));
                     break;
                 case Expression.StartsWith:
-                    this.target.SetActive(this._fetcher.MissionGroupModel.ResetDayOfWeek.StartsWith(this.enableResetDayOfWeek));
+                    this.target.SetActive((this._fetcher.MissionGroupModel?.ResetDayOfWeek ?? "").StartsWith(this.enableResetDayOfWeek));
                     break;
                 case Expression.EndsWith:
-                    this.target.SetActive(this._fetcher.MissionGroupModel.ResetDayOfWeek.EndsWith(this.enableResetDayOfWeek));
+                    this.target.SetActive((this._fetcher.MissionGroupModel?.ResetDayOfWeek ?? "").EndsWith(this.enableResetDayOfWeek));
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();

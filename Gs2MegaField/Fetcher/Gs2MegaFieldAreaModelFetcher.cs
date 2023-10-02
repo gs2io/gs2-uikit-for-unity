@@ -119,6 +119,18 @@ namespace Gs2.Unity.UiKit.Gs2MegaField.Fetcher
             );
             this._callbackId = null;
         }
+
+        public void SetTemporarySlot(
+            Gs2.Unity.Gs2MegaField.Model.EzAreaModel areaModel
+        ) {
+            AreaModel = areaModel;
+            this.OnFetched.Invoke();
+        }
+
+        public void RollbackTemporarySlot(
+        ) {
+            OnUpdateContext();
+        }
     }
 
     /// <summary>

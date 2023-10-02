@@ -45,16 +45,16 @@ namespace Gs2.Unity.UiKit.Gs2MegaField.Enabler
             switch(this.expression)
             {
                 case Expression.In:
-                    this.target.SetActive(this.enableLayerModelNames.Contains(this._fetcher.Spatial.LayerModelName));
+                    this.target.SetActive(this.enableLayerModelNames.Contains(this._fetcher.Spatial?.LayerModelName ?? ""));
                     break;
                 case Expression.NotIn:
-                    this.target.SetActive(!this.enableLayerModelNames.Contains(this._fetcher.Spatial.LayerModelName));
+                    this.target.SetActive(!this.enableLayerModelNames.Contains(this._fetcher.Spatial?.LayerModelName ?? ""));
                     break;
                 case Expression.StartsWith:
-                    this.target.SetActive(this._fetcher.Spatial.LayerModelName.StartsWith(this.enableLayerModelName));
+                    this.target.SetActive((this._fetcher.Spatial?.LayerModelName ?? "").StartsWith(this.enableLayerModelName));
                     break;
                 case Expression.EndsWith:
-                    this.target.SetActive(this._fetcher.Spatial.LayerModelName.EndsWith(this.enableLayerModelName));
+                    this.target.SetActive((this._fetcher.Spatial?.LayerModelName ?? "").EndsWith(this.enableLayerModelName));
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();

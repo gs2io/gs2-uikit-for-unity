@@ -45,22 +45,22 @@ namespace Gs2.Unity.UiKit.Gs2Version.SpriteSwitcher
             switch(this.expression)
             {
                 case Expression.In:
-                    if (this.applyVersionNames.Contains(this._fetcher.AcceptVersion.VersionName)) {
+                    if (this.applyVersionNames.Contains(this._fetcher.AcceptVersion?.VersionName ?? "")) {
                         this.onUpdate.Invoke(this.sprite);
                     }
                     break;
                 case Expression.NotIn:
-                    if (!this.applyVersionNames.Contains(this._fetcher.AcceptVersion.VersionName)) {
+                    if (!this.applyVersionNames.Contains(this._fetcher.AcceptVersion?.VersionName ?? "")) {
                         this.onUpdate.Invoke(this.sprite);
                     }
                     break;
                 case Expression.StartsWith:
-                    if (this._fetcher.AcceptVersion.VersionName.StartsWith(this.applyVersionName)) {
+                    if ((this._fetcher.AcceptVersion?.VersionName ?? "").StartsWith(this.applyVersionName)) {
                         this.onUpdate.Invoke(this.sprite);
                     }
                     break;
                 case Expression.EndsWith:
-                    if (this._fetcher.AcceptVersion.VersionName.EndsWith(this.applyVersionName)) {
+                    if ((this._fetcher.AcceptVersion?.VersionName ?? "").EndsWith(this.applyVersionName)) {
                         this.onUpdate.Invoke(this.sprite);
                     }
                     break;

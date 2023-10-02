@@ -119,6 +119,18 @@ namespace Gs2.Unity.UiKit.Gs2Limit.Fetcher
             );
             this._callbackId = null;
         }
+
+        public void SetTemporarySlot(
+            Gs2.Unity.Gs2Limit.Model.EzLimitModel limitModel
+        ) {
+            LimitModel = limitModel;
+            this.OnFetched.Invoke();
+        }
+
+        public void RollbackTemporarySlot(
+        ) {
+            OnUpdateContext();
+        }
     }
 
     /// <summary>

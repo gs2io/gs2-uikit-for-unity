@@ -45,22 +45,22 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.SpriteSwitcher
             switch(this.expression)
             {
                 case Expression.In:
-                    if (this.applyInventoryNames.Contains(this._fetcher.ItemSet[index].InventoryName)) {
+                    if (this.applyInventoryNames.Contains(this._fetcher.ItemSet[index]?.InventoryName ?? "")) {
                         this.onUpdate.Invoke(this.sprite);
                     }
                     break;
                 case Expression.NotIn:
-                    if (!this.applyInventoryNames.Contains(this._fetcher.ItemSet[index].InventoryName)) {
+                    if (!this.applyInventoryNames.Contains(this._fetcher.ItemSet[index]?.InventoryName ?? "")) {
                         this.onUpdate.Invoke(this.sprite);
                     }
                     break;
                 case Expression.StartsWith:
-                    if (this._fetcher.ItemSet[index].InventoryName.StartsWith(this.applyInventoryName)) {
+                    if ((this._fetcher.ItemSet[index]?.InventoryName ?? "").StartsWith(this.applyInventoryName)) {
                         this.onUpdate.Invoke(this.sprite);
                     }
                     break;
                 case Expression.EndsWith:
-                    if (this._fetcher.ItemSet[index].InventoryName.EndsWith(this.applyInventoryName)) {
+                    if ((this._fetcher.ItemSet[index]?.InventoryName ?? "").EndsWith(this.applyInventoryName)) {
                         this.onUpdate.Invoke(this.sprite);
                     }
                     break;

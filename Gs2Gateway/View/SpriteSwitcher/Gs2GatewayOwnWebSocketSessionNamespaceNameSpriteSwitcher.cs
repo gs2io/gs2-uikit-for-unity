@@ -45,22 +45,22 @@ namespace Gs2.Unity.UiKit.Gs2Gateway.SpriteSwitcher
             switch(this.expression)
             {
                 case Expression.In:
-                    if (this.applyNamespaceNames.Contains(this._fetcher.WebSocketSession.NamespaceName)) {
+                    if (this.applyNamespaceNames.Contains(this._fetcher.WebSocketSession?.NamespaceName ?? "")) {
                         this.onUpdate.Invoke(this.sprite);
                     }
                     break;
                 case Expression.NotIn:
-                    if (!this.applyNamespaceNames.Contains(this._fetcher.WebSocketSession.NamespaceName)) {
+                    if (!this.applyNamespaceNames.Contains(this._fetcher.WebSocketSession?.NamespaceName ?? "")) {
                         this.onUpdate.Invoke(this.sprite);
                     }
                     break;
                 case Expression.StartsWith:
-                    if (this._fetcher.WebSocketSession.NamespaceName.StartsWith(this.applyNamespaceName)) {
+                    if ((this._fetcher.WebSocketSession?.NamespaceName ?? "").StartsWith(this.applyNamespaceName)) {
                         this.onUpdate.Invoke(this.sprite);
                     }
                     break;
                 case Expression.EndsWith:
-                    if (this._fetcher.WebSocketSession.NamespaceName.EndsWith(this.applyNamespaceName)) {
+                    if ((this._fetcher.WebSocketSession?.NamespaceName ?? "").EndsWith(this.applyNamespaceName)) {
                         this.onUpdate.Invoke(this.sprite);
                     }
                     break;

@@ -45,10 +45,10 @@ namespace Gs2.Unity.UiKit.Gs2SerialKey
             switch(this.expression)
             {
                 case Expression.True:
-                    this.target.SetActive(this._fetcher.CampaignModel.EnableCampaignCode);
+                    this.target.SetActive(this._fetcher.CampaignModel?.EnableCampaignCode ?? false);
                     break;
                 case Expression.False:
-                    this.target.SetActive(!this._fetcher.CampaignModel.EnableCampaignCode);
+                    this.target.SetActive(!this._fetcher.CampaignModel?.EnableCampaignCode ?? false);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();

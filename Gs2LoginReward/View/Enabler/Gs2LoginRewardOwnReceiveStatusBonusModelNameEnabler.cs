@@ -45,16 +45,16 @@ namespace Gs2.Unity.UiKit.Gs2LoginReward.Enabler
             switch(this.expression)
             {
                 case Expression.In:
-                    this.target.SetActive(this.enableBonusModelNames.Contains(this._fetcher.ReceiveStatus.BonusModelName));
+                    this.target.SetActive(this.enableBonusModelNames.Contains(this._fetcher.ReceiveStatus?.BonusModelName ?? ""));
                     break;
                 case Expression.NotIn:
-                    this.target.SetActive(!this.enableBonusModelNames.Contains(this._fetcher.ReceiveStatus.BonusModelName));
+                    this.target.SetActive(!this.enableBonusModelNames.Contains(this._fetcher.ReceiveStatus?.BonusModelName ?? ""));
                     break;
                 case Expression.StartsWith:
-                    this.target.SetActive(this._fetcher.ReceiveStatus.BonusModelName.StartsWith(this.enableBonusModelName));
+                    this.target.SetActive((this._fetcher.ReceiveStatus?.BonusModelName ?? "").StartsWith(this.enableBonusModelName));
                     break;
                 case Expression.EndsWith:
-                    this.target.SetActive(this._fetcher.ReceiveStatus.BonusModelName.EndsWith(this.enableBonusModelName));
+                    this.target.SetActive((this._fetcher.ReceiveStatus?.BonusModelName ?? "").EndsWith(this.enableBonusModelName));
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();

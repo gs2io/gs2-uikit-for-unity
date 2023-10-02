@@ -45,12 +45,12 @@ namespace Gs2.Unity.UiKit.Gs2Inbox
             switch(this.expression)
             {
                 case Expression.True:
-                    if (this._fetcher.Message.IsRead) {
+                    if (this._fetcher.Message?.IsRead ?? false) {
                         this.onUpdate.Invoke(this.sprite);
                     }
                     break;
                 case Expression.False:
-                    if (!this._fetcher.Message.IsRead) {
+                    if (!this._fetcher.Message?.IsRead ?? false) {
                         this.onUpdate.Invoke(this.sprite);
                     }
                     break;

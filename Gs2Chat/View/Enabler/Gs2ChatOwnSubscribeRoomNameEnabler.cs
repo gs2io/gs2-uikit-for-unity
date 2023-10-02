@@ -45,16 +45,16 @@ namespace Gs2.Unity.UiKit.Gs2Chat.Enabler
             switch(this.expression)
             {
                 case Expression.In:
-                    this.target.SetActive(this.enableRoomNames.Contains(this._fetcher.Subscribe.RoomName));
+                    this.target.SetActive(this.enableRoomNames.Contains(this._fetcher.Subscribe?.RoomName ?? ""));
                     break;
                 case Expression.NotIn:
-                    this.target.SetActive(!this.enableRoomNames.Contains(this._fetcher.Subscribe.RoomName));
+                    this.target.SetActive(!this.enableRoomNames.Contains(this._fetcher.Subscribe?.RoomName ?? ""));
                     break;
                 case Expression.StartsWith:
-                    this.target.SetActive(this._fetcher.Subscribe.RoomName.StartsWith(this.enableRoomName));
+                    this.target.SetActive((this._fetcher.Subscribe?.RoomName ?? "").StartsWith(this.enableRoomName));
                     break;
                 case Expression.EndsWith:
-                    this.target.SetActive(this._fetcher.Subscribe.RoomName.EndsWith(this.enableRoomName));
+                    this.target.SetActive((this._fetcher.Subscribe?.RoomName ?? "").EndsWith(this.enableRoomName));
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();

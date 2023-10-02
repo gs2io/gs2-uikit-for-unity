@@ -45,22 +45,22 @@ namespace Gs2.Unity.UiKit.Gs2Dictionary.SpriteSwitcher
             switch(this.expression)
             {
                 case Expression.In:
-                    if (this.applyMetadatas.Contains(this._fetcher.EntryModel.Metadata)) {
+                    if (this.applyMetadatas.Contains(this._fetcher.EntryModel?.Metadata ?? "")) {
                         this.onUpdate.Invoke(this.sprite);
                     }
                     break;
                 case Expression.NotIn:
-                    if (!this.applyMetadatas.Contains(this._fetcher.EntryModel.Metadata)) {
+                    if (!this.applyMetadatas.Contains(this._fetcher.EntryModel?.Metadata ?? "")) {
                         this.onUpdate.Invoke(this.sprite);
                     }
                     break;
                 case Expression.StartsWith:
-                    if (this._fetcher.EntryModel.Metadata.StartsWith(this.applyMetadata)) {
+                    if ((this._fetcher.EntryModel?.Metadata ?? "").StartsWith(this.applyMetadata)) {
                         this.onUpdate.Invoke(this.sprite);
                     }
                     break;
                 case Expression.EndsWith:
-                    if (this._fetcher.EntryModel.Metadata.EndsWith(this.applyMetadata)) {
+                    if ((this._fetcher.EntryModel?.Metadata ?? "").EndsWith(this.applyMetadata)) {
                         this.onUpdate.Invoke(this.sprite);
                     }
                     break;

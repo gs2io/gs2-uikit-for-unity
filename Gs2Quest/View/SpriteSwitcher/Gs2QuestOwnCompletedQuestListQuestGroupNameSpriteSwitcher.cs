@@ -45,22 +45,22 @@ namespace Gs2.Unity.UiKit.Gs2Quest.SpriteSwitcher
             switch(this.expression)
             {
                 case Expression.In:
-                    if (this.applyQuestGroupNames.Contains(this._fetcher.CompletedQuestList.QuestGroupName)) {
+                    if (this.applyQuestGroupNames.Contains(this._fetcher.CompletedQuestList?.QuestGroupName ?? "")) {
                         this.onUpdate.Invoke(this.sprite);
                     }
                     break;
                 case Expression.NotIn:
-                    if (!this.applyQuestGroupNames.Contains(this._fetcher.CompletedQuestList.QuestGroupName)) {
+                    if (!this.applyQuestGroupNames.Contains(this._fetcher.CompletedQuestList?.QuestGroupName ?? "")) {
                         this.onUpdate.Invoke(this.sprite);
                     }
                     break;
                 case Expression.StartsWith:
-                    if (this._fetcher.CompletedQuestList.QuestGroupName.StartsWith(this.applyQuestGroupName)) {
+                    if ((this._fetcher.CompletedQuestList?.QuestGroupName ?? "").StartsWith(this.applyQuestGroupName)) {
                         this.onUpdate.Invoke(this.sprite);
                     }
                     break;
                 case Expression.EndsWith:
-                    if (this._fetcher.CompletedQuestList.QuestGroupName.EndsWith(this.applyQuestGroupName)) {
+                    if ((this._fetcher.CompletedQuestList?.QuestGroupName ?? "").EndsWith(this.applyQuestGroupName)) {
                         this.onUpdate.Invoke(this.sprite);
                     }
                     break;

@@ -45,16 +45,16 @@ namespace Gs2.Unity.UiKit.Gs2Realtime.Enabler
             switch(this.expression)
             {
                 case Expression.In:
-                    this.target.SetActive(this.enableEncryptionKeys.Contains(this._fetcher.Room.EncryptionKey));
+                    this.target.SetActive(this.enableEncryptionKeys.Contains(this._fetcher.Room?.EncryptionKey ?? ""));
                     break;
                 case Expression.NotIn:
-                    this.target.SetActive(!this.enableEncryptionKeys.Contains(this._fetcher.Room.EncryptionKey));
+                    this.target.SetActive(!this.enableEncryptionKeys.Contains(this._fetcher.Room?.EncryptionKey ?? ""));
                     break;
                 case Expression.StartsWith:
-                    this.target.SetActive(this._fetcher.Room.EncryptionKey.StartsWith(this.enableEncryptionKey));
+                    this.target.SetActive((this._fetcher.Room?.EncryptionKey ?? "").StartsWith(this.enableEncryptionKey));
                     break;
                 case Expression.EndsWith:
-                    this.target.SetActive(this._fetcher.Room.EncryptionKey.EndsWith(this.enableEncryptionKey));
+                    this.target.SetActive((this._fetcher.Room?.EncryptionKey ?? "").EndsWith(this.enableEncryptionKey));
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();

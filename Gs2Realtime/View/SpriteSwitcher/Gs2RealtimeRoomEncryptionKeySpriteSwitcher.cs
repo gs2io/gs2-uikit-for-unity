@@ -45,22 +45,22 @@ namespace Gs2.Unity.UiKit.Gs2Realtime.SpriteSwitcher
             switch(this.expression)
             {
                 case Expression.In:
-                    if (this.applyEncryptionKeys.Contains(this._fetcher.Room.EncryptionKey)) {
+                    if (this.applyEncryptionKeys.Contains(this._fetcher.Room?.EncryptionKey ?? "")) {
                         this.onUpdate.Invoke(this.sprite);
                     }
                     break;
                 case Expression.NotIn:
-                    if (!this.applyEncryptionKeys.Contains(this._fetcher.Room.EncryptionKey)) {
+                    if (!this.applyEncryptionKeys.Contains(this._fetcher.Room?.EncryptionKey ?? "")) {
                         this.onUpdate.Invoke(this.sprite);
                     }
                     break;
                 case Expression.StartsWith:
-                    if (this._fetcher.Room.EncryptionKey.StartsWith(this.applyEncryptionKey)) {
+                    if ((this._fetcher.Room?.EncryptionKey ?? "").StartsWith(this.applyEncryptionKey)) {
                         this.onUpdate.Invoke(this.sprite);
                     }
                     break;
                 case Expression.EndsWith:
-                    if (this._fetcher.Room.EncryptionKey.EndsWith(this.applyEncryptionKey)) {
+                    if ((this._fetcher.Room?.EncryptionKey ?? "").EndsWith(this.applyEncryptionKey)) {
                         this.onUpdate.Invoke(this.sprite);
                     }
                     break;

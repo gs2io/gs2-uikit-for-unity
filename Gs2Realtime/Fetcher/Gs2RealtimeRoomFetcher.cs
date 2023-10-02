@@ -119,6 +119,18 @@ namespace Gs2.Unity.UiKit.Gs2Realtime.Fetcher
             );
             this._callbackId = null;
         }
+
+        public void SetTemporarySlot(
+            Gs2.Unity.Gs2Realtime.Model.EzRoom room
+        ) {
+            Room = room;
+            this.OnFetched.Invoke();
+        }
+
+        public void RollbackTemporarySlot(
+        ) {
+            OnUpdateContext();
+        }
     }
 
     /// <summary>

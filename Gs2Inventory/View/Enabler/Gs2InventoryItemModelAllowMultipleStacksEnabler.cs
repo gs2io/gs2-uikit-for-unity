@@ -45,10 +45,10 @@ namespace Gs2.Unity.UiKit.Gs2Inventory
             switch(this.expression)
             {
                 case Expression.True:
-                    this.target.SetActive(this._fetcher.ItemModel.AllowMultipleStacks);
+                    this.target.SetActive(this._fetcher.ItemModel?.AllowMultipleStacks ?? false);
                     break;
                 case Expression.False:
-                    this.target.SetActive(!this._fetcher.ItemModel.AllowMultipleStacks);
+                    this.target.SetActive(!this._fetcher.ItemModel?.AllowMultipleStacks ?? false);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();

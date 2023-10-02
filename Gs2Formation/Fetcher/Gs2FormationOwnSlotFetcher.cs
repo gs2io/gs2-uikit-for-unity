@@ -76,6 +76,13 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Fetcher
                 item =>
                 {
                     Slot = item.Slots.FirstOrDefault(v => v.Name == this.Context.Slot.SlotName);
+                    if (Slot == null) {
+                        Slot = new EzSlot {
+                            Name = this.Context.Slot.SlotName,
+                            PropertyId = null,
+                            Metadata = null
+                        };
+                    }
                     Fetched = true;
                     this.OnFetched.Invoke();
                 }
@@ -90,6 +97,13 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Fetcher
                 }
                 else {
                     Slot = future.Result.Slots.FirstOrDefault(v => v.Name == this.Context.Slot.SlotName);
+                    if (Slot == null) {
+                        Slot = new EzSlot {
+                            Name = this.Context.Slot.SlotName,
+                            PropertyId = null,
+                            Metadata = null
+                        };
+                    }
                     Fetched = true;
                     this.OnFetched.Invoke();
                     break;
@@ -123,6 +137,18 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Fetcher
                 this._callbackId.Value
             );
             this._callbackId = null;
+        }
+
+        public void SetTemporarySlot(
+            Gs2.Unity.Gs2Formation.Model.EzSlot slot
+        ) {
+            Slot = slot;
+            this.OnFetched.Invoke();
+        }
+
+        public void RollbackTemporarySlot(
+        ) {
+            OnUpdateContext();
         }
     }
 

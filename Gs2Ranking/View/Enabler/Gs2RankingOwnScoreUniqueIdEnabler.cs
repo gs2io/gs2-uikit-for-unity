@@ -45,16 +45,16 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Enabler
             switch(this.expression)
             {
                 case Expression.In:
-                    this.target.SetActive(this.enableUniqueIds.Contains(this._fetcher.Score.UniqueId));
+                    this.target.SetActive(this.enableUniqueIds.Contains(this._fetcher.Score?.UniqueId ?? ""));
                     break;
                 case Expression.NotIn:
-                    this.target.SetActive(!this.enableUniqueIds.Contains(this._fetcher.Score.UniqueId));
+                    this.target.SetActive(!this.enableUniqueIds.Contains(this._fetcher.Score?.UniqueId ?? ""));
                     break;
                 case Expression.StartsWith:
-                    this.target.SetActive(this._fetcher.Score.UniqueId.StartsWith(this.enableUniqueId));
+                    this.target.SetActive((this._fetcher.Score?.UniqueId ?? "").StartsWith(this.enableUniqueId));
                     break;
                 case Expression.EndsWith:
-                    this.target.SetActive(this._fetcher.Score.UniqueId.EndsWith(this.enableUniqueId));
+                    this.target.SetActive((this._fetcher.Score?.UniqueId ?? "").EndsWith(this.enableUniqueId));
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();

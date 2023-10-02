@@ -44,10 +44,10 @@ namespace Gs2.Unity.UiKit.Gs2Inbox
             switch(this.expression)
             {
                 case Expression.True:
-                    this.target.SetActive(this._fetcher.Message.IsRead);
+                    this.target.SetActive(this._fetcher.Message?.IsRead ?? false);
                     break;
                 case Expression.False:
-                    this.target.SetActive(!this._fetcher.Message.IsRead);
+                    this.target.SetActive(!this._fetcher.Message?.IsRead ?? false);
                     break;
             }
         }

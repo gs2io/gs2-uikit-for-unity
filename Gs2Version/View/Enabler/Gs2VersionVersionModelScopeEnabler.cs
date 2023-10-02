@@ -45,16 +45,16 @@ namespace Gs2.Unity.UiKit.Gs2Version.Enabler
             switch(this.expression)
             {
                 case Expression.In:
-                    this.target.SetActive(this.enableScopes.Contains(this._fetcher.VersionModel.Scope));
+                    this.target.SetActive(this.enableScopes.Contains(this._fetcher.VersionModel?.Scope ?? ""));
                     break;
                 case Expression.NotIn:
-                    this.target.SetActive(!this.enableScopes.Contains(this._fetcher.VersionModel.Scope));
+                    this.target.SetActive(!this.enableScopes.Contains(this._fetcher.VersionModel?.Scope ?? ""));
                     break;
                 case Expression.StartsWith:
-                    this.target.SetActive(this._fetcher.VersionModel.Scope.StartsWith(this.enableScope));
+                    this.target.SetActive((this._fetcher.VersionModel?.Scope ?? "").StartsWith(this.enableScope));
                     break;
                 case Expression.EndsWith:
-                    this.target.SetActive(this._fetcher.VersionModel.Scope.EndsWith(this.enableScope));
+                    this.target.SetActive((this._fetcher.VersionModel?.Scope ?? "").EndsWith(this.enableScope));
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();

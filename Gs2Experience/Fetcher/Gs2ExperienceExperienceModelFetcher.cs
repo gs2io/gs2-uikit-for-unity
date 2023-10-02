@@ -119,6 +119,18 @@ namespace Gs2.Unity.UiKit.Gs2Experience.Fetcher
             );
             this._callbackId = null;
         }
+
+        public void SetTemporarySlot(
+            Gs2.Unity.Gs2Experience.Model.EzExperienceModel experienceModel
+        ) {
+            ExperienceModel = experienceModel;
+            this.OnFetched.Invoke();
+        }
+
+        public void RollbackTemporarySlot(
+        ) {
+            OnUpdateContext();
+        }
     }
 
     /// <summary>

@@ -45,16 +45,16 @@ namespace Gs2.Unity.UiKit.Gs2Dictionary.Enabler
             switch(this.expression)
             {
                 case Expression.In:
-                    this.target.SetActive(this.enableNames.Contains(this._fetcher.EntryModel.Name));
+                    this.target.SetActive(this.enableNames.Contains(this._fetcher.EntryModel?.Name ?? ""));
                     break;
                 case Expression.NotIn:
-                    this.target.SetActive(!this.enableNames.Contains(this._fetcher.EntryModel.Name));
+                    this.target.SetActive(!this.enableNames.Contains(this._fetcher.EntryModel?.Name ?? ""));
                     break;
                 case Expression.StartsWith:
-                    this.target.SetActive(this._fetcher.EntryModel.Name.StartsWith(this.enableName));
+                    this.target.SetActive((this._fetcher.EntryModel?.Name ?? "").StartsWith(this.enableName));
                     break;
                 case Expression.EndsWith:
-                    this.target.SetActive(this._fetcher.EntryModel.Name.EndsWith(this.enableName));
+                    this.target.SetActive((this._fetcher.EntryModel?.Name ?? "").EndsWith(this.enableName));
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();

@@ -119,6 +119,18 @@ namespace Gs2.Unity.UiKit.Gs2Dictionary.Fetcher
             );
             this._callbackId = null;
         }
+
+        public void SetTemporarySlot(
+            Gs2.Unity.Gs2Dictionary.Model.EzEntryModel entryModel
+        ) {
+            EntryModel = entryModel;
+            this.OnFetched.Invoke();
+        }
+
+        public void RollbackTemporarySlot(
+        ) {
+            OnUpdateContext();
+        }
     }
 
     /// <summary>

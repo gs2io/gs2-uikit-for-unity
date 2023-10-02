@@ -45,22 +45,22 @@ namespace Gs2.Unity.UiKit.Gs2LoginReward.SpriteSwitcher
             switch(this.expression)
             {
                 case Expression.In:
-                    if (this.applyBonusModelNames.Contains(this._fetcher.ReceiveStatus.BonusModelName)) {
+                    if (this.applyBonusModelNames.Contains(this._fetcher.ReceiveStatus?.BonusModelName ?? "")) {
                         this.onUpdate.Invoke(this.sprite);
                     }
                     break;
                 case Expression.NotIn:
-                    if (!this.applyBonusModelNames.Contains(this._fetcher.ReceiveStatus.BonusModelName)) {
+                    if (!this.applyBonusModelNames.Contains(this._fetcher.ReceiveStatus?.BonusModelName ?? "")) {
                         this.onUpdate.Invoke(this.sprite);
                     }
                     break;
                 case Expression.StartsWith:
-                    if (this._fetcher.ReceiveStatus.BonusModelName.StartsWith(this.applyBonusModelName)) {
+                    if ((this._fetcher.ReceiveStatus?.BonusModelName ?? "").StartsWith(this.applyBonusModelName)) {
                         this.onUpdate.Invoke(this.sprite);
                     }
                     break;
                 case Expression.EndsWith:
-                    if (this._fetcher.ReceiveStatus.BonusModelName.EndsWith(this.applyBonusModelName)) {
+                    if ((this._fetcher.ReceiveStatus?.BonusModelName ?? "").EndsWith(this.applyBonusModelName)) {
                         this.onUpdate.Invoke(this.sprite);
                     }
                     break;

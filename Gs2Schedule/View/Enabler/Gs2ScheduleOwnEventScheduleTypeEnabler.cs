@@ -45,16 +45,16 @@ namespace Gs2.Unity.UiKit.Gs2Schedule.Enabler
             switch(this.expression)
             {
                 case Expression.In:
-                    this.target.SetActive(this.enableScheduleTypes.Contains(this._fetcher.Event.ScheduleType));
+                    this.target.SetActive(this.enableScheduleTypes.Contains(this._fetcher.Event?.ScheduleType ?? ""));
                     break;
                 case Expression.NotIn:
-                    this.target.SetActive(!this.enableScheduleTypes.Contains(this._fetcher.Event.ScheduleType));
+                    this.target.SetActive(!this.enableScheduleTypes.Contains(this._fetcher.Event?.ScheduleType ?? ""));
                     break;
                 case Expression.StartsWith:
-                    this.target.SetActive(this._fetcher.Event.ScheduleType.StartsWith(this.enableScheduleType));
+                    this.target.SetActive((this._fetcher.Event?.ScheduleType ?? "").StartsWith(this.enableScheduleType));
                     break;
                 case Expression.EndsWith:
-                    this.target.SetActive(this._fetcher.Event.ScheduleType.EndsWith(this.enableScheduleType));
+                    this.target.SetActive((this._fetcher.Event?.ScheduleType ?? "").EndsWith(this.enableScheduleType));
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();

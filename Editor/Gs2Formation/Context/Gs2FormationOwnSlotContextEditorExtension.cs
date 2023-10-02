@@ -43,19 +43,22 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Editor
             serializedObject.Update();
 
             if (original.Slot == null) {
-                if (original.GetComponentInParent<Gs2FormationOwnSlotList>(true) != null) {
+                var list = original.GetComponentInParent<Gs2FormationOwnSlotList>(true);
+                if (list != null) {
                     EditorGUILayout.HelpBox("OwnSlot is auto assign from Gs2FormationOwnSlotList.", MessageType.Info);
+                    EditorGUI.BeginDisabledGroup(true);
+                    EditorGUILayout.ObjectField("List", list, typeof(Gs2FormationOwnSlotList), false);
+                    EditorGUI.EndDisabledGroup();
+                }
+                else if (original.GetComponentInParent<Gs2FormationConvertSlotModelToOwnSlot>(true) != null) {
+                    EditorGUILayout.HelpBox("Slot is auto assign from Gs2FormationConvertSlotModelToOwnSlot.", MessageType.Info);
+                    EditorGUI.BeginDisabledGroup(true);
+                    EditorGUILayout.ObjectField("Converter", original.GetComponentInParent<Gs2FormationConvertSlotModelToOwnSlot>(true), typeof(Gs2FormationConvertSlotModelToOwnSlot), false);
+                    EditorGUI.EndDisabledGroup();
                 }
                 else {
-                    var ownFormContext = original.GetComponentInParent<Gs2FormationOwnFormContext>(true);
-                    var slotModelContext = original.GetComponentInParent<Gs2FormationSlotModelContext>(true);
-                    if (ownFormContext != null && slotModelContext != null) {
-                        EditorGUILayout.HelpBox("OwnSlot is auto assign from Gs2FormationOwnFormContext and Gs2FormationSlotModelContext.", MessageType.Info);
-                    }
-                    else {
-                        EditorGUILayout.HelpBox("OwnSlot not assigned.", MessageType.Error);
-                        EditorGUILayout.PropertyField(serializedObject.FindProperty("Slot"), true);
-                    }
+                    EditorGUILayout.HelpBox("OwnSlot not assigned.", MessageType.Error);
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("_slot"), true);
                 }
             }
             else {

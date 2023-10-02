@@ -45,22 +45,22 @@ namespace Gs2.Unity.UiKit.Gs2Schedule.SpriteSwitcher
             switch(this.expression)
             {
                 case Expression.In:
-                    if (this.applyRelativeTriggerNames.Contains(this._fetcher.Event.RelativeTriggerName)) {
+                    if (this.applyRelativeTriggerNames.Contains(this._fetcher.Event?.RelativeTriggerName ?? "")) {
                         this.onUpdate.Invoke(this.sprite);
                     }
                     break;
                 case Expression.NotIn:
-                    if (!this.applyRelativeTriggerNames.Contains(this._fetcher.Event.RelativeTriggerName)) {
+                    if (!this.applyRelativeTriggerNames.Contains(this._fetcher.Event?.RelativeTriggerName ?? "")) {
                         this.onUpdate.Invoke(this.sprite);
                     }
                     break;
                 case Expression.StartsWith:
-                    if (this._fetcher.Event.RelativeTriggerName.StartsWith(this.applyRelativeTriggerName)) {
+                    if ((this._fetcher.Event?.RelativeTriggerName ?? "").StartsWith(this.applyRelativeTriggerName)) {
                         this.onUpdate.Invoke(this.sprite);
                     }
                     break;
                 case Expression.EndsWith:
-                    if (this._fetcher.Event.RelativeTriggerName.EndsWith(this.applyRelativeTriggerName)) {
+                    if ((this._fetcher.Event?.RelativeTriggerName ?? "").EndsWith(this.applyRelativeTriggerName)) {
                         this.onUpdate.Invoke(this.sprite);
                     }
                     break;

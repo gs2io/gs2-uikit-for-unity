@@ -43,12 +43,16 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Editor
             serializedObject.Update();
 
             if (original.SlotModel == null) {
-                if (original.GetComponentInParent<Gs2FormationSlotModelList>(true) != null) {
+                var list = original.GetComponentInParent<Gs2FormationSlotModelList>(true);
+                if (list != null) {
                     EditorGUILayout.HelpBox("SlotModel is auto assign from Gs2FormationSlotModelList.", MessageType.Info);
+                    EditorGUI.BeginDisabledGroup(true);
+                    EditorGUILayout.ObjectField("List", list, typeof(Gs2FormationSlotModelList), false);
+                    EditorGUI.EndDisabledGroup();
                 }
                 else {
                     EditorGUILayout.HelpBox("SlotModel not assigned.", MessageType.Error);
-                    EditorGUILayout.PropertyField(serializedObject.FindProperty("SlotModel"), true);
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("_slotModel"), true);
                 }
             }
             else {

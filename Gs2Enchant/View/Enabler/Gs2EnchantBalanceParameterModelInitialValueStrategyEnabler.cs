@@ -45,16 +45,16 @@ namespace Gs2.Unity.UiKit.Gs2Enchant.Enabler
             switch(this.expression)
             {
                 case Expression.In:
-                    this.target.SetActive(this.enableInitialValueStrategies.Contains(this._fetcher.BalanceParameterModel.InitialValueStrategy));
+                    this.target.SetActive(this.enableInitialValueStrategies.Contains(this._fetcher.BalanceParameterModel?.InitialValueStrategy ?? ""));
                     break;
                 case Expression.NotIn:
-                    this.target.SetActive(!this.enableInitialValueStrategies.Contains(this._fetcher.BalanceParameterModel.InitialValueStrategy));
+                    this.target.SetActive(!this.enableInitialValueStrategies.Contains(this._fetcher.BalanceParameterModel?.InitialValueStrategy ?? ""));
                     break;
                 case Expression.StartsWith:
-                    this.target.SetActive(this._fetcher.BalanceParameterModel.InitialValueStrategy.StartsWith(this.enableInitialValueStrategy));
+                    this.target.SetActive((this._fetcher.BalanceParameterModel?.InitialValueStrategy ?? "").StartsWith(this.enableInitialValueStrategy));
                     break;
                 case Expression.EndsWith:
-                    this.target.SetActive(this._fetcher.BalanceParameterModel.InitialValueStrategy.EndsWith(this.enableInitialValueStrategy));
+                    this.target.SetActive((this._fetcher.BalanceParameterModel?.InitialValueStrategy ?? "").EndsWith(this.enableInitialValueStrategy));
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();

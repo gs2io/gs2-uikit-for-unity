@@ -120,6 +120,18 @@ namespace Gs2.Unity.UiKit.Gs2SkillTree.Fetcher
             this._callbackId = null;
         }
 
+        public void SetTemporarySlot(
+            Gs2.Unity.Gs2SkillTree.Model.EzNodeModel nodeModel
+        ) {
+            NodeModel = nodeModel;
+            this.OnFetched.Invoke();
+        }
+
+        public void RollbackTemporarySlot(
+        ) {
+            OnUpdateContext();
+        }
+
         public List<Unity.Core.Model.EzAcquireAction> AcquireActions(string context = "default") {
             if (!Fetched) {
                 return new List<Unity.Core.Model.EzAcquireAction>();

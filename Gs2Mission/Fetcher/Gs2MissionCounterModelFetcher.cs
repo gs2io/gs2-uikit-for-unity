@@ -119,6 +119,18 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Fetcher
             );
             this._callbackId = null;
         }
+
+        public void SetTemporarySlot(
+            Gs2.Unity.Gs2Mission.Model.EzCounterModel counterModel
+        ) {
+            CounterModel = counterModel;
+            this.OnFetched.Invoke();
+        }
+
+        public void RollbackTemporarySlot(
+        ) {
+            OnUpdateContext();
+        }
     }
 
     /// <summary>

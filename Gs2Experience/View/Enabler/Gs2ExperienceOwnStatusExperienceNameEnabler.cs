@@ -45,16 +45,16 @@ namespace Gs2.Unity.UiKit.Gs2Experience.Enabler
             switch(this.expression)
             {
                 case Expression.In:
-                    this.target.SetActive(this.enableExperienceNames.Contains(this._fetcher.Status.ExperienceName));
+                    this.target.SetActive(this.enableExperienceNames.Contains(this._fetcher.Status?.ExperienceName ?? ""));
                     break;
                 case Expression.NotIn:
-                    this.target.SetActive(!this.enableExperienceNames.Contains(this._fetcher.Status.ExperienceName));
+                    this.target.SetActive(!this.enableExperienceNames.Contains(this._fetcher.Status?.ExperienceName ?? ""));
                     break;
                 case Expression.StartsWith:
-                    this.target.SetActive(this._fetcher.Status.ExperienceName.StartsWith(this.enableExperienceName));
+                    this.target.SetActive((this._fetcher.Status?.ExperienceName ?? "").StartsWith(this.enableExperienceName));
                     break;
                 case Expression.EndsWith:
-                    this.target.SetActive(this._fetcher.Status.ExperienceName.EndsWith(this.enableExperienceName));
+                    this.target.SetActive((this._fetcher.Status?.ExperienceName ?? "").EndsWith(this.enableExperienceName));
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();

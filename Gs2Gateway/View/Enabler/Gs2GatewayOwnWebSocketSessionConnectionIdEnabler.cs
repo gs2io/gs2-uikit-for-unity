@@ -45,16 +45,16 @@ namespace Gs2.Unity.UiKit.Gs2Gateway.Enabler
             switch(this.expression)
             {
                 case Expression.In:
-                    this.target.SetActive(this.enableConnectionIds.Contains(this._fetcher.WebSocketSession.ConnectionId));
+                    this.target.SetActive(this.enableConnectionIds.Contains(this._fetcher.WebSocketSession?.ConnectionId ?? ""));
                     break;
                 case Expression.NotIn:
-                    this.target.SetActive(!this.enableConnectionIds.Contains(this._fetcher.WebSocketSession.ConnectionId));
+                    this.target.SetActive(!this.enableConnectionIds.Contains(this._fetcher.WebSocketSession?.ConnectionId ?? ""));
                     break;
                 case Expression.StartsWith:
-                    this.target.SetActive(this._fetcher.WebSocketSession.ConnectionId.StartsWith(this.enableConnectionId));
+                    this.target.SetActive((this._fetcher.WebSocketSession?.ConnectionId ?? "").StartsWith(this.enableConnectionId));
                     break;
                 case Expression.EndsWith:
-                    this.target.SetActive(this._fetcher.WebSocketSession.ConnectionId.EndsWith(this.enableConnectionId));
+                    this.target.SetActive((this._fetcher.WebSocketSession?.ConnectionId ?? "").EndsWith(this.enableConnectionId));
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();

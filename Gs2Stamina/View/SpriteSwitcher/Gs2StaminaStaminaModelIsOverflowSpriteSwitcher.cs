@@ -45,12 +45,12 @@ namespace Gs2.Unity.UiKit.Gs2Stamina
             switch(this.expression)
             {
                 case Expression.True:
-                    if (this._fetcher.StaminaModel.IsOverflow) {
+                    if (this._fetcher.StaminaModel?.IsOverflow ?? false) {
                         this.onUpdate.Invoke(this.sprite);
                     }
                     break;
                 case Expression.False:
-                    if (!this._fetcher.StaminaModel.IsOverflow) {
+                    if (!this._fetcher.StaminaModel?.IsOverflow ?? false) {
                         this.onUpdate.Invoke(this.sprite);
                     }
                     break;

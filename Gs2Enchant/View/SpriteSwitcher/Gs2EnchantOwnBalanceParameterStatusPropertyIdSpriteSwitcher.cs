@@ -45,22 +45,22 @@ namespace Gs2.Unity.UiKit.Gs2Enchant.SpriteSwitcher
             switch(this.expression)
             {
                 case Expression.In:
-                    if (this.applyPropertyIds.Contains(this._fetcher.BalanceParameterStatus.PropertyId)) {
+                    if (this.applyPropertyIds.Contains(this._fetcher.BalanceParameterStatus?.PropertyId ?? "")) {
                         this.onUpdate.Invoke(this.sprite);
                     }
                     break;
                 case Expression.NotIn:
-                    if (!this.applyPropertyIds.Contains(this._fetcher.BalanceParameterStatus.PropertyId)) {
+                    if (!this.applyPropertyIds.Contains(this._fetcher.BalanceParameterStatus?.PropertyId ?? "")) {
                         this.onUpdate.Invoke(this.sprite);
                     }
                     break;
                 case Expression.StartsWith:
-                    if (this._fetcher.BalanceParameterStatus.PropertyId.StartsWith(this.applyPropertyId)) {
+                    if ((this._fetcher.BalanceParameterStatus?.PropertyId ?? "").StartsWith(this.applyPropertyId)) {
                         this.onUpdate.Invoke(this.sprite);
                     }
                     break;
                 case Expression.EndsWith:
-                    if (this._fetcher.BalanceParameterStatus.PropertyId.EndsWith(this.applyPropertyId)) {
+                    if ((this._fetcher.BalanceParameterStatus?.PropertyId ?? "").EndsWith(this.applyPropertyId)) {
                         this.onUpdate.Invoke(this.sprite);
                     }
                     break;

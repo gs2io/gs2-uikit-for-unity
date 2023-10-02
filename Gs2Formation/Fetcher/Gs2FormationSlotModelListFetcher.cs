@@ -48,7 +48,7 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Fetcher
 	[AddComponentMenu("GS2 UIKit/Formation/SlotModel/Fetcher/Gs2FormationSlotModelListFetcher")]
     public partial class Gs2FormationSlotModelListFetcher : MonoBehaviour
     {
-        private EzFormModelDomain _domain;
+        private EzMoldModelDomain _domain;
         private ulong? _callbackId;
 
         private IEnumerator Fetch()
@@ -64,12 +64,11 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Fetcher
                 this.Context.FormModel.NamespaceName
             ).MoldModel(
                 this.Context.FormModel.MoldModelName
-            ).FormModel(
             );
             this._callbackId = this._domain.Subscribe(
                 item =>
                 {
-                    SlotModels = item.Slots;
+                    SlotModels = item.FormModel.Slots;
                     Fetched = true;
                     this.OnFetched.Invoke();
                 }
@@ -89,7 +88,7 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Fetcher
                 yield break;
             }
 
-            SlotModels = future.Result.Slots;
+            SlotModels = future.Result.FormModel.Slots;
             Fetched = true;
             this.OnFetched.Invoke();
         }

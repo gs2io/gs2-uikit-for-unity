@@ -45,16 +45,16 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Enabler
             switch(this.expression)
             {
                 case Expression.In:
-                    this.target.SetActive(this.enableTransactionIds.Contains(this._fetcher.Progress.TransactionId));
+                    this.target.SetActive(this.enableTransactionIds.Contains(this._fetcher.Progress?.TransactionId ?? ""));
                     break;
                 case Expression.NotIn:
-                    this.target.SetActive(!this.enableTransactionIds.Contains(this._fetcher.Progress.TransactionId));
+                    this.target.SetActive(!this.enableTransactionIds.Contains(this._fetcher.Progress?.TransactionId ?? ""));
                     break;
                 case Expression.StartsWith:
-                    this.target.SetActive(this._fetcher.Progress.TransactionId.StartsWith(this.enableTransactionId));
+                    this.target.SetActive((this._fetcher.Progress?.TransactionId ?? "").StartsWith(this.enableTransactionId));
                     break;
                 case Expression.EndsWith:
-                    this.target.SetActive(this._fetcher.Progress.TransactionId.EndsWith(this.enableTransactionId));
+                    this.target.SetActive((this._fetcher.Progress?.TransactionId ?? "").EndsWith(this.enableTransactionId));
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();

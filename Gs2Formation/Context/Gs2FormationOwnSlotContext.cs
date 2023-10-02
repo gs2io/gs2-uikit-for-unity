@@ -29,6 +29,7 @@
 using Gs2.Unity.Gs2Formation.ScriptableObject;
 using Gs2.Unity.UiKit.Core;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2Formation.Context
 {
@@ -41,13 +42,16 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Context
     {
         public new void Start() {
             if (Slot == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Slot is not set in Gs2FormationOwnSlotContext.");
+                Debug.LogWarning($"{gameObject.GetFullPath()}: Slot is not set in Gs2FormationOwnSlotContext.");
             }
         }
 
         public override bool HasError() {
             if (Slot == null) {
                 if (GetComponentInParent<Gs2FormationOwnSlotList>(true) != null) {
+                    return false;
+                }
+                else if (GetComponentInParent<Gs2FormationConvertSlotModelToOwnSlot>(true) != null) {
                     return false;
                 }
                 else if (GetComponentInParent<Gs2FormationOwnSlotList>(true) != null) {
@@ -85,10 +89,18 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Context
 
     public partial class Gs2FormationOwnSlotContext
     {
-        public OwnSlot Slot;
+        [SerializeField]
+        private OwnSlot _slot;
+        public OwnSlot Slot
+        {
+            get => _slot;
+            set => SetOwnSlot(value);
+        }
 
-        public void SetOwnSlot(OwnSlot Slot) {
-            this.Slot = Slot;
+        public void SetOwnSlot(OwnSlot OwnSlot) {
+            this._slot = OwnSlot;
+
+            this.OnUpdate.Invoke();
         }
     }
 

@@ -45,16 +45,16 @@ namespace Gs2.Unity.UiKit.Gs2Datastore.Enabler
             switch(this.expression)
             {
                 case Expression.In:
-                    this.target.SetActive(this.enableGenerations.Contains(this._fetcher.DataObjectHistory.Generation));
+                    this.target.SetActive(this.enableGenerations.Contains(this._fetcher.DataObjectHistory?.Generation ?? ""));
                     break;
                 case Expression.NotIn:
-                    this.target.SetActive(!this.enableGenerations.Contains(this._fetcher.DataObjectHistory.Generation));
+                    this.target.SetActive(!this.enableGenerations.Contains(this._fetcher.DataObjectHistory?.Generation ?? ""));
                     break;
                 case Expression.StartsWith:
-                    this.target.SetActive(this._fetcher.DataObjectHistory.Generation.StartsWith(this.enableGeneration));
+                    this.target.SetActive((this._fetcher.DataObjectHistory?.Generation ?? "").StartsWith(this.enableGeneration));
                     break;
                 case Expression.EndsWith:
-                    this.target.SetActive(this._fetcher.DataObjectHistory.Generation.EndsWith(this.enableGeneration));
+                    this.target.SetActive((this._fetcher.DataObjectHistory?.Generation ?? "").EndsWith(this.enableGeneration));
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();

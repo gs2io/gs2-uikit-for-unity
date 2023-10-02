@@ -45,16 +45,16 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Enabler
             switch(this.expression)
             {
                 case Expression.In:
-                    this.target.SetActive(this.enableInventoryNames.Contains(this._fetcher.ItemSet[index].InventoryName));
+                    this.target.SetActive(this.enableInventoryNames.Contains(this._fetcher.ItemSet[index]?.InventoryName ?? ""));
                     break;
                 case Expression.NotIn:
-                    this.target.SetActive(!this.enableInventoryNames.Contains(this._fetcher.ItemSet[index].InventoryName));
+                    this.target.SetActive(!this.enableInventoryNames.Contains(this._fetcher.ItemSet[index]?.InventoryName ?? ""));
                     break;
                 case Expression.StartsWith:
-                    this.target.SetActive(this._fetcher.ItemSet[index].InventoryName.StartsWith(this.enableInventoryName));
+                    this.target.SetActive((this._fetcher.ItemSet[index]?.InventoryName ?? "").StartsWith(this.enableInventoryName));
                     break;
                 case Expression.EndsWith:
-                    this.target.SetActive(this._fetcher.ItemSet[index].InventoryName.EndsWith(this.enableInventoryName));
+                    this.target.SetActive((this._fetcher.ItemSet[index]?.InventoryName ?? "").EndsWith(this.enableInventoryName));
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();

@@ -45,22 +45,22 @@ namespace Gs2.Unity.UiKit.Gs2SerialKey.SpriteSwitcher
             switch(this.expression)
             {
                 case Expression.In:
-                    if (this.applyCampaignModelNames.Contains(this._fetcher.SerialKey.CampaignModelName)) {
+                    if (this.applyCampaignModelNames.Contains(this._fetcher.SerialKey?.CampaignModelName ?? "")) {
                         this.onUpdate.Invoke(this.sprite);
                     }
                     break;
                 case Expression.NotIn:
-                    if (!this.applyCampaignModelNames.Contains(this._fetcher.SerialKey.CampaignModelName)) {
+                    if (!this.applyCampaignModelNames.Contains(this._fetcher.SerialKey?.CampaignModelName ?? "")) {
                         this.onUpdate.Invoke(this.sprite);
                     }
                     break;
                 case Expression.StartsWith:
-                    if (this._fetcher.SerialKey.CampaignModelName.StartsWith(this.applyCampaignModelName)) {
+                    if ((this._fetcher.SerialKey?.CampaignModelName ?? "").StartsWith(this.applyCampaignModelName)) {
                         this.onUpdate.Invoke(this.sprite);
                     }
                     break;
                 case Expression.EndsWith:
-                    if (this._fetcher.SerialKey.CampaignModelName.EndsWith(this.applyCampaignModelName)) {
+                    if ((this._fetcher.SerialKey?.CampaignModelName ?? "").EndsWith(this.applyCampaignModelName)) {
                         this.onUpdate.Invoke(this.sprite);
                     }
                     break;

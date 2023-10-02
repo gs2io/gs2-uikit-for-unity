@@ -45,16 +45,16 @@ namespace Gs2.Unity.UiKit.Gs2Realtime.Enabler
             switch(this.expression)
             {
                 case Expression.In:
-                    this.target.SetActive(this.enableIpAddresses.Contains(this._fetcher.Room.IpAddress));
+                    this.target.SetActive(this.enableIpAddresses.Contains(this._fetcher.Room?.IpAddress ?? ""));
                     break;
                 case Expression.NotIn:
-                    this.target.SetActive(!this.enableIpAddresses.Contains(this._fetcher.Room.IpAddress));
+                    this.target.SetActive(!this.enableIpAddresses.Contains(this._fetcher.Room?.IpAddress ?? ""));
                     break;
                 case Expression.StartsWith:
-                    this.target.SetActive(this._fetcher.Room.IpAddress.StartsWith(this.enableIpAddress));
+                    this.target.SetActive((this._fetcher.Room?.IpAddress ?? "").StartsWith(this.enableIpAddress));
                     break;
                 case Expression.EndsWith:
-                    this.target.SetActive(this._fetcher.Room.IpAddress.EndsWith(this.enableIpAddress));
+                    this.target.SetActive((this._fetcher.Room?.IpAddress ?? "").EndsWith(this.enableIpAddress));
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();

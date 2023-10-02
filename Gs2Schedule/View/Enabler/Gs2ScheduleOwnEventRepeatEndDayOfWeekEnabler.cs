@@ -45,16 +45,16 @@ namespace Gs2.Unity.UiKit.Gs2Schedule.Enabler
             switch(this.expression)
             {
                 case Expression.In:
-                    this.target.SetActive(this.enableRepeatEndDayOfWeeks.Contains(this._fetcher.Event.RepeatEndDayOfWeek));
+                    this.target.SetActive(this.enableRepeatEndDayOfWeeks.Contains(this._fetcher.Event?.RepeatEndDayOfWeek ?? ""));
                     break;
                 case Expression.NotIn:
-                    this.target.SetActive(!this.enableRepeatEndDayOfWeeks.Contains(this._fetcher.Event.RepeatEndDayOfWeek));
+                    this.target.SetActive(!this.enableRepeatEndDayOfWeeks.Contains(this._fetcher.Event?.RepeatEndDayOfWeek ?? ""));
                     break;
                 case Expression.StartsWith:
-                    this.target.SetActive(this._fetcher.Event.RepeatEndDayOfWeek.StartsWith(this.enableRepeatEndDayOfWeek));
+                    this.target.SetActive((this._fetcher.Event?.RepeatEndDayOfWeek ?? "").StartsWith(this.enableRepeatEndDayOfWeek));
                     break;
                 case Expression.EndsWith:
-                    this.target.SetActive(this._fetcher.Event.RepeatEndDayOfWeek.EndsWith(this.enableRepeatEndDayOfWeek));
+                    this.target.SetActive((this._fetcher.Event?.RepeatEndDayOfWeek ?? "").EndsWith(this.enableRepeatEndDayOfWeek));
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();

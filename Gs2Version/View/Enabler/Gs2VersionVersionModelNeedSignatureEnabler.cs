@@ -45,10 +45,10 @@ namespace Gs2.Unity.UiKit.Gs2Version
             switch(this.expression)
             {
                 case Expression.True:
-                    this.target.SetActive(this._fetcher.VersionModel.NeedSignature);
+                    this.target.SetActive(this._fetcher.VersionModel?.NeedSignature ?? false);
                     break;
                 case Expression.False:
-                    this.target.SetActive(!this._fetcher.VersionModel.NeedSignature);
+                    this.target.SetActive(!this._fetcher.VersionModel?.NeedSignature ?? false);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();

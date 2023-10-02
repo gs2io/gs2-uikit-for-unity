@@ -45,22 +45,22 @@ namespace Gs2.Unity.UiKit.Gs2Gateway.SpriteSwitcher
             switch(this.expression)
             {
                 case Expression.In:
-                    if (this.applyConnectionIds.Contains(this._fetcher.WebSocketSession.ConnectionId)) {
+                    if (this.applyConnectionIds.Contains(this._fetcher.WebSocketSession?.ConnectionId ?? "")) {
                         this.onUpdate.Invoke(this.sprite);
                     }
                     break;
                 case Expression.NotIn:
-                    if (!this.applyConnectionIds.Contains(this._fetcher.WebSocketSession.ConnectionId)) {
+                    if (!this.applyConnectionIds.Contains(this._fetcher.WebSocketSession?.ConnectionId ?? "")) {
                         this.onUpdate.Invoke(this.sprite);
                     }
                     break;
                 case Expression.StartsWith:
-                    if (this._fetcher.WebSocketSession.ConnectionId.StartsWith(this.applyConnectionId)) {
+                    if ((this._fetcher.WebSocketSession?.ConnectionId ?? "").StartsWith(this.applyConnectionId)) {
                         this.onUpdate.Invoke(this.sprite);
                     }
                     break;
                 case Expression.EndsWith:
-                    if (this._fetcher.WebSocketSession.ConnectionId.EndsWith(this.applyConnectionId)) {
+                    if ((this._fetcher.WebSocketSession?.ConnectionId ?? "").EndsWith(this.applyConnectionId)) {
                         this.onUpdate.Invoke(this.sprite);
                     }
                     break;

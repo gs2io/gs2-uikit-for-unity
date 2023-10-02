@@ -45,16 +45,16 @@ namespace Gs2.Unity.UiKit.Gs2Enchant.Enabler
             switch(this.expression)
             {
                 case Expression.In:
-                    this.target.SetActive(this.enableParameterNames.Contains(this._fetcher.BalanceParameterStatus.ParameterName));
+                    this.target.SetActive(this.enableParameterNames.Contains(this._fetcher.BalanceParameterStatus?.ParameterName ?? ""));
                     break;
                 case Expression.NotIn:
-                    this.target.SetActive(!this.enableParameterNames.Contains(this._fetcher.BalanceParameterStatus.ParameterName));
+                    this.target.SetActive(!this.enableParameterNames.Contains(this._fetcher.BalanceParameterStatus?.ParameterName ?? ""));
                     break;
                 case Expression.StartsWith:
-                    this.target.SetActive(this._fetcher.BalanceParameterStatus.ParameterName.StartsWith(this.enableParameterName));
+                    this.target.SetActive((this._fetcher.BalanceParameterStatus?.ParameterName ?? "").StartsWith(this.enableParameterName));
                     break;
                 case Expression.EndsWith:
-                    this.target.SetActive(this._fetcher.BalanceParameterStatus.ParameterName.EndsWith(this.enableParameterName));
+                    this.target.SetActive((this._fetcher.BalanceParameterStatus?.ParameterName ?? "").EndsWith(this.enableParameterName));
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();

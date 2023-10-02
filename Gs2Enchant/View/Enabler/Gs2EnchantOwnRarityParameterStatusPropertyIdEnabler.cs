@@ -45,16 +45,16 @@ namespace Gs2.Unity.UiKit.Gs2Enchant.Enabler
             switch(this.expression)
             {
                 case Expression.In:
-                    this.target.SetActive(this.enablePropertyIds.Contains(this._fetcher.RarityParameterStatus.PropertyId));
+                    this.target.SetActive(this.enablePropertyIds.Contains(this._fetcher.RarityParameterStatus?.PropertyId ?? ""));
                     break;
                 case Expression.NotIn:
-                    this.target.SetActive(!this.enablePropertyIds.Contains(this._fetcher.RarityParameterStatus.PropertyId));
+                    this.target.SetActive(!this.enablePropertyIds.Contains(this._fetcher.RarityParameterStatus?.PropertyId ?? ""));
                     break;
                 case Expression.StartsWith:
-                    this.target.SetActive(this._fetcher.RarityParameterStatus.PropertyId.StartsWith(this.enablePropertyId));
+                    this.target.SetActive((this._fetcher.RarityParameterStatus?.PropertyId ?? "").StartsWith(this.enablePropertyId));
                     break;
                 case Expression.EndsWith:
-                    this.target.SetActive(this._fetcher.RarityParameterStatus.PropertyId.EndsWith(this.enablePropertyId));
+                    this.target.SetActive((this._fetcher.RarityParameterStatus?.PropertyId ?? "").EndsWith(this.enablePropertyId));
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();

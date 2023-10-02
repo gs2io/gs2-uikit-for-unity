@@ -45,22 +45,22 @@ namespace Gs2.Unity.UiKit.Gs2SerialKey.SpriteSwitcher
             switch(this.expression)
             {
                 case Expression.In:
-                    if (this.applyStatuses.Contains(this._fetcher.SerialKey.Status)) {
+                    if (this.applyStatuses.Contains(this._fetcher.SerialKey?.Status ?? "")) {
                         this.onUpdate.Invoke(this.sprite);
                     }
                     break;
                 case Expression.NotIn:
-                    if (!this.applyStatuses.Contains(this._fetcher.SerialKey.Status)) {
+                    if (!this.applyStatuses.Contains(this._fetcher.SerialKey?.Status ?? "")) {
                         this.onUpdate.Invoke(this.sprite);
                     }
                     break;
                 case Expression.StartsWith:
-                    if (this._fetcher.SerialKey.Status.StartsWith(this.applyStatus)) {
+                    if ((this._fetcher.SerialKey?.Status ?? "").StartsWith(this.applyStatus)) {
                         this.onUpdate.Invoke(this.sprite);
                     }
                     break;
                 case Expression.EndsWith:
-                    if (this._fetcher.SerialKey.Status.EndsWith(this.applyStatus)) {
+                    if ((this._fetcher.SerialKey?.Status ?? "").EndsWith(this.applyStatus)) {
                         this.onUpdate.Invoke(this.sprite);
                     }
                     break;

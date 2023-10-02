@@ -119,6 +119,18 @@ namespace Gs2.Unity.UiKit.Gs2Enchant.Fetcher
             );
             this._callbackId = null;
         }
+
+        public void SetTemporarySlot(
+            Gs2.Unity.Gs2Enchant.Model.EzRarityParameterModel rarityParameterModel
+        ) {
+            RarityParameterModel = rarityParameterModel;
+            this.OnFetched.Invoke();
+        }
+
+        public void RollbackTemporarySlot(
+        ) {
+            OnUpdateContext();
+        }
     }
 
     /// <summary>

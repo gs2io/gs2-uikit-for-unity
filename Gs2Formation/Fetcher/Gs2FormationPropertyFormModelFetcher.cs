@@ -119,6 +119,18 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Fetcher
             );
             this._callbackId = null;
         }
+
+        public void SetTemporarySlot(
+            Gs2.Unity.Gs2Formation.Model.EzPropertyFormModel propertyFormModel
+        ) {
+            PropertyFormModel = propertyFormModel;
+            this.OnFetched.Invoke();
+        }
+
+        public void RollbackTemporarySlot(
+        ) {
+            OnUpdateContext();
+        }
     }
 
     /// <summary>

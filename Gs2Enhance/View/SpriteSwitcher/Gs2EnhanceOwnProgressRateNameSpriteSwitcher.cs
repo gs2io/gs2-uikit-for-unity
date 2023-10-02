@@ -45,22 +45,22 @@ namespace Gs2.Unity.UiKit.Gs2Enhance.SpriteSwitcher
             switch(this.expression)
             {
                 case Expression.In:
-                    if (this.applyRateNames.Contains(this._fetcher.Progress.RateName)) {
+                    if (this.applyRateNames.Contains(this._fetcher.Progress?.RateName ?? "")) {
                         this.onUpdate.Invoke(this.sprite);
                     }
                     break;
                 case Expression.NotIn:
-                    if (!this.applyRateNames.Contains(this._fetcher.Progress.RateName)) {
+                    if (!this.applyRateNames.Contains(this._fetcher.Progress?.RateName ?? "")) {
                         this.onUpdate.Invoke(this.sprite);
                     }
                     break;
                 case Expression.StartsWith:
-                    if (this._fetcher.Progress.RateName.StartsWith(this.applyRateName)) {
+                    if ((this._fetcher.Progress?.RateName ?? "").StartsWith(this.applyRateName)) {
                         this.onUpdate.Invoke(this.sprite);
                     }
                     break;
                 case Expression.EndsWith:
-                    if (this._fetcher.Progress.RateName.EndsWith(this.applyRateName)) {
+                    if ((this._fetcher.Progress?.RateName ?? "").EndsWith(this.applyRateName)) {
                         this.onUpdate.Invoke(this.sprite);
                     }
                     break;

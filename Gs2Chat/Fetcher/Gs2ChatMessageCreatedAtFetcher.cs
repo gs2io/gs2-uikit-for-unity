@@ -42,9 +42,11 @@ namespace Gs2.Unity.UiKit.Gs2Chat
     {
         private void OnFetched()
         {
-            onUpdate?.Invoke(
-                this._fetcher.Message.CreatedAt
-            );
+            if (this._fetcher.Message.CreatedAt != null) {
+                onUpdate?.Invoke(
+                    this._fetcher.Message.CreatedAt
+                );
+            }
         }
     }
 

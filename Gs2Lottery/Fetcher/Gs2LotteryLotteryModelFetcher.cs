@@ -119,6 +119,18 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.Fetcher
             );
             this._callbackId = null;
         }
+
+        public void SetTemporarySlot(
+            Gs2.Unity.Gs2Lottery.Model.EzLotteryModel lotteryModel
+        ) {
+            LotteryModel = lotteryModel;
+            this.OnFetched.Invoke();
+        }
+
+        public void RollbackTemporarySlot(
+        ) {
+            OnUpdateContext();
+        }
     }
 
     /// <summary>

@@ -45,22 +45,22 @@ namespace Gs2.Unity.UiKit.Gs2Realtime.SpriteSwitcher
             switch(this.expression)
             {
                 case Expression.In:
-                    if (this.applyIpAddresses.Contains(this._fetcher.Room.IpAddress)) {
+                    if (this.applyIpAddresses.Contains(this._fetcher.Room?.IpAddress ?? "")) {
                         this.onUpdate.Invoke(this.sprite);
                     }
                     break;
                 case Expression.NotIn:
-                    if (!this.applyIpAddresses.Contains(this._fetcher.Room.IpAddress)) {
+                    if (!this.applyIpAddresses.Contains(this._fetcher.Room?.IpAddress ?? "")) {
                         this.onUpdate.Invoke(this.sprite);
                     }
                     break;
                 case Expression.StartsWith:
-                    if (this._fetcher.Room.IpAddress.StartsWith(this.applyIpAddress)) {
+                    if ((this._fetcher.Room?.IpAddress ?? "").StartsWith(this.applyIpAddress)) {
                         this.onUpdate.Invoke(this.sprite);
                     }
                     break;
                 case Expression.EndsWith:
-                    if (this._fetcher.Room.IpAddress.EndsWith(this.applyIpAddress)) {
+                    if ((this._fetcher.Room?.IpAddress ?? "").EndsWith(this.applyIpAddress)) {
                         this.onUpdate.Invoke(this.sprite);
                     }
                     break;

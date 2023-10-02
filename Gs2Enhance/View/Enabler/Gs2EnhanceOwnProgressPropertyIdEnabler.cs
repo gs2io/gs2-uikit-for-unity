@@ -45,16 +45,16 @@ namespace Gs2.Unity.UiKit.Gs2Enhance.Enabler
             switch(this.expression)
             {
                 case Expression.In:
-                    this.target.SetActive(this.enablePropertyIds.Contains(this._fetcher.Progress.PropertyId));
+                    this.target.SetActive(this.enablePropertyIds.Contains(this._fetcher.Progress?.PropertyId ?? ""));
                     break;
                 case Expression.NotIn:
-                    this.target.SetActive(!this.enablePropertyIds.Contains(this._fetcher.Progress.PropertyId));
+                    this.target.SetActive(!this.enablePropertyIds.Contains(this._fetcher.Progress?.PropertyId ?? ""));
                     break;
                 case Expression.StartsWith:
-                    this.target.SetActive(this._fetcher.Progress.PropertyId.StartsWith(this.enablePropertyId));
+                    this.target.SetActive((this._fetcher.Progress?.PropertyId ?? "").StartsWith(this.enablePropertyId));
                     break;
                 case Expression.EndsWith:
-                    this.target.SetActive(this._fetcher.Progress.PropertyId.EndsWith(this.enablePropertyId));
+                    this.target.SetActive((this._fetcher.Progress?.PropertyId ?? "").EndsWith(this.enablePropertyId));
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();

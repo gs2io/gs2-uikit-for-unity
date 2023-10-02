@@ -119,6 +119,18 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Fetcher
             );
             this._callbackId = null;
         }
+
+        public void SetTemporarySlot(
+            Gs2.Unity.Gs2Quest.Model.EzQuestGroupModel questGroupModel
+        ) {
+            QuestGroupModel = questGroupModel;
+            this.OnFetched.Invoke();
+        }
+
+        public void RollbackTemporarySlot(
+        ) {
+            OnUpdateContext();
+        }
     }
 
     /// <summary>

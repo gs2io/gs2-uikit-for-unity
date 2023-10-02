@@ -28,6 +28,7 @@ using System.Collections.Generic;
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Formation.Fetcher;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2Formation.Enabler
 {
@@ -43,16 +44,16 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Enabler
             switch(this.expression)
             {
                 case Expression.In:
-                    this.target.SetActive(this.enableNames.Contains(_fetcher.SlotModel.Name));
+                    this.target.SetActive(this.enableNames.Contains(_fetcher.SlotModel?.Name));
                     break;
                 case Expression.NotIn:
-                    this.target.SetActive(!this.enableNames.Contains(_fetcher.SlotModel.Name));
+                    this.target.SetActive(!this.enableNames.Contains(_fetcher.SlotModel?.Name));
                     break;
                 case Expression.StartsWith:
-                    this.target.SetActive(this._fetcher.SlotModel.Name.StartsWith(enableName));
+                    this.target.SetActive((this._fetcher.SlotModel?.Name ?? "").StartsWith(enableName));
                     break;
                 case Expression.EndsWith:
-                    this.target.SetActive(this._fetcher.SlotModel.Name.EndsWith(enableName));
+                    this.target.SetActive((this._fetcher.SlotModel?.Name ?? "").EndsWith(enableName));
                     break;
             }
         }
@@ -70,11 +71,11 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Enabler
         {
             this._fetcher = GetComponent<Gs2FormationSlotModelFetcher>() ?? GetComponentInParent<Gs2FormationSlotModelFetcher>();
             if (this._fetcher == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2FormationSlotModelFetcher.");
+                Debug.LogWarning($"{gameObject.GetFullPath()}: Couldn't find the Gs2FormationSlotModelFetcher.");
                 enabled = false;
             }
             if (this.target == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: target is not set.");
+                Debug.LogWarning($"{gameObject.GetFullPath()}: target is not set.");
                 enabled = false;
             }
         }
@@ -89,6 +90,29 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Enabler
                 return true;
             }
             return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
         }
     }
 

@@ -45,16 +45,16 @@ namespace Gs2.Unity.UiKit.Gs2Schedule.Enabler
             switch(this.expression)
             {
                 case Expression.In:
-                    this.target.SetActive(this.enableRelativeTriggerNames.Contains(this._fetcher.Event.RelativeTriggerName));
+                    this.target.SetActive(this.enableRelativeTriggerNames.Contains(this._fetcher.Event?.RelativeTriggerName ?? ""));
                     break;
                 case Expression.NotIn:
-                    this.target.SetActive(!this.enableRelativeTriggerNames.Contains(this._fetcher.Event.RelativeTriggerName));
+                    this.target.SetActive(!this.enableRelativeTriggerNames.Contains(this._fetcher.Event?.RelativeTriggerName ?? ""));
                     break;
                 case Expression.StartsWith:
-                    this.target.SetActive(this._fetcher.Event.RelativeTriggerName.StartsWith(this.enableRelativeTriggerName));
+                    this.target.SetActive((this._fetcher.Event?.RelativeTriggerName ?? "").StartsWith(this.enableRelativeTriggerName));
                     break;
                 case Expression.EndsWith:
-                    this.target.SetActive(this._fetcher.Event.RelativeTriggerName.EndsWith(this.enableRelativeTriggerName));
+                    this.target.SetActive((this._fetcher.Event?.RelativeTriggerName ?? "").EndsWith(this.enableRelativeTriggerName));
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();

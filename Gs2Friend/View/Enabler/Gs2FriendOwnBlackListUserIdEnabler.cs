@@ -45,16 +45,16 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Enabler
             switch(this.expression)
             {
                 case Expression.In:
-                    this.target.SetActive(this.enableUserIds.Contains(this._fetcher.BlackList.UserId));
+                    this.target.SetActive(this.enableUserIds.Contains(this._fetcher.BlackList?.UserId ?? ""));
                     break;
                 case Expression.NotIn:
-                    this.target.SetActive(!this.enableUserIds.Contains(this._fetcher.BlackList.UserId));
+                    this.target.SetActive(!this.enableUserIds.Contains(this._fetcher.BlackList?.UserId ?? ""));
                     break;
                 case Expression.StartsWith:
-                    this.target.SetActive(this._fetcher.BlackList.UserId.StartsWith(this.enableUserId));
+                    this.target.SetActive((this._fetcher.BlackList?.UserId ?? "").StartsWith(this.enableUserId));
                     break;
                 case Expression.EndsWith:
-                    this.target.SetActive(this._fetcher.BlackList.UserId.EndsWith(this.enableUserId));
+                    this.target.SetActive((this._fetcher.BlackList?.UserId ?? "").EndsWith(this.enableUserId));
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();

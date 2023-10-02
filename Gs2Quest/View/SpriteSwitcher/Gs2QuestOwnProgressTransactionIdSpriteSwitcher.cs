@@ -45,22 +45,22 @@ namespace Gs2.Unity.UiKit.Gs2Quest.SpriteSwitcher
             switch(this.expression)
             {
                 case Expression.In:
-                    if (this.applyTransactionIds.Contains(this._fetcher.Progress.TransactionId)) {
+                    if (this.applyTransactionIds.Contains(this._fetcher.Progress?.TransactionId ?? "")) {
                         this.onUpdate.Invoke(this.sprite);
                     }
                     break;
                 case Expression.NotIn:
-                    if (!this.applyTransactionIds.Contains(this._fetcher.Progress.TransactionId)) {
+                    if (!this.applyTransactionIds.Contains(this._fetcher.Progress?.TransactionId ?? "")) {
                         this.onUpdate.Invoke(this.sprite);
                     }
                     break;
                 case Expression.StartsWith:
-                    if (this._fetcher.Progress.TransactionId.StartsWith(this.applyTransactionId)) {
+                    if ((this._fetcher.Progress?.TransactionId ?? "").StartsWith(this.applyTransactionId)) {
                         this.onUpdate.Invoke(this.sprite);
                     }
                     break;
                 case Expression.EndsWith:
-                    if (this._fetcher.Progress.TransactionId.EndsWith(this.applyTransactionId)) {
+                    if ((this._fetcher.Progress?.TransactionId ?? "").EndsWith(this.applyTransactionId)) {
                         this.onUpdate.Invoke(this.sprite);
                     }
                     break;

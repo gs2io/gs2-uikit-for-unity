@@ -45,16 +45,16 @@ namespace Gs2.Unity.UiKit.Gs2Showcase.Enabler
             switch(this.expression)
             {
                 case Expression.In:
-                    this.target.SetActive(this.enableTypes.Contains(this._fetcher.DisplayItem.Type));
+                    this.target.SetActive(this.enableTypes.Contains(this._fetcher.DisplayItem?.Type ?? ""));
                     break;
                 case Expression.NotIn:
-                    this.target.SetActive(!this.enableTypes.Contains(this._fetcher.DisplayItem.Type));
+                    this.target.SetActive(!this.enableTypes.Contains(this._fetcher.DisplayItem?.Type ?? ""));
                     break;
                 case Expression.StartsWith:
-                    this.target.SetActive(this._fetcher.DisplayItem.Type.StartsWith(this.enableType));
+                    this.target.SetActive((this._fetcher.DisplayItem?.Type ?? "").StartsWith(this.enableType));
                     break;
                 case Expression.EndsWith:
-                    this.target.SetActive(this._fetcher.DisplayItem.Type.EndsWith(this.enableType));
+                    this.target.SetActive((this._fetcher.DisplayItem?.Type ?? "").EndsWith(this.enableType));
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();

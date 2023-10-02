@@ -45,22 +45,22 @@ namespace Gs2.Unity.UiKit.Gs2SkillTree.SpriteSwitcher
             switch(this.expression)
             {
                 case Expression.In:
-                    if (this.applyUserIds.Contains(this._fetcher.Status.UserId)) {
+                    if (this.applyUserIds.Contains(this._fetcher.Status?.UserId ?? "")) {
                         this.onUpdate.Invoke(this.sprite);
                     }
                     break;
                 case Expression.NotIn:
-                    if (!this.applyUserIds.Contains(this._fetcher.Status.UserId)) {
+                    if (!this.applyUserIds.Contains(this._fetcher.Status?.UserId ?? "")) {
                         this.onUpdate.Invoke(this.sprite);
                     }
                     break;
                 case Expression.StartsWith:
-                    if (this._fetcher.Status.UserId.StartsWith(this.applyUserId)) {
+                    if ((this._fetcher.Status?.UserId ?? "").StartsWith(this.applyUserId)) {
                         this.onUpdate.Invoke(this.sprite);
                     }
                     break;
                 case Expression.EndsWith:
-                    if (this._fetcher.Status.UserId.EndsWith(this.applyUserId)) {
+                    if ((this._fetcher.Status?.UserId ?? "").EndsWith(this.applyUserId)) {
                         this.onUpdate.Invoke(this.sprite);
                     }
                     break;

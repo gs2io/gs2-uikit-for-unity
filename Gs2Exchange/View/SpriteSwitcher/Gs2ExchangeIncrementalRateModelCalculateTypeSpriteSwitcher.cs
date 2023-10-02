@@ -45,22 +45,22 @@ namespace Gs2.Unity.UiKit.Gs2Exchange.SpriteSwitcher
             switch(this.expression)
             {
                 case Expression.In:
-                    if (this.applyCalculateTypes.Contains(this._fetcher.IncrementalRateModel.CalculateType)) {
+                    if (this.applyCalculateTypes.Contains(this._fetcher.IncrementalRateModel?.CalculateType ?? "")) {
                         this.onUpdate.Invoke(this.sprite);
                     }
                     break;
                 case Expression.NotIn:
-                    if (!this.applyCalculateTypes.Contains(this._fetcher.IncrementalRateModel.CalculateType)) {
+                    if (!this.applyCalculateTypes.Contains(this._fetcher.IncrementalRateModel?.CalculateType ?? "")) {
                         this.onUpdate.Invoke(this.sprite);
                     }
                     break;
                 case Expression.StartsWith:
-                    if (this._fetcher.IncrementalRateModel.CalculateType.StartsWith(this.applyCalculateType)) {
+                    if ((this._fetcher.IncrementalRateModel?.CalculateType ?? "").StartsWith(this.applyCalculateType)) {
                         this.onUpdate.Invoke(this.sprite);
                     }
                     break;
                 case Expression.EndsWith:
-                    if (this._fetcher.IncrementalRateModel.CalculateType.EndsWith(this.applyCalculateType)) {
+                    if ((this._fetcher.IncrementalRateModel?.CalculateType ?? "").EndsWith(this.applyCalculateType)) {
                         this.onUpdate.Invoke(this.sprite);
                     }
                     break;
