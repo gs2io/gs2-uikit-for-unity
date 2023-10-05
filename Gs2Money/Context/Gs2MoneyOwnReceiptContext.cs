@@ -84,6 +84,7 @@ namespace Gs2.Unity.UiKit.Gs2Money.Context
         }
 
         public void SetOwnReceipt(OwnReceipt receipt) {
+            if (receipt == null) return;
             this._receipt = receipt;
 
             this.OnUpdate.Invoke();

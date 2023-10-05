@@ -87,8 +87,10 @@ namespace Gs2.Unity.UiKit.Gs2Exchange.Context
             set => SetRateModel(value);
         }
 
-        public void SetRateModel(RateModel RateModel) {
-            this._rateModel = RateModel;
+        public void SetRateModel(RateModel rateModel) {
+            if (rateModel == null) return;
+
+            this._rateModel = rateModel;
 
             this.OnUpdate.Invoke();
         }

@@ -84,8 +84,10 @@ namespace Gs2.Unity.UiKit.Gs2Idle.Context
             set => SetAcquireAction(value);
         }
 
-        public void SetAcquireAction(AcquireAction AcquireAction) {
-            this._acquireAction = AcquireAction;
+        public void SetAcquireAction(AcquireAction acquireAction) {
+            if (acquireAction == null) return;
+
+            this._acquireAction = acquireAction;
 
             this.OnUpdate.Invoke();
         }

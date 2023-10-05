@@ -87,6 +87,7 @@ namespace Gs2.Unity.UiKit.Gs2Datastore.Context
         }
 
         public void SetOwnDataObject(OwnDataObject dataObject) {
+            if (dataObject == null) return;
             this._dataObject = dataObject;
 
             this.OnUpdate.Invoke();

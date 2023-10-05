@@ -88,6 +88,7 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Context
         }
 
         public void SetOwnMold(OwnMold mold) {
+            if (mold == null) return;
             this.MoldModel = MoldModel.New(
                 Namespace.New(
                     mold.NamespaceName

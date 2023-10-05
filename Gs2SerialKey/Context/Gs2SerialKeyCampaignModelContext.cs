@@ -84,8 +84,10 @@ namespace Gs2.Unity.UiKit.Gs2SerialKey.Context
             set => SetCampaignModel(value);
         }
 
-        public void SetCampaignModel(CampaignModel CampaignModel) {
-            this._campaignModel = CampaignModel;
+        public void SetCampaignModel(CampaignModel campaignModel) {
+            if (campaignModel == null) return;
+
+            this._campaignModel = campaignModel;
 
             this.OnUpdate.Invoke();
         }

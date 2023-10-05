@@ -83,6 +83,7 @@ namespace Gs2.Unity.UiKit.Core
     {
         public void SetFormat(string format) {
             this.format = format;
+            OnChangeValue();
         }
         public void SetTime(long time) {
             this.time = time;

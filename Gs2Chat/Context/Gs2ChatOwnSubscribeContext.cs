@@ -87,6 +87,7 @@ namespace Gs2.Unity.UiKit.Gs2Chat.Context
         }
 
         public void SetOwnSubscribe(OwnSubscribe subscribe) {
+            if (subscribe == null) return;
             this._subscribe = subscribe;
 
             this.OnUpdate.Invoke();

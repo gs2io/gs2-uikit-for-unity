@@ -72,7 +72,7 @@ namespace Gs2.Unity.UiKit.Gs2Schedule
         private void Initialize() {
             for (var i = 0; i < this.maximumItems; i++) {
                 var node = Instantiate(this.prefab, transform);
-                node.Event_ = OwnEvent.New(
+                node.Event = OwnEvent.New(
                     this._fetcher.Context.Namespace,
                     ""
                 );

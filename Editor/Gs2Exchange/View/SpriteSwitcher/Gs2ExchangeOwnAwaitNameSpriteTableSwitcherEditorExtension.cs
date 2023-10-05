@@ -57,11 +57,11 @@ namespace Gs2.Unity.UiKit.Gs2Exchange.SpriteSwitcher.Editor
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2ExchangeOwnAwaitContext), false);
                     EditorGUI.indentLevel++;
-                    context.Await_ = EditorGUILayout.ObjectField("Await", context.Await_, typeof(OwnAwait), false) as OwnAwait;
-                    if (context.Await_ != null) {
+                    context.Await = EditorGUILayout.ObjectField("Await", context.Await, typeof(OwnAwait), false) as OwnAwait;
+                    if (context.Await != null) {
                         EditorGUI.indentLevel++;
-                        EditorGUILayout.TextField("NamespaceName", context.Await_?.NamespaceName?.ToString());
-                        EditorGUILayout.TextField("AwaitName", context.Await_?.AwaitName?.ToString());
+                        EditorGUILayout.TextField("NamespaceName", context.Await?.NamespaceName?.ToString());
+                        EditorGUILayout.TextField("AwaitName", context.Await?.AwaitName?.ToString());
                         EditorGUI.indentLevel--;
                     }
                     EditorGUI.indentLevel--;

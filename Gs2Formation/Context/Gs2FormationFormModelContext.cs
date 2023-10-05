@@ -84,8 +84,10 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Context
             set => SetFormModel(value);
         }
 
-        public void SetFormModel(FormModel FormModel) {
-            this._formModel = FormModel;
+        public void SetFormModel(FormModel formModel) {
+            if (formModel == null) return;
+
+            this._formModel = formModel;
 
             this.OnUpdate.Invoke();
         }

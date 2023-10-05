@@ -84,6 +84,7 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Context
         }
 
         public void SetOwnReferenceOf(OwnReferenceOf referenceOf) {
+            if (referenceOf == null) return;
             this._referenceOf = referenceOf;
 
             this.OnUpdate.Invoke();

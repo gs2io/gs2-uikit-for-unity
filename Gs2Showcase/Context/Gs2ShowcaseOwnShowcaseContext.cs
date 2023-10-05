@@ -84,6 +84,7 @@ namespace Gs2.Unity.UiKit.Gs2Showcase.Context
         }
 
         public void SetOwnShowcase(OwnShowcase showcase) {
+            if (showcase == null) return;
             this._showcase = showcase;
 
             this.OnUpdate.Invoke();

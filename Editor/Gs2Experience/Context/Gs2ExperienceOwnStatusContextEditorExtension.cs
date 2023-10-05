@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
@@ -48,6 +50,12 @@ namespace Gs2.Unity.UiKit.Gs2Experience.Editor
                     EditorGUILayout.HelpBox("Status is auto assign from Gs2ExperienceOwnStatusList.", MessageType.Info);
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("List", list, typeof(Gs2ExperienceOwnStatusList), false);
+                    EditorGUI.EndDisabledGroup();
+                }
+                else if (original.GetComponentInParent<Gs2ExperienceConvertInventoryItemSetToOwnStatus>(true) != null) {
+                    EditorGUILayout.HelpBox("Status is auto assign from Gs2ExperienceConvertInventoryItemSetToOwnStatus.", MessageType.Info);
+                    EditorGUI.BeginDisabledGroup(true);
+                    EditorGUILayout.ObjectField("Converter", original.GetComponentInParent<Gs2ExperienceConvertInventoryItemSetToOwnStatus>(true), typeof(Gs2ExperienceConvertInventoryItemSetToOwnStatus), false);
                     EditorGUI.EndDisabledGroup();
                 }
                 else {

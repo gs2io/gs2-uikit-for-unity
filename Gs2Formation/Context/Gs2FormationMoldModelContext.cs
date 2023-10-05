@@ -87,8 +87,10 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Context
             set => SetMoldModel(value);
         }
 
-        public void SetMoldModel(MoldModel MoldModel) {
-            this._moldModel = MoldModel;
+        public void SetMoldModel(MoldModel moldModel) {
+            if (moldModel == null) return;
+
+            this._moldModel = moldModel;
 
             this.OnUpdate.Invoke();
         }

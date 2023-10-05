@@ -84,8 +84,10 @@ namespace Gs2.Unity.UiKit.Gs2SerialKey.Context
             set => SetSerialKey(value);
         }
 
-        public void SetSerialKey(SerialKey SerialKey) {
-            this._serialKey = SerialKey;
+        public void SetSerialKey(SerialKey serialKey) {
+            if (serialKey == null) return;
+
+            this._serialKey = serialKey;
 
             this.OnUpdate.Invoke();
         }

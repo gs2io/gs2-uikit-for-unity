@@ -84,8 +84,10 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Context
             set => SetNamespace(value);
         }
 
-        public void SetNamespace(Namespace Namespace) {
-            this._namespace = Namespace;
+        public void SetNamespace(Namespace namespace_) {
+            if (namespace_ == null) return;
+
+            this._namespace = namespace_;
 
             this.OnUpdate.Invoke();
         }

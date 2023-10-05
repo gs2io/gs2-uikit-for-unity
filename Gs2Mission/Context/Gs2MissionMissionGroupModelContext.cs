@@ -87,8 +87,10 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Context
             set => SetMissionGroupModel(value);
         }
 
-        public void SetMissionGroupModel(MissionGroupModel MissionGroupModel) {
-            this._missionGroupModel = MissionGroupModel;
+        public void SetMissionGroupModel(MissionGroupModel missionGroupModel) {
+            if (missionGroupModel == null) return;
+
+            this._missionGroupModel = missionGroupModel;
 
             this.OnUpdate.Invoke();
         }

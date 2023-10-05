@@ -87,8 +87,10 @@ namespace Gs2.Unity.UiKit.Gs2LoginReward.Context
             set => SetBonusModel(value);
         }
 
-        public void SetBonusModel(BonusModel BonusModel) {
-            this._bonusModel = BonusModel;
+        public void SetBonusModel(BonusModel bonusModel) {
+            if (bonusModel == null) return;
+
+            this._bonusModel = bonusModel;
 
             this.OnUpdate.Invoke();
         }

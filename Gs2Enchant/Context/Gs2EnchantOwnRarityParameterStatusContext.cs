@@ -87,6 +87,7 @@ namespace Gs2.Unity.UiKit.Gs2Enchant.Context
         }
 
         public void SetOwnRarityParameterStatus(OwnRarityParameterStatus rarityParameterStatus) {
+            if (rarityParameterStatus == null) return;
             this._rarityParameterStatus = rarityParameterStatus;
 
             this.OnUpdate.Invoke();

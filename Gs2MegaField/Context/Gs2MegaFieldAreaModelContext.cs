@@ -87,8 +87,10 @@ namespace Gs2.Unity.UiKit.Gs2MegaField.Context
             set => SetAreaModel(value);
         }
 
-        public void SetAreaModel(AreaModel AreaModel) {
-            this._areaModel = AreaModel;
+        public void SetAreaModel(AreaModel areaModel) {
+            if (areaModel == null) return;
+
+            this._areaModel = areaModel;
 
             this.OnUpdate.Invoke();
         }

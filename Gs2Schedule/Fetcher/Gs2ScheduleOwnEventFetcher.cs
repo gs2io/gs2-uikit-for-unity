@@ -60,14 +60,14 @@ namespace Gs2.Unity.UiKit.Gs2Schedule.Fetcher
 
             yield return new WaitUntil(() => clientHolder.Initialized);
             yield return new WaitUntil(() => gameSessionHolder.Initialized);
-            yield return new WaitUntil(() => Context != null && this.Context.Event_ != null);
+            yield return new WaitUntil(() => Context != null && this.Context.Event != null);
 
             this._domain = clientHolder.Gs2.Schedule.Namespace(
-                this.Context.Event_.NamespaceName
+                this.Context.Event.NamespaceName
             ).Me(
                 gameSessionHolder.GameSession
             ).Event(
-                this.Context.Event_.EventName
+                this.Context.Event.EventName
             );;
             this._callbackId = this._domain.Subscribe(
                 item =>

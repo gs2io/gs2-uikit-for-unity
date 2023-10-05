@@ -84,6 +84,7 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking.Context
         }
 
         public void SetOwnBallot(OwnBallot ballot) {
+            if (ballot == null) return;
             this._ballot = ballot;
 
             this.OnUpdate.Invoke();

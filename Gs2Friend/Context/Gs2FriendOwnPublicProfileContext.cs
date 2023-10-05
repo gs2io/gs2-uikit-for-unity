@@ -84,6 +84,7 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Context
         }
 
         public void SetOwnPublicProfile(OwnPublicProfile publicProfile) {
+            if (publicProfile == null) return;
             this._publicProfile = publicProfile;
 
             this.OnUpdate.Invoke();

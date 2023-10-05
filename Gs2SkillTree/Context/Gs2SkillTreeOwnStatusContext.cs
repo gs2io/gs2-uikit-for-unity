@@ -84,6 +84,7 @@ namespace Gs2.Unity.UiKit.Gs2SkillTree.Context
         }
 
         public void SetOwnStatus(OwnStatus status) {
+            if (status == null) return;
             this._status = status;
 
             this.OnUpdate.Invoke();

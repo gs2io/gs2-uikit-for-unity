@@ -87,8 +87,10 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Context
             set => SetItemModel(value);
         }
 
-        public void SetItemModel(ItemModel ItemModel) {
-            this._itemModel = ItemModel;
+        public void SetItemModel(ItemModel itemModel) {
+            if (itemModel == null) return;
+
+            this._itemModel = itemModel;
 
             this.OnUpdate.Invoke();
         }

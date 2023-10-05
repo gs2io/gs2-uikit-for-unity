@@ -87,6 +87,7 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Context
         }
 
         public void SetOwnBlackList(OwnBlackList blackList) {
+            if (blackList == null) return;
             this._blackList = blackList;
 
             this.OnUpdate.Invoke();

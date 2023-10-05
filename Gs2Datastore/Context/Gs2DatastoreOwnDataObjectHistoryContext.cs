@@ -87,6 +87,7 @@ namespace Gs2.Unity.UiKit.Gs2Datastore.Context
         }
 
         public void SetOwnDataObjectHistory(OwnDataObjectHistory dataObjectHistory) {
+            if (dataObjectHistory == null) return;
             this._dataObjectHistory = dataObjectHistory;
 
             this.OnUpdate.Invoke();

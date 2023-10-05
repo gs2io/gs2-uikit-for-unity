@@ -84,6 +84,7 @@ namespace Gs2.Unity.UiKit.Gs2Gateway.Context
         }
 
         public void SetOwnWebSocketSession(OwnWebSocketSession webSocketSession) {
+            if (webSocketSession == null) return;
             this._webSocketSession = webSocketSession;
 
             this.OnUpdate.Invoke();

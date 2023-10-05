@@ -42,7 +42,7 @@ namespace Gs2.Unity.UiKit.Gs2Exchange.Editor
 
             serializedObject.Update();
 
-            if (original.Await_ == null) {
+            if (original.Await == null) {
                 var list = original.GetComponentInParent<Gs2ExchangeOwnAwaitList>(true);
                 if (list != null) {
                     EditorGUILayout.HelpBox("Await is auto assign from Gs2ExchangeOwnAwaitList.", MessageType.Info);
@@ -56,12 +56,12 @@ namespace Gs2.Unity.UiKit.Gs2Exchange.Editor
                 }
             }
             else {
-                original.Await_ = EditorGUILayout.ObjectField("OwnAwait", original.Await_, typeof(OwnAwait), false) as OwnAwait;
+                original.Await = EditorGUILayout.ObjectField("OwnAwait", original.Await, typeof(OwnAwait), false) as OwnAwait;
                 EditorGUI.BeginDisabledGroup(true);
-                if (original.Await_ != null) {
+                if (original.Await != null) {
                     EditorGUI.indentLevel++;
-                    EditorGUILayout.TextField("NamespaceName", original.Await_?.NamespaceName?.ToString());
-                    EditorGUILayout.TextField("AwaitName", original.Await_?.AwaitName?.ToString());
+                    EditorGUILayout.TextField("NamespaceName", original.Await?.NamespaceName?.ToString());
+                    EditorGUILayout.TextField("AwaitName", original.Await?.AwaitName?.ToString());
                     EditorGUI.indentLevel--;
                 }
                 EditorGUI.EndDisabledGroup();

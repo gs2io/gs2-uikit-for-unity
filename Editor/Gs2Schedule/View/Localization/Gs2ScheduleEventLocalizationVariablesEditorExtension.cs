@@ -63,11 +63,11 @@ namespace Gs2.Unity.UiKit.Gs2Schedule.Localization.Editor
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2ScheduleOwnEventFetcher), false);
                     EditorGUI.indentLevel++;
-                    context.Event_ = EditorGUILayout.ObjectField("Event", context.Event_, typeof(OwnEvent), false) as OwnEvent;
-                    if (context.Event_ != null) {
+                    context.Event = EditorGUILayout.ObjectField("Event", context.Event, typeof(OwnEvent), false) as OwnEvent;
+                    if (context.Event != null) {
                         EditorGUI.indentLevel++;
-                        EditorGUILayout.TextField("NamespaceName", context.Event_?.NamespaceName?.ToString());
-                        EditorGUILayout.TextField("EventName", context.Event_?.EventName?.ToString());
+                        EditorGUILayout.TextField("NamespaceName", context.Event?.NamespaceName?.ToString());
+                        EditorGUILayout.TextField("EventName", context.Event?.EventName?.ToString());
                         EditorGUI.indentLevel--;
                     }
                     EditorGUI.indentLevel--;

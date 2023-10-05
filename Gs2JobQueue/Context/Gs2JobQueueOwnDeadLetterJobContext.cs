@@ -84,6 +84,7 @@ namespace Gs2.Unity.UiKit.Gs2JobQueue.Context
         }
 
         public void SetOwnDeadLetterJob(OwnDeadLetterJob deadLetterJob) {
+            if (deadLetterJob == null) return;
             this._deadLetterJob = deadLetterJob;
 
             this.OnUpdate.Invoke();

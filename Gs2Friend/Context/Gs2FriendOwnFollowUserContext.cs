@@ -87,6 +87,7 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Context
         }
 
         public void SetOwnFollowUser(OwnFollowUser followUser) {
+            if (followUser == null) return;
             this._followUser = followUser;
 
             this.OnUpdate.Invoke();

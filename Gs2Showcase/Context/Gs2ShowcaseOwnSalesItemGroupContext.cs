@@ -84,6 +84,7 @@ namespace Gs2.Unity.UiKit.Gs2Showcase.Context
         }
 
         public void SetOwnSalesItemGroup(OwnSalesItemGroup salesItemGroup) {
+            if (salesItemGroup == null) return;
             this._salesItemGroup = salesItemGroup;
 
             this.OnUpdate.Invoke();

@@ -87,6 +87,7 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Context
         }
 
         public void SetOwnScore(OwnScore score) {
+            if (score == null) return;
             this._score = score;
 
             this.OnUpdate.Invoke();

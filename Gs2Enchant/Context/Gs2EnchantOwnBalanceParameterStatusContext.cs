@@ -87,6 +87,7 @@ namespace Gs2.Unity.UiKit.Gs2Enchant.Context
         }
 
         public void SetOwnBalanceParameterStatus(OwnBalanceParameterStatus balanceParameterStatus) {
+            if (balanceParameterStatus == null) return;
             this._balanceParameterStatus = balanceParameterStatus;
 
             this.OnUpdate.Invoke();

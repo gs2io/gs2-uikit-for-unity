@@ -88,6 +88,7 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking.Context
         }
 
         public void SetOwnRating(OwnRating rating) {
+            if (rating == null) return;
             this.RatingModel = RatingModel.New(
                 Namespace.New(
                     rating.NamespaceName

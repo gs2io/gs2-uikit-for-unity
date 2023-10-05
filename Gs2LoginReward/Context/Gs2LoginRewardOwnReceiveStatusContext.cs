@@ -87,6 +87,7 @@ namespace Gs2.Unity.UiKit.Gs2LoginReward.Context
         }
 
         public void SetOwnReceiveStatus(OwnReceiveStatus receiveStatus) {
+            if (receiveStatus == null) return;
             this._receiveStatus = receiveStatus;
 
             this.OnUpdate.Invoke();

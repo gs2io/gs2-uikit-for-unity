@@ -87,8 +87,10 @@ namespace Gs2.Unity.UiKit.Gs2MegaField.Context
             set => SetLayerModel(value);
         }
 
-        public void SetLayerModel(LayerModel LayerModel) {
-            this._layerModel = LayerModel;
+        public void SetLayerModel(LayerModel layerModel) {
+            if (layerModel == null) return;
+
+            this._layerModel = layerModel;
 
             this.OnUpdate.Invoke();
         }

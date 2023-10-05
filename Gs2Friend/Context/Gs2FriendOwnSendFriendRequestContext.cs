@@ -87,6 +87,7 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Context
         }
 
         public void SetOwnSendFriendRequest(OwnSendFriendRequest sendFriendRequest) {
+            if (sendFriendRequest == null) return;
             this._sendFriendRequest = sendFriendRequest;
 
             this.OnUpdate.Invoke();

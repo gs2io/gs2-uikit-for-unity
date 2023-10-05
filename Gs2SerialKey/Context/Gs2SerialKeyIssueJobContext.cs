@@ -84,8 +84,10 @@ namespace Gs2.Unity.UiKit.Gs2SerialKey.Context
             set => SetIssueJob(value);
         }
 
-        public void SetIssueJob(IssueJob IssueJob) {
-            this._issueJob = IssueJob;
+        public void SetIssueJob(IssueJob issueJob) {
+            if (issueJob == null) return;
+
+            this._issueJob = issueJob;
 
             this.OnUpdate.Invoke();
         }

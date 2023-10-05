@@ -84,8 +84,10 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking.Context
             set => SetGathering(value);
         }
 
-        public void SetGathering(Gathering Gathering) {
-            this._gathering = Gathering;
+        public void SetGathering(Gathering gathering) {
+            if (gathering == null) return;
+
+            this._gathering = gathering;
 
             this.OnUpdate.Invoke();
         }

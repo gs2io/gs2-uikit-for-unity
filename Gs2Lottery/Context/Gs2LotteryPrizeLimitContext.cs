@@ -84,8 +84,10 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.Context
             set => SetPrizeLimit(value);
         }
 
-        public void SetPrizeLimit(PrizeLimit PrizeLimit) {
-            this._prizeLimit = PrizeLimit;
+        public void SetPrizeLimit(PrizeLimit prizeLimit) {
+            if (prizeLimit == null) return;
+
+            this._prizeLimit = prizeLimit;
 
             this.OnUpdate.Invoke();
         }

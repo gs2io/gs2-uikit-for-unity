@@ -88,6 +88,7 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Context
         }
 
         public void SetOwnInventory(OwnInventory inventory) {
+            if (inventory == null) return;
             this.InventoryModel = InventoryModel.New(
                 Namespace.New(
                     inventory.NamespaceName

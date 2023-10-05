@@ -88,6 +88,7 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Context
         }
 
         public void SetOwnForm(OwnForm form) {
+            if (form == null) return;
             this.FormModel = FormModel.New(
                 MoldModel.New(
                     Namespace.New(

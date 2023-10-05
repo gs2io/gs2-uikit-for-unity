@@ -87,6 +87,7 @@ namespace Gs2.Unity.UiKit.Gs2Schedule.Context
         }
 
         public void SetOwnTrigger(OwnTrigger trigger) {
+            if (trigger == null) return;
             this._trigger = trigger;
 
             this.OnUpdate.Invoke();

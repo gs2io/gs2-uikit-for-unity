@@ -87,11 +87,7 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Fetcher
             retryWaitSecond = 1;
             ItemSets = items;
             Fetched = true;
-
             this.OnFetched.Invoke();
-            
-            yield return new WaitForSeconds(1);
-            StartCoroutine(nameof(Load));
         }
 
         private IEnumerator Fetch()

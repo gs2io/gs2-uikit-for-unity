@@ -84,8 +84,10 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.Context
             set => SetPrizeTable(value);
         }
 
-        public void SetPrizeTable(PrizeTable PrizeTable) {
-            this._prizeTable = PrizeTable;
+        public void SetPrizeTable(PrizeTable prizeTable) {
+            if (prizeTable == null) return;
+
+            this._prizeTable = prizeTable;
 
             this.OnUpdate.Invoke();
         }

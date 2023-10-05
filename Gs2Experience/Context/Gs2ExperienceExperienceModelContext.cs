@@ -87,8 +87,10 @@ namespace Gs2.Unity.UiKit.Gs2Experience.Context
             set => SetExperienceModel(value);
         }
 
-        public void SetExperienceModel(ExperienceModel ExperienceModel) {
-            this._experienceModel = ExperienceModel;
+        public void SetExperienceModel(ExperienceModel experienceModel) {
+            if (experienceModel == null) return;
+
+            this._experienceModel = experienceModel;
 
             this.OnUpdate.Invoke();
         }

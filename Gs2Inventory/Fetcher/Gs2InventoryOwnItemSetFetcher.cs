@@ -78,7 +78,7 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Fetcher
             this._callbackId = this._domain.Subscribe(
                 item =>
                 {
-                    ItemSet = item == null ? new List<EzItemSet>() : item.ToList();
+                    ItemSet = new []{ item }.ToList();
                     Fetched = true;
                     this.OnFetched.Invoke();
                 }

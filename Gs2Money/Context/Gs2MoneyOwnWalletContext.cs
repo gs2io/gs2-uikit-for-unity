@@ -84,6 +84,7 @@ namespace Gs2.Unity.UiKit.Gs2Money.Context
         }
 
         public void SetOwnWallet(OwnWallet wallet) {
+            if (wallet == null) return;
             this._wallet = wallet;
 
             this.OnUpdate.Invoke();

@@ -84,6 +84,7 @@ namespace Gs2.Unity.UiKit.Gs2MegaField.Context
         }
 
         public void SetOwnSpatial(OwnSpatial spatial) {
+            if (spatial == null) return;
             this._spatial = spatial;
 
             this.OnUpdate.Invoke();

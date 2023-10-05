@@ -87,8 +87,10 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Context
             set => SetBigInventoryModel(value);
         }
 
-        public void SetBigInventoryModel(BigInventoryModel BigInventoryModel) {
-            this._bigInventoryModel = BigInventoryModel;
+        public void SetBigInventoryModel(BigInventoryModel bigInventoryModel) {
+            if (bigInventoryModel == null) return;
+
+            this._bigInventoryModel = bigInventoryModel;
 
             this.OnUpdate.Invoke();
         }

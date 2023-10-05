@@ -84,8 +84,10 @@ namespace Gs2.Unity.UiKit.Gs2Chat.Context
             set => SetRoom(value);
         }
 
-        public void SetRoom(Room Room) {
-            this._room = Room;
+        public void SetRoom(Room room) {
+            if (room == null) return;
+
+            this._room = room;
 
             this.OnUpdate.Invoke();
         }

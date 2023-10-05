@@ -72,7 +72,7 @@ namespace Gs2.Unity.UiKit.Gs2Exchange
         private void Initialize() {
             for (var i = 0; i < this.maximumItems; i++) {
                 var node = Instantiate(this.prefab, transform);
-                node.Await_ = OwnAwait.New(
+                node.Await = OwnAwait.New(
                     this._fetcher.Context.Namespace,
                     ""
                 );

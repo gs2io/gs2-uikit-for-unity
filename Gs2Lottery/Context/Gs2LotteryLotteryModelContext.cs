@@ -87,8 +87,10 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.Context
             set => SetLotteryModel(value);
         }
 
-        public void SetLotteryModel(LotteryModel LotteryModel) {
-            this._lotteryModel = LotteryModel;
+        public void SetLotteryModel(LotteryModel lotteryModel) {
+            if (lotteryModel == null) return;
+
+            this._lotteryModel = lotteryModel;
 
             this.OnUpdate.Invoke();
         }

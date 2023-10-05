@@ -60,14 +60,14 @@ namespace Gs2.Unity.UiKit.Gs2Exchange.Fetcher
 
             yield return new WaitUntil(() => clientHolder.Initialized);
             yield return new WaitUntil(() => gameSessionHolder.Initialized);
-            yield return new WaitUntil(() => Context != null && this.Context.Await_ != null);
+            yield return new WaitUntil(() => Context != null && this.Context.Await != null);
 
             this._domain = clientHolder.Gs2.Exchange.Namespace(
-                this.Context.Await_.NamespaceName
+                this.Context.Await.NamespaceName
             ).Me(
                 gameSessionHolder.GameSession
             ).Await(
-                this.Context.Await_.AwaitName
+                this.Context.Await.AwaitName
             );;
             this._callbackId = this._domain.Subscribe(
                 item =>

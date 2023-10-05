@@ -88,6 +88,7 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Context
         }
 
         public void SetOwnBigItem(OwnBigItem bigItem) {
+            if (bigItem == null) return;
             this.BigItemModel = BigItemModel.New(
                 BigInventoryModel.New(
                     Namespace.New(

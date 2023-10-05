@@ -87,8 +87,10 @@ namespace Gs2.Unity.UiKit.Gs2Dictionary.Context
             set => SetEntryModel(value);
         }
 
-        public void SetEntryModel(EntryModel EntryModel) {
-            this._entryModel = EntryModel;
+        public void SetEntryModel(EntryModel entryModel) {
+            if (entryModel == null) return;
+
+            this._entryModel = entryModel;
 
             this.OnUpdate.Invoke();
         }

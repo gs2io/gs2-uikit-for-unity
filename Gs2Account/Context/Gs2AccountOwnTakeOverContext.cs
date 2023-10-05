@@ -87,6 +87,7 @@ namespace Gs2.Unity.UiKit.Gs2Account.Context
         }
 
         public void SetOwnTakeOver(OwnTakeOver takeOver) {
+            if (takeOver == null) return;
             this._takeOver = takeOver;
 
             this.OnUpdate.Invoke();

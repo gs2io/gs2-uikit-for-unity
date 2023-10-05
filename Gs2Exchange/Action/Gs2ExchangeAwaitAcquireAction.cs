@@ -55,11 +55,11 @@ namespace Gs2.Unity.UiKit.Gs2Exchange
             yield return new WaitUntil(() => gameSessionHolder.Initialized);
             
             var domain = clientHolder.Gs2.Exchange.Namespace(
-                this._context.Await_.NamespaceName
+                this._context.Await.NamespaceName
             ).Me(
                 gameSessionHolder.GameSession
             ).Await(
-                this._context.Await_.AwaitName
+                this._context.Await.AwaitName
             );
             var future = domain.Acquire(
             );

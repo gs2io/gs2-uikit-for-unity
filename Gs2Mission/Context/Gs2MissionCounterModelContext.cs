@@ -87,8 +87,10 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Context
             set => SetCounterModel(value);
         }
 
-        public void SetCounterModel(CounterModel CounterModel) {
-            this._counterModel = CounterModel;
+        public void SetCounterModel(CounterModel counterModel) {
+            if (counterModel == null) return;
+
+            this._counterModel = counterModel;
 
             this.OnUpdate.Invoke();
         }

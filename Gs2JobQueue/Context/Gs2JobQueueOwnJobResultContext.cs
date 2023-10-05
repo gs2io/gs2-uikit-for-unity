@@ -84,6 +84,7 @@ namespace Gs2.Unity.UiKit.Gs2JobQueue.Context
         }
 
         public void SetOwnJobResult(OwnJobResult jobResult) {
+            if (jobResult == null) return;
             this._jobResult = jobResult;
 
             this.OnUpdate.Invoke();

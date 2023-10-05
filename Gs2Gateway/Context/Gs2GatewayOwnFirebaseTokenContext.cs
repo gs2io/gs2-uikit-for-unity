@@ -84,6 +84,7 @@ namespace Gs2.Unity.UiKit.Gs2Gateway.Context
         }
 
         public void SetOwnFirebaseToken(OwnFirebaseToken firebaseToken) {
+            if (firebaseToken == null) return;
             this._firebaseToken = firebaseToken;
 
             this.OnUpdate.Invoke();

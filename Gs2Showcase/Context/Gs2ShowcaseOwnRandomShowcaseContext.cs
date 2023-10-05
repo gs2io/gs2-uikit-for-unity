@@ -84,6 +84,7 @@ namespace Gs2.Unity.UiKit.Gs2Showcase.Context
         }
 
         public void SetOwnRandomShowcase(OwnRandomShowcase randomShowcase) {
+            if (randomShowcase == null) return;
             this._randomShowcase = randomShowcase;
 
             this.OnUpdate.Invoke();

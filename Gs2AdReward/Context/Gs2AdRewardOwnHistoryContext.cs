@@ -84,6 +84,7 @@ namespace Gs2.Unity.UiKit.Gs2AdReward.Context
         }
 
         public void SetOwnHistory(OwnHistory history) {
+            if (history == null) return;
             this._history = history;
 
             this.OnUpdate.Invoke();

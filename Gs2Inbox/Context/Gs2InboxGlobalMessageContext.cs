@@ -84,8 +84,10 @@ namespace Gs2.Unity.UiKit.Gs2Inbox.Context
             set => SetGlobalMessage(value);
         }
 
-        public void SetGlobalMessage(GlobalMessage GlobalMessage) {
-            this._globalMessage = GlobalMessage;
+        public void SetGlobalMessage(GlobalMessage globalMessage) {
+            if (globalMessage == null) return;
+
+            this._globalMessage = globalMessage;
 
             this.OnUpdate.Invoke();
         }

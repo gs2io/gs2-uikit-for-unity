@@ -87,8 +87,10 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Context
             set => SetPropertyFormModel(value);
         }
 
-        public void SetPropertyFormModel(PropertyFormModel PropertyFormModel) {
-            this._propertyFormModel = PropertyFormModel;
+        public void SetPropertyFormModel(PropertyFormModel propertyFormModel) {
+            if (propertyFormModel == null) return;
+
+            this._propertyFormModel = propertyFormModel;
 
             this.OnUpdate.Invoke();
         }

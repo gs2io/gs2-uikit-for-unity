@@ -84,6 +84,7 @@ namespace Gs2.Unity.UiKit.Gs2Account.Context
         }
 
         public void SetOwnAccount(OwnAccount account) {
+            if (account == null) return;
             this._account = account;
 
             this.OnUpdate.Invoke();

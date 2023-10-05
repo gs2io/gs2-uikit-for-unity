@@ -87,8 +87,10 @@ namespace Gs2.Unity.UiKit.Gs2Enchant.Context
             set => SetBalanceParameterModel(value);
         }
 
-        public void SetBalanceParameterModel(BalanceParameterModel BalanceParameterModel) {
-            this._balanceParameterModel = BalanceParameterModel;
+        public void SetBalanceParameterModel(BalanceParameterModel balanceParameterModel) {
+            if (balanceParameterModel == null) return;
+
+            this._balanceParameterModel = balanceParameterModel;
 
             this.OnUpdate.Invoke();
         }

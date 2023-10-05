@@ -87,6 +87,7 @@ namespace Gs2.Unity.UiKit.Gs2Inbox.Context
         }
 
         public void SetOwnMessage(OwnMessage message) {
+            if (message == null) return;
             this._message = message;
 
             this.OnUpdate.Invoke();

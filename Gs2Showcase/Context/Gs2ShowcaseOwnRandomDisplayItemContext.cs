@@ -87,6 +87,7 @@ namespace Gs2.Unity.UiKit.Gs2Showcase.Context
         }
 
         public void SetOwnRandomDisplayItem(OwnRandomDisplayItem randomDisplayItem) {
+            if (randomDisplayItem == null) return;
             this._randomDisplayItem = randomDisplayItem;
 
             this.OnUpdate.Invoke();

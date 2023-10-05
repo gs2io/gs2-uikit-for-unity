@@ -53,11 +53,11 @@ namespace Gs2.Unity.UiKit.Gs2Exchange.Fetcher
             var action = _fetcher.ConsumeActions().FirstOrDefault(v => v.Action == "Gs2Exchange:DeleteAwaitByUserId");
             if (action != null) {
                 Request = DeleteAwaitByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
-                if (Await_ == null || (
-                        Await_.NamespaceName == Request.NamespaceName &&
-                        Await_.AwaitName == Request.AwaitName)
+                if (Await == null || (
+                        Await.NamespaceName == Request.NamespaceName &&
+                        Await.AwaitName == Request.AwaitName)
                    ) {
-                    Await_ = OwnAwait.New(
+                    Await = OwnAwait.New(
                                 Namespace.New(
                                     Request.NamespaceName
                                 ),

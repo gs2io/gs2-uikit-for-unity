@@ -88,6 +88,7 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Context
         }
 
         public void SetOwnCounter(OwnCounter counter) {
+            if (counter == null) return;
             this.CounterModel = CounterModel.New(
                 Namespace.New(
                     counter.NamespaceName

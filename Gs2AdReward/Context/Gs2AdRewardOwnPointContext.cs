@@ -84,6 +84,7 @@ namespace Gs2.Unity.UiKit.Gs2AdReward.Context
         }
 
         public void SetOwnPoint(OwnPoint point) {
+            if (point == null) return;
             this._point = point;
 
             this.OnUpdate.Invoke();

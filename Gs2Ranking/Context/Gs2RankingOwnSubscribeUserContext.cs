@@ -87,6 +87,7 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Context
         }
 
         public void SetOwnSubscribeUser(OwnSubscribeUser subscribeUser) {
+            if (subscribeUser == null) return;
             this._subscribeUser = subscribeUser;
 
             this.OnUpdate.Invoke();

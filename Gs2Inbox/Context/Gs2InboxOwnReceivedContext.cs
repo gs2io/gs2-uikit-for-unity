@@ -84,6 +84,7 @@ namespace Gs2.Unity.UiKit.Gs2Inbox.Context
         }
 
         public void SetOwnReceived(OwnReceived received) {
+            if (received == null) return;
             this._received = received;
 
             this.OnUpdate.Invoke();

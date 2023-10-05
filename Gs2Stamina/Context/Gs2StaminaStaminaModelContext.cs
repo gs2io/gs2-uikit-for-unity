@@ -87,8 +87,10 @@ namespace Gs2.Unity.UiKit.Gs2Stamina.Context
             set => SetStaminaModel(value);
         }
 
-        public void SetStaminaModel(StaminaModel StaminaModel) {
-            this._staminaModel = StaminaModel;
+        public void SetStaminaModel(StaminaModel staminaModel) {
+            if (staminaModel == null) return;
+
+            this._staminaModel = staminaModel;
 
             this.OnUpdate.Invoke();
         }

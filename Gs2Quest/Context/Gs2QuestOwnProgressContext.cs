@@ -84,6 +84,7 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Context
         }
 
         public void SetOwnProgress(OwnProgress progress) {
+            if (progress == null) return;
             this._progress = progress;
 
             this.OnUpdate.Invoke();

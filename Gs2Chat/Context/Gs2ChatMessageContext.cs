@@ -87,8 +87,10 @@ namespace Gs2.Unity.UiKit.Gs2Chat.Context
             set => SetMessage(value);
         }
 
-        public void SetMessage(Message Message) {
-            this._message = Message;
+        public void SetMessage(Message message) {
+            if (message == null) return;
+
+            this._message = message;
 
             this.OnUpdate.Invoke();
         }

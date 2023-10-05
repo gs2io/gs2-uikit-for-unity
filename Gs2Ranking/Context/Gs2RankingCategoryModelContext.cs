@@ -87,8 +87,10 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Context
             set => SetCategoryModel(value);
         }
 
-        public void SetCategoryModel(CategoryModel CategoryModel) {
-            this._categoryModel = CategoryModel;
+        public void SetCategoryModel(CategoryModel categoryModel) {
+            if (categoryModel == null) return;
+
+            this._categoryModel = categoryModel;
 
             this.OnUpdate.Invoke();
         }

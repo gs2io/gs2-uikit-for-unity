@@ -87,8 +87,10 @@ namespace Gs2.Unity.UiKit.Gs2SkillTree.Context
             set => SetNodeModel(value);
         }
 
-        public void SetNodeModel(NodeModel NodeModel) {
-            this._nodeModel = NodeModel;
+        public void SetNodeModel(NodeModel nodeModel) {
+            if (nodeModel == null) return;
+
+            this._nodeModel = nodeModel;
 
             this.OnUpdate.Invoke();
         }

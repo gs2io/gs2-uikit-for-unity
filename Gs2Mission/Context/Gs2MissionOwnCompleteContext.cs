@@ -87,6 +87,7 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Context
         }
 
         public void SetOwnComplete(OwnComplete complete) {
+            if (complete == null) return;
             this._complete = complete;
 
             this.OnUpdate.Invoke();

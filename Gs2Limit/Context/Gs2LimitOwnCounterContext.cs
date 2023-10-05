@@ -87,6 +87,7 @@ namespace Gs2.Unity.UiKit.Gs2Limit.Context
         }
 
         public void SetOwnCounter(OwnCounter counter) {
+            if (counter == null) return;
             this._counter = counter;
 
             this.OnUpdate.Invoke();

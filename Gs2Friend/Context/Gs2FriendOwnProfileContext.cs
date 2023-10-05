@@ -84,6 +84,7 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Context
         }
 
         public void SetOwnProfile(OwnProfile profile) {
+            if (profile == null) return;
             this._profile = profile;
 
             this.OnUpdate.Invoke();

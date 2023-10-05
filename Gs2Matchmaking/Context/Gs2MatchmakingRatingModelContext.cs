@@ -87,8 +87,10 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking.Context
             set => SetRatingModel(value);
         }
 
-        public void SetRatingModel(RatingModel RatingModel) {
-            this._ratingModel = RatingModel;
+        public void SetRatingModel(RatingModel ratingModel) {
+            if (ratingModel == null) return;
+
+            this._ratingModel = ratingModel;
 
             this.OnUpdate.Invoke();
         }

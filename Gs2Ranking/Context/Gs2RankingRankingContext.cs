@@ -87,8 +87,10 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Context
             set => SetRanking(value);
         }
 
-        public void SetRanking(Ranking Ranking) {
-            this._ranking = Ranking;
+        public void SetRanking(Ranking ranking) {
+            if (ranking == null) return;
+
+            this._ranking = ranking;
 
             this.OnUpdate.Invoke();
         }

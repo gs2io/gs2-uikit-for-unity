@@ -84,8 +84,10 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking.Context
             set => SetVote(value);
         }
 
-        public void SetVote(Vote Vote) {
-            this._vote = Vote;
+        public void SetVote(Vote vote) {
+            if (vote == null) return;
+
+            this._vote = vote;
 
             this.OnUpdate.Invoke();
         }

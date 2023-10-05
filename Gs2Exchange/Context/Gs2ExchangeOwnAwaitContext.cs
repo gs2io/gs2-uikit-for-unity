@@ -39,12 +39,12 @@ namespace Gs2.Unity.UiKit.Gs2Exchange.Context
     public partial class Gs2ExchangeOwnAwaitContext : MonoBehaviour
     {
         public void Start() {
-            if (Await_ == null) {
-                Debug.LogWarning($"{gameObject.GetFullPath()}: Await_ is not set in Gs2ExchangeOwnAwaitContext.");
+            if (Await == null) {
+                Debug.LogWarning($"{gameObject.GetFullPath()}: Await is not set in Gs2ExchangeOwnAwaitContext.");
             }
         }
         public virtual bool HasError() {
-            if (Await_ == null) {
+            if (Await == null) {
                 if (GetComponentInParent<Gs2ExchangeOwnAwaitList>(true) != null) {
                     return false;
                 }
@@ -80,13 +80,14 @@ namespace Gs2.Unity.UiKit.Gs2Exchange.Context
     {
         [SerializeField]
         private OwnAwait _await;
-        public OwnAwait Await_
+        public OwnAwait Await
         {
             get => _await;
             set => SetOwnAwait(value);
         }
 
         public void SetOwnAwait(OwnAwait await_) {
+            if (await_ == null) return;
             this._await = await_;
 
             this.OnUpdate.Invoke();

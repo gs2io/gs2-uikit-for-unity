@@ -87,6 +87,7 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.Context
         }
 
         public void SetOwnBoxItems(OwnBoxItems boxItems) {
+            if (boxItems == null) return;
             this._boxItems = boxItems;
 
             this.OnUpdate.Invoke();

@@ -87,8 +87,10 @@ namespace Gs2.Unity.UiKit.Gs2Exchange.Context
             set => SetIncrementalRateModel(value);
         }
 
-        public void SetIncrementalRateModel(IncrementalRateModel IncrementalRateModel) {
-            this._incrementalRateModel = IncrementalRateModel;
+        public void SetIncrementalRateModel(IncrementalRateModel incrementalRateModel) {
+            if (incrementalRateModel == null) return;
+
+            this._incrementalRateModel = incrementalRateModel;
 
             this.OnUpdate.Invoke();
         }

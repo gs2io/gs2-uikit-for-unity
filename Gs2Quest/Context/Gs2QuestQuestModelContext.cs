@@ -87,8 +87,10 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Context
             set => SetQuestModel(value);
         }
 
-        public void SetQuestModel(QuestModel QuestModel) {
-            this._questModel = QuestModel;
+        public void SetQuestModel(QuestModel questModel) {
+            if (questModel == null) return;
+
+            this._questModel = questModel;
 
             this.OnUpdate.Invoke();
         }

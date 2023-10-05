@@ -87,8 +87,10 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Context
             set => SetBigItemModel(value);
         }
 
-        public void SetBigItemModel(BigItemModel BigItemModel) {
-            this._bigItemModel = BigItemModel;
+        public void SetBigItemModel(BigItemModel bigItemModel) {
+            if (bigItemModel == null) return;
+
+            this._bigItemModel = bigItemModel;
 
             this.OnUpdate.Invoke();
         }

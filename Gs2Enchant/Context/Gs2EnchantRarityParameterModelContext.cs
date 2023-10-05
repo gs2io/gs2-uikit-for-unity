@@ -87,8 +87,10 @@ namespace Gs2.Unity.UiKit.Gs2Enchant.Context
             set => SetRarityParameterModel(value);
         }
 
-        public void SetRarityParameterModel(RarityParameterModel RarityParameterModel) {
-            this._rarityParameterModel = RarityParameterModel;
+        public void SetRarityParameterModel(RarityParameterModel rarityParameterModel) {
+            if (rarityParameterModel == null) return;
+
+            this._rarityParameterModel = rarityParameterModel;
 
             this.OnUpdate.Invoke();
         }

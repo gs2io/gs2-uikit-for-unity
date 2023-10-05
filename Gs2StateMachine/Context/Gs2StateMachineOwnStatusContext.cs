@@ -87,6 +87,7 @@ namespace Gs2.Unity.UiKit.Gs2StateMachine.Context
         }
 
         public void SetOwnStatus(OwnStatus status) {
+            if (status == null) return;
             this._status = status;
 
             this.OnUpdate.Invoke();

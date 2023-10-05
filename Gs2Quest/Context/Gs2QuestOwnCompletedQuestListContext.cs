@@ -87,6 +87,7 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Context
         }
 
         public void SetOwnCompletedQuestList(OwnCompletedQuestList completedQuestList) {
+            if (completedQuestList == null) return;
             this._completedQuestList = completedQuestList;
 
             this.OnUpdate.Invoke();

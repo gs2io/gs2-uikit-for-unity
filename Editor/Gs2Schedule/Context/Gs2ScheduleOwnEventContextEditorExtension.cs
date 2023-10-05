@@ -43,7 +43,7 @@ namespace Gs2.Unity.UiKit.Gs2Schedule.Editor
 
             serializedObject.Update();
 
-            if (original.Event_ == null) {
+            if (original.Event == null) {
                 var list = original.GetComponentInParent<Gs2ScheduleOwnEventList>(true);
                 if (list != null) {
                     EditorGUILayout.HelpBox("Event is auto assign from Gs2ScheduleOwnEventList.", MessageType.Info);
@@ -57,12 +57,12 @@ namespace Gs2.Unity.UiKit.Gs2Schedule.Editor
                 }
             }
             else {
-                original.Event_ = EditorGUILayout.ObjectField("OwnEvent", original.Event_, typeof(OwnEvent), false) as OwnEvent;
+                original.Event = EditorGUILayout.ObjectField("OwnEvent", original.Event, typeof(OwnEvent), false) as OwnEvent;
                 EditorGUI.BeginDisabledGroup(true);
-                if (original.Event_ != null) {
+                if (original.Event != null) {
                     EditorGUI.indentLevel++;
-                    EditorGUILayout.TextField("NamespaceName", original.Event_?.NamespaceName?.ToString());
-                    EditorGUILayout.TextField("EventName", original.Event_?.EventName?.ToString());
+                    EditorGUILayout.TextField("NamespaceName", original.Event?.NamespaceName?.ToString());
+                    EditorGUILayout.TextField("EventName", original.Event?.EventName?.ToString());
                     EditorGUI.indentLevel--;
                 }
                 EditorGUI.EndDisabledGroup();

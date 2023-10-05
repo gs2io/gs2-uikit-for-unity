@@ -84,6 +84,7 @@ namespace Gs2.Unity.UiKit.Gs2Account.Context
         }
 
         public void SetOwnDataOwner(OwnDataOwner dataOwner) {
+            if (dataOwner == null) return;
             this._dataOwner = dataOwner;
 
             this.OnUpdate.Invoke();

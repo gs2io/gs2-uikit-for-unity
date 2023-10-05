@@ -84,8 +84,10 @@ namespace Gs2.Unity.UiKit.Gs2Account.Context
             set => SetBanStatus(value);
         }
 
-        public void SetBanStatus(BanStatus BanStatus) {
-            this._banStatus = BanStatus;
+        public void SetBanStatus(BanStatus banStatus) {
+            if (banStatus == null) return;
+
+            this._banStatus = banStatus;
 
             this.OnUpdate.Invoke();
         }

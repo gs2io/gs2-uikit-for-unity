@@ -88,6 +88,7 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Context
         }
 
         public void SetOwnPropertyForm(OwnPropertyForm propertyForm) {
+            if (propertyForm == null) return;
             this.PropertyFormModel = PropertyFormModel.New(
                 Namespace.New(
                     propertyForm.NamespaceName

@@ -87,6 +87,7 @@ namespace Gs2.Unity.UiKit.Gs2Version.Context
         }
 
         public void SetOwnAcceptVersion(OwnAcceptVersion acceptVersion) {
+            if (acceptVersion == null) return;
             this._acceptVersion = acceptVersion;
 
             this.OnUpdate.Invoke();

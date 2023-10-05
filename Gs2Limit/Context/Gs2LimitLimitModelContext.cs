@@ -87,8 +87,10 @@ namespace Gs2.Unity.UiKit.Gs2Limit.Context
             set => SetLimitModel(value);
         }
 
-        public void SetLimitModel(LimitModel LimitModel) {
-            this._limitModel = LimitModel;
+        public void SetLimitModel(LimitModel limitModel) {
+            if (limitModel == null) return;
+
+            this._limitModel = limitModel;
 
             this.OnUpdate.Invoke();
         }

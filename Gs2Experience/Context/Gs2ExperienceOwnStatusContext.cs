@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
@@ -46,6 +48,9 @@ namespace Gs2.Unity.UiKit.Gs2Experience.Context
         public virtual bool HasError() {
             if (Status == null) {
                 if (GetComponentInParent<Gs2ExperienceOwnStatusList>(true) != null) {
+                    return false;
+                }
+                else if (GetComponentInParent<Gs2ExperienceConvertInventoryItemSetToOwnStatus>(true) != null) {
                     return false;
                 }
                 return true;

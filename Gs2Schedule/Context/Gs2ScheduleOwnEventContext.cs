@@ -39,12 +39,12 @@ namespace Gs2.Unity.UiKit.Gs2Schedule.Context
     public partial class Gs2ScheduleOwnEventContext : MonoBehaviour
     {
         public void Start() {
-            if (Event_ == null) {
-                Debug.LogWarning($"{gameObject.GetFullPath()}: Event_ is not set in Gs2ScheduleOwnEventContext.");
+            if (Event == null) {
+                Debug.LogWarning($"{gameObject.GetFullPath()}: Event is not set in Gs2ScheduleOwnEventContext.");
             }
         }
         public virtual bool HasError() {
-            if (Event_ == null) {
+            if (Event == null) {
                 if (GetComponentInParent<Gs2ScheduleOwnEventList>(true) != null) {
                     return false;
                 }
@@ -80,13 +80,14 @@ namespace Gs2.Unity.UiKit.Gs2Schedule.Context
     {
         [SerializeField]
         private OwnEvent _event;
-        public OwnEvent Event_
+        public OwnEvent Event
         {
             get => _event;
             set => SetOwnEvent(value);
         }
 
         public void SetOwnEvent(OwnEvent event_) {
+            if (event_ == null) return;
             this._event = event_;
 
             this.OnUpdate.Invoke();

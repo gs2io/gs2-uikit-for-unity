@@ -87,8 +87,10 @@ namespace Gs2.Unity.UiKit.Gs2Version.Context
             set => SetVersionModel(value);
         }
 
-        public void SetVersionModel(VersionModel VersionModel) {
-            this._versionModel = VersionModel;
+        public void SetVersionModel(VersionModel versionModel) {
+            if (versionModel == null) return;
+
+            this._versionModel = versionModel;
 
             this.OnUpdate.Invoke();
         }

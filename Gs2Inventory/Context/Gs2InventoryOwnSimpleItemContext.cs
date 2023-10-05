@@ -88,6 +88,7 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Context
         }
 
         public void SetOwnSimpleItem(OwnSimpleItem simpleItem) {
+            if (simpleItem == null) return;
             this.SimpleItemModel = SimpleItemModel.New(
                 SimpleInventoryModel.New(
                     Namespace.New(

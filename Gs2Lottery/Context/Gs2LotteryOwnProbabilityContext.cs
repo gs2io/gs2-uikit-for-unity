@@ -87,6 +87,7 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.Context
         }
 
         public void SetOwnProbability(OwnProbability probability) {
+            if (probability == null) return;
             this._probability = probability;
 
             this.OnUpdate.Invoke();
