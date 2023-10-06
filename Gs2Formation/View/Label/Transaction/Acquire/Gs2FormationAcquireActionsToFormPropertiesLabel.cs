@@ -26,8 +26,10 @@
 
 using System;
 using Gs2.Gs2Formation.Request;
+using Gs2.Unity.Gs2Formation.ScriptableObject;
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Core.Fetcher;
+using Gs2.Unity.UiKit.Gs2Formation.Context;
 using Gs2.Unity.UiKit.Gs2Formation.Fetcher;
 using Gs2.Util.LitJson;
 using UnityEngine;
@@ -44,64 +46,58 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Label
     {
         private void OnFetched()
         {
+            if (this._userDataFetcher == null) {
+                var context = gameObject.AddComponent<Gs2FormationOwnFormContext>();
+                context.SetOwnForm(
+                    OwnForm.New(
+                        OwnMold.New(
+                            Namespace.New(
+                                this._fetcher.Request.NamespaceName
+                            ),
+                            this._fetcher.Request.MoldModelName
+                        ),
+                        this._fetcher.Request.Index ?? 0
+                    )
+                );
+                this._userDataFetcher = gameObject.AddComponent<Gs2FormationOwnFormFetcher>();
+                this._userDataFetcher.OnFetched.AddListener(this._onFetched);
+            }
             if ((!this._fetcher?.Fetched ?? false) || this._fetcher.Request == null) {
                 return;
             }
-            if (this._userDataFetcher?.Fetched ?? false)
-            {
-                this.onUpdate?.Invoke(
-                    this.format.Replace(
-                        "{namespaceName}",
-                        $"{this._fetcher.Request.NamespaceName}"
-                    ).Replace(
-                        "{userId}",
-                        $"{this._fetcher.Request.UserId}"
-                    ).Replace(
-                        "{moldModelName}",
-                        $"{this._fetcher.Request.MoldModelName}"
-                    ).Replace(
-                        "{index}",
-                        $"{this._fetcher.Request.Index}"
-                    ).Replace(
-                        "{acquireAction}",
-                        $"{this._fetcher.Request.AcquireAction}"
-                    ).Replace(
-                        "{config}",
-                        $"{this._fetcher.Request.Config}"
-                    ).Replace(
-                        "{userData:name}",
-                        $"{this._userDataFetcher.Form.Name}"
-                    ).Replace(
-                        "{userData:index}",
-                        $"{this._userDataFetcher.Form.Index}"
-                    ).Replace(
-                        "{userData:slots}",
-                        $"{this._userDataFetcher.Form.Slots}"
-                    )
-                );
-            } else {
-                this.onUpdate?.Invoke(
-                    this.format.Replace(
-                        "{namespaceName}",
-                        $"{this._fetcher.Request.NamespaceName}"
-                    ).Replace(
-                        "{userId}",
-                        $"{this._fetcher.Request.UserId}"
-                    ).Replace(
-                        "{moldModelName}",
-                        $"{this._fetcher.Request.MoldModelName}"
-                    ).Replace(
-                        "{index}",
-                        $"{this._fetcher.Request.Index}"
-                    ).Replace(
-                        "{acquireAction}",
-                        $"{this._fetcher.Request.AcquireAction}"
-                    ).Replace(
-                        "{config}",
-                        $"{this._fetcher.Request.Config}"
-                    )
-                );
+            if ((!this._userDataFetcher?.Fetched ?? false) || this._userDataFetcher.Form == null) {
+                return;
             }
+            this.onUpdate?.Invoke(
+                this.format.Replace(
+                    "{namespaceName}",
+                    $"{this._fetcher.Request.NamespaceName}"
+                ).Replace(
+                    "{userId}",
+                    $"{this._fetcher.Request.UserId}"
+                ).Replace(
+                    "{moldModelName}",
+                    $"{this._fetcher.Request.MoldModelName}"
+                ).Replace(
+                    "{index}",
+                    $"{this._fetcher.Request.Index}"
+                ).Replace(
+                    "{acquireAction}",
+                    $"{this._fetcher.Request.AcquireAction}"
+                ).Replace(
+                    "{config}",
+                    $"{this._fetcher.Request.Config}"
+                ).Replace(
+                    "{userData:name}",
+                    $"{this._userDataFetcher.Form.Name}"
+                ).Replace(
+                    "{userData:index}",
+                    $"{this._userDataFetcher.Form.Index}"
+                ).Replace(
+                    "{userData:slots}",
+                    $"{this._userDataFetcher.Form.Slots}"
+                )
+            );
         }
     }
 

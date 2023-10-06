@@ -26,8 +26,10 @@
 
 using System;
 using Gs2.Gs2Enhance.Request;
+using Gs2.Unity.Gs2Enhance.ScriptableObject;
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Core.Fetcher;
+using Gs2.Unity.UiKit.Gs2Enhance.Context;
 using Gs2.Unity.UiKit.Gs2Enhance.Fetcher;
 using Gs2.Util.LitJson;
 using UnityEngine;
@@ -44,70 +46,60 @@ namespace Gs2.Unity.UiKit.Gs2Enhance.Label
     {
         private void OnFetched()
         {
+            if (this._userDataFetcher == null) {
+                var context = gameObject.AddComponent<Gs2EnhanceOwnProgressContext>();
+                context.SetOwnProgress(
+                    OwnProgress.New(
+                        Namespace.New(
+                            this._fetcher.Request.NamespaceName
+                        )
+                    )
+                );
+                this._userDataFetcher = gameObject.AddComponent<Gs2EnhanceOwnProgressFetcher>();
+                this._userDataFetcher.OnFetched.AddListener(this._onFetched);
+            }
             if ((!this._fetcher?.Fetched ?? false) || this._fetcher.Request == null) {
                 return;
             }
-            if (this._userDataFetcher?.Fetched ?? false)
-            {
-                this.onUpdate?.Invoke(
-                    this.format.Replace(
-                        "{namespaceName}",
-                        $"{this._fetcher.Request.NamespaceName}"
-                    ).Replace(
-                        "{userId}",
-                        $"{this._fetcher.Request.UserId}"
-                    ).Replace(
-                        "{rateName}",
-                        $"{this._fetcher.Request.RateName}"
-                    ).Replace(
-                        "{targetItemSetId}",
-                        $"{this._fetcher.Request.TargetItemSetId}"
-                    ).Replace(
-                        "{materials}",
-                        $"{this._fetcher.Request.Materials}"
-                    ).Replace(
-                        "{force}",
-                        $"{this._fetcher.Request.Force}"
-                    ).Replace(
-                        "{userData:name}",
-                        $"{this._userDataFetcher.Progress.Name}"
-                    ).Replace(
-                        "{userData:rateName}",
-                        $"{this._userDataFetcher.Progress.RateName}"
-                    ).Replace(
-                        "{userData:propertyId}",
-                        $"{this._userDataFetcher.Progress.PropertyId}"
-                    ).Replace(
-                        "{userData:experienceValue}",
-                        $"{this._userDataFetcher.Progress.ExperienceValue}"
-                    ).Replace(
-                        "{userData:rate}",
-                        $"{this._userDataFetcher.Progress.Rate}"
-                    )
-                );
-            } else {
-                this.onUpdate?.Invoke(
-                    this.format.Replace(
-                        "{namespaceName}",
-                        $"{this._fetcher.Request.NamespaceName}"
-                    ).Replace(
-                        "{userId}",
-                        $"{this._fetcher.Request.UserId}"
-                    ).Replace(
-                        "{rateName}",
-                        $"{this._fetcher.Request.RateName}"
-                    ).Replace(
-                        "{targetItemSetId}",
-                        $"{this._fetcher.Request.TargetItemSetId}"
-                    ).Replace(
-                        "{materials}",
-                        $"{this._fetcher.Request.Materials}"
-                    ).Replace(
-                        "{force}",
-                        $"{this._fetcher.Request.Force}"
-                    )
-                );
+            if ((!this._userDataFetcher?.Fetched ?? false) || this._userDataFetcher.Progress == null) {
+                return;
             }
+            this.onUpdate?.Invoke(
+                this.format.Replace(
+                    "{namespaceName}",
+                    $"{this._fetcher.Request.NamespaceName}"
+                ).Replace(
+                    "{userId}",
+                    $"{this._fetcher.Request.UserId}"
+                ).Replace(
+                    "{rateName}",
+                    $"{this._fetcher.Request.RateName}"
+                ).Replace(
+                    "{targetItemSetId}",
+                    $"{this._fetcher.Request.TargetItemSetId}"
+                ).Replace(
+                    "{materials}",
+                    $"{this._fetcher.Request.Materials}"
+                ).Replace(
+                    "{force}",
+                    $"{this._fetcher.Request.Force}"
+                ).Replace(
+                    "{userData:name}",
+                    $"{this._userDataFetcher.Progress.Name}"
+                ).Replace(
+                    "{userData:rateName}",
+                    $"{this._userDataFetcher.Progress.RateName}"
+                ).Replace(
+                    "{userData:propertyId}",
+                    $"{this._userDataFetcher.Progress.PropertyId}"
+                ).Replace(
+                    "{userData:experienceValue}",
+                    $"{this._userDataFetcher.Progress.ExperienceValue}"
+                ).Replace(
+                    "{userData:rate}",
+                    $"{this._userDataFetcher.Progress.Rate}"
+                )
+            );
         }
     }
 

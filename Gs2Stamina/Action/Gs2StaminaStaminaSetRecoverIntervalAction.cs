@@ -53,6 +53,9 @@ namespace Gs2.Unity.UiKit.Gs2Stamina
 
             yield return new WaitUntil(() => clientHolder.Initialized);
             yield return new WaitUntil(() => gameSessionHolder.Initialized);
+
+            this.onSetRecoverIntervalStart.Invoke();
+
             
             var domain = clientHolder.Gs2.Stamina.Namespace(
                 this._context.Stamina.NamespaceName
@@ -231,6 +234,21 @@ namespace Gs2.Unity.UiKit.Gs2Stamina
         {
             add => this.onChangeSignedStatusSignature.AddListener(value);
             remove => this.onChangeSignedStatusSignature.RemoveListener(value);
+        }
+
+        [Serializable]
+        private class SetRecoverIntervalStartEvent : UnityEvent
+        {
+
+        }
+
+        [SerializeField]
+        private SetRecoverIntervalStartEvent onSetRecoverIntervalStart = new SetRecoverIntervalStartEvent();
+
+        public event UnityAction OnSetRecoverIntervalStart
+        {
+            add => this.onSetRecoverIntervalStart.AddListener(value);
+            remove => this.onSetRecoverIntervalStart.RemoveListener(value);
         }
 
         [Serializable]

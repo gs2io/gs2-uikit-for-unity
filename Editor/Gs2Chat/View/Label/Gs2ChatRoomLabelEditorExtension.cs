@@ -52,7 +52,7 @@ namespace Gs2.Unity.UiKit.Gs2Chat.Editor
                 EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2ChatRoomFetcher), false);
                 EditorGUI.indentLevel++;
                 if (fetcher.Context != null) {
-                    fetcher.Context.Room = EditorGUILayout.ObjectField("Room", fetcher.Context.Room, typeof(Room), false) as Room;
+                    EditorGUILayout.ObjectField("Room", fetcher.Context.Room, typeof(Room), false);
                     EditorGUI.indentLevel++;
                     EditorGUILayout.TextField("NamespaceName", fetcher.Context.Room?.NamespaceName?.ToString());
                     EditorGUILayout.TextField("RoomName", fetcher.Context.Room?.RoomName?.ToString());

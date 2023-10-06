@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
@@ -26,8 +28,10 @@
 
 using System;
 using Gs2.Gs2Inventory.Request;
+using Gs2.Unity.Gs2Inventory.ScriptableObject;
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Core.Fetcher;
+using Gs2.Unity.UiKit.Gs2Inventory.Context;
 using Gs2.Unity.UiKit.Gs2Inventory.Fetcher;
 using Gs2.Util.LitJson;
 using UnityEngine;
@@ -44,52 +48,53 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Label
     {
         private void OnFetched()
         {
+            if (this._userDataFetcher == null) {
+                var context = gameObject.AddComponent<Gs2InventoryOwnSimpleItemContext>();
+                context.SetOwnSimpleItem(OwnSimpleItem.New(
+                    OwnSimpleInventory.New(
+                        Namespace.New(
+                            this._fetcher.Request.NamespaceName
+                        ),
+                        this._fetcher.Request.InventoryName
+                    ),
+                    this._fetcher.Request.ConsumeCounts[index].ItemName
+                ));
+                this._userDataFetcher = gameObject.AddComponent<Gs2InventoryOwnSimpleItemFetcher>();
+                this._userDataFetcher.OnFetched.AddListener(this._onFetched);
+            }
             if ((!this._fetcher?.Fetched ?? false) || this._fetcher.Request == null) {
                 return;
             }
-            if (this._userDataFetcher?.Fetched ?? false)
-            {
-                this.onUpdate?.Invoke(
-                    this.format.Replace(
-                        "{namespaceName}",
-                        $"{this._fetcher.Request.NamespaceName}"
-                    ).Replace(
-                        "{inventoryName}",
-                        $"{this._fetcher.Request.InventoryName}"
-                    ).Replace(
-                        "{userId}",
-                        $"{this._fetcher.Request.UserId}"
-                    ).Replace(
-                        "{consumeCounts}",
-                        $"{this._fetcher.Request.ConsumeCounts}"
-                    ).Replace(
-                        "{userData:itemId}",
-                        $"{this._userDataFetcher.SimpleItem.ItemId}"
-                    ).Replace(
-                        "{userData:itemName}",
-                        $"{this._userDataFetcher.SimpleItem.ItemName}"
-                    ).Replace(
-                        "{userData:count}",
-                        $"{this._userDataFetcher.SimpleItem.Count}"
-                    )
-                );
-            } else {
-                this.onUpdate?.Invoke(
-                    this.format.Replace(
-                        "{namespaceName}",
-                        $"{this._fetcher.Request.NamespaceName}"
-                    ).Replace(
-                        "{inventoryName}",
-                        $"{this._fetcher.Request.InventoryName}"
-                    ).Replace(
-                        "{userId}",
-                        $"{this._fetcher.Request.UserId}"
-                    ).Replace(
-                        "{consumeCounts}",
-                        $"{this._fetcher.Request.ConsumeCounts}"
-                    )
-                );
+            if ((!this._userDataFetcher?.Fetched ?? false) || this._userDataFetcher.SimpleItem == null) {
+                return;
             }
+            this.onUpdate?.Invoke(
+                this.format.Replace(
+                    "{namespaceName}",
+                    $"{this._fetcher.Request.NamespaceName}"
+                ).Replace(
+                    "{inventoryName}",
+                    $"{this._fetcher.Request.InventoryName}"
+                ).Replace(
+                    "{userId}",
+                    $"{this._fetcher.Request.UserId}"
+                ).Replace(
+                    "{itemName}",
+                    $"{this._fetcher.Request.ConsumeCounts[0].ItemName}"
+                ).Replace(
+                    "{count}",
+                    $"{this._fetcher.Request.ConsumeCounts[0].Count}"
+                ).Replace(
+                    "{userData:itemId}",
+                    $"{this._userDataFetcher.SimpleItem.ItemId}"
+                ).Replace(
+                    "{userData:itemName}",
+                    $"{this._userDataFetcher.SimpleItem.ItemName}"
+                ).Replace(
+                    "{userData:count}",
+                    $"{this._userDataFetcher.SimpleItem.Count}"
+                )
+            );
         }
     }
 
@@ -168,6 +173,7 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Label
 
     public partial class Gs2InventoryConsumeSimpleItemsByUserIdLabel
     {
+        public int index;
         public string format;
     }
 

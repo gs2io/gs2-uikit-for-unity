@@ -59,7 +59,7 @@ namespace Gs2.Unity.UiKit.Gs2LoginReward.Editor
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2LoginRewardBonusModelFetcher), false);
                     EditorGUI.indentLevel++;
                     if (fetcher.Context != null) {
-                        fetcher.Context.BonusModel = EditorGUILayout.ObjectField("BonusModel", fetcher.Context.BonusModel, typeof(BonusModel), false) as BonusModel;
+                        EditorGUILayout.ObjectField("BonusModel", fetcher.Context.BonusModel, typeof(BonusModel), false);
                         EditorGUI.indentLevel++;
                         EditorGUILayout.TextField("NamespaceName", fetcher.Context.BonusModel?.NamespaceName?.ToString());
                         EditorGUILayout.TextField("BonusModelName", fetcher.Context.BonusModel?.BonusModelName?.ToString());

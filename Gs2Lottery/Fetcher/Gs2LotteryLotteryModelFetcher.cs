@@ -35,6 +35,7 @@ using Gs2.Unity.Gs2Lottery.Model;
 using Gs2.Unity.Gs2Lottery.ScriptableObject;
 using Gs2.Unity.Util;
 using Gs2.Unity.UiKit.Core;
+using Gs2.Unity.UiKit.Core.Model;
 using Gs2.Unity.UiKit.Gs2Core.Fetcher;
 using Gs2.Unity.UiKit.Gs2Lottery.Context;
 using UnityEngine;
@@ -120,14 +121,14 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.Fetcher
             this._callbackId = null;
         }
 
-        public void SetTemporarySlot(
+        public void SetTemporaryLotteryModel(
             Gs2.Unity.Gs2Lottery.Model.EzLotteryModel lotteryModel
         ) {
             LotteryModel = lotteryModel;
             this.OnFetched.Invoke();
         }
 
-        public void RollbackTemporarySlot(
+        public void RollbackTemporaryLotteryModel(
         ) {
             OnUpdateContext();
         }

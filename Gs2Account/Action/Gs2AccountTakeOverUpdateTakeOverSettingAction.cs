@@ -53,6 +53,9 @@ namespace Gs2.Unity.UiKit.Gs2Account
 
             yield return new WaitUntil(() => clientHolder.Initialized);
             yield return new WaitUntil(() => gameSessionHolder.Initialized);
+
+            this.onUpdateTakeOverSettingStart.Invoke();
+
             
             var domain = clientHolder.Gs2.Account.Namespace(
                 this._context.TakeOver.NamespaceName
@@ -209,6 +212,21 @@ namespace Gs2.Unity.UiKit.Gs2Account
         {
             add => this.onChangePassword.AddListener(value);
             remove => this.onChangePassword.RemoveListener(value);
+        }
+
+        [Serializable]
+        private class UpdateTakeOverSettingStartEvent : UnityEvent
+        {
+
+        }
+
+        [SerializeField]
+        private UpdateTakeOverSettingStartEvent onUpdateTakeOverSettingStart = new UpdateTakeOverSettingStartEvent();
+
+        public event UnityAction OnUpdateTakeOverSettingStart
+        {
+            add => this.onUpdateTakeOverSettingStart.AddListener(value);
+            remove => this.onUpdateTakeOverSettingStart.RemoveListener(value);
         }
 
         [Serializable]

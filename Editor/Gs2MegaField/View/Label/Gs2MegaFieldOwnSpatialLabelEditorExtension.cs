@@ -52,7 +52,7 @@ namespace Gs2.Unity.UiKit.Gs2MegaField.Editor
                 EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2MegaFieldSpatialFetcher), false);
                 EditorGUI.indentLevel++;
                 if (fetcher.Context != null) {
-                    fetcher.Context.Spatial = EditorGUILayout.ObjectField("Spatial", fetcher.Context.Spatial, typeof(Spatial), false) as Spatial;
+                    EditorGUILayout.ObjectField("Spatial", fetcher.Context.Spatial, typeof(Spatial), false);
                     EditorGUI.indentLevel++;
                     EditorGUILayout.TextField("NamespaceName", fetcher.Context.Spatial?.NamespaceName?.ToString());
                     EditorGUILayout.TextField("AreaModelName", fetcher.Context.Spatial?.AreaModelName?.ToString());

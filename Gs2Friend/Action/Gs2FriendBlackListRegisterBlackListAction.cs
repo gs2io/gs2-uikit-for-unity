@@ -53,6 +53,9 @@ namespace Gs2.Unity.UiKit.Gs2Friend
 
             yield return new WaitUntil(() => clientHolder.Initialized);
             yield return new WaitUntil(() => gameSessionHolder.Initialized);
+
+            this.onRegisterBlackListStart.Invoke();
+
             
             var domain = clientHolder.Gs2.Friend.Namespace(
                 this._context.BlackList.NamespaceName
@@ -186,6 +189,21 @@ namespace Gs2.Unity.UiKit.Gs2Friend
         {
             add => this.onChangeTargetUserId.AddListener(value);
             remove => this.onChangeTargetUserId.RemoveListener(value);
+        }
+
+        [Serializable]
+        private class RegisterBlackListStartEvent : UnityEvent
+        {
+
+        }
+
+        [SerializeField]
+        private RegisterBlackListStartEvent onRegisterBlackListStart = new RegisterBlackListStartEvent();
+
+        public event UnityAction OnRegisterBlackListStart
+        {
+            add => this.onRegisterBlackListStart.AddListener(value);
+            remove => this.onRegisterBlackListStart.RemoveListener(value);
         }
 
         [Serializable]

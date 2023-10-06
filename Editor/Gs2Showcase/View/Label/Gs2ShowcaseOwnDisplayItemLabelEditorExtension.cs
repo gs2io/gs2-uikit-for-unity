@@ -52,7 +52,7 @@ namespace Gs2.Unity.UiKit.Gs2Showcase.Editor
                 EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2ShowcaseOwnDisplayItemFetcher), false);
                 EditorGUI.indentLevel++;
                 if (fetcher.Context != null) {
-                    fetcher.Context.DisplayItem = EditorGUILayout.ObjectField("DisplayItem", fetcher.Context.DisplayItem, typeof(OwnDisplayItem), false) as OwnDisplayItem;
+                    EditorGUILayout.ObjectField("DisplayItem", fetcher.Context.DisplayItem, typeof(OwnDisplayItem), false);
                     EditorGUI.indentLevel++;
                     EditorGUILayout.TextField("NamespaceName", fetcher.Context.DisplayItem?.NamespaceName?.ToString());
                     EditorGUILayout.TextField("ShowcaseName", fetcher.Context.DisplayItem?.ShowcaseName?.ToString());

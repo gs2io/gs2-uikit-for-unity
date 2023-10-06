@@ -26,8 +26,10 @@
 
 using System;
 using Gs2.Gs2Formation.Request;
+using Gs2.Unity.Gs2Formation.ScriptableObject;
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Core.Fetcher;
+using Gs2.Unity.UiKit.Gs2Formation.Context;
 using Gs2.Unity.UiKit.Gs2Formation.Fetcher;
 using Gs2.Util.LitJson;
 using UnityEngine;
@@ -44,52 +46,49 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Label
     {
         private void OnFetched()
         {
+            if (this._userDataFetcher == null) {
+                var context = gameObject.AddComponent<Gs2FormationOwnMoldContext>();
+                context.SetOwnMold(
+                    OwnMold.New(
+                        Namespace.New(
+                            this._fetcher.Request.NamespaceName
+                        ),
+                        this._fetcher.Request.MoldModelName
+                    )
+                );
+                this._userDataFetcher = gameObject.AddComponent<Gs2FormationOwnMoldFetcher>();
+                this._userDataFetcher.OnFetched.AddListener(this._onFetched);
+            }
             if ((!this._fetcher?.Fetched ?? false) || this._fetcher.Request == null) {
                 return;
             }
-            if (this._userDataFetcher?.Fetched ?? false)
-            {
-                this.onUpdate?.Invoke(
-                    this.format.Replace(
-                        "{namespaceName}",
-                        $"{this._fetcher.Request.NamespaceName}"
-                    ).Replace(
-                        "{userId}",
-                        $"{this._fetcher.Request.UserId}"
-                    ).Replace(
-                        "{moldModelName}",
-                        $"{this._fetcher.Request.MoldModelName}"
-                    ).Replace(
-                        "{capacity}",
-                        $"{this._fetcher.Request.Capacity}"
-                    ).Replace(
-                        "{userData:name}",
-                        $"{this._userDataFetcher.Mold.Name}"
-                    ).Replace(
-                        "{userData:userId}",
-                        $"{this._userDataFetcher.Mold.UserId}"
-                    ).Replace(
-                        "{userData:capacity}",
-                        $"{this._userDataFetcher.Mold.Capacity}"
-                    )
-                );
-            } else {
-                this.onUpdate?.Invoke(
-                    this.format.Replace(
-                        "{namespaceName}",
-                        $"{this._fetcher.Request.NamespaceName}"
-                    ).Replace(
-                        "{userId}",
-                        $"{this._fetcher.Request.UserId}"
-                    ).Replace(
-                        "{moldModelName}",
-                        $"{this._fetcher.Request.MoldModelName}"
-                    ).Replace(
-                        "{capacity}",
-                        $"{this._fetcher.Request.Capacity}"
-                    )
-                );
+            if ((!this._userDataFetcher?.Fetched ?? false) || this._userDataFetcher.Mold == null) {
+                return;
             }
+            this.onUpdate?.Invoke(
+                this.format.Replace(
+                    "{namespaceName}",
+                    $"{this._fetcher.Request.NamespaceName}"
+                ).Replace(
+                    "{userId}",
+                    $"{this._fetcher.Request.UserId}"
+                ).Replace(
+                    "{moldModelName}",
+                    $"{this._fetcher.Request.MoldModelName}"
+                ).Replace(
+                    "{capacity}",
+                    $"{this._fetcher.Request.Capacity}"
+                ).Replace(
+                    "{userData:name}",
+                    $"{this._userDataFetcher.Mold.Name}"
+                ).Replace(
+                    "{userData:userId}",
+                    $"{this._userDataFetcher.Mold.UserId}"
+                ).Replace(
+                    "{userData:capacity}",
+                    $"{this._userDataFetcher.Mold.Capacity}"
+                )
+            );
         }
     }
 

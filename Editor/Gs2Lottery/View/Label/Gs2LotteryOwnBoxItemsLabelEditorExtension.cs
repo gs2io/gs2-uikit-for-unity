@@ -59,7 +59,7 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.Editor
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2LotteryOwnBoxItemsFetcher), false);
                     EditorGUI.indentLevel++;
                     if (fetcher.Context != null) {
-                        fetcher.Context.BoxItems = EditorGUILayout.ObjectField("BoxItems", fetcher.Context.BoxItems, typeof(OwnBoxItems), false) as OwnBoxItems;
+                        EditorGUILayout.ObjectField("BoxItems", fetcher.Context.BoxItems, typeof(OwnBoxItems), false);
                         EditorGUI.indentLevel++;
                         EditorGUILayout.TextField("NamespaceName", fetcher.Context.BoxItems?.NamespaceName?.ToString());
                         EditorGUILayout.TextField("PrizeTableName", fetcher.Context.BoxItems?.PrizeTableName?.ToString());

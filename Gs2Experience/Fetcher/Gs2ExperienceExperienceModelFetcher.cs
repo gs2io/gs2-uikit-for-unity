@@ -35,6 +35,7 @@ using Gs2.Unity.Gs2Experience.Model;
 using Gs2.Unity.Gs2Experience.ScriptableObject;
 using Gs2.Unity.Util;
 using Gs2.Unity.UiKit.Core;
+using Gs2.Unity.UiKit.Core.Model;
 using Gs2.Unity.UiKit.Gs2Core.Fetcher;
 using Gs2.Unity.UiKit.Gs2Experience.Context;
 using UnityEngine;
@@ -120,14 +121,14 @@ namespace Gs2.Unity.UiKit.Gs2Experience.Fetcher
             this._callbackId = null;
         }
 
-        public void SetTemporarySlot(
+        public void SetTemporaryExperienceModel(
             Gs2.Unity.Gs2Experience.Model.EzExperienceModel experienceModel
         ) {
             ExperienceModel = experienceModel;
             this.OnFetched.Invoke();
         }
 
-        public void RollbackTemporarySlot(
+        public void RollbackTemporaryExperienceModel(
         ) {
             OnUpdateContext();
         }

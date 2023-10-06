@@ -53,6 +53,9 @@ namespace Gs2.Unity.UiKit.Gs2SkillTree
 
             yield return new WaitUntil(() => clientHolder.Initialized);
             yield return new WaitUntil(() => gameSessionHolder.Initialized);
+
+            this.onRestrainStart.Invoke();
+
             
             var domain = clientHolder.Gs2.SkillTree.Namespace(
                 this._context.Status.NamespaceName
@@ -175,6 +178,21 @@ namespace Gs2.Unity.UiKit.Gs2SkillTree
         {
             add => this.onChangeNodeModelNames.AddListener(value);
             remove => this.onChangeNodeModelNames.RemoveListener(value);
+        }
+
+        [Serializable]
+        private class RestrainStartEvent : UnityEvent
+        {
+
+        }
+
+        [SerializeField]
+        private RestrainStartEvent onRestrainStart = new RestrainStartEvent();
+
+        public event UnityAction OnRestrainStart
+        {
+            add => this.onRestrainStart.AddListener(value);
+            remove => this.onRestrainStart.RemoveListener(value);
         }
 
         [Serializable]

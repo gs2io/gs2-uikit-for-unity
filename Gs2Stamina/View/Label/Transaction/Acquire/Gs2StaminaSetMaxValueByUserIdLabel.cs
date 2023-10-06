@@ -26,8 +26,10 @@
 
 using System;
 using Gs2.Gs2Stamina.Request;
+using Gs2.Unity.Gs2Stamina.ScriptableObject;
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Core.Fetcher;
+using Gs2.Unity.UiKit.Gs2Stamina.Context;
 using Gs2.Unity.UiKit.Gs2Stamina.Fetcher;
 using Gs2.Util.LitJson;
 using UnityEngine;
@@ -44,64 +46,61 @@ namespace Gs2.Unity.UiKit.Gs2Stamina.Label
     {
         private void OnFetched()
         {
+            if (this._userDataFetcher == null) {
+                var context = gameObject.AddComponent<Gs2StaminaOwnStaminaContext>();
+                context.SetOwnStamina(
+                    OwnStamina.New(
+                        Namespace.New(
+                            this._fetcher.Request.NamespaceName
+                        ),
+                        this._fetcher.Request.StaminaName
+                    )
+                );
+                this._userDataFetcher = gameObject.AddComponent<Gs2StaminaOwnStaminaFetcher>();
+                this._userDataFetcher.OnFetched.AddListener(this._onFetched);
+            }
             if ((!this._fetcher?.Fetched ?? false) || this._fetcher.Request == null) {
                 return;
             }
-            if (this._userDataFetcher?.Fetched ?? false)
-            {
-                this.onUpdate?.Invoke(
-                    this.format.Replace(
-                        "{namespaceName}",
-                        $"{this._fetcher.Request.NamespaceName}"
-                    ).Replace(
-                        "{staminaName}",
-                        $"{this._fetcher.Request.StaminaName}"
-                    ).Replace(
-                        "{userId}",
-                        $"{this._fetcher.Request.UserId}"
-                    ).Replace(
-                        "{maxValue}",
-                        $"{this._fetcher.Request.MaxValue}"
-                    ).Replace(
-                        "{userData:staminaName}",
-                        $"{this._userDataFetcher.Stamina.StaminaName}"
-                    ).Replace(
-                        "{userData:value}",
-                        $"{this._userDataFetcher.Stamina.Value}"
-                    ).Replace(
-                        "{userData:overflowValue}",
-                        $"{this._userDataFetcher.Stamina.OverflowValue}"
-                    ).Replace(
-                        "{userData:maxValue}",
-                        $"{this._userDataFetcher.Stamina.MaxValue}"
-                    ).Replace(
-                        "{userData:recoverIntervalMinutes}",
-                        $"{this._userDataFetcher.Stamina.RecoverIntervalMinutes}"
-                    ).Replace(
-                        "{userData:recoverValue}",
-                        $"{this._userDataFetcher.Stamina.RecoverValue}"
-                    ).Replace(
-                        "{userData:nextRecoverAt}",
-                        $"{this._userDataFetcher.Stamina.NextRecoverAt}"
-                    )
-                );
-            } else {
-                this.onUpdate?.Invoke(
-                    this.format.Replace(
-                        "{namespaceName}",
-                        $"{this._fetcher.Request.NamespaceName}"
-                    ).Replace(
-                        "{staminaName}",
-                        $"{this._fetcher.Request.StaminaName}"
-                    ).Replace(
-                        "{userId}",
-                        $"{this._fetcher.Request.UserId}"
-                    ).Replace(
-                        "{maxValue}",
-                        $"{this._fetcher.Request.MaxValue}"
-                    )
-                );
+            if ((!this._userDataFetcher?.Fetched ?? false) || this._userDataFetcher.Stamina == null) {
+                return;
             }
+            this.onUpdate?.Invoke(
+                this.format.Replace(
+                    "{namespaceName}",
+                    $"{this._fetcher.Request.NamespaceName}"
+                ).Replace(
+                    "{staminaName}",
+                    $"{this._fetcher.Request.StaminaName}"
+                ).Replace(
+                    "{userId}",
+                    $"{this._fetcher.Request.UserId}"
+                ).Replace(
+                    "{maxValue}",
+                    $"{this._fetcher.Request.MaxValue}"
+                ).Replace(
+                    "{userData:staminaName}",
+                    $"{this._userDataFetcher.Stamina.StaminaName}"
+                ).Replace(
+                    "{userData:value}",
+                    $"{this._userDataFetcher.Stamina.Value}"
+                ).Replace(
+                    "{userData:overflowValue}",
+                    $"{this._userDataFetcher.Stamina.OverflowValue}"
+                ).Replace(
+                    "{userData:maxValue}",
+                    $"{this._userDataFetcher.Stamina.MaxValue}"
+                ).Replace(
+                    "{userData:recoverIntervalMinutes}",
+                    $"{this._userDataFetcher.Stamina.RecoverIntervalMinutes}"
+                ).Replace(
+                    "{userData:recoverValue}",
+                    $"{this._userDataFetcher.Stamina.RecoverValue}"
+                ).Replace(
+                    "{userData:nextRecoverAt}",
+                    $"{this._userDataFetcher.Stamina.NextRecoverAt}"
+                )
+            );
         }
     }
 

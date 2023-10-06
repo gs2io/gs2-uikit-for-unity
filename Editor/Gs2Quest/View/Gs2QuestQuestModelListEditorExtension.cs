@@ -51,7 +51,7 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Editor
                 EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2QuestQuestModelListFetcher), false);
                 EditorGUI.indentLevel++;
                 if (fetcher.Context != null) {
-                    fetcher.Context.QuestGroupModel = EditorGUILayout.ObjectField("QuestGroupModel", fetcher.Context.QuestGroupModel, typeof(QuestGroupModel), false) as QuestGroupModel;
+                    EditorGUILayout.ObjectField("QuestGroupModel", fetcher.Context.QuestGroupModel, typeof(QuestGroupModel), false);
                     EditorGUI.indentLevel++;
                     EditorGUILayout.TextField("NamespaceName", fetcher.Context.QuestGroupModel?.NamespaceName?.ToString());
                     EditorGUI.indentLevel--;

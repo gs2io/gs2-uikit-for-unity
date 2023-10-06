@@ -53,6 +53,9 @@ namespace Gs2.Unity.UiKit.Gs2Limit
 
             yield return new WaitUntil(() => clientHolder.Initialized);
             yield return new WaitUntil(() => gameSessionHolder.Initialized);
+
+            this.onCountUpStart.Invoke();
+
             
             var domain = clientHolder.Gs2.Limit.Namespace(
                 this._context.Counter.NamespaceName
@@ -234,6 +237,21 @@ namespace Gs2.Unity.UiKit.Gs2Limit
         {
             add => this.onChangeMaxValue.AddListener(value);
             remove => this.onChangeMaxValue.RemoveListener(value);
+        }
+
+        [Serializable]
+        private class CountUpStartEvent : UnityEvent
+        {
+
+        }
+
+        [SerializeField]
+        private CountUpStartEvent onCountUpStart = new CountUpStartEvent();
+
+        public event UnityAction OnCountUpStart
+        {
+            add => this.onCountUpStart.AddListener(value);
+            remove => this.onCountUpStart.RemoveListener(value);
         }
 
         [Serializable]

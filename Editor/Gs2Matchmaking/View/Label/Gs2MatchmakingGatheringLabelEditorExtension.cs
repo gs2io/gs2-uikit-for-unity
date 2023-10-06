@@ -52,7 +52,7 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking.Editor
                 EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2MatchmakingGatheringFetcher), false);
                 EditorGUI.indentLevel++;
                 if (fetcher.Context != null) {
-                    fetcher.Context.Gathering = EditorGUILayout.ObjectField("Gathering", fetcher.Context.Gathering, typeof(Gathering), false) as Gathering;
+                    EditorGUILayout.ObjectField("Gathering", fetcher.Context.Gathering, typeof(Gathering), false);
                     EditorGUI.indentLevel++;
                     EditorGUILayout.TextField("NamespaceName", fetcher.Context.Gathering?.NamespaceName?.ToString());
                     EditorGUILayout.TextField("GatheringName", fetcher.Context.Gathering?.GatheringName?.ToString());

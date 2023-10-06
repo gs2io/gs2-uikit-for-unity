@@ -112,7 +112,6 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.SpriteSwitcher
                 OnFetched();
             };
             this._fetcher.OnFetched.AddListener(this._onFetched);
-
             if (this._fetcher.Fetched) {
                 OnFetched();
             }
@@ -174,8 +173,8 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.SpriteSwitcher
 
         public event UnityAction<Sprite> OnUpdate
         {
-            add => onUpdate.AddListener(value);
-            remove => onUpdate.RemoveListener(value);
+            add => this.onUpdate.AddListener(value);
+            remove => this.onUpdate.RemoveListener(value);
         }
     }
 }

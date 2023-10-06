@@ -35,6 +35,7 @@ using Gs2.Unity.Gs2SkillTree.Model;
 using Gs2.Unity.Gs2SkillTree.ScriptableObject;
 using Gs2.Unity.Util;
 using Gs2.Unity.UiKit.Core;
+using Gs2.Unity.UiKit.Core.Model;
 using Gs2.Unity.UiKit.Gs2Core.Fetcher;
 using Gs2.Unity.UiKit.Gs2SkillTree.Context;
 using UnityEngine;
@@ -120,14 +121,14 @@ namespace Gs2.Unity.UiKit.Gs2SkillTree.Fetcher
             this._callbackId = null;
         }
 
-        public void SetTemporarySlot(
+        public void SetTemporaryNodeModel(
             Gs2.Unity.Gs2SkillTree.Model.EzNodeModel nodeModel
         ) {
             NodeModel = nodeModel;
             this.OnFetched.Invoke();
         }
 
-        public void RollbackTemporarySlot(
+        public void RollbackTemporaryNodeModel(
         ) {
             OnUpdateContext();
         }
@@ -136,7 +137,7 @@ namespace Gs2.Unity.UiKit.Gs2SkillTree.Fetcher
             if (!Fetched) {
                 return new List<Unity.Core.Model.EzAcquireAction>();
             }
-            return NodeModel.ReturnAcquireActions;
+            return NodeModel.ReturnAcquireActions.Denormalize();
         }
 
         bool IAcquireActionsFetcher.IsFetched() {
@@ -155,7 +156,7 @@ namespace Gs2.Unity.UiKit.Gs2SkillTree.Fetcher
             if (!Fetched) {
                 return new List<Unity.Core.Model.EzConsumeAction>();
             }
-            return NodeModel.ReleaseConsumeActions;
+            return NodeModel.ReleaseConsumeActions.Denormalize();
         }
 
         bool IConsumeActionsFetcher.IsFetched() {

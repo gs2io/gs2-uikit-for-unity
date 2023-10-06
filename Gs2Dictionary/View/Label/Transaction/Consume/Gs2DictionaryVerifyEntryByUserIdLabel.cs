@@ -26,8 +26,10 @@
 
 using System;
 using Gs2.Gs2Dictionary.Request;
+using Gs2.Unity.Gs2Dictionary.ScriptableObject;
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Core.Fetcher;
+using Gs2.Unity.UiKit.Gs2Dictionary.Context;
 using Gs2.Unity.UiKit.Gs2Dictionary.Fetcher;
 using Gs2.Util.LitJson;
 using UnityEngine;
@@ -47,52 +49,36 @@ namespace Gs2.Unity.UiKit.Gs2Dictionary.Label
             if ((!this._fetcher?.Fetched ?? false) || this._fetcher.Request == null) {
                 return;
             }
-            if (this._userDataFetcher?.Fetched ?? false)
-            {
-                this.onUpdate?.Invoke(
-                    this.format.Replace(
-                        "{namespaceName}",
-                        $"{this._fetcher.Request.NamespaceName}"
-                    ).Replace(
-                        "{userId}",
-                        $"{this._fetcher.Request.UserId}"
-                    ).Replace(
-                        "{entryModelName}",
-                        $"{this._fetcher.Request.EntryModelName}"
-                    ).Replace(
-                        "{verifyType}",
-                        $"{this._fetcher.Request.VerifyType}"
-                    ).Replace(
-                        "{userData:entryId}",
-                        $"{this._userDataFetcher.Entry.EntryId}"
-                    ).Replace(
-                        "{userData:userId}",
-                        $"{this._userDataFetcher.Entry.UserId}"
-                    ).Replace(
-                        "{userData:name}",
-                        $"{this._userDataFetcher.Entry.Name}"
-                    ).Replace(
-                        "{userData:acquiredAt}",
-                        $"{this._userDataFetcher.Entry.AcquiredAt}"
-                    )
-                );
-            } else {
-                this.onUpdate?.Invoke(
-                    this.format.Replace(
-                        "{namespaceName}",
-                        $"{this._fetcher.Request.NamespaceName}"
-                    ).Replace(
-                        "{userId}",
-                        $"{this._fetcher.Request.UserId}"
-                    ).Replace(
-                        "{entryModelName}",
-                        $"{this._fetcher.Request.EntryModelName}"
-                    ).Replace(
-                        "{verifyType}",
-                        $"{this._fetcher.Request.VerifyType}"
-                    )
-                );
+            if ((!this._userDataFetcher?.Fetched ?? false) || this._userDataFetcher.Entry == null) {
+                return;
             }
+            this.onUpdate?.Invoke(
+                this.format.Replace(
+                    "{namespaceName}",
+                    $"{this._fetcher.Request.NamespaceName}"
+                ).Replace(
+                    "{userId}",
+                    $"{this._fetcher.Request.UserId}"
+                ).Replace(
+                    "{entryModelName}",
+                    $"{this._fetcher.Request.EntryModelName}"
+                ).Replace(
+                    "{verifyType}",
+                    $"{this._fetcher.Request.VerifyType}"
+                ).Replace(
+                    "{userData:entryId}",
+                    $"{this._userDataFetcher.Entry.EntryId}"
+                ).Replace(
+                    "{userData:userId}",
+                    $"{this._userDataFetcher.Entry.UserId}"
+                ).Replace(
+                    "{userData:name}",
+                    $"{this._userDataFetcher.Entry.Name}"
+                ).Replace(
+                    "{userData:acquiredAt}",
+                    $"{this._userDataFetcher.Entry.AcquiredAt}"
+                )
+            );
         }
     }
 

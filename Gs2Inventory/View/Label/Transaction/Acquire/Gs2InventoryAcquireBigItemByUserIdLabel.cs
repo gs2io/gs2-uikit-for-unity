@@ -26,8 +26,10 @@
 
 using System;
 using Gs2.Gs2Inventory.Request;
+using Gs2.Unity.Gs2Inventory.ScriptableObject;
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Core.Fetcher;
+using Gs2.Unity.UiKit.Gs2Inventory.Context;
 using Gs2.Unity.UiKit.Gs2Inventory.Fetcher;
 using Gs2.Util.LitJson;
 using UnityEngine;
@@ -44,61 +46,58 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Label
     {
         private void OnFetched()
         {
+            if (this._userDataFetcher == null) {
+                var context = gameObject.AddComponent<Gs2InventoryOwnBigItemContext>();
+                context.SetOwnBigItem(
+                    OwnBigItem.New(
+                        OwnBigInventory.New(
+                            Namespace.New(
+                                this._fetcher.Request.NamespaceName
+                            ),
+                            this._fetcher.Request.InventoryName
+                        ),
+                        this._fetcher.Request.ItemName
+                    )
+                );
+                this._userDataFetcher = gameObject.AddComponent<Gs2InventoryOwnBigItemFetcher>();
+                this._userDataFetcher.OnFetched.AddListener(this._onFetched);
+            }
             if ((!this._fetcher?.Fetched ?? false) || this._fetcher.Request == null) {
                 return;
             }
-            if (this._userDataFetcher?.Fetched ?? false)
-            {
-                this.onUpdate?.Invoke(
-                    this.format.Replace(
-                        "{namespaceName}",
-                        $"{this._fetcher.Request.NamespaceName}"
-                    ).Replace(
-                        "{inventoryName}",
-                        $"{this._fetcher.Request.InventoryName}"
-                    ).Replace(
-                        "{userId}",
-                        $"{this._fetcher.Request.UserId}"
-                    ).Replace(
-                        "{itemName}",
-                        $"{this._fetcher.Request.ItemName}"
-                    ).Replace(
-                        "{acquireCount}",
-                        $"{this._fetcher.Request.AcquireCount}"
-                    ).Replace(
-                        "{userData:itemId}",
-                        $"{this._userDataFetcher.BigItem.ItemId}"
-                    ).Replace(
-                        "{userData:itemName}",
-                        $"{this._userDataFetcher.BigItem.ItemName}"
-                    ).Replace(
-                        "{userData:count}",
-                        $"{this._userDataFetcher.BigItem.Count}"
-                    ).Replace(
-                        "{userData:count:changed}",
-                        $"{this._userDataFetcher.BigItem.Count + this._fetcher.Request.AcquireCount}"
-                    )
-                );
-            } else {
-                this.onUpdate?.Invoke(
-                    this.format.Replace(
-                        "{namespaceName}",
-                        $"{this._fetcher.Request.NamespaceName}"
-                    ).Replace(
-                        "{inventoryName}",
-                        $"{this._fetcher.Request.InventoryName}"
-                    ).Replace(
-                        "{userId}",
-                        $"{this._fetcher.Request.UserId}"
-                    ).Replace(
-                        "{itemName}",
-                        $"{this._fetcher.Request.ItemName}"
-                    ).Replace(
-                        "{acquireCount}",
-                        $"{this._fetcher.Request.AcquireCount}"
-                    )
-                );
+            if ((!this._userDataFetcher?.Fetched ?? false) || this._userDataFetcher.BigItem == null) {
+                return;
             }
+            this.onUpdate?.Invoke(
+                this.format.Replace(
+                    "{namespaceName}",
+                    $"{this._fetcher.Request.NamespaceName}"
+                ).Replace(
+                    "{inventoryName}",
+                    $"{this._fetcher.Request.InventoryName}"
+                ).Replace(
+                    "{userId}",
+                    $"{this._fetcher.Request.UserId}"
+                ).Replace(
+                    "{itemName}",
+                    $"{this._fetcher.Request.ItemName}"
+                ).Replace(
+                    "{acquireCount}",
+                    $"{this._fetcher.Request.AcquireCount}"
+                ).Replace(
+                    "{userData:itemId}",
+                    $"{this._userDataFetcher.BigItem.ItemId}"
+                ).Replace(
+                    "{userData:itemName}",
+                    $"{this._userDataFetcher.BigItem.ItemName}"
+                ).Replace(
+                    "{userData:count}",
+                    $"{this._userDataFetcher.BigItem.Count}"
+                ).Replace(
+                    "{userData:count:changed}",
+                    $"{this._userDataFetcher.BigItem.Count + this._fetcher.Request.AcquireCount}"
+                )
+            );
         }
     }
 

@@ -94,7 +94,6 @@ namespace Gs2.Unity.UiKit.Gs2Idle.SpriteSwitcher
                 OnFetched();
             };
             this._fetcher.OnFetched.AddListener(this._onFetched);
-
             if (this._fetcher.Fetched) {
                 OnFetched();
             }

@@ -26,8 +26,10 @@
 
 using System;
 using Gs2.Gs2Mission.Request;
+using Gs2.Unity.Gs2Mission.ScriptableObject;
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Core.Fetcher;
+using Gs2.Unity.UiKit.Gs2Mission.Context;
 using Gs2.Unity.UiKit.Gs2Mission.Fetcher;
 using Gs2.Util.LitJson;
 using UnityEngine;
@@ -44,52 +46,49 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Label
     {
         private void OnFetched()
         {
+            if (this._userDataFetcher == null) {
+                var context = gameObject.AddComponent<Gs2MissionOwnCompleteContext>();
+                context.SetOwnComplete(
+                    OwnComplete.New(
+                        Namespace.New(
+                            this._fetcher.Request.NamespaceName
+                        ),
+                        this._fetcher.Request.MissionGroupName
+                    )
+                );
+                this._userDataFetcher = gameObject.AddComponent<Gs2MissionOwnCompleteFetcher>();
+                this._userDataFetcher.OnFetched.AddListener(this._onFetched);
+            }
             if ((!this._fetcher?.Fetched ?? false) || this._fetcher.Request == null) {
                 return;
             }
-            if (this._userDataFetcher?.Fetched ?? false)
-            {
-                this.onUpdate?.Invoke(
-                    this.format.Replace(
-                        "{namespaceName}",
-                        $"{this._fetcher.Request.NamespaceName}"
-                    ).Replace(
-                        "{missionGroupName}",
-                        $"{this._fetcher.Request.MissionGroupName}"
-                    ).Replace(
-                        "{missionTaskName}",
-                        $"{this._fetcher.Request.MissionTaskName}"
-                    ).Replace(
-                        "{userId}",
-                        $"{this._fetcher.Request.UserId}"
-                    ).Replace(
-                        "{userData:missionGroupName}",
-                        $"{this._userDataFetcher.Complete.MissionGroupName}"
-                    ).Replace(
-                        "{userData:completedMissionTaskNames}",
-                        $"{this._userDataFetcher.Complete.CompletedMissionTaskNames}"
-                    ).Replace(
-                        "{userData:receivedMissionTaskNames}",
-                        $"{this._userDataFetcher.Complete.ReceivedMissionTaskNames}"
-                    )
-                );
-            } else {
-                this.onUpdate?.Invoke(
-                    this.format.Replace(
-                        "{namespaceName}",
-                        $"{this._fetcher.Request.NamespaceName}"
-                    ).Replace(
-                        "{missionGroupName}",
-                        $"{this._fetcher.Request.MissionGroupName}"
-                    ).Replace(
-                        "{missionTaskName}",
-                        $"{this._fetcher.Request.MissionTaskName}"
-                    ).Replace(
-                        "{userId}",
-                        $"{this._fetcher.Request.UserId}"
-                    )
-                );
+            if ((!this._userDataFetcher?.Fetched ?? false) || this._userDataFetcher.Complete == null) {
+                return;
             }
+            this.onUpdate?.Invoke(
+                this.format.Replace(
+                    "{namespaceName}",
+                    $"{this._fetcher.Request.NamespaceName}"
+                ).Replace(
+                    "{missionGroupName}",
+                    $"{this._fetcher.Request.MissionGroupName}"
+                ).Replace(
+                    "{missionTaskName}",
+                    $"{this._fetcher.Request.MissionTaskName}"
+                ).Replace(
+                    "{userId}",
+                    $"{this._fetcher.Request.UserId}"
+                ).Replace(
+                    "{userData:missionGroupName}",
+                    $"{this._userDataFetcher.Complete.MissionGroupName}"
+                ).Replace(
+                    "{userData:completedMissionTaskNames}",
+                    $"{this._userDataFetcher.Complete.CompletedMissionTaskNames}"
+                ).Replace(
+                    "{userData:receivedMissionTaskNames}",
+                    $"{this._userDataFetcher.Complete.ReceivedMissionTaskNames}"
+                )
+            );
         }
     }
 

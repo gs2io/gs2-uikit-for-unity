@@ -53,6 +53,9 @@ namespace Gs2.Unity.UiKit.Gs2Stamina
 
             yield return new WaitUntil(() => clientHolder.Initialized);
             yield return new WaitUntil(() => gameSessionHolder.Initialized);
+
+            this.onSetMaxValueStart.Invoke();
+
             
             var domain = clientHolder.Gs2.Stamina.Namespace(
                 this._context.Stamina.NamespaceName
@@ -231,6 +234,21 @@ namespace Gs2.Unity.UiKit.Gs2Stamina
         {
             add => this.onChangeSignedStatusSignature.AddListener(value);
             remove => this.onChangeSignedStatusSignature.RemoveListener(value);
+        }
+
+        [Serializable]
+        private class SetMaxValueStartEvent : UnityEvent
+        {
+
+        }
+
+        [SerializeField]
+        private SetMaxValueStartEvent onSetMaxValueStart = new SetMaxValueStartEvent();
+
+        public event UnityAction OnSetMaxValueStart
+        {
+            add => this.onSetMaxValueStart.AddListener(value);
+            remove => this.onSetMaxValueStart.RemoveListener(value);
         }
 
         [Serializable]

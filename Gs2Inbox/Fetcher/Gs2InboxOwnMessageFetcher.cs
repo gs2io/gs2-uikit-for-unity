@@ -35,6 +35,7 @@ using Gs2.Unity.Gs2Inbox.Model;
 using Gs2.Unity.Gs2Inbox.ScriptableObject;
 using Gs2.Unity.Util;
 using Gs2.Unity.UiKit.Core;
+using Gs2.Unity.UiKit.Core.Model;
 using Gs2.Unity.UiKit.Gs2Core.Fetcher;
 using Gs2.Unity.UiKit.Gs2Inbox.Context;
 using UnityEngine;
@@ -122,11 +123,23 @@ namespace Gs2.Unity.UiKit.Gs2Inbox.Fetcher
             this._callbackId = null;
         }
 
+        public void SetTemporaryMessage(
+            Gs2.Unity.Gs2Inbox.Model.EzMessage message
+        ) {
+            Message = message;
+            this.OnFetched.Invoke();
+        }
+
+        public void RollbackTemporaryMessage(
+        ) {
+            OnUpdateContext();
+        }
+
         public List<Unity.Core.Model.EzAcquireAction> AcquireActions(string context = "default") {
             if (!Fetched) {
                 return new List<Unity.Core.Model.EzAcquireAction>();
             }
-            return Message.ReadAcquireActions;
+            return Message.ReadAcquireActions.Denormalize();
         }
 
         bool IAcquireActionsFetcher.IsFetched() {

@@ -60,7 +60,7 @@ namespace Gs2.Unity.UiKit.Gs2Schedule.Editor
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2ScheduleOwnEventFetcher), false);
                     EditorGUI.indentLevel++;
                     if (fetcher.Context != null) {
-                        fetcher.Context.Event = EditorGUILayout.ObjectField("Event", fetcher.Context.Event, typeof(OwnEvent), false) as OwnEvent;
+                        EditorGUILayout.ObjectField("Event", fetcher.Context.Event, typeof(OwnEvent), false);
                         EditorGUI.indentLevel++;
                         EditorGUILayout.TextField("NamespaceName", fetcher.Context.Event?.NamespaceName?.ToString());
                         EditorGUILayout.TextField("EventName", fetcher.Context.Event?.EventName?.ToString());

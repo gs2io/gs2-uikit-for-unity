@@ -53,6 +53,9 @@ namespace Gs2.Unity.UiKit.Gs2Quest
 
             yield return new WaitUntil(() => clientHolder.Initialized);
             yield return new WaitUntil(() => gameSessionHolder.Initialized);
+
+            this.onEndStart.Invoke();
+
             
             var domain = clientHolder.Gs2.Quest.Namespace(
                 this._context.Progress.NamespaceName
@@ -219,6 +222,21 @@ namespace Gs2.Unity.UiKit.Gs2Quest
         {
             add => this.onChangeConfig.AddListener(value);
             remove => this.onChangeConfig.RemoveListener(value);
+        }
+
+        [Serializable]
+        private class EndStartEvent : UnityEvent
+        {
+
+        }
+
+        [SerializeField]
+        private EndStartEvent onEndStart = new EndStartEvent();
+
+        public event UnityAction OnEndStart
+        {
+            add => this.onEndStart.AddListener(value);
+            remove => this.onEndStart.RemoveListener(value);
         }
 
         [Serializable]

@@ -53,6 +53,9 @@ namespace Gs2.Unity.UiKit.Gs2Ranking
 
             yield return new WaitUntil(() => clientHolder.Initialized);
             yield return new WaitUntil(() => gameSessionHolder.Initialized);
+
+            this.onUnsubscribeStart.Invoke();
+
             
             var domain = clientHolder.Gs2.Ranking.Namespace(
                 this._context.SubscribeUser.NamespaceName
@@ -167,6 +170,21 @@ namespace Gs2.Unity.UiKit.Gs2Ranking
     /// </summary>
     public partial class Gs2RankingSubscribeUserUnsubscribeAction
     {
+
+        [Serializable]
+        private class UnsubscribeStartEvent : UnityEvent
+        {
+
+        }
+
+        [SerializeField]
+        private UnsubscribeStartEvent onUnsubscribeStart = new UnsubscribeStartEvent();
+
+        public event UnityAction OnUnsubscribeStart
+        {
+            add => this.onUnsubscribeStart.AddListener(value);
+            remove => this.onUnsubscribeStart.RemoveListener(value);
+        }
 
         [Serializable]
         private class UnsubscribeCompleteEvent : UnityEvent<EzSubscribeUser>

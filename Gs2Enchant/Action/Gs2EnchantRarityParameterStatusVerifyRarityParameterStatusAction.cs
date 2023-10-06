@@ -53,6 +53,9 @@ namespace Gs2.Unity.UiKit.Gs2Enchant
 
             yield return new WaitUntil(() => clientHolder.Initialized);
             yield return new WaitUntil(() => gameSessionHolder.Initialized);
+
+            this.onVerifyRarityParameterStatusStart.Invoke();
+
             
             var domain = clientHolder.Gs2.Enchant.Namespace(
                 this._context.RarityParameterStatus.NamespaceName
@@ -244,6 +247,21 @@ namespace Gs2.Unity.UiKit.Gs2Enchant
         {
             add => this.onChangeParameterCount.AddListener(value);
             remove => this.onChangeParameterCount.RemoveListener(value);
+        }
+
+        [Serializable]
+        private class VerifyRarityParameterStatusStartEvent : UnityEvent
+        {
+
+        }
+
+        [SerializeField]
+        private VerifyRarityParameterStatusStartEvent onVerifyRarityParameterStatusStart = new VerifyRarityParameterStatusStartEvent();
+
+        public event UnityAction OnVerifyRarityParameterStatusStart
+        {
+            add => this.onVerifyRarityParameterStatusStart.AddListener(value);
+            remove => this.onVerifyRarityParameterStatusStart.RemoveListener(value);
         }
 
         [Serializable]

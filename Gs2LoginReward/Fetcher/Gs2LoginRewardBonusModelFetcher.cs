@@ -35,6 +35,7 @@ using Gs2.Unity.Gs2LoginReward.Model;
 using Gs2.Unity.Gs2LoginReward.ScriptableObject;
 using Gs2.Unity.Util;
 using Gs2.Unity.UiKit.Core;
+using Gs2.Unity.UiKit.Core.Model;
 using Gs2.Unity.UiKit.Gs2Core.Fetcher;
 using Gs2.Unity.UiKit.Gs2LoginReward.Context;
 using UnityEngine;
@@ -120,14 +121,14 @@ namespace Gs2.Unity.UiKit.Gs2LoginReward.Fetcher
             this._callbackId = null;
         }
 
-        public void SetTemporarySlot(
+        public void SetTemporaryBonusModel(
             Gs2.Unity.Gs2LoginReward.Model.EzBonusModel bonusModel
         ) {
             BonusModel = bonusModel;
             this.OnFetched.Invoke();
         }
 
-        public void RollbackTemporarySlot(
+        public void RollbackTemporaryBonusModel(
         ) {
             OnUpdateContext();
         }
@@ -136,7 +137,7 @@ namespace Gs2.Unity.UiKit.Gs2LoginReward.Fetcher
             if (!Fetched) {
                 return new List<Unity.Core.Model.EzConsumeAction>();
             }
-            return BonusModel.MissedReceiveReliefConsumeActions;
+            return BonusModel.MissedReceiveReliefConsumeActions.Denormalize();
         }
 
         bool IConsumeActionsFetcher.IsFetched() {

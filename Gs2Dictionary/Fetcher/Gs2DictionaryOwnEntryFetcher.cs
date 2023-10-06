@@ -35,6 +35,7 @@ using Gs2.Unity.Gs2Dictionary.Model;
 using Gs2.Unity.Gs2Dictionary.ScriptableObject;
 using Gs2.Unity.Util;
 using Gs2.Unity.UiKit.Core;
+using Gs2.Unity.UiKit.Core.Model;
 using Gs2.Unity.UiKit.Gs2Core.Fetcher;
 using Gs2.Unity.UiKit.Gs2Dictionary.Context;
 using UnityEngine;
@@ -120,6 +121,18 @@ namespace Gs2.Unity.UiKit.Gs2Dictionary.Fetcher
                 this._callbackId.Value
             );
             this._callbackId = null;
+        }
+
+        public void SetTemporaryEntry(
+            Gs2.Unity.Gs2Dictionary.Model.EzEntry entry
+        ) {
+            Entry = entry;
+            this.OnFetched.Invoke();
+        }
+
+        public void RollbackTemporaryEntry(
+        ) {
+            OnUpdateContext();
         }
     }
 

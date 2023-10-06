@@ -53,6 +53,9 @@ namespace Gs2.Unity.UiKit.Gs2Idle
 
             yield return new WaitUntil(() => clientHolder.Initialized);
             yield return new WaitUntil(() => gameSessionHolder.Initialized);
+
+            this.onReceiveStart.Invoke();
+
             
             var domain = clientHolder.Gs2.Idle.Namespace(
                 this._context.Status.NamespaceName
@@ -155,6 +158,21 @@ namespace Gs2.Unity.UiKit.Gs2Idle
     /// </summary>
     public partial class Gs2IdleStatusReceiveAction
     {
+
+        [Serializable]
+        private class ReceiveStartEvent : UnityEvent
+        {
+
+        }
+
+        [SerializeField]
+        private ReceiveStartEvent onReceiveStart = new ReceiveStartEvent();
+
+        public event UnityAction OnReceiveStart
+        {
+            add => this.onReceiveStart.AddListener(value);
+            remove => this.onReceiveStart.RemoveListener(value);
+        }
 
         [Serializable]
         private class ReceiveCompleteEvent : UnityEvent<string>

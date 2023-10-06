@@ -59,7 +59,7 @@ namespace Gs2.Unity.UiKit.Gs2Experience.Editor
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2ExperienceExperienceModelFetcher), false);
                     EditorGUI.indentLevel++;
                     if (fetcher.Context != null) {
-                        fetcher.Context.ExperienceModel = EditorGUILayout.ObjectField("ExperienceModel", fetcher.Context.ExperienceModel, typeof(ExperienceModel), false) as ExperienceModel;
+                        EditorGUILayout.ObjectField("ExperienceModel", fetcher.Context.ExperienceModel, typeof(ExperienceModel), false);
                         EditorGUI.indentLevel++;
                         EditorGUILayout.TextField("NamespaceName", fetcher.Context.ExperienceModel?.NamespaceName?.ToString());
                         EditorGUILayout.TextField("ExperienceName", fetcher.Context.ExperienceModel?.ExperienceName?.ToString());

@@ -53,6 +53,9 @@ namespace Gs2.Unity.UiKit.Gs2Datastore
 
             yield return new WaitUntil(() => clientHolder.Initialized);
             yield return new WaitUntil(() => gameSessionHolder.Initialized);
+
+            this.onUpdateDataObjectStart.Invoke();
+
             
             var domain = clientHolder.Gs2.Datastore.Namespace(
                 this._context.DataObject.NamespaceName
@@ -209,6 +212,21 @@ namespace Gs2.Unity.UiKit.Gs2Datastore
         {
             add => this.onChangeAllowUserIds.AddListener(value);
             remove => this.onChangeAllowUserIds.RemoveListener(value);
+        }
+
+        [Serializable]
+        private class UpdateDataObjectStartEvent : UnityEvent
+        {
+
+        }
+
+        [SerializeField]
+        private UpdateDataObjectStartEvent onUpdateDataObjectStart = new UpdateDataObjectStartEvent();
+
+        public event UnityAction OnUpdateDataObjectStart
+        {
+            add => this.onUpdateDataObjectStart.AddListener(value);
+            remove => this.onUpdateDataObjectStart.RemoveListener(value);
         }
 
         [Serializable]

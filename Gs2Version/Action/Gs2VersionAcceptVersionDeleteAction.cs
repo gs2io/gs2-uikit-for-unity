@@ -53,6 +53,9 @@ namespace Gs2.Unity.UiKit.Gs2Version
 
             yield return new WaitUntil(() => clientHolder.Initialized);
             yield return new WaitUntil(() => gameSessionHolder.Initialized);
+
+            this.onDeleteStart.Invoke();
+
             
             var domain = clientHolder.Gs2.Version.Namespace(
                 this._context.AcceptVersion.NamespaceName
@@ -166,6 +169,21 @@ namespace Gs2.Unity.UiKit.Gs2Version
     /// </summary>
     public partial class Gs2VersionAcceptVersionDeleteAction
     {
+
+        [Serializable]
+        private class DeleteStartEvent : UnityEvent
+        {
+
+        }
+
+        [SerializeField]
+        private DeleteStartEvent onDeleteStart = new DeleteStartEvent();
+
+        public event UnityAction OnDeleteStart
+        {
+            add => this.onDeleteStart.AddListener(value);
+            remove => this.onDeleteStart.RemoveListener(value);
+        }
 
         [Serializable]
         private class DeleteCompleteEvent : UnityEvent<EzAcceptVersion>

@@ -32,6 +32,7 @@ using Gs2.Core.Exception;
 using Gs2.Gs2StateMachine.Request;
 using Gs2.Unity.Gs2StateMachine.ScriptableObject;
 using Gs2.Unity.UiKit.Core;
+using Gs2.Unity.UiKit.Gs2Core.Context;
 using Gs2.Unity.UiKit.Gs2Core.Fetcher;
 using Gs2.Unity.UiKit.Gs2StateMachine.Context;
 using Gs2.Unity.Util;
@@ -50,19 +51,34 @@ namespace Gs2.Unity.UiKit.Gs2StateMachine.Fetcher
     {
         private void Fetch()
         {
-            var action = _fetcher.AcquireActions().FirstOrDefault(v => v.Action == "Gs2StateMachine:StartStateMachineByUserId");
-            if (action != null) {
-                Request = StartStateMachineByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
-                if (Namespace == null || (
-                        Namespace.NamespaceName == Request.NamespaceName)
-                   ) {
-                    Namespace = Namespace.New(
-                                Request.NamespaceName
-                            );
+            if (this._context != null) {
+                if (this._context.AcquireAction.Action == "Gs2StateMachine:StartStateMachineByUserId") {
+                    Request = StartStateMachineByUserIdRequest.FromJson(JsonMapper.ToObject(this._context.AcquireAction.Request));
+                    if (Namespace == null || (
+                            Namespace.NamespaceName == Request.NamespaceName)
+                    ) {
+                        Namespace = Namespace.New(
+                            Request.NamespaceName
+                        );
+                    }
+                    Fetched = true;
+                    this.OnFetched.Invoke();
+                }
+            } else {
+                var action = this._fetcher.AcquireActions().FirstOrDefault(v => v.Action == "Gs2StateMachine:StartStateMachineByUserId");
+                if (action != null) {
+                    Request = StartStateMachineByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
+                    if (Namespace == null || (
+                            Namespace.NamespaceName == Request.NamespaceName)
+                    ) {
+                        Namespace = Namespace.New(
+                            Request.NamespaceName
+                        );
+                    }
+                    Fetched = true;
+                    this.OnFetched.Invoke();
                 }
             }
-            Fetched = true;
-            this.OnFetched.Invoke();
         }
     }
 
@@ -72,6 +88,7 @@ namespace Gs2.Unity.UiKit.Gs2StateMachine.Fetcher
 
     public partial class Gs2StateMachineStartStateMachineByUserIdFetcher
     {
+        private Gs2CoreAcquireActionContext _context;
         private IAcquireActionsFetcher _fetcher;
 
         public new void Start() {
@@ -80,33 +97,52 @@ namespace Gs2.Unity.UiKit.Gs2StateMachine.Fetcher
 
         public void Awake()
         {
-            this._fetcher = GetComponent<IAcquireActionsFetcher>() ?? GetComponentInParent<IAcquireActionsFetcher>();
-            if (this._fetcher == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the IAcquireActionFetcher.");
-                enabled = false;
+            this._context = GetComponent<Gs2CoreAcquireActionContext>() ?? GetComponentInParent<Gs2CoreAcquireActionContext>();
+            if (this._context == null) {
+                this._fetcher = GetComponent<IAcquireActionsFetcher>() ?? GetComponentInParent<IAcquireActionsFetcher>();
+                if (this._fetcher == null) {
+                    Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the IAcquireActionFetcher.");
+                    enabled = false;
+                }
             }
         }
 
         public override bool HasError()
         {
-            this._fetcher = GetComponent<IAcquireActionsFetcher>() ?? GetComponentInParent<IAcquireActionsFetcher>(true);
-            if (this._fetcher == null) {
-                return true;
+            this._context = GetComponent<Gs2CoreAcquireActionContext>() ?? GetComponentInParent<Gs2CoreAcquireActionContext>();
+            if (this._context == null) {
+                this._fetcher = GetComponent<IAcquireActionsFetcher>() ?? GetComponentInParent<IAcquireActionsFetcher>(true);
+                if (this._fetcher == null) {
+                    return true;
+                }
             }
             return false;
         }
 
         public void OnEnable()
         {
-            this._fetcher.OnFetchedEvent().AddListener(Fetch);
-            if (this._fetcher.IsFetched()) {
-                Fetch();
+            if (this._context != null) {
+                this._context.OnUpdate.AddListener(Fetch);
+                if (this._context.AcquireAction != null) {
+                    Fetch();
+                }
+            }
+            if (this._fetcher != null) {
+                this._fetcher.OnFetchedEvent().AddListener(Fetch);
+                if (this._fetcher.IsFetched()) {
+                    Fetch();
+                }
             }
         }
 
         public void OnDisable()
         {
-            this._fetcher.OnFetchedEvent().RemoveListener(Fetch);
+            if (this._context != null) {
+                this._context.OnUpdate.RemoveListener(Fetch);
+            }
+            if (this._fetcher != null) {
+                this._fetcher.OnFetchedEvent().RemoveListener(Fetch);
+            }
         }
     }
 

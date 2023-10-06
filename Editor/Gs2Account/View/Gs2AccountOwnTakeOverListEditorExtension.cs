@@ -51,7 +51,7 @@ namespace Gs2.Unity.UiKit.Gs2Account.Editor
                 EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2AccountOwnTakeOverListFetcher), false);
                 EditorGUI.indentLevel++;
                 if (fetcher.Context != null) {
-                    fetcher.Context.Account = EditorGUILayout.ObjectField("OwnAccount", fetcher.Context.Account, typeof(OwnAccount), false) as OwnAccount;
+                    EditorGUILayout.ObjectField("OwnAccount", fetcher.Context.Account, typeof(OwnAccount), false);
                     EditorGUI.indentLevel++;
                     EditorGUILayout.TextField("NamespaceName", fetcher.Context.Account?.NamespaceName?.ToString());
                     EditorGUI.indentLevel--;

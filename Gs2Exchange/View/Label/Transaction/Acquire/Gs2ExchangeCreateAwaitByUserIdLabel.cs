@@ -26,8 +26,10 @@
 
 using System;
 using Gs2.Gs2Exchange.Request;
+using Gs2.Unity.Gs2Exchange.ScriptableObject;
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Core.Fetcher;
+using Gs2.Unity.UiKit.Gs2Exchange.Context;
 using Gs2.Unity.UiKit.Gs2Exchange.Fetcher;
 using Gs2.Util.LitJson;
 using UnityEngine;
@@ -47,52 +49,36 @@ namespace Gs2.Unity.UiKit.Gs2Exchange.Label
             if ((!this._fetcher?.Fetched ?? false) || this._fetcher.Request == null) {
                 return;
             }
-            if (this._userDataFetcher?.Fetched ?? false)
-            {
-                this.onUpdate?.Invoke(
-                    this.format.Replace(
-                        "{namespaceName}",
-                        $"{this._fetcher.Request.NamespaceName}"
-                    ).Replace(
-                        "{userId}",
-                        $"{this._fetcher.Request.UserId}"
-                    ).Replace(
-                        "{rateName}",
-                        $"{this._fetcher.Request.RateName}"
-                    ).Replace(
-                        "{count}",
-                        $"{this._fetcher.Request.Count}"
-                    ).Replace(
-                        "{userData:userId}",
-                        $"{this._userDataFetcher.Await.UserId}"
-                    ).Replace(
-                        "{userData:rateName}",
-                        $"{this._userDataFetcher.Await.RateName}"
-                    ).Replace(
-                        "{userData:name}",
-                        $"{this._userDataFetcher.Await.Name}"
-                    ).Replace(
-                        "{userData:exchangedAt}",
-                        $"{this._userDataFetcher.Await.ExchangedAt}"
-                    )
-                );
-            } else {
-                this.onUpdate?.Invoke(
-                    this.format.Replace(
-                        "{namespaceName}",
-                        $"{this._fetcher.Request.NamespaceName}"
-                    ).Replace(
-                        "{userId}",
-                        $"{this._fetcher.Request.UserId}"
-                    ).Replace(
-                        "{rateName}",
-                        $"{this._fetcher.Request.RateName}"
-                    ).Replace(
-                        "{count}",
-                        $"{this._fetcher.Request.Count}"
-                    )
-                );
+            if ((!this._userDataFetcher?.Fetched ?? false) || this._userDataFetcher.Await == null) {
+                return;
             }
+            this.onUpdate?.Invoke(
+                this.format.Replace(
+                    "{namespaceName}",
+                    $"{this._fetcher.Request.NamespaceName}"
+                ).Replace(
+                    "{userId}",
+                    $"{this._fetcher.Request.UserId}"
+                ).Replace(
+                    "{rateName}",
+                    $"{this._fetcher.Request.RateName}"
+                ).Replace(
+                    "{count}",
+                    $"{this._fetcher.Request.Count}"
+                ).Replace(
+                    "{userData:userId}",
+                    $"{this._userDataFetcher.Await.UserId}"
+                ).Replace(
+                    "{userData:rateName}",
+                    $"{this._userDataFetcher.Await.RateName}"
+                ).Replace(
+                    "{userData:name}",
+                    $"{this._userDataFetcher.Await.Name}"
+                ).Replace(
+                    "{userData:exchangedAt}",
+                    $"{this._userDataFetcher.Await.ExchangedAt}"
+                )
+            );
         }
     }
 

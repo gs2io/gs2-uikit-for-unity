@@ -26,8 +26,10 @@
 
 using System;
 using Gs2.Gs2Money.Request;
+using Gs2.Unity.Gs2Money.ScriptableObject;
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Core.Fetcher;
+using Gs2.Unity.UiKit.Gs2Money.Context;
 using Gs2.Unity.UiKit.Gs2Money.Fetcher;
 using Gs2.Util.LitJson;
 using UnityEngine;
@@ -44,61 +46,55 @@ namespace Gs2.Unity.UiKit.Gs2Money.Label
     {
         private void OnFetched()
         {
+            if (this._userDataFetcher == null) {
+                var context = gameObject.AddComponent<Gs2MoneyOwnWalletContext>();
+                context.SetOwnWallet(
+                    OwnWallet.New(
+                        Namespace.New(
+                            this._fetcher.Request.NamespaceName
+                        ),
+                        this._fetcher.Request.Slot ?? 0
+                    )
+                );
+                this._userDataFetcher = gameObject.AddComponent<Gs2MoneyOwnWalletFetcher>();
+                this._userDataFetcher.OnFetched.AddListener(this._onFetched);
+            }
             if ((!this._fetcher?.Fetched ?? false) || this._fetcher.Request == null) {
                 return;
             }
-            if (this._userDataFetcher?.Fetched ?? false)
-            {
-                this.onUpdate?.Invoke(
-                    this.format.Replace(
-                        "{namespaceName}",
-                        $"{this._fetcher.Request.NamespaceName}"
-                    ).Replace(
-                        "{userId}",
-                        $"{this._fetcher.Request.UserId}"
-                    ).Replace(
-                        "{slot}",
-                        $"{this._fetcher.Request.Slot}"
-                    ).Replace(
-                        "{price}",
-                        $"{this._fetcher.Request.Price}"
-                    ).Replace(
-                        "{count}",
-                        $"{this._fetcher.Request.Count}"
-                    ).Replace(
-                        "{userData:slot}",
-                        $"{this._userDataFetcher.Wallet.Slot}"
-                    ).Replace(
-                        "{userData:paid}",
-                        $"{this._userDataFetcher.Wallet.Paid}"
-                    ).Replace(
-                        "{userData:free}",
-                        $"{this._userDataFetcher.Wallet.Free}"
-                    ).Replace(
-                        "{userData:updatedAt}",
-                        $"{this._userDataFetcher.Wallet.UpdatedAt}"
-                    )
-                );
-            } else {
-                this.onUpdate?.Invoke(
-                    this.format.Replace(
-                        "{namespaceName}",
-                        $"{this._fetcher.Request.NamespaceName}"
-                    ).Replace(
-                        "{userId}",
-                        $"{this._fetcher.Request.UserId}"
-                    ).Replace(
-                        "{slot}",
-                        $"{this._fetcher.Request.Slot}"
-                    ).Replace(
-                        "{price}",
-                        $"{this._fetcher.Request.Price}"
-                    ).Replace(
-                        "{count}",
-                        $"{this._fetcher.Request.Count}"
-                    )
-                );
+            if ((!this._userDataFetcher?.Fetched ?? false) || this._userDataFetcher.Wallet == null) {
+                return;
             }
+            this.onUpdate?.Invoke(
+                this.format.Replace(
+                    "{namespaceName}",
+                    $"{this._fetcher.Request.NamespaceName}"
+                ).Replace(
+                    "{userId}",
+                    $"{this._fetcher.Request.UserId}"
+                ).Replace(
+                    "{slot}",
+                    $"{this._fetcher.Request.Slot}"
+                ).Replace(
+                    "{price}",
+                    $"{this._fetcher.Request.Price}"
+                ).Replace(
+                    "{count}",
+                    $"{this._fetcher.Request.Count}"
+                ).Replace(
+                    "{userData:slot}",
+                    $"{this._userDataFetcher.Wallet.Slot}"
+                ).Replace(
+                    "{userData:paid}",
+                    $"{this._userDataFetcher.Wallet.Paid}"
+                ).Replace(
+                    "{userData:free}",
+                    $"{this._userDataFetcher.Wallet.Free}"
+                ).Replace(
+                    "{userData:updatedAt}",
+                    $"{this._userDataFetcher.Wallet.UpdatedAt}"
+                )
+            );
         }
     }
 

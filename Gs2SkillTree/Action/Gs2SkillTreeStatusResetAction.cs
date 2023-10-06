@@ -53,6 +53,9 @@ namespace Gs2.Unity.UiKit.Gs2SkillTree
 
             yield return new WaitUntil(() => clientHolder.Initialized);
             yield return new WaitUntil(() => gameSessionHolder.Initialized);
+
+            this.onResetStart.Invoke();
+
             
             var domain = clientHolder.Gs2.SkillTree.Namespace(
                 this._context.Status.NamespaceName
@@ -154,6 +157,21 @@ namespace Gs2.Unity.UiKit.Gs2SkillTree
     /// </summary>
     public partial class Gs2SkillTreeStatusResetAction
     {
+
+        [Serializable]
+        private class ResetStartEvent : UnityEvent
+        {
+
+        }
+
+        [SerializeField]
+        private ResetStartEvent onResetStart = new ResetStartEvent();
+
+        public event UnityAction OnResetStart
+        {
+            add => this.onResetStart.AddListener(value);
+            remove => this.onResetStart.RemoveListener(value);
+        }
 
         [Serializable]
         private class ResetCompleteEvent : UnityEvent<string>

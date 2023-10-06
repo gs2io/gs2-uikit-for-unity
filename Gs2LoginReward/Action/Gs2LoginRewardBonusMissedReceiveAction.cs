@@ -53,6 +53,9 @@ namespace Gs2.Unity.UiKit.Gs2LoginReward
 
             yield return new WaitUntil(() => clientHolder.Initialized);
             yield return new WaitUntil(() => gameSessionHolder.Initialized);
+
+            this.onMissedReceiveStart.Invoke();
+
             
             var domain = clientHolder.Gs2.LoginReward.Namespace(
                 this._context.Namespace.NamespaceName
@@ -231,6 +234,21 @@ namespace Gs2.Unity.UiKit.Gs2LoginReward
         {
             add => this.onChangeConfig.AddListener(value);
             remove => this.onChangeConfig.RemoveListener(value);
+        }
+
+        [Serializable]
+        private class MissedReceiveStartEvent : UnityEvent
+        {
+
+        }
+
+        [SerializeField]
+        private MissedReceiveStartEvent onMissedReceiveStart = new MissedReceiveStartEvent();
+
+        public event UnityAction OnMissedReceiveStart
+        {
+            add => this.onMissedReceiveStart.AddListener(value);
+            remove => this.onMissedReceiveStart.RemoveListener(value);
         }
 
         [Serializable]

@@ -26,8 +26,10 @@
 
 using System;
 using Gs2.Gs2StateMachine.Request;
+using Gs2.Unity.Gs2StateMachine.ScriptableObject;
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Core.Fetcher;
+using Gs2.Unity.UiKit.Gs2StateMachine.Context;
 using Gs2.Unity.UiKit.Gs2StateMachine.Fetcher;
 using Gs2.Util.LitJson;
 using UnityEngine;
@@ -47,61 +49,45 @@ namespace Gs2.Unity.UiKit.Gs2StateMachine.Label
             if ((!this._fetcher?.Fetched ?? false) || this._fetcher.Request == null) {
                 return;
             }
-            if (this._userDataFetcher?.Fetched ?? false)
-            {
-                this.onUpdate?.Invoke(
-                    this.format.Replace(
-                        "{namespaceName}",
-                        $"{this._fetcher.Request.NamespaceName}"
-                    ).Replace(
-                        "{userId}",
-                        $"{this._fetcher.Request.UserId}"
-                    ).Replace(
-                        "{args}",
-                        $"{this._fetcher.Request.Args}"
-                    ).Replace(
-                        "{ttl}",
-                        $"{this._fetcher.Request.Ttl}"
-                    ).Replace(
-                        "{userData:statusId}",
-                        $"{this._userDataFetcher.Status.StatusId}"
-                    ).Replace(
-                        "{userData:name}",
-                        $"{this._userDataFetcher.Status.Name}"
-                    ).Replace(
-                        "{userData:stacks}",
-                        $"{this._userDataFetcher.Status.Stacks}"
-                    ).Replace(
-                        "{userData:variables}",
-                        $"{this._userDataFetcher.Status.Variables}"
-                    ).Replace(
-                        "{userData:status}",
-                        $"{this._userDataFetcher.Status.Status}"
-                    ).Replace(
-                        "{userData:lastError}",
-                        $"{this._userDataFetcher.Status.LastError}"
-                    ).Replace(
-                        "{userData:transitionCount}",
-                        $"{this._userDataFetcher.Status.TransitionCount}"
-                    )
-                );
-            } else {
-                this.onUpdate?.Invoke(
-                    this.format.Replace(
-                        "{namespaceName}",
-                        $"{this._fetcher.Request.NamespaceName}"
-                    ).Replace(
-                        "{userId}",
-                        $"{this._fetcher.Request.UserId}"
-                    ).Replace(
-                        "{args}",
-                        $"{this._fetcher.Request.Args}"
-                    ).Replace(
-                        "{ttl}",
-                        $"{this._fetcher.Request.Ttl}"
-                    )
-                );
+            if ((!this._userDataFetcher?.Fetched ?? false) || this._userDataFetcher.Status == null) {
+                return;
             }
+            this.onUpdate?.Invoke(
+                this.format.Replace(
+                    "{namespaceName}",
+                    $"{this._fetcher.Request.NamespaceName}"
+                ).Replace(
+                    "{userId}",
+                    $"{this._fetcher.Request.UserId}"
+                ).Replace(
+                    "{args}",
+                    $"{this._fetcher.Request.Args}"
+                ).Replace(
+                    "{ttl}",
+                    $"{this._fetcher.Request.Ttl}"
+                ).Replace(
+                    "{userData:statusId}",
+                    $"{this._userDataFetcher.Status.StatusId}"
+                ).Replace(
+                    "{userData:name}",
+                    $"{this._userDataFetcher.Status.Name}"
+                ).Replace(
+                    "{userData:stacks}",
+                    $"{this._userDataFetcher.Status.Stacks}"
+                ).Replace(
+                    "{userData:variables}",
+                    $"{this._userDataFetcher.Status.Variables}"
+                ).Replace(
+                    "{userData:status}",
+                    $"{this._userDataFetcher.Status.Status}"
+                ).Replace(
+                    "{userData:lastError}",
+                    $"{this._userDataFetcher.Status.LastError}"
+                ).Replace(
+                    "{userData:transitionCount}",
+                    $"{this._userDataFetcher.Status.TransitionCount}"
+                )
+            );
         }
     }
 

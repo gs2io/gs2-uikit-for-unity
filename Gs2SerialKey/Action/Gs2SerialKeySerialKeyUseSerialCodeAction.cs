@@ -53,6 +53,9 @@ namespace Gs2.Unity.UiKit.Gs2SerialKey
 
             yield return new WaitUntil(() => clientHolder.Initialized);
             yield return new WaitUntil(() => gameSessionHolder.Initialized);
+
+            this.onUseSerialCodeStart.Invoke();
+
             
             var domain = clientHolder.Gs2.SerialKey.Namespace(
                 this._context.SerialKey.NamespaceName
@@ -187,6 +190,21 @@ namespace Gs2.Unity.UiKit.Gs2SerialKey
         {
             add => this.onChangeCode.AddListener(value);
             remove => this.onChangeCode.RemoveListener(value);
+        }
+
+        [Serializable]
+        private class UseSerialCodeStartEvent : UnityEvent
+        {
+
+        }
+
+        [SerializeField]
+        private UseSerialCodeStartEvent onUseSerialCodeStart = new UseSerialCodeStartEvent();
+
+        public event UnityAction OnUseSerialCodeStart
+        {
+            add => this.onUseSerialCodeStart.AddListener(value);
+            remove => this.onUseSerialCodeStart.RemoveListener(value);
         }
 
         [Serializable]

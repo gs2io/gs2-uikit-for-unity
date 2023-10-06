@@ -53,6 +53,9 @@ namespace Gs2.Unity.UiKit.Gs2Exchange
 
             yield return new WaitUntil(() => clientHolder.Initialized);
             yield return new WaitUntil(() => gameSessionHolder.Initialized);
+
+            this.onAcquireStart.Invoke();
+
             
             var domain = clientHolder.Gs2.Exchange.Namespace(
                 this._context.Await.NamespaceName
@@ -155,6 +158,21 @@ namespace Gs2.Unity.UiKit.Gs2Exchange
     /// </summary>
     public partial class Gs2ExchangeAwaitAcquireAction
     {
+
+        [Serializable]
+        private class AcquireStartEvent : UnityEvent
+        {
+
+        }
+
+        [SerializeField]
+        private AcquireStartEvent onAcquireStart = new AcquireStartEvent();
+
+        public event UnityAction OnAcquireStart
+        {
+            add => this.onAcquireStart.AddListener(value);
+            remove => this.onAcquireStart.RemoveListener(value);
+        }
 
         [Serializable]
         private class AcquireCompleteEvent : UnityEvent<string>

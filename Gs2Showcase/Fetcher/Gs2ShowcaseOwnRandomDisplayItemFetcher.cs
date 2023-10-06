@@ -35,6 +35,7 @@ using Gs2.Unity.Gs2Showcase.Model;
 using Gs2.Unity.Gs2Showcase.ScriptableObject;
 using Gs2.Unity.Util;
 using Gs2.Unity.UiKit.Core;
+using Gs2.Unity.UiKit.Core.Model;
 using Gs2.Unity.UiKit.Gs2Core.Fetcher;
 using Gs2.Unity.UiKit.Gs2Showcase.Context;
 using UnityEngine;
@@ -124,11 +125,23 @@ namespace Gs2.Unity.UiKit.Gs2Showcase.Fetcher
             this._callbackId = null;
         }
 
+        public void SetTemporaryRandomDisplayItem(
+            Gs2.Unity.Gs2Showcase.Model.EzRandomDisplayItem randomDisplayItem
+        ) {
+            RandomDisplayItem = randomDisplayItem;
+            this.OnFetched.Invoke();
+        }
+
+        public void RollbackTemporaryRandomDisplayItem(
+        ) {
+            OnUpdateContext();
+        }
+
         public List<Unity.Core.Model.EzAcquireAction> AcquireActions(string context = "default") {
             if (!Fetched) {
                 return new List<Unity.Core.Model.EzAcquireAction>();
             }
-            return RandomDisplayItem.AcquireActions;
+            return RandomDisplayItem.AcquireActions.Denormalize();
         }
 
         bool IAcquireActionsFetcher.IsFetched() {
@@ -147,7 +160,7 @@ namespace Gs2.Unity.UiKit.Gs2Showcase.Fetcher
             if (!Fetched) {
                 return new List<Unity.Core.Model.EzConsumeAction>();
             }
-            return RandomDisplayItem.ConsumeActions;
+            return RandomDisplayItem.ConsumeActions.Denormalize();
         }
 
         bool IConsumeActionsFetcher.IsFetched() {

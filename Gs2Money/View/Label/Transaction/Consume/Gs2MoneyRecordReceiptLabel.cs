@@ -26,8 +26,10 @@
 
 using System;
 using Gs2.Gs2Money.Request;
+using Gs2.Unity.Gs2Money.ScriptableObject;
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Core.Fetcher;
+using Gs2.Unity.UiKit.Gs2Money.Context;
 using Gs2.Unity.UiKit.Gs2Money.Fetcher;
 using Gs2.Util.LitJson;
 using UnityEngine;
@@ -47,23 +49,21 @@ namespace Gs2.Unity.UiKit.Gs2Money.Label
             if ((!this._fetcher?.Fetched ?? false) || this._fetcher.Request == null) {
                 return;
             }
-            {
-                this.onUpdate?.Invoke(
-                    this.format.Replace(
-                        "{namespaceName}",
-                        $"{this._fetcher.Request.NamespaceName}"
-                    ).Replace(
-                        "{userId}",
-                        $"{this._fetcher.Request.UserId}"
-                    ).Replace(
-                        "{contentsId}",
-                        $"{this._fetcher.Request.ContentsId}"
-                    ).Replace(
-                        "{receipt}",
-                        $"{this._fetcher.Request.Receipt}"
-                    )
-                );
-            }
+            this.onUpdate?.Invoke(
+                this.format.Replace(
+                    "{namespaceName}",
+                    $"{this._fetcher.Request.NamespaceName}"
+                ).Replace(
+                    "{userId}",
+                    $"{this._fetcher.Request.UserId}"
+                ).Replace(
+                    "{contentsId}",
+                    $"{this._fetcher.Request.ContentsId}"
+                ).Replace(
+                    "{receipt}",
+                    $"{this._fetcher.Request.Receipt}"
+                )
+            );
         }
     }
 

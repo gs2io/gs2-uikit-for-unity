@@ -26,8 +26,10 @@
 
 using System;
 using Gs2.Gs2Schedule.Request;
+using Gs2.Unity.Gs2Schedule.ScriptableObject;
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Core.Fetcher;
+using Gs2.Unity.UiKit.Gs2Schedule.Context;
 using Gs2.Unity.UiKit.Gs2Schedule.Fetcher;
 using Gs2.Util.LitJson;
 using UnityEngine;
@@ -44,61 +46,55 @@ namespace Gs2.Unity.UiKit.Gs2Schedule.Label
     {
         private void OnFetched()
         {
+            if (this._userDataFetcher == null) {
+                var context = gameObject.AddComponent<Gs2ScheduleOwnTriggerContext>();
+                context.SetOwnTrigger(
+                    OwnTrigger.New(
+                        Namespace.New(
+                            this._fetcher.Request.NamespaceName
+                        ),
+                        this._fetcher.Request.TriggerName
+                    )
+                );
+                this._userDataFetcher = gameObject.AddComponent<Gs2ScheduleOwnTriggerFetcher>();
+                this._userDataFetcher.OnFetched.AddListener(this._onFetched);
+            }
             if ((!this._fetcher?.Fetched ?? false) || this._fetcher.Request == null) {
                 return;
             }
-            if (this._userDataFetcher?.Fetched ?? false)
-            {
-                this.onUpdate?.Invoke(
-                    this.format.Replace(
-                        "{namespaceName}",
-                        $"{this._fetcher.Request.NamespaceName}"
-                    ).Replace(
-                        "{triggerName}",
-                        $"{this._fetcher.Request.TriggerName}"
-                    ).Replace(
-                        "{userId}",
-                        $"{this._fetcher.Request.UserId}"
-                    ).Replace(
-                        "{triggerStrategy}",
-                        $"{this._fetcher.Request.TriggerStrategy}"
-                    ).Replace(
-                        "{ttl}",
-                        $"{this._fetcher.Request.Ttl}"
-                    ).Replace(
-                        "{userData:triggerId}",
-                        $"{this._userDataFetcher.Trigger.TriggerId}"
-                    ).Replace(
-                        "{userData:name}",
-                        $"{this._userDataFetcher.Trigger.Name}"
-                    ).Replace(
-                        "{userData:createdAt}",
-                        $"{this._userDataFetcher.Trigger.CreatedAt}"
-                    ).Replace(
-                        "{userData:expiresAt}",
-                        $"{this._userDataFetcher.Trigger.ExpiresAt}"
-                    )
-                );
-            } else {
-                this.onUpdate?.Invoke(
-                    this.format.Replace(
-                        "{namespaceName}",
-                        $"{this._fetcher.Request.NamespaceName}"
-                    ).Replace(
-                        "{triggerName}",
-                        $"{this._fetcher.Request.TriggerName}"
-                    ).Replace(
-                        "{userId}",
-                        $"{this._fetcher.Request.UserId}"
-                    ).Replace(
-                        "{triggerStrategy}",
-                        $"{this._fetcher.Request.TriggerStrategy}"
-                    ).Replace(
-                        "{ttl}",
-                        $"{this._fetcher.Request.Ttl}"
-                    )
-                );
+            if ((!this._userDataFetcher?.Fetched ?? false) || this._userDataFetcher.Trigger == null) {
+                return;
             }
+            this.onUpdate?.Invoke(
+                this.format.Replace(
+                    "{namespaceName}",
+                    $"{this._fetcher.Request.NamespaceName}"
+                ).Replace(
+                    "{triggerName}",
+                    $"{this._fetcher.Request.TriggerName}"
+                ).Replace(
+                    "{userId}",
+                    $"{this._fetcher.Request.UserId}"
+                ).Replace(
+                    "{triggerStrategy}",
+                    $"{this._fetcher.Request.TriggerStrategy}"
+                ).Replace(
+                    "{ttl}",
+                    $"{this._fetcher.Request.Ttl}"
+                ).Replace(
+                    "{userData:triggerId}",
+                    $"{this._userDataFetcher.Trigger.TriggerId}"
+                ).Replace(
+                    "{userData:name}",
+                    $"{this._userDataFetcher.Trigger.Name}"
+                ).Replace(
+                    "{userData:createdAt}",
+                    $"{this._userDataFetcher.Trigger.CreatedAt}"
+                ).Replace(
+                    "{userData:expiresAt}",
+                    $"{this._userDataFetcher.Trigger.ExpiresAt}"
+                )
+            );
         }
     }
 

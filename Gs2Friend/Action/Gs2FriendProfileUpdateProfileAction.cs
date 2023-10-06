@@ -53,6 +53,9 @@ namespace Gs2.Unity.UiKit.Gs2Friend
 
             yield return new WaitUntil(() => clientHolder.Initialized);
             yield return new WaitUntil(() => gameSessionHolder.Initialized);
+
+            this.onUpdateProfileStart.Invoke();
+
             
             var domain = clientHolder.Gs2.Friend.Namespace(
                 this._context.Profile.NamespaceName
@@ -230,6 +233,21 @@ namespace Gs2.Unity.UiKit.Gs2Friend
         {
             add => this.onChangeFriendProfile.AddListener(value);
             remove => this.onChangeFriendProfile.RemoveListener(value);
+        }
+
+        [Serializable]
+        private class UpdateProfileStartEvent : UnityEvent
+        {
+
+        }
+
+        [SerializeField]
+        private UpdateProfileStartEvent onUpdateProfileStart = new UpdateProfileStartEvent();
+
+        public event UnityAction OnUpdateProfileStart
+        {
+            add => this.onUpdateProfileStart.AddListener(value);
+            remove => this.onUpdateProfileStart.RemoveListener(value);
         }
 
         [Serializable]

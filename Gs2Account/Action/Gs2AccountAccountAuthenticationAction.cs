@@ -53,6 +53,9 @@ namespace Gs2.Unity.UiKit.Gs2Account
 
             yield return new WaitUntil(() => clientHolder.Initialized);
             yield return new WaitUntil(() => gameSessionHolder.Initialized);
+
+            this.onAuthenticationStart.Invoke();
+
             
             var domain = clientHolder.Gs2.Account.Namespace(
                 this._context.Account.NamespaceName
@@ -227,6 +230,21 @@ namespace Gs2.Unity.UiKit.Gs2Account
         {
             add => this.onChangeUserId.AddListener(value);
             remove => this.onChangeUserId.RemoveListener(value);
+        }
+
+        [Serializable]
+        private class AuthenticationStartEvent : UnityEvent
+        {
+
+        }
+
+        [SerializeField]
+        private AuthenticationStartEvent onAuthenticationStart = new AuthenticationStartEvent();
+
+        public event UnityAction OnAuthenticationStart
+        {
+            add => this.onAuthenticationStart.AddListener(value);
+            remove => this.onAuthenticationStart.RemoveListener(value);
         }
 
         [Serializable]

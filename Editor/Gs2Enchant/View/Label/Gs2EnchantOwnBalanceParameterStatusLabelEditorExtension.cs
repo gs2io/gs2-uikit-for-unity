@@ -59,7 +59,7 @@ namespace Gs2.Unity.UiKit.Gs2Enchant.Editor
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2EnchantOwnBalanceParameterStatusFetcher), false);
                     EditorGUI.indentLevel++;
                     if (fetcher.Context != null) {
-                        fetcher.Context.BalanceParameterStatus = EditorGUILayout.ObjectField("BalanceParameterStatus", fetcher.Context.BalanceParameterStatus, typeof(OwnBalanceParameterStatus), false) as OwnBalanceParameterStatus;
+                        EditorGUILayout.ObjectField("BalanceParameterStatus", fetcher.Context.BalanceParameterStatus, typeof(OwnBalanceParameterStatus), false);
                         EditorGUI.indentLevel++;
                         EditorGUILayout.TextField("NamespaceName", fetcher.Context.BalanceParameterStatus?.NamespaceName?.ToString());
                         EditorGUILayout.TextField("ParameterName", fetcher.Context.BalanceParameterStatus?.ParameterName?.ToString());

@@ -52,6 +52,9 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking
             var gameSessionHolder = Gs2GameSessionHolder.Instance;
 
             yield return new WaitUntil(() => clientHolder.Initialized);
+
+            this.onVoteStart.Invoke();
+
             
             var domain = clientHolder.Gs2.Matchmaking.Namespace(
                 this._context.Vote.NamespaceName
@@ -248,6 +251,21 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking
         {
             add => this.onChangeKeyId.AddListener(value);
             remove => this.onChangeKeyId.RemoveListener(value);
+        }
+
+        [Serializable]
+        private class VoteStartEvent : UnityEvent
+        {
+
+        }
+
+        [SerializeField]
+        private VoteStartEvent onVoteStart = new VoteStartEvent();
+
+        public event UnityAction OnVoteStart
+        {
+            add => this.onVoteStart.AddListener(value);
+            remove => this.onVoteStart.RemoveListener(value);
         }
 
         [Serializable]

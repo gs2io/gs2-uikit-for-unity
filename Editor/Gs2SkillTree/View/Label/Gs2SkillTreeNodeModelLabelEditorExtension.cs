@@ -59,7 +59,7 @@ namespace Gs2.Unity.UiKit.Gs2SkillTree.Editor
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2SkillTreeNodeModelFetcher), false);
                     EditorGUI.indentLevel++;
                     if (fetcher.Context != null) {
-                        fetcher.Context.NodeModel = EditorGUILayout.ObjectField("NodeModel", fetcher.Context.NodeModel, typeof(NodeModel), false) as NodeModel;
+                        EditorGUILayout.ObjectField("NodeModel", fetcher.Context.NodeModel, typeof(NodeModel), false);
                         EditorGUI.indentLevel++;
                         EditorGUILayout.TextField("NamespaceName", fetcher.Context.NodeModel?.NamespaceName?.ToString());
                         EditorGUILayout.TextField("NodeModelName", fetcher.Context.NodeModel?.NodeModelName?.ToString());

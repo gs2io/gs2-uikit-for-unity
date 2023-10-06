@@ -35,6 +35,7 @@ using Gs2.Unity.Gs2Quest.Model;
 using Gs2.Unity.Gs2Quest.ScriptableObject;
 using Gs2.Unity.Util;
 using Gs2.Unity.UiKit.Core;
+using Gs2.Unity.UiKit.Core.Model;
 using Gs2.Unity.UiKit.Gs2Core.Fetcher;
 using Gs2.Unity.UiKit.Gs2Quest.Context;
 using UnityEngine;
@@ -122,14 +123,14 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Fetcher
             this._callbackId = null;
         }
 
-        public void SetTemporarySlot(
+        public void SetTemporaryQuestModel(
             Gs2.Unity.Gs2Quest.Model.EzQuestModel questModel
         ) {
             QuestModel = questModel;
             this.OnFetched.Invoke();
         }
 
-        public void RollbackTemporarySlot(
+        public void RollbackTemporaryQuestModel(
         ) {
             OnUpdateContext();
         }
@@ -138,7 +139,7 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Fetcher
             if (!Fetched) {
                 return new List<Unity.Core.Model.EzAcquireAction>();
             }
-            return QuestModel.FirstCompleteAcquireActions;
+            return QuestModel.FirstCompleteAcquireActions.Denormalize();
         }
 
         bool IAcquireActionsFetcher.IsFetched() {
@@ -157,7 +158,7 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Fetcher
             if (!Fetched) {
                 return new List<Unity.Core.Model.EzConsumeAction>();
             }
-            return QuestModel.ConsumeActions;
+            return QuestModel.ConsumeActions.Denormalize();
         }
 
         bool IConsumeActionsFetcher.IsFetched() {

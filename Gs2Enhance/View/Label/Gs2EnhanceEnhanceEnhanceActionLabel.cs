@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
@@ -44,8 +46,6 @@ namespace Gs2.Unity.UiKit.Gs2Enhance
         {
             this.onUpdate?.Invoke(
                 this.format.Replace(
-                    "{rateName}", $"{this.action?.RateName}"
-                ).Replace(
                     "{targetItemSetId}", $"{this.action?.TargetItemSetId}"
                 ).Replace(
                     "{materials}", $"{this.action?.Materials}"

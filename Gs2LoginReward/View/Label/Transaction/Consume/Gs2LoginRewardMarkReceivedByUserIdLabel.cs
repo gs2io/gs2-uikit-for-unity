@@ -26,8 +26,10 @@
 
 using System;
 using Gs2.Gs2LoginReward.Request;
+using Gs2.Unity.Gs2LoginReward.ScriptableObject;
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Core.Fetcher;
+using Gs2.Unity.UiKit.Gs2LoginReward.Context;
 using Gs2.Unity.UiKit.Gs2LoginReward.Fetcher;
 using Gs2.Util.LitJson;
 using UnityEngine;
@@ -44,52 +46,49 @@ namespace Gs2.Unity.UiKit.Gs2LoginReward.Label
     {
         private void OnFetched()
         {
+            if (this._userDataFetcher == null) {
+                var context = gameObject.AddComponent<Gs2LoginRewardOwnReceiveStatusContext>();
+                context.SetOwnReceiveStatus(
+                    OwnReceiveStatus.New(
+                        Namespace.New(
+                            this._fetcher.Request.NamespaceName
+                        ),
+                        this._fetcher.Request.BonusModelName
+                    )
+                );
+                this._userDataFetcher = gameObject.AddComponent<Gs2LoginRewardOwnReceiveStatusFetcher>();
+                this._userDataFetcher.OnFetched.AddListener(this._onFetched);
+            }
             if ((!this._fetcher?.Fetched ?? false) || this._fetcher.Request == null) {
                 return;
             }
-            if (this._userDataFetcher?.Fetched ?? false)
-            {
-                this.onUpdate?.Invoke(
-                    this.format.Replace(
-                        "{namespaceName}",
-                        $"{this._fetcher.Request.NamespaceName}"
-                    ).Replace(
-                        "{bonusModelName}",
-                        $"{this._fetcher.Request.BonusModelName}"
-                    ).Replace(
-                        "{userId}",
-                        $"{this._fetcher.Request.UserId}"
-                    ).Replace(
-                        "{stepNumber}",
-                        $"{this._fetcher.Request.StepNumber}"
-                    ).Replace(
-                        "{userData:bonusModelName}",
-                        $"{this._userDataFetcher.ReceiveStatus.BonusModelName}"
-                    ).Replace(
-                        "{userData:receivedSteps}",
-                        $"{this._userDataFetcher.ReceiveStatus.ReceivedSteps}"
-                    ).Replace(
-                        "{userData:lastReceivedAt}",
-                        $"{this._userDataFetcher.ReceiveStatus.LastReceivedAt}"
-                    )
-                );
-            } else {
-                this.onUpdate?.Invoke(
-                    this.format.Replace(
-                        "{namespaceName}",
-                        $"{this._fetcher.Request.NamespaceName}"
-                    ).Replace(
-                        "{bonusModelName}",
-                        $"{this._fetcher.Request.BonusModelName}"
-                    ).Replace(
-                        "{userId}",
-                        $"{this._fetcher.Request.UserId}"
-                    ).Replace(
-                        "{stepNumber}",
-                        $"{this._fetcher.Request.StepNumber}"
-                    )
-                );
+            if ((!this._userDataFetcher?.Fetched ?? false) || this._userDataFetcher.ReceiveStatus == null) {
+                return;
             }
+            this.onUpdate?.Invoke(
+                this.format.Replace(
+                    "{namespaceName}",
+                    $"{this._fetcher.Request.NamespaceName}"
+                ).Replace(
+                    "{bonusModelName}",
+                    $"{this._fetcher.Request.BonusModelName}"
+                ).Replace(
+                    "{userId}",
+                    $"{this._fetcher.Request.UserId}"
+                ).Replace(
+                    "{stepNumber}",
+                    $"{this._fetcher.Request.StepNumber}"
+                ).Replace(
+                    "{userData:bonusModelName}",
+                    $"{this._userDataFetcher.ReceiveStatus.BonusModelName}"
+                ).Replace(
+                    "{userData:receivedSteps}",
+                    $"{this._userDataFetcher.ReceiveStatus.ReceivedSteps}"
+                ).Replace(
+                    "{userData:lastReceivedAt}",
+                    $"{this._userDataFetcher.ReceiveStatus.LastReceivedAt}"
+                )
+            );
         }
     }
 

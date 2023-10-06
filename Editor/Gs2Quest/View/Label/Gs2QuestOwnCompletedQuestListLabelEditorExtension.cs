@@ -59,7 +59,7 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Editor
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2QuestOwnCompletedQuestListFetcher), false);
                     EditorGUI.indentLevel++;
                     if (fetcher.Context != null) {
-                        fetcher.Context.CompletedQuestList = EditorGUILayout.ObjectField("CompletedQuestList", fetcher.Context.CompletedQuestList, typeof(OwnCompletedQuestList), false) as OwnCompletedQuestList;
+                        EditorGUILayout.ObjectField("CompletedQuestList", fetcher.Context.CompletedQuestList, typeof(OwnCompletedQuestList), false);
                         EditorGUI.indentLevel++;
                         EditorGUILayout.TextField("NamespaceName", fetcher.Context.CompletedQuestList?.NamespaceName?.ToString());
                         EditorGUILayout.TextField("QuestGroupName", fetcher.Context.CompletedQuestList?.QuestGroupName?.ToString());

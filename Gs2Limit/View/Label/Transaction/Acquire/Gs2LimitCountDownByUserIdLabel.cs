@@ -26,8 +26,10 @@
 
 using System;
 using Gs2.Gs2Limit.Request;
+using Gs2.Unity.Gs2Limit.ScriptableObject;
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Core.Fetcher;
+using Gs2.Unity.UiKit.Gs2Limit.Context;
 using Gs2.Unity.UiKit.Gs2Limit.Fetcher;
 using Gs2.Util.LitJson;
 using UnityEngine;
@@ -44,70 +46,65 @@ namespace Gs2.Unity.UiKit.Gs2Limit.Label
     {
         private void OnFetched()
         {
+            if (this._userDataFetcher == null) {
+                var context = gameObject.AddComponent<Gs2LimitOwnCounterContext>();
+                context.SetOwnCounter(
+                    OwnCounter.New(
+                        Namespace.New(
+                            this._fetcher.Request.NamespaceName
+                        ),
+                        this._fetcher.Request.LimitName,
+                        this._fetcher.Request.CounterName
+                    )
+                );
+                this._userDataFetcher = gameObject.AddComponent<Gs2LimitOwnCounterFetcher>();
+                this._userDataFetcher.OnFetched.AddListener(this._onFetched);
+            }
             if ((!this._fetcher?.Fetched ?? false) || this._fetcher.Request == null) {
                 return;
             }
-            if (this._userDataFetcher?.Fetched ?? false)
-            {
-                this.onUpdate?.Invoke(
-                    this.format.Replace(
-                        "{namespaceName}",
-                        $"{this._fetcher.Request.NamespaceName}"
-                    ).Replace(
-                        "{limitName}",
-                        $"{this._fetcher.Request.LimitName}"
-                    ).Replace(
-                        "{counterName}",
-                        $"{this._fetcher.Request.CounterName}"
-                    ).Replace(
-                        "{userId}",
-                        $"{this._fetcher.Request.UserId}"
-                    ).Replace(
-                        "{countDownValue}",
-                        $"{this._fetcher.Request.CountDownValue}"
-                    ).Replace(
-                        "{userData:counterId}",
-                        $"{this._userDataFetcher.Counter.CounterId}"
-                    ).Replace(
-                        "{userData:limitName}",
-                        $"{this._userDataFetcher.Counter.LimitName}"
-                    ).Replace(
-                        "{userData:name}",
-                        $"{this._userDataFetcher.Counter.Name}"
-                    ).Replace(
-                        "{userData:count}",
-                        $"{this._userDataFetcher.Counter.Count}"
-                    ).Replace(
-                        "{userData:count:changed}",
-                        $"{this._userDataFetcher.Counter.Count + this._fetcher.Request.CountDownValue}"
-                    ).Replace(
-                        "{userData:createdAt}",
-                        $"{this._userDataFetcher.Counter.CreatedAt}"
-                    ).Replace(
-                        "{userData:updatedAt}",
-                        $"{this._userDataFetcher.Counter.UpdatedAt}"
-                    )
-                );
-            } else {
-                this.onUpdate?.Invoke(
-                    this.format.Replace(
-                        "{namespaceName}",
-                        $"{this._fetcher.Request.NamespaceName}"
-                    ).Replace(
-                        "{limitName}",
-                        $"{this._fetcher.Request.LimitName}"
-                    ).Replace(
-                        "{counterName}",
-                        $"{this._fetcher.Request.CounterName}"
-                    ).Replace(
-                        "{userId}",
-                        $"{this._fetcher.Request.UserId}"
-                    ).Replace(
-                        "{countDownValue}",
-                        $"{this._fetcher.Request.CountDownValue}"
-                    )
-                );
+            if ((!this._userDataFetcher?.Fetched ?? false) || this._userDataFetcher.Counter == null) {
+                return;
             }
+            this.onUpdate?.Invoke(
+                this.format.Replace(
+                    "{namespaceName}",
+                    $"{this._fetcher.Request.NamespaceName}"
+                ).Replace(
+                    "{limitName}",
+                    $"{this._fetcher.Request.LimitName}"
+                ).Replace(
+                    "{counterName}",
+                    $"{this._fetcher.Request.CounterName}"
+                ).Replace(
+                    "{userId}",
+                    $"{this._fetcher.Request.UserId}"
+                ).Replace(
+                    "{countDownValue}",
+                    $"{this._fetcher.Request.CountDownValue}"
+                ).Replace(
+                    "{userData:counterId}",
+                    $"{this._userDataFetcher.Counter.CounterId}"
+                ).Replace(
+                    "{userData:limitName}",
+                    $"{this._userDataFetcher.Counter.LimitName}"
+                ).Replace(
+                    "{userData:name}",
+                    $"{this._userDataFetcher.Counter.Name}"
+                ).Replace(
+                    "{userData:count}",
+                    $"{this._userDataFetcher.Counter.Count}"
+                ).Replace(
+                    "{userData:count:changed}",
+                    $"{this._userDataFetcher.Counter.Count + this._fetcher.Request.CountDownValue}"
+                ).Replace(
+                    "{userData:createdAt}",
+                    $"{this._userDataFetcher.Counter.CreatedAt}"
+                ).Replace(
+                    "{userData:updatedAt}",
+                    $"{this._userDataFetcher.Counter.UpdatedAt}"
+                )
+            );
         }
     }
 

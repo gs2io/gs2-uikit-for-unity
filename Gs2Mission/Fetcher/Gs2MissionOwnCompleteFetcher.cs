@@ -35,6 +35,7 @@ using Gs2.Unity.Gs2Mission.Model;
 using Gs2.Unity.Gs2Mission.ScriptableObject;
 using Gs2.Unity.Util;
 using Gs2.Unity.UiKit.Core;
+using Gs2.Unity.UiKit.Core.Model;
 using Gs2.Unity.UiKit.Gs2Core.Fetcher;
 using Gs2.Unity.UiKit.Gs2Mission.Context;
 using UnityEngine;
@@ -120,6 +121,18 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Fetcher
                 this._callbackId.Value
             );
             this._callbackId = null;
+        }
+
+        public void SetTemporaryComplete(
+            Gs2.Unity.Gs2Mission.Model.EzComplete complete
+        ) {
+            Complete = complete;
+            this.OnFetched.Invoke();
+        }
+
+        public void RollbackTemporaryComplete(
+        ) {
+            OnUpdateContext();
         }
     }
 

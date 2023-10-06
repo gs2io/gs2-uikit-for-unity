@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
@@ -120,6 +122,18 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Fetcher
                 this._callbackId.Value
             );
             this._callbackId = null;
+        }
+
+        public void SetTemporarySendFriendRequest(
+            Gs2.Unity.Gs2Friend.Model.EzFriendRequest sendFriendRequest
+        ) {
+            SendFriendRequest = sendFriendRequest;
+            this.OnFetched.Invoke();
+        }
+
+        public void RollbackTemporarySendFriendRequest(
+        ) {
+            OnUpdateContext();
         }
     }
 

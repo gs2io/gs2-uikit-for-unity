@@ -35,6 +35,7 @@ using Gs2.Unity.Gs2Inventory.Model;
 using Gs2.Unity.Gs2Inventory.ScriptableObject;
 using Gs2.Unity.Util;
 using Gs2.Unity.UiKit.Core;
+using Gs2.Unity.UiKit.Core.Model;
 using Gs2.Unity.UiKit.Gs2Core.Fetcher;
 using Gs2.Unity.UiKit.Gs2Inventory.Context;
 using UnityEngine;
@@ -122,6 +123,18 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Fetcher
                 this._callbackId.Value
             );
             this._callbackId = null;
+        }
+
+        public void SetTemporaryBigItem(
+            Gs2.Unity.Gs2Inventory.Model.EzBigItem bigItem
+        ) {
+            BigItem = bigItem;
+            this.OnFetched.Invoke();
+        }
+
+        public void RollbackTemporaryBigItem(
+        ) {
+            OnUpdateContext();
         }
     }
 

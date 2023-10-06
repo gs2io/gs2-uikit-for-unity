@@ -59,7 +59,7 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Editor
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2InventoryOwnBigItemFetcher), false);
                     EditorGUI.indentLevel++;
                     if (fetcher.Context != null) {
-                        fetcher.Context.BigItem = EditorGUILayout.ObjectField("BigItem", fetcher.Context.BigItem, typeof(OwnBigItem), false) as OwnBigItem;
+                        EditorGUILayout.ObjectField("BigItem", fetcher.Context.BigItem, typeof(OwnBigItem), false);
                         EditorGUI.indentLevel++;
                         EditorGUILayout.TextField("NamespaceName", fetcher.Context.BigItem?.NamespaceName?.ToString());
                         EditorGUILayout.TextField("InventoryName", fetcher.Context.BigItem?.InventoryName?.ToString());

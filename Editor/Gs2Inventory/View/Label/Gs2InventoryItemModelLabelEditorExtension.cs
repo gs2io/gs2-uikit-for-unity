@@ -65,7 +65,7 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Editor
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2InventoryItemModelFetcher), false);
                     EditorGUI.indentLevel++;
                     if (fetcher.Context != null) {
-                        fetcher.Context.ItemModel = EditorGUILayout.ObjectField("ItemModel", fetcher.Context.ItemModel, typeof(ItemModel), false) as ItemModel;
+                        EditorGUILayout.ObjectField("ItemModel", fetcher.Context.ItemModel, typeof(ItemModel), false);
                         EditorGUI.indentLevel++;
                         EditorGUILayout.TextField("ItemName", fetcher.Context.ItemModel?.ItemName?.ToString());
                         EditorGUI.indentLevel--;

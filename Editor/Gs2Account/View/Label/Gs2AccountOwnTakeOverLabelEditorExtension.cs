@@ -59,7 +59,7 @@ namespace Gs2.Unity.UiKit.Gs2Account.Editor
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2AccountOwnTakeOverFetcher), false);
                     EditorGUI.indentLevel++;
                     if (fetcher.Context != null) {
-                        fetcher.Context.TakeOver = EditorGUILayout.ObjectField("TakeOver", fetcher.Context.TakeOver, typeof(OwnTakeOver), false) as OwnTakeOver;
+                        EditorGUILayout.ObjectField("TakeOver", fetcher.Context.TakeOver, typeof(OwnTakeOver), false);
                         EditorGUI.indentLevel++;
                         EditorGUILayout.TextField("NamespaceName", fetcher.Context.TakeOver?.NamespaceName?.ToString());
                         EditorGUILayout.TextField("Type", fetcher.Context.TakeOver?.Type.ToString());

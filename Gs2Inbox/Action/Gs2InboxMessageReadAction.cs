@@ -53,6 +53,9 @@ namespace Gs2.Unity.UiKit.Gs2Inbox
 
             yield return new WaitUntil(() => clientHolder.Initialized);
             yield return new WaitUntil(() => gameSessionHolder.Initialized);
+
+            this.onReadStart.Invoke();
+
             
             var domain = clientHolder.Gs2.Inbox.Namespace(
                 this._context.Message.NamespaceName
@@ -155,6 +158,21 @@ namespace Gs2.Unity.UiKit.Gs2Inbox
     /// </summary>
     public partial class Gs2InboxMessageReadAction
     {
+
+        [Serializable]
+        private class ReadStartEvent : UnityEvent
+        {
+
+        }
+
+        [SerializeField]
+        private ReadStartEvent onReadStart = new ReadStartEvent();
+
+        public event UnityAction OnReadStart
+        {
+            add => this.onReadStart.AddListener(value);
+            remove => this.onReadStart.RemoveListener(value);
+        }
 
         [Serializable]
         private class ReadCompleteEvent : UnityEvent<string>

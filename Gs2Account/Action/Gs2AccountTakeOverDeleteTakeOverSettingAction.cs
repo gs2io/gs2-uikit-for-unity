@@ -53,6 +53,9 @@ namespace Gs2.Unity.UiKit.Gs2Account
 
             yield return new WaitUntil(() => clientHolder.Initialized);
             yield return new WaitUntil(() => gameSessionHolder.Initialized);
+
+            this.onDeleteTakeOverSettingStart.Invoke();
+
             
             var domain = clientHolder.Gs2.Account.Namespace(
                 this._context.TakeOver.NamespaceName
@@ -166,6 +169,21 @@ namespace Gs2.Unity.UiKit.Gs2Account
     /// </summary>
     public partial class Gs2AccountTakeOverDeleteTakeOverSettingAction
     {
+
+        [Serializable]
+        private class DeleteTakeOverSettingStartEvent : UnityEvent
+        {
+
+        }
+
+        [SerializeField]
+        private DeleteTakeOverSettingStartEvent onDeleteTakeOverSettingStart = new DeleteTakeOverSettingStartEvent();
+
+        public event UnityAction OnDeleteTakeOverSettingStart
+        {
+            add => this.onDeleteTakeOverSettingStart.AddListener(value);
+            remove => this.onDeleteTakeOverSettingStart.RemoveListener(value);
+        }
 
         [Serializable]
         private class DeleteTakeOverSettingCompleteEvent : UnityEvent<EzTakeOver>

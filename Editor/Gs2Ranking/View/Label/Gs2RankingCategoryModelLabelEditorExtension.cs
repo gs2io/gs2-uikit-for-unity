@@ -59,7 +59,7 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Editor
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2RankingCategoryModelFetcher), false);
                     EditorGUI.indentLevel++;
                     if (fetcher.Context != null) {
-                        fetcher.Context.CategoryModel = EditorGUILayout.ObjectField("CategoryModel", fetcher.Context.CategoryModel, typeof(CategoryModel), false) as CategoryModel;
+                        EditorGUILayout.ObjectField("CategoryModel", fetcher.Context.CategoryModel, typeof(CategoryModel), false);
                         EditorGUI.indentLevel++;
                         EditorGUILayout.TextField("NamespaceName", fetcher.Context.CategoryModel?.NamespaceName?.ToString());
                         EditorGUILayout.TextField("CategoryName", fetcher.Context.CategoryModel?.CategoryName?.ToString());

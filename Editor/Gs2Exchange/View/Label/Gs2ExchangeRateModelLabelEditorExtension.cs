@@ -59,7 +59,7 @@ namespace Gs2.Unity.UiKit.Gs2Exchange.Editor
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2ExchangeRateModelFetcher), false);
                     EditorGUI.indentLevel++;
                     if (fetcher.Context != null) {
-                        fetcher.Context.RateModel = EditorGUILayout.ObjectField("RateModel", fetcher.Context.RateModel, typeof(RateModel), false) as RateModel;
+                        EditorGUILayout.ObjectField("RateModel", fetcher.Context.RateModel, typeof(RateModel), false);
                         EditorGUI.indentLevel++;
                         EditorGUILayout.TextField("NamespaceName", fetcher.Context.RateModel?.NamespaceName?.ToString());
                         EditorGUILayout.TextField("RateName", fetcher.Context.RateModel?.RateName?.ToString());

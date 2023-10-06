@@ -59,7 +59,7 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Editor
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2FriendOwnBlackListFetcher), false);
                     EditorGUI.indentLevel++;
                     if (fetcher.Context != null) {
-                        fetcher.Context.BlackList = EditorGUILayout.ObjectField("BlackList", fetcher.Context.BlackList, typeof(OwnBlackList), false) as OwnBlackList;
+                        EditorGUILayout.ObjectField("BlackList", fetcher.Context.BlackList, typeof(OwnBlackList), false);
                         EditorGUI.indentLevel++;
                         EditorGUILayout.TextField("NamespaceName", fetcher.Context.BlackList?.NamespaceName?.ToString());
                         EditorGUI.indentLevel--;

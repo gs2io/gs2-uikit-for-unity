@@ -52,7 +52,7 @@ namespace Gs2.Unity.UiKit.Gs2JobQueue.Editor
                 EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2JobQueueOwnJobResultFetcher), false);
                 EditorGUI.indentLevel++;
                 if (fetcher.Context != null) {
-                    fetcher.Context.JobResult = EditorGUILayout.ObjectField("JobResult", fetcher.Context.JobResult, typeof(OwnJobResult), false) as OwnJobResult;
+                    EditorGUILayout.ObjectField("JobResult", fetcher.Context.JobResult, typeof(OwnJobResult), false);
                     EditorGUI.indentLevel++;
                     EditorGUILayout.TextField("NamespaceName", fetcher.Context.JobResult?.NamespaceName?.ToString());
                     EditorGUILayout.TextField("JobName", fetcher.Context.JobResult?.JobName?.ToString());

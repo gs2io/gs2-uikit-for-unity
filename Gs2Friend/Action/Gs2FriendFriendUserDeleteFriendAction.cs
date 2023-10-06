@@ -53,6 +53,9 @@ namespace Gs2.Unity.UiKit.Gs2Friend
 
             yield return new WaitUntil(() => clientHolder.Initialized);
             yield return new WaitUntil(() => gameSessionHolder.Initialized);
+
+            this.onDeleteFriendStart.Invoke();
+
             
             var domain = clientHolder.Gs2.Friend.Namespace(
                 this._context.FriendUser.NamespaceName
@@ -168,6 +171,21 @@ namespace Gs2.Unity.UiKit.Gs2Friend
     /// </summary>
     public partial class Gs2FriendFriendUserDeleteFriendAction
     {
+
+        [Serializable]
+        private class DeleteFriendStartEvent : UnityEvent
+        {
+
+        }
+
+        [SerializeField]
+        private DeleteFriendStartEvent onDeleteFriendStart = new DeleteFriendStartEvent();
+
+        public event UnityAction OnDeleteFriendStart
+        {
+            add => this.onDeleteFriendStart.AddListener(value);
+            remove => this.onDeleteFriendStart.RemoveListener(value);
+        }
 
         [Serializable]
         private class DeleteFriendCompleteEvent : UnityEvent<EzFriendUser>

@@ -52,6 +52,9 @@ namespace Gs2.Unity.UiKit.Gs2Account
             var gameSessionHolder = Gs2GameSessionHolder.Instance;
 
             yield return new WaitUntil(() => clientHolder.Initialized);
+
+            this.onCreateStart.Invoke();
+
             
             var domain = clientHolder.Gs2.Account.Namespace(
                 this._context.Namespace.NamespaceName
@@ -161,6 +164,21 @@ namespace Gs2.Unity.UiKit.Gs2Account
     /// </summary>
     public partial class Gs2AccountAccountCreateAction
     {
+
+        [Serializable]
+        private class CreateStartEvent : UnityEvent
+        {
+
+        }
+
+        [SerializeField]
+        private CreateStartEvent onCreateStart = new CreateStartEvent();
+
+        public event UnityAction OnCreateStart
+        {
+            add => this.onCreateStart.AddListener(value);
+            remove => this.onCreateStart.RemoveListener(value);
+        }
 
         [Serializable]
         private class CreateCompleteEvent : UnityEvent<EzAccount>

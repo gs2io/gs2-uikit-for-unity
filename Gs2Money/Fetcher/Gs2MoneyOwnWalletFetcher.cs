@@ -35,6 +35,7 @@ using Gs2.Unity.Gs2Money.Model;
 using Gs2.Unity.Gs2Money.ScriptableObject;
 using Gs2.Unity.Util;
 using Gs2.Unity.UiKit.Core;
+using Gs2.Unity.UiKit.Core.Model;
 using Gs2.Unity.UiKit.Gs2Core.Fetcher;
 using Gs2.Unity.UiKit.Gs2Money.Context;
 using UnityEngine;
@@ -120,6 +121,18 @@ namespace Gs2.Unity.UiKit.Gs2Money.Fetcher
                 this._callbackId.Value
             );
             this._callbackId = null;
+        }
+
+        public void SetTemporaryWallet(
+            Gs2.Unity.Gs2Money.Model.EzWallet wallet
+        ) {
+            Wallet = wallet;
+            this.OnFetched.Invoke();
+        }
+
+        public void RollbackTemporaryWallet(
+        ) {
+            OnUpdateContext();
         }
     }
 

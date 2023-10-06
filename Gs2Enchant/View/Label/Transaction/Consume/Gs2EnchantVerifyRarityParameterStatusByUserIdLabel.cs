@@ -26,8 +26,10 @@
 
 using System;
 using Gs2.Gs2Enchant.Request;
+using Gs2.Unity.Gs2Enchant.ScriptableObject;
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Core.Fetcher;
+using Gs2.Unity.UiKit.Gs2Enchant.Context;
 using Gs2.Unity.UiKit.Gs2Enchant.Fetcher;
 using Gs2.Util.LitJson;
 using UnityEngine;
@@ -44,70 +46,59 @@ namespace Gs2.Unity.UiKit.Gs2Enchant.Label
     {
         private void OnFetched()
         {
+            if (this._userDataFetcher == null) {
+                var context = gameObject.AddComponent<Gs2EnchantOwnRarityParameterStatusContext>();
+                context.SetOwnRarityParameterStatus(
+                    OwnRarityParameterStatus.New(
+                        Namespace.New(
+                            this._fetcher.Request.NamespaceName
+                        ),
+                        this._fetcher.Request.ParameterName,
+                        this._fetcher.Request.PropertyId
+                    )
+                );
+                this._userDataFetcher = gameObject.AddComponent<Gs2EnchantOwnRarityParameterStatusFetcher>();
+                this._userDataFetcher.OnFetched.AddListener(this._onFetched);
+            }
             if ((!this._fetcher?.Fetched ?? false) || this._fetcher.Request == null) {
                 return;
             }
-            if (this._userDataFetcher?.Fetched ?? false)
-            {
-                this.onUpdate?.Invoke(
-                    this.format.Replace(
-                        "{namespaceName}",
-                        $"{this._fetcher.Request.NamespaceName}"
-                    ).Replace(
-                        "{parameterName}",
-                        $"{this._fetcher.Request.ParameterName}"
-                    ).Replace(
-                        "{userId}",
-                        $"{this._fetcher.Request.UserId}"
-                    ).Replace(
-                        "{propertyId}",
-                        $"{this._fetcher.Request.PropertyId}"
-                    ).Replace(
-                        "{verifyType}",
-                        $"{this._fetcher.Request.VerifyType}"
-                    ).Replace(
-                        "{parameterValueName}",
-                        $"{this._fetcher.Request.ParameterValueName}"
-                    ).Replace(
-                        "{parameterCount}",
-                        $"{this._fetcher.Request.ParameterCount}"
-                    ).Replace(
-                        "{userData:parameterName}",
-                        $"{this._userDataFetcher.RarityParameterStatus.ParameterName}"
-                    ).Replace(
-                        "{userData:propertyId}",
-                        $"{this._userDataFetcher.RarityParameterStatus.PropertyId}"
-                    ).Replace(
-                        "{userData:parameterValues}",
-                        $"{this._userDataFetcher.RarityParameterStatus.ParameterValues}"
-                    )
-                );
-            } else {
-                this.onUpdate?.Invoke(
-                    this.format.Replace(
-                        "{namespaceName}",
-                        $"{this._fetcher.Request.NamespaceName}"
-                    ).Replace(
-                        "{parameterName}",
-                        $"{this._fetcher.Request.ParameterName}"
-                    ).Replace(
-                        "{userId}",
-                        $"{this._fetcher.Request.UserId}"
-                    ).Replace(
-                        "{propertyId}",
-                        $"{this._fetcher.Request.PropertyId}"
-                    ).Replace(
-                        "{verifyType}",
-                        $"{this._fetcher.Request.VerifyType}"
-                    ).Replace(
-                        "{parameterValueName}",
-                        $"{this._fetcher.Request.ParameterValueName}"
-                    ).Replace(
-                        "{parameterCount}",
-                        $"{this._fetcher.Request.ParameterCount}"
-                    )
-                );
+            if ((!this._userDataFetcher?.Fetched ?? false) || this._userDataFetcher.RarityParameterStatus == null) {
+                return;
             }
+            this.onUpdate?.Invoke(
+                this.format.Replace(
+                    "{namespaceName}",
+                    $"{this._fetcher.Request.NamespaceName}"
+                ).Replace(
+                    "{parameterName}",
+                    $"{this._fetcher.Request.ParameterName}"
+                ).Replace(
+                    "{userId}",
+                    $"{this._fetcher.Request.UserId}"
+                ).Replace(
+                    "{propertyId}",
+                    $"{this._fetcher.Request.PropertyId}"
+                ).Replace(
+                    "{verifyType}",
+                    $"{this._fetcher.Request.VerifyType}"
+                ).Replace(
+                    "{parameterValueName}",
+                    $"{this._fetcher.Request.ParameterValueName}"
+                ).Replace(
+                    "{parameterCount}",
+                    $"{this._fetcher.Request.ParameterCount}"
+                ).Replace(
+                    "{userData:parameterName}",
+                    $"{this._userDataFetcher.RarityParameterStatus.ParameterName}"
+                ).Replace(
+                    "{userData:propertyId}",
+                    $"{this._userDataFetcher.RarityParameterStatus.PropertyId}"
+                ).Replace(
+                    "{userData:parameterValues}",
+                    $"{this._userDataFetcher.RarityParameterStatus.ParameterValues}"
+                )
+            );
         }
     }
 

@@ -35,6 +35,7 @@ using Gs2.Unity.Gs2MegaField.Model;
 using Gs2.Unity.Gs2MegaField.ScriptableObject;
 using Gs2.Unity.Util;
 using Gs2.Unity.UiKit.Core;
+using Gs2.Unity.UiKit.Core.Model;
 using Gs2.Unity.UiKit.Gs2Core.Fetcher;
 using Gs2.Unity.UiKit.Gs2MegaField.Context;
 using UnityEngine;
@@ -120,14 +121,14 @@ namespace Gs2.Unity.UiKit.Gs2MegaField.Fetcher
             this._callbackId = null;
         }
 
-        public void SetTemporarySlot(
+        public void SetTemporaryAreaModel(
             Gs2.Unity.Gs2MegaField.Model.EzAreaModel areaModel
         ) {
             AreaModel = areaModel;
             this.OnFetched.Invoke();
         }
 
-        public void RollbackTemporarySlot(
+        public void RollbackTemporaryAreaModel(
         ) {
             OnUpdateContext();
         }

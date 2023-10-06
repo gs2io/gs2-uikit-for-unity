@@ -54,6 +54,8 @@ namespace Gs2.Unity.UiKit.Gs2Enhance
                 ).Replace(
                     "{materialInventoryModelId}", $"{this._fetcher?.RateModel?.MaterialInventoryModelId}"
                 ).Replace(
+                    "{acquireExperienceHierarchy}", $"{this._fetcher?.RateModel?.AcquireExperienceHierarchy}"
+                ).Replace(
                     "{experienceModelId}", $"{this._fetcher?.RateModel?.ExperienceModelId}"
                 )
             );

@@ -53,6 +53,9 @@ namespace Gs2.Unity.UiKit.Gs2Money
 
             yield return new WaitUntil(() => clientHolder.Initialized);
             yield return new WaitUntil(() => gameSessionHolder.Initialized);
+
+            this.onWithdrawStart.Invoke();
+
             
             var domain = clientHolder.Gs2.Money.Namespace(
                 this._context.Wallet.NamespaceName
@@ -221,6 +224,21 @@ namespace Gs2.Unity.UiKit.Gs2Money
         {
             add => this.onChangePaidOnly.AddListener(value);
             remove => this.onChangePaidOnly.RemoveListener(value);
+        }
+
+        [Serializable]
+        private class WithdrawStartEvent : UnityEvent
+        {
+
+        }
+
+        [SerializeField]
+        private WithdrawStartEvent onWithdrawStart = new WithdrawStartEvent();
+
+        public event UnityAction OnWithdrawStart
+        {
+            add => this.onWithdrawStart.AddListener(value);
+            remove => this.onWithdrawStart.RemoveListener(value);
         }
 
         [Serializable]

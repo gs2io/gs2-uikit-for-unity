@@ -35,6 +35,7 @@ using Gs2.Unity.Gs2Quest.Model;
 using Gs2.Unity.Gs2Quest.ScriptableObject;
 using Gs2.Unity.Util;
 using Gs2.Unity.UiKit.Core;
+using Gs2.Unity.UiKit.Core.Model;
 using Gs2.Unity.UiKit.Gs2Core.Fetcher;
 using Gs2.Unity.UiKit.Gs2Quest.Context;
 using UnityEngine;
@@ -119,6 +120,18 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Fetcher
                 this._callbackId.Value
             );
             this._callbackId = null;
+        }
+
+        public void SetTemporaryProgress(
+            Gs2.Unity.Gs2Quest.Model.EzProgress progress
+        ) {
+            Progress = progress;
+            this.OnFetched.Invoke();
+        }
+
+        public void RollbackTemporaryProgress(
+        ) {
+            OnUpdateContext();
         }
     }
 

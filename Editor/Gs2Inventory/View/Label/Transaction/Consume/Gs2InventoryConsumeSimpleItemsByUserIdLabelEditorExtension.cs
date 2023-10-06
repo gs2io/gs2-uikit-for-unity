@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
@@ -72,8 +74,13 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Label.Editor
                 GUI.FocusControl("");
                 EditorUtility.SetDirty(original);
             }
-            if (GUILayout.Button("ConsumeCounts")) {
-                original.format += "{consumeCounts}";
+            if (GUILayout.Button("itemName")) {
+                original.format += "{itemName}";
+                GUI.FocusControl("");
+                EditorUtility.SetDirty(original);
+            }
+            if (GUILayout.Button("count")) {
+                original.format += "{count}";
                 GUI.FocusControl("");
                 EditorUtility.SetDirty(original);
             }

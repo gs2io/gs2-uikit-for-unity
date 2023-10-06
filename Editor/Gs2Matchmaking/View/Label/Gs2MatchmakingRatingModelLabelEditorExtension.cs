@@ -65,7 +65,7 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking.Editor
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2MatchmakingRatingModelFetcher), false);
                     EditorGUI.indentLevel++;
                     if (fetcher.Context != null) {
-                        fetcher.Context.RatingModel = EditorGUILayout.ObjectField("RatingModel", fetcher.Context.RatingModel, typeof(RatingModel), false) as RatingModel;
+                        EditorGUILayout.ObjectField("RatingModel", fetcher.Context.RatingModel, typeof(RatingModel), false);
                         EditorGUI.indentLevel++;
                         EditorGUILayout.TextField("NamespaceName", fetcher.Context.RatingModel?.NamespaceName?.ToString());
                         EditorGUILayout.TextField("RatingName", fetcher.Context.RatingModel?.RatingName?.ToString());

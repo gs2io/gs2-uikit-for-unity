@@ -18,6 +18,7 @@
 
 using System;
 using Gs2.Core.Util;
+using Gs2.Unity.Gs2Experience.Model;
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Experience.Fetcher;
 using UnityEngine;
@@ -127,7 +128,7 @@ namespace Gs2.Unity.UiKit.Gs2Experience
 
     public partial class Gs2ExperienceStatusProgress
     {
-
+        
     }
 
     /// <summary>

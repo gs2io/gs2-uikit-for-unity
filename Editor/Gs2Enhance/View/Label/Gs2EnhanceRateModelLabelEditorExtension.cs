@@ -59,7 +59,7 @@ namespace Gs2.Unity.UiKit.Gs2Enhance.Editor
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2EnhanceRateModelFetcher), false);
                     EditorGUI.indentLevel++;
                     if (fetcher.Context != null) {
-                        fetcher.Context.RateModel = EditorGUILayout.ObjectField("RateModel", fetcher.Context.RateModel, typeof(RateModel), false) as RateModel;
+                        EditorGUILayout.ObjectField("RateModel", fetcher.Context.RateModel, typeof(RateModel), false);
                         EditorGUI.indentLevel++;
                         EditorGUILayout.TextField("NamespaceName", fetcher.Context.RateModel?.NamespaceName?.ToString());
                         EditorGUILayout.TextField("RateName", fetcher.Context.RateModel?.RateName?.ToString());
@@ -96,6 +96,11 @@ namespace Gs2.Unity.UiKit.Gs2Enhance.Editor
             }
             if (GUILayout.Button("MaterialInventoryModelId")) {
                 original.format += "{materialInventoryModelId}";
+                GUI.FocusControl("");
+                EditorUtility.SetDirty(original);
+            }
+            if (GUILayout.Button("AcquireExperienceHierarchy")) {
+                original.format += "{acquireExperienceHierarchy}";
                 GUI.FocusControl("");
                 EditorUtility.SetDirty(original);
             }

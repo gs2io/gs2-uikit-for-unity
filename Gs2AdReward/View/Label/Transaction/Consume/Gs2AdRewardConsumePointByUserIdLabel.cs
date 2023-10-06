@@ -26,8 +26,10 @@
 
 using System;
 using Gs2.Gs2AdReward.Request;
+using Gs2.Unity.Gs2AdReward.ScriptableObject;
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Core.Fetcher;
+using Gs2.Unity.UiKit.Gs2AdReward.Context;
 using Gs2.Unity.UiKit.Gs2AdReward.Fetcher;
 using Gs2.Util.LitJson;
 using UnityEngine;
@@ -44,40 +46,39 @@ namespace Gs2.Unity.UiKit.Gs2AdReward.Label
     {
         private void OnFetched()
         {
+            if (this._userDataFetcher == null) {
+                var context = gameObject.AddComponent<Gs2AdRewardOwnPointContext>();
+                context.SetOwnPoint(
+                    OwnPoint.New(
+                        Namespace.New(
+                            this._fetcher.Request.NamespaceName
+                        )
+                    )
+                );
+                this._userDataFetcher = gameObject.AddComponent<Gs2AdRewardOwnPointFetcher>();
+                this._userDataFetcher.OnFetched.AddListener(this._onFetched);
+            }
             if ((!this._fetcher?.Fetched ?? false) || this._fetcher.Request == null) {
                 return;
             }
-            if (this._userDataFetcher?.Fetched ?? false)
-            {
-                this.onUpdate?.Invoke(
-                    this.format.Replace(
-                        "{namespaceName}",
-                        $"{this._fetcher.Request.NamespaceName}"
-                    ).Replace(
-                        "{userId}",
-                        $"{this._fetcher.Request.UserId}"
-                    ).Replace(
-                        "{point}",
-                        $"{this._fetcher.Request.Point}"
-                    ).Replace(
-                        "{userData:point}",
-                        $"{this._userDataFetcher.Point.Point}"
-                    )
-                );
-            } else {
-                this.onUpdate?.Invoke(
-                    this.format.Replace(
-                        "{namespaceName}",
-                        $"{this._fetcher.Request.NamespaceName}"
-                    ).Replace(
-                        "{userId}",
-                        $"{this._fetcher.Request.UserId}"
-                    ).Replace(
-                        "{point}",
-                        $"{this._fetcher.Request.Point}"
-                    )
-                );
+            if ((!this._userDataFetcher?.Fetched ?? false) || this._userDataFetcher.Point == null) {
+                return;
             }
+            this.onUpdate?.Invoke(
+                this.format.Replace(
+                    "{namespaceName}",
+                    $"{this._fetcher.Request.NamespaceName}"
+                ).Replace(
+                    "{userId}",
+                    $"{this._fetcher.Request.UserId}"
+                ).Replace(
+                    "{point}",
+                    $"{this._fetcher.Request.Point}"
+                ).Replace(
+                    "{userData:point}",
+                    $"{this._userDataFetcher.Point.Point}"
+                )
+            );
         }
     }
 

@@ -52,7 +52,7 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Editor
                 EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2QuestOwnProgressFetcher), false);
                 EditorGUI.indentLevel++;
                 if (fetcher.Context != null) {
-                    fetcher.Context.Progress = EditorGUILayout.ObjectField("Progress", fetcher.Context.Progress, typeof(OwnProgress), false) as OwnProgress;
+                    EditorGUILayout.ObjectField("Progress", fetcher.Context.Progress, typeof(OwnProgress), false);
                     EditorGUI.indentLevel++;
                     EditorGUILayout.TextField("NamespaceName", fetcher.Context.Progress?.NamespaceName?.ToString());
                     EditorGUI.indentLevel--;

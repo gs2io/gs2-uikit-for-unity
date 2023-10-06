@@ -53,6 +53,9 @@ namespace Gs2.Unity.UiKit.Gs2Ranking
 
             yield return new WaitUntil(() => clientHolder.Initialized);
             yield return new WaitUntil(() => gameSessionHolder.Initialized);
+
+            this.onPutScoreStart.Invoke();
+
             
             var domain = clientHolder.Gs2.Ranking.Namespace(
                 this._context.Ranking.NamespaceName
@@ -221,6 +224,21 @@ namespace Gs2.Unity.UiKit.Gs2Ranking
         {
             add => this.onChangeMetadata.AddListener(value);
             remove => this.onChangeMetadata.RemoveListener(value);
+        }
+
+        [Serializable]
+        private class PutScoreStartEvent : UnityEvent
+        {
+
+        }
+
+        [SerializeField]
+        private PutScoreStartEvent onPutScoreStart = new PutScoreStartEvent();
+
+        public event UnityAction OnPutScoreStart
+        {
+            add => this.onPutScoreStart.AddListener(value);
+            remove => this.onPutScoreStart.RemoveListener(value);
         }
 
         [Serializable]

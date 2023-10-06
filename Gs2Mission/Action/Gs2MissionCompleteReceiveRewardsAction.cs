@@ -53,6 +53,9 @@ namespace Gs2.Unity.UiKit.Gs2Mission
 
             yield return new WaitUntil(() => clientHolder.Initialized);
             yield return new WaitUntil(() => gameSessionHolder.Initialized);
+
+            this.onReceiveRewardsStart.Invoke();
+
             
             var domain = clientHolder.Gs2.Mission.Namespace(
                 this._context.Complete.NamespaceName
@@ -176,6 +179,21 @@ namespace Gs2.Unity.UiKit.Gs2Mission
         {
             add => this.onChangeMissionTaskName.AddListener(value);
             remove => this.onChangeMissionTaskName.RemoveListener(value);
+        }
+
+        [Serializable]
+        private class ReceiveRewardsStartEvent : UnityEvent
+        {
+
+        }
+
+        [SerializeField]
+        private ReceiveRewardsStartEvent onReceiveRewardsStart = new ReceiveRewardsStartEvent();
+
+        public event UnityAction OnReceiveRewardsStart
+        {
+            add => this.onReceiveRewardsStart.AddListener(value);
+            remove => this.onReceiveRewardsStart.RemoveListener(value);
         }
 
         [Serializable]

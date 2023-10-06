@@ -53,6 +53,9 @@ namespace Gs2.Unity.UiKit.Gs2StateMachine
 
             yield return new WaitUntil(() => clientHolder.Initialized);
             yield return new WaitUntil(() => gameSessionHolder.Initialized);
+
+            this.onEmitStart.Invoke();
+
             
             var domain = clientHolder.Gs2.StateMachine.Namespace(
                 this._context.Status.NamespaceName
@@ -209,6 +212,21 @@ namespace Gs2.Unity.UiKit.Gs2StateMachine
         {
             add => this.onChangeArgs.AddListener(value);
             remove => this.onChangeArgs.RemoveListener(value);
+        }
+
+        [Serializable]
+        private class EmitStartEvent : UnityEvent
+        {
+
+        }
+
+        [SerializeField]
+        private EmitStartEvent onEmitStart = new EmitStartEvent();
+
+        public event UnityAction OnEmitStart
+        {
+            add => this.onEmitStart.AddListener(value);
+            remove => this.onEmitStart.RemoveListener(value);
         }
 
         [Serializable]

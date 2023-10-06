@@ -52,7 +52,7 @@ namespace Gs2.Unity.UiKit.Gs2SkillTree.Editor
                 EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2SkillTreeOwnStatusFetcher), false);
                 EditorGUI.indentLevel++;
                 if (fetcher.Context != null) {
-                    fetcher.Context.Status = EditorGUILayout.ObjectField("Status", fetcher.Context.Status, typeof(OwnStatus), false) as OwnStatus;
+                    EditorGUILayout.ObjectField("Status", fetcher.Context.Status, typeof(OwnStatus), false);
                     EditorGUI.indentLevel++;
                     EditorGUILayout.TextField("NamespaceName", fetcher.Context.Status?.NamespaceName?.ToString());
                     EditorGUI.indentLevel--;

@@ -35,6 +35,7 @@ using Gs2.Unity.Gs2Stamina.Model;
 using Gs2.Unity.Gs2Stamina.ScriptableObject;
 using Gs2.Unity.Util;
 using Gs2.Unity.UiKit.Core;
+using Gs2.Unity.UiKit.Core.Model;
 using Gs2.Unity.UiKit.Gs2Core.Fetcher;
 using Gs2.Unity.UiKit.Gs2Stamina.Context;
 using UnityEngine;
@@ -120,14 +121,14 @@ namespace Gs2.Unity.UiKit.Gs2Stamina.Fetcher
             this._callbackId = null;
         }
 
-        public void SetTemporarySlot(
+        public void SetTemporaryStaminaModel(
             Gs2.Unity.Gs2Stamina.Model.EzStaminaModel staminaModel
         ) {
             StaminaModel = staminaModel;
             this.OnFetched.Invoke();
         }
 
-        public void RollbackTemporarySlot(
+        public void RollbackTemporaryStaminaModel(
         ) {
             OnUpdateContext();
         }

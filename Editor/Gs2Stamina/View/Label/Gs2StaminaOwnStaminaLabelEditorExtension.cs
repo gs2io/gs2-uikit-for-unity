@@ -59,7 +59,7 @@ namespace Gs2.Unity.UiKit.Gs2Stamina.Editor
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2StaminaOwnStaminaFetcher), false);
                     EditorGUI.indentLevel++;
                     if (fetcher.Context != null) {
-                        fetcher.Context.Stamina = EditorGUILayout.ObjectField("Stamina", fetcher.Context.Stamina, typeof(OwnStamina), false) as OwnStamina;
+                        EditorGUILayout.ObjectField("Stamina", fetcher.Context.Stamina, typeof(OwnStamina), false);
                         EditorGUI.indentLevel++;
                         EditorGUILayout.TextField("NamespaceName", fetcher.Context.Stamina?.NamespaceName?.ToString());
                         EditorGUILayout.TextField("StaminaName", fetcher.Context.Stamina?.StaminaName?.ToString());

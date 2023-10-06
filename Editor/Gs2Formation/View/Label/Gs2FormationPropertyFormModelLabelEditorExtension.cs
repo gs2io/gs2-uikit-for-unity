@@ -65,7 +65,7 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Editor
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2FormationPropertyFormModelFetcher), false);
                     EditorGUI.indentLevel++;
                     if (fetcher.Context != null) {
-                        fetcher.Context.PropertyFormModel = EditorGUILayout.ObjectField("PropertyFormModel", fetcher.Context.PropertyFormModel, typeof(PropertyFormModel), false) as PropertyFormModel;
+                        EditorGUILayout.ObjectField("PropertyFormModel", fetcher.Context.PropertyFormModel, typeof(PropertyFormModel), false);
                         EditorGUI.indentLevel++;
                         EditorGUILayout.TextField("NamespaceName", fetcher.Context.PropertyFormModel?.NamespaceName?.ToString());
                         EditorGUILayout.TextField("PropertyFormModelName", fetcher.Context.PropertyFormModel?.PropertyFormModelName?.ToString());

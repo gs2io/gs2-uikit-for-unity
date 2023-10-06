@@ -52,7 +52,7 @@ namespace Gs2.Unity.UiKit.Gs2AdReward.Editor
                 EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2AdRewardOwnPointFetcher), false);
                 EditorGUI.indentLevel++;
                 if (fetcher.Context != null) {
-                    fetcher.Context.Point = EditorGUILayout.ObjectField("Point", fetcher.Context.Point, typeof(OwnPoint), false) as OwnPoint;
+                    EditorGUILayout.ObjectField("Point", fetcher.Context.Point, typeof(OwnPoint), false);
                     EditorGUI.indentLevel++;
                     EditorGUILayout.TextField("NamespaceName", fetcher.Context.Point?.NamespaceName?.ToString());
                     EditorGUI.indentLevel--;

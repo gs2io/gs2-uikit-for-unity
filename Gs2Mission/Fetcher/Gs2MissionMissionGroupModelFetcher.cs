@@ -35,6 +35,7 @@ using Gs2.Unity.Gs2Mission.Model;
 using Gs2.Unity.Gs2Mission.ScriptableObject;
 using Gs2.Unity.Util;
 using Gs2.Unity.UiKit.Core;
+using Gs2.Unity.UiKit.Core.Model;
 using Gs2.Unity.UiKit.Gs2Core.Fetcher;
 using Gs2.Unity.UiKit.Gs2Mission.Context;
 using UnityEngine;
@@ -120,14 +121,14 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Fetcher
             this._callbackId = null;
         }
 
-        public void SetTemporarySlot(
+        public void SetTemporaryMissionGroupModel(
             Gs2.Unity.Gs2Mission.Model.EzMissionGroupModel missionGroupModel
         ) {
             MissionGroupModel = missionGroupModel;
             this.OnFetched.Invoke();
         }
 
-        public void RollbackTemporarySlot(
+        public void RollbackTemporaryMissionGroupModel(
         ) {
             OnUpdateContext();
         }

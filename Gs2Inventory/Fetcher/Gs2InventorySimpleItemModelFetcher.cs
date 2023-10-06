@@ -35,6 +35,7 @@ using Gs2.Unity.Gs2Inventory.Model;
 using Gs2.Unity.Gs2Inventory.ScriptableObject;
 using Gs2.Unity.Util;
 using Gs2.Unity.UiKit.Core;
+using Gs2.Unity.UiKit.Core.Model;
 using Gs2.Unity.UiKit.Gs2Core.Fetcher;
 using Gs2.Unity.UiKit.Gs2Inventory.Context;
 using UnityEngine;
@@ -122,14 +123,14 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Fetcher
             this._callbackId = null;
         }
 
-        public void SetTemporarySlot(
+        public void SetTemporarySimpleItemModel(
             Gs2.Unity.Gs2Inventory.Model.EzSimpleItemModel simpleItemModel
         ) {
             SimpleItemModel = simpleItemModel;
             this.OnFetched.Invoke();
         }
 
-        public void RollbackTemporarySlot(
+        public void RollbackTemporarySimpleItemModel(
         ) {
             OnUpdateContext();
         }

@@ -59,7 +59,7 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Editor
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2RankingOwnSubscribeUserFetcher), false);
                     EditorGUI.indentLevel++;
                     if (fetcher.Context != null) {
-                        fetcher.Context.SubscribeUser = EditorGUILayout.ObjectField("SubscribeUser", fetcher.Context.SubscribeUser, typeof(OwnSubscribeUser), false) as OwnSubscribeUser;
+                        EditorGUILayout.ObjectField("SubscribeUser", fetcher.Context.SubscribeUser, typeof(OwnSubscribeUser), false);
                         EditorGUI.indentLevel++;
                         EditorGUILayout.TextField("CategoryName", fetcher.Context.SubscribeUser?.CategoryName?.ToString());
                         EditorGUILayout.TextField("TargetUserId", fetcher.Context.SubscribeUser?.TargetUserId?.ToString());

@@ -35,6 +35,7 @@ using Gs2.Unity.Gs2Lottery.Model;
 using Gs2.Unity.Gs2Lottery.ScriptableObject;
 using Gs2.Unity.Util;
 using Gs2.Unity.UiKit.Core;
+using Gs2.Unity.UiKit.Core.Model;
 using Gs2.Unity.UiKit.Gs2Core.Fetcher;
 using Gs2.Unity.UiKit.Gs2Lottery.Context;
 using UnityEngine;
@@ -120,6 +121,18 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.Fetcher
                 this._callbackId.Value
             );
             this._callbackId = null;
+        }
+
+        public void SetTemporaryBoxItems(
+            Gs2.Unity.Gs2Lottery.Model.EzBoxItems boxItems
+        ) {
+            BoxItems = boxItems;
+            this.OnFetched.Invoke();
+        }
+
+        public void RollbackTemporaryBoxItems(
+        ) {
+            OnUpdateContext();
         }
     }
 

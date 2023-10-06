@@ -53,6 +53,9 @@ namespace Gs2.Unity.UiKit.Gs2Datastore
 
             yield return new WaitUntil(() => clientHolder.Initialized);
             yield return new WaitUntil(() => gameSessionHolder.Initialized);
+
+            this.onDeleteDataObjectStart.Invoke();
+
             
             var domain = clientHolder.Gs2.Datastore.Namespace(
                 this._context.DataObject.NamespaceName
@@ -166,6 +169,21 @@ namespace Gs2.Unity.UiKit.Gs2Datastore
     /// </summary>
     public partial class Gs2DatastoreDataObjectDeleteDataObjectAction
     {
+
+        [Serializable]
+        private class DeleteDataObjectStartEvent : UnityEvent
+        {
+
+        }
+
+        [SerializeField]
+        private DeleteDataObjectStartEvent onDeleteDataObjectStart = new DeleteDataObjectStartEvent();
+
+        public event UnityAction OnDeleteDataObjectStart
+        {
+            add => this.onDeleteDataObjectStart.AddListener(value);
+            remove => this.onDeleteDataObjectStart.RemoveListener(value);
+        }
 
         [Serializable]
         private class DeleteDataObjectCompleteEvent : UnityEvent<EzDataObject>

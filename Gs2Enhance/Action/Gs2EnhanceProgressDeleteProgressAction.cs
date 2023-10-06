@@ -53,6 +53,9 @@ namespace Gs2.Unity.UiKit.Gs2Enhance
 
             yield return new WaitUntil(() => clientHolder.Initialized);
             yield return new WaitUntil(() => gameSessionHolder.Initialized);
+
+            this.onDeleteProgressStart.Invoke();
+
             
             var domain = clientHolder.Gs2.Enhance.Namespace(
                 this._context.Progress.NamespaceName
@@ -165,6 +168,21 @@ namespace Gs2.Unity.UiKit.Gs2Enhance
     /// </summary>
     public partial class Gs2EnhanceProgressDeleteProgressAction
     {
+
+        [Serializable]
+        private class DeleteProgressStartEvent : UnityEvent
+        {
+
+        }
+
+        [SerializeField]
+        private DeleteProgressStartEvent onDeleteProgressStart = new DeleteProgressStartEvent();
+
+        public event UnityAction OnDeleteProgressStart
+        {
+            add => this.onDeleteProgressStart.AddListener(value);
+            remove => this.onDeleteProgressStart.RemoveListener(value);
+        }
 
         [Serializable]
         private class DeleteProgressCompleteEvent : UnityEvent<EzProgress>

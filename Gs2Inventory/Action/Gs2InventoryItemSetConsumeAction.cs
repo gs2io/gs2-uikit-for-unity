@@ -46,7 +46,6 @@ using UnityEditor;
 
 namespace Gs2.Unity.UiKit.Gs2Inventory
 {
-	[AddComponentMenu("GS2 UIKit/Inventory/ItemSet/Action/Gs2InventoryItemSetConsumeAction")]
     public partial class Gs2InventoryItemSetConsumeAction : MonoBehaviour
     {
         private IEnumerator Process()
@@ -56,6 +55,9 @@ namespace Gs2.Unity.UiKit.Gs2Inventory
 
             yield return new WaitUntil(() => clientHolder.Initialized);
             yield return new WaitUntil(() => gameSessionHolder.Initialized);
+
+            this.onConsumeStart.Invoke();
+
             
             var domain = clientHolder.Gs2.Inventory.Namespace(
                 this._context.ItemSet.NamespaceName
@@ -135,7 +137,7 @@ namespace Gs2.Unity.UiKit.Gs2Inventory
         public void Awake()
         {
             this._context = GetComponent<Gs2InventoryOwnItemSetContext>() ?? GetComponentInParent<Gs2InventoryOwnItemSetContext>();
-            if (_context == null) {
+            if (this._context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2InventoryOwnItemSetContext.");
                 enabled = false;
             }
@@ -144,7 +146,7 @@ namespace Gs2.Unity.UiKit.Gs2Inventory
         public virtual bool HasError()
         {
             this._context = GetComponent<Gs2InventoryOwnItemSetContext>() ?? GetComponentInParent<Gs2InventoryOwnItemSetContext>(true);
-            if (_context == null) {
+            if (this._context == null) {
                 return true;
             }
             return false;
@@ -205,6 +207,21 @@ namespace Gs2.Unity.UiKit.Gs2Inventory
         {
             add => this.onChangeConsumeCount.AddListener(value);
             remove => this.onChangeConsumeCount.RemoveListener(value);
+        }
+
+        [Serializable]
+        private class ConsumeStartEvent : UnityEvent
+        {
+
+        }
+
+        [SerializeField]
+        private ConsumeStartEvent onConsumeStart = new ConsumeStartEvent();
+
+        public event UnityAction OnConsumeStart
+        {
+            add => this.onConsumeStart.AddListener(value);
+            remove => this.onConsumeStart.RemoveListener(value);
         }
 
         [Serializable]

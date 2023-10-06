@@ -53,6 +53,9 @@ namespace Gs2.Unity.UiKit.Gs2Stamina
 
             yield return new WaitUntil(() => clientHolder.Initialized);
             yield return new WaitUntil(() => gameSessionHolder.Initialized);
+
+            this.onConsumeStart.Invoke();
+
             
             var domain = clientHolder.Gs2.Stamina.Namespace(
                 this._context.Stamina.NamespaceName
@@ -199,6 +202,21 @@ namespace Gs2.Unity.UiKit.Gs2Stamina
         {
             add => this.onChangeConsumeValue.AddListener(value);
             remove => this.onChangeConsumeValue.RemoveListener(value);
+        }
+
+        [Serializable]
+        private class ConsumeStartEvent : UnityEvent
+        {
+
+        }
+
+        [SerializeField]
+        private ConsumeStartEvent onConsumeStart = new ConsumeStartEvent();
+
+        public event UnityAction OnConsumeStart
+        {
+            add => this.onConsumeStart.AddListener(value);
+            remove => this.onConsumeStart.RemoveListener(value);
         }
 
         [Serializable]

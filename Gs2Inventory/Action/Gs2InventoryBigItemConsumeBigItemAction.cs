@@ -53,6 +53,9 @@ namespace Gs2.Unity.UiKit.Gs2Inventory
 
             yield return new WaitUntil(() => clientHolder.Initialized);
             yield return new WaitUntil(() => gameSessionHolder.Initialized);
+
+            this.onConsumeBigItemStart.Invoke();
+
             
             var domain = clientHolder.Gs2.Inventory.Namespace(
                 this._context.BigItem.NamespaceName
@@ -189,6 +192,21 @@ namespace Gs2.Unity.UiKit.Gs2Inventory
         {
             add => this.onChangeConsumeCount.AddListener(value);
             remove => this.onChangeConsumeCount.RemoveListener(value);
+        }
+
+        [Serializable]
+        private class ConsumeBigItemStartEvent : UnityEvent
+        {
+
+        }
+
+        [SerializeField]
+        private ConsumeBigItemStartEvent onConsumeBigItemStart = new ConsumeBigItemStartEvent();
+
+        public event UnityAction OnConsumeBigItemStart
+        {
+            add => this.onConsumeBigItemStart.AddListener(value);
+            remove => this.onConsumeBigItemStart.RemoveListener(value);
         }
 
         [Serializable]

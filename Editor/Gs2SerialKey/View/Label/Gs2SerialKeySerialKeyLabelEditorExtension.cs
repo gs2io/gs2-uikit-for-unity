@@ -52,7 +52,7 @@ namespace Gs2.Unity.UiKit.Gs2SerialKey.Editor
                 EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2SerialKeySerialKeyFetcher), false);
                 EditorGUI.indentLevel++;
                 if (fetcher.Context != null) {
-                    fetcher.Context.SerialKey = EditorGUILayout.ObjectField("SerialKey", fetcher.Context.SerialKey, typeof(SerialKey), false) as SerialKey;
+                    EditorGUILayout.ObjectField("SerialKey", fetcher.Context.SerialKey, typeof(SerialKey), false);
                     EditorGUI.indentLevel++;
                     EditorGUILayout.TextField("NamespaceName", fetcher.Context.SerialKey?.NamespaceName?.ToString());
                     EditorGUILayout.TextField("SerialKeyCode", fetcher.Context.SerialKey?.SerialKeyCode?.ToString());

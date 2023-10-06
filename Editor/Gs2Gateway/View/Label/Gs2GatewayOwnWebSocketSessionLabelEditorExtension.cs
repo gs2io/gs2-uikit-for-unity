@@ -52,7 +52,7 @@ namespace Gs2.Unity.UiKit.Gs2Gateway.Editor
                 EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2GatewayOwnWebSocketSessionFetcher), false);
                 EditorGUI.indentLevel++;
                 if (fetcher.Context != null) {
-                    fetcher.Context.WebSocketSession = EditorGUILayout.ObjectField("WebSocketSession", fetcher.Context.WebSocketSession, typeof(OwnWebSocketSession), false) as OwnWebSocketSession;
+                    EditorGUILayout.ObjectField("WebSocketSession", fetcher.Context.WebSocketSession, typeof(OwnWebSocketSession), false);
                     EditorGUI.indentLevel++;
                     EditorGUILayout.TextField("NamespaceName", fetcher.Context.WebSocketSession?.NamespaceName?.ToString());
                     EditorGUILayout.TextField("ConnectionId", fetcher.Context.WebSocketSession?.ConnectionId?.ToString());

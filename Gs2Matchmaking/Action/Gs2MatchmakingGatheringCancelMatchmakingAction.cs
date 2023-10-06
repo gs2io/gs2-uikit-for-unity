@@ -53,6 +53,9 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking
 
             yield return new WaitUntil(() => clientHolder.Initialized);
             yield return new WaitUntil(() => gameSessionHolder.Initialized);
+
+            this.onCancelMatchmakingStart.Invoke();
+
             
             var domain = clientHolder.Gs2.Matchmaking.Namespace(
                 this._context.Gathering.NamespaceName
@@ -166,6 +169,21 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking
     /// </summary>
     public partial class Gs2MatchmakingGatheringCancelMatchmakingAction
     {
+
+        [Serializable]
+        private class CancelMatchmakingStartEvent : UnityEvent
+        {
+
+        }
+
+        [SerializeField]
+        private CancelMatchmakingStartEvent onCancelMatchmakingStart = new CancelMatchmakingStartEvent();
+
+        public event UnityAction OnCancelMatchmakingStart
+        {
+            add => this.onCancelMatchmakingStart.AddListener(value);
+            remove => this.onCancelMatchmakingStart.RemoveListener(value);
+        }
 
         [Serializable]
         private class CancelMatchmakingCompleteEvent : UnityEvent<EzGathering>

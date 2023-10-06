@@ -26,8 +26,10 @@
 
 using System;
 using Gs2.Gs2Inventory.Request;
+using Gs2.Unity.Gs2Inventory.ScriptableObject;
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Core.Fetcher;
+using Gs2.Unity.UiKit.Gs2Inventory.Context;
 using Gs2.Unity.UiKit.Gs2Inventory.Fetcher;
 using Gs2.Util.LitJson;
 using UnityEngine;
@@ -47,32 +49,30 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Label
             if ((!this._fetcher?.Fetched ?? false) || this._fetcher.Request == null) {
                 return;
             }
-            {
-                this.onUpdate?.Invoke(
-                    this.format.Replace(
-                        "{namespaceName}",
-                        $"{this._fetcher.Request.NamespaceName}"
-                    ).Replace(
-                        "{inventoryName}",
-                        $"{this._fetcher.Request.InventoryName}"
-                    ).Replace(
-                        "{userId}",
-                        $"{this._fetcher.Request.UserId}"
-                    ).Replace(
-                        "{itemName}",
-                        $"{this._fetcher.Request.ItemName}"
-                    ).Replace(
-                        "{itemSetName}",
-                        $"{this._fetcher.Request.ItemSetName}"
-                    ).Replace(
-                        "{referenceOf}",
-                        $"{this._fetcher.Request.ReferenceOf}"
-                    ).Replace(
-                        "{verifyType}",
-                        $"{this._fetcher.Request.VerifyType}"
-                    )
-                );
-            }
+            this.onUpdate?.Invoke(
+                this.format.Replace(
+                    "{namespaceName}",
+                    $"{this._fetcher.Request.NamespaceName}"
+                ).Replace(
+                    "{inventoryName}",
+                    $"{this._fetcher.Request.InventoryName}"
+                ).Replace(
+                    "{userId}",
+                    $"{this._fetcher.Request.UserId}"
+                ).Replace(
+                    "{itemName}",
+                    $"{this._fetcher.Request.ItemName}"
+                ).Replace(
+                    "{itemSetName}",
+                    $"{this._fetcher.Request.ItemSetName}"
+                ).Replace(
+                    "{referenceOf}",
+                    $"{this._fetcher.Request.ReferenceOf}"
+                ).Replace(
+                    "{verifyType}",
+                    $"{this._fetcher.Request.VerifyType}"
+                )
+            );
         }
     }
 

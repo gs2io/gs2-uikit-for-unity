@@ -59,7 +59,7 @@ namespace Gs2.Unity.UiKit.Gs2Version.Editor
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2VersionOwnAcceptVersionFetcher), false);
                     EditorGUI.indentLevel++;
                     if (fetcher.Context != null) {
-                        fetcher.Context.AcceptVersion = EditorGUILayout.ObjectField("AcceptVersion", fetcher.Context.AcceptVersion, typeof(OwnAcceptVersion), false) as OwnAcceptVersion;
+                        EditorGUILayout.ObjectField("AcceptVersion", fetcher.Context.AcceptVersion, typeof(OwnAcceptVersion), false);
                         EditorGUI.indentLevel++;
                         EditorGUILayout.TextField("NamespaceName", fetcher.Context.AcceptVersion?.NamespaceName?.ToString());
                         EditorGUILayout.TextField("VersionName", fetcher.Context.AcceptVersion?.VersionName?.ToString());

@@ -53,6 +53,9 @@ namespace Gs2.Unity.UiKit.Gs2Exchange
 
             yield return new WaitUntil(() => clientHolder.Initialized);
             yield return new WaitUntil(() => gameSessionHolder.Initialized);
+
+            this.onDeleteAwaitStart.Invoke();
+
             
             var domain = clientHolder.Gs2.Exchange.Namespace(
                 this._context.Await.NamespaceName
@@ -166,6 +169,21 @@ namespace Gs2.Unity.UiKit.Gs2Exchange
     /// </summary>
     public partial class Gs2ExchangeAwaitDeleteAwaitAction
     {
+
+        [Serializable]
+        private class DeleteAwaitStartEvent : UnityEvent
+        {
+
+        }
+
+        [SerializeField]
+        private DeleteAwaitStartEvent onDeleteAwaitStart = new DeleteAwaitStartEvent();
+
+        public event UnityAction OnDeleteAwaitStart
+        {
+            add => this.onDeleteAwaitStart.AddListener(value);
+            remove => this.onDeleteAwaitStart.RemoveListener(value);
+        }
 
         [Serializable]
         private class DeleteAwaitCompleteEvent : UnityEvent<EzAwait>

@@ -26,8 +26,10 @@
 
 using System;
 using Gs2.Gs2Experience.Request;
+using Gs2.Unity.Gs2Experience.ScriptableObject;
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Core.Fetcher;
+using Gs2.Unity.UiKit.Gs2Experience.Context;
 using Gs2.Unity.UiKit.Gs2Experience.Fetcher;
 using Gs2.Util.LitJson;
 using UnityEngine;
@@ -44,67 +46,62 @@ namespace Gs2.Unity.UiKit.Gs2Experience.Label
     {
         private void OnFetched()
         {
+            if (this._userDataFetcher == null) {
+                var context = gameObject.AddComponent<Gs2ExperienceOwnStatusContext>();
+                context.SetOwnStatus(
+                    OwnStatus.New(
+                        Namespace.New(
+                            this._fetcher.Request.NamespaceName
+                        ),
+                        this._fetcher.Request.ExperienceName,
+                        this._fetcher.Request.PropertyId
+                    )
+                );
+                this._userDataFetcher = gameObject.AddComponent<Gs2ExperienceOwnStatusFetcher>();
+                this._userDataFetcher.OnFetched.AddListener(this._onFetched);
+            }
             if ((!this._fetcher?.Fetched ?? false) || this._fetcher.Request == null) {
                 return;
             }
-            if (this._userDataFetcher?.Fetched ?? false)
-            {
-                this.onUpdate?.Invoke(
-                    this.format.Replace(
-                        "{namespaceName}",
-                        $"{this._fetcher.Request.NamespaceName}"
-                    ).Replace(
-                        "{userId}",
-                        $"{this._fetcher.Request.UserId}"
-                    ).Replace(
-                        "{experienceName}",
-                        $"{this._fetcher.Request.ExperienceName}"
-                    ).Replace(
-                        "{propertyId}",
-                        $"{this._fetcher.Request.PropertyId}"
-                    ).Replace(
-                        "{rankCapValue}",
-                        $"{this._fetcher.Request.RankCapValue}"
-                    ).Replace(
-                        "{userData:experienceName}",
-                        $"{this._userDataFetcher.Status.ExperienceName}"
-                    ).Replace(
-                        "{userData:propertyId}",
-                        $"{this._userDataFetcher.Status.PropertyId}"
-                    ).Replace(
-                        "{userData:experienceValue}",
-                        $"{this._userDataFetcher.Status.ExperienceValue}"
-                    ).Replace(
-                        "{userData:rankValue}",
-                        $"{this._userDataFetcher.Status.RankValue}"
-                    ).Replace(
-                        "{userData:rankCapValue}",
-                        $"{this._userDataFetcher.Status.RankCapValue}"
-                    ).Replace(
-                        "{userData:nextRankUpExperienceValue}",
-                        $"{this._userDataFetcher.Status.NextRankUpExperienceValue}"
-                    )
-                );
-            } else {
-                this.onUpdate?.Invoke(
-                    this.format.Replace(
-                        "{namespaceName}",
-                        $"{this._fetcher.Request.NamespaceName}"
-                    ).Replace(
-                        "{userId}",
-                        $"{this._fetcher.Request.UserId}"
-                    ).Replace(
-                        "{experienceName}",
-                        $"{this._fetcher.Request.ExperienceName}"
-                    ).Replace(
-                        "{propertyId}",
-                        $"{this._fetcher.Request.PropertyId}"
-                    ).Replace(
-                        "{rankCapValue}",
-                        $"{this._fetcher.Request.RankCapValue}"
-                    )
-                );
+            if ((!this._userDataFetcher?.Fetched ?? false) || this._userDataFetcher.Status == null) {
+                return;
             }
+            this.onUpdate?.Invoke(
+                this.format.Replace(
+                    "{namespaceName}",
+                    $"{this._fetcher.Request.NamespaceName}"
+                ).Replace(
+                    "{userId}",
+                    $"{this._fetcher.Request.UserId}"
+                ).Replace(
+                    "{experienceName}",
+                    $"{this._fetcher.Request.ExperienceName}"
+                ).Replace(
+                    "{propertyId}",
+                    $"{this._fetcher.Request.PropertyId}"
+                ).Replace(
+                    "{rankCapValue}",
+                    $"{this._fetcher.Request.RankCapValue}"
+                ).Replace(
+                    "{userData:experienceName}",
+                    $"{this._userDataFetcher.Status.ExperienceName}"
+                ).Replace(
+                    "{userData:propertyId}",
+                    $"{this._userDataFetcher.Status.PropertyId}"
+                ).Replace(
+                    "{userData:experienceValue}",
+                    $"{this._userDataFetcher.Status.ExperienceValue}"
+                ).Replace(
+                    "{userData:rankValue}",
+                    $"{this._userDataFetcher.Status.RankValue}"
+                ).Replace(
+                    "{userData:rankCapValue}",
+                    $"{this._userDataFetcher.Status.RankCapValue}"
+                ).Replace(
+                    "{userData:nextRankUpExperienceValue}",
+                    $"{this._userDataFetcher.Status.NextRankUpExperienceValue}"
+                )
+            );
         }
     }
 

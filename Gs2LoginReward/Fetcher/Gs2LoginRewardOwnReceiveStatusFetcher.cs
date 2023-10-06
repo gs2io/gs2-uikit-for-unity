@@ -35,6 +35,7 @@ using Gs2.Unity.Gs2LoginReward.Model;
 using Gs2.Unity.Gs2LoginReward.ScriptableObject;
 using Gs2.Unity.Util;
 using Gs2.Unity.UiKit.Core;
+using Gs2.Unity.UiKit.Core.Model;
 using Gs2.Unity.UiKit.Gs2Core.Fetcher;
 using Gs2.Unity.UiKit.Gs2LoginReward.Context;
 using UnityEngine;
@@ -120,6 +121,18 @@ namespace Gs2.Unity.UiKit.Gs2LoginReward.Fetcher
                 this._callbackId.Value
             );
             this._callbackId = null;
+        }
+
+        public void SetTemporaryReceiveStatus(
+            Gs2.Unity.Gs2LoginReward.Model.EzReceiveStatus receiveStatus
+        ) {
+            ReceiveStatus = receiveStatus;
+            this.OnFetched.Invoke();
+        }
+
+        public void RollbackTemporaryReceiveStatus(
+        ) {
+            OnUpdateContext();
         }
     }
 

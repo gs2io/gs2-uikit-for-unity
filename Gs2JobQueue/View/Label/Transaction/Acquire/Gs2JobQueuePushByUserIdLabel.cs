@@ -26,8 +26,10 @@
 
 using System;
 using Gs2.Gs2JobQueue.Request;
+using Gs2.Unity.Gs2JobQueue.ScriptableObject;
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Core.Fetcher;
+using Gs2.Unity.UiKit.Gs2JobQueue.Context;
 using Gs2.Unity.UiKit.Gs2JobQueue.Fetcher;
 using Gs2.Util.LitJson;
 using UnityEngine;
@@ -47,49 +49,36 @@ namespace Gs2.Unity.UiKit.Gs2JobQueue.Label
             if ((!this._fetcher?.Fetched ?? false) || this._fetcher.Request == null) {
                 return;
             }
-            if (this._userDataFetcher?.Fetched ?? false)
-            {
-                this.onUpdate?.Invoke(
-                    this.format.Replace(
-                        "{namespaceName}",
-                        $"{this._fetcher.Request.NamespaceName}"
-                    ).Replace(
-                        "{userId}",
-                        $"{this._fetcher.Request.UserId}"
-                    ).Replace(
-                        "{jobs}",
-                        $"{this._fetcher.Request.Jobs}"
-                    ).Replace(
-                        "{userData:jobId}",
-                        $"{this._userDataFetcher.Job.JobId}"
-                    ).Replace(
-                        "{userData:scriptId}",
-                        $"{this._userDataFetcher.Job.ScriptId}"
-                    ).Replace(
-                        "{userData:args}",
-                        $"{this._userDataFetcher.Job.Args}"
-                    ).Replace(
-                        "{userData:currentRetryCount}",
-                        $"{this._userDataFetcher.Job.CurrentRetryCount}"
-                    ).Replace(
-                        "{userData:maxTryCount}",
-                        $"{this._userDataFetcher.Job.MaxTryCount}"
-                    )
-                );
-            } else {
-                this.onUpdate?.Invoke(
-                    this.format.Replace(
-                        "{namespaceName}",
-                        $"{this._fetcher.Request.NamespaceName}"
-                    ).Replace(
-                        "{userId}",
-                        $"{this._fetcher.Request.UserId}"
-                    ).Replace(
-                        "{jobs}",
-                        $"{this._fetcher.Request.Jobs}"
-                    )
-                );
+            if ((!this._userDataFetcher?.Fetched ?? false) || this._userDataFetcher.Job == null) {
+                return;
             }
+            this.onUpdate?.Invoke(
+                this.format.Replace(
+                    "{namespaceName}",
+                    $"{this._fetcher.Request.NamespaceName}"
+                ).Replace(
+                    "{userId}",
+                    $"{this._fetcher.Request.UserId}"
+                ).Replace(
+                    "{jobs}",
+                    $"{this._fetcher.Request.Jobs}"
+                ).Replace(
+                    "{userData:jobId}",
+                    $"{this._userDataFetcher.Job.JobId}"
+                ).Replace(
+                    "{userData:scriptId}",
+                    $"{this._userDataFetcher.Job.ScriptId}"
+                ).Replace(
+                    "{userData:args}",
+                    $"{this._userDataFetcher.Job.Args}"
+                ).Replace(
+                    "{userData:currentRetryCount}",
+                    $"{this._userDataFetcher.Job.CurrentRetryCount}"
+                ).Replace(
+                    "{userData:maxTryCount}",
+                    $"{this._userDataFetcher.Job.MaxTryCount}"
+                )
+            );
         }
     }
 

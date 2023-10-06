@@ -53,6 +53,9 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking
 
             yield return new WaitUntil(() => clientHolder.Initialized);
             yield return new WaitUntil(() => gameSessionHolder.Initialized);
+
+            this.onCreateGatheringStart.Invoke();
+
             
             var domain = clientHolder.Gs2.Matchmaking.Namespace(
                 this._context.Namespace.NamespaceName
@@ -307,6 +310,21 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking
         {
             add => this.onChangeExpiresAtTimeSpan.AddListener(value);
             remove => this.onChangeExpiresAtTimeSpan.RemoveListener(value);
+        }
+
+        [Serializable]
+        private class CreateGatheringStartEvent : UnityEvent
+        {
+
+        }
+
+        [SerializeField]
+        private CreateGatheringStartEvent onCreateGatheringStart = new CreateGatheringStartEvent();
+
+        public event UnityAction OnCreateGatheringStart
+        {
+            add => this.onCreateGatheringStart.AddListener(value);
+            remove => this.onCreateGatheringStart.RemoveListener(value);
         }
 
         [Serializable]

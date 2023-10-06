@@ -35,6 +35,7 @@ using Gs2.Unity.Gs2Exchange.Model;
 using Gs2.Unity.Gs2Exchange.ScriptableObject;
 using Gs2.Unity.Util;
 using Gs2.Unity.UiKit.Core;
+using Gs2.Unity.UiKit.Core.Model;
 using Gs2.Unity.UiKit.Gs2Core.Fetcher;
 using Gs2.Unity.UiKit.Gs2Exchange.Context;
 using UnityEngine;
@@ -120,6 +121,18 @@ namespace Gs2.Unity.UiKit.Gs2Exchange.Fetcher
                 this._callbackId.Value
             );
             this._callbackId = null;
+        }
+
+        public void SetTemporaryAwait(
+            Gs2.Unity.Gs2Exchange.Model.EzAwait await_
+        ) {
+            Await = await_;
+            this.OnFetched.Invoke();
+        }
+
+        public void RollbackTemporaryAwait(
+        ) {
+            OnUpdateContext();
         }
     }
 

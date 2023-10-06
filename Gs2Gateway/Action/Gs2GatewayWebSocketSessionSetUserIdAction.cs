@@ -53,6 +53,9 @@ namespace Gs2.Unity.UiKit.Gs2Gateway
 
             yield return new WaitUntil(() => clientHolder.Initialized);
             yield return new WaitUntil(() => gameSessionHolder.Initialized);
+
+            this.onSetUserIdStart.Invoke();
+
             
             var domain = clientHolder.Gs2.Gateway.Namespace(
                 this._context.WebSocketSession.NamespaceName
@@ -186,6 +189,21 @@ namespace Gs2.Unity.UiKit.Gs2Gateway
         {
             add => this.onChangeAllowConcurrentAccess.AddListener(value);
             remove => this.onChangeAllowConcurrentAccess.RemoveListener(value);
+        }
+
+        [Serializable]
+        private class SetUserIdStartEvent : UnityEvent
+        {
+
+        }
+
+        [SerializeField]
+        private SetUserIdStartEvent onSetUserIdStart = new SetUserIdStartEvent();
+
+        public event UnityAction OnSetUserIdStart
+        {
+            add => this.onSetUserIdStart.AddListener(value);
+            remove => this.onSetUserIdStart.RemoveListener(value);
         }
 
         [Serializable]

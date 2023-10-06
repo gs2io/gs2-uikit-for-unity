@@ -35,6 +35,7 @@ using Gs2.Unity.Gs2SerialKey.Model;
 using Gs2.Unity.Gs2SerialKey.ScriptableObject;
 using Gs2.Unity.Util;
 using Gs2.Unity.UiKit.Core;
+using Gs2.Unity.UiKit.Core.Model;
 using Gs2.Unity.UiKit.Gs2Core.Fetcher;
 using Gs2.Unity.UiKit.Gs2SerialKey.Context;
 using UnityEngine;
@@ -120,14 +121,14 @@ namespace Gs2.Unity.UiKit.Gs2SerialKey.Fetcher
             this._callbackId = null;
         }
 
-        public void SetTemporarySlot(
+        public void SetTemporaryCampaignModel(
             Gs2.Unity.Gs2SerialKey.Model.EzCampaignModel campaignModel
         ) {
             CampaignModel = campaignModel;
             this.OnFetched.Invoke();
         }
 
-        public void RollbackTemporarySlot(
+        public void RollbackTemporaryCampaignModel(
         ) {
             OnUpdateContext();
         }

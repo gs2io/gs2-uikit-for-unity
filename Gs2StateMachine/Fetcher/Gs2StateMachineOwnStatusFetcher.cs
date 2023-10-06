@@ -35,6 +35,7 @@ using Gs2.Unity.Gs2StateMachine.Model;
 using Gs2.Unity.Gs2StateMachine.ScriptableObject;
 using Gs2.Unity.Util;
 using Gs2.Unity.UiKit.Core;
+using Gs2.Unity.UiKit.Core.Model;
 using Gs2.Unity.UiKit.Gs2Core.Fetcher;
 using Gs2.Unity.UiKit.Gs2StateMachine.Context;
 using UnityEngine;
@@ -120,6 +121,18 @@ namespace Gs2.Unity.UiKit.Gs2StateMachine.Fetcher
                 this._callbackId.Value
             );
             this._callbackId = null;
+        }
+
+        public void SetTemporaryStatus(
+            Gs2.Unity.Gs2StateMachine.Model.EzStatus status
+        ) {
+            Status = status;
+            this.OnFetched.Invoke();
+        }
+
+        public void RollbackTemporaryStatus(
+        ) {
+            OnUpdateContext();
         }
     }
 

@@ -53,6 +53,9 @@ namespace Gs2.Unity.UiKit.Gs2Datastore
 
             yield return new WaitUntil(() => clientHolder.Initialized);
             yield return new WaitUntil(() => gameSessionHolder.Initialized);
+
+            this.onPrepareDownloadOwnDataStart.Invoke();
+
             
             var domain = clientHolder.Gs2.Datastore.Namespace(
                 this._context.DataObject.NamespaceName
@@ -166,6 +169,21 @@ namespace Gs2.Unity.UiKit.Gs2Datastore
     /// </summary>
     public partial class Gs2DatastoreDataObjectPrepareDownloadOwnDataAction
     {
+
+        [Serializable]
+        private class PrepareDownloadOwnDataStartEvent : UnityEvent
+        {
+
+        }
+
+        [SerializeField]
+        private PrepareDownloadOwnDataStartEvent onPrepareDownloadOwnDataStart = new PrepareDownloadOwnDataStartEvent();
+
+        public event UnityAction OnPrepareDownloadOwnDataStart
+        {
+            add => this.onPrepareDownloadOwnDataStart.AddListener(value);
+            remove => this.onPrepareDownloadOwnDataStart.RemoveListener(value);
+        }
 
         [Serializable]
         private class PrepareDownloadOwnDataCompleteEvent : UnityEvent<EzDataObject>

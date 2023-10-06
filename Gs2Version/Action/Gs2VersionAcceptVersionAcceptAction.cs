@@ -53,6 +53,9 @@ namespace Gs2.Unity.UiKit.Gs2Version
 
             yield return new WaitUntil(() => clientHolder.Initialized);
             yield return new WaitUntil(() => gameSessionHolder.Initialized);
+
+            this.onAcceptStart.Invoke();
+
             
             var domain = clientHolder.Gs2.Version.Namespace(
                 this._context.AcceptVersion.NamespaceName
@@ -166,6 +169,21 @@ namespace Gs2.Unity.UiKit.Gs2Version
     /// </summary>
     public partial class Gs2VersionAcceptVersionAcceptAction
     {
+
+        [Serializable]
+        private class AcceptStartEvent : UnityEvent
+        {
+
+        }
+
+        [SerializeField]
+        private AcceptStartEvent onAcceptStart = new AcceptStartEvent();
+
+        public event UnityAction OnAcceptStart
+        {
+            add => this.onAcceptStart.AddListener(value);
+            remove => this.onAcceptStart.RemoveListener(value);
+        }
 
         [Serializable]
         private class AcceptCompleteEvent : UnityEvent<EzAcceptVersion>

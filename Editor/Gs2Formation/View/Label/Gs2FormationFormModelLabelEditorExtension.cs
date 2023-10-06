@@ -52,7 +52,7 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Editor
                 EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2FormationFormModelFetcher), false);
                 EditorGUI.indentLevel++;
                 if (fetcher.Context != null) {
-                    fetcher.Context.FormModel = EditorGUILayout.ObjectField("FormModel", fetcher.Context.FormModel, typeof(FormModel), false) as FormModel;
+                    EditorGUILayout.ObjectField("FormModel", fetcher.Context.FormModel, typeof(FormModel), false);
                     EditorGUI.indentLevel++;
                     EditorGUILayout.TextField("NamespaceName", fetcher.Context.FormModel?.NamespaceName?.ToString());
                     EditorGUILayout.TextField("MoldModelName", fetcher.Context.FormModel?.MoldModelName?.ToString());

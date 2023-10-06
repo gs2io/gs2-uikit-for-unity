@@ -53,6 +53,9 @@ namespace Gs2.Unity.UiKit.Gs2Friend
 
             yield return new WaitUntil(() => clientHolder.Initialized);
             yield return new WaitUntil(() => gameSessionHolder.Initialized);
+
+            this.onSendRequestStart.Invoke();
+
             
             var domain = clientHolder.Gs2.Friend.Namespace(
                 this._context.SendFriendRequest.NamespaceName
@@ -165,6 +168,21 @@ namespace Gs2.Unity.UiKit.Gs2Friend
     /// </summary>
     public partial class Gs2FriendSendFriendRequestSendRequestAction
     {
+
+        [Serializable]
+        private class SendRequestStartEvent : UnityEvent
+        {
+
+        }
+
+        [SerializeField]
+        private SendRequestStartEvent onSendRequestStart = new SendRequestStartEvent();
+
+        public event UnityAction OnSendRequestStart
+        {
+            add => this.onSendRequestStart.AddListener(value);
+            remove => this.onSendRequestStart.RemoveListener(value);
+        }
 
         [Serializable]
         private class SendRequestCompleteEvent : UnityEvent<EzFriendRequest>

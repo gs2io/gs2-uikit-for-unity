@@ -59,7 +59,7 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Editor
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2MissionMissionTaskModelFetcher), false);
                     EditorGUI.indentLevel++;
                     if (fetcher.Context != null) {
-                        fetcher.Context.MissionTaskModel = EditorGUILayout.ObjectField("MissionTaskModel", fetcher.Context.MissionTaskModel, typeof(MissionTaskModel), false) as MissionTaskModel;
+                        EditorGUILayout.ObjectField("MissionTaskModel", fetcher.Context.MissionTaskModel, typeof(MissionTaskModel), false);
                         EditorGUI.indentLevel++;
                         EditorGUILayout.TextField("MissionTaskName", fetcher.Context.MissionTaskModel?.MissionTaskName?.ToString());
                         EditorGUI.indentLevel--;

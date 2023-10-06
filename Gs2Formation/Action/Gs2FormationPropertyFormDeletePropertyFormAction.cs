@@ -53,6 +53,9 @@ namespace Gs2.Unity.UiKit.Gs2Formation
 
             yield return new WaitUntil(() => clientHolder.Initialized);
             yield return new WaitUntil(() => gameSessionHolder.Initialized);
+
+            this.onDeletePropertyFormStart.Invoke();
+
             
             var domain = clientHolder.Gs2.Formation.Namespace(
                 this._context.PropertyForm.NamespaceName
@@ -167,6 +170,21 @@ namespace Gs2.Unity.UiKit.Gs2Formation
     /// </summary>
     public partial class Gs2FormationPropertyFormDeletePropertyFormAction
     {
+
+        [Serializable]
+        private class DeletePropertyFormStartEvent : UnityEvent
+        {
+
+        }
+
+        [SerializeField]
+        private DeletePropertyFormStartEvent onDeletePropertyFormStart = new DeletePropertyFormStartEvent();
+
+        public event UnityAction OnDeletePropertyFormStart
+        {
+            add => this.onDeletePropertyFormStart.AddListener(value);
+            remove => this.onDeletePropertyFormStart.RemoveListener(value);
+        }
 
         [Serializable]
         private class DeletePropertyFormCompleteEvent : UnityEvent<EzPropertyForm>

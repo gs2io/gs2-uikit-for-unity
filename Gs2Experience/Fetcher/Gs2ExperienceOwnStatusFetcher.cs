@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
@@ -74,6 +76,7 @@ namespace Gs2.Unity.UiKit.Gs2Experience.Fetcher
                 item =>
                 {
                     Status = item;
+                    this._experienceValue = Status.ExperienceValue;
                     Fetched = true;
                     this.OnFetched.Invoke();
                 }
@@ -88,6 +91,7 @@ namespace Gs2.Unity.UiKit.Gs2Experience.Fetcher
                 }
                 else {
                     Status = future.Result;
+                    this._experienceValue = Status.ExperienceValue;
                     Fetched = true;
                     this.OnFetched.Invoke();
                     break;
@@ -122,6 +126,18 @@ namespace Gs2.Unity.UiKit.Gs2Experience.Fetcher
             );
             this._callbackId = null;
         }
+
+        public void SetTemporaryStatus(
+            Gs2.Unity.Gs2Experience.Model.EzStatus status
+        ) {
+            Status = status;
+            this.OnFetched.Invoke();
+        }
+
+        public void RollbackTemporaryStatus(
+        ) {
+            OnUpdateContext();
+        }
     }
 
     /// <summary>
@@ -130,10 +146,13 @@ namespace Gs2.Unity.UiKit.Gs2Experience.Fetcher
 
     public partial class Gs2ExperienceOwnStatusFetcher
     {
+        private long _experienceValue;
+        private Gs2ExperienceExperienceModelFetcher _experienceModelFetcher;
         public Gs2ExperienceOwnStatusContext Context { get; private set; }
 
         public void Awake()
         {
+            this._experienceModelFetcher = GetComponent<Gs2ExperienceExperienceModelFetcher>() ?? GetComponentInParent<Gs2ExperienceExperienceModelFetcher>();
             Context = GetComponent<Gs2ExperienceOwnStatusContext>() ?? GetComponentInParent<Gs2ExperienceOwnStatusContext>();
             if (Context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ExperienceOwnStatusContext.");
@@ -157,6 +176,15 @@ namespace Gs2.Unity.UiKit.Gs2Experience.Fetcher
 
     public partial class Gs2ExperienceOwnStatusFetcher
     {
+        public long addition;
+
+        public void SetAddition(long addition) {
+            this.addition = addition;
+            Status.ExperienceValue = this._experienceValue + this.addition;
+            Status.RankValue = this._experienceModelFetcher.ExperienceModel.Rank(Status);
+            Status.NextRankUpExperienceValue = this._experienceModelFetcher.ExperienceModel.NextRankExperienceValue(Status);
+            SetTemporaryStatus(Status);
+        }
         public Gs2.Unity.Gs2Experience.Model.EzStatus Status { get; protected set; }
         public bool Fetched { get; protected set; }
         public UnityEvent OnFetched = new UnityEvent();

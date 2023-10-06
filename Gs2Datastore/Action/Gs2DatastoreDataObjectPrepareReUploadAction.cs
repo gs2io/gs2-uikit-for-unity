@@ -53,6 +53,9 @@ namespace Gs2.Unity.UiKit.Gs2Datastore
 
             yield return new WaitUntil(() => clientHolder.Initialized);
             yield return new WaitUntil(() => gameSessionHolder.Initialized);
+
+            this.onPrepareReUploadStart.Invoke();
+
             
             var domain = clientHolder.Gs2.Datastore.Namespace(
                 this._context.DataObject.NamespaceName
@@ -187,6 +190,21 @@ namespace Gs2.Unity.UiKit.Gs2Datastore
         {
             add => this.onChangeContentType.AddListener(value);
             remove => this.onChangeContentType.RemoveListener(value);
+        }
+
+        [Serializable]
+        private class PrepareReUploadStartEvent : UnityEvent
+        {
+
+        }
+
+        [SerializeField]
+        private PrepareReUploadStartEvent onPrepareReUploadStart = new PrepareReUploadStartEvent();
+
+        public event UnityAction OnPrepareReUploadStart
+        {
+            add => this.onPrepareReUploadStart.AddListener(value);
+            remove => this.onPrepareReUploadStart.RemoveListener(value);
         }
 
         [Serializable]

@@ -53,6 +53,9 @@ namespace Gs2.Unity.UiKit.Gs2Chat
 
             yield return new WaitUntil(() => clientHolder.Initialized);
             yield return new WaitUntil(() => gameSessionHolder.Initialized);
+
+            this.onDeleteRoomStart.Invoke();
+
             
             var domain = clientHolder.Gs2.Chat.Namespace(
                 this._context.Room.NamespaceName
@@ -167,6 +170,21 @@ namespace Gs2.Unity.UiKit.Gs2Chat
     /// </summary>
     public partial class Gs2ChatRoomDeleteRoomAction
     {
+
+        [Serializable]
+        private class DeleteRoomStartEvent : UnityEvent
+        {
+
+        }
+
+        [SerializeField]
+        private DeleteRoomStartEvent onDeleteRoomStart = new DeleteRoomStartEvent();
+
+        public event UnityAction OnDeleteRoomStart
+        {
+            add => this.onDeleteRoomStart.AddListener(value);
+            remove => this.onDeleteRoomStart.RemoveListener(value);
+        }
 
         [Serializable]
         private class DeleteRoomCompleteEvent : UnityEvent<EzRoom>

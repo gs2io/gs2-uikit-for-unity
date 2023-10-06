@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable UnusedAutoPropertyAccessor.Local
@@ -54,14 +56,16 @@ namespace Gs2.Unity.UiKit.Gs2Enhance
             yield return new WaitUntil(() => clientHolder.Initialized);
             yield return new WaitUntil(() => gameSessionHolder.Initialized);
             
+            this.onEnhanceStart.Invoke();
+            
             var domain = clientHolder.Gs2.Enhance.Namespace(
-                this._context.Namespace.NamespaceName
+                this._context.RateModel.NamespaceName
             ).Me(
                 gameSessionHolder.GameSession
             ).Enhance(
             );
             var future = domain.Enhance(
-                RateName,
+                this._context.RateModel.RateName,
                 TargetItemSetId,
                 Materials.ToArray(),
                 Config.ToArray()
@@ -115,20 +119,20 @@ namespace Gs2.Unity.UiKit.Gs2Enhance
 
     public partial class Gs2EnhanceEnhanceEnhanceAction
     {
-        private Gs2EnhanceNamespaceContext _context;
+        private Gs2EnhanceRateModelContext _context;
 
         public void Awake()
         {
-            this._context = GetComponent<Gs2EnhanceNamespaceContext>() ?? GetComponentInParent<Gs2EnhanceNamespaceContext>();
+            this._context = GetComponent<Gs2EnhanceRateModelContext>() ?? GetComponentInParent<Gs2EnhanceRateModelContext>();
             if (this._context == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2EnhanceNamespaceContext.");
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2EnhanceRateModelContext.");
                 enabled = false;
             }
         }
 
         public virtual bool HasError()
         {
-            this._context = GetComponent<Gs2EnhanceNamespaceContext>() ?? GetComponentInParent<Gs2EnhanceNamespaceContext>(true);
+            this._context = GetComponent<Gs2EnhanceRateModelContext>() ?? GetComponentInParent<Gs2EnhanceRateModelContext>(true);
             if (this._context == null) {
                 return true;
             }
@@ -151,16 +155,9 @@ namespace Gs2.Unity.UiKit.Gs2Enhance
     public partial class Gs2EnhanceEnhanceEnhanceAction
     {
         public bool WaitAsyncProcessComplete;
-        public string RateName;
         public string TargetItemSetId;
         public List<Gs2.Unity.Gs2Enhance.Model.EzMaterial> Materials;
         public List<Gs2.Unity.Gs2Enhance.Model.EzConfig> Config;
-
-        public void SetRateName(string value) {
-            this.RateName = value;
-            this.onChangeRateName.Invoke(this.RateName);
-            this.OnChange.Invoke();
-        }
 
         public void SetTargetItemSetId(string value) {
             this.TargetItemSetId = value;
@@ -172,6 +169,10 @@ namespace Gs2.Unity.UiKit.Gs2Enhance
             this.Materials = value;
             this.onChangeMaterials.Invoke(this.Materials);
             this.OnChange.Invoke();
+        }
+
+        public void ClearMaterials() {
+            SetMaterials(new List<Gs2.Unity.Gs2Enhance.Model.EzMaterial>());
         }
 
         public void SetConfig(List<Gs2.Unity.Gs2Enhance.Model.EzConfig> value) {
@@ -186,20 +187,6 @@ namespace Gs2.Unity.UiKit.Gs2Enhance
     /// </summary>
     public partial class Gs2EnhanceEnhanceEnhanceAction
     {
-
-        [Serializable]
-        private class ChangeRateNameEvent : UnityEvent<string>
-        {
-
-        }
-
-        [SerializeField]
-        private ChangeRateNameEvent onChangeRateName = new ChangeRateNameEvent();
-        public event UnityAction<string> OnChangeRateName
-        {
-            add => this.onChangeRateName.AddListener(value);
-            remove => this.onChangeRateName.RemoveListener(value);
-        }
 
         [Serializable]
         private class ChangeTargetItemSetIdEvent : UnityEvent<string>
@@ -241,6 +228,21 @@ namespace Gs2.Unity.UiKit.Gs2Enhance
         {
             add => this.onChangeConfig.AddListener(value);
             remove => this.onChangeConfig.RemoveListener(value);
+        }
+
+        [Serializable]
+        private class EnhanceStartEvent : UnityEvent
+        {
+
+        }
+
+        [SerializeField]
+        private EnhanceStartEvent onEnhanceStart = new EnhanceStartEvent();
+
+        public event UnityAction OnEnhanceStart
+        {
+            add => this.onEnhanceStart.AddListener(value);
+            remove => this.onEnhanceStart.RemoveListener(value);
         }
 
         [Serializable]

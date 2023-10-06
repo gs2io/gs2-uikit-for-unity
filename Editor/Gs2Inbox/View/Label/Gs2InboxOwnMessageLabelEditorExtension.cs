@@ -59,7 +59,7 @@ namespace Gs2.Unity.UiKit.Gs2Inbox.Editor
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2InboxOwnMessageFetcher), false);
                     EditorGUI.indentLevel++;
                     if (fetcher.Context != null) {
-                        fetcher.Context.Message = EditorGUILayout.ObjectField("Message", fetcher.Context.Message, typeof(OwnMessage), false) as OwnMessage;
+                        EditorGUILayout.ObjectField("Message", fetcher.Context.Message, typeof(OwnMessage), false);
                         EditorGUI.indentLevel++;
                         EditorGUILayout.TextField("NamespaceName", fetcher.Context.Message?.NamespaceName?.ToString());
                         EditorGUILayout.TextField("MessageName", fetcher.Context.Message?.MessageName?.ToString());

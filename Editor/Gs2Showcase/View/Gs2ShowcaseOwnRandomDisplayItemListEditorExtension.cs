@@ -51,7 +51,7 @@ namespace Gs2.Unity.UiKit.Gs2Showcase.Editor
                 EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2ShowcaseOwnRandomDisplayItemListFetcher), false);
                 EditorGUI.indentLevel++;
                 if (fetcher.Context != null) {
-                    fetcher.Context.RandomShowcase = EditorGUILayout.ObjectField("OwnRandomShowcase", fetcher.Context.RandomShowcase, typeof(OwnRandomShowcase), false) as OwnRandomShowcase;
+                    EditorGUILayout.ObjectField("OwnRandomShowcase", fetcher.Context.RandomShowcase, typeof(OwnRandomShowcase), false);
                     EditorGUI.indentLevel++;
                     EditorGUILayout.TextField("NamespaceName", fetcher.Context.RandomShowcase?.NamespaceName?.ToString());
                     EditorGUI.indentLevel--;

@@ -59,7 +59,7 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Editor
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2MissionOwnCompleteFetcher), false);
                     EditorGUI.indentLevel++;
                     if (fetcher.Context != null) {
-                        fetcher.Context.Complete = EditorGUILayout.ObjectField("Complete", fetcher.Context.Complete, typeof(OwnComplete), false) as OwnComplete;
+                        EditorGUILayout.ObjectField("Complete", fetcher.Context.Complete, typeof(OwnComplete), false);
                         EditorGUI.indentLevel++;
                         EditorGUILayout.TextField("NamespaceName", fetcher.Context.Complete?.NamespaceName?.ToString());
                         EditorGUILayout.TextField("MissionGroupName", fetcher.Context.Complete?.MissionGroupName?.ToString());

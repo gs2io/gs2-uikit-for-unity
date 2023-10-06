@@ -52,7 +52,7 @@ namespace Gs2.Unity.UiKit.Gs2SerialKey.Editor
                 EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2SerialKeyCampaignModelFetcher), false);
                 EditorGUI.indentLevel++;
                 if (fetcher.Context != null) {
-                    fetcher.Context.CampaignModel = EditorGUILayout.ObjectField("CampaignModel", fetcher.Context.CampaignModel, typeof(CampaignModel), false) as CampaignModel;
+                    EditorGUILayout.ObjectField("CampaignModel", fetcher.Context.CampaignModel, typeof(CampaignModel), false);
                     EditorGUI.indentLevel++;
                     EditorGUILayout.TextField("NamespaceName", fetcher.Context.CampaignModel?.NamespaceName?.ToString());
                     EditorGUILayout.TextField("CampaignModelName", fetcher.Context.CampaignModel?.CampaignModelName?.ToString());

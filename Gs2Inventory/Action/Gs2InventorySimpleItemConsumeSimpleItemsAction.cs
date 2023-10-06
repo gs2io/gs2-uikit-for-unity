@@ -55,6 +55,9 @@ namespace Gs2.Unity.UiKit.Gs2Inventory
 
             yield return new WaitUntil(() => clientHolder.Initialized);
             yield return new WaitUntil(() => gameSessionHolder.Initialized);
+
+            this.onConsumeSimpleItemsStart.Invoke();
+
             
             var domain = clientHolder.Gs2.Inventory.Namespace(
                 this._context.SimpleItem.NamespaceName
@@ -137,7 +140,7 @@ namespace Gs2.Unity.UiKit.Gs2Inventory
         public void Awake()
         {
             this._context = GetComponent<Gs2InventoryOwnSimpleItemContext>() ?? GetComponentInParent<Gs2InventoryOwnSimpleItemContext>();
-            if (_context == null) {
+            if (this._context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2InventoryOwnSimpleItemContext.");
                 enabled = false;
             }
@@ -146,7 +149,7 @@ namespace Gs2.Unity.UiKit.Gs2Inventory
         public virtual bool HasError()
         {
             this._context = GetComponent<Gs2InventoryOwnSimpleItemContext>() ?? GetComponentInParent<Gs2InventoryOwnSimpleItemContext>(true);
-            if (_context == null) {
+            if (this._context == null) {
                 return true;
             }
             return false;
@@ -195,6 +198,21 @@ namespace Gs2.Unity.UiKit.Gs2Inventory
         {
             add => this.onChangeConsumeCounts.AddListener(value);
             remove => this.onChangeConsumeCounts.RemoveListener(value);
+        }
+
+        [Serializable]
+        private class ConsumeSimpleItemsStartEvent : UnityEvent
+        {
+
+        }
+
+        [SerializeField]
+        private ConsumeSimpleItemsStartEvent onConsumeSimpleItemsStart = new ConsumeSimpleItemsStartEvent();
+
+        public event UnityAction OnConsumeSimpleItemsStart
+        {
+            add => this.onConsumeSimpleItemsStart.AddListener(value);
+            remove => this.onConsumeSimpleItemsStart.RemoveListener(value);
         }
 
         [Serializable]

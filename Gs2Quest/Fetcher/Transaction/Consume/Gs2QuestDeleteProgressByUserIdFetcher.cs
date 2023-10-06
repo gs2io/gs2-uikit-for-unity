@@ -32,6 +32,7 @@ using Gs2.Core.Exception;
 using Gs2.Gs2Quest.Request;
 using Gs2.Unity.Gs2Quest.ScriptableObject;
 using Gs2.Unity.UiKit.Core;
+using Gs2.Unity.UiKit.Gs2Core.Context;
 using Gs2.Unity.UiKit.Gs2Core.Fetcher;
 using Gs2.Unity.UiKit.Gs2Quest.Context;
 using Gs2.Unity.Util;
@@ -50,19 +51,34 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Fetcher
     {
         private void Fetch()
         {
-            var action = _fetcher.ConsumeActions().FirstOrDefault(v => v.Action == "Gs2Quest:DeleteProgressByUserId");
-            if (action != null) {
-                Request = DeleteProgressByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
-                if (Namespace == null || (
-                        Namespace.NamespaceName == Request.NamespaceName)
-                   ) {
-                    Namespace = Namespace.New(
-                                Request.NamespaceName
-                            );
+            if (this._context != null) {
+                if (this._context.ConsumeAction.Action == "Gs2Quest:DeleteProgressByUserId") {
+                    Request = DeleteProgressByUserIdRequest.FromJson(JsonMapper.ToObject(this._context.ConsumeAction.Request));
+                    if (Namespace == null || (
+                            Namespace.NamespaceName == Request.NamespaceName)
+                    ) {
+                        Namespace = Namespace.New(
+                            Request.NamespaceName
+                        );
+                    }
+                    Fetched = true;
+                    this.OnFetched.Invoke();
+                }
+            } else {
+                var action = this._fetcher.ConsumeActions().FirstOrDefault(v => v.Action == "Gs2Quest:DeleteProgressByUserId");
+                if (action != null) {
+                    Request = DeleteProgressByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
+                    if (Namespace == null || (
+                            Namespace.NamespaceName == Request.NamespaceName)
+                    ) {
+                        Namespace = Namespace.New(
+                            Request.NamespaceName
+                        );
+                    }
+                    Fetched = true;
+                    this.OnFetched.Invoke();
                 }
             }
-            Fetched = true;
-            this.OnFetched.Invoke();
         }
     }
 
@@ -72,6 +88,7 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Fetcher
 
     public partial class Gs2QuestDeleteProgressByUserIdFetcher
     {
+        private Gs2CoreConsumeActionContext _context;
         private IConsumeActionsFetcher _fetcher;
 
         public new void Start() {
@@ -80,33 +97,52 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Fetcher
 
         public void Awake()
         {
-            this._fetcher = GetComponent<IConsumeActionsFetcher>() ?? GetComponentInParent<IConsumeActionsFetcher>();
-            if (this._fetcher == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the IConsumeActionFetcher.");
-                enabled = false;
+            this._context = GetComponent<Gs2CoreConsumeActionContext>() ?? GetComponentInParent<Gs2CoreConsumeActionContext>();
+            if (this._context == null) {
+                this._fetcher = GetComponent<IConsumeActionsFetcher>() ?? GetComponentInParent<IConsumeActionsFetcher>();
+                if (this._fetcher == null) {
+                    Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the IConsumeActionFetcher.");
+                    enabled = false;
+                }
             }
         }
 
         public override bool HasError()
         {
-            this._fetcher = GetComponent<IConsumeActionsFetcher>() ?? GetComponentInParent<IConsumeActionsFetcher>(true);
-            if (this._fetcher == null) {
-                return true;
+            this._context = GetComponent<Gs2CoreConsumeActionContext>() ?? GetComponentInParent<Gs2CoreConsumeActionContext>();
+            if (this._context == null) {
+                this._fetcher = GetComponent<IConsumeActionsFetcher>() ?? GetComponentInParent<IConsumeActionsFetcher>(true);
+                if (this._fetcher == null) {
+                    return true;
+                }
             }
             return false;
         }
 
         public void OnEnable()
         {
-            this._fetcher.OnFetchedEvent().AddListener(Fetch);
-            if (this._fetcher.IsFetched()) {
-                Fetch();
+            if (this._context != null) {
+                this._context.OnUpdate.AddListener(Fetch);
+                if (this._context.ConsumeAction != null) {
+                    Fetch();
+                }
+            }
+            if (this._fetcher != null) {
+                this._fetcher.OnFetchedEvent().AddListener(Fetch);
+                if (this._fetcher.IsFetched()) {
+                    Fetch();
+                }
             }
         }
 
         public void OnDisable()
         {
-            this._fetcher.OnFetchedEvent().RemoveListener(Fetch);
+            if (this._context != null) {
+                this._context.OnUpdate.RemoveListener(Fetch);
+            }
+            if (this._fetcher != null) {
+                this._fetcher.OnFetchedEvent().RemoveListener(Fetch);
+            }
         }
     }
 

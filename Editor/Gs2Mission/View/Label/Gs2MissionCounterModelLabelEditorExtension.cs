@@ -65,7 +65,7 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Editor
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2MissionCounterModelFetcher), false);
                     EditorGUI.indentLevel++;
                     if (fetcher.Context != null) {
-                        fetcher.Context.CounterModel = EditorGUILayout.ObjectField("CounterModel", fetcher.Context.CounterModel, typeof(CounterModel), false) as CounterModel;
+                        EditorGUILayout.ObjectField("CounterModel", fetcher.Context.CounterModel, typeof(CounterModel), false);
                         EditorGUI.indentLevel++;
                         EditorGUILayout.TextField("NamespaceName", fetcher.Context.CounterModel?.NamespaceName?.ToString());
                         EditorGUILayout.TextField("CounterName", fetcher.Context.CounterModel?.CounterName?.ToString());

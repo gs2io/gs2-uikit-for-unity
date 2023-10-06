@@ -65,7 +65,7 @@ namespace Gs2.Unity.UiKit.Gs2Dictionary.Editor
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2DictionaryEntryModelFetcher), false);
                     EditorGUI.indentLevel++;
                     if (fetcher.Context != null) {
-                        fetcher.Context.EntryModel = EditorGUILayout.ObjectField("EntryModel", fetcher.Context.EntryModel, typeof(EntryModel), false) as EntryModel;
+                        EditorGUILayout.ObjectField("EntryModel", fetcher.Context.EntryModel, typeof(EntryModel), false);
                         EditorGUI.indentLevel++;
                         EditorGUILayout.TextField("NamespaceName", fetcher.Context.EntryModel?.NamespaceName?.ToString());
                         EditorGUILayout.TextField("EntryName", fetcher.Context.EntryModel?.EntryName?.ToString());

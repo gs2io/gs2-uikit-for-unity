@@ -53,6 +53,9 @@ namespace Gs2.Unity.UiKit.Gs2Exchange
 
             yield return new WaitUntil(() => clientHolder.Initialized);
             yield return new WaitUntil(() => gameSessionHolder.Initialized);
+
+            this.onIncrementalExchangeStart.Invoke();
+
             
             var domain = clientHolder.Gs2.Exchange.Namespace(
                 this._context.Namespace.NamespaceName
@@ -231,6 +234,21 @@ namespace Gs2.Unity.UiKit.Gs2Exchange
         {
             add => this.onChangeConfig.AddListener(value);
             remove => this.onChangeConfig.RemoveListener(value);
+        }
+
+        [Serializable]
+        private class IncrementalExchangeStartEvent : UnityEvent
+        {
+
+        }
+
+        [SerializeField]
+        private IncrementalExchangeStartEvent onIncrementalExchangeStart = new IncrementalExchangeStartEvent();
+
+        public event UnityAction OnIncrementalExchangeStart
+        {
+            add => this.onIncrementalExchangeStart.AddListener(value);
+            remove => this.onIncrementalExchangeStart.RemoveListener(value);
         }
 
         [Serializable]

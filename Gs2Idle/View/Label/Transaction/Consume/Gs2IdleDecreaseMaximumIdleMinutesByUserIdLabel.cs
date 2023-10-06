@@ -26,8 +26,10 @@
 
 using System;
 using Gs2.Gs2Idle.Request;
+using Gs2.Unity.Gs2Idle.ScriptableObject;
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Core.Fetcher;
+using Gs2.Unity.UiKit.Gs2Idle.Context;
 using Gs2.Unity.UiKit.Gs2Idle.Fetcher;
 using Gs2.Util.LitJson;
 using UnityEngine;
@@ -44,55 +46,52 @@ namespace Gs2.Unity.UiKit.Gs2Idle.Label
     {
         private void OnFetched()
         {
+            if (this._userDataFetcher == null) {
+                var context = gameObject.AddComponent<Gs2IdleOwnStatusContext>();
+                context.SetOwnStatus(
+                    OwnStatus.New(
+                        Namespace.New(
+                            this._fetcher.Request.NamespaceName
+                        ),
+                        this._fetcher.Request.CategoryName
+                    )
+                );
+                this._userDataFetcher = gameObject.AddComponent<Gs2IdleOwnStatusFetcher>();
+                this._userDataFetcher.OnFetched.AddListener(this._onFetched);
+            }
             if ((!this._fetcher?.Fetched ?? false) || this._fetcher.Request == null) {
                 return;
             }
-            if (this._userDataFetcher?.Fetched ?? false)
-            {
-                this.onUpdate?.Invoke(
-                    this.format.Replace(
-                        "{namespaceName}",
-                        $"{this._fetcher.Request.NamespaceName}"
-                    ).Replace(
-                        "{userId}",
-                        $"{this._fetcher.Request.UserId}"
-                    ).Replace(
-                        "{categoryName}",
-                        $"{this._fetcher.Request.CategoryName}"
-                    ).Replace(
-                        "{decreaseMinutes}",
-                        $"{this._fetcher.Request.DecreaseMinutes}"
-                    ).Replace(
-                        "{userData:categoryName}",
-                        $"{this._userDataFetcher.Status.CategoryName}"
-                    ).Replace(
-                        "{userData:randomSeed}",
-                        $"{this._userDataFetcher.Status.RandomSeed}"
-                    ).Replace(
-                        "{userData:idleMinutes}",
-                        $"{this._userDataFetcher.Status.IdleMinutes}"
-                    ).Replace(
-                        "{userData:maximumIdleMinutes}",
-                        $"{this._userDataFetcher.Status.MaximumIdleMinutes}"
-                    )
-                );
-            } else {
-                this.onUpdate?.Invoke(
-                    this.format.Replace(
-                        "{namespaceName}",
-                        $"{this._fetcher.Request.NamespaceName}"
-                    ).Replace(
-                        "{userId}",
-                        $"{this._fetcher.Request.UserId}"
-                    ).Replace(
-                        "{categoryName}",
-                        $"{this._fetcher.Request.CategoryName}"
-                    ).Replace(
-                        "{decreaseMinutes}",
-                        $"{this._fetcher.Request.DecreaseMinutes}"
-                    )
-                );
+            if ((!this._userDataFetcher?.Fetched ?? false) || this._userDataFetcher.Status == null) {
+                return;
             }
+            this.onUpdate?.Invoke(
+                this.format.Replace(
+                    "{namespaceName}",
+                    $"{this._fetcher.Request.NamespaceName}"
+                ).Replace(
+                    "{userId}",
+                    $"{this._fetcher.Request.UserId}"
+                ).Replace(
+                    "{categoryName}",
+                    $"{this._fetcher.Request.CategoryName}"
+                ).Replace(
+                    "{decreaseMinutes}",
+                    $"{this._fetcher.Request.DecreaseMinutes}"
+                ).Replace(
+                    "{userData:categoryName}",
+                    $"{this._userDataFetcher.Status.CategoryName}"
+                ).Replace(
+                    "{userData:randomSeed}",
+                    $"{this._userDataFetcher.Status.RandomSeed}"
+                ).Replace(
+                    "{userData:idleMinutes}",
+                    $"{this._userDataFetcher.Status.IdleMinutes}"
+                ).Replace(
+                    "{userData:maximumIdleMinutes}",
+                    $"{this._userDataFetcher.Status.MaximumIdleMinutes}"
+                )
+            );
         }
     }
 

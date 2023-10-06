@@ -53,6 +53,9 @@ namespace Gs2.Unity.UiKit.Gs2Exchange
 
             yield return new WaitUntil(() => clientHolder.Initialized);
             yield return new WaitUntil(() => gameSessionHolder.Initialized);
+
+            this.onSkipStart.Invoke();
+
             
             var domain = clientHolder.Gs2.Exchange.Namespace(
                 this._context.Await.NamespaceName
@@ -155,6 +158,21 @@ namespace Gs2.Unity.UiKit.Gs2Exchange
     /// </summary>
     public partial class Gs2ExchangeAwaitSkipAction
     {
+
+        [Serializable]
+        private class SkipStartEvent : UnityEvent
+        {
+
+        }
+
+        [SerializeField]
+        private SkipStartEvent onSkipStart = new SkipStartEvent();
+
+        public event UnityAction OnSkipStart
+        {
+            add => this.onSkipStart.AddListener(value);
+            remove => this.onSkipStart.RemoveListener(value);
+        }
 
         [Serializable]
         private class SkipCompleteEvent : UnityEvent<string>

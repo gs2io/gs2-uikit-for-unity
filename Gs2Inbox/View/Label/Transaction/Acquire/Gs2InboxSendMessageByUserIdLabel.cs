@@ -26,8 +26,10 @@
 
 using System;
 using Gs2.Gs2Inbox.Request;
+using Gs2.Unity.Gs2Inbox.ScriptableObject;
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Core.Fetcher;
+using Gs2.Unity.UiKit.Gs2Inbox.Context;
 using Gs2.Unity.UiKit.Gs2Inbox.Fetcher;
 using Gs2.Util.LitJson;
 using UnityEngine;
@@ -47,76 +49,54 @@ namespace Gs2.Unity.UiKit.Gs2Inbox.Label
             if ((!this._fetcher?.Fetched ?? false) || this._fetcher.Request == null) {
                 return;
             }
-            if (this._userDataFetcher?.Fetched ?? false)
-            {
-                this.onUpdate?.Invoke(
-                    this.format.Replace(
-                        "{namespaceName}",
-                        $"{this._fetcher.Request.NamespaceName}"
-                    ).Replace(
-                        "{userId}",
-                        $"{this._fetcher.Request.UserId}"
-                    ).Replace(
-                        "{metadata}",
-                        $"{this._fetcher.Request.Metadata}"
-                    ).Replace(
-                        "{readAcquireActions}",
-                        $"{this._fetcher.Request.ReadAcquireActions}"
-                    ).Replace(
-                        "{expiresAt}",
-                        $"{this._fetcher.Request.ExpiresAt}"
-                    ).Replace(
-                        "{expiresTimeSpan}",
-                        $"{this._fetcher.Request.ExpiresTimeSpan}"
-                    ).Replace(
-                        "{userData:messageId}",
-                        $"{this._userDataFetcher.Message.MessageId}"
-                    ).Replace(
-                        "{userData:name}",
-                        $"{this._userDataFetcher.Message.Name}"
-                    ).Replace(
-                        "{userData:metadata}",
-                        $"{this._userDataFetcher.Message.Metadata}"
-                    ).Replace(
-                        "{userData:isRead}",
-                        $"{this._userDataFetcher.Message.IsRead}"
-                    ).Replace(
-                        "{userData:readAcquireActions}",
-                        $"{this._userDataFetcher.Message.ReadAcquireActions}"
-                    ).Replace(
-                        "{userData:receivedAt}",
-                        $"{this._userDataFetcher.Message.ReceivedAt}"
-                    ).Replace(
-                        "{userData:readAt}",
-                        $"{this._userDataFetcher.Message.ReadAt}"
-                    ).Replace(
-                        "{userData:expiresAt}",
-                        $"{this._userDataFetcher.Message.ExpiresAt}"
-                    )
-                );
-            } else {
-                this.onUpdate?.Invoke(
-                    this.format.Replace(
-                        "{namespaceName}",
-                        $"{this._fetcher.Request.NamespaceName}"
-                    ).Replace(
-                        "{userId}",
-                        $"{this._fetcher.Request.UserId}"
-                    ).Replace(
-                        "{metadata}",
-                        $"{this._fetcher.Request.Metadata}"
-                    ).Replace(
-                        "{readAcquireActions}",
-                        $"{this._fetcher.Request.ReadAcquireActions}"
-                    ).Replace(
-                        "{expiresAt}",
-                        $"{this._fetcher.Request.ExpiresAt}"
-                    ).Replace(
-                        "{expiresTimeSpan}",
-                        $"{this._fetcher.Request.ExpiresTimeSpan}"
-                    )
-                );
+            if ((!this._userDataFetcher?.Fetched ?? false) || this._userDataFetcher.Message == null) {
+                return;
             }
+            this.onUpdate?.Invoke(
+                this.format.Replace(
+                    "{namespaceName}",
+                    $"{this._fetcher.Request.NamespaceName}"
+                ).Replace(
+                    "{userId}",
+                    $"{this._fetcher.Request.UserId}"
+                ).Replace(
+                    "{metadata}",
+                    $"{this._fetcher.Request.Metadata}"
+                ).Replace(
+                    "{readAcquireActions}",
+                    $"{this._fetcher.Request.ReadAcquireActions}"
+                ).Replace(
+                    "{expiresAt}",
+                    $"{this._fetcher.Request.ExpiresAt}"
+                ).Replace(
+                    "{expiresTimeSpan}",
+                    $"{this._fetcher.Request.ExpiresTimeSpan}"
+                ).Replace(
+                    "{userData:messageId}",
+                    $"{this._userDataFetcher.Message.MessageId}"
+                ).Replace(
+                    "{userData:name}",
+                    $"{this._userDataFetcher.Message.Name}"
+                ).Replace(
+                    "{userData:metadata}",
+                    $"{this._userDataFetcher.Message.Metadata}"
+                ).Replace(
+                    "{userData:isRead}",
+                    $"{this._userDataFetcher.Message.IsRead}"
+                ).Replace(
+                    "{userData:readAcquireActions}",
+                    $"{this._userDataFetcher.Message.ReadAcquireActions}"
+                ).Replace(
+                    "{userData:receivedAt}",
+                    $"{this._userDataFetcher.Message.ReceivedAt}"
+                ).Replace(
+                    "{userData:readAt}",
+                    $"{this._userDataFetcher.Message.ReadAt}"
+                ).Replace(
+                    "{userData:expiresAt}",
+                    $"{this._userDataFetcher.Message.ExpiresAt}"
+                )
+            );
         }
     }
 

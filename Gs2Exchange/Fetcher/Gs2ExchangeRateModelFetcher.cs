@@ -35,6 +35,7 @@ using Gs2.Unity.Gs2Exchange.Model;
 using Gs2.Unity.Gs2Exchange.ScriptableObject;
 using Gs2.Unity.Util;
 using Gs2.Unity.UiKit.Core;
+using Gs2.Unity.UiKit.Core.Model;
 using Gs2.Unity.UiKit.Gs2Core.Fetcher;
 using Gs2.Unity.UiKit.Gs2Exchange.Context;
 using UnityEngine;
@@ -120,14 +121,14 @@ namespace Gs2.Unity.UiKit.Gs2Exchange.Fetcher
             this._callbackId = null;
         }
 
-        public void SetTemporarySlot(
+        public void SetTemporaryRateModel(
             Gs2.Unity.Gs2Exchange.Model.EzRateModel rateModel
         ) {
             RateModel = rateModel;
             this.OnFetched.Invoke();
         }
 
-        public void RollbackTemporarySlot(
+        public void RollbackTemporaryRateModel(
         ) {
             OnUpdateContext();
         }
@@ -136,7 +137,7 @@ namespace Gs2.Unity.UiKit.Gs2Exchange.Fetcher
             if (!Fetched) {
                 return new List<Unity.Core.Model.EzAcquireAction>();
             }
-            return RateModel.AcquireActions;
+            return RateModel.AcquireActions.Denormalize();
         }
 
         bool IAcquireActionsFetcher.IsFetched() {
@@ -155,7 +156,7 @@ namespace Gs2.Unity.UiKit.Gs2Exchange.Fetcher
             if (!Fetched) {
                 return new List<Unity.Core.Model.EzConsumeAction>();
             }
-            return RateModel.ConsumeActions;
+            return RateModel.ConsumeActions.Denormalize();
         }
 
         bool IConsumeActionsFetcher.IsFetched() {

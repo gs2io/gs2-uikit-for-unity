@@ -53,6 +53,9 @@ namespace Gs2.Unity.UiKit.Gs2JobQueue
 
             yield return new WaitUntil(() => clientHolder.Initialized);
             yield return new WaitUntil(() => gameSessionHolder.Initialized);
+
+            this.onRunStart.Invoke();
+
             
             var domain = clientHolder.Gs2.JobQueue.Namespace(
                 this._context.Job.NamespaceName
@@ -164,6 +167,21 @@ namespace Gs2.Unity.UiKit.Gs2JobQueue
     /// </summary>
     public partial class Gs2JobQueueJobRunAction
     {
+
+        [Serializable]
+        private class RunStartEvent : UnityEvent
+        {
+
+        }
+
+        [SerializeField]
+        private RunStartEvent onRunStart = new RunStartEvent();
+
+        public event UnityAction OnRunStart
+        {
+            add => this.onRunStart.AddListener(value);
+            remove => this.onRunStart.RemoveListener(value);
+        }
 
         [Serializable]
         private class RunCompleteEvent : UnityEvent<EzJob>

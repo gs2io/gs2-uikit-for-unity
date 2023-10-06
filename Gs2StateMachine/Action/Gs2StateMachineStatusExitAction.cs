@@ -53,6 +53,9 @@ namespace Gs2.Unity.UiKit.Gs2StateMachine
 
             yield return new WaitUntil(() => clientHolder.Initialized);
             yield return new WaitUntil(() => gameSessionHolder.Initialized);
+
+            this.onExitStart.Invoke();
+
             
             var domain = clientHolder.Gs2.StateMachine.Namespace(
                 this._context.Status.NamespaceName
@@ -166,6 +169,21 @@ namespace Gs2.Unity.UiKit.Gs2StateMachine
     /// </summary>
     public partial class Gs2StateMachineStatusExitAction
     {
+
+        [Serializable]
+        private class ExitStartEvent : UnityEvent
+        {
+
+        }
+
+        [SerializeField]
+        private ExitStartEvent onExitStart = new ExitStartEvent();
+
+        public event UnityAction OnExitStart
+        {
+            add => this.onExitStart.AddListener(value);
+            remove => this.onExitStart.RemoveListener(value);
+        }
 
         [Serializable]
         private class ExitCompleteEvent : UnityEvent<EzStatus>

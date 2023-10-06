@@ -51,7 +51,7 @@ namespace Gs2.Unity.UiKit.Gs2Dictionary.Editor
                 EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2DictionaryOwnEntryListFetcher), false);
                 EditorGUI.indentLevel++;
                 if (fetcher.Context != null) {
-                    fetcher.Context.Namespace = EditorGUILayout.ObjectField("Namespace", fetcher.Context.Namespace, typeof(Namespace), false) as Namespace;
+                    EditorGUILayout.ObjectField("Namespace", fetcher.Context.Namespace, typeof(Namespace), false);
                     EditorGUI.indentLevel++;
                     EditorGUI.indentLevel--;
                 }

@@ -52,7 +52,7 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Editor
                 EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2FriendOwnFriendUserFetcher), false);
                 EditorGUI.indentLevel++;
                 if (fetcher.Context != null) {
-                    fetcher.Context.FriendUser = EditorGUILayout.ObjectField("FriendUser", fetcher.Context.FriendUser, typeof(OwnFriendUser), false) as OwnFriendUser;
+                    EditorGUILayout.ObjectField("FriendUser", fetcher.Context.FriendUser, typeof(OwnFriendUser), false);
                     EditorGUI.indentLevel++;
                     EditorGUILayout.TextField("NamespaceName", fetcher.Context.FriendUser?.NamespaceName?.ToString());
                     EditorGUI.indentLevel--;

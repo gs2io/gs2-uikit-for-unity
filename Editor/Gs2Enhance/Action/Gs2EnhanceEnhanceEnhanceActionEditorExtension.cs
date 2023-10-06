@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
@@ -40,21 +42,22 @@ namespace Gs2.Unity.UiKit.Gs2Enhance.Editor
 
             if (original == null) return;
 
-            var context = original.GetComponent<Gs2EnhanceNamespaceContext>() ?? original.GetComponentInParent<Gs2EnhanceNamespaceContext>(true);
+            var context = original.GetComponent<Gs2EnhanceRateModelContext>() ?? original.GetComponentInParent<Gs2EnhanceRateModelContext>(true);
             if (context == null) {
-                EditorGUILayout.HelpBox("Gs2EnhanceNamespaceContext not found.", MessageType.Error);
+                EditorGUILayout.HelpBox("Gs2EnhanceRateModelContext not found.", MessageType.Error);
                 if (GUILayout.Button("Add Context")) {
-                    original.gameObject.AddComponent<Gs2EnhanceNamespaceContext>();
+                    original.gameObject.AddComponent<Gs2EnhanceRateModelContext>();
                 }
             }
             else {
                 EditorGUI.BeginDisabledGroup(true);
-                EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2EnhanceNamespaceContext), false);
+                EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2EnhanceRateModelContext), false);
                 EditorGUI.indentLevel++;
-                context.Namespace = EditorGUILayout.ObjectField("Namespace", context.Namespace, typeof(Namespace), false) as Namespace;
-                if (context.Namespace != null) {
+                context.RateModel = EditorGUILayout.ObjectField("RateModel", context.RateModel, typeof(RateModel), false) as RateModel;
+                if (context.RateModel != null) {
                     EditorGUI.indentLevel++;
-                        EditorGUILayout.TextField("NamespaceName", context.Namespace?.NamespaceName?.ToString());
+                    EditorGUILayout.TextField("NamespaceName", context.RateModel?.NamespaceName?.ToString());
+                    EditorGUILayout.TextField("RateName", context.RateModel?.RateName?.ToString());
                     EditorGUI.indentLevel--;
                 }
                 EditorGUI.indentLevel--;

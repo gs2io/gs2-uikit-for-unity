@@ -59,7 +59,7 @@ namespace Gs2.Unity.UiKit.Gs2MegaField.Editor
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2MegaFieldLayerModelFetcher), false);
                     EditorGUI.indentLevel++;
                     if (fetcher.Context != null) {
-                        fetcher.Context.LayerModel = EditorGUILayout.ObjectField("LayerModel", fetcher.Context.LayerModel, typeof(LayerModel), false) as LayerModel;
+                        EditorGUILayout.ObjectField("LayerModel", fetcher.Context.LayerModel, typeof(LayerModel), false);
                         EditorGUI.indentLevel++;
                         EditorGUILayout.TextField("LayerModelName", fetcher.Context.LayerModel?.LayerModelName?.ToString());
                         EditorGUI.indentLevel--;

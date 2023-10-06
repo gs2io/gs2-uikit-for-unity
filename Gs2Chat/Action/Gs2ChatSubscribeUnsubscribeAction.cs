@@ -53,6 +53,9 @@ namespace Gs2.Unity.UiKit.Gs2Chat
 
             yield return new WaitUntil(() => clientHolder.Initialized);
             yield return new WaitUntil(() => gameSessionHolder.Initialized);
+
+            this.onUnsubscribeStart.Invoke();
+
             
             var domain = clientHolder.Gs2.Chat.Namespace(
                 this._context.Subscribe.NamespaceName
@@ -166,6 +169,21 @@ namespace Gs2.Unity.UiKit.Gs2Chat
     /// </summary>
     public partial class Gs2ChatSubscribeUnsubscribeAction
     {
+
+        [Serializable]
+        private class UnsubscribeStartEvent : UnityEvent
+        {
+
+        }
+
+        [SerializeField]
+        private UnsubscribeStartEvent onUnsubscribeStart = new UnsubscribeStartEvent();
+
+        public event UnityAction OnUnsubscribeStart
+        {
+            add => this.onUnsubscribeStart.AddListener(value);
+            remove => this.onUnsubscribeStart.RemoveListener(value);
+        }
 
         [Serializable]
         private class UnsubscribeCompleteEvent : UnityEvent<EzSubscribe>

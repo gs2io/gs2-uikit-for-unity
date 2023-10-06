@@ -35,6 +35,7 @@ using Gs2.Unity.Gs2Limit.Model;
 using Gs2.Unity.Gs2Limit.ScriptableObject;
 using Gs2.Unity.Util;
 using Gs2.Unity.UiKit.Core;
+using Gs2.Unity.UiKit.Core.Model;
 using Gs2.Unity.UiKit.Gs2Core.Fetcher;
 using Gs2.Unity.UiKit.Gs2Limit.Context;
 using UnityEngine;
@@ -121,6 +122,18 @@ namespace Gs2.Unity.UiKit.Gs2Limit.Fetcher
                 this._callbackId.Value
             );
             this._callbackId = null;
+        }
+
+        public void SetTemporaryCounter(
+            Gs2.Unity.Gs2Limit.Model.EzCounter counter
+        ) {
+            Counter = counter;
+            this.OnFetched.Invoke();
+        }
+
+        public void RollbackTemporaryCounter(
+        ) {
+            OnUpdateContext();
         }
     }
 

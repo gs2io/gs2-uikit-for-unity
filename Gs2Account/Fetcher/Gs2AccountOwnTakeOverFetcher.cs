@@ -35,6 +35,7 @@ using Gs2.Unity.Gs2Account.Model;
 using Gs2.Unity.Gs2Account.ScriptableObject;
 using Gs2.Unity.Util;
 using Gs2.Unity.UiKit.Core;
+using Gs2.Unity.UiKit.Core.Model;
 using Gs2.Unity.UiKit.Gs2Core.Fetcher;
 using Gs2.Unity.UiKit.Gs2Account.Context;
 using UnityEngine;
@@ -120,6 +121,18 @@ namespace Gs2.Unity.UiKit.Gs2Account.Fetcher
                 this._callbackId.Value
             );
             this._callbackId = null;
+        }
+
+        public void SetTemporaryTakeOver(
+            Gs2.Unity.Gs2Account.Model.EzTakeOver takeOver
+        ) {
+            TakeOver = takeOver;
+            this.OnFetched.Invoke();
+        }
+
+        public void RollbackTemporaryTakeOver(
+        ) {
+            OnUpdateContext();
         }
     }
 

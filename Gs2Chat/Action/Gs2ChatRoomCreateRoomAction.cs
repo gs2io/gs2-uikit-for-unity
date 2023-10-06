@@ -53,6 +53,9 @@ namespace Gs2.Unity.UiKit.Gs2Chat
 
             yield return new WaitUntil(() => clientHolder.Initialized);
             yield return new WaitUntil(() => gameSessionHolder.Initialized);
+
+            this.onCreateRoomStart.Invoke();
+
             
             var domain = clientHolder.Gs2.Chat.Namespace(
                 this._context.Namespace.NamespaceName
@@ -251,6 +254,21 @@ namespace Gs2.Unity.UiKit.Gs2Chat
         {
             add => this.onChangeWhiteListUserIds.AddListener(value);
             remove => this.onChangeWhiteListUserIds.RemoveListener(value);
+        }
+
+        [Serializable]
+        private class CreateRoomStartEvent : UnityEvent
+        {
+
+        }
+
+        [SerializeField]
+        private CreateRoomStartEvent onCreateRoomStart = new CreateRoomStartEvent();
+
+        public event UnityAction OnCreateRoomStart
+        {
+            add => this.onCreateRoomStart.AddListener(value);
+            remove => this.onCreateRoomStart.RemoveListener(value);
         }
 
         [Serializable]

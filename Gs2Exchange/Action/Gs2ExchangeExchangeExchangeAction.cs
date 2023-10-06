@@ -152,15 +152,8 @@ namespace Gs2.Unity.UiKit.Gs2Exchange
     public partial class Gs2ExchangeExchangeExchangeAction
     {
         public bool WaitAsyncProcessComplete;
-        public string RateName;
         public int Count;
         public List<Gs2.Unity.Gs2Exchange.Model.EzConfig> Config;
-
-        public void SetRateName(string value) {
-            this.RateName = value;
-            this.onChangeRateName.Invoke(this.RateName);
-            this.OnChange.Invoke();
-        }
 
         public void SetCount(int value) {
             this.Count = value;
@@ -192,20 +185,6 @@ namespace Gs2.Unity.UiKit.Gs2Exchange
     /// </summary>
     public partial class Gs2ExchangeExchangeExchangeAction
     {
-
-        [Serializable]
-        private class ChangeRateNameEvent : UnityEvent<string>
-        {
-
-        }
-
-        [SerializeField]
-        private ChangeRateNameEvent onChangeRateName = new ChangeRateNameEvent();
-        public event UnityAction<string> OnChangeRateName
-        {
-            add => this.onChangeRateName.AddListener(value);
-            remove => this.onChangeRateName.RemoveListener(value);
-        }
 
         [Serializable]
         private class ChangeCountEvent : UnityEvent<int>

@@ -53,6 +53,9 @@ namespace Gs2.Unity.UiKit.Gs2Lottery
 
             yield return new WaitUntil(() => clientHolder.Initialized);
             yield return new WaitUntil(() => gameSessionHolder.Initialized);
+
+            this.onResetBoxStart.Invoke();
+
             
             var domain = clientHolder.Gs2.Lottery.Namespace(
                 this._context.BoxItems.NamespaceName
@@ -150,6 +153,21 @@ namespace Gs2.Unity.UiKit.Gs2Lottery
     /// </summary>
     public partial class Gs2LotteryBoxItemsResetBoxAction
     {
+
+        [Serializable]
+        private class ResetBoxStartEvent : UnityEvent
+        {
+
+        }
+
+        [SerializeField]
+        private ResetBoxStartEvent onResetBoxStart = new ResetBoxStartEvent();
+
+        public event UnityAction OnResetBoxStart
+        {
+            add => this.onResetBoxStart.AddListener(value);
+            remove => this.onResetBoxStart.RemoveListener(value);
+        }
 
         [Serializable]
         private class ResetBoxCompleteEvent : UnityEvent

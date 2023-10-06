@@ -53,6 +53,9 @@ namespace Gs2.Unity.UiKit.Gs2Friend
 
             yield return new WaitUntil(() => clientHolder.Initialized);
             yield return new WaitUntil(() => gameSessionHolder.Initialized);
+
+            this.onFollowStart.Invoke();
+
             
             var domain = clientHolder.Gs2.Friend.Namespace(
                 this._context.FollowUser.NamespaceName
@@ -167,6 +170,21 @@ namespace Gs2.Unity.UiKit.Gs2Friend
     /// </summary>
     public partial class Gs2FriendFollowUserFollowAction
     {
+
+        [Serializable]
+        private class FollowStartEvent : UnityEvent
+        {
+
+        }
+
+        [SerializeField]
+        private FollowStartEvent onFollowStart = new FollowStartEvent();
+
+        public event UnityAction OnFollowStart
+        {
+            add => this.onFollowStart.AddListener(value);
+            remove => this.onFollowStart.RemoveListener(value);
+        }
 
         [Serializable]
         private class FollowCompleteEvent : UnityEvent<EzFollowUser>

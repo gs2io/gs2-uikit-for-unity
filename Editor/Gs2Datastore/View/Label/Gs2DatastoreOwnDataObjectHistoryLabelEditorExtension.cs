@@ -59,7 +59,7 @@ namespace Gs2.Unity.UiKit.Gs2Datastore.Editor
                     EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2DatastoreOwnDataObjectHistoryFetcher), false);
                     EditorGUI.indentLevel++;
                     if (fetcher.Context != null) {
-                        fetcher.Context.DataObjectHistory = EditorGUILayout.ObjectField("DataObjectHistory", fetcher.Context.DataObjectHistory, typeof(OwnDataObjectHistory), false) as OwnDataObjectHistory;
+                        EditorGUILayout.ObjectField("DataObjectHistory", fetcher.Context.DataObjectHistory, typeof(OwnDataObjectHistory), false);
                         EditorGUI.indentLevel++;
                         EditorGUILayout.TextField("NamespaceName", fetcher.Context.DataObjectHistory?.NamespaceName?.ToString());
                         EditorGUILayout.TextField("DataObjectName", fetcher.Context.DataObjectHistory?.DataObjectName?.ToString());

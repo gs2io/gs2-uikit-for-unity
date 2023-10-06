@@ -26,8 +26,10 @@
 
 using System;
 using Gs2.Gs2Inventory.Request;
+using Gs2.Unity.Gs2Inventory.ScriptableObject;
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Core.Fetcher;
+using Gs2.Unity.UiKit.Gs2Inventory.Context;
 using Gs2.Unity.UiKit.Gs2Inventory.Fetcher;
 using Gs2.Util.LitJson;
 using UnityEngine;
@@ -44,58 +46,55 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Label
     {
         private void OnFetched()
         {
+            if (this._userDataFetcher == null) {
+                var context = gameObject.AddComponent<Gs2InventoryOwnInventoryContext>();
+                context.SetOwnInventory(
+                    OwnInventory.New(
+                        Namespace.New(
+                            this._fetcher.Request.NamespaceName
+                        ),
+                        this._fetcher.Request.InventoryName
+                    )
+                );
+                this._userDataFetcher = gameObject.AddComponent<Gs2InventoryOwnInventoryFetcher>();
+                this._userDataFetcher.OnFetched.AddListener(this._onFetched);
+            }
             if ((!this._fetcher?.Fetched ?? false) || this._fetcher.Request == null) {
                 return;
             }
-            if (this._userDataFetcher?.Fetched ?? false)
-            {
-                this.onUpdate?.Invoke(
-                    this.format.Replace(
-                        "{namespaceName}",
-                        $"{this._fetcher.Request.NamespaceName}"
-                    ).Replace(
-                        "{inventoryName}",
-                        $"{this._fetcher.Request.InventoryName}"
-                    ).Replace(
-                        "{userId}",
-                        $"{this._fetcher.Request.UserId}"
-                    ).Replace(
-                        "{addCapacityValue}",
-                        $"{this._fetcher.Request.AddCapacityValue}"
-                    ).Replace(
-                        "{userData:inventoryId}",
-                        $"{this._userDataFetcher.Inventory.InventoryId}"
-                    ).Replace(
-                        "{userData:inventoryName}",
-                        $"{this._userDataFetcher.Inventory.InventoryName}"
-                    ).Replace(
-                        "{userData:currentInventoryCapacityUsage}",
-                        $"{this._userDataFetcher.Inventory.CurrentInventoryCapacityUsage}"
-                    ).Replace(
-                        "{userData:currentInventoryMaxCapacity}",
-                        $"{this._userDataFetcher.Inventory.CurrentInventoryMaxCapacity}"
-                    ).Replace(
-                        "{userData:currentInventoryMaxCapacity:changed}",
-                        $"{this._userDataFetcher.Inventory.CurrentInventoryMaxCapacity + this._fetcher.Request.AddCapacityValue}"
-                    )
-                );
-            } else {
-                this.onUpdate?.Invoke(
-                    this.format.Replace(
-                        "{namespaceName}",
-                        $"{this._fetcher.Request.NamespaceName}"
-                    ).Replace(
-                        "{inventoryName}",
-                        $"{this._fetcher.Request.InventoryName}"
-                    ).Replace(
-                        "{userId}",
-                        $"{this._fetcher.Request.UserId}"
-                    ).Replace(
-                        "{addCapacityValue}",
-                        $"{this._fetcher.Request.AddCapacityValue}"
-                    )
-                );
+            if ((!this._userDataFetcher?.Fetched ?? false) || this._userDataFetcher.Inventory == null) {
+                return;
             }
+            this.onUpdate?.Invoke(
+                this.format.Replace(
+                    "{namespaceName}",
+                    $"{this._fetcher.Request.NamespaceName}"
+                ).Replace(
+                    "{inventoryName}",
+                    $"{this._fetcher.Request.InventoryName}"
+                ).Replace(
+                    "{userId}",
+                    $"{this._fetcher.Request.UserId}"
+                ).Replace(
+                    "{addCapacityValue}",
+                    $"{this._fetcher.Request.AddCapacityValue}"
+                ).Replace(
+                    "{userData:inventoryId}",
+                    $"{this._userDataFetcher.Inventory.InventoryId}"
+                ).Replace(
+                    "{userData:inventoryName}",
+                    $"{this._userDataFetcher.Inventory.InventoryName}"
+                ).Replace(
+                    "{userData:currentInventoryCapacityUsage}",
+                    $"{this._userDataFetcher.Inventory.CurrentInventoryCapacityUsage}"
+                ).Replace(
+                    "{userData:currentInventoryMaxCapacity}",
+                    $"{this._userDataFetcher.Inventory.CurrentInventoryMaxCapacity}"
+                ).Replace(
+                    "{userData:currentInventoryMaxCapacity:changed}",
+                    $"{this._userDataFetcher.Inventory.CurrentInventoryMaxCapacity + this._fetcher.Request.AddCapacityValue}"
+                )
+            );
         }
     }
 
