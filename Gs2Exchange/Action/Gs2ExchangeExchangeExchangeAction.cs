@@ -93,7 +93,7 @@ namespace Gs2.Unity.UiKit.Gs2Exchange
             }
             if (this.WaitAsyncProcessComplete) {
                 var transaction = future.Result;
-                var future2 = transaction.Wait();
+                var future2 = transaction.WaitFuture();
                 yield return future2;
             }
             this.onExchangeComplete.Invoke(future.Result.TransactionId);

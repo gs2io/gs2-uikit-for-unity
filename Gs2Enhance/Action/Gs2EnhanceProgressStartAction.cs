@@ -96,7 +96,7 @@ namespace Gs2.Unity.UiKit.Gs2Enhance
             }
             if (this.WaitAsyncProcessComplete) {
                 var transaction = future.Result;
-                var future2 = transaction.Wait();
+                var future2 = transaction.WaitFuture();
                 yield return future2;
             }
             this.onStartComplete.Invoke(future.Result.TransactionId);
