@@ -66,7 +66,7 @@ namespace Gs2.Unity.UiKit.Gs2Inventory
             ).SimpleInventory(
                 this._context.SimpleItem.InventoryName
             );
-            var future = domain.ConsumeSimpleItems(
+            var future = domain.ConsumeSimpleItemsFuture(
                 ConsumeCounts.ToArray()
             );
             yield return future;
@@ -85,7 +85,7 @@ namespace Gs2.Unity.UiKit.Gs2Inventory
                         }
                         var simpleItems = new List<EzSimpleItem>();
                         foreach (var r in future.Result) {
-                            var future3 = r.Model();
+                            var future3 = r.ModelFuture();
                             yield return future3;
                             if (future3.Error != null)
                             {
@@ -106,7 +106,7 @@ namespace Gs2.Unity.UiKit.Gs2Inventory
             }
             var simpleItems = new List<EzSimpleItem>();
             foreach (var r in future.Result) {
-                var future2 = r.Model();
+                var future2 = r.ModelFuture();
                 yield return future2;
                 if (future2.Error != null)
                 {

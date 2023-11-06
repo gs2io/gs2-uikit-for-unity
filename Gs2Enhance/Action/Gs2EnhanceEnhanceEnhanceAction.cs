@@ -55,8 +55,9 @@ namespace Gs2.Unity.UiKit.Gs2Enhance
 
             yield return new WaitUntil(() => clientHolder.Initialized);
             yield return new WaitUntil(() => gameSessionHolder.Initialized);
-            
+
             this.onEnhanceStart.Invoke();
+
             
             var domain = clientHolder.Gs2.Enhance.Namespace(
                 this._context.RateModel.NamespaceName
@@ -64,7 +65,7 @@ namespace Gs2.Unity.UiKit.Gs2Enhance
                 gameSessionHolder.GameSession
             ).Enhance(
             );
-            var future = domain.Enhance(
+            var future = domain.EnhanceFuture(
                 this._context.RateModel.RateName,
                 TargetItemSetId,
                 Materials.ToArray(),

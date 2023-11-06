@@ -64,7 +64,7 @@ namespace Gs2.Unity.UiKit.Gs2Idle
             ).Status(
                 this._context.Status.CategoryName
             );
-            var future = domain.Prediction(
+            var future = domain.PredictionFuture(
             );
             yield return future;
             if (future.Error != null)
@@ -116,7 +116,7 @@ namespace Gs2.Unity.UiKit.Gs2Idle
         public void Awake()
         {
             this._context = GetComponent<Gs2IdleOwnStatusContext>() ?? GetComponentInParent<Gs2IdleOwnStatusContext>();
-            if (_context == null) {
+            if (this._context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2IdleOwnStatusContext.");
                 enabled = false;
             }
@@ -125,7 +125,7 @@ namespace Gs2.Unity.UiKit.Gs2Idle
         public virtual bool HasError()
         {
             this._context = GetComponent<Gs2IdleOwnStatusContext>() ?? GetComponentInParent<Gs2IdleOwnStatusContext>(true);
-            if (_context == null) {
+            if (this._context == null) {
                 return true;
             }
             return false;

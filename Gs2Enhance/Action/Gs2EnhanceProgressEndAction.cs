@@ -63,7 +63,7 @@ namespace Gs2.Unity.UiKit.Gs2Enhance
                 gameSessionHolder.GameSession
             ).Progress(
             );
-            var future = domain.End(
+            var future = domain.EndFuture(
                 Config.ToArray()
             );
             yield return future;

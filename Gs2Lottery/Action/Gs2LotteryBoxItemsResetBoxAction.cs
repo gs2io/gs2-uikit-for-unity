@@ -64,7 +64,7 @@ namespace Gs2.Unity.UiKit.Gs2Lottery
             ).BoxItems(
                 this._context.BoxItems.PrizeTableName
             );
-            var future = domain.ResetBox(
+            var future = domain.ResetBoxFuture(
             );
             yield return future;
             if (future.Error != null)

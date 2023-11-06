@@ -56,6 +56,9 @@ namespace Gs2.Unity.UiKit.Gs2Formation
 
             yield return new WaitUntil(() => clientHolder.Initialized);
             yield return new WaitUntil(() => gameSessionHolder.Initialized);
+
+            this.onSetFormStart.Invoke();
+
             
             var domain = clientHolder.Gs2.Formation.Namespace(
                 this._context.Form.NamespaceName
@@ -66,7 +69,7 @@ namespace Gs2.Unity.UiKit.Gs2Formation
             ).Form(
                 this._context.Form.Index
             );
-            var future = domain.SetForm(
+            var future = domain.SetFormFuture(
                 Slots.ToArray(),
                 Key.Grn
             );
@@ -84,7 +87,7 @@ namespace Gs2.Unity.UiKit.Gs2Formation
                             this.onError.Invoke(future.Error, Retry);
                             yield break;
                         }
-                        var future3 = future.Result.Model();
+                        var future3 = future.Result.ModelFuture();
                         yield return future3;
                         if (future3.Error != null)
                         {
@@ -102,7 +105,7 @@ namespace Gs2.Unity.UiKit.Gs2Formation
                 this.onError.Invoke(future.Error, null);
                 yield break;
             }
-            var future2 = future.Result.Model();
+            var future2 = future.Result.ModelFuture();
             yield return future2;
             if (future2.Error != null)
             {
@@ -214,6 +217,21 @@ namespace Gs2.Unity.UiKit.Gs2Formation
         {
             add => this.onChangeKeyId.AddListener(value);
             remove => this.onChangeKeyId.RemoveListener(value);
+        }
+
+        [Serializable]
+        private class SetFormStartEvent : UnityEvent
+        {
+
+        }
+
+        [SerializeField]
+        private SetFormStartEvent onSetFormStart = new SetFormStartEvent();
+
+        public event UnityAction OnSetFormStart
+        {
+            add => this.onSetFormStart.AddListener(value);
+            remove => this.onSetFormStart.RemoveListener(value);
         }
 
         [Serializable]

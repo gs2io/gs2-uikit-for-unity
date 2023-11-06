@@ -63,7 +63,7 @@ namespace Gs2.Unity.UiKit.Gs2Enhance
                 gameSessionHolder.GameSession
             ).Progress(
             );
-            var future = domain.Start(
+            var future = domain.StartFuture(
                 RateName,
                 TargetItemSetId,
                 Materials.ToArray(),

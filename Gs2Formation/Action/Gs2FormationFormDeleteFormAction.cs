@@ -66,7 +66,7 @@ namespace Gs2.Unity.UiKit.Gs2Formation
             ).Form(
                 this._context.Form.Index
             );
-            var future = domain.DeleteForm(
+            var future = domain.DeleteFormFuture(
             );
             yield return future;
             if (future.Error != null)
@@ -82,7 +82,7 @@ namespace Gs2.Unity.UiKit.Gs2Formation
                             this.onError.Invoke(future.Error, Retry);
                             yield break;
                         }
-                        var future3 = future.Result.Model();
+                        var future3 = future.Result.ModelFuture();
                         yield return future3;
                         if (future3.Error != null)
                         {
@@ -100,7 +100,7 @@ namespace Gs2.Unity.UiKit.Gs2Formation
                 this.onError.Invoke(future.Error, null);
                 yield break;
             }
-            var future2 = future.Result.Model();
+            var future2 = future.Result.ModelFuture();
             yield return future2;
             if (future2.Error != null)
             {

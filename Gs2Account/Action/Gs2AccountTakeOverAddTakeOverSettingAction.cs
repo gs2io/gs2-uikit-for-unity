@@ -55,6 +55,9 @@ namespace Gs2.Unity.UiKit.Gs2Account
 
             yield return new WaitUntil(() => clientHolder.Initialized);
             yield return new WaitUntil(() => gameSessionHolder.Initialized);
+
+            this.onAddTakeOverSettingStart.Invoke();
+
             
             var domain = clientHolder.Gs2.Account.Namespace(
                 this._context.Account.NamespaceName
@@ -63,7 +66,7 @@ namespace Gs2.Unity.UiKit.Gs2Account
             ).TakeOver(
                 this.Type
             );
-            var future = domain.AddTakeOverSetting(
+            var future = domain.AddTakeOverSettingFuture(
                 UserIdentifier,
                 Password
             );
@@ -81,7 +84,7 @@ namespace Gs2.Unity.UiKit.Gs2Account
                             this.onError.Invoke(future.Error, Retry);
                             yield break;
                         }
-                        var future3 = future.Result.Model();
+                        var future3 = future.Result.ModelFuture();
                         yield return future3;
                         if (future3.Error != null)
                         {
@@ -99,7 +102,7 @@ namespace Gs2.Unity.UiKit.Gs2Account
                 this.onError.Invoke(future.Error, null);
                 yield break;
             }
-            var future2 = future.Result.Model();
+            var future2 = future.Result.ModelFuture();
             yield return future2;
             if (future2.Error != null)
             {
@@ -132,7 +135,7 @@ namespace Gs2.Unity.UiKit.Gs2Account
         public void Awake()
         {
             this._context = GetComponent<Gs2AccountOwnAccountContext>() ?? GetComponentInParent<Gs2AccountOwnAccountContext>();
-            if (_context == null) {
+            if (this._context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2AccountOwnAccountContext.");
                 enabled = false;
             }
@@ -141,7 +144,7 @@ namespace Gs2.Unity.UiKit.Gs2Account
         public virtual bool HasError()
         {
             this._context = GetComponent<Gs2AccountOwnAccountContext>() ?? GetComponentInParent<Gs2AccountOwnAccountContext>(true);
-            if (_context == null) {
+            if (this._context == null) {
                 return true;
             }
             return false;
@@ -244,6 +247,21 @@ namespace Gs2.Unity.UiKit.Gs2Account
         {
             add => this.onChangePassword.AddListener(value);
             remove => this.onChangePassword.RemoveListener(value);
+        }
+
+        [Serializable]
+        private class AddTakeOverSettingStartEvent : UnityEvent
+        {
+
+        }
+
+        [SerializeField]
+        private AddTakeOverSettingStartEvent onAddTakeOverSettingStart = new AddTakeOverSettingStartEvent();
+
+        public event UnityAction OnAddTakeOverSettingStart
+        {
+            add => this.onAddTakeOverSettingStart.AddListener(value);
+            remove => this.onAddTakeOverSettingStart.RemoveListener(value);
         }
 
         [Serializable]

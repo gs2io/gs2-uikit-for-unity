@@ -80,7 +80,7 @@ namespace Gs2.Unity.UiKit.Gs2Showcase.Fetcher
             );
 
             while (true) {
-                var future = this._domain.Model();
+                var future = this._domain.ModelFuture();
                 yield return future;
                 if (future.Error != null) {
                     yield return new WaitForSeconds(retryWaitSecond);

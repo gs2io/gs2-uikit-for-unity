@@ -55,6 +55,9 @@ namespace Gs2.Unity.UiKit.Gs2Datastore
 
             yield return new WaitUntil(() => clientHolder.Initialized);
             yield return new WaitUntil(() => gameSessionHolder.Initialized);
+
+            this.onPrepareDownloadByUserIdAndDataObjectNameStart.Invoke();
+
             
             var domain = clientHolder.Gs2.Datastore.Namespace(
                 this._context.DataObject.NamespaceName
@@ -63,7 +66,7 @@ namespace Gs2.Unity.UiKit.Gs2Datastore
             ).DataObject(
                 this._context.DataObject.DataObjectName
             );
-            var future = domain.PrepareDownloadByUserIdAndDataObjectName(
+            var future = domain.PrepareDownloadByUserIdAndDataObjectNameFuture(
             );
             yield return future;
             if (future.Error != null)
@@ -79,7 +82,7 @@ namespace Gs2.Unity.UiKit.Gs2Datastore
                             this.onError.Invoke(future.Error, Retry);
                             yield break;
                         }
-                        var future3 = future.Result.Model();
+                        var future3 = future.Result.ModelFuture();
                         yield return future3;
                         if (future3.Error != null)
                         {
@@ -97,7 +100,7 @@ namespace Gs2.Unity.UiKit.Gs2Datastore
                 this.onError.Invoke(future.Error, null);
                 yield break;
             }
-            var future2 = future.Result.Model();
+            var future2 = future.Result.ModelFuture();
             yield return future2;
             if (future2.Error != null)
             {
@@ -168,6 +171,21 @@ namespace Gs2.Unity.UiKit.Gs2Datastore
     /// </summary>
     public partial class Gs2DatastoreDataObjectPrepareDownloadByUserIdAndDataObjectNameAction
     {
+
+        [Serializable]
+        private class PrepareDownloadByUserIdAndDataObjectNameStartEvent : UnityEvent
+        {
+
+        }
+
+        [SerializeField]
+        private PrepareDownloadByUserIdAndDataObjectNameStartEvent onPrepareDownloadByUserIdAndDataObjectNameStart = new PrepareDownloadByUserIdAndDataObjectNameStartEvent();
+
+        public event UnityAction OnPrepareDownloadByUserIdAndDataObjectNameStart
+        {
+            add => this.onPrepareDownloadByUserIdAndDataObjectNameStart.AddListener(value);
+            remove => this.onPrepareDownloadByUserIdAndDataObjectNameStart.RemoveListener(value);
+        }
 
         [Serializable]
         private class PrepareDownloadByUserIdAndDataObjectNameCompleteEvent : UnityEvent<EzDataObject>

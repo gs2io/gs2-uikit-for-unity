@@ -63,7 +63,7 @@ namespace Gs2.Unity.UiKit.Gs2LoginReward
                 gameSessionHolder.GameSession
             ).Bonus(
             );
-            var future = domain.Receive(
+            var future = domain.ReceiveFuture(
                 BonusModelName,
                 Config.ToArray()
             );

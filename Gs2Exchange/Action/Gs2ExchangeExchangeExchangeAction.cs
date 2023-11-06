@@ -55,6 +55,9 @@ namespace Gs2.Unity.UiKit.Gs2Exchange
 
             yield return new WaitUntil(() => clientHolder.Initialized);
             yield return new WaitUntil(() => gameSessionHolder.Initialized);
+
+            this.onExchangeStart.Invoke();
+
             
             var domain = clientHolder.Gs2.Exchange.Namespace(
                 this._context.RateModel.NamespaceName
@@ -62,7 +65,7 @@ namespace Gs2.Unity.UiKit.Gs2Exchange
                 gameSessionHolder.GameSession
             ).Exchange(
             );
-            var future = domain.Exchange(
+            var future = domain.ExchangeFuture(
                 this._context.RateModel.RateName,
                 Count,
                 Config.ToArray()
@@ -212,6 +215,21 @@ namespace Gs2.Unity.UiKit.Gs2Exchange
         {
             add => this.onChangeConfig.AddListener(value);
             remove => this.onChangeConfig.RemoveListener(value);
+        }
+
+        [Serializable]
+        private class ExchangeStartEvent : UnityEvent
+        {
+
+        }
+
+        [SerializeField]
+        private ExchangeStartEvent onExchangeStart = new ExchangeStartEvent();
+
+        public event UnityAction OnExchangeStart
+        {
+            add => this.onExchangeStart.AddListener(value);
+            remove => this.onExchangeStart.RemoveListener(value);
         }
 
         [Serializable]

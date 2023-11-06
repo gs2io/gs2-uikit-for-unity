@@ -56,6 +56,9 @@ namespace Gs2.Unity.UiKit.Gs2Formation
 
             yield return new WaitUntil(() => clientHolder.Initialized);
             yield return new WaitUntil(() => gameSessionHolder.Initialized);
+
+            this.onSetPropertyFormStart.Invoke();
+
             
             var domain = clientHolder.Gs2.Formation.Namespace(
                 this._context.PropertyForm.NamespaceName
@@ -65,7 +68,7 @@ namespace Gs2.Unity.UiKit.Gs2Formation
                 this._context.PropertyForm.PropertyFormModelName,
                 this._context.PropertyForm.PropertyId
             );
-            var future = domain.SetPropertyForm(
+            var future = domain.SetPropertyFormFuture(
                 Slots.ToArray(),
                 Key.Grn
             );
@@ -83,7 +86,7 @@ namespace Gs2.Unity.UiKit.Gs2Formation
                             this.onError.Invoke(future.Error, Retry);
                             yield break;
                         }
-                        var future3 = future.Result.Model();
+                        var future3 = future.Result.ModelFuture();
                         yield return future3;
                         if (future3.Error != null)
                         {
@@ -101,7 +104,7 @@ namespace Gs2.Unity.UiKit.Gs2Formation
                 this.onError.Invoke(future.Error, null);
                 yield break;
             }
-            var future2 = future.Result.Model();
+            var future2 = future.Result.ModelFuture();
             yield return future2;
             if (future2.Error != null)
             {
@@ -213,6 +216,21 @@ namespace Gs2.Unity.UiKit.Gs2Formation
         {
             add => this.onChangeKeyId.AddListener(value);
             remove => this.onChangeKeyId.RemoveListener(value);
+        }
+
+        [Serializable]
+        private class SetPropertyFormStartEvent : UnityEvent
+        {
+
+        }
+
+        [SerializeField]
+        private SetPropertyFormStartEvent onSetPropertyFormStart = new SetPropertyFormStartEvent();
+
+        public event UnityAction OnSetPropertyFormStart
+        {
+            add => this.onSetPropertyFormStart.AddListener(value);
+            remove => this.onSetPropertyFormStart.RemoveListener(value);
         }
 
         [Serializable]

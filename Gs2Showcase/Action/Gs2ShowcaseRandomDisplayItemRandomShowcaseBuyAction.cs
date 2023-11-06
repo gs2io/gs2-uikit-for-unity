@@ -93,7 +93,7 @@ namespace Gs2.Unity.UiKit.Gs2Showcase
             ).RandomDisplayItem(
                 this._fetcher.Context.RandomDisplayItem.DisplayItemName
             );
-            var future = domain.RandomShowcaseBuy(
+            var future = domain.RandomShowcaseBuyFuture(
                 Quantity,
                 config.ToArray()
             );

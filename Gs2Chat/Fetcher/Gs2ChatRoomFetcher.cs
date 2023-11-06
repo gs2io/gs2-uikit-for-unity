@@ -37,6 +37,7 @@ using Gs2.Unity.Gs2Chat.Model;
 using Gs2.Unity.Gs2Chat.ScriptableObject;
 using Gs2.Unity.Util;
 using Gs2.Unity.UiKit.Core;
+using Gs2.Unity.UiKit.Core.Model;
 using Gs2.Unity.UiKit.Gs2Core.Fetcher;
 using Gs2.Unity.UiKit.Gs2Chat.Context;
 using UnityEngine;
@@ -82,7 +83,7 @@ namespace Gs2.Unity.UiKit.Gs2Chat.Fetcher
             );
 
             while (true) {
-                var future = this._domain.Model();
+                var future = this._domain.ModelFuture();
                 yield return future;
                 if (future.Error != null) {
                     yield return new WaitForSeconds(retryWaitSecond);
@@ -123,6 +124,18 @@ namespace Gs2.Unity.UiKit.Gs2Chat.Fetcher
                 this._callbackId.Value
             );
             this._callbackId = null;
+        }
+
+        public void SetTemporaryRoom(
+            Gs2.Unity.Gs2Chat.Model.EzRoom room
+        ) {
+            Room = room;
+            this.OnFetched.Invoke();
+        }
+
+        public void RollbackTemporaryRoom(
+        ) {
+            OnUpdateContext();
         }
     }
 

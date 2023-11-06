@@ -65,7 +65,7 @@ namespace Gs2.Unity.UiKit.Gs2Idle.Fetcher
                     ).Status(
                         this.Context.Prediction.CategoryName
                     );
-                    var future = domain.Prediction();
+                    var future = domain.PredictionFuture();
                     yield return future;
                     if (future.Error != null)
                     {

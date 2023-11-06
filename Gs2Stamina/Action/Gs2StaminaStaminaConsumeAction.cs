@@ -64,7 +64,7 @@ namespace Gs2.Unity.UiKit.Gs2Stamina
             ).Stamina(
                 this._context.Stamina.StaminaName
             );
-            var future = domain.Consume(
+            var future = domain.ConsumeFuture(
                 ConsumeValue
             );
             yield return future;
@@ -81,7 +81,7 @@ namespace Gs2.Unity.UiKit.Gs2Stamina
                             this.onError.Invoke(future.Error, Retry);
                             yield break;
                         }
-                        var future3 = future.Result.Model();
+                        var future3 = future.Result.ModelFuture();
                         yield return future3;
                         if (future3.Error != null)
                         {
@@ -99,7 +99,7 @@ namespace Gs2.Unity.UiKit.Gs2Stamina
                 this.onError.Invoke(future.Error, null);
                 yield break;
             }
-            var future2 = future.Result.Model();
+            var future2 = future.Result.ModelFuture();
             yield return future2;
             if (future2.Error != null)
             {

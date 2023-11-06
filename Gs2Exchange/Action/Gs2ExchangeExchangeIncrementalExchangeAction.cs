@@ -63,7 +63,7 @@ namespace Gs2.Unity.UiKit.Gs2Exchange
                 gameSessionHolder.GameSession
             ).Exchange(
             );
-            var future = domain.IncrementalExchange(
+            var future = domain.IncrementalExchangeFuture(
                 RateName,
                 Count,
                 Config.ToArray()

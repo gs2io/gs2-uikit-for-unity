@@ -64,7 +64,7 @@ namespace Gs2.Unity.UiKit.Gs2Datastore
             ).DataObject(
                 this._context.DataObject.DataObjectName
             );
-            var future = domain.DoneUpload(
+            var future = domain.DoneUploadFuture(
             );
             yield return future;
             if (future.Error != null)
@@ -80,7 +80,7 @@ namespace Gs2.Unity.UiKit.Gs2Datastore
                             this.onError.Invoke(future.Error, Retry);
                             yield break;
                         }
-                        var future3 = future.Result.Model();
+                        var future3 = future.Result.ModelFuture();
                         yield return future3;
                         if (future3.Error != null)
                         {
@@ -98,7 +98,7 @@ namespace Gs2.Unity.UiKit.Gs2Datastore
                 this.onError.Invoke(future.Error, null);
                 yield break;
             }
-            var future2 = future.Result.Model();
+            var future2 = future.Result.ModelFuture();
             yield return future2;
             if (future2.Error != null)
             {

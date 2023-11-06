@@ -37,6 +37,7 @@ using Gs2.Unity.Gs2Stamina.Model;
 using Gs2.Unity.Gs2Stamina.ScriptableObject;
 using Gs2.Unity.Util;
 using Gs2.Unity.UiKit.Core;
+using Gs2.Unity.UiKit.Core.Model;
 using Gs2.Unity.UiKit.Gs2Core.Fetcher;
 using Gs2.Unity.UiKit.Gs2Stamina.Context;
 using UnityEngine;
@@ -81,7 +82,7 @@ namespace Gs2.Unity.UiKit.Gs2Stamina.Fetcher
             );
 
             while (true) {
-                var future = this._domain.Model();
+                var future = this._domain.ModelFuture();
                 yield return future;
                 if (future.Error != null) {
                     yield return new WaitForSeconds(retryWaitSecond);
@@ -127,6 +128,18 @@ namespace Gs2.Unity.UiKit.Gs2Stamina.Fetcher
                 this._callbackId.Value
             );
             this._callbackId = null;
+        }
+
+        public void SetTemporaryStamina(
+            Gs2.Unity.Gs2Stamina.Model.EzStamina stamina
+        ) {
+            Stamina = stamina;
+            this.OnFetched.Invoke();
+        }
+
+        public void RollbackTemporaryStamina(
+        ) {
+            OnUpdateContext();
         }
     }
 

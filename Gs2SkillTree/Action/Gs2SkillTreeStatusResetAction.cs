@@ -63,7 +63,7 @@ namespace Gs2.Unity.UiKit.Gs2SkillTree
                 gameSessionHolder.GameSession
             ).Status(
             );
-            var future = domain.Reset(
+            var future = domain.ResetFuture(
             );
             yield return future;
             if (future.Error != null)

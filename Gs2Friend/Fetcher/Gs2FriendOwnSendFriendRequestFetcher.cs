@@ -37,6 +37,7 @@ using Gs2.Unity.Gs2Friend.Model;
 using Gs2.Unity.Gs2Friend.ScriptableObject;
 using Gs2.Unity.Util;
 using Gs2.Unity.UiKit.Core;
+using Gs2.Unity.UiKit.Core.Model;
 using Gs2.Unity.UiKit.Gs2Core.Fetcher;
 using Gs2.Unity.UiKit.Gs2Friend.Context;
 using UnityEngine;
@@ -81,7 +82,7 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Fetcher
             );
 
             while (true) {
-                var future = this._domain.Model();
+                var future = this._domain.ModelFuture();
                 yield return future;
                 if (future.Error != null) {
                     yield return new WaitForSeconds(retryWaitSecond);

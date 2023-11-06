@@ -62,7 +62,7 @@ namespace Gs2.Unity.UiKit.Gs2Quest
             ).Me(
                 gameSessionHolder.GameSession
             );
-            var future = domain.Start(
+            var future = domain.StartFuture(
                 QuestGroupName,
                 QuestName,
                 Force,

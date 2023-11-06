@@ -64,7 +64,7 @@ namespace Gs2.Unity.UiKit.Gs2Mission
             ).Complete(
                 this._context.Complete.MissionGroupName
             );
-            var future = domain.ReceiveRewards(
+            var future = domain.ReceiveRewardsFuture(
                 MissionTaskName
             );
             yield return future;

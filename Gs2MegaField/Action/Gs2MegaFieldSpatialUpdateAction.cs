@@ -46,7 +46,6 @@ using UnityEditor;
 
 namespace Gs2.Unity.UiKit.Gs2MegaField
 {
-	[AddComponentMenu("GS2 UIKit/MegaField/Spatial/Action/Gs2MegaFieldSpatialUpdateAction")]
     public partial class Gs2MegaFieldSpatialUpdateAction : MonoBehaviour
     {
         private IEnumerator Process()
@@ -56,6 +55,9 @@ namespace Gs2.Unity.UiKit.Gs2MegaField
 
             yield return new WaitUntil(() => clientHolder.Initialized);
             yield return new WaitUntil(() => gameSessionHolder.Initialized);
+
+            this.onUpdateStart.Invoke();
+
             
             var domain = clientHolder.Gs2.MegaField.Namespace(
                 this._context.LayerModel.NamespaceName
@@ -65,7 +67,7 @@ namespace Gs2.Unity.UiKit.Gs2MegaField
                 this._context.LayerModel.AreaModelName,
                 this._context.LayerModel.LayerModelName
             );
-            var future = domain.Update(
+            var future = domain.UpdateFuture(
                 Position,
                 Scopes.ToArray()
             );
@@ -85,7 +87,7 @@ namespace Gs2.Unity.UiKit.Gs2MegaField
                         }
                         var items = new List<EzSpatial>();
                         foreach (var domain_ in future.Result) {
-                            var future3 = domain_.Model();
+                            var future3 = domain_.ModelFuture();
                             yield return future3;
                             if (future3.Error != null)
                             {
@@ -107,7 +109,7 @@ namespace Gs2.Unity.UiKit.Gs2MegaField
             }
             var items = new List<EzSpatial>();
             foreach (var domain_ in future.Result) {
-                var future2 = domain_.Model();
+                var future2 = domain_.ModelFuture();
                 yield return future2;
                 if (future2.Error != null)
                 {
@@ -221,6 +223,21 @@ namespace Gs2.Unity.UiKit.Gs2MegaField
         {
             add => this.onChangeScopes.AddListener(value);
             remove => this.onChangeScopes.RemoveListener(value);
+        }
+
+        [Serializable]
+        private class UpdateStartEvent : UnityEvent
+        {
+
+        }
+
+        [SerializeField]
+        private UpdateStartEvent onUpdateStart = new UpdateStartEvent();
+
+        public event UnityAction OnUpdateStart
+        {
+            add => this.onUpdateStart.AddListener(value);
+            remove => this.onUpdateStart.RemoveListener(value);
         }
 
         [Serializable]

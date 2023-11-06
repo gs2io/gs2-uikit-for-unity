@@ -64,7 +64,7 @@ namespace Gs2.Unity.UiKit.Gs2Exchange
             ).Await(
                 this._context.Await.AwaitName
             );
-            var future = domain.Acquire(
+            var future = domain.AcquireFuture(
             );
             yield return future;
             if (future.Error != null)

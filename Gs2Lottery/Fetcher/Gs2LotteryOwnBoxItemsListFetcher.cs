@@ -56,7 +56,7 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.Fetcher
         private IEnumerator Load() {
             var future = _domain.BoxItems(
                 Context.BoxItems.PrizeTableName
-            ).Model();
+            ).ModelFuture();
             yield return future;
             if (future.Error != null)
             {

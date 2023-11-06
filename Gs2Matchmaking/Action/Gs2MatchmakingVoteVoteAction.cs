@@ -59,7 +59,7 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking
             var domain = clientHolder.Gs2.Matchmaking.Namespace(
                 this._context.Vote.NamespaceName
             );
-            var future = domain.Vote(
+            var future = domain.VoteFuture(
                 BallotBody,
                 BallotSignature,
                 KeyId,
@@ -79,7 +79,7 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking
                             this.onError.Invoke(future.Error, Retry);
                             yield break;
                         }
-                        var future3 = future.Result.Model();
+                        var future3 = future.Result.ModelFuture();
                         yield return future3;
                         if (future3.Error != null)
                         {
@@ -97,7 +97,7 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking
                 this.onError.Invoke(future.Error, null);
                 yield break;
             }
-            var future2 = future.Result.Model();
+            var future2 = future.Result.ModelFuture();
             yield return future2;
             if (future2.Error != null)
             {

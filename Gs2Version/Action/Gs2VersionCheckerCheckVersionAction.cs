@@ -63,7 +63,7 @@ namespace Gs2.Unity.UiKit.Gs2Version
                 gameSessionHolder.GameSession
             ).Checker(
             );
-            var future = domain.CheckVersion(
+            var future = domain.CheckVersionFuture(
                 TargetVersions.ToArray()
             );
             yield return future;

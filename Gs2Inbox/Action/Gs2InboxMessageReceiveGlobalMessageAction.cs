@@ -46,7 +46,6 @@ using UnityEditor;
 
 namespace Gs2.Unity.UiKit.Gs2Inbox
 {
-	[AddComponentMenu("GS2 UIKit/Inbox/Message/Action/Gs2InboxMessageReceiveGlobalMessageAction")]
     public partial class Gs2InboxMessageReceiveGlobalMessageAction : MonoBehaviour
     {
         private IEnumerator Process()
@@ -56,13 +55,16 @@ namespace Gs2.Unity.UiKit.Gs2Inbox
 
             yield return new WaitUntil(() => clientHolder.Initialized);
             yield return new WaitUntil(() => gameSessionHolder.Initialized);
+
+            this.onReceiveGlobalMessageStart.Invoke();
+
             
             var domain = clientHolder.Gs2.Inbox.Namespace(
                 this._context.Message.NamespaceName
             ).Me(
                 gameSessionHolder.GameSession
             );
-            var future = domain.ReceiveGlobalMessage(
+            var future = domain.ReceiveGlobalMessageFuture(
             );
             yield return future;
             if (future.Error != null)
@@ -80,7 +82,7 @@ namespace Gs2.Unity.UiKit.Gs2Inbox
                         }
                         var items2 = new List<EzMessage>();
                         foreach (var domain_ in future.Result) {
-                            var future3 = domain_.Model();
+                            var future3 = domain_.ModelFuture();
                             yield return future3;
                             if (future3.Error != null)
                             {
@@ -102,7 +104,7 @@ namespace Gs2.Unity.UiKit.Gs2Inbox
             }
             var items = new List<EzMessage>();
             foreach (var domain_ in future.Result) {
-                var future2 = domain_.Model();
+                var future2 = domain_.ModelFuture();
                 yield return future2;
                 if (future2.Error != null)
                 {
@@ -137,7 +139,7 @@ namespace Gs2.Unity.UiKit.Gs2Inbox
         public void Awake()
         {
             this._context = GetComponent<Gs2InboxOwnMessageContext>() ?? GetComponentInParent<Gs2InboxOwnMessageContext>();
-            if (_context == null) {
+            if (this._context == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2InboxOwnMessageContext.");
                 enabled = false;
             }
@@ -146,7 +148,7 @@ namespace Gs2.Unity.UiKit.Gs2Inbox
         public virtual bool HasError()
         {
             this._context = GetComponent<Gs2InboxOwnMessageContext>() ?? GetComponentInParent<Gs2InboxOwnMessageContext>(true);
-            if (_context == null) {
+            if (this._context == null) {
                 return true;
             }
             return false;
@@ -175,6 +177,21 @@ namespace Gs2.Unity.UiKit.Gs2Inbox
     /// </summary>
     public partial class Gs2InboxMessageReceiveGlobalMessageAction
     {
+
+        [Serializable]
+        private class ReceiveGlobalMessageStartEvent : UnityEvent
+        {
+
+        }
+
+        [SerializeField]
+        private ReceiveGlobalMessageStartEvent onReceiveGlobalMessageStart = new ReceiveGlobalMessageStartEvent();
+
+        public event UnityAction OnReceiveGlobalMessageStart
+        {
+            add => this.onReceiveGlobalMessageStart.AddListener(value);
+            remove => this.onReceiveGlobalMessageStart.RemoveListener(value);
+        }
 
         [Serializable]
         private class ReceiveGlobalMessageCompleteEvent : UnityEvent<List<EzMessage>>

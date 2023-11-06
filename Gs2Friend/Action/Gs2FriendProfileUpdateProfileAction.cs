@@ -63,7 +63,7 @@ namespace Gs2.Unity.UiKit.Gs2Friend
                 gameSessionHolder.GameSession
             ).Profile(
             );
-            var future = domain.UpdateProfile(
+            var future = domain.UpdateProfileFuture(
                 PublicProfile,
                 FollowerProfile,
                 FriendProfile
@@ -82,7 +82,7 @@ namespace Gs2.Unity.UiKit.Gs2Friend
                             this.onError.Invoke(future.Error, Retry);
                             yield break;
                         }
-                        var future3 = future.Result.Model();
+                        var future3 = future.Result.ModelFuture();
                         yield return future3;
                         if (future3.Error != null)
                         {
@@ -100,7 +100,7 @@ namespace Gs2.Unity.UiKit.Gs2Friend
                 this.onError.Invoke(future.Error, null);
                 yield break;
             }
-            var future2 = future.Result.Model();
+            var future2 = future.Result.ModelFuture();
             yield return future2;
             if (future2.Error != null)
             {

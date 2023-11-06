@@ -63,7 +63,7 @@ namespace Gs2.Unity.UiKit.Gs2SkillTree
                 gameSessionHolder.GameSession
             ).Status(
             );
-            var future = domain.Restrain(
+            var future = domain.RestrainFuture(
                 NodeModelNames.ToArray()
             );
             yield return future;

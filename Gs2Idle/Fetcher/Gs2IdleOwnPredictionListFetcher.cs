@@ -66,7 +66,7 @@ namespace Gs2.Unity.UiKit.Gs2Idle.Fetcher
                     ).Status(
                         this.Context.Status.categoryName
                     );
-                    var future = domain.Prediction();
+                    var future = domain.PredictionFuture();
                     yield return future;
                     if (future.Error != null) {
                         if (future.Error is BadRequestException || future.Error is NotFoundException)

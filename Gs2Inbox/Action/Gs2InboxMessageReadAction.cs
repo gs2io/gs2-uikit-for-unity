@@ -64,7 +64,7 @@ namespace Gs2.Unity.UiKit.Gs2Inbox
             ).Message(
                 this._context.Message.MessageName
             );
-            var future = domain.Read(
+            var future = domain.ReadFuture(
             );
             yield return future;
             if (future.Error != null)

@@ -63,7 +63,7 @@ namespace Gs2.Unity.UiKit.Gs2Quest
                 gameSessionHolder.GameSession
             ).Progress(
             );
-            var future = domain.End(
+            var future = domain.EndFuture(
                 IsComplete,
                 Rewards.ToArray(),
                 Config.ToArray()

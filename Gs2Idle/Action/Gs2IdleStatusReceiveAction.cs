@@ -64,7 +64,7 @@ namespace Gs2.Unity.UiKit.Gs2Idle
             ).Status(
                 this._context.Status.CategoryName
             );
-            var future = domain.Receive(
+            var future = domain.ReceiveFuture(
             );
             yield return future;
             if (future.Error != null)

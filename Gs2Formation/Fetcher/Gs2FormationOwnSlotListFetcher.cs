@@ -77,7 +77,7 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Fetcher
                 Fetched = true;
                 this.OnFetched.Invoke();
             });
-            var future = this._domain.Model();
+            var future = this._domain.ModelFuture();
             yield return future;
             if (future.Error != null)
             {

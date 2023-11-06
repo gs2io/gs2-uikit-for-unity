@@ -60,7 +60,7 @@ namespace Gs2.Unity.UiKit.Gs2Showcase
             ).DisplayItem(
                 DisplayItemId
             );
-            var future = domain.Buy(
+            var future = domain.BuyFuture(
                 Quantity,
                 Config.ToArray()
             );

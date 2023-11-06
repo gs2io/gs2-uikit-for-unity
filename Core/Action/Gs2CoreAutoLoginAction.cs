@@ -42,14 +42,14 @@ namespace Gs2.Unity.UiKit.Gs2Account
 
             var createAccountFuture = this._clientHolder.Gs2.Account.Namespace(
                 this.AccountNamespace.namespaceName
-            ).Create();
+            ).CreateFuture();
             yield return createAccountFuture;
             if (createAccountFuture.Error != null) {
                 this.onError.Invoke(createAccountFuture.Error, Process);
                 yield break;
             }
 
-            var loadAccountFuture = createAccountFuture.Result.Model();
+            var loadAccountFuture = createAccountFuture.Result.ModelFuture();
             yield return loadAccountFuture;
             if (loadAccountFuture.Error != null) {
                 this.onError.Invoke(loadAccountFuture.Error, Process);
