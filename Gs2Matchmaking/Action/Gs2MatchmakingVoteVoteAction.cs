@@ -110,12 +110,12 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking
 
         public void OnEnable()
         {
-            StartCoroutine(nameof(Process));
+            Gs2ClientHolder.Instance.StartCoroutine(Process());
         }
 
         public void OnDisable()
         {
-            StopCoroutine(nameof(Process));
+            
         }
     }
 

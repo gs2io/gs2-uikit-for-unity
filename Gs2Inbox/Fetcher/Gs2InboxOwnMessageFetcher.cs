@@ -109,6 +109,7 @@ namespace Gs2.Unity.UiKit.Gs2Inbox.Fetcher
 
         public void OnDisable()
         {
+            StopCoroutine(nameof(Fetch));
             Context.OnUpdate.RemoveListener(OnUpdateContext);
 
             if (this._domain == null) {

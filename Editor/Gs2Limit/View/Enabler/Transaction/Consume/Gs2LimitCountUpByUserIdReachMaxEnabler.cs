@@ -54,7 +54,7 @@ namespace Gs2.Unity.UiKit.Gs2Core
                     ).Counter(
                         _fetcher.Request.LimitName,
                         _fetcher.Request.CounterName
-                    ).Model();
+                    ).ModelFuture();
                     yield return future;
                     if (future.Error != null) {
                         this.onError.Invoke(new CanIgnoreException(future.Error), null);
@@ -95,7 +95,7 @@ namespace Gs2.Unity.UiKit.Gs2Core
         }
 
         public void OnEnable() {
-            StartCoroutine(nameof(Process));
+            Gs2ClientHolder.Instance.StartCoroutine(Process());
         }
     }
 

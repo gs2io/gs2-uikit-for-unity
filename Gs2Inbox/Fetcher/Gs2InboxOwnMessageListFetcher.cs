@@ -89,9 +89,14 @@ namespace Gs2.Unity.UiKit.Gs2Inbox.Fetcher
             Fetched = true;
 
             this.OnFetched.Invoke();
-            
-            yield return new WaitForSeconds(1);
-            StartCoroutine(nameof(Load));
+
+            while (true) {
+                yield return new WaitForSeconds(1);
+                it = _domain.Messages();
+                while (it.HasNext()) {
+                    yield return it.Next();
+                }
+            }
         }
 
         private IEnumerator Fetch()

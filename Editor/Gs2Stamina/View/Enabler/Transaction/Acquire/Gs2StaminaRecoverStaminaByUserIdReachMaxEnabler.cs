@@ -52,7 +52,7 @@ namespace Gs2.Unity.UiKit.Gs2Core
                         this._sessionHolder.GameSession
                     ).Stamina(
                         _fetcher.Request.StaminaName
-                    ).Model();
+                    ).ModelFuture();
                     yield return future;
                     if (future.Error != null) {
                         this.onError.Invoke(new CanIgnoreException(future.Error), null);
@@ -66,7 +66,7 @@ namespace Gs2.Unity.UiKit.Gs2Core
                         _fetcher.Request.NamespaceName
                     ).StaminaModel(
                         _fetcher.Request.StaminaName
-                    ).Model();
+                    ).ModelFuture();
                     yield return future2;
                     if (future2.Error != null) {
                         this.onError.Invoke(new CanIgnoreException(future2.Error), null);
@@ -91,7 +91,7 @@ namespace Gs2.Unity.UiKit.Gs2Core
         }
 
         public void OnEnable() {
-            StartCoroutine(nameof(Process));
+            Gs2ClientHolder.Instance.StartCoroutine(Process());
         }
     }
 

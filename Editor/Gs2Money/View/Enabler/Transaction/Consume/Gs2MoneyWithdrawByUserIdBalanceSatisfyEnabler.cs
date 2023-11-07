@@ -52,7 +52,7 @@ namespace Gs2.Unity.UiKit.Gs2Core
                         this._sessionHolder.GameSession
                     ).Wallet(
                         _fetcher.Request.Slot ?? 0
-                    ).Model();
+                    ).ModelFuture();
                     yield return future;
                     if (future.Error != null) {
                         this.onError.Invoke(new CanIgnoreException(future.Error), null);
@@ -80,7 +80,7 @@ namespace Gs2.Unity.UiKit.Gs2Core
         }
 
         public void OnEnable() {
-            StartCoroutine(nameof(Process));
+            Gs2ClientHolder.Instance.StartCoroutine(Process());
         }
     }
 

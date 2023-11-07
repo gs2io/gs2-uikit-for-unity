@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable UnusedAutoPropertyAccessor.Local
@@ -80,7 +82,7 @@ namespace Gs2.Unity.UiKit.Gs2Inbox
                             this.onError.Invoke(future.Error, Retry);
                             yield break;
                         }
-                        this.onReadComplete.Invoke(future.Result.TransactionId);
+                        this.onReadComplete.Invoke(future.Result?.TransactionId);
                     }
 
                     this.onError.Invoke(future.Error, Retry);
@@ -90,22 +92,23 @@ namespace Gs2.Unity.UiKit.Gs2Inbox
                 this.onError.Invoke(future.Error, null);
                 yield break;
             }
-            if (this.WaitAsyncProcessComplete) {
-                var transaction = future.Result;
-                var future2 = transaction.WaitFuture();
-                yield return future2;
+            if (future.Result != null) {
+                if (this.WaitAsyncProcessComplete && future.Result != null) {
+                    var transaction = future.Result;
+                    var future2 = transaction.WaitFuture();
+                    yield return future2;
+                }
             }
-            this.onReadComplete.Invoke(future.Result.TransactionId);
+            this.onReadComplete.Invoke(future.Result?.TransactionId);
         }
 
         public void OnEnable()
         {
-            StartCoroutine(nameof(Process));
+            Gs2ClientHolder.Instance.StartCoroutine(Process());
         }
 
         public void OnDisable()
         {
-            StopCoroutine(nameof(Process));
         }
     }
 

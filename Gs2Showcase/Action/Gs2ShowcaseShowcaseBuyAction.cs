@@ -78,7 +78,7 @@ namespace Gs2.Unity.UiKit.Gs2Showcase
                             this.onError.Invoke(future.Error, Retry);
                             yield break;
                         }
-                        this.onBuyComplete.Invoke(future.Result.TransactionId);
+                        this.onBuyComplete.Invoke(future.Result?.TransactionId);
                     }
 
                     this.onError.Invoke(future.Error, Retry);
@@ -88,17 +88,17 @@ namespace Gs2.Unity.UiKit.Gs2Showcase
                 this.onError.Invoke(future.Error, null);
                 yield break;
             }
-            this.onBuyComplete.Invoke(future.Result.TransactionId);
+            this.onBuyComplete.Invoke(future.Result?.TransactionId);
         }
 
         public void OnEnable()
         {
-            StartCoroutine(nameof(Process));
+            Gs2ClientHolder.Instance.StartCoroutine(Process());
         }
 
         public void OnDisable()
         {
-            StopCoroutine(nameof(Process));
+            
         }
     }
 

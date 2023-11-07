@@ -111,7 +111,7 @@ namespace Gs2.Unity.UiKit.Gs2Showcase
                             this.onError.Invoke(future.Error, Retry);
                             yield break;
                         }
-                        this.onRandomShowcaseBuyComplete.Invoke(future.Result.TransactionId);
+                        this.onRandomShowcaseBuyComplete.Invoke(future.Result?.TransactionId);
                     }
 
 #if GS2_ENABLE_PURCHASING
@@ -127,7 +127,7 @@ namespace Gs2.Unity.UiKit.Gs2Showcase
                 this.onError.Invoke(future.Error, null);
                 yield break;
             }
-            if (this.WaitAsyncProcessComplete) {
+            if (this.WaitAsyncProcessComplete && future.Result != null) {
                 var transaction = future.Result;
                 var future2 = transaction.WaitFuture();
                 yield return future2;
@@ -138,17 +138,17 @@ namespace Gs2.Unity.UiKit.Gs2Showcase
                 purchaseParameters.controller.ConfirmPendingPurchase(purchaseParameters.product);
             }
 #endif
-            this.onRandomShowcaseBuyComplete.Invoke(future.Result.TransactionId);
+            this.onRandomShowcaseBuyComplete.Invoke(future.Result?.TransactionId);
         }
 
         public void OnEnable()
         {
-            StartCoroutine(nameof(Process));
+            Gs2ClientHolder.Instance.StartCoroutine(Process());
         }
 
         public void OnDisable()
         {
-            StopCoroutine(nameof(Process));
+            
         }
     }
 

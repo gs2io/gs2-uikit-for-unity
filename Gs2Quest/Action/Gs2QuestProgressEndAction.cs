@@ -82,7 +82,7 @@ namespace Gs2.Unity.UiKit.Gs2Quest
                             this.onError.Invoke(future.Error, Retry);
                             yield break;
                         }
-                        this.onEndComplete.Invoke(future.Result.TransactionId);
+                        this.onEndComplete.Invoke(future.Result?.TransactionId);
                     }
 
                     this.onError.Invoke(future.Error, Retry);
@@ -92,22 +92,22 @@ namespace Gs2.Unity.UiKit.Gs2Quest
                 this.onError.Invoke(future.Error, null);
                 yield break;
             }
-            if (this.WaitAsyncProcessComplete) {
+            if (this.WaitAsyncProcessComplete && future.Result != null) {
                 var transaction = future.Result;
                 var future2 = transaction.WaitFuture();
                 yield return future2;
             }
-            this.onEndComplete.Invoke(future.Result.TransactionId);
+            this.onEndComplete.Invoke(future.Result?.TransactionId);
         }
 
         public void OnEnable()
         {
-            StartCoroutine(nameof(Process));
+            Gs2ClientHolder.Instance.StartCoroutine(Process());
         }
 
         public void OnDisable()
         {
-            StopCoroutine(nameof(Process));
+            
         }
     }
 
