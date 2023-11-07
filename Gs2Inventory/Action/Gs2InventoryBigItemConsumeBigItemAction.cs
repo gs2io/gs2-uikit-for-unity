@@ -119,7 +119,7 @@ namespace Gs2.Unity.UiKit.Gs2Inventory
 
         public void OnDisable()
         {
-            
+
         }
     }
 

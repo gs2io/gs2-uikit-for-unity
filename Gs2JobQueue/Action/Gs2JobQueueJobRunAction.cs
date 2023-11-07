@@ -114,7 +114,7 @@ namespace Gs2.Unity.UiKit.Gs2JobQueue
 
         public void OnDisable()
         {
-            
+
         }
     }
 

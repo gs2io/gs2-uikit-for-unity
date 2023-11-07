@@ -116,7 +116,7 @@ namespace Gs2.Unity.UiKit.Gs2Gateway
 
         public void OnDisable()
         {
-            
+
         }
     }
 

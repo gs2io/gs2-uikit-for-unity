@@ -111,7 +111,7 @@ namespace Gs2.Unity.UiKit.Gs2Account
 
         public void OnDisable()
         {
-            
+
         }
     }
 

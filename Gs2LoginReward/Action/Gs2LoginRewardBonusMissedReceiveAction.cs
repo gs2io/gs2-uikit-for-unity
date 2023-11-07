@@ -107,7 +107,7 @@ namespace Gs2.Unity.UiKit.Gs2LoginReward
 
         public void OnDisable()
         {
-            
+
         }
     }
 

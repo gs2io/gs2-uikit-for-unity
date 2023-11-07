@@ -115,7 +115,7 @@ namespace Gs2.Unity.UiKit.Gs2Quest
 
         public void OnDisable()
         {
-            
+
         }
     }
 

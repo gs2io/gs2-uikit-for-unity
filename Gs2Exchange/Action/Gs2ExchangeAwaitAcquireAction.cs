@@ -105,7 +105,7 @@ namespace Gs2.Unity.UiKit.Gs2Exchange
 
         public void OnDisable()
         {
-            
+
         }
     }
 

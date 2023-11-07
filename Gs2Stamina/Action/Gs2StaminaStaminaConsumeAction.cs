@@ -117,7 +117,7 @@ namespace Gs2.Unity.UiKit.Gs2Stamina
 
         public void OnDisable()
         {
-            
+
         }
     }
 

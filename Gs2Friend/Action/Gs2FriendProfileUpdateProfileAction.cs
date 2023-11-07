@@ -118,7 +118,7 @@ namespace Gs2.Unity.UiKit.Gs2Friend
 
         public void OnDisable()
         {
-            
+
         }
     }
 

@@ -109,7 +109,7 @@ namespace Gs2.Unity.UiKit.Gs2Enhance
 
         public void OnDisable()
         {
-            
+
         }
     }
 

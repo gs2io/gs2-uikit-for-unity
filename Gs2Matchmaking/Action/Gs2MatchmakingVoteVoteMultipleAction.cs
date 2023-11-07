@@ -114,7 +114,7 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking
 
         public void OnDisable()
         {
-            
+
         }
     }
 

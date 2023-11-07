@@ -105,7 +105,7 @@ namespace Gs2.Unity.UiKit.Gs2Idle
 
         public void OnDisable()
         {
-            
+
         }
     }
 

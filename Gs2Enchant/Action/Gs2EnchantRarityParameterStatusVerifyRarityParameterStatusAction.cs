@@ -120,7 +120,7 @@ namespace Gs2.Unity.UiKit.Gs2Enchant
 
         public void OnDisable()
         {
-            
+
         }
     }
 

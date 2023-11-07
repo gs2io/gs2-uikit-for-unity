@@ -117,7 +117,7 @@ namespace Gs2.Unity.UiKit.Gs2Formation
 
         public void OnDisable()
         {
-            
+
         }
     }
 
