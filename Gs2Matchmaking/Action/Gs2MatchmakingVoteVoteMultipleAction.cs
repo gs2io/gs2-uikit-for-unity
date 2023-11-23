@@ -60,9 +60,9 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking
                 this._context.Vote.NamespaceName
             );
             var future = domain.VoteMultipleFuture(
-                KeyId,
                 SignedBallots.ToArray(),
-                GameResults.ToArray()
+                GameResults.ToArray(),
+                KeyId
             );
             yield return future;
             if (future.Error != null)

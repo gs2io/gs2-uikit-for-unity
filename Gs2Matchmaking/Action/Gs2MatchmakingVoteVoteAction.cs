@@ -62,8 +62,8 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking
             var future = domain.VoteFuture(
                 BallotBody,
                 BallotSignature,
-                KeyId,
-                GameResults.ToArray()
+                GameResults.ToArray(),
+                KeyId
             );
             yield return future;
             if (future.Error != null)

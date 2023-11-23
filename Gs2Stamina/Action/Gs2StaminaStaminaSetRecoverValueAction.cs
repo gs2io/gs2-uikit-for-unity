@@ -65,9 +65,9 @@ namespace Gs2.Unity.UiKit.Gs2Stamina
                 this._context.Stamina.StaminaName
             );
             var future = domain.SetRecoverValueFuture(
-                KeyId,
                 SignedStatusBody,
-                SignedStatusSignature
+                SignedStatusSignature,
+                KeyId
             );
             yield return future;
             if (future.Error != null)
