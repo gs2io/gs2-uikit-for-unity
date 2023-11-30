@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
@@ -47,7 +49,7 @@ namespace Gs2.Unity.UiKit.Gs2Account.Fetcher
 	[AddComponentMenu("GS2 UIKit/Account/Account/Fetcher/Gs2AccountOwnAccountFetcher")]
     public partial class Gs2AccountOwnAccountFetcher : MonoBehaviour
     {
-        private EzAccountGameSessionDomain _domain;
+        private EzAccountDomain _domain;
         private ulong? _callbackId;
 
         private IEnumerator Fetch()
@@ -62,8 +64,8 @@ namespace Gs2.Unity.UiKit.Gs2Account.Fetcher
 
             _domain = clientHolder.Gs2.Account.Namespace(
                 this.Context.Account.NamespaceName
-            ).Me(
-                gameSessionHolder.GameSession
+            ).Account(
+                gameSessionHolder.GameSession.AccessToken.UserId
             );
             this._callbackId = this._domain.Subscribe(
                 item =>

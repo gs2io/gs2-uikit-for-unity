@@ -63,7 +63,7 @@ namespace Gs2.Unity.UiKit.Gs2Friend
             ).ReceiveFriendRequest(
                 this._context.FriendUser.TargetUserId
             );
-            var future = domain.Accept(
+            var future = domain.AcceptFuture(
             );
             yield return future;
             if (future.Error != null)

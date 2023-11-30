@@ -85,19 +85,6 @@ namespace Gs2.Unity.UiKit.Gs2MegaField
                             this.onError.Invoke(future.Error, Retry);
                             yield break;
                         }
-                        var items = new List<EzSpatial>();
-                        foreach (var domain_ in future.Result) {
-                            var future3 = domain_.ModelFuture();
-                            yield return future3;
-                            if (future3.Error != null)
-                            {
-                                this.onError.Invoke(future3.Error, null);
-                                yield break;
-                            }
-                            items.Add(future3.Result);
-                        }
-
-                        this.onUpdateComplete.Invoke(items);
                     }
 
                     this.onError.Invoke(future.Error, Retry);
@@ -107,19 +94,6 @@ namespace Gs2.Unity.UiKit.Gs2MegaField
                 this.onError.Invoke(future.Error, null);
                 yield break;
             }
-            var items = new List<EzSpatial>();
-            foreach (var domain_ in future.Result) {
-                var future2 = domain_.ModelFuture();
-                yield return future2;
-                if (future2.Error != null)
-                {
-                    this.onError.Invoke(future2.Error, null);
-                    yield break;
-                }
-                items.Add(future2.Result);
-            }
-
-            this.onUpdateComplete.Invoke(items);
         }
 
         public void OnEnable()

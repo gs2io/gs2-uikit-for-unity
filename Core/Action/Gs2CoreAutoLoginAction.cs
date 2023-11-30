@@ -57,32 +57,30 @@ namespace Gs2.Unity.UiKit.Gs2Account
             }
             var account = loadAccountFuture.Result;
 
-            var loginFuture = this._clientHolder.Profile.LoginFuture(
+            var loginFuture = this._clientHolder.Gs2.LoginFuture(
                 new Gs2AccountAuthenticator(
-                    this._clientHolder.Profile.Gs2Session,
-                    this._clientHolder.Profile.Gs2RestSession,
-                    this.AccountNamespace.namespaceName,
-                    this.Key.Grn,
-                    account.UserId,
-                    account.Password,
-                    this.GatewayNamespace == null ? null : new GatewaySetting {
-                        gatewayNamespaceName = this.GatewayNamespace.NamespaceName,
+                    new AccountSetting {
+                        accountNamespaceName = this.AccountNamespace?.namespaceName ?? "default",
+                        keyId = this.Key.Grn
+                    },
+                    new GatewaySetting {
+                        gatewayNamespaceName = this.GatewayNamespace?.NamespaceName ?? "default",
                         allowConcurrentAccess = this.allowConcurrentAccess
                     },
-                    this.VersionNamespace == null ? null : new VersionSetting {
-                        versionNamespaceName = this.VersionNamespace.NamespaceName,
-                        targetVersions = this.targetVersions.ToArray()
+                    new VersionSetting {
+                        versionNamespaceName = this.VersionNamespace?.NamespaceName,
+                        targetVersions = this.targetVersions?.ToArray()
                     }
-                )
+                ),
+                account.UserId,
+                account.Password
             );
             yield return loginFuture;
             if (loginFuture.Error != null) {
                 this.onError.Invoke(loginFuture.Error, Process);
                 yield break;
             }
-            var gameSession = loginFuture.Result;
-            
-            this._gameSessionHolder.UpdateAccessToken(gameSession);
+            this._gameSessionHolder.UpdateGameSession(loginFuture.Result);
 
             this.onAutoLoginComplete.Invoke();
         }

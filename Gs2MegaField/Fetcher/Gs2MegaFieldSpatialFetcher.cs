@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
@@ -52,7 +54,6 @@ namespace Gs2.Unity.UiKit.Gs2MegaField.Fetcher
 
         private IEnumerator Fetch()
         {
-            var retryWaitSecond = 1;
             var clientHolder = Gs2ClientHolder.Instance;
             var gameSessionHolder = Gs2GameSessionHolder.Instance;
 
@@ -68,29 +69,6 @@ namespace Gs2.Unity.UiKit.Gs2MegaField.Fetcher
                 this.Context.Spatial.AreaModelName,
                 this.Context.Spatial.LayerModelName
             );
-            this._callbackId = this._domain.Subscribe(
-                item =>
-                {
-                    Spatial = item;
-                    Fetched = true;
-                    this.OnFetched.Invoke();
-                }
-            );
-
-            while (true) {
-                var future = this._domain.ModelFuture();
-                yield return future;
-                if (future.Error != null) {
-                    yield return new WaitForSeconds(retryWaitSecond);
-                    retryWaitSecond *= 2;
-                }
-                else {
-                    Spatial = future.Result;
-                    Fetched = true;
-                    this.OnFetched.Invoke();
-                    break;
-                }
-            }
         }
     }
 
@@ -135,17 +113,6 @@ namespace Gs2.Unity.UiKit.Gs2MegaField.Fetcher
         public void OnDisable()
         {
             Context.OnUpdate.RemoveListener(OnUpdateContext);
-
-            if (this._domain == null) {
-                return;
-            }
-            if (!this._callbackId.HasValue) {
-                return;
-            }
-            this._domain.Unsubscribe(
-                this._callbackId.Value
-            );
-            this._callbackId = null;
         }
     }
 

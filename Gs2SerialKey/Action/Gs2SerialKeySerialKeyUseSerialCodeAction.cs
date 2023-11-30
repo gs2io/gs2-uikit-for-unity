@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable UnusedAutoPropertyAccessor.Local
@@ -65,7 +67,6 @@ namespace Gs2.Unity.UiKit.Gs2SerialKey
                 this._context.SerialKey.SerialKeyCode
             );
             var future = domain.UseSerialCodeFuture(
-                Code
             );
             yield return future;
             if (future.Error != null)
@@ -163,13 +164,6 @@ namespace Gs2.Unity.UiKit.Gs2SerialKey
     public partial class Gs2SerialKeySerialKeyUseSerialCodeAction
     {
         public bool WaitAsyncProcessComplete;
-        public string Code;
-
-        public void SetCode(string value) {
-            this.Code = value;
-            this.onChangeCode.Invoke(this.Code);
-            this.OnChange.Invoke();
-        }
     }
 
     /// <summary>
@@ -177,21 +171,6 @@ namespace Gs2.Unity.UiKit.Gs2SerialKey
     /// </summary>
     public partial class Gs2SerialKeySerialKeyUseSerialCodeAction
     {
-
-        [Serializable]
-        private class ChangeCodeEvent : UnityEvent<string>
-        {
-
-        }
-
-        [SerializeField]
-        private ChangeCodeEvent onChangeCode = new ChangeCodeEvent();
-        public event UnityAction<string> OnChangeCode
-        {
-            add => this.onChangeCode.AddListener(value);
-            remove => this.onChangeCode.RemoveListener(value);
-        }
-
         [Serializable]
         private class UseSerialCodeStartEvent : UnityEvent
         {
