@@ -25,46 +25,33 @@
 #pragma warning disable CS0472
 
 using System;
-using Gs2.Core.Util;
+using System.Linq;
+using System.Collections.Generic;
+using Gs2.Gs2StateMachine.Request;
 using Gs2.Unity.UiKit.Core;
+using Gs2.Unity.UiKit.Gs2Core.Fetcher;
 using Gs2.Unity.UiKit.Gs2StateMachine.Fetcher;
+using Gs2.Util.LitJson;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace Gs2.Unity.UiKit.Gs2StateMachine
+namespace Gs2.Unity.UiKit.Gs2StateMachine.SpriteSwitcher
 {
     /// <summary>
     /// Main
     /// </summary>
 
-	[AddComponentMenu("GS2 UIKit/StateMachine/Status/View/Label/Gs2StateMachineOwnStatusLabel")]
-    public partial class Gs2StateMachineOwnStatusLabel : MonoBehaviour
+	[AddComponentMenu("GS2 UIKit/StateMachine/Status/View/SpriteSwitcher/Transaction/Properties/EnableSpeculativeExecution/Gs2StateMachineStartStateMachineByUserIdEnableSpeculativeExecutionSpriteTableSwitcher")]
+    public partial class Gs2StateMachineStartStateMachineByUserIdEnableSpeculativeExecutionSpriteTableSwitcher : MonoBehaviour
     {
         private void OnFetched()
         {
-            this.onUpdate?.Invoke(
-                this.format.Replace(
-                    "{statusId}", $"{this._fetcher?.Status?.StatusId}"
-                ).Replace(
-                    "{name}", $"{this._fetcher?.Status?.Name}"
-                ).Replace(
-                    "{enableSpeculativeExecution}", $"{this._fetcher?.Status?.EnableSpeculativeExecution}"
-                ).Replace(
-                    "{stateMachineDefinition}", $"{this._fetcher?.Status?.StateMachineDefinition}"
-                ).Replace(
-                    "{randomStatus}", $"{this._fetcher?.Status?.RandomStatus}"
-                ).Replace(
-                    "{stacks}", $"{this._fetcher?.Status?.Stacks}"
-                ).Replace(
-                    "{variables}", $"{this._fetcher?.Status?.Variables}"
-                ).Replace(
-                    "{status}", $"{this._fetcher?.Status?.Status}"
-                ).Replace(
-                    "{lastError}", $"{this._fetcher?.Status?.LastError}"
-                ).Replace(
-                    "{transitionCount}", $"{this._fetcher?.Status?.TransitionCount}"
-                )
-            );
+            if (this.sprites.Count(v => v.value == this._fetcher.Request.EnableSpeculativeExecution) > 0) {
+                this.onUpdate.Invoke(sprites.Find(v => v.value == this._fetcher.Request.EnableSpeculativeExecution).sprite);
+            }
+            else {
+                this.onUpdate.Invoke(this.defaultSprite);
+            }
         }
     }
 
@@ -72,23 +59,30 @@ namespace Gs2.Unity.UiKit.Gs2StateMachine
     /// Dependent components
     /// </summary>
 
-    public partial class Gs2StateMachineOwnStatusLabel
+    public partial class Gs2StateMachineStartStateMachineByUserIdEnableSpeculativeExecutionSpriteTableSwitcher
     {
-        private Gs2StateMachineOwnStatusFetcher _fetcher;
+        private Gs2StateMachineStartStateMachineByUserIdFetcher _fetcher;
 
         public void Awake()
         {
-            this._fetcher = GetComponent<Gs2StateMachineOwnStatusFetcher>() ?? GetComponentInParent<Gs2StateMachineOwnStatusFetcher>();
+            this._fetcher = GetComponent<Gs2StateMachineStartStateMachineByUserIdFetcher>() ?? GetComponentInParent<Gs2StateMachineStartStateMachineByUserIdFetcher>();
             if (this._fetcher == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2StateMachineOwnStatusFetcher.");
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2StateMachineStartStateMachineByUserIdFetcher.");
+                enabled = false;
+            }
+            if (this.sprites == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: sprite is not set.");
                 enabled = false;
             }
         }
 
         public virtual bool HasError()
         {
-            this._fetcher = GetComponent<Gs2StateMachineOwnStatusFetcher>() ?? GetComponentInParent<Gs2StateMachineOwnStatusFetcher>(true);
+            this._fetcher = GetComponent<Gs2StateMachineStartStateMachineByUserIdFetcher>() ?? GetComponentInParent<Gs2StateMachineStartStateMachineByUserIdFetcher>(true);
             if (this._fetcher == null) {
+                return true;
+            }
+            if (this.sprites == null) {
                 return true;
             }
             return false;
@@ -103,7 +97,6 @@ namespace Gs2.Unity.UiKit.Gs2StateMachine
                 OnFetched();
             };
             this._fetcher.OnFetched.AddListener(this._onFetched);
-
             if (this._fetcher.Fetched) {
                 OnFetched();
             }
@@ -122,7 +115,7 @@ namespace Gs2.Unity.UiKit.Gs2StateMachine
     /// Public properties
     /// </summary>
 
-    public partial class Gs2StateMachineOwnStatusLabel
+    public partial class Gs2StateMachineStartStateMachineByUserIdEnableSpeculativeExecutionSpriteTableSwitcher
     {
 
     }
@@ -131,18 +124,26 @@ namespace Gs2.Unity.UiKit.Gs2StateMachine
     /// Parameters for Inspector
     /// </summary>
 
-    public partial class Gs2StateMachineOwnStatusLabel
+    public partial class Gs2StateMachineStartStateMachineByUserIdEnableSpeculativeExecutionSpriteTableSwitcher
     {
-        public string format;
+        [System.Serializable]
+        public class SpriteTableEntry
+        {
+            public string value;
+            public Sprite sprite;
+        }
+
+        public List<SpriteTableEntry> sprites;
+        public Sprite defaultSprite;
     }
 
     /// <summary>
     /// Event handlers
     /// </summary>
-    public partial class Gs2StateMachineOwnStatusLabel
+    public partial class Gs2StateMachineStartStateMachineByUserIdEnableSpeculativeExecutionSpriteTableSwitcher
     {
         [Serializable]
-        private class UpdateEvent : UnityEvent<string>
+        private class UpdateEvent : UnityEvent<Sprite>
         {
 
         }
@@ -150,7 +151,7 @@ namespace Gs2.Unity.UiKit.Gs2StateMachine
         [SerializeField]
         private UpdateEvent onUpdate = new UpdateEvent();
 
-        public event UnityAction<string> OnUpdate
+        public event UnityAction<Sprite> OnUpdate
         {
             add => this.onUpdate.AddListener(value);
             remove => this.onUpdate.RemoveListener(value);

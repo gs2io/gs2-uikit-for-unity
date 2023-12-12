@@ -25,46 +25,40 @@
 #pragma warning disable CS0472
 
 using System;
-using Gs2.Core.Util;
+using System.Collections.Generic;
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2StateMachine.Fetcher;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace Gs2.Unity.UiKit.Gs2StateMachine
+namespace Gs2.Unity.UiKit.Gs2StateMachine.Enabler
 {
     /// <summary>
     /// Main
     /// </summary>
 
-	[AddComponentMenu("GS2 UIKit/StateMachine/Status/View/Label/Gs2StateMachineOwnStatusLabel")]
-    public partial class Gs2StateMachineOwnStatusLabel : MonoBehaviour
+	[AddComponentMenu("GS2 UIKit/StateMachine/Status/View/Enabler/Properties/StateMachineDefinition/Gs2StateMachineOwnStatusStateMachineDefinitionEnabler")]
+    public partial class Gs2StateMachineOwnStatusStateMachineDefinitionEnabler : MonoBehaviour
     {
         private void OnFetched()
         {
-            this.onUpdate?.Invoke(
-                this.format.Replace(
-                    "{statusId}", $"{this._fetcher?.Status?.StatusId}"
-                ).Replace(
-                    "{name}", $"{this._fetcher?.Status?.Name}"
-                ).Replace(
-                    "{enableSpeculativeExecution}", $"{this._fetcher?.Status?.EnableSpeculativeExecution}"
-                ).Replace(
-                    "{stateMachineDefinition}", $"{this._fetcher?.Status?.StateMachineDefinition}"
-                ).Replace(
-                    "{randomStatus}", $"{this._fetcher?.Status?.RandomStatus}"
-                ).Replace(
-                    "{stacks}", $"{this._fetcher?.Status?.Stacks}"
-                ).Replace(
-                    "{variables}", $"{this._fetcher?.Status?.Variables}"
-                ).Replace(
-                    "{status}", $"{this._fetcher?.Status?.Status}"
-                ).Replace(
-                    "{lastError}", $"{this._fetcher?.Status?.LastError}"
-                ).Replace(
-                    "{transitionCount}", $"{this._fetcher?.Status?.TransitionCount}"
-                )
-            );
+            switch(this.expression)
+            {
+                case Expression.In:
+                    this.target.SetActive(this.enableStateMachineDefinitions.Contains(this._fetcher.Status?.StateMachineDefinition ?? ""));
+                    break;
+                case Expression.NotIn:
+                    this.target.SetActive(!this.enableStateMachineDefinitions.Contains(this._fetcher.Status?.StateMachineDefinition ?? ""));
+                    break;
+                case Expression.StartsWith:
+                    this.target.SetActive((this._fetcher.Status?.StateMachineDefinition ?? "").StartsWith(this.enableStateMachineDefinition));
+                    break;
+                case Expression.EndsWith:
+                    this.target.SetActive((this._fetcher.Status?.StateMachineDefinition ?? "").EndsWith(this.enableStateMachineDefinition));
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
         }
     }
 
@@ -72,7 +66,7 @@ namespace Gs2.Unity.UiKit.Gs2StateMachine
     /// Dependent components
     /// </summary>
 
-    public partial class Gs2StateMachineOwnStatusLabel
+    public partial class Gs2StateMachineOwnStatusStateMachineDefinitionEnabler
     {
         private Gs2StateMachineOwnStatusFetcher _fetcher;
 
@@ -83,12 +77,19 @@ namespace Gs2.Unity.UiKit.Gs2StateMachine
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2StateMachineOwnStatusFetcher.");
                 enabled = false;
             }
+            if (this.target == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: target is not set.");
+                enabled = false;
+            }
         }
 
         public virtual bool HasError()
         {
             this._fetcher = GetComponent<Gs2StateMachineOwnStatusFetcher>() ?? GetComponentInParent<Gs2StateMachineOwnStatusFetcher>(true);
             if (this._fetcher == null) {
+                return true;
+            }
+            if (this.target == null) {
                 return true;
             }
             return false;
@@ -122,7 +123,7 @@ namespace Gs2.Unity.UiKit.Gs2StateMachine
     /// Public properties
     /// </summary>
 
-    public partial class Gs2StateMachineOwnStatusLabel
+    public partial class Gs2StateMachineOwnStatusStateMachineDefinitionEnabler
     {
 
     }
@@ -131,29 +132,29 @@ namespace Gs2.Unity.UiKit.Gs2StateMachine
     /// Parameters for Inspector
     /// </summary>
 
-    public partial class Gs2StateMachineOwnStatusLabel
+    public partial class Gs2StateMachineOwnStatusStateMachineDefinitionEnabler
     {
-        public string format;
+        public enum Expression {
+            In,
+            NotIn,
+            StartsWith,
+            EndsWith,
+        }
+
+        public Expression expression;
+
+        public List<string> enableStateMachineDefinitions;
+
+        public string enableStateMachineDefinition;
+
+        public GameObject target;
     }
 
     /// <summary>
     /// Event handlers
     /// </summary>
-    public partial class Gs2StateMachineOwnStatusLabel
+    public partial class Gs2StateMachineOwnStatusStateMachineDefinitionEnabler
     {
-        [Serializable]
-        private class UpdateEvent : UnityEvent<string>
-        {
-
-        }
-
-        [SerializeField]
-        private UpdateEvent onUpdate = new UpdateEvent();
-
-        public event UnityAction<string> OnUpdate
-        {
-            add => this.onUpdate.AddListener(value);
-            remove => this.onUpdate.RemoveListener(value);
-        }
+        
     }
 }

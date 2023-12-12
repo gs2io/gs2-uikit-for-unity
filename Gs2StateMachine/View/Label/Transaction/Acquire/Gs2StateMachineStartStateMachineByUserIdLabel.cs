@@ -63,6 +63,9 @@ namespace Gs2.Unity.UiKit.Gs2StateMachine.Label
                     "{args}",
                     $"{this._fetcher.Request.Args}"
                 ).Replace(
+                    "{enableSpeculativeExecution}",
+                    $"{this._fetcher.Request.EnableSpeculativeExecution}"
+                ).Replace(
                     "{ttl}",
                     $"{this._fetcher.Request.Ttl}"
                 ).Replace(
@@ -71,6 +74,15 @@ namespace Gs2.Unity.UiKit.Gs2StateMachine.Label
                 ).Replace(
                     "{userData:name}",
                     $"{this._userDataFetcher.Status.Name}"
+                ).Replace(
+                    "{userData:enableSpeculativeExecution}",
+                    $"{this._userDataFetcher.Status.EnableSpeculativeExecution}"
+                ).Replace(
+                    "{userData:stateMachineDefinition}",
+                    $"{this._userDataFetcher.Status.StateMachineDefinition}"
+                ).Replace(
+                    "{userData:randomStatus}",
+                    $"{this._userDataFetcher.Status.RandomStatus}"
                 ).Replace(
                     "{userData:stacks}",
                     $"{this._userDataFetcher.Status.Stacks}"

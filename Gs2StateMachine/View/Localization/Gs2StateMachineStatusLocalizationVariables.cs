@@ -50,6 +50,12 @@ namespace Gs2.Unity.UiKit.Gs2StateMachine.Localization
             this.target.StringReference["name"] = new StringVariable {
                 Value = _fetcher?.Status?.Name ?? "",
             };
+            this.target.StringReference["enableSpeculativeExecution"] = new StringVariable {
+                Value = _fetcher?.Status?.EnableSpeculativeExecution ?? "",
+            };
+            this.target.StringReference["stateMachineDefinition"] = new StringVariable {
+                Value = _fetcher?.Status?.StateMachineDefinition ?? "",
+            };
             this.target.StringReference["status"] = new StringVariable {
                 Value = _fetcher?.Status?.Status ?? "",
             };

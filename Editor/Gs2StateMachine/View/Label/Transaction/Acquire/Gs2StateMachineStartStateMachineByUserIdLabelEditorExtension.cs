@@ -72,6 +72,11 @@ namespace Gs2.Unity.UiKit.Gs2StateMachine.Label.Editor
                 GUI.FocusControl("");
                 EditorUtility.SetDirty(original);
             }
+            if (GUILayout.Button("EnableSpeculativeExecution")) {
+                original.format += "{enableSpeculativeExecution}";
+                GUI.FocusControl("");
+                EditorUtility.SetDirty(original);
+            }
             if (GUILayout.Button("Ttl")) {
                 original.format += "{ttl}";
                 GUI.FocusControl("");
@@ -85,6 +90,21 @@ namespace Gs2.Unity.UiKit.Gs2StateMachine.Label.Editor
                 }
                 if (GUILayout.Button("UserData:Name")) {
                     original.format += "{userData:name}";
+                    GUI.FocusControl("");
+                    EditorUtility.SetDirty(original);
+                }
+                if (GUILayout.Button("UserData:EnableSpeculativeExecution")) {
+                    original.format += "{userData:enableSpeculativeExecution}";
+                    GUI.FocusControl("");
+                    EditorUtility.SetDirty(original);
+                }
+                if (GUILayout.Button("UserData:StateMachineDefinition")) {
+                    original.format += "{userData:stateMachineDefinition}";
+                    GUI.FocusControl("");
+                    EditorUtility.SetDirty(original);
+                }
+                if (GUILayout.Button("UserData:RandomStatus")) {
+                    original.format += "{userData:randomStatus}";
                     GUI.FocusControl("");
                     EditorUtility.SetDirty(original);
                 }

@@ -84,6 +84,21 @@ namespace Gs2.Unity.UiKit.Gs2StateMachine.Editor
                 GUI.FocusControl("");
                 EditorUtility.SetDirty(original);
             }
+            if (GUILayout.Button("EnableSpeculativeExecution")) {
+                original.format += "{enableSpeculativeExecution}";
+                GUI.FocusControl("");
+                EditorUtility.SetDirty(original);
+            }
+            if (GUILayout.Button("StateMachineDefinition")) {
+                original.format += "{stateMachineDefinition}";
+                GUI.FocusControl("");
+                EditorUtility.SetDirty(original);
+            }
+            if (GUILayout.Button("RandomStatus")) {
+                original.format += "{randomStatus}";
+                GUI.FocusControl("");
+                EditorUtility.SetDirty(original);
+            }
             if (GUILayout.Button("Stacks")) {
                 original.format += "{stacks}";
                 GUI.FocusControl("");
