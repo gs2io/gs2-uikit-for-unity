@@ -111,7 +111,7 @@ namespace Gs2.Unity.UiKit.Gs2Showcase
                             this.onError.Invoke(future.Error, Retry);
                             yield break;
                         }
-                        this.onRandomShowcaseBuyComplete.Invoke(future.Result?.TransactionId);
+                        this.onRandomShowcaseBuyComplete.Invoke();
                     }
 
 #if GS2_ENABLE_PURCHASING
@@ -138,7 +138,7 @@ namespace Gs2.Unity.UiKit.Gs2Showcase
                 purchaseParameters.controller.ConfirmPendingPurchase(purchaseParameters.product);
             }
 #endif
-            this.onRandomShowcaseBuyComplete.Invoke(future.Result?.TransactionId);
+            this.onRandomShowcaseBuyComplete.Invoke();
         }
 
         public void OnEnable()
@@ -257,14 +257,14 @@ namespace Gs2.Unity.UiKit.Gs2Showcase
         }
 
         [Serializable]
-        private class RandomShowcaseBuyCompleteEvent : UnityEvent<string>
+        private class RandomShowcaseBuyCompleteEvent : UnityEvent
         {
 
         }
 
         [SerializeField]
         private RandomShowcaseBuyCompleteEvent onRandomShowcaseBuyComplete = new RandomShowcaseBuyCompleteEvent();
-        public event UnityAction<string> OnRandomShowcaseBuyComplete
+        public event UnityAction OnRandomShowcaseBuyComplete
         {
             add => this.onRandomShowcaseBuyComplete.AddListener(value);
             remove => this.onRandomShowcaseBuyComplete.RemoveListener(value);

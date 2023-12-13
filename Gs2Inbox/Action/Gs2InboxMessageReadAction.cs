@@ -82,7 +82,7 @@ namespace Gs2.Unity.UiKit.Gs2Inbox
                             this.onError.Invoke(future.Error, Retry);
                             yield break;
                         }
-                        this.onReadComplete.Invoke(future.Result?.TransactionId);
+                        this.onReadComplete.Invoke();
                     }
 
                     this.onError.Invoke(future.Error, Retry);
@@ -99,7 +99,7 @@ namespace Gs2.Unity.UiKit.Gs2Inbox
                     yield return future2;
                 }
             }
-            this.onReadComplete.Invoke(future.Result?.TransactionId);
+            this.onReadComplete.Invoke();
         }
 
         public void OnEnable()
@@ -178,14 +178,14 @@ namespace Gs2.Unity.UiKit.Gs2Inbox
         }
 
         [Serializable]
-        private class ReadCompleteEvent : UnityEvent<string>
+        private class ReadCompleteEvent : UnityEvent
         {
 
         }
 
         [SerializeField]
         private ReadCompleteEvent onReadComplete = new ReadCompleteEvent();
-        public event UnityAction<string> OnReadComplete
+        public event UnityAction OnReadComplete
         {
             add => this.onReadComplete.AddListener(value);
             remove => this.onReadComplete.RemoveListener(value);

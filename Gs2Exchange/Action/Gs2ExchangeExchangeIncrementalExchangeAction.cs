@@ -82,7 +82,7 @@ namespace Gs2.Unity.UiKit.Gs2Exchange
                             this.onError.Invoke(future.Error, Retry);
                             yield break;
                         }
-                        this.onIncrementalExchangeComplete.Invoke(future.Result?.TransactionId);
+                        this.onIncrementalExchangeComplete.Invoke();
                     }
 
                     this.onError.Invoke(future.Error, Retry);
@@ -97,7 +97,7 @@ namespace Gs2.Unity.UiKit.Gs2Exchange
                 var future2 = transaction.WaitFuture();
                 yield return future2;
             }
-            this.onIncrementalExchangeComplete.Invoke(future.Result?.TransactionId);
+            this.onIncrementalExchangeComplete.Invoke();
         }
 
         public void OnEnable()
@@ -252,14 +252,14 @@ namespace Gs2.Unity.UiKit.Gs2Exchange
         }
 
         [Serializable]
-        private class IncrementalExchangeCompleteEvent : UnityEvent<string>
+        private class IncrementalExchangeCompleteEvent : UnityEvent
         {
 
         }
 
         [SerializeField]
         private IncrementalExchangeCompleteEvent onIncrementalExchangeComplete = new IncrementalExchangeCompleteEvent();
-        public event UnityAction<string> OnIncrementalExchangeComplete
+        public event UnityAction OnIncrementalExchangeComplete
         {
             add => this.onIncrementalExchangeComplete.AddListener(value);
             remove => this.onIncrementalExchangeComplete.RemoveListener(value);

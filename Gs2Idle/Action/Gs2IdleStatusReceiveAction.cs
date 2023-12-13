@@ -80,7 +80,7 @@ namespace Gs2.Unity.UiKit.Gs2Idle
                             this.onError.Invoke(future.Error, Retry);
                             yield break;
                         }
-                        this.onReceiveComplete.Invoke(future.Result?.TransactionId);
+                        this.onReceiveComplete.Invoke();
                     }
 
                     this.onError.Invoke(future.Error, Retry);
@@ -95,7 +95,7 @@ namespace Gs2.Unity.UiKit.Gs2Idle
                 var future2 = transaction.WaitFuture();
                 yield return future2;
             }
-            this.onReceiveComplete.Invoke(future.Result?.TransactionId);
+            this.onReceiveComplete.Invoke();
         }
 
         public void OnEnable()
@@ -175,14 +175,14 @@ namespace Gs2.Unity.UiKit.Gs2Idle
         }
 
         [Serializable]
-        private class ReceiveCompleteEvent : UnityEvent<string>
+        private class ReceiveCompleteEvent : UnityEvent
         {
 
         }
 
         [SerializeField]
         private ReceiveCompleteEvent onReceiveComplete = new ReceiveCompleteEvent();
-        public event UnityAction<string> OnReceiveComplete
+        public event UnityAction OnReceiveComplete
         {
             add => this.onReceiveComplete.AddListener(value);
             remove => this.onReceiveComplete.RemoveListener(value);

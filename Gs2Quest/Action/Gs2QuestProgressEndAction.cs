@@ -82,7 +82,7 @@ namespace Gs2.Unity.UiKit.Gs2Quest
                             this.onError.Invoke(future.Error, Retry);
                             yield break;
                         }
-                        this.onEndComplete.Invoke(future.Result?.TransactionId);
+                        this.onEndComplete.Invoke();
                     }
 
                     this.onError.Invoke(future.Error, Retry);
@@ -97,7 +97,7 @@ namespace Gs2.Unity.UiKit.Gs2Quest
                 var future2 = transaction.WaitFuture();
                 yield return future2;
             }
-            this.onEndComplete.Invoke(future.Result?.TransactionId);
+            this.onEndComplete.Invoke();
         }
 
         public void OnEnable()
@@ -240,14 +240,14 @@ namespace Gs2.Unity.UiKit.Gs2Quest
         }
 
         [Serializable]
-        private class EndCompleteEvent : UnityEvent<string>
+        private class EndCompleteEvent : UnityEvent
         {
 
         }
 
         [SerializeField]
         private EndCompleteEvent onEndComplete = new EndCompleteEvent();
-        public event UnityAction<string> OnEndComplete
+        public event UnityAction OnEndComplete
         {
             add => this.onEndComplete.AddListener(value);
             remove => this.onEndComplete.RemoveListener(value);

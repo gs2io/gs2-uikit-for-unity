@@ -84,7 +84,7 @@ namespace Gs2.Unity.UiKit.Gs2Enhance
                             this.onError.Invoke(future.Error, Retry);
                             yield break;
                         }
-                        this.onStartComplete.Invoke(future.Result?.TransactionId);
+                        this.onStartComplete.Invoke();
                     }
 
                     this.onError.Invoke(future.Error, Retry);
@@ -99,7 +99,7 @@ namespace Gs2.Unity.UiKit.Gs2Enhance
                 var future2 = transaction.WaitFuture();
                 yield return future2;
             }
-            this.onStartComplete.Invoke(future.Result?.TransactionId);
+            this.onStartComplete.Invoke();
         }
 
         public void OnEnable()
@@ -284,14 +284,14 @@ namespace Gs2.Unity.UiKit.Gs2Enhance
         }
 
         [Serializable]
-        private class StartCompleteEvent : UnityEvent<string>
+        private class StartCompleteEvent : UnityEvent
         {
 
         }
 
         [SerializeField]
         private StartCompleteEvent onStartComplete = new StartCompleteEvent();
-        public event UnityAction<string> OnStartComplete
+        public event UnityAction OnStartComplete
         {
             add => this.onStartComplete.AddListener(value);
             remove => this.onStartComplete.RemoveListener(value);

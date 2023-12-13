@@ -63,9 +63,6 @@ namespace Gs2.Unity.UiKit.Gs2StateMachine.Label
                     "{args}",
                     $"{this._fetcher.Request.Args}"
                 ).Replace(
-                    "{enableSpeculativeExecution}",
-                    $"{this._fetcher.Request.EnableSpeculativeExecution}"
-                ).Replace(
                     "{ttl}",
                     $"{this._fetcher.Request.Ttl}"
                 ).Replace(

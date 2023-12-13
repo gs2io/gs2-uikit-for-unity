@@ -80,7 +80,7 @@ namespace Gs2.Unity.UiKit.Gs2Exchange
                             this.onError.Invoke(future.Error, Retry);
                             yield break;
                         }
-                        this.onSkipComplete.Invoke(future.Result?.TransactionId);
+                        this.onSkipComplete.Invoke();
                     }
 
                     this.onError.Invoke(future.Error, Retry);
@@ -95,7 +95,7 @@ namespace Gs2.Unity.UiKit.Gs2Exchange
                 var future2 = transaction.WaitFuture();
                 yield return future2;
             }
-            this.onSkipComplete.Invoke(future.Result?.TransactionId);
+            this.onSkipComplete.Invoke();
         }
 
         public void OnEnable()
@@ -175,14 +175,14 @@ namespace Gs2.Unity.UiKit.Gs2Exchange
         }
 
         [Serializable]
-        private class SkipCompleteEvent : UnityEvent<string>
+        private class SkipCompleteEvent : UnityEvent
         {
 
         }
 
         [SerializeField]
         private SkipCompleteEvent onSkipComplete = new SkipCompleteEvent();
-        public event UnityAction<string> OnSkipComplete
+        public event UnityAction OnSkipComplete
         {
             add => this.onSkipComplete.AddListener(value);
             remove => this.onSkipComplete.RemoveListener(value);

@@ -72,11 +72,6 @@ namespace Gs2.Unity.UiKit.Gs2StateMachine.Label.Editor
                 GUI.FocusControl("");
                 EditorUtility.SetDirty(original);
             }
-            if (GUILayout.Button("EnableSpeculativeExecution")) {
-                original.format += "{enableSpeculativeExecution}";
-                GUI.FocusControl("");
-                EditorUtility.SetDirty(original);
-            }
             if (GUILayout.Button("Ttl")) {
                 original.format += "{ttl}";
                 GUI.FocusControl("");

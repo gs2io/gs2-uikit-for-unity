@@ -112,7 +112,7 @@ namespace Gs2.Unity.UiKit.Gs2Showcase
                             this.onError.Invoke(future.Error, Retry);
                             yield break;
                         }
-                        this.onBuyComplete.Invoke(future.Result?.TransactionId);
+                        this.onBuyComplete.Invoke();
                     }
 
 #if GS2_ENABLE_PURCHASING
@@ -141,7 +141,7 @@ namespace Gs2.Unity.UiKit.Gs2Showcase
                 yield return future2;
             }
             
-            this.onBuyComplete.Invoke(future.Result?.TransactionId);
+            this.onBuyComplete.Invoke();
         }
 
         public void OnEnable()
@@ -258,14 +258,14 @@ namespace Gs2.Unity.UiKit.Gs2Showcase
         }
 
         [Serializable]
-        private class BuyCompleteEvent : UnityEvent<string>
+        private class BuyCompleteEvent : UnityEvent
         {
 
         }
 
         [SerializeField]
         private BuyCompleteEvent onBuyComplete = new BuyCompleteEvent();
-        public event UnityAction<string> OnBuyComplete
+        public event UnityAction OnBuyComplete
         {
             add => this.onBuyComplete.AddListener(value);
             remove => this.onBuyComplete.RemoveListener(value);

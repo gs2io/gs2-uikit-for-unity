@@ -80,7 +80,7 @@ namespace Gs2.Unity.UiKit.Gs2Enhance
             return false;
         }
 
-        private void ResetQuantity(string v) {
+        private void ResetQuantity() {
             this._slider.value = 0;
         }
 

@@ -80,7 +80,7 @@ namespace Gs2.Unity.UiKit.Gs2SkillTree
                             this.onError.Invoke(future.Error, Retry);
                             yield break;
                         }
-                        this.onRestrainComplete.Invoke(future.Result?.TransactionId);
+                        this.onRestrainComplete.Invoke();
                     }
 
                     this.onError.Invoke(future.Error, Retry);
@@ -95,7 +95,7 @@ namespace Gs2.Unity.UiKit.Gs2SkillTree
                 var future2 = transaction.WaitFuture();
                 yield return future2;
             }
-            this.onRestrainComplete.Invoke(future.Result?.TransactionId);
+            this.onRestrainComplete.Invoke();
         }
 
         public void OnEnable()
@@ -196,14 +196,14 @@ namespace Gs2.Unity.UiKit.Gs2SkillTree
         }
 
         [Serializable]
-        private class RestrainCompleteEvent : UnityEvent<string>
+        private class RestrainCompleteEvent : UnityEvent
         {
 
         }
 
         [SerializeField]
         private RestrainCompleteEvent onRestrainComplete = new RestrainCompleteEvent();
-        public event UnityAction<string> OnRestrainComplete
+        public event UnityAction OnRestrainComplete
         {
             add => this.onRestrainComplete.AddListener(value);
             remove => this.onRestrainComplete.RemoveListener(value);

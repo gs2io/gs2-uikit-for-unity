@@ -85,7 +85,7 @@ namespace Gs2.Unity.UiKit.Gs2Enhance
                             this.onError.Invoke(future.Error, Retry);
                             yield break;
                         }
-                        this.onEnhanceComplete.Invoke(future.Result?.TransactionId);
+                        this.onEnhanceComplete.Invoke();
                     }
 
                     this.onError.Invoke(future.Error, Retry);
@@ -100,7 +100,7 @@ namespace Gs2.Unity.UiKit.Gs2Enhance
                 var future2 = transaction.WaitFuture();
                 yield return future2;
             }
-            this.onEnhanceComplete.Invoke(future.Result?.TransactionId);
+            this.onEnhanceComplete.Invoke();
         }
 
         public void OnEnable()
@@ -110,7 +110,7 @@ namespace Gs2.Unity.UiKit.Gs2Enhance
 
         public void OnDisable()
         {
-            
+
         }
     }
 
@@ -247,14 +247,14 @@ namespace Gs2.Unity.UiKit.Gs2Enhance
         }
 
         [Serializable]
-        private class EnhanceCompleteEvent : UnityEvent<string>
+        private class EnhanceCompleteEvent : UnityEvent
         {
 
         }
 
         [SerializeField]
         private EnhanceCompleteEvent onEnhanceComplete = new EnhanceCompleteEvent();
-        public event UnityAction<string> OnEnhanceComplete
+        public event UnityAction OnEnhanceComplete
         {
             add => this.onEnhanceComplete.AddListener(value);
             remove => this.onEnhanceComplete.RemoveListener(value);

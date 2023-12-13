@@ -82,7 +82,7 @@ namespace Gs2.Unity.UiKit.Gs2LoginReward
                             this.onError.Invoke(future.Error, Retry);
                             yield break;
                         }
-                        this.onMissedReceiveComplete.Invoke(future.Result?.TransactionId);
+                        this.onMissedReceiveComplete.Invoke();
                     }
 
                     this.onError.Invoke(future.Error, Retry);
@@ -97,7 +97,7 @@ namespace Gs2.Unity.UiKit.Gs2LoginReward
                 var future2 = transaction.WaitFuture();
                 yield return future2;
             }
-            this.onMissedReceiveComplete.Invoke(future.Result?.TransactionId);
+            this.onMissedReceiveComplete.Invoke();
         }
 
         public void OnEnable()
@@ -252,14 +252,14 @@ namespace Gs2.Unity.UiKit.Gs2LoginReward
         }
 
         [Serializable]
-        private class MissedReceiveCompleteEvent : UnityEvent<string>
+        private class MissedReceiveCompleteEvent : UnityEvent
         {
 
         }
 
         [SerializeField]
         private MissedReceiveCompleteEvent onMissedReceiveComplete = new MissedReceiveCompleteEvent();
-        public event UnityAction<string> OnMissedReceiveComplete
+        public event UnityAction OnMissedReceiveComplete
         {
             add => this.onMissedReceiveComplete.AddListener(value);
             remove => this.onMissedReceiveComplete.RemoveListener(value);
