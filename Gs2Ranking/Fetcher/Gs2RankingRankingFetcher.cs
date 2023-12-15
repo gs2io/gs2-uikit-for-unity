@@ -37,6 +37,7 @@ using Gs2.Unity.Gs2Ranking.Model;
 using Gs2.Unity.Gs2Ranking.ScriptableObject;
 using Gs2.Unity.Util;
 using Gs2.Unity.UiKit.Core;
+using Gs2.Unity.UiKit.Core.Model;
 using Gs2.Unity.UiKit.Gs2Core.Fetcher;
 using Gs2.Unity.UiKit.Gs2Ranking.Context;
 using UnityEngine;
@@ -126,6 +127,18 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Fetcher
                 Context.Ranking.UserId
             );
             this._callbackId = null;
+        }
+
+        public void SetTemporaryRanking(
+            Gs2.Unity.Gs2Ranking.Model.EzRanking ranking
+        ) {
+            Ranking = ranking;
+            this.OnFetched.Invoke();
+        }
+
+        public void RollbackTemporaryRanking(
+        ) {
+            OnUpdateContext();
         }
     }
 
