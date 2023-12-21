@@ -109,6 +109,11 @@ namespace Gs2.Unity.UiKit.Gs2Exchange.Editor
                 GUI.FocusControl("");
                 EditorUtility.SetDirty(original);
             }
+            if (GUILayout.Button("MaximumExchangeCount")) {
+                original.format += "{maximumExchangeCount}";
+                GUI.FocusControl("");
+                EditorUtility.SetDirty(original);
+            }
             if (GUILayout.Button("AcquireActions")) {
                 original.format += "{acquireActions}";
                 GUI.FocusControl("");

@@ -81,7 +81,6 @@ namespace Gs2.Unity.UiKit.Gs2Showcase.Editor
                 GUI.FocusControl("");
                 EditorUtility.SetDirty(original);
             }
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("onUpdate"), true);
             serializedObject.ApplyModifiedProperties();
         }
     }

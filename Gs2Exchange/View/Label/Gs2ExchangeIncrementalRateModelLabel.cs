@@ -58,6 +58,8 @@ namespace Gs2.Unity.UiKit.Gs2Exchange
                 ).Replace(
                     "{exchangeCountId}", $"{this._fetcher?.IncrementalRateModel?.ExchangeCountId}"
                 ).Replace(
+                    "{maximumExchangeCount}", $"{this._fetcher?.IncrementalRateModel?.MaximumExchangeCount}"
+                ).Replace(
                     "{acquireActions}", $"{this._fetcher?.IncrementalRateModel?.AcquireActions}"
                 )
             );

@@ -68,29 +68,21 @@ namespace Gs2.Unity.UiKit.Gs2Idle.Fetcher
             ).CategoryModel(
                 this.Context.CategoryModel.CategoryName
             );;
-            this._callbackId = this._domain.Subscribe(
+            var future = this._domain.SubscribeWithInitialCallFuture(
                 item =>
                 {
+                    retryWaitSecond = 0;
                     CategoryModel = item;
                     Fetched = true;
                     this.OnFetched.Invoke();
                 }
             );
-
-            while (true) {
-                var future = this._domain.ModelFuture();
-                yield return future;
-                if (future.Error != null) {
-                    yield return new WaitForSeconds(retryWaitSecond);
-                    retryWaitSecond *= 2;
-                }
-                else {
-                    CategoryModel = future.Result;
-                    Fetched = true;
-                    this.OnFetched.Invoke();
-                    break;
-                }
+            yield return future;
+            if (future.Error != null) {
+                this.onError.Invoke(future.Error, null);
+                yield break;
             }
+            this._callbackId = future.Result;
         }
 
         public void OnUpdateContext() {

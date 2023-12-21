@@ -71,7 +71,6 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Editor
             }
             
             serializedObject.Update();
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("onError"), true);
             serializedObject.ApplyModifiedProperties();
         }
     }

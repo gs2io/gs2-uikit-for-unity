@@ -62,6 +62,9 @@ namespace Gs2.Unity.UiKit.Gs2Exchange.Localization
             this.target.StringReference["exchangeCountId"] = new StringVariable {
                 Value = _fetcher?.IncrementalRateModel?.ExchangeCountId ?? "",
             };
+            this.target.StringReference["maximumExchangeCount"] = new IntVariable {
+                Value = _fetcher?.IncrementalRateModel?.MaximumExchangeCount ?? 0,
+            };
             this.target.enabled = true;
         }
     }

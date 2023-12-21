@@ -77,6 +77,9 @@ namespace Gs2.Unity.UiKit.Gs2AdReward.Label
                 ).Replace(
                     "{userData:point}",
                     $"{this._userDataFetcher.Point.Point}"
+                ).Replace(
+                    "{userData:point:changed}",
+                    $"{this._userDataFetcher.Point.Point + this._fetcher.Request.Point}"
                 )
             );
         }

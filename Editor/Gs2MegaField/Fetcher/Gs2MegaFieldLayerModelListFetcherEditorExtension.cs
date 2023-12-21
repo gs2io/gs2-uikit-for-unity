@@ -61,7 +61,6 @@ namespace Gs2.Unity.UiKit.Gs2MegaField.Editor
             }
 
             serializedObject.Update();
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("onError"), true);
             serializedObject.ApplyModifiedProperties();
         }
     }

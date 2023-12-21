@@ -68,29 +68,21 @@ namespace Gs2.Unity.UiKit.Gs2SkillTree.Fetcher
             ).NodeModel(
                 this.Context.NodeModel.NodeModelName
             );;
-            this._callbackId = this._domain.Subscribe(
+            var future = this._domain.SubscribeWithInitialCallFuture(
                 item =>
                 {
+                    retryWaitSecond = 0;
                     NodeModel = item;
                     Fetched = true;
                     this.OnFetched.Invoke();
                 }
             );
-
-            while (true) {
-                var future = this._domain.ModelFuture();
-                yield return future;
-                if (future.Error != null) {
-                    yield return new WaitForSeconds(retryWaitSecond);
-                    retryWaitSecond *= 2;
-                }
-                else {
-                    NodeModel = future.Result;
-                    Fetched = true;
-                    this.OnFetched.Invoke();
-                    break;
-                }
+            yield return future;
+            if (future.Error != null) {
+                this.onError.Invoke(future.Error, null);
+                yield break;
             }
+            this._callbackId = future.Result;
         }
 
         public void OnUpdateContext() {

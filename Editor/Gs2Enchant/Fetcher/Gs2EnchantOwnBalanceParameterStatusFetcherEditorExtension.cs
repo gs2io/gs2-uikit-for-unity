@@ -72,7 +72,6 @@ namespace Gs2.Unity.UiKit.Gs2Enchant.Editor
             }
             
             serializedObject.Update();
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("onError"), true);
             serializedObject.ApplyModifiedProperties();
         }
     }

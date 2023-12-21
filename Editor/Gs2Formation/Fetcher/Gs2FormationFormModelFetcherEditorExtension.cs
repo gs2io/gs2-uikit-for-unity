@@ -63,7 +63,6 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Editor
             }
             
             serializedObject.Update();
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("onError"), true);
             serializedObject.ApplyModifiedProperties();
         }
     }
