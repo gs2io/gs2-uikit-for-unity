@@ -80,7 +80,15 @@ namespace Gs2.Unity.UiKit.Gs2Lottery
                             this.onError.Invoke(future.Error, Retry);
                             yield break;
                         }
-                        this.onResetBoxComplete.Invoke();
+                        var future3 = future.Result.ModelFuture();
+                        yield return future3;
+                        if (future3.Error != null)
+                        {
+                            this.onError.Invoke(future3.Error, null);
+                            yield break;
+                        }
+
+                        this.onResetBoxComplete.Invoke(future3.Result);
                     }
 
                     this.onError.Invoke(future.Error, Retry);
@@ -90,7 +98,15 @@ namespace Gs2.Unity.UiKit.Gs2Lottery
                 this.onError.Invoke(future.Error, null);
                 yield break;
             }
-            this.onResetBoxComplete.Invoke();
+            var future2 = future.Result.ModelFuture();
+            yield return future2;
+            if (future2.Error != null)
+            {
+                this.onError.Invoke(future2.Error, null);
+                yield break;
+            }
+
+            this.onResetBoxComplete.Invoke(future2.Result);
         }
 
         public void OnEnable()
@@ -170,14 +186,14 @@ namespace Gs2.Unity.UiKit.Gs2Lottery
         }
 
         [Serializable]
-        private class ResetBoxCompleteEvent : UnityEvent
+        private class ResetBoxCompleteEvent : UnityEvent<EzBoxItems>
         {
 
         }
 
         [SerializeField]
         private ResetBoxCompleteEvent onResetBoxComplete = new ResetBoxCompleteEvent();
-        public event UnityAction OnResetBoxComplete
+        public event UnityAction<EzBoxItems> OnResetBoxComplete
         {
             add => this.onResetBoxComplete.AddListener(value);
             remove => this.onResetBoxComplete.RemoveListener(value);
