@@ -91,6 +91,9 @@ namespace Gs2.Unity.UiKit.Gs2Money.Label
                     "{userData:free}",
                     $"{this._userDataFetcher.Wallet.Free}"
                 ).Replace(
+                    "{userData:shareFree}",
+                    $"{this._userDataFetcher.Wallet.ShareFree}"
+                ).Replace(
                     "{userData:updatedAt}",
                     $"{this._userDataFetcher.Wallet.UpdatedAt}"
                 )

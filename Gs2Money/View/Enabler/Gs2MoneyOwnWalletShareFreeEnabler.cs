@@ -24,42 +24,32 @@
 
 #pragma warning disable CS0472
 
-#if GS2_ENABLE_LOCALIZATION
-
+using System.Collections.Generic;
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Money.Fetcher;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.Localization.Components;
-using UnityEngine.Localization.SmartFormat.PersistentVariables;
 
-namespace Gs2.Unity.UiKit.Gs2Money.Localization
+namespace Gs2.Unity.UiKit.Gs2Money
 {
     /// <summary>
     /// Main
     /// </summary>
 
-    [AddComponentMenu("GS2 UIKit/Money/Wallet/View/Localization/Gs2MoneyWalletLocalizationVariables")]
-    public partial class Gs2MoneyWalletLocalizationVariables : MonoBehaviour
+	[AddComponentMenu("GS2 UIKit/Money/Wallet/View/Enabler/Properties/ShareFree/Gs2MoneyOwnWalletShareFreeEnabler")]
+    public partial class Gs2MoneyOwnWalletShareFreeEnabler : MonoBehaviour
     {
         private void OnFetched()
         {
-            this.target.StringReference["slot"] = new IntVariable {
-                Value = _fetcher?.Wallet?.Slot ?? 0,
-            };
-            this.target.StringReference["paid"] = new IntVariable {
-                Value = _fetcher?.Wallet?.Paid ?? 0,
-            };
-            this.target.StringReference["free"] = new IntVariable {
-                Value = _fetcher?.Wallet?.Free ?? 0,
-            };
-            this.target.StringReference["shareFree"] = new BoolVariable {
-                Value = _fetcher?.Wallet?.ShareFree ?? false,
-            };
-            this.target.StringReference["updatedAt"] = new LongVariable {
-                Value = _fetcher?.Wallet?.UpdatedAt ?? 0,
-            };
-            this.target.enabled = true;
+            switch(this.expression)
+            {
+                case Expression.True:
+                    this.target.SetActive(this._fetcher.Wallet?.ShareFree ?? false);
+                    break;
+                case Expression.False:
+                    this.target.SetActive(!this._fetcher.Wallet?.ShareFree ?? false);
+                    break;
+            }
         }
     }
 
@@ -67,16 +57,20 @@ namespace Gs2.Unity.UiKit.Gs2Money.Localization
     /// Dependent components
     /// </summary>
 
-    public partial class Gs2MoneyWalletLocalizationVariables
+    public partial class Gs2MoneyOwnWalletShareFreeEnabler
     {
         private Gs2MoneyOwnWalletFetcher _fetcher;
 
-        public void Awake() {
-            this.target.enabled = false;
+        public void Awake()
+        {
             this._fetcher = GetComponent<Gs2MoneyOwnWalletFetcher>() ?? GetComponentInParent<Gs2MoneyOwnWalletFetcher>();
 
             if (this._fetcher == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MoneyWalletFetcher.");
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MoneyOwnWalletFetcher.");
+                enabled = false;
+            }
+            if (this.target == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: target is not set.");
                 enabled = false;
             }
         }
@@ -85,6 +79,9 @@ namespace Gs2.Unity.UiKit.Gs2Money.Localization
         {
             this._fetcher = GetComponent<Gs2MoneyOwnWalletFetcher>() ?? GetComponentInParent<Gs2MoneyOwnWalletFetcher>(true);
             if (this._fetcher == null) {
+                return true;
+            }
+            if (this.target == null) {
                 return true;
             }
             return false;
@@ -118,7 +115,7 @@ namespace Gs2.Unity.UiKit.Gs2Money.Localization
     /// Public properties
     /// </summary>
 
-    public partial class Gs2MoneyWalletLocalizationVariables
+    public partial class Gs2MoneyOwnWalletShareFreeEnabler
     {
 
     }
@@ -126,19 +123,24 @@ namespace Gs2.Unity.UiKit.Gs2Money.Localization
     /// <summary>
     /// Parameters for Inspector
     /// </summary>
-
-    public partial class Gs2MoneyWalletLocalizationVariables
+    
+    public partial class Gs2MoneyOwnWalletShareFreeEnabler
     {
-        public LocalizeStringEvent target;
+        public enum Expression {
+            True,
+            False
+        }
+
+        public Expression expression;
+
+        public GameObject target;
     }
 
     /// <summary>
     /// Event handlers
     /// </summary>
-    public partial class Gs2MoneyWalletLocalizationVariables
+    public partial class Gs2MoneyOwnWalletShareFreeEnabler
     {
-
+        
     }
 }
-
-#endif
