@@ -28,6 +28,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
+using System.Linq;
 using Gs2.Core.Exception;
 using Gs2.Unity.Core.Exception;
 using Gs2.Unity.Gs2Quest.Domain.Model;
@@ -104,9 +105,10 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Fetcher
                 this.Context.QuestGroupModel.QuestGroupName
             );
             this._callbackId = this._domain.SubscribeQuestModels(
-                () =>
+                items =>
                 {
-                    StartCoroutine(nameof(Load));
+                    QuestModels = items.ToList();
+                    this.OnFetched.Invoke();
                 }
             );
 

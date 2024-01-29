@@ -29,6 +29,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Gs2.Core.Exception;
 using Gs2.Unity.Core.Exception;
@@ -114,9 +115,10 @@ namespace Gs2.Unity.UiKit.Gs2Inbox.Fetcher
                 gameSessionHolder.GameSession
             );
             this._callbackId = this._domain.SubscribeMessages(
-                () =>
+                items =>
                 {
-                    StartCoroutine(nameof(Load));
+                    Messages = items.ToList();
+                    this.OnFetched.Invoke();
                 }
             );
 

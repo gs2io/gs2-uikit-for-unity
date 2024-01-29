@@ -28,6 +28,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
+using System.Linq;
 using Gs2.Core.Exception;
 using Gs2.Unity.Core.Exception;
 using Gs2.Unity.Gs2Inventory.Domain.Model;
@@ -104,9 +105,10 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Fetcher
                 this.Context.InventoryModel.InventoryName
             );
             this._callbackId = this._domain.SubscribeItemModels(
-                () =>
+                items =>
                 {
-                    StartCoroutine(nameof(Load));
+                    ItemModels = items.ToList();
+                    this.OnFetched.Invoke();
                 }
             );
 

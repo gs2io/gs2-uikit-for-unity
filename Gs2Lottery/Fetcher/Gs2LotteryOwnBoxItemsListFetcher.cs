@@ -30,6 +30,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
+using System.Linq;
 using Gs2.Core.Exception;
 using Gs2.Unity.Core.Exception;
 using Gs2.Unity.Gs2Lottery.Domain.Model;
@@ -50,13 +51,11 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.Fetcher
 	[AddComponentMenu("GS2 UIKit/Lottery/BoxItems/Fetcher/Gs2LotteryOwnBoxItemsListFetcher")]
     public partial class Gs2LotteryOwnBoxItemsListFetcher : MonoBehaviour
     {
-        private EzUserGameSessionDomain _domain;
+        private EzBoxItemsGameSessionDomain _domain;
         private ulong? _callbackId;
 
         private IEnumerator Load() {
-            var future = _domain.BoxItems(
-                Context.BoxItems.PrizeTableName
-            ).ModelFuture();
+            var future = _domain.ModelFuture();
             yield return future;
             if (future.Error != null)
             {
@@ -84,13 +83,14 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.Fetcher
                 this.Context.BoxItems.NamespaceName
             ).Me(
                 gameSessionHolder.GameSession
-            );
-            this._callbackId = this._domain.SubscribeBoxes(
-                () =>
-                {
-                    StartCoroutine(nameof(Load));
-                },
+            ).BoxItems(
                 this.Context.BoxItems.PrizeTableName
+            );
+            this._callbackId = this._domain.Subscribe(
+                item =>
+                {
+                    BoxItems = item.Items;
+                }
             );
 
             yield return Load();
@@ -118,9 +118,8 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.Fetcher
             if (!this._callbackId.HasValue) {
                 return;
             }
-            this._domain.UnsubscribeBoxes(
-                this._callbackId.Value,
-                this.Context.BoxItems.PrizeTableName
+            this._domain.Unsubscribe(
+                this._callbackId.Value
             );
             this._callbackId = null;
         }

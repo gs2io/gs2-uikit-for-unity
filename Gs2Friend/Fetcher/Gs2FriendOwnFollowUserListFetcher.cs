@@ -29,6 +29,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Gs2.Core.Exception;
 using Gs2.Unity.Core.Exception;
@@ -106,9 +107,10 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Fetcher
                 gameSessionHolder.GameSession
             );
             this._callbackId = this._domain.SubscribeFollows(
-                () =>
+                items =>
                 {
-                    StartCoroutine(nameof(Load));
+                    FollowUsers = items.ToList();
+                    this.OnFetched.Invoke();
                 },
                 this.WithProfile
             );

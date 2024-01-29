@@ -30,6 +30,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
+using System.Linq;
 using Gs2.Core.Exception;
 using Gs2.Unity.Core.Exception;
 using Gs2.Unity.Gs2Formation.Domain.Model;
@@ -108,10 +109,12 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Fetcher
                 gameSessionHolder.GameSession
             );
             this._callbackId = this._domain.SubscribePropertyForms(
-                () =>
+                items =>
                 {
-                    StartCoroutine(nameof(Load));
-                }
+                    PropertyForms = items.ToList();
+                    this.OnFetched.Invoke();
+                },
+                this.Context.PropertyFormModel.PropertyFormModelName
             );
 
             yield return Load();
@@ -140,7 +143,8 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Fetcher
                 return;
             }
             this._domain.UnsubscribePropertyForms(
-                this._callbackId.Value
+                this._callbackId.Value,
+                this.Context.PropertyFormModel.PropertyFormModelName
             );
             this._callbackId = null;
         }

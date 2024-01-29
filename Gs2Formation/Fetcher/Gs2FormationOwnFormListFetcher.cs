@@ -28,6 +28,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
+using System.Linq;
 using Gs2.Core.Exception;
 using Gs2.Unity.Core.Exception;
 using Gs2.Unity.Gs2Formation.Domain.Model;
@@ -106,9 +107,10 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Fetcher
                 this.Context.Mold.MoldModelName
             );
             this._callbackId = this._domain.SubscribeForms(
-                () =>
+                items =>
                 {
-                    StartCoroutine(nameof(Load));
+                    Forms = items.ToList();
+                    this.OnFetched.Invoke();
                 }
             );
 

@@ -28,6 +28,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
+using System.Linq;
 using Gs2.Core.Exception;
 using Gs2.Unity.Core.Exception;
 using Gs2.Unity.Gs2Version.Domain.Model;
@@ -104,9 +105,10 @@ namespace Gs2.Unity.UiKit.Gs2Version.Fetcher
                 gameSessionHolder.GameSession
             );
             this._callbackId = this._domain.SubscribeAcceptVersions(
-                () =>
+                items =>
                 {
-                    StartCoroutine(nameof(Load));
+                    AcceptVersions = items.ToList();
+                    this.OnFetched.Invoke();
                 }
             );
 

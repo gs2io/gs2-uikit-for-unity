@@ -29,6 +29,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Gs2.Core.Exception;
 using Gs2.Unity.Core.Exception;
@@ -109,10 +110,13 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Fetcher
                 gameSessionHolder.GameSession
             );
             this._callbackId = this._domain.SubscribeScores(
-                () =>
+                items =>
                 {
-                    StartCoroutine(nameof(Load));
-                }
+                    Scores = items.ToList();
+                    this.OnFetched.Invoke();
+                },
+                this.Context.CategoryModel.CategoryName,
+                gameSessionHolder.GameSession.UserId
             );
 
             yield return Load();
@@ -140,8 +144,11 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Fetcher
             if (!this._callbackId.HasValue) {
                 return;
             }
+            var gameSessionHolder = Gs2GameSessionHolder.Instance;
             this._domain.UnsubscribeScores(
-                this._callbackId.Value
+                this._callbackId.Value,
+                this.Context.CategoryModel.CategoryName,
+                gameSessionHolder.GameSession.UserId
             );
             this._callbackId = null;
         }

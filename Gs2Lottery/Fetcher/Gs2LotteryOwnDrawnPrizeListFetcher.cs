@@ -27,6 +27,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Gs2.Core.Exception;
 using Gs2.Unity.Core.Exception;
@@ -104,9 +105,10 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.Fetcher
                 gameSessionHolder.GameSession
             ).Lottery();
             this._callbackId = this._domain.SubscribeDrawnPrizes(
-                () =>
+                items =>
                 {
-                    StartCoroutine(nameof(Load));
+                    DrawnPrizes = items.ToList();
+                    this.OnFetched.Invoke();
                 }
             );
 
