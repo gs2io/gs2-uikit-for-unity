@@ -67,9 +67,10 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Fetcher
                 this.Context.FollowUser.NamespaceName
             ).Me(
                 gameSessionHolder.GameSession
-            ).FollowUser(
-                this.Context.FollowUser.TargetUserId,
+            ).Follow(
                 this.Context.FollowUser.WithProfile
+            ).FollowUser(
+                this.Context.FollowUser.TargetUserId
             );;
             var future = this._domain.SubscribeWithInitialCallFuture(
                 item =>

@@ -12,8 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
- * deny overwrite
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
@@ -42,23 +40,12 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Context
     {
         public void Start() {
             if (FriendUser == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: FriendUser is not set in Gs2FriendOwnFriendUserContext.");
+                Debug.LogWarning($"{gameObject.GetFullPath()}: FriendUser is not set in Gs2FriendOwnFriendUserContext.");
             }
         }
         public virtual bool HasError() {
             if (FriendUser == null) {
-                if (GetComponentInParent<Gs2FriendOwnFriendList>(true) != null) {
-                    return false;
-                }
-                else if (GetComponentInParent<Gs2FriendOwnSendFriendRequestList>(true) != null) {
-                    return false;
-                }
-                else if (GetComponentInParent<Gs2FriendOwnReceiveFriendRequestList>(true) != null) {
-                    return false;
-                }
-                else {
-                    return true;
-                }
+                return true;
             }
             return false;
         }
@@ -97,6 +84,7 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Context
         }
 
         public void SetOwnFriendUser(OwnFriendUser friendUser) {
+            if (friendUser == null) return;
             this._friendUser = friendUser;
 
             this.OnUpdate.Invoke();

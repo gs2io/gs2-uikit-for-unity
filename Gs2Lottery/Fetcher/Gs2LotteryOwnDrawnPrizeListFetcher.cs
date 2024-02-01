@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
@@ -49,7 +51,7 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.Fetcher
 	[AddComponentMenu("GS2 UIKit/DrawnPrizeation/DrawnPrize/Fetcher/Gs2LotteryOwnDrawnPrizeListFetcher")]
     public partial class Gs2LotteryOwnDrawnPrizeListFetcher : MonoBehaviour
     {
-        private EzLotteryGameSessionDomain _domain;
+        private EzNamespaceDomain _domain;
         private ulong? _callbackId;
 
         private IEnumerator Load() {
@@ -101,9 +103,7 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.Fetcher
 
             this._domain = clientHolder.Gs2.Lottery.Namespace(
                 this.Context.Namespace.NamespaceName
-            ).Me(
-                gameSessionHolder.GameSession
-            ).Lottery();
+            );
             this._callbackId = this._domain.SubscribeDrawnPrizes(
                 items =>
                 {

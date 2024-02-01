@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable UnusedAutoPropertyAccessor.Local
@@ -269,14 +271,14 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking
         }
 
         [Serializable]
-        private class VoteCompleteEvent : UnityEvent<EzBallot>
+        private class VoteCompleteEvent : UnityEvent<EzSignedBallot>
         {
 
         }
 
         [SerializeField]
         private VoteCompleteEvent onVoteComplete = new VoteCompleteEvent();
-        public event UnityAction<EzBallot> OnVoteComplete
+        public event UnityAction<EzSignedBallot> OnVoteComplete
         {
             add => this.onVoteComplete.AddListener(value);
             remove => this.onVoteComplete.RemoveListener(value);

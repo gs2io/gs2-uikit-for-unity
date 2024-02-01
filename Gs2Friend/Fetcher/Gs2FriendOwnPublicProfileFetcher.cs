@@ -71,35 +71,21 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Fetcher
                 gameSessionHolder.GameSession
             ).Profile(
             );;
-            this._callbackId = this._domain.Subscribe(
+            var future = this._domain.SubscribeWithInitialCallFuture(
                 item =>
                 {
-                    PublicProfile = new EzPublicProfile {
-                        UserId = item.UserId,
-                        PublicProfile = item.PublicProfile,
-                    };
+                    retryWaitSecond = 0;
+                    PublicProfile = item;
                     Fetched = true;
                     this.OnFetched.Invoke();
                 }
             );
-
-            while (true) {
-                var future = this._domain.ModelFuture();
-                yield return future;
-                if (future.Error != null) {
-                    yield return new WaitForSeconds(retryWaitSecond);
-                    retryWaitSecond *= 2;
-                }
-                else {
-                    PublicProfile = new EzPublicProfile {
-                        UserId = future.Result.UserId,
-                        PublicProfile = future.Result.PublicProfile,
-                    };
-                    Fetched = true;
-                    this.OnFetched.Invoke();
-                    break;
-                }
+            yield return future;
+            if (future.Error != null) {
+                this.onError.Invoke(future.Error, null);
+                yield break;
             }
+            this._callbackId = future.Result;
         }
 
         public void OnUpdateContext() {
@@ -131,7 +117,7 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Fetcher
         }
 
         public void SetTemporaryPublicProfile(
-            Gs2.Unity.Gs2Friend.Model.EzPublicProfile publicProfile
+            Gs2.Unity.Gs2Friend.Model.EzProfile publicProfile
         ) {
             PublicProfile = publicProfile;
             this.OnFetched.Invoke();
@@ -176,7 +162,7 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Fetcher
 
     public partial class Gs2FriendOwnPublicProfileFetcher
     {
-        public Gs2.Unity.Gs2Friend.Model.EzPublicProfile PublicProfile { get; protected set; }
+        public Gs2.Unity.Gs2Friend.Model.EzProfile PublicProfile { get; protected set; }
         public bool Fetched { get; protected set; }
         public UnityEvent OnFetched = new UnityEvent();
     }

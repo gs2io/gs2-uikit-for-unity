@@ -61,9 +61,10 @@ namespace Gs2.Unity.UiKit.Gs2Friend
                 this._context.FollowUser.NamespaceName
             ).Me(
                 gameSessionHolder.GameSession
-            ).FollowUser(
-                this._context.FollowUser.TargetUserId,
+            ).Follow(
                 this._context.FollowUser.WithProfile
+            ).FollowUser(
+                this._context.FollowUser.TargetUserId
             );
             var future = domain.UnfollowFuture(
             );

@@ -37,6 +37,7 @@ using Gs2.Unity.Gs2Friend.Model;
 using Gs2.Unity.Gs2Friend.ScriptableObject;
 using Gs2.Unity.Util;
 using Gs2.Unity.UiKit.Core;
+using Gs2.Unity.UiKit.Core.Model;
 using Gs2.Unity.UiKit.Gs2Core.Fetcher;
 using Gs2.Unity.UiKit.Gs2Friend.Context;
 using UnityEngine;
@@ -62,38 +63,30 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Fetcher
 
             yield return new WaitUntil(() => clientHolder.Initialized);
             yield return new WaitUntil(() => gameSessionHolder.Initialized);
-            yield return new WaitUntil(() => Context != null && this.Context.FriendUser != null);
+            yield return new WaitUntil(() => Context != null && this.Context.ReceiveFriendRequest != null);
 
             this._domain = clientHolder.Gs2.Friend.Namespace(
-                this.Context.FriendUser.NamespaceName
+                this.Context.ReceiveFriendRequest.NamespaceName
             ).Me(
                 gameSessionHolder.GameSession
             ).ReceiveFriendRequest(
-                this.Context.FriendUser.TargetUserId
+                this.Context.ReceiveFriendRequest.FromUserId
             );;
-            this._callbackId = this._domain.Subscribe(
+            var future = this._domain.SubscribeWithInitialCallFuture(
                 item =>
                 {
+                    retryWaitSecond = 0;
                     ReceiveFriendRequest = item;
                     Fetched = true;
                     this.OnFetched.Invoke();
                 }
             );
-
-            while (true) {
-                var future = this._domain.ModelFuture();
-                yield return future;
-                if (future.Error != null) {
-                    yield return new WaitForSeconds(retryWaitSecond);
-                    retryWaitSecond *= 2;
-                }
-                else {
-                    ReceiveFriendRequest = future.Result;
-                    Fetched = true;
-                    this.OnFetched.Invoke();
-                    break;
-                }
+            yield return future;
+            if (future.Error != null) {
+                this.onError.Invoke(future.Error, null);
+                yield break;
             }
+            this._callbackId = future.Result;
         }
 
         public void OnUpdateContext() {
@@ -123,6 +116,18 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Fetcher
             );
             this._callbackId = null;
         }
+
+        public void SetTemporaryReceiveFriendRequest(
+            Gs2.Unity.Gs2Friend.Model.EzFriendRequest receiveFriendRequest
+        ) {
+            ReceiveFriendRequest = receiveFriendRequest;
+            this.OnFetched.Invoke();
+        }
+
+        public void RollbackTemporaryReceiveFriendRequest(
+        ) {
+            OnUpdateContext();
+        }
     }
 
     /// <summary>
@@ -131,20 +136,20 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Fetcher
 
     public partial class Gs2FriendOwnReceiveFriendRequestFetcher
     {
-        public Gs2FriendOwnFriendUserContext Context { get; private set; }
+        public Gs2FriendOwnReceiveFriendRequestContext Context { get; private set; }
 
         public void Awake()
         {
-            Context = GetComponent<Gs2FriendOwnFriendUserContext>() ?? GetComponentInParent<Gs2FriendOwnFriendUserContext>();
+            Context = GetComponent<Gs2FriendOwnReceiveFriendRequestContext>() ?? GetComponentInParent<Gs2FriendOwnReceiveFriendRequestContext>();
             if (Context == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2FriendOwnFriendUserContext.");
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2FriendOwnReceiveFriendRequestContext.");
                 enabled = false;
             }
         }
 
         public virtual bool HasError()
         {
-            Context = GetComponent<Gs2FriendOwnFriendUserContext>() ?? GetComponentInParent<Gs2FriendOwnFriendUserContext>(true);
+            Context = GetComponent<Gs2FriendOwnReceiveFriendRequestContext>() ?? GetComponentInParent<Gs2FriendOwnReceiveFriendRequestContext>(true);
             if (Context == null) {
                 return true;
             }

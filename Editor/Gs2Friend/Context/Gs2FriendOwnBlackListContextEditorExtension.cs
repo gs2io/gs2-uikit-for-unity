@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
@@ -32,41 +34,5 @@ using UnityEngine;
 
 namespace Gs2.Unity.UiKit.Gs2Friend.Editor
 {
-    [CustomEditor(typeof(Gs2FriendOwnBlackListContext))]
-    public class Gs2FriendOwnBlackListContextEditorExtension : UnityEditor.Editor
-    {
-        public override void OnInspectorGUI() {
-            var original = target as Gs2FriendOwnBlackListContext;
-
-            if (original == null) return;
-
-            serializedObject.Update();
-
-            if (original.BlackList == null) {
-                var list = original.GetComponentInParent<Gs2FriendOwnBlackListList>(true);
-                if (list != null) {
-                    EditorGUILayout.HelpBox("BlackList is auto assign from Gs2FriendOwnBlackListList.", MessageType.Info);
-                    EditorGUI.BeginDisabledGroup(true);
-                    EditorGUILayout.ObjectField("List", list, typeof(Gs2FriendOwnBlackListList), false);
-                    EditorGUI.EndDisabledGroup();
-                }
-                else {
-                    EditorGUILayout.HelpBox("OwnBlackList not assigned.", MessageType.Error);
-                    EditorGUILayout.PropertyField(serializedObject.FindProperty("_blackList"), true);
-                }
-            }
-            else {
-                original.BlackList = EditorGUILayout.ObjectField("OwnBlackList", original.BlackList, typeof(OwnBlackList), false) as OwnBlackList;
-                EditorGUI.BeginDisabledGroup(true);
-                if (original.BlackList != null) {
-                    EditorGUI.indentLevel++;
-                    EditorGUILayout.TextField("NamespaceName", original.BlackList?.NamespaceName?.ToString());
-                    EditorGUI.indentLevel--;
-                }
-                EditorGUI.EndDisabledGroup();
-            }
-
-            serializedObject.ApplyModifiedProperties();
-        }
-    }
+    
 }

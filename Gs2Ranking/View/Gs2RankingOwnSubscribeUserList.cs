@@ -45,13 +45,13 @@ namespace Gs2.Unity.UiKit.Gs2Ranking
     {
         private List<Gs2RankingOwnSubscribeUserContext> _children;
 
-        public void OnFetched() {
-            for (var i = 0; i < this.maximumItems; i++) {
+        private void OnFetched() {
+            for (var i = 0; i < this._children.Count; i++) {
                 if (i < this._fetcher.SubscribeUsers.Count) {
                     this._children[i].SetOwnSubscribeUser(
                         OwnSubscribeUser.New(
-                            this._fetcher.Context.CategoryModel.Namespace,
-                            this._fetcher.Context.CategoryModel.CategoryName,
+                            this._fetcher.Context.Ranking.User.Namespace,
+                            this._fetcher.Context.Ranking.CategoryName,
                             this._fetcher.SubscribeUsers[i].TargetUserId
                         )
                     );
@@ -72,6 +72,19 @@ namespace Gs2.Unity.UiKit.Gs2Ranking
     {
         private Gs2RankingOwnSubscribeUserListFetcher _fetcher;
 
+        private void Initialize() {
+            for (var i = 0; i < this.maximumItems; i++) {
+                var node = Instantiate(this.prefab, transform);
+                node.SubscribeUser = OwnSubscribeUser.New(
+                    this._fetcher.Context.Ranking.User.Namespace,
+                    this._fetcher.Context.Ranking.CategoryName,
+                    ""
+                );
+                node.gameObject.SetActive(false);
+                this._children.Add(node);
+            }
+        }
+
         public void Awake()
         {
             if (this.prefab == null) {
@@ -86,18 +99,10 @@ namespace Gs2.Unity.UiKit.Gs2Ranking
                 enabled = false;
             }
 
-            _children = new List<Gs2RankingOwnSubscribeUserContext>();
-            for (var i = 0; i < this.maximumItems; i++) {
-                var node = Instantiate(this.prefab, transform);
-                node.SubscribeUser = OwnSubscribeUser.New(
-                    this._fetcher.Context.CategoryModel.Namespace,
-                    this._fetcher.Context.CategoryModel.CategoryName,
-                    ""
-                );
-                node.gameObject.SetActive(false);
-                this._children.Add(node);
-            }
+            this._children = new List<Gs2RankingOwnSubscribeUserContext>();
             this.prefab.gameObject.SetActive(false);
+
+            Invoke(nameof(Initialize), 0);
         }
 
         public virtual bool HasError()

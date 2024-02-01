@@ -55,13 +55,16 @@ namespace Gs2.Unity.UiKit.Gs2Friend
 
             yield return new WaitUntil(() => clientHolder.Initialized);
             yield return new WaitUntil(() => gameSessionHolder.Initialized);
+
+            this.onAcceptStart.Invoke();
+
             
             var domain = clientHolder.Gs2.Friend.Namespace(
-                this._context.FriendUser.NamespaceName
+                this._context.ReceiveFriendRequest.NamespaceName
             ).Me(
                 gameSessionHolder.GameSession
             ).ReceiveFriendRequest(
-                this._context.FriendUser.TargetUserId
+                this._context.ReceiveFriendRequest.FromUserId
             );
             var future = domain.AcceptFuture(
             );
@@ -79,7 +82,7 @@ namespace Gs2.Unity.UiKit.Gs2Friend
                             this.onError.Invoke(future.Error, Retry);
                             yield break;
                         }
-                        var future3 = future.Result.Model();
+                        var future3 = future.Result.ModelFuture();
                         yield return future3;
                         if (future3.Error != null)
                         {
@@ -97,7 +100,7 @@ namespace Gs2.Unity.UiKit.Gs2Friend
                 this.onError.Invoke(future.Error, null);
                 yield break;
             }
-            var future2 = future.Result.Model();
+            var future2 = future.Result.ModelFuture();
             yield return future2;
             if (future2.Error != null)
             {
@@ -115,7 +118,7 @@ namespace Gs2.Unity.UiKit.Gs2Friend
 
         public void OnDisable()
         {
-            
+
         }
     }
 
@@ -125,21 +128,21 @@ namespace Gs2.Unity.UiKit.Gs2Friend
 
     public partial class Gs2FriendReceiveFriendRequestAcceptAction
     {
-        private Gs2FriendOwnFriendUserContext _context;
+        private Gs2FriendOwnReceiveFriendRequestContext _context;
 
         public void Awake()
         {
-            this._context = GetComponent<Gs2FriendOwnFriendUserContext>() ?? GetComponentInParent<Gs2FriendOwnFriendUserContext>();
-            if (_context == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2FriendOwnFriendUserContext.");
+            this._context = GetComponent<Gs2FriendOwnReceiveFriendRequestContext>() ?? GetComponentInParent<Gs2FriendOwnReceiveFriendRequestContext>();
+            if (this._context == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2FriendOwnReceiveFriendRequestContext.");
                 enabled = false;
             }
         }
 
         public virtual bool HasError()
         {
-            this._context = GetComponent<Gs2FriendOwnFriendUserContext>() ?? GetComponentInParent<Gs2FriendOwnFriendUserContext>(true);
-            if (_context == null) {
+            this._context = GetComponent<Gs2FriendOwnReceiveFriendRequestContext>() ?? GetComponentInParent<Gs2FriendOwnReceiveFriendRequestContext>(true);
+            if (this._context == null) {
                 return true;
             }
             return false;
@@ -168,6 +171,21 @@ namespace Gs2.Unity.UiKit.Gs2Friend
     /// </summary>
     public partial class Gs2FriendReceiveFriendRequestAcceptAction
     {
+
+        [Serializable]
+        private class AcceptStartEvent : UnityEvent
+        {
+
+        }
+
+        [SerializeField]
+        private AcceptStartEvent onAcceptStart = new AcceptStartEvent();
+
+        public event UnityAction OnAcceptStart
+        {
+            add => this.onAcceptStart.AddListener(value);
+            remove => this.onAcceptStart.RemoveListener(value);
+        }
 
         [Serializable]
         private class AcceptCompleteEvent : UnityEvent<EzFriendRequest>

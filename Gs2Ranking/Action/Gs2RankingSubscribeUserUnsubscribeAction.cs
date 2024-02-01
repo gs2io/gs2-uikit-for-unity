@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable UnusedAutoPropertyAccessor.Local
@@ -61,8 +63,9 @@ namespace Gs2.Unity.UiKit.Gs2Ranking
                 this._context.SubscribeUser.NamespaceName
             ).Me(
                 gameSessionHolder.GameSession
+            ).RankingCategory(
+                this._context.SubscribeUser.CategoryName
             ).SubscribeUser(
-                this._context.SubscribeUser.CategoryName,
                 this._context.SubscribeUser.TargetUserId
             );
             var future = domain.UnsubscribeFuture(

@@ -61,8 +61,9 @@ namespace Gs2.Unity.UiKit.Gs2Ranking
                 this._context.Ranking.NamespaceName
             ).Me(
                 gameSessionHolder.GameSession
-            ).Ranking(
-                this._context.Ranking.CategoryName
+            ).RankingCategory(
+                this._context.Ranking.CategoryName,
+                this._context.Ranking.AdditionalScopeName
             );
             var future = domain.PutScoreFuture(
                 Score,

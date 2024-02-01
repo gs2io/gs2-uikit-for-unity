@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
@@ -31,76 +33,5 @@ using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2Friend.Context
 {
-    /// <summary>
-    /// Main
-    /// </summary>
-
-	[AddComponentMenu("GS2 UIKit/Friend/BlackList/Context/Gs2FriendOwnBlackListContext")]
-    public partial class Gs2FriendOwnBlackListContext : MonoBehaviour
-    {
-        public void Start() {
-            if (BlackList == null) {
-                Debug.LogWarning($"{gameObject.GetFullPath()}: BlackList is not set in Gs2FriendOwnBlackListContext.");
-            }
-        }
-        public virtual bool HasError() {
-            if (BlackList == null) {
-                if (GetComponentInParent<Gs2FriendOwnBlackListList>(true) != null) {
-                    return false;
-                }
-                return true;
-            }
-            return false;
-        }
-    }
-
-    /// <summary>
-    /// Dependent components
-    /// </summary>
-
-    public partial class Gs2FriendOwnBlackListContext
-    {
-
-    }
-
-    /// <summary>
-    /// Public properties
-    /// </summary>
-
-    public partial class Gs2FriendOwnBlackListContext
-    {
-
-    }
-
-    /// <summary>
-    /// Parameters for Inspector
-    /// </summary>
-
-    public partial class Gs2FriendOwnBlackListContext
-    {
-        [SerializeField]
-        private OwnBlackList _blackList;
-        public OwnBlackList BlackList
-        {
-            get => _blackList;
-            set => SetOwnBlackList(value);
-        }
-
-        public void SetOwnBlackList(OwnBlackList blackList) {
-            if (blackList == null) return;
-            this._blackList = blackList;
-
-            this.OnUpdate.Invoke();
-        }
-
-        public UnityEvent OnUpdate = new UnityEvent();
-    }
-
-    /// <summary>
-    /// Event handlers
-    /// </summary>
-    public partial class Gs2FriendOwnBlackListContext
-    {
-
-    }
+    
 }

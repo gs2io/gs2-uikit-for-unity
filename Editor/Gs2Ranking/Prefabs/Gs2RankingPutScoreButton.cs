@@ -5,7 +5,7 @@ namespace Editor.Gs2Ranking.Prefabs
 {
     public static class Gs2RankingRankingPutScoreButton
     {
-        [MenuItem("GameObject/UI/Game Server Services/Ranking/Namespace/User/Ranking/Action/PutScore", priority = 0)]
+        [MenuItem("GameObject/UI/Game Server Services/Ranking/Namespace/User/RankingCategory/Ranking/Action/PutScore", priority = 0)]
         private static void CreateButton()
         {
             var prefab = AssetDatabase.LoadAssetAtPath<GameObject>(

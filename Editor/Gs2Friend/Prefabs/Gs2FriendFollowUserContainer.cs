@@ -5,7 +5,7 @@ namespace Editor.Gs2Friend.Prefabs
 {
     public static class Gs2FriendFollowUserContainer
     {
-        [MenuItem("GameObject/UI/Game Server Services/Friend/Namespace/User/FollowUserContainer", priority = 0)]
+        [MenuItem("GameObject/UI/Game Server Services/Friend/Namespace/User/Follow/FollowUserContainer", priority = 0)]
         private static void CreateButton()
         {
             var prefab = AssetDatabase.LoadAssetAtPath<GameObject>(

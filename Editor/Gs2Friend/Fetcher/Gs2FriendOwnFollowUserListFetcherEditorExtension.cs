@@ -40,20 +40,20 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Editor
 
             if (original == null) return;
 
-            var context = original.GetComponent<Gs2FriendNamespaceContext>() ?? original.GetComponentInParent<Gs2FriendNamespaceContext>(true);
+            var context = original.GetComponent<Gs2FriendOwnFollowContext>() ?? original.GetComponentInParent<Gs2FriendOwnFollowContext>(true);
             if (context == null) {
-                EditorGUILayout.HelpBox("Gs2FriendNamespaceContext not found.", MessageType.Error);
+                EditorGUILayout.HelpBox("Gs2FriendOwnFollowContext not found.", MessageType.Error);
                 if (GUILayout.Button("Add Context")) {
-                    original.gameObject.AddComponent<Gs2FriendNamespaceContext>();
+                    original.gameObject.AddComponent<Gs2FriendOwnFollowContext>();
                 }
             }
             else {
                 EditorGUI.BeginDisabledGroup(true);
-                EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2FriendNamespaceContext), false);
+                EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2FriendOwnFollowContext), false);
                 EditorGUI.indentLevel++;
-                context.Namespace = EditorGUILayout.ObjectField("Namespace", context.Namespace, typeof(Namespace), false) as Namespace;
+                context.Follow = EditorGUILayout.ObjectField("OwnFollow", context.Follow, typeof(OwnFollow), false) as OwnFollow;
                 EditorGUI.indentLevel++;
-                EditorGUILayout.TextField("NamespaceName", context.Namespace?.NamespaceName?.ToString());
+                EditorGUILayout.TextField("NamespaceName", context.Follow?.NamespaceName?.ToString());
                 EditorGUI.indentLevel--;
                 EditorGUI.indentLevel--;
                 EditorGUI.EndDisabledGroup();

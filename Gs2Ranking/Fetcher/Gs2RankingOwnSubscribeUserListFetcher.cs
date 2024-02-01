@@ -29,8 +29,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
+using System.Linq;
 using Gs2.Core.Exception;
 using Gs2.Unity.Core.Exception;
 using Gs2.Unity.Gs2Ranking.Domain.Model;
@@ -51,14 +51,12 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Fetcher
 	[AddComponentMenu("GS2 UIKit/Ranking/SubscribeUser/Fetcher/Gs2RankingOwnSubscribeUserListFetcher")]
     public partial class Gs2RankingOwnSubscribeUserListFetcher : MonoBehaviour
     {
-        private EzUserGameSessionDomain _domain;
+        private EzRankingCategoryGameSessionDomain _domain;
         private ulong? _callbackId;
 
         private IEnumerator Load() {
             var retryWaitSecond = 1;
-            var it = _domain.SubscribeUsers(
-                this.Context.CategoryModel.CategoryName
-            );
+            var it = _domain.SubscribeUsers();
             var items = new List<Gs2.Unity.Gs2Ranking.Model.EzSubscribeUser>();
             while (it.HasNext())
             {
@@ -101,20 +99,22 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Fetcher
 
             yield return new WaitUntil(() => clientHolder.Initialized);
             yield return new WaitUntil(() => gameSessionHolder.Initialized);
-            yield return new WaitUntil(() => Context != null && Context.CategoryModel != null);
+            yield return new WaitUntil(() => Context != null && Context.Ranking != null);
 
             this._domain = clientHolder.Gs2.Ranking.Namespace(
-                this.Context.CategoryModel.NamespaceName
+                this.Context.Ranking.NamespaceName
             ).Me(
                 gameSessionHolder.GameSession
+            ).RankingCategory(
+                this.Context.Ranking.CategoryName,
+                this.Context.Ranking.AdditionalScopeName
             );
             this._callbackId = this._domain.SubscribeSubscribeUsers(
                 items =>
                 {
                     SubscribeUsers = items.ToList();
                     this.OnFetched.Invoke();
-                },
-                this.Context.CategoryModel.CategoryName
+                }
             );
 
             yield return Load();
@@ -143,8 +143,7 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Fetcher
                 return;
             }
             this._domain.UnsubscribeSubscribeUsers(
-                this._callbackId.Value,
-                this.Context.CategoryModel.CategoryName
+                this._callbackId.Value
             );
             this._callbackId = null;
         }
@@ -156,22 +155,22 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Fetcher
 
     public partial class Gs2RankingOwnSubscribeUserListFetcher
     {
-        public Gs2RankingCategoryModelContext Context;
+        public Gs2RankingRankingContext Context { get; private set; }
 
         public UnityEvent OnFetched = new UnityEvent();
 
         public void Awake()
         {
-            Context = GetComponent<Gs2RankingCategoryModelContext>() ?? GetComponentInParent<Gs2RankingCategoryModelContext>();
+            Context = GetComponent<Gs2RankingRankingContext>() ?? GetComponentInParent<Gs2RankingRankingContext>();
             if (Context == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2RankingCategoryModelContext.");
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2RankingRankingContext.");
                 enabled = false;
             }
         }
 
         public virtual bool HasError()
         {
-            Context = GetComponent<Gs2RankingCategoryModelContext>() ?? GetComponentInParent<Gs2RankingCategoryModelContext>(true);
+            Context = GetComponent<Gs2RankingRankingContext>() ?? GetComponentInParent<Gs2RankingRankingContext>(true);
             if (Context == null) {
                 return true;
             }

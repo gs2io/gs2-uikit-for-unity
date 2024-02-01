@@ -15,3 +15,32 @@
  *
  * deny overwrite
  */
+// ReSharper disable UnusedAutoPropertyAccessor.Global
+// ReSharper disable CheckNamespace
+// ReSharper disable RedundantNameQualifier
+// ReSharper disable RedundantAssignment
+// ReSharper disable NotAccessedVariable
+// ReSharper disable RedundantUsingDirective
+// ReSharper disable Unity.NoNullPropagation
+// ReSharper disable InconsistentNaming
+
+#pragma warning disable CS0472
+
+using System;
+using System.Collections;
+using System.Text;
+using Gs2.Core.Exception;
+using Gs2.Unity.Core.Exception;
+using Gs2.Unity.Gs2Friend.Domain.Model;
+using Gs2.Unity.Gs2Friend.Model;
+using Gs2.Unity.Gs2Friend.ScriptableObject;
+using Gs2.Unity.Util;
+using Gs2.Unity.UiKit.Core;
+using Gs2.Unity.UiKit.Gs2Friend.Context;
+using UnityEngine;
+using UnityEngine.Events;
+
+namespace Gs2.Unity.UiKit.Gs2Friend.Fetcher
+{
+ 
+}

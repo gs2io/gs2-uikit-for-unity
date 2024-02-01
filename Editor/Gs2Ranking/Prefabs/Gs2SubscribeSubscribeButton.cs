@@ -5,7 +5,7 @@ namespace Editor.Gs2Ranking.Prefabs
 {
     public static class Gs2RankingSubscribeSubscribeButton
     {
-        [MenuItem("GameObject/UI/Game Server Services/Ranking/Namespace/User/Subscribe/Action/Subscribe", priority = 0)]
+        [MenuItem("GameObject/UI/Game Server Services/Ranking/Namespace/User/RankingCategory/Subscribe/Action/Subscribe", priority = 0)]
         private static void CreateButton()
         {
             var prefab = AssetDatabase.LoadAssetAtPath<GameObject>(

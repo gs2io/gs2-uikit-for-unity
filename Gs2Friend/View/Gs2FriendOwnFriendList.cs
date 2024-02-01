@@ -40,19 +40,18 @@ namespace Gs2.Unity.UiKit.Gs2Friend
     /// Main
     /// </summary>
 
-    [AddComponentMenu("GS2 UIKit/Friend/FriendUser/View/Gs2FriendOwnFriendList")]
+    [AddComponentMenu("GS2 UIKit/Friend/Friend/View/Gs2FriendOwnFriendList")]
     public partial class Gs2FriendOwnFriendList : MonoBehaviour
     {
-        private List<Gs2FriendOwnFriendUserContext> _children;
+        private List<Gs2FriendOwnFriendContext> _children;
 
         private void OnFetched() {
-            for (var i = 0; i < this.maximumItems; i++) {
+            for (var i = 0; i < this._children.Count; i++) {
                 if (i < this._fetcher.Friends.Count) {
-                    this._children[i].SetOwnFriendUser(
-                        OwnFriendUser.New(
+                    this._children[i].SetOwnFriend(
+                        OwnFriend.New(
                             this._fetcher.Context.Namespace,
-                            this._fetcher.Friends[i].UserId,
-                            this._fetcher.WithProfile
+                            this.withProfile
                         )
                     );
                     this._children[i].gameObject.SetActive(true);
@@ -72,6 +71,18 @@ namespace Gs2.Unity.UiKit.Gs2Friend
     {
         private Gs2FriendOwnFriendListFetcher _fetcher;
 
+        private void Initialize() {
+            for (var i = 0; i < this.maximumItems; i++) {
+                var node = Instantiate(this.prefab, transform);
+                node.Friend = OwnFriend.New(
+                    this._fetcher.Context.Namespace,
+                    this.withProfile
+                );
+                node.gameObject.SetActive(false);
+                this._children.Add(node);
+            }
+        }
+
         public void Awake()
         {
             if (this.prefab == null) {
@@ -86,18 +97,10 @@ namespace Gs2.Unity.UiKit.Gs2Friend
                 enabled = false;
             }
 
-            this._children = new List<Gs2FriendOwnFriendUserContext>();
-            for (var i = 0; i < this.maximumItems; i++) {
-                var node = Instantiate(this.prefab, transform);
-                node.FriendUser = OwnFriendUser.New(
-                    _fetcher.Context.Namespace,
-                    "",
-                    this._fetcher.WithProfile
-                );
-                node.gameObject.SetActive(false);
-                this._children.Add(node);
-            }
+            this._children = new List<Gs2FriendOwnFriendContext>();
             this.prefab.gameObject.SetActive(false);
+
+            Invoke(nameof(Initialize), 0);
         }
 
         public virtual bool HasError()
@@ -151,8 +154,10 @@ namespace Gs2.Unity.UiKit.Gs2Friend
 
     public partial class Gs2FriendOwnFriendList
     {
-        public Gs2FriendOwnFriendUserContext prefab;
+        public Gs2FriendOwnFriendContext prefab;
         public int maximumItems;
+
+        public bool withProfile;
     }
 
     /// <summary>

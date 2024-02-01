@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
@@ -67,8 +69,9 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.Fetcher
                 this.Context.Probability.NamespaceName
             ).Me(
                 gameSessionHolder.GameSession
+            ).Lottery(
+                this.Context.Probability.LotteryName
             ).Probability(
-                this.Context.Probability.LotteryName,
                 this.Context.Probability.PrizeId
             );
             this._callbackId = this._domain.Subscribe(

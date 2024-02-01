@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
@@ -29,34 +31,5 @@ using UnityEngine;
 
 namespace Gs2.Unity.UiKit.Gs2Friend.Editor
 {
-    [CustomEditor(typeof(Gs2FriendBlackListUnregisterBlackListActionLabel))]
-    public class Gs2FriendBlackListUnregisterBlackListActionLabelEditorExtension : UnityEditor.Editor
-    {
-        public override void OnInspectorGUI() {
-            var original = target as Gs2FriendBlackListUnregisterBlackListActionLabel;
-
-            if (original == null) return;
-
-            if (original.action == null) {
-                EditorGUILayout.HelpBox("Gs2FriendBlackListUnregisterBlackListAction not found.", MessageType.Error);
-                if (GUILayout.Button("Add Context")) {
-                    original.gameObject.AddComponent<Gs2FriendBlackListUnregisterBlackListAction>();
-                }
-                return;
-            }
-
-            serializedObject.Update();
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("action"), true);
-            original.format = EditorGUILayout.TextField("Format", original.format);
-
-            GUILayout.Label("Add Format Parameter");
-            if (GUILayout.Button("TargetUserId")) {
-                original.format += "{targetUserId}";
-                GUI.FocusControl("");
-                EditorUtility.SetDirty(original);
-            }
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("onUpdate"), true);
-            serializedObject.ApplyModifiedProperties();
-        }
-    }
+    
 }

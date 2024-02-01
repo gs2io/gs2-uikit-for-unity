@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
@@ -33,128 +35,5 @@ using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2Friend.Enabler
 {
-    /// <summary>
-    /// Main
-    /// </summary>
-
-	[AddComponentMenu("GS2 UIKit/Friend/BlackList/View/Enabler/Properties/UserId/Gs2FriendOwnBlackListUserIdEnabler")]
-    public partial class Gs2FriendOwnBlackListUserIdEnabler : MonoBehaviour
-    {
-        private void OnFetched()
-        {
-            switch(this.expression)
-            {
-                case Expression.In:
-                    this.target.SetActive(this.enableUserIds.Contains(this._fetcher.BlackList?.UserId ?? ""));
-                    break;
-                case Expression.NotIn:
-                    this.target.SetActive(!this.enableUserIds.Contains(this._fetcher.BlackList?.UserId ?? ""));
-                    break;
-                case Expression.StartsWith:
-                    this.target.SetActive((this._fetcher.BlackList?.UserId ?? "").StartsWith(this.enableUserId));
-                    break;
-                case Expression.EndsWith:
-                    this.target.SetActive((this._fetcher.BlackList?.UserId ?? "").EndsWith(this.enableUserId));
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
-        }
-    }
-
-    /// <summary>
-    /// Dependent components
-    /// </summary>
-
-    public partial class Gs2FriendOwnBlackListUserIdEnabler
-    {
-        private Gs2FriendOwnBlackListFetcher _fetcher;
-
-        public void Awake()
-        {
-            this._fetcher = GetComponent<Gs2FriendOwnBlackListFetcher>() ?? GetComponentInParent<Gs2FriendOwnBlackListFetcher>();
-            if (this._fetcher == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2FriendOwnBlackListFetcher.");
-                enabled = false;
-            }
-            if (this.target == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: target is not set.");
-                enabled = false;
-            }
-        }
-
-        public virtual bool HasError()
-        {
-            this._fetcher = GetComponent<Gs2FriendOwnBlackListFetcher>() ?? GetComponentInParent<Gs2FriendOwnBlackListFetcher>(true);
-            if (this._fetcher == null) {
-                return true;
-            }
-            if (this.target == null) {
-                return true;
-            }
-            return false;
-        }
-
-        private UnityAction _onFetched;
-
-        public void OnEnable()
-        {
-            this._onFetched = () =>
-            {
-                OnFetched();
-            };
-            this._fetcher.OnFetched.AddListener(this._onFetched);
-
-            if (this._fetcher.Fetched) {
-                OnFetched();
-            }
-        }
-
-        public void OnDisable()
-        {
-            if (this._onFetched != null) {
-                this._fetcher.OnFetched.RemoveListener(this._onFetched);
-                this._onFetched = null;
-            }
-        }
-    }
-
-    /// <summary>
-    /// Public properties
-    /// </summary>
-
-    public partial class Gs2FriendOwnBlackListUserIdEnabler
-    {
-
-    }
-
-    /// <summary>
-    /// Parameters for Inspector
-    /// </summary>
-
-    public partial class Gs2FriendOwnBlackListUserIdEnabler
-    {
-        public enum Expression {
-            In,
-            NotIn,
-            StartsWith,
-            EndsWith,
-        }
-
-        public Expression expression;
-
-        public List<string> enableUserIds;
-
-        public string enableUserId;
-
-        public GameObject target;
-    }
-
-    /// <summary>
-    /// Event handlers
-    /// </summary>
-    public partial class Gs2FriendOwnBlackListUserIdEnabler
-    {
-        
-    }
+    
 }

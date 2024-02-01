@@ -29,8 +29,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
+using System.Linq;
 using Gs2.Core.Exception;
 using Gs2.Unity.Core.Exception;
 using Gs2.Unity.Gs2Friend.Domain.Model;
@@ -153,7 +153,6 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Fetcher
     public partial class Gs2FriendOwnReceiveFriendRequestListFetcher
     {
         public Gs2FriendNamespaceContext Context;
-        public bool WithProfile;
 
         public UnityEvent OnFetched = new UnityEvent();
 

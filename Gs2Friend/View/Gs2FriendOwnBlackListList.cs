@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
@@ -34,131 +36,5 @@ using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2Friend
 {
-    /// <summary>
-    /// Main
-    /// </summary>
-
-    [AddComponentMenu("GS2 UIKit/Friend/BlackList/View/Gs2FriendOwnBlackListList")]
-    public partial class Gs2FriendOwnBlackListList : MonoBehaviour
-    {
-        private List<Gs2FriendOwnBlackListContext> _children;
-
-        private void OnFetched() {
-            for (var i = 0; i < this._children.Count; i++) {
-                if (i < this._fetcher.BlackList.Count) {
-                    this._children[i].SetOwnBlackList(
-                        OwnBlackList.New(
-                            this._fetcher.Context.Namespace
-                        )
-                    );
-                    this._children[i].gameObject.SetActive(true);
-                }
-                else {
-                    this._children[i].gameObject.SetActive(false);
-                }
-            }
-        }
-    }
-
-    /// <summary>
-    /// Dependent components
-    /// </summary>
-
-    public partial class Gs2FriendOwnBlackListList
-    {
-        private Gs2FriendOwnBlackListListFetcher _fetcher;
-
-        private void Initialize() {
-            for (var i = 0; i < this.maximumItems; i++) {
-                var node = Instantiate(this.prefab, transform);
-                node.BlackList = OwnBlackList.New(
-                    this._fetcher.Context.Namespace
-                );
-                node.gameObject.SetActive(false);
-                this._children.Add(node);
-            }
-        }
-
-        public void Awake()
-        {
-            if (this.prefab == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2FriendOwnBlackListContext Prefab.");
-                enabled = false;
-                return;
-            }
-
-            this._fetcher = GetComponent<Gs2FriendOwnBlackListListFetcher>() ?? GetComponentInParent<Gs2FriendOwnBlackListListFetcher>();
-            if (this._fetcher == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2FriendOwnBlackListListFetcher.");
-                enabled = false;
-            }
-
-            this._children = new List<Gs2FriendOwnBlackListContext>();
-            this.prefab.gameObject.SetActive(false);
-
-            Invoke(nameof(Initialize), 0);
-        }
-
-        public virtual bool HasError()
-        {
-            if (this.prefab == null) {
-                return true;
-            }
-            this._fetcher = GetComponent<Gs2FriendOwnBlackListListFetcher>() ?? GetComponentInParent<Gs2FriendOwnBlackListListFetcher>(true);
-            if (this._fetcher == null) {
-                return true;
-            }
-            return false;
-        }
-
-        private UnityAction _onFetched;
-
-        public void OnEnable()
-        {
-            this._onFetched = () =>
-            {
-                OnFetched();
-            };
-            this._fetcher.OnFetched.AddListener(this._onFetched);
-
-            if (this._fetcher.Fetched) {
-                OnFetched();
-            }
-        }
-
-        public void OnDisable()
-        {
-            if (this._onFetched != null) {
-                this._fetcher.OnFetched.RemoveListener(this._onFetched);
-                this._onFetched = null;
-            }
-        }
-    }
-
-    /// <summary>
-    /// Public properties
-    /// </summary>
-
-    public partial class Gs2FriendOwnBlackListList
-    {
-
-    }
-
-    /// <summary>
-    /// Parameters for Inspector
-    /// </summary>
-
-    public partial class Gs2FriendOwnBlackListList
-    {
-        public Gs2FriendOwnBlackListContext prefab;
-        public int maximumItems;
-    }
-
-    /// <summary>
-    /// Event handlers
-    /// </summary>
-    public partial class Gs2FriendOwnBlackListList
-    {
-
-    }
+    
 }

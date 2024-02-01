@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
@@ -31,38 +33,5 @@ using UnityEngine;
 
 namespace Gs2.Unity.UiKit.Gs2Friend.Editor
 {
-    [CustomEditor(typeof(Gs2FriendOwnBlackListList))]
-    public class Gs2FriendOwnBlackListListEditorExtension : UnityEditor.Editor
-    {
-        public override void OnInspectorGUI() {
-            var original = target as Gs2FriendOwnBlackListList;
-
-            if (original == null) return;
-
-            var fetcher = original.GetComponent<Gs2FriendOwnBlackListListFetcher>() ?? original.GetComponentInParent<Gs2FriendOwnBlackListListFetcher>(true);
-            if (fetcher == null) {
-                EditorGUILayout.HelpBox("Gs2FriendOwnBlackListListFetcher not found.", MessageType.Error);
-                if (GUILayout.Button("Add ListFetcher")) {
-                    original.gameObject.AddComponent<Gs2FriendOwnBlackListListFetcher>();
-                }
-            }
-            else {
-                EditorGUI.BeginDisabledGroup(true);
-                EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2FriendOwnBlackListListFetcher), false);
-                EditorGUI.indentLevel++;
-                if (fetcher.Context != null) {
-                    EditorGUILayout.ObjectField("Namespace", fetcher.Context.Namespace, typeof(Namespace), false);
-                    EditorGUI.indentLevel++;
-                    EditorGUI.indentLevel--;
-                }
-                EditorGUI.indentLevel--;
-                EditorGUI.EndDisabledGroup();
-            }
-
-            serializedObject.Update();
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("prefab"), true);
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("maximumItems"), true);
-            serializedObject.ApplyModifiedProperties();
-        }
-    }
+    
 }

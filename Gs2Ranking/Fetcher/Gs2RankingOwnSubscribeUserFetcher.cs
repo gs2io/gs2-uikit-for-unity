@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
@@ -64,8 +66,9 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Fetcher
                 this.Context.SubscribeUser.NamespaceName
             ).Me(
                 gameSessionHolder.GameSession
+            ).RankingCategory(
+                this.Context.SubscribeUser.CategoryName
             ).SubscribeUser(
-                this.Context.SubscribeUser.CategoryName,
                 this.Context.SubscribeUser.TargetUserId
             );
             this._callbackId = this._domain.Subscribe(

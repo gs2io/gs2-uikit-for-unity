@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
@@ -31,116 +33,5 @@ using UnityEngine.Events;
 
 namespace Gs2.Unity.UiKit.Gs2Friend
 {
-    /// <summary>
-    /// Main
-    /// </summary>
-
-	[AddComponentMenu("GS2 UIKit/Friend/BlackList/View/Enabler/Gs2FriendOwnBlackListEnabler")]
-    public partial class Gs2FriendOwnBlackListEnabler : MonoBehaviour
-    {
-        private void OnFetched()
-        {
-            if (this._fetcher.BlackList == null)
-            {
-                this.target.SetActive(this.notFound);
-            }
-            else
-            {
-                this.target.SetActive(this.loaded);
-            }
-        }
-    }
-
-    /// <summary>
-    /// Dependent components
-    /// </summary>
-
-    public partial class Gs2FriendOwnBlackListEnabler
-    {
-        private Gs2FriendOwnBlackListFetcher _fetcher;
-
-        public void Awake()
-        {
-            this._fetcher = GetComponent<Gs2FriendOwnBlackListFetcher>() ?? GetComponentInParent<Gs2FriendOwnBlackListFetcher>();
-            if (this._fetcher == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2FriendOwnBlackListFetcher.");
-                enabled = false;
-            }
-            if (this.target == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: target is not set.");
-                enabled = false;
-            }
-            if (this._fetcher.Fetched) {
-                OnFetched();
-            }
-            else {
-                this.target.SetActive(this.loading);
-            }
-        }
-
-        public virtual bool HasError()
-        {
-            this._fetcher = GetComponent<Gs2FriendOwnBlackListFetcher>() ?? GetComponentInParent<Gs2FriendOwnBlackListFetcher>(true);
-            if (this._fetcher == null) {
-                return true;
-            }
-            if (this.target == null) {
-                return true;
-            }
-            return false;
-        }
-
-        private UnityAction _onFetched;
-
-        public void OnEnable()
-        {
-            this._onFetched = () =>
-            {
-                OnFetched();
-            };
-            this._fetcher.OnFetched.AddListener(this._onFetched);
-
-            if (this._fetcher.Fetched) {
-                OnFetched();
-            }
-        }
-
-        public void OnDisable()
-        {
-            if (this._onFetched != null) {
-                this._fetcher.OnFetched.RemoveListener(this._onFetched);
-                this._onFetched = null;
-            }
-        }
-    }
-
-    /// <summary>
-    /// Public properties
-    /// </summary>
-
-    public partial class Gs2FriendOwnBlackListEnabler
-    {
-
-    }
-
-    /// <summary>
-    /// Parameters for Inspector
-    /// </summary>
-
-    public partial class Gs2FriendOwnBlackListEnabler
-    {
-        public bool loading;
-        public bool notFound;
-        public bool loaded;
-
-        public GameObject target;
-    }
-
-    /// <summary>
-    /// Event handlers
-    /// </summary>
-    public partial class Gs2FriendOwnBlackListEnabler
-    {
-
-    }
+    
 }

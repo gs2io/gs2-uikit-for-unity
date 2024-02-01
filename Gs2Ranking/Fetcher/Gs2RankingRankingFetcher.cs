@@ -69,35 +69,28 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Fetcher
                 this.Context.Ranking.NamespaceName
             ).Me(
                 gameSessionHolder.GameSession
+            ).RankingCategory(
+                this.Context.Ranking.CategoryName,
+                this.Context.Ranking.AdditionalScopeName
             ).Ranking(
-                this.Context.Ranking.CategoryName
+                this.Context.Ranking.UserId,
+                this.Context.Ranking.Index
             );;
-            this._callbackId = this._domain.Subscribe(
+            var future = this._domain.SubscribeWithInitialCallFuture(
                 item =>
                 {
+                    retryWaitSecond = 0;
                     Ranking = item;
                     Fetched = true;
                     this.OnFetched.Invoke();
-                },
-                Context.Ranking.UserId
+                }
             );
-
-            while (true) {
-                var future = this._domain.ModelFuture(
-                    Context.Ranking.UserId
-                );
-                yield return future;
-                if (future.Error != null) {
-                    yield return new WaitForSeconds(retryWaitSecond);
-                    retryWaitSecond *= 2;
-                }
-                else {
-                    Ranking = future.Result;
-                    Fetched = true;
-                    this.OnFetched.Invoke();
-                    break;
-                }
+            yield return future;
+            if (future.Error != null) {
+                this.onError.Invoke(future.Error, null);
+                yield break;
             }
+            this._callbackId = future.Result;
         }
 
         public void OnUpdateContext() {
@@ -123,8 +116,7 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Fetcher
                 return;
             }
             this._domain.Unsubscribe(
-                this._callbackId.Value,
-                Context.Ranking.UserId
+                this._callbackId.Value
             );
             this._callbackId = null;
         }

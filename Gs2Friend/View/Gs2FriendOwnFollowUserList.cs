@@ -45,20 +45,19 @@ namespace Gs2.Unity.UiKit.Gs2Friend
     {
         private List<Gs2FriendOwnFollowUserContext> _children;
 
-        public void OnFetched() {
-            for (var i = 0; i < this.maximumItems; i++) {
+        private void OnFetched() {
+            for (var i = 0; i < this._children.Count; i++) {
                 if (i < this._fetcher.FollowUsers.Count) {
-                    _children[i].SetOwnFollowUser(
+                    this._children[i].SetOwnFollowUser(
                         OwnFollowUser.New(
-                            this._fetcher.Context.Namespace,
-                            this._fetcher.FollowUsers[i].UserId,
-                            this._fetcher.WithProfile
+                            this._fetcher.Context.Follow,
+                            this._fetcher.FollowUsers[i].UserId
                         )
                     );
-                    _children[i].gameObject.SetActive(true);
+                    this._children[i].gameObject.SetActive(true);
                 }
                 else {
-                    _children[i].gameObject.SetActive(false);
+                    this._children[i].gameObject.SetActive(false);
                 }
             }
         }
@@ -72,45 +71,45 @@ namespace Gs2.Unity.UiKit.Gs2Friend
     {
         private Gs2FriendOwnFollowUserListFetcher _fetcher;
 
+        private void Initialize() {
+            for (var i = 0; i < this.maximumItems; i++) {
+                var node = Instantiate(this.prefab, transform);
+                node.FollowUser = OwnFollowUser.New(
+                    this._fetcher.Context.Follow,
+                    ""
+                );
+                node.gameObject.SetActive(false);
+                this._children.Add(node);
+            }
+        }
+
         public void Awake()
         {
-            if (prefab == null) {
+            if (this.prefab == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2FriendOwnFollowUserContext Prefab.");
                 enabled = false;
                 return;
             }
 
-            _fetcher = GetComponent<Gs2FriendOwnFollowUserListFetcher>() ?? GetComponentInParent<Gs2FriendOwnFollowUserListFetcher>();
-            if (_fetcher == null) {
+            this._fetcher = GetComponent<Gs2FriendOwnFollowUserListFetcher>() ?? GetComponentInParent<Gs2FriendOwnFollowUserListFetcher>();
+            if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2FriendOwnFollowUserListFetcher.");
                 enabled = false;
             }
 
-            var context = GetComponent<Gs2FriendNamespaceContext>() ?? GetComponentInParent<Gs2FriendNamespaceContext>(true);
-            if (context == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2FriendOwnFollowUserListFetcher::Context.");
-                enabled = false;
-                return;
-            }
-
-            _children = new List<Gs2FriendOwnFollowUserContext>();
-            for (var i = 0; i < this.maximumItems; i++) {
-                var node = Instantiate(this.prefab, transform);
-                node.FollowUser = OwnFollowUser.New(
-                    context.Namespace,
-                    "",
-                    this._fetcher.WithProfile
-                );
-                node.gameObject.SetActive(false);
-                _children.Add(node);
-            }
+            this._children = new List<Gs2FriendOwnFollowUserContext>();
             this.prefab.gameObject.SetActive(false);
+
+            Invoke(nameof(Initialize), 0);
         }
 
         public virtual bool HasError()
         {
-            _fetcher = GetComponent<Gs2FriendOwnFollowUserListFetcher>() ?? GetComponentInParent<Gs2FriendOwnFollowUserListFetcher>(true);
-            if (_fetcher == null) {
+            if (this.prefab == null) {
+                return true;
+            }
+            this._fetcher = GetComponent<Gs2FriendOwnFollowUserListFetcher>() ?? GetComponentInParent<Gs2FriendOwnFollowUserListFetcher>(true);
+            if (this._fetcher == null) {
                 return true;
             }
             return false;

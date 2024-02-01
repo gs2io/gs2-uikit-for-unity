@@ -29,8 +29,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
+using System.Linq;
 using Gs2.Core.Exception;
 using Gs2.Unity.Core.Exception;
 using Gs2.Unity.Gs2Friend.Domain.Model;
@@ -51,7 +51,7 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Fetcher
 	[AddComponentMenu("GS2 UIKit/Friend/FollowUser/Fetcher/Gs2FriendOwnFollowUserListFetcher")]
     public partial class Gs2FriendOwnFollowUserListFetcher : MonoBehaviour
     {
-        private EzUserGameSessionDomain _domain;
+        private EzFollowGameSessionDomain _domain;
         private ulong? _callbackId;
 
         private IEnumerator Load() {
@@ -99,20 +99,21 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Fetcher
 
             yield return new WaitUntil(() => clientHolder.Initialized);
             yield return new WaitUntil(() => gameSessionHolder.Initialized);
-            yield return new WaitUntil(() => Context != null && Context.Namespace != null);
+            yield return new WaitUntil(() => Context != null && Context.Follow != null);
 
             this._domain = clientHolder.Gs2.Friend.Namespace(
-                this.Context.Namespace.NamespaceName
+                this.Context.Follow.NamespaceName
             ).Me(
                 gameSessionHolder.GameSession
+            ).Follow(
+                this.Context.Follow.WithProfile
             );
             this._callbackId = this._domain.SubscribeFollows(
                 items =>
                 {
                     FollowUsers = items.ToList();
                     this.OnFetched.Invoke();
-                },
-                this.WithProfile
+                }
             );
 
             yield return Load();
@@ -141,8 +142,7 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Fetcher
                 return;
             }
             this._domain.UnsubscribeFollows(
-                this._callbackId.Value,
-                this.WithProfile
+                this._callbackId.Value
             );
             this._callbackId = null;
         }
@@ -154,23 +154,22 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Fetcher
 
     public partial class Gs2FriendOwnFollowUserListFetcher
     {
-        public Gs2FriendNamespaceContext Context;
-        public bool WithProfile;
+        public Gs2FriendOwnFollowContext Context { get; private set; }
 
         public UnityEvent OnFetched = new UnityEvent();
 
         public void Awake()
         {
-            Context = GetComponent<Gs2FriendNamespaceContext>() ?? GetComponentInParent<Gs2FriendNamespaceContext>();
+            Context = GetComponent<Gs2FriendOwnFollowContext>() ?? GetComponentInParent<Gs2FriendOwnFollowContext>();
             if (Context == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2FriendNamespaceContext.");
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2FriendOwnFollowContext.");
                 enabled = false;
             }
         }
 
         public virtual bool HasError()
         {
-            Context = GetComponent<Gs2FriendNamespaceContext>() ?? GetComponentInParent<Gs2FriendNamespaceContext>(true);
+            Context = GetComponent<Gs2FriendOwnFollowContext>() ?? GetComponentInParent<Gs2FriendOwnFollowContext>(true);
             if (Context == null) {
                 return true;
             }

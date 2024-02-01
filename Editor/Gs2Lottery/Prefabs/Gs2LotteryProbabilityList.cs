@@ -5,7 +5,7 @@ namespace Editor.Gs2Lottery.Prefabs
 {
     public static class Gs2LotteryProbabilityList
     {
-        [MenuItem("GameObject/UI/Game Server Services/Lottery/Namespace/User/ProbabilityList", priority = 0)]
+        [MenuItem("GameObject/UI/Game Server Services/Lottery/Namespace/User/Lottery/ProbabilityList", priority = 0)]
         private static void CreateButton()
         {
             var prefab = AssetDatabase.LoadAssetAtPath<GameObject>(

@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
@@ -40,20 +42,19 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Editor
 
             if (original == null) return;
 
-            var context = original.GetComponent<Gs2RankingNamespaceContext>() ?? original.GetComponentInParent<Gs2RankingNamespaceContext>(true);
+            var context = original.GetComponent<Gs2RankingRankingContext>() ?? original.GetComponentInParent<Gs2RankingRankingContext>(true);
             if (context == null) {
-                EditorGUILayout.HelpBox("Gs2RankingNamespaceContext not found.", MessageType.Error);
+                EditorGUILayout.HelpBox("Gs2RankingRankingContext not found.", MessageType.Error);
                 if (GUILayout.Button("Add Context")) {
-                    original.gameObject.AddComponent<Gs2RankingNamespaceContext>();
+                    original.gameObject.AddComponent<Gs2RankingRankingContext>();
                 }
             }
             else {
                 EditorGUI.BeginDisabledGroup(true);
-                EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2RankingNamespaceContext), false);
+                EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2RankingRankingContext), false);
                 EditorGUI.indentLevel++;
-                context.Namespace = EditorGUILayout.ObjectField("Namespace", context.Namespace, typeof(Namespace), false) as Namespace;
+                context.Ranking = EditorGUILayout.ObjectField("Ranking", context.Ranking, typeof(Ranking), false) as Ranking;
                 EditorGUI.indentLevel++;
-                EditorGUILayout.TextField("NamespaceName", context.Namespace?.NamespaceName?.ToString());
                 EditorGUI.indentLevel--;
                 EditorGUI.indentLevel--;
                 EditorGUI.EndDisabledGroup();

@@ -45,14 +45,13 @@ namespace Gs2.Unity.UiKit.Gs2Friend
     {
         private List<Gs2FriendOwnSendFriendRequestContext> _children;
 
-        public void OnFetched() {
-            for (var i = 0; i < this.maximumItems; i++) {
+        private void OnFetched() {
+            for (var i = 0; i < this._children.Count; i++) {
                 if (i < this._fetcher.SendFriendRequests.Count) {
                     this._children[i].SetOwnSendFriendRequest(
                         OwnSendFriendRequest.New(
                             this._fetcher.Context.Namespace,
-                            this._fetcher.SendFriendRequests[i].TargetUserId,
-                            this._fetcher.WithProfile
+                            this._fetcher.SendFriendRequests[i].TargetUserId
                         )
                     );
                     this._children[i].gameObject.SetActive(true);
@@ -72,6 +71,18 @@ namespace Gs2.Unity.UiKit.Gs2Friend
     {
         private Gs2FriendOwnSendFriendRequestListFetcher _fetcher;
 
+        private void Initialize() {
+            for (var i = 0; i < this.maximumItems; i++) {
+                var node = Instantiate(this.prefab, transform);
+                node.SendFriendRequest = OwnSendFriendRequest.New(
+                    this._fetcher.Context.Namespace,
+                    ""
+                );
+                node.gameObject.SetActive(false);
+                this._children.Add(node);
+            }
+        }
+
         public void Awake()
         {
             if (this.prefab == null) {
@@ -86,18 +97,10 @@ namespace Gs2.Unity.UiKit.Gs2Friend
                 enabled = false;
             }
 
-            _children = new List<Gs2FriendOwnSendFriendRequestContext>();
-            for (var i = 0; i < this.maximumItems; i++) {
-                var node = Instantiate(this.prefab, transform);
-                node.SendFriendRequest = OwnSendFriendRequest.New(
-                    this._fetcher.Context.Namespace,
-                    "",
-                    this._fetcher.WithProfile
-                );
-                node.gameObject.SetActive(false);
-                this._children.Add(node);
-            }
+            this._children = new List<Gs2FriendOwnSendFriendRequestContext>();
             this.prefab.gameObject.SetActive(false);
+
+            Invoke(nameof(Initialize), 0);
         }
 
         public virtual bool HasError()

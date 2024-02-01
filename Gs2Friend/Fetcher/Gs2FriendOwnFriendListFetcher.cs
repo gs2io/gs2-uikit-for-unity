@@ -12,8 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
- * deny overwrite
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
@@ -29,8 +27,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
+using System.Linq;
 using Gs2.Core.Exception;
 using Gs2.Unity.Core.Exception;
 using Gs2.Unity.Gs2Friend.Domain.Model;
@@ -48,7 +46,7 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Fetcher
     /// Main
     /// </summary>
 
-	[AddComponentMenu("GS2 UIKit/Friend/FriendUser/Fetcher/Gs2FriendOwnFriendListFetcher")]
+	[AddComponentMenu("GS2 UIKit/Friend/Friend/Fetcher/Gs2FriendOwnFriendListFetcher")]
     public partial class Gs2FriendOwnFriendListFetcher : MonoBehaviour
     {
         private EzUserGameSessionDomain _domain;
@@ -111,8 +109,7 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Fetcher
                 {
                     Friends = items.ToList();
                     this.OnFetched.Invoke();
-                },
-                this.WithProfile
+                }
             );
 
             yield return Load();
@@ -141,8 +138,7 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Fetcher
                 return;
             }
             this._domain.UnsubscribeFriends(
-                this._callbackId.Value,
-                this.WithProfile
+                this._callbackId.Value
             );
             this._callbackId = null;
         }
@@ -184,7 +180,6 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Fetcher
     public partial class Gs2FriendOwnFriendListFetcher
     {
         public List<Gs2.Unity.Gs2Friend.Model.EzFriendUser> Friends { get; private set; }
-        public bool WithProfile;
         public bool Fetched { get; private set; }
     }
 
