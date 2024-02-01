@@ -94,6 +94,9 @@ namespace Gs2.Unity.UiKit.Gs2Stamina.Label
                     "{userData:recoverIntervalMinutes}",
                     $"{this._userDataFetcher.Stamina.RecoverIntervalMinutes}"
                 ).Replace(
+                    "{userData:recoverIntervalMinutes:changed}",
+                    $"{this._userDataFetcher.Stamina.RecoverIntervalMinutes + this._fetcher.Request.RecoverIntervalMinutes}"
+                ).Replace(
                     "{userData:recoverValue}",
                     $"{this._userDataFetcher.Stamina.RecoverValue}"
                 ).Replace(

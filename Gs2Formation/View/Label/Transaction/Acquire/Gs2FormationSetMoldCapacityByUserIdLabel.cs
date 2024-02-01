@@ -87,6 +87,9 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Label
                 ).Replace(
                     "{userData:capacity}",
                     $"{this._userDataFetcher.Mold.Capacity}"
+                ).Replace(
+                    "{userData:capacity:changed}",
+                    $"{this._userDataFetcher.Mold.Capacity + this._fetcher.Request.Capacity}"
                 )
             );
         }

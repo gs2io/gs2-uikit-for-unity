@@ -98,6 +98,11 @@ namespace Gs2.Unity.UiKit.Gs2Stamina.Label.Editor
                     GUI.FocusControl("");
                     EditorUtility.SetDirty(original);
                 }
+                if (GUILayout.Button("UserData:MaxValue:Changed")) {
+                    original.format += "{userData:maxValue:changed}";
+                    GUI.FocusControl("");
+                    EditorUtility.SetDirty(original);
+                }
                 if (GUILayout.Button("UserData:RecoverIntervalMinutes")) {
                     original.format += "{userData:recoverIntervalMinutes}";
                     GUI.FocusControl("");

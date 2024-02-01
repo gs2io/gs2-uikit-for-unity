@@ -108,6 +108,11 @@ namespace Gs2.Unity.UiKit.Gs2Stamina.Label.Editor
                     GUI.FocusControl("");
                     EditorUtility.SetDirty(original);
                 }
+                if (GUILayout.Button("UserData:RecoverValue:Changed")) {
+                    original.format += "{userData:recoverValue:changed}";
+                    GUI.FocusControl("");
+                    EditorUtility.SetDirty(original);
+                }
                 if (GUILayout.Button("UserData:NextRecoverAt")) {
                     original.format += "{userData:nextRecoverAt}";
                     GUI.FocusControl("");

@@ -93,6 +93,11 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Label.Editor
                     GUI.FocusControl("");
                     EditorUtility.SetDirty(original);
                 }
+                if (GUILayout.Button("UserData:Capacity:Changed")) {
+                    original.format += "{userData:capacity:changed}";
+                    GUI.FocusControl("");
+                    EditorUtility.SetDirty(original);
+                }
             }
             EditorGUILayout.PropertyField(serializedObject.FindProperty("onUpdate"), true);
             serializedObject.ApplyModifiedProperties();

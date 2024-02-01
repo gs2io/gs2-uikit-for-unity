@@ -77,6 +77,11 @@ namespace Gs2.Unity.UiKit.Gs2Exchange.Label.Editor
                 GUI.FocusControl("");
                 EditorUtility.SetDirty(original);
             }
+            if (GUILayout.Button("Config")) {
+                original.format += "{config}";
+                GUI.FocusControl("");
+                EditorUtility.SetDirty(original);
+            }
             if (userDataFetcher != null) {
                 if (GUILayout.Button("UserData:UserId")) {
                     original.format += "{userData:userId}";

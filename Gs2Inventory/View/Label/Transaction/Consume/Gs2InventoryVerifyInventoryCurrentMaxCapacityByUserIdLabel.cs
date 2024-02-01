@@ -93,6 +93,9 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Label
                 ).Replace(
                     "{userData:currentInventoryMaxCapacity}",
                     $"{this._userDataFetcher.Inventory.CurrentInventoryMaxCapacity}"
+                ).Replace(
+                    "{userData:currentInventoryMaxCapacity:changed}",
+                    $"{this._userDataFetcher.Inventory.CurrentInventoryMaxCapacity + this._fetcher.Request.CurrentInventoryMaxCapacity}"
                 )
             );
         }

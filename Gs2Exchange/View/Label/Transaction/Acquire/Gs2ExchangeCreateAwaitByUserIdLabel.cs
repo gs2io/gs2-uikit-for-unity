@@ -66,6 +66,9 @@ namespace Gs2.Unity.UiKit.Gs2Exchange.Label
                     "{count}",
                     $"{this._fetcher.Request.Count}"
                 ).Replace(
+                    "{config}",
+                    $"{this._fetcher.Request.Config}"
+                ).Replace(
                     "{userData:userId}",
                     $"{this._userDataFetcher.Await.UserId}"
                 ).Replace(

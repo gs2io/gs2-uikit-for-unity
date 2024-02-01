@@ -91,6 +91,9 @@ namespace Gs2.Unity.UiKit.Gs2Stamina.Label
                     "{userData:maxValue}",
                     $"{this._userDataFetcher.Stamina.MaxValue}"
                 ).Replace(
+                    "{userData:maxValue:changed}",
+                    $"{this._userDataFetcher.Stamina.MaxValue + this._fetcher.Request.MaxValue}"
+                ).Replace(
                     "{userData:recoverIntervalMinutes}",
                     $"{this._userDataFetcher.Stamina.RecoverIntervalMinutes}"
                 ).Replace(

@@ -103,6 +103,11 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Label.Editor
                     GUI.FocusControl("");
                     EditorUtility.SetDirty(original);
                 }
+                if (GUILayout.Button("UserData:CurrentInventoryMaxCapacity:Changed")) {
+                    original.format += "{userData:currentInventoryMaxCapacity:changed}";
+                    GUI.FocusControl("");
+                    EditorUtility.SetDirty(original);
+                }
             }
             EditorGUILayout.PropertyField(serializedObject.FindProperty("onUpdate"), true);
             serializedObject.ApplyModifiedProperties();

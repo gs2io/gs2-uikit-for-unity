@@ -97,6 +97,9 @@ namespace Gs2.Unity.UiKit.Gs2Stamina.Label
                     "{userData:recoverValue}",
                     $"{this._userDataFetcher.Stamina.RecoverValue}"
                 ).Replace(
+                    "{userData:recoverValue:changed}",
+                    $"{this._userDataFetcher.Stamina.RecoverValue + this._fetcher.Request.RecoverValue}"
+                ).Replace(
                     "{userData:nextRecoverAt}",
                     $"{this._userDataFetcher.Stamina.NextRecoverAt}"
                 )

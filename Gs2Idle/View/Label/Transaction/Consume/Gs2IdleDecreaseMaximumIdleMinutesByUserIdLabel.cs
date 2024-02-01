@@ -90,6 +90,9 @@ namespace Gs2.Unity.UiKit.Gs2Idle.Label
                 ).Replace(
                     "{userData:maximumIdleMinutes}",
                     $"{this._userDataFetcher.Status.MaximumIdleMinutes}"
+                ).Replace(
+                    "{userData:maximumIdleMinutes:changed}",
+                    $"{this._userDataFetcher.Status.MaximumIdleMinutes + this._fetcher.Request.DecreaseMinutes}"
                 )
             );
         }

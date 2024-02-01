@@ -96,6 +96,9 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Label
                 ).Replace(
                     "{userData:count}",
                     $"{this._userDataFetcher.BigItem.Count}"
+                ).Replace(
+                    "{userData:count:changed}",
+                    $"{this._userDataFetcher.BigItem.Count + this._fetcher.Request.Count}"
                 )
             );
         }

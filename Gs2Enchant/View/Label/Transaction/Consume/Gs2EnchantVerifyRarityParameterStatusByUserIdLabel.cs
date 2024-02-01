@@ -97,6 +97,9 @@ namespace Gs2.Unity.UiKit.Gs2Enchant.Label
                 ).Replace(
                     "{userData:parameterValues}",
                     $"{this._userDataFetcher.RarityParameterStatus.ParameterValues}"
+                ).Replace(
+                    "{userData:parameterValues:changed}",
+                    $"{this._userDataFetcher.RarityParameterStatus.ParameterValues + this._fetcher.Request.ParameterName}"
                 )
             );
         }
