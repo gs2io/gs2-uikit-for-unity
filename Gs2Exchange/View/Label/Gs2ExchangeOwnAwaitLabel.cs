@@ -51,6 +51,8 @@ namespace Gs2.Unity.UiKit.Gs2Exchange
                 ).Replace(
                     "{name}", $"{this._fetcher?.Await?.Name}"
                 ).Replace(
+                    "{config}", $"{this._fetcher?.Await?.Config}"
+                ).Replace(
                     "{exchangedAt:yyyy}", exchangedAt.ToString("yyyy")
                 ).Replace(
                     "{exchangedAt:yy}", exchangedAt.ToString("yy")

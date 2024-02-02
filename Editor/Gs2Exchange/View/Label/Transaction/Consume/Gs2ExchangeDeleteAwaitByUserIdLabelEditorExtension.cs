@@ -88,6 +88,11 @@ namespace Gs2.Unity.UiKit.Gs2Exchange.Label.Editor
                     GUI.FocusControl("");
                     EditorUtility.SetDirty(original);
                 }
+                if (GUILayout.Button("UserData:Config")) {
+                    original.format += "{userData:config}";
+                    GUI.FocusControl("");
+                    EditorUtility.SetDirty(original);
+                }
                 if (GUILayout.Button("UserData:ExchangedAt")) {
                     original.format += "{userData:exchangedAt}";
                     GUI.FocusControl("");

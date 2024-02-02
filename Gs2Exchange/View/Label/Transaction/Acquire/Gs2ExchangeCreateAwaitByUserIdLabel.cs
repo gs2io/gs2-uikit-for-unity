@@ -78,6 +78,9 @@ namespace Gs2.Unity.UiKit.Gs2Exchange.Label
                     "{userData:name}",
                     $"{this._userDataFetcher.Await.Name}"
                 ).Replace(
+                    "{userData:config}",
+                    $"{this._userDataFetcher.Await.Config}"
+                ).Replace(
                     "{userData:exchangedAt}",
                     $"{this._userDataFetcher.Await.ExchangedAt}"
                 )
