@@ -60,6 +60,7 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.SpriteSwitcher.Editor
                     context.SubscribeUser = EditorGUILayout.ObjectField("SubscribeUser", context.SubscribeUser, typeof(OwnSubscribeUser), false) as OwnSubscribeUser;
                     if (context.SubscribeUser != null) {
                         EditorGUI.indentLevel++;
+                        EditorGUILayout.TextField("NamespaceName", context.SubscribeUser?.NamespaceName?.ToString());
                         EditorGUILayout.TextField("CategoryName", context.SubscribeUser?.CategoryName?.ToString());
                         EditorGUILayout.TextField("TargetUserId", context.SubscribeUser?.TargetUserId?.ToString());
                         EditorGUI.indentLevel--;
