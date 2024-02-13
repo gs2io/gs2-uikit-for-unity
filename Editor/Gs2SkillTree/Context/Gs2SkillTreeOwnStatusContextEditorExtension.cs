@@ -52,6 +52,7 @@ namespace Gs2.Unity.UiKit.Gs2SkillTree.Editor
                 if (original.Status != null) {
                     EditorGUI.indentLevel++;
                     EditorGUILayout.TextField("NamespaceName", original.Status?.NamespaceName?.ToString());
+                    EditorGUILayout.TextField("PropertyId", original.Status?.PropertyId?.ToString());
                     EditorGUI.indentLevel--;
                 }
                 EditorGUI.EndDisabledGroup();

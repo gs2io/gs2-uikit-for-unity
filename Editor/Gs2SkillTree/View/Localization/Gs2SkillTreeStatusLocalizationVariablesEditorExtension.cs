@@ -59,6 +59,7 @@ namespace Gs2.Unity.UiKit.Gs2SkillTree.Localization.Editor
                 if (context.Status != null) {
                     EditorGUI.indentLevel++;
                     EditorGUILayout.TextField("NamespaceName", context.Status?.NamespaceName?.ToString());
+                    EditorGUILayout.TextField("PropertyId", context.Status?.PropertyId?.ToString());
                     EditorGUI.indentLevel--;
                 }
                 EditorGUI.indentLevel--;

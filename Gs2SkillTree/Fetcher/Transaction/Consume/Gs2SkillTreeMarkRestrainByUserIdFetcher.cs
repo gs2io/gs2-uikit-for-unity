@@ -47,18 +47,22 @@ namespace Gs2.Unity.UiKit.Gs2SkillTree.Fetcher
     /// </summary>
 
 	[AddComponentMenu("GS2 UIKit/SkillTree/Status/Fetcher/Consume/Gs2SkillTreeMarkRestrainByUserIdFetcher")]
-    public partial class Gs2SkillTreeMarkRestrainByUserIdFetcher : Gs2SkillTreeNamespaceContext
+    public partial class Gs2SkillTreeMarkRestrainByUserIdFetcher : Gs2SkillTreeOwnStatusContext
     {
         private void Fetch()
         {
             if (this._context != null) {
                 if (this._context.ConsumeAction.Action == "Gs2SkillTree:MarkRestrainByUserId") {
                     Request = MarkRestrainByUserIdRequest.FromJson(JsonMapper.ToObject(this._context.ConsumeAction.Request));
-                    if (Namespace == null || (
-                            Namespace.NamespaceName == Request.NamespaceName)
+                    if (Status == null || (
+                            Status.NamespaceName == Request.NamespaceName &&
+                            Status.PropertyId == Request.PropertyId)
                     ) {
-                        Namespace = Namespace.New(
-                            Request.NamespaceName
+                        Status = OwnStatus.New(
+                            Namespace.New(
+                                Request.NamespaceName
+                            ),
+                            Request.PropertyId
                         );
                     }
                     Fetched = true;
@@ -68,11 +72,15 @@ namespace Gs2.Unity.UiKit.Gs2SkillTree.Fetcher
                 var action = this._fetcher.ConsumeActions().FirstOrDefault(v => v.Action == "Gs2SkillTree:MarkRestrainByUserId");
                 if (action != null) {
                     Request = MarkRestrainByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
-                    if (Namespace == null || (
-                            Namespace.NamespaceName == Request.NamespaceName)
+                    if (Status == null || (
+                            Status.NamespaceName == Request.NamespaceName &&
+                            Status.PropertyId == Request.PropertyId)
                     ) {
-                        Namespace = Namespace.New(
-                            Request.NamespaceName
+                        Status = OwnStatus.New(
+                            Namespace.New(
+                                Request.NamespaceName
+                            ),
+                            Request.PropertyId
                         );
                     }
                     Fetched = true;

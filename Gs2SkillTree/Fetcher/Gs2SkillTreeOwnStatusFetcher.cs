@@ -68,6 +68,7 @@ namespace Gs2.Unity.UiKit.Gs2SkillTree.Fetcher
             ).Me(
                 gameSessionHolder.GameSession
             ).Status(
+                this.Context.Status.PropertyId
             );;
             var future = this._domain.SubscribeWithInitialCallFuture(
                 item =>

@@ -25,70 +25,52 @@
 #pragma warning disable CS0472
 
 using System;
+using System.Linq;
+using System.Collections.Generic;
 using Gs2.Gs2SkillTree.Request;
-using Gs2.Unity.Gs2SkillTree.ScriptableObject;
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Core.Fetcher;
-using Gs2.Unity.UiKit.Gs2SkillTree.Context;
 using Gs2.Unity.UiKit.Gs2SkillTree.Fetcher;
 using Gs2.Util.LitJson;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace Gs2.Unity.UiKit.Gs2SkillTree.Label
+namespace Gs2.Unity.UiKit.Gs2SkillTree.SpriteSwitcher
 {
     /// <summary>
     /// Main
     /// </summary>
 
-	[AddComponentMenu("GS2 UIKit/SkillTree/Status/View/Label/Transaction/Gs2SkillTreeMarkRestrainByUserIdLabel")]
-    public partial class Gs2SkillTreeMarkRestrainByUserIdLabel : MonoBehaviour
+	[AddComponentMenu("GS2 UIKit/SkillTree/Status/View/SpriteSwitcher/Transaction/Properties/PropertyId/Gs2SkillTreeMarkRestrainByUserIdPropertyIdSpriteSwitcher")]
+    public partial class Gs2SkillTreeMarkRestrainByUserIdPropertyIdSpriteSwitcher : MonoBehaviour
     {
         private void OnFetched()
         {
-            if (this._userDataFetcher == null) {
-                var context = gameObject.AddComponent<Gs2SkillTreeOwnStatusContext>();
-                context.SetOwnStatus(
-                    OwnStatus.New(
-                        Namespace.New(
-                            this._fetcher.Request.NamespaceName
-                        ),
-                        this._fetcher.Request.PropertyId
-                    )
-                );
-                this._userDataFetcher = gameObject.AddComponent<Gs2SkillTreeOwnStatusFetcher>();
-                this._userDataFetcher.OnFetched.AddListener(this._onFetched);
+            switch(this.expression)
+            {
+                case Expression.In:
+                    if (this.applyPropertyIds.Contains(this._fetcher.Request?.PropertyId ?? "")) {
+                        this.onUpdate.Invoke(this.sprite);
+                    }
+                    break;
+                case Expression.NotIn:
+                    if (!this.applyPropertyIds.Contains(this._fetcher.Request?.PropertyId ?? "")) {
+                        this.onUpdate.Invoke(this.sprite);
+                    }
+                    break;
+                case Expression.StartsWith:
+                    if ((this._fetcher.Request?.PropertyId ?? "").StartsWith(this.applyPropertyId)) {
+                        this.onUpdate.Invoke(this.sprite);
+                    }
+                    break;
+                case Expression.EndsWith:
+                    if ((this._fetcher.Request?.PropertyId ?? "").EndsWith(this.applyPropertyId)) {
+                        this.onUpdate.Invoke(this.sprite);
+                    }
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
-            if ((!this._fetcher?.Fetched ?? false) || this._fetcher.Request == null) {
-                return;
-            }
-            if ((!this._userDataFetcher?.Fetched ?? false) || this._userDataFetcher.Status == null) {
-                return;
-            }
-            this.onUpdate?.Invoke(
-                this.format.Replace(
-                    "{namespaceName}",
-                    $"{this._fetcher.Request.NamespaceName}"
-                ).Replace(
-                    "{userId}",
-                    $"{this._fetcher.Request.UserId}"
-                ).Replace(
-                    "{propertyId}",
-                    $"{this._fetcher.Request.PropertyId}"
-                ).Replace(
-                    "{nodeModelNames}",
-                    $"{this._fetcher.Request.NodeModelNames}"
-                ).Replace(
-                    "{userData:statusId}",
-                    $"{this._userDataFetcher.Status.StatusId}"
-                ).Replace(
-                    "{userData:userId}",
-                    $"{this._userDataFetcher.Status.UserId}"
-                ).Replace(
-                    "{userData:releasedNodeNames}",
-                    $"{this._userDataFetcher.Status.ReleasedNodeNames}"
-                )
-            );
         }
     }
 
@@ -96,10 +78,9 @@ namespace Gs2.Unity.UiKit.Gs2SkillTree.Label
     /// Dependent components
     /// </summary>
 
-    public partial class Gs2SkillTreeMarkRestrainByUserIdLabel
+    public partial class Gs2SkillTreeMarkRestrainByUserIdPropertyIdSpriteSwitcher
     {
         private Gs2SkillTreeMarkRestrainByUserIdFetcher _fetcher;
-        private Gs2SkillTreeOwnStatusFetcher _userDataFetcher;
 
         public void Awake()
         {
@@ -108,13 +89,19 @@ namespace Gs2.Unity.UiKit.Gs2SkillTree.Label
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2SkillTreeMarkRestrainByUserIdFetcher.");
                 enabled = false;
             }
-            this._userDataFetcher = GetComponent<Gs2SkillTreeOwnStatusFetcher>() ?? GetComponentInParent<Gs2SkillTreeOwnStatusFetcher>();
+            if (this.sprite == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: sprite is not set.");
+                enabled = false;
+            }
         }
 
         public virtual bool HasError()
         {
             this._fetcher = GetComponent<Gs2SkillTreeMarkRestrainByUserIdFetcher>() ?? GetComponentInParent<Gs2SkillTreeMarkRestrainByUserIdFetcher>(true);
             if (this._fetcher == null) {
+                return true;
+            }
+            if (this.sprite == null) {
                 return true;
             }
             return false;
@@ -132,21 +119,12 @@ namespace Gs2.Unity.UiKit.Gs2SkillTree.Label
             if (this._fetcher.Fetched) {
                 OnFetched();
             }
-            if (this._userDataFetcher != null) {
-                this._userDataFetcher.OnFetched.AddListener(this._onFetched);
-                if (this._userDataFetcher.Fetched) {
-                    OnFetched();
-                }
-            }
         }
 
         public void OnDisable()
         {
             if (this._onFetched != null) {
                 this._fetcher.OnFetched.RemoveListener(this._onFetched);
-                if (this._userDataFetcher != null) {
-                    this._userDataFetcher.OnFetched.RemoveListener(this._onFetched);
-                }
                 this._onFetched = null;
             }
         }
@@ -156,7 +134,7 @@ namespace Gs2.Unity.UiKit.Gs2SkillTree.Label
     /// Public properties
     /// </summary>
 
-    public partial class Gs2SkillTreeMarkRestrainByUserIdLabel
+    public partial class Gs2SkillTreeMarkRestrainByUserIdPropertyIdSpriteSwitcher
     {
 
     }
@@ -165,18 +143,31 @@ namespace Gs2.Unity.UiKit.Gs2SkillTree.Label
     /// Parameters for Inspector
     /// </summary>
 
-    public partial class Gs2SkillTreeMarkRestrainByUserIdLabel
+    public partial class Gs2SkillTreeMarkRestrainByUserIdPropertyIdSpriteSwitcher
     {
-        public string format;
+        public enum Expression {
+            In,
+            NotIn,
+            StartsWith,
+            EndsWith,
+        }
+
+        public Expression expression;
+
+        public List<string> applyPropertyIds;
+
+        public string applyPropertyId;
+
+        public Sprite sprite;
     }
 
     /// <summary>
     /// Event handlers
     /// </summary>
-    public partial class Gs2SkillTreeMarkRestrainByUserIdLabel
+    public partial class Gs2SkillTreeMarkRestrainByUserIdPropertyIdSpriteSwitcher
     {
         [Serializable]
-        private class UpdateEvent : UnityEvent<string>
+        private class UpdateEvent : UnityEvent<Sprite>
         {
 
         }
@@ -184,7 +175,7 @@ namespace Gs2.Unity.UiKit.Gs2SkillTree.Label
         [SerializeField]
         private UpdateEvent onUpdate = new UpdateEvent();
 
-        public event UnityAction<string> OnUpdate
+        public event UnityAction<Sprite> OnUpdate
         {
             add => this.onUpdate.AddListener(value);
             remove => this.onUpdate.RemoveListener(value);
