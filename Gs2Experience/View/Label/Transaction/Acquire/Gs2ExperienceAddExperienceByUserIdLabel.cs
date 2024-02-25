@@ -83,6 +83,9 @@ namespace Gs2.Unity.UiKit.Gs2Experience.Label
                     "{experienceValue}",
                     $"{this._fetcher.Request.ExperienceValue}"
                 ).Replace(
+                    "{truncateExperienceWhenRankUp}",
+                    $"{this._fetcher.Request.TruncateExperienceWhenRankUp}"
+                ).Replace(
                     "{userData:experienceName}",
                     $"{this._userDataFetcher.Status.ExperienceName}"
                 ).Replace(

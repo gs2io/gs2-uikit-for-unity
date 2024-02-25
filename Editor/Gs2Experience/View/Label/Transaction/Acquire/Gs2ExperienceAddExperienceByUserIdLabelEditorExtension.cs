@@ -82,6 +82,11 @@ namespace Gs2.Unity.UiKit.Gs2Experience.Label.Editor
                 GUI.FocusControl("");
                 EditorUtility.SetDirty(original);
             }
+            if (GUILayout.Button("TruncateExperienceWhenRankUp")) {
+                original.format += "{truncateExperienceWhenRankUp}";
+                GUI.FocusControl("");
+                EditorUtility.SetDirty(original);
+            }
             if (userDataFetcher != null) {
                 if (GUILayout.Button("UserData:ExperienceName")) {
                     original.format += "{userData:experienceName}";
