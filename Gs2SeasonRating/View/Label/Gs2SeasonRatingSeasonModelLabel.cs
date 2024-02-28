@@ -44,6 +44,8 @@ namespace Gs2.Unity.UiKit.Gs2SeasonRating
         {
             this.onUpdate?.Invoke(
                 this.format.Replace(
+                    "{seasonModelId}", $"{this._fetcher?.SeasonModel?.SeasonModelId}"
+                ).Replace(
                     "{name}", $"{this._fetcher?.SeasonModel?.Name}"
                 ).Replace(
                     "{metadata}", $"{this._fetcher?.SeasonModel?.Metadata}"

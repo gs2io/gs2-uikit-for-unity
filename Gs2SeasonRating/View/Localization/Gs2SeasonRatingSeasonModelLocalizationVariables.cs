@@ -44,6 +44,9 @@ namespace Gs2.Unity.UiKit.Gs2SeasonRating.Localization
     {
         private void OnFetched()
         {
+            this.target.StringReference["seasonModelId"] = new StringVariable {
+                Value = _fetcher?.SeasonModel?.SeasonModelId ?? "",
+            };
             this.target.StringReference["name"] = new StringVariable {
                 Value = _fetcher?.SeasonModel?.Name ?? "",
             };

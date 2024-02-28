@@ -74,6 +74,11 @@ namespace Gs2.Unity.UiKit.Gs2SeasonRating.Editor
             original.format = EditorGUILayout.TextField("Format", original.format);
 
             GUILayout.Label("Add Format Parameter");
+            if (GUILayout.Button("SeasonModelId")) {
+                original.format += "{seasonModelId}";
+                GUI.FocusControl("");
+                EditorUtility.SetDirty(original);
+            }
             if (GUILayout.Button("Name")) {
                 original.format += "{name}";
                 GUI.FocusControl("");
