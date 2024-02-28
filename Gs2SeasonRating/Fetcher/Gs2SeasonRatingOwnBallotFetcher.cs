@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable CheckNamespace
@@ -68,6 +70,10 @@ namespace Gs2.Unity.UiKit.Gs2SeasonRating.Fetcher
             ).Me(
                 gameSessionHolder.GameSession
             ).Ballot(
+                this.Context.Ballot.SeasonName,
+                this.Context.Ballot.SessionName,
+                this.Context.Ballot.NumberOfPlayer,
+                this.Context.Ballot.KeyId
             );;
             var future = this._domain.SubscribeWithInitialCallFuture(
                 item =>
@@ -115,7 +121,7 @@ namespace Gs2.Unity.UiKit.Gs2SeasonRating.Fetcher
         }
 
         public void SetTemporaryBallot(
-            Gs2.Unity.Gs2SeasonRating.Model.EzBallot ballot
+            Gs2.Unity.Gs2SeasonRating.Model.EzSignedBallot ballot
         ) {
             Ballot = ballot;
             this.OnFetched.Invoke();
@@ -160,7 +166,7 @@ namespace Gs2.Unity.UiKit.Gs2SeasonRating.Fetcher
 
     public partial class Gs2SeasonRatingOwnBallotFetcher
     {
-        public Gs2.Unity.Gs2SeasonRating.Model.EzBallot Ballot { get; protected set; }
+        public Gs2.Unity.Gs2SeasonRating.Model.EzSignedBallot Ballot { get; protected set; }
         public bool Fetched { get; protected set; }
         public UnityEvent OnFetched = new UnityEvent();
     }
