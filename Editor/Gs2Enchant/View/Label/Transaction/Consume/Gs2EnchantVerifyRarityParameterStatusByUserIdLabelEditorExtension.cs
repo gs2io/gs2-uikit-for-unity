@@ -92,6 +92,11 @@ namespace Gs2.Unity.UiKit.Gs2Enchant.Label.Editor
                 GUI.FocusControl("");
                 EditorUtility.SetDirty(original);
             }
+            if (GUILayout.Button("MultiplyValueSpecifyingQuantity")) {
+                original.format += "{multiplyValueSpecifyingQuantity}";
+                GUI.FocusControl("");
+                EditorUtility.SetDirty(original);
+            }
             if (userDataFetcher != null) {
                 if (GUILayout.Button("UserData:ParameterName")) {
                     original.format += "{userData:parameterName}";

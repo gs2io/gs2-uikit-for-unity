@@ -87,6 +87,11 @@ namespace Gs2.Unity.UiKit.Gs2Experience.Label.Editor
                 GUI.FocusControl("");
                 EditorUtility.SetDirty(original);
             }
+            if (GUILayout.Button("MultiplyValueSpecifyingQuantity")) {
+                original.format += "{multiplyValueSpecifyingQuantity}";
+                GUI.FocusControl("");
+                EditorUtility.SetDirty(original);
+            }
             if (userDataFetcher != null) {
                 if (GUILayout.Button("UserData:ExperienceName")) {
                     original.format += "{userData:experienceName}";

@@ -86,6 +86,9 @@ namespace Gs2.Unity.UiKit.Gs2Limit.Label
                     "{count}",
                     $"{this._fetcher.Request.Count}"
                 ).Replace(
+                    "{multiplyValueSpecifyingQuantity}",
+                    $"{this._fetcher.Request.MultiplyValueSpecifyingQuantity}"
+                ).Replace(
                     "{userData:counterId}",
                     $"{this._userDataFetcher.Counter.CounterId}"
                 ).Replace(

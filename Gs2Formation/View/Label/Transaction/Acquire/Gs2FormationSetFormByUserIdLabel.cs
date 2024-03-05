@@ -25,47 +25,47 @@
 #pragma warning disable CS0472
 
 using System;
-using Gs2.Gs2Inventory.Request;
-using Gs2.Unity.Gs2Inventory.ScriptableObject;
+using Gs2.Gs2Formation.Request;
+using Gs2.Unity.Gs2Formation.ScriptableObject;
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Core.Fetcher;
-using Gs2.Unity.UiKit.Gs2Inventory.Context;
-using Gs2.Unity.UiKit.Gs2Inventory.Fetcher;
+using Gs2.Unity.UiKit.Gs2Formation.Context;
+using Gs2.Unity.UiKit.Gs2Formation.Fetcher;
 using Gs2.Util.LitJson;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace Gs2.Unity.UiKit.Gs2Inventory.Label
+namespace Gs2.Unity.UiKit.Gs2Formation.Label
 {
     /// <summary>
     /// Main
     /// </summary>
 
-	[AddComponentMenu("GS2 UIKit/Inventory/BigItem/View/Label/Transaction/Gs2InventoryVerifyBigItemByUserIdLabel")]
-    public partial class Gs2InventoryVerifyBigItemByUserIdLabel : MonoBehaviour
+	[AddComponentMenu("GS2 UIKit/Formation/Form/View/Label/Transaction/Gs2FormationSetFormByUserIdLabel")]
+    public partial class Gs2FormationSetFormByUserIdLabel : MonoBehaviour
     {
         private void OnFetched()
         {
             if (this._userDataFetcher == null) {
-                var context = gameObject.AddComponent<Gs2InventoryOwnBigItemContext>();
-                context.SetOwnBigItem(
-                    OwnBigItem.New(
-                        OwnBigInventory.New(
+                var context = gameObject.AddComponent<Gs2FormationOwnFormContext>();
+                context.SetOwnForm(
+                    OwnForm.New(
+                        OwnMold.New(
                             Namespace.New(
                                 this._fetcher.Request.NamespaceName
                             ),
-                            this._fetcher.Request.InventoryName
+                            this._fetcher.Request.MoldModelName
                         ),
-                        this._fetcher.Request.ItemName
+                        this._fetcher.Request.Index ?? 0
                     )
                 );
-                this._userDataFetcher = gameObject.AddComponent<Gs2InventoryOwnBigItemFetcher>();
+                this._userDataFetcher = gameObject.AddComponent<Gs2FormationOwnFormFetcher>();
                 this._userDataFetcher.OnFetched.AddListener(this._onFetched);
             }
             if ((!this._fetcher?.Fetched ?? false) || this._fetcher.Request == null) {
                 return;
             }
-            if ((!this._userDataFetcher?.Fetched ?? false) || this._userDataFetcher.BigItem == null) {
+            if ((!this._userDataFetcher?.Fetched ?? false) || this._userDataFetcher.Form == null) {
                 return;
             }
             this.onUpdate?.Invoke(
@@ -76,32 +76,23 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Label
                     "{userId}",
                     $"{this._fetcher.Request.UserId}"
                 ).Replace(
-                    "{inventoryName}",
-                    $"{this._fetcher.Request.InventoryName}"
+                    "{moldModelName}",
+                    $"{this._fetcher.Request.MoldModelName}"
                 ).Replace(
-                    "{itemName}",
-                    $"{this._fetcher.Request.ItemName}"
+                    "{index}",
+                    $"{this._fetcher.Request.Index}"
                 ).Replace(
-                    "{verifyType}",
-                    $"{this._fetcher.Request.VerifyType}"
+                    "{slots}",
+                    $"{this._fetcher.Request.Slots}"
                 ).Replace(
-                    "{count}",
-                    $"{this._fetcher.Request.Count}"
+                    "{userData:name}",
+                    $"{this._userDataFetcher.Form.Name}"
                 ).Replace(
-                    "{multiplyValueSpecifyingQuantity}",
-                    $"{this._fetcher.Request.MultiplyValueSpecifyingQuantity}"
+                    "{userData:index}",
+                    $"{this._userDataFetcher.Form.Index}"
                 ).Replace(
-                    "{userData:itemId}",
-                    $"{this._userDataFetcher.BigItem.ItemId}"
-                ).Replace(
-                    "{userData:itemName}",
-                    $"{this._userDataFetcher.BigItem.ItemName}"
-                ).Replace(
-                    "{userData:count}",
-                    $"{this._userDataFetcher.BigItem.Count}"
-                ).Replace(
-                    "{userData:count:changed}",
-                    $"{this._userDataFetcher.BigItem.Count + this._fetcher.Request.Count}"
+                    "{userData:slots}",
+                    $"{this._userDataFetcher.Form.Slots}"
                 )
             );
         }
@@ -111,24 +102,24 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Label
     /// Dependent components
     /// </summary>
 
-    public partial class Gs2InventoryVerifyBigItemByUserIdLabel
+    public partial class Gs2FormationSetFormByUserIdLabel
     {
-        private Gs2InventoryVerifyBigItemByUserIdFetcher _fetcher;
-        private Gs2InventoryOwnBigItemFetcher _userDataFetcher;
+        private Gs2FormationSetFormByUserIdFetcher _fetcher;
+        private Gs2FormationOwnFormFetcher _userDataFetcher;
 
         public void Awake()
         {
-            this._fetcher = GetComponent<Gs2InventoryVerifyBigItemByUserIdFetcher>() ?? GetComponentInParent<Gs2InventoryVerifyBigItemByUserIdFetcher>();
+            this._fetcher = GetComponent<Gs2FormationSetFormByUserIdFetcher>() ?? GetComponentInParent<Gs2FormationSetFormByUserIdFetcher>();
             if (this._fetcher == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2InventoryVerifyBigItemByUserIdFetcher.");
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2FormationSetFormByUserIdFetcher.");
                 enabled = false;
             }
-            this._userDataFetcher = GetComponent<Gs2InventoryOwnBigItemFetcher>() ?? GetComponentInParent<Gs2InventoryOwnBigItemFetcher>();
+            this._userDataFetcher = GetComponent<Gs2FormationOwnFormFetcher>() ?? GetComponentInParent<Gs2FormationOwnFormFetcher>();
         }
 
         public virtual bool HasError()
         {
-            this._fetcher = GetComponent<Gs2InventoryVerifyBigItemByUserIdFetcher>() ?? GetComponentInParent<Gs2InventoryVerifyBigItemByUserIdFetcher>(true);
+            this._fetcher = GetComponent<Gs2FormationSetFormByUserIdFetcher>() ?? GetComponentInParent<Gs2FormationSetFormByUserIdFetcher>(true);
             if (this._fetcher == null) {
                 return true;
             }
@@ -171,7 +162,7 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Label
     /// Public properties
     /// </summary>
 
-    public partial class Gs2InventoryVerifyBigItemByUserIdLabel
+    public partial class Gs2FormationSetFormByUserIdLabel
     {
 
     }
@@ -180,7 +171,7 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Label
     /// Parameters for Inspector
     /// </summary>
 
-    public partial class Gs2InventoryVerifyBigItemByUserIdLabel
+    public partial class Gs2FormationSetFormByUserIdLabel
     {
         public string format;
     }
@@ -188,7 +179,7 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Label
     /// <summary>
     /// Event handlers
     /// </summary>
-    public partial class Gs2InventoryVerifyBigItemByUserIdLabel
+    public partial class Gs2FormationSetFormByUserIdLabel
     {
         [Serializable]
         private class UpdateEvent : UnityEvent<string>

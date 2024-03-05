@@ -87,6 +87,11 @@ namespace Gs2.Unity.UiKit.Gs2Grade.Label.Editor
                 GUI.FocusControl("");
                 EditorUtility.SetDirty(original);
             }
+            if (GUILayout.Button("MultiplyValueSpecifyingQuantity")) {
+                original.format += "{multiplyValueSpecifyingQuantity}";
+                GUI.FocusControl("");
+                EditorUtility.SetDirty(original);
+            }
             if (userDataFetcher != null) {
                 if (GUILayout.Button("UserData:GradeName")) {
                     original.format += "{userData:gradeName}";

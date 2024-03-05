@@ -87,6 +87,11 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Label.Editor
                 GUI.FocusControl("");
                 EditorUtility.SetDirty(original);
             }
+            if (GUILayout.Button("MultiplyValueSpecifyingQuantity")) {
+                original.format += "{multiplyValueSpecifyingQuantity}";
+                GUI.FocusControl("");
+                EditorUtility.SetDirty(original);
+            }
             if (userDataFetcher != null) {
                 if (GUILayout.Button("UserData:ItemId")) {
                     original.format += "{userData:itemId}";

@@ -88,6 +88,9 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Label
                     "{count}",
                     $"{this._fetcher.Request.Count}"
                 ).Replace(
+                    "{multiplyValueSpecifyingQuantity}",
+                    $"{this._fetcher.Request.MultiplyValueSpecifyingQuantity}"
+                ).Replace(
                     "{userData:itemId}",
                     $"{this._userDataFetcher.SimpleItem.ItemId}"
                 ).Replace(

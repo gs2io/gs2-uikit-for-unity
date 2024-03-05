@@ -89,6 +89,9 @@ namespace Gs2.Unity.UiKit.Gs2Enchant.Label
                     "{parameterCount}",
                     $"{this._fetcher.Request.ParameterCount}"
                 ).Replace(
+                    "{multiplyValueSpecifyingQuantity}",
+                    $"{this._fetcher.Request.MultiplyValueSpecifyingQuantity}"
+                ).Replace(
                     "{userData:parameterName}",
                     $"{this._userDataFetcher.RarityParameterStatus.ParameterName}"
                 ).Replace(

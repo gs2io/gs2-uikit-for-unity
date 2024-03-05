@@ -86,6 +86,9 @@ namespace Gs2.Unity.UiKit.Gs2Grade.Label
                     "{gradeValue}",
                     $"{this._fetcher.Request.GradeValue}"
                 ).Replace(
+                    "{multiplyValueSpecifyingQuantity}",
+                    $"{this._fetcher.Request.MultiplyValueSpecifyingQuantity}"
+                ).Replace(
                     "{userData:gradeName}",
                     $"{this._userDataFetcher.Status.GradeName}"
                 ).Replace(

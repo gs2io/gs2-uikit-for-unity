@@ -24,32 +24,32 @@
 
 #pragma warning disable CS0472
 
-using Gs2.Unity.UiKit.Gs2Inventory.Fetcher;
+using Gs2.Unity.UiKit.Gs2Formation.Fetcher;
 using UnityEditor;
 using UnityEngine;
 
-namespace Gs2.Unity.UiKit.Gs2Inventory.Label.Editor
+namespace Gs2.Unity.UiKit.Gs2Formation.Label.Editor
 {
-    [CustomEditor(typeof(Gs2InventoryVerifyBigItemByUserIdLabel))]
-    public class Gs2InventoryVerifyBigItemByUserIdLabelEditorExtension : UnityEditor.Editor
+    [CustomEditor(typeof(Gs2FormationSetFormByUserIdLabel))]
+    public class Gs2FormationSetFormByUserIdLabelEditorExtension : UnityEditor.Editor
     {
         public override void OnInspectorGUI() {
-            var original = target as Gs2InventoryVerifyBigItemByUserIdLabel;
+            var original = target as Gs2FormationSetFormByUserIdLabel;
 
             if (original == null) return;
 
-            var fetcher = original.GetComponent<Gs2InventoryVerifyBigItemByUserIdFetcher>() ?? original.GetComponentInParent<Gs2InventoryVerifyBigItemByUserIdFetcher>(true);
-             var userDataFetcher = original.GetComponent<Gs2InventoryOwnBigItemFetcher>() ?? original.GetComponentInParent<Gs2InventoryOwnBigItemFetcher>(true);
+            var fetcher = original.GetComponent<Gs2FormationSetFormByUserIdFetcher>() ?? original.GetComponentInParent<Gs2FormationSetFormByUserIdFetcher>(true);
+             var userDataFetcher = original.GetComponent<Gs2FormationOwnFormFetcher>() ?? original.GetComponentInParent<Gs2FormationOwnFormFetcher>(true);
             if (fetcher == null) {
-                EditorGUILayout.HelpBox("Gs2InventoryVerifyBigItemByUserIdFetcher not found.", MessageType.Error);
+                EditorGUILayout.HelpBox("Gs2FormationSetFormByUserIdFetcher not found.", MessageType.Error);
                 if (GUILayout.Button("Add Fetcher")) {
-                    original.gameObject.AddComponent<Gs2InventoryVerifyBigItemByUserIdFetcher>();
+                    original.gameObject.AddComponent<Gs2FormationSetFormByUserIdFetcher>();
                 }
             }
             if (userDataFetcher == null) {
-                EditorGUILayout.HelpBox("Gs2InventoryOwnBigItemFetcher not found. Adding a Fetcher allows more values to be used.", MessageType.Warning);
+                EditorGUILayout.HelpBox("Gs2FormationOwnFormFetcher not found. Adding a Fetcher allows more values to be used.", MessageType.Warning);
                 if (GUILayout.Button("Add Fetcher")) {
-                    original.gameObject.AddComponent<Gs2InventoryOwnBigItemFetcher>();
+                    original.gameObject.AddComponent<Gs2FormationOwnFormFetcher>();
                 }
             }
 
@@ -67,49 +67,34 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Label.Editor
                 GUI.FocusControl("");
                 EditorUtility.SetDirty(original);
             }
-            if (GUILayout.Button("InventoryName")) {
-                original.format += "{inventoryName}";
+            if (GUILayout.Button("MoldModelName")) {
+                original.format += "{moldModelName}";
                 GUI.FocusControl("");
                 EditorUtility.SetDirty(original);
             }
-            if (GUILayout.Button("ItemName")) {
-                original.format += "{itemName}";
+            if (GUILayout.Button("Index")) {
+                original.format += "{index}";
                 GUI.FocusControl("");
                 EditorUtility.SetDirty(original);
             }
-            if (GUILayout.Button("VerifyType")) {
-                original.format += "{verifyType}";
-                GUI.FocusControl("");
-                EditorUtility.SetDirty(original);
-            }
-            if (GUILayout.Button("Count")) {
-                original.format += "{count}";
-                GUI.FocusControl("");
-                EditorUtility.SetDirty(original);
-            }
-            if (GUILayout.Button("MultiplyValueSpecifyingQuantity")) {
-                original.format += "{multiplyValueSpecifyingQuantity}";
+            if (GUILayout.Button("Slots")) {
+                original.format += "{slots}";
                 GUI.FocusControl("");
                 EditorUtility.SetDirty(original);
             }
             if (userDataFetcher != null) {
-                if (GUILayout.Button("UserData:ItemId")) {
-                    original.format += "{userData:itemId}";
+                if (GUILayout.Button("UserData:Name")) {
+                    original.format += "{userData:name}";
                     GUI.FocusControl("");
                     EditorUtility.SetDirty(original);
                 }
-                if (GUILayout.Button("UserData:ItemName")) {
-                    original.format += "{userData:itemName}";
+                if (GUILayout.Button("UserData:Index")) {
+                    original.format += "{userData:index}";
                     GUI.FocusControl("");
                     EditorUtility.SetDirty(original);
                 }
-                if (GUILayout.Button("UserData:Count")) {
-                    original.format += "{userData:count}";
-                    GUI.FocusControl("");
-                    EditorUtility.SetDirty(original);
-                }
-                if (GUILayout.Button("UserData:Count:Changed")) {
-                    original.format += "{userData:count:changed}";
+                if (GUILayout.Button("UserData:Slots")) {
+                    original.format += "{userData:slots}";
                     GUI.FocusControl("");
                     EditorUtility.SetDirty(original);
                 }

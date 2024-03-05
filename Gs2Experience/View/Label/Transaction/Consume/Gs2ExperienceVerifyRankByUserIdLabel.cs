@@ -86,6 +86,9 @@ namespace Gs2.Unity.UiKit.Gs2Experience.Label
                     "{rankValue}",
                     $"{this._fetcher.Request.RankValue}"
                 ).Replace(
+                    "{multiplyValueSpecifyingQuantity}",
+                    $"{this._fetcher.Request.MultiplyValueSpecifyingQuantity}"
+                ).Replace(
                     "{userData:experienceName}",
                     $"{this._userDataFetcher.Status.ExperienceName}"
                 ).Replace(
