@@ -79,6 +79,9 @@ namespace Gs2.Unity.UiKit.Gs2SkillTree.Label
                     "{nodeModelNames}",
                     $"{this._fetcher.Request.NodeModelNames}"
                 ).Replace(
+                    "{timeOffsetToken}",
+                    $"{this._fetcher.Request.TimeOffsetToken}"
+                ).Replace(
                     "{userData:statusId}",
                     $"{this._userDataFetcher.Status.StatusId}"
                 ).Replace(

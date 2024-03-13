@@ -88,6 +88,9 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Label
                     "{config}",
                     $"{this._fetcher.Request.Config}"
                 ).Replace(
+                    "{timeOffsetToken}",
+                    $"{this._fetcher.Request.TimeOffsetToken}"
+                ).Replace(
                     "{userData:name}",
                     $"{this._userDataFetcher.Form.Name}"
                 ).Replace(

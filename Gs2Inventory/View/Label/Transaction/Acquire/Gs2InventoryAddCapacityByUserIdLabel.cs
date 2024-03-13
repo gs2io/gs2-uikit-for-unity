@@ -79,6 +79,9 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Label
                     "{addCapacityValue}",
                     $"{this._fetcher.Request.AddCapacityValue}"
                 ).Replace(
+                    "{timeOffsetToken}",
+                    $"{this._fetcher.Request.TimeOffsetToken}"
+                ).Replace(
                     "{userData:inventoryId}",
                     $"{this._userDataFetcher.Inventory.InventoryId}"
                 ).Replace(

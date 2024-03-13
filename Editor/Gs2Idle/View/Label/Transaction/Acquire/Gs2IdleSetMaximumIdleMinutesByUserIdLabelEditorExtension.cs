@@ -77,6 +77,11 @@ namespace Gs2.Unity.UiKit.Gs2Idle.Label.Editor
                 GUI.FocusControl("");
                 EditorUtility.SetDirty(original);
             }
+            if (GUILayout.Button("TimeOffsetToken")) {
+                original.format += "{timeOffsetToken}";
+                GUI.FocusControl("");
+                EditorUtility.SetDirty(original);
+            }
             if (userDataFetcher != null) {
                 if (GUILayout.Button("UserData:CategoryName")) {
                     original.format += "{userData:categoryName}";
@@ -95,11 +100,6 @@ namespace Gs2.Unity.UiKit.Gs2Idle.Label.Editor
                 }
                 if (GUILayout.Button("UserData:MaximumIdleMinutes")) {
                     original.format += "{userData:maximumIdleMinutes}";
-                    GUI.FocusControl("");
-                    EditorUtility.SetDirty(original);
-                }
-                if (GUILayout.Button("UserData:MaximumIdleMinutes:Changed")) {
-                    original.format += "{userData:maximumIdleMinutes:changed}";
                     GUI.FocusControl("");
                     EditorUtility.SetDirty(original);
                 }

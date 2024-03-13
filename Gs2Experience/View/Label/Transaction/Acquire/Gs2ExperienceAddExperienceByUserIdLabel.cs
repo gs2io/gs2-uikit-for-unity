@@ -86,6 +86,9 @@ namespace Gs2.Unity.UiKit.Gs2Experience.Label
                     "{truncateExperienceWhenRankUp}",
                     $"{this._fetcher.Request.TruncateExperienceWhenRankUp}"
                 ).Replace(
+                    "{timeOffsetToken}",
+                    $"{this._fetcher.Request.TimeOffsetToken}"
+                ).Replace(
                     "{userData:experienceName}",
                     $"{this._userDataFetcher.Status.ExperienceName}"
                 ).Replace(

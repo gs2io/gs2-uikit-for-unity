@@ -85,6 +85,9 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Label
                     "{multiplyValueSpecifyingQuantity}",
                     $"{this._fetcher.Request.MultiplyValueSpecifyingQuantity}"
                 ).Replace(
+                    "{timeOffsetToken}",
+                    $"{this._fetcher.Request.TimeOffsetToken}"
+                ).Replace(
                     "{userData:inventoryId}",
                     $"{this._userDataFetcher.Inventory.InventoryId}"
                 ).Replace(

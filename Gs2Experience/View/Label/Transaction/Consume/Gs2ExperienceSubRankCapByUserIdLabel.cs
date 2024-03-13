@@ -83,6 +83,9 @@ namespace Gs2.Unity.UiKit.Gs2Experience.Label
                     "{rankCapValue}",
                     $"{this._fetcher.Request.RankCapValue}"
                 ).Replace(
+                    "{timeOffsetToken}",
+                    $"{this._fetcher.Request.TimeOffsetToken}"
+                ).Replace(
                     "{userData:experienceName}",
                     $"{this._userDataFetcher.Status.ExperienceName}"
                 ).Replace(

@@ -66,6 +66,9 @@ namespace Gs2.Unity.UiKit.Gs2StateMachine.Label
                     "{ttl}",
                     $"{this._fetcher.Request.Ttl}"
                 ).Replace(
+                    "{timeOffsetToken}",
+                    $"{this._fetcher.Request.TimeOffsetToken}"
+                ).Replace(
                     "{userData:statusId}",
                     $"{this._userDataFetcher.Status.StatusId}"
                 ).Replace(

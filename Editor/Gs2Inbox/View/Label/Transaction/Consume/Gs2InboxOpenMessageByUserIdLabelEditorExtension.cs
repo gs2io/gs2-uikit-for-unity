@@ -72,6 +72,11 @@ namespace Gs2.Unity.UiKit.Gs2Inbox.Label.Editor
                 GUI.FocusControl("");
                 EditorUtility.SetDirty(original);
             }
+            if (GUILayout.Button("TimeOffsetToken")) {
+                original.format += "{timeOffsetToken}";
+                GUI.FocusControl("");
+                EditorUtility.SetDirty(original);
+            }
             if (userDataFetcher != null) {
                 if (GUILayout.Button("UserData:MessageId")) {
                     original.format += "{userData:messageId}";

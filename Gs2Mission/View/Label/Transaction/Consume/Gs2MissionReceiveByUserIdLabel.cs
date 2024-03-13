@@ -79,6 +79,9 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Label
                     "{userId}",
                     $"{this._fetcher.Request.UserId}"
                 ).Replace(
+                    "{timeOffsetToken}",
+                    $"{this._fetcher.Request.TimeOffsetToken}"
+                ).Replace(
                     "{userData:missionGroupName}",
                     $"{this._userDataFetcher.Complete.MissionGroupName}"
                 ).Replace(

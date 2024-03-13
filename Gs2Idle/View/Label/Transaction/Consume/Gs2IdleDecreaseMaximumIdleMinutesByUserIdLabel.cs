@@ -79,6 +79,9 @@ namespace Gs2.Unity.UiKit.Gs2Idle.Label
                     "{decreaseMinutes}",
                     $"{this._fetcher.Request.DecreaseMinutes}"
                 ).Replace(
+                    "{timeOffsetToken}",
+                    $"{this._fetcher.Request.TimeOffsetToken}"
+                ).Replace(
                     "{userData:categoryName}",
                     $"{this._userDataFetcher.Status.CategoryName}"
                 ).Replace(

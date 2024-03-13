@@ -72,6 +72,9 @@ namespace Gs2.Unity.UiKit.Gs2Inbox.Label
                     "{expiresTimeSpan}",
                     $"{this._fetcher.Request.ExpiresTimeSpan}"
                 ).Replace(
+                    "{timeOffsetToken}",
+                    $"{this._fetcher.Request.TimeOffsetToken}"
+                ).Replace(
                     "{userData:messageId}",
                     $"{this._userDataFetcher.Message.MessageId}"
                 ).Replace(

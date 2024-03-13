@@ -89,6 +89,9 @@ namespace Gs2.Unity.UiKit.Gs2Experience.Label
                     "{multiplyValueSpecifyingQuantity}",
                     $"{this._fetcher.Request.MultiplyValueSpecifyingQuantity}"
                 ).Replace(
+                    "{timeOffsetToken}",
+                    $"{this._fetcher.Request.TimeOffsetToken}"
+                ).Replace(
                     "{userData:experienceName}",
                     $"{this._userDataFetcher.Status.ExperienceName}"
                 ).Replace(

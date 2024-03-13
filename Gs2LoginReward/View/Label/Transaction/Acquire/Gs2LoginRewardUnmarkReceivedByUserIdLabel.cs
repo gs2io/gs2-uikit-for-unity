@@ -79,6 +79,9 @@ namespace Gs2.Unity.UiKit.Gs2LoginReward.Label
                     "{stepNumber}",
                     $"{this._fetcher.Request.StepNumber}"
                 ).Replace(
+                    "{timeOffsetToken}",
+                    $"{this._fetcher.Request.TimeOffsetToken}"
+                ).Replace(
                     "{userData:bonusModelName}",
                     $"{this._userDataFetcher.ReceiveStatus.BonusModelName}"
                 ).Replace(

@@ -85,6 +85,9 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Label
                     "{consumeCount}",
                     $"{this._fetcher.Request.ConsumeCount}"
                 ).Replace(
+                    "{timeOffsetToken}",
+                    $"{this._fetcher.Request.TimeOffsetToken}"
+                ).Replace(
                     "{userData:itemId}",
                     $"{this._userDataFetcher.BigItem.ItemId}"
                 ).Replace(

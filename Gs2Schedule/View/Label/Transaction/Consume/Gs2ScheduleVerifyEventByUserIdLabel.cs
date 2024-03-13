@@ -79,6 +79,9 @@ namespace Gs2.Unity.UiKit.Gs2Schedule.Label
                     "{verifyType}",
                     $"{this._fetcher.Request.VerifyType}"
                 ).Replace(
+                    "{timeOffsetToken}",
+                    $"{this._fetcher.Request.TimeOffsetToken}"
+                ).Replace(
                     "{userData:name}",
                     $"{this._userDataFetcher.Event.Name}"
                 ).Replace(

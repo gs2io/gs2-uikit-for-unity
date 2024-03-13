@@ -76,6 +76,9 @@ namespace Gs2.Unity.UiKit.Gs2Inbox.Label
                     "{messageName}",
                     $"{this._fetcher.Request.MessageName}"
                 ).Replace(
+                    "{timeOffsetToken}",
+                    $"{this._fetcher.Request.TimeOffsetToken}"
+                ).Replace(
                     "{userData:messageId}",
                     $"{this._userDataFetcher.Message.MessageId}"
                 ).Replace(

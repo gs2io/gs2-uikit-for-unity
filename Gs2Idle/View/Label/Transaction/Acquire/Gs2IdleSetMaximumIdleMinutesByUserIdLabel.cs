@@ -79,6 +79,9 @@ namespace Gs2.Unity.UiKit.Gs2Idle.Label
                     "{maximumIdleMinutes}",
                     $"{this._fetcher.Request.MaximumIdleMinutes}"
                 ).Replace(
+                    "{timeOffsetToken}",
+                    $"{this._fetcher.Request.TimeOffsetToken}"
+                ).Replace(
                     "{userData:categoryName}",
                     $"{this._userDataFetcher.Status.CategoryName}"
                 ).Replace(
@@ -90,9 +93,6 @@ namespace Gs2.Unity.UiKit.Gs2Idle.Label
                 ).Replace(
                     "{userData:maximumIdleMinutes}",
                     $"{this._userDataFetcher.Status.MaximumIdleMinutes}"
-                ).Replace(
-                    "{userData:maximumIdleMinutes:changed}",
-                    $"{this._userDataFetcher.Status.MaximumIdleMinutes + this._fetcher.Request.MaximumIdleMinutes}"
                 )
             );
         }

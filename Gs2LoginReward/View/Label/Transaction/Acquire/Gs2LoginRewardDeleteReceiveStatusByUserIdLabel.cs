@@ -76,6 +76,9 @@ namespace Gs2.Unity.UiKit.Gs2LoginReward.Label
                     "{userId}",
                     $"{this._fetcher.Request.UserId}"
                 ).Replace(
+                    "{timeOffsetToken}",
+                    $"{this._fetcher.Request.TimeOffsetToken}"
+                ).Replace(
                     "{userData:bonusModelName}",
                     $"{this._userDataFetcher.ReceiveStatus.BonusModelName}"
                 ).Replace(

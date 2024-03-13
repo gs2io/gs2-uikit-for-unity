@@ -72,6 +72,11 @@ namespace Gs2.Unity.UiKit.Gs2Dictionary.Label.Editor
                 GUI.FocusControl("");
                 EditorUtility.SetDirty(original);
             }
+            if (GUILayout.Button("TimeOffsetToken")) {
+                original.format += "{timeOffsetToken}";
+                GUI.FocusControl("");
+                EditorUtility.SetDirty(original);
+            }
             if (userDataFetcher != null) {
                 if (GUILayout.Button("UserData:EntryId")) {
                     original.format += "{userData:entryId}";

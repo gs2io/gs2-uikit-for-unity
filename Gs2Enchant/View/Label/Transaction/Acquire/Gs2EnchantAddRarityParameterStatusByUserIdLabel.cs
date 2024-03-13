@@ -83,6 +83,9 @@ namespace Gs2.Unity.UiKit.Gs2Enchant.Label
                     "{count}",
                     $"{this._fetcher.Request.Count}"
                 ).Replace(
+                    "{timeOffsetToken}",
+                    $"{this._fetcher.Request.TimeOffsetToken}"
+                ).Replace(
                     "{userData:parameterName}",
                     $"{this._userDataFetcher.RarityParameterStatus.ParameterName}"
                 ).Replace(

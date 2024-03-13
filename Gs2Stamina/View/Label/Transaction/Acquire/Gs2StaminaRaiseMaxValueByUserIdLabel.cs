@@ -79,6 +79,9 @@ namespace Gs2.Unity.UiKit.Gs2Stamina.Label
                     "{raiseValue}",
                     $"{this._fetcher.Request.RaiseValue}"
                 ).Replace(
+                    "{timeOffsetToken}",
+                    $"{this._fetcher.Request.TimeOffsetToken}"
+                ).Replace(
                     "{userData:staminaName}",
                     $"{this._userDataFetcher.Stamina.StaminaName}"
                 ).Replace(

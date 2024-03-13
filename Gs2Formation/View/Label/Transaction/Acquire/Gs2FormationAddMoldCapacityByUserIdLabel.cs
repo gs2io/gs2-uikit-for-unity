@@ -79,6 +79,9 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Label
                     "{capacity}",
                     $"{this._fetcher.Request.Capacity}"
                 ).Replace(
+                    "{timeOffsetToken}",
+                    $"{this._fetcher.Request.TimeOffsetToken}"
+                ).Replace(
                     "{userData:name}",
                     $"{this._userDataFetcher.Mold.Name}"
                 ).Replace(

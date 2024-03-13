@@ -76,6 +76,9 @@ namespace Gs2.Unity.UiKit.Gs2Schedule.Label
                     "{triggerName}",
                     $"{this._fetcher.Request.TriggerName}"
                 ).Replace(
+                    "{timeOffsetToken}",
+                    $"{this._fetcher.Request.TimeOffsetToken}"
+                ).Replace(
                     "{userData:triggerId}",
                     $"{this._userDataFetcher.Trigger.TriggerId}"
                 ).Replace(

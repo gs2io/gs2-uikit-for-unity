@@ -71,6 +71,9 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Label
                 ).Replace(
                     "{verifyType}",
                     $"{this._fetcher.Request.VerifyType}"
+                ).Replace(
+                    "{timeOffsetToken}",
+                    $"{this._fetcher.Request.TimeOffsetToken}"
                 )
             );
         }

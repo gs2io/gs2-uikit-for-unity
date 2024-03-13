@@ -75,6 +75,9 @@ namespace Gs2.Unity.UiKit.Gs2AdReward.Label
                     "{point}",
                     $"{this._fetcher.Request.Point}"
                 ).Replace(
+                    "{timeOffsetToken}",
+                    $"{this._fetcher.Request.TimeOffsetToken}"
+                ).Replace(
                     "{userData:point}",
                     $"{this._userDataFetcher.Point.Point}"
                 ).Replace(

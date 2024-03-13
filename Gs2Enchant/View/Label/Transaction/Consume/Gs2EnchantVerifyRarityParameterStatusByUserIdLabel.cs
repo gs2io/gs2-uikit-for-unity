@@ -92,6 +92,9 @@ namespace Gs2.Unity.UiKit.Gs2Enchant.Label
                     "{multiplyValueSpecifyingQuantity}",
                     $"{this._fetcher.Request.MultiplyValueSpecifyingQuantity}"
                 ).Replace(
+                    "{timeOffsetToken}",
+                    $"{this._fetcher.Request.TimeOffsetToken}"
+                ).Replace(
                     "{userData:parameterName}",
                     $"{this._userDataFetcher.RarityParameterStatus.ParameterName}"
                 ).Replace(

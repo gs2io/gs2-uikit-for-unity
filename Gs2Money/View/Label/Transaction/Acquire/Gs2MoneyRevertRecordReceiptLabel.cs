@@ -59,6 +59,9 @@ namespace Gs2.Unity.UiKit.Gs2Money.Label
                 ).Replace(
                     "{receipt}",
                     $"{this._fetcher.Request.Receipt}"
+                ).Replace(
+                    "{timeOffsetToken}",
+                    $"{this._fetcher.Request.TimeOffsetToken}"
                 )
             );
         }

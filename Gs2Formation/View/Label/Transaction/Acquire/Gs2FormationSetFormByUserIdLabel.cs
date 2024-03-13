@@ -85,6 +85,9 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Label
                     "{slots}",
                     $"{this._fetcher.Request.Slots}"
                 ).Replace(
+                    "{timeOffsetToken}",
+                    $"{this._fetcher.Request.TimeOffsetToken}"
+                ).Replace(
                     "{userData:name}",
                     $"{this._userDataFetcher.Form.Name}"
                 ).Replace(

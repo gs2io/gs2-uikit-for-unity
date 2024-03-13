@@ -82,6 +82,9 @@ namespace Gs2.Unity.UiKit.Gs2Money.Label
                     "{count}",
                     $"{this._fetcher.Request.Count}"
                 ).Replace(
+                    "{timeOffsetToken}",
+                    $"{this._fetcher.Request.TimeOffsetToken}"
+                ).Replace(
                     "{userData:slot}",
                     $"{this._userDataFetcher.Wallet.Slot}"
                 ).Replace(

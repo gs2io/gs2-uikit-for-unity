@@ -68,6 +68,9 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Label
                 ).Replace(
                     "{referenceOf}",
                     $"{this._fetcher.Request.ReferenceOf}"
+                ).Replace(
+                    "{timeOffsetToken}",
+                    $"{this._fetcher.Request.TimeOffsetToken}"
                 )
             );
         }

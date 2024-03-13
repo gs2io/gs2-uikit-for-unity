@@ -72,6 +72,9 @@ namespace Gs2.Unity.UiKit.Gs2Enhance.Label
                     "{userId}",
                     $"{this._fetcher.Request.UserId}"
                 ).Replace(
+                    "{timeOffsetToken}",
+                    $"{this._fetcher.Request.TimeOffsetToken}"
+                ).Replace(
                     "{userData:name}",
                     $"{this._userDataFetcher.Progress.Name}"
                 ).Replace(

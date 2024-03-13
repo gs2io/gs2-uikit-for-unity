@@ -65,6 +65,11 @@ namespace Gs2.Unity.UiKit.Gs2Money.Label.Editor
                 GUI.FocusControl("");
                 EditorUtility.SetDirty(original);
             }
+            if (GUILayout.Button("TimeOffsetToken")) {
+                original.format += "{timeOffsetToken}";
+                GUI.FocusControl("");
+                EditorUtility.SetDirty(original);
+            }
             EditorGUILayout.PropertyField(serializedObject.FindProperty("onUpdate"), true);
             serializedObject.ApplyModifiedProperties();
         }

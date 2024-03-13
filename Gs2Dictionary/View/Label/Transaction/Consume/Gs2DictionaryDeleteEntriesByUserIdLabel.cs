@@ -63,6 +63,9 @@ namespace Gs2.Unity.UiKit.Gs2Dictionary.Label
                     "{entryModelNames}",
                     $"{this._fetcher.Request.EntryModelNames}"
                 ).Replace(
+                    "{timeOffsetToken}",
+                    $"{this._fetcher.Request.TimeOffsetToken}"
+                ).Replace(
                     "{userData:entryId}",
                     $"{this._userDataFetcher.Entry.EntryId}"
                 ).Replace(

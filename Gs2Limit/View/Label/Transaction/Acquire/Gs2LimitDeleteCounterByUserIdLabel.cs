@@ -80,6 +80,9 @@ namespace Gs2.Unity.UiKit.Gs2Limit.Label
                     "{counterName}",
                     $"{this._fetcher.Request.CounterName}"
                 ).Replace(
+                    "{timeOffsetToken}",
+                    $"{this._fetcher.Request.TimeOffsetToken}"
+                ).Replace(
                     "{userData:counterId}",
                     $"{this._userDataFetcher.Counter.CounterId}"
                 ).Replace(

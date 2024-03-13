@@ -86,6 +86,9 @@ namespace Gs2.Unity.UiKit.Gs2Grade.Label
                     "{acquireActions}",
                     $"{this._fetcher.Request.AcquireActions}"
                 ).Replace(
+                    "{timeOffsetToken}",
+                    $"{this._fetcher.Request.TimeOffsetToken}"
+                ).Replace(
                     "{userData:gradeName}",
                     $"{this._userDataFetcher.Status.GradeName}"
                 ).Replace(

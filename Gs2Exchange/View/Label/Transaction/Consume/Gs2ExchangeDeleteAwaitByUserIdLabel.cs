@@ -76,6 +76,9 @@ namespace Gs2.Unity.UiKit.Gs2Exchange.Label
                     "{awaitName}",
                     $"{this._fetcher.Request.AwaitName}"
                 ).Replace(
+                    "{timeOffsetToken}",
+                    $"{this._fetcher.Request.TimeOffsetToken}"
+                ).Replace(
                     "{userData:userId}",
                     $"{this._userDataFetcher.Await.UserId}"
                 ).Replace(

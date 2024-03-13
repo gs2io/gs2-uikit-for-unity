@@ -80,6 +80,9 @@ namespace Gs2.Unity.UiKit.Gs2Grade.Label
                     "{propertyId}",
                     $"{this._fetcher.Request.PropertyId}"
                 ).Replace(
+                    "{timeOffsetToken}",
+                    $"{this._fetcher.Request.TimeOffsetToken}"
+                ).Replace(
                     "{userData:gradeName}",
                     $"{this._userDataFetcher.Status.GradeName}"
                 ).Replace(

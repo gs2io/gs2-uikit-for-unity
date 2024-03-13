@@ -76,6 +76,9 @@ namespace Gs2.Unity.UiKit.Gs2Lottery.Label
                     "{userId}",
                     $"{this._fetcher.Request.UserId}"
                 ).Replace(
+                    "{timeOffsetToken}",
+                    $"{this._fetcher.Request.TimeOffsetToken}"
+                ).Replace(
                     "{userData:boxId}",
                     $"{this._userDataFetcher.BoxItems.BoxId}"
                 ).Replace(

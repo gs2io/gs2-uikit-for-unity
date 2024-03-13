@@ -66,6 +66,9 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Label
                     "{counts}",
                     $"{this._fetcher.Request.Counts}"
                 ).Replace(
+                    "{timeOffsetToken}",
+                    $"{this._fetcher.Request.TimeOffsetToken}"
+                ).Replace(
                     "{userData:itemId}",
                     $"{this._userDataFetcher.SimpleItem.ItemId}"
                 ).Replace(
