@@ -90,6 +90,11 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Editor
                 GUI.FocusControl("");
                 EditorUtility.SetDirty(original);
             }
+            if (GUILayout.Button("FailedRewards")) {
+                original.format += "{failedRewards}";
+                GUI.FocusControl("");
+                EditorUtility.SetDirty(original);
+            }
             serializedObject.ApplyModifiedProperties();
         }
     }

@@ -53,6 +53,8 @@ namespace Gs2.Unity.UiKit.Gs2Quest
                     "{randomSeed}", $"{this._fetcher?.Progress?.RandomSeed}"
                 ).Replace(
                     "{rewards}", $"{this._fetcher?.Progress?.Rewards}"
+                ).Replace(
+                    "{failedRewards}", $"{this._fetcher?.Progress?.FailedRewards}"
                 )
             );
         }
