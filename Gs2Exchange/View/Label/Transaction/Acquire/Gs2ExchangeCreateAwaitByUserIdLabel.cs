@@ -81,11 +81,17 @@ namespace Gs2.Unity.UiKit.Gs2Exchange.Label
                     "{userData:name}",
                     $"{this._userDataFetcher.Await.Name}"
                 ).Replace(
+                    "{userData:skipSeconds}",
+                    $"{this._userDataFetcher.Await.SkipSeconds}"
+                ).Replace(
                     "{userData:config}",
                     $"{this._userDataFetcher.Await.Config}"
                 ).Replace(
                     "{userData:exchangedAt}",
                     $"{this._userDataFetcher.Await.ExchangedAt}"
+                ).Replace(
+                    "{userData:acquirableAt}",
+                    $"{this._userDataFetcher.Await.AcquirableAt}"
                 )
             );
         }

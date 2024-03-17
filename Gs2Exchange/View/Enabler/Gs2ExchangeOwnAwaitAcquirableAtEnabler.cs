@@ -24,45 +24,47 @@
 
 #pragma warning disable CS0472
 
-#if GS2_ENABLE_LOCALIZATION
-
+using System;
+using System.Collections.Generic;
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Exchange.Fetcher;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.Localization.Components;
-using UnityEngine.Localization.SmartFormat.PersistentVariables;
 
-namespace Gs2.Unity.UiKit.Gs2Exchange.Localization
+namespace Gs2.Unity.UiKit.Gs2Exchange
 {
     /// <summary>
     /// Main
     /// </summary>
 
-    [AddComponentMenu("GS2 UIKit/Exchange/Await/View/Localization/Gs2ExchangeAwaitLocalizationVariables")]
-    public partial class Gs2ExchangeAwaitLocalizationVariables : MonoBehaviour
+	[AddComponentMenu("GS2 UIKit/Exchange/Await/View/Enabler/Properties/AcquirableAt/Gs2ExchangeOwnAwaitAcquirableAtEnabler")]
+    public partial class Gs2ExchangeOwnAwaitAcquirableAtEnabler : MonoBehaviour
     {
         private void OnFetched()
         {
-            this.target.StringReference["userId"] = new StringVariable {
-                Value = _fetcher?.Await?.UserId ?? "",
-            };
-            this.target.StringReference["rateName"] = new StringVariable {
-                Value = _fetcher?.Await?.RateName ?? "",
-            };
-            this.target.StringReference["name"] = new StringVariable {
-                Value = _fetcher?.Await?.Name ?? "",
-            };
-            this.target.StringReference["skipSeconds"] = new IntVariable {
-                Value = _fetcher?.Await?.SkipSeconds ?? 0,
-            };
-            this.target.StringReference["exchangedAt"] = new LongVariable {
-                Value = _fetcher?.Await?.ExchangedAt ?? 0,
-            };
-            this.target.StringReference["acquirableAt"] = new LongVariable {
-                Value = _fetcher?.Await?.AcquirableAt ?? 0,
-            };
-            this.target.enabled = true;
+            switch(this.expression)
+            {
+                case Expression.In:
+                    this.target.SetActive(this.enableAcquirableAts.Contains(this._fetcher.Await.AcquirableAt));
+                    break;
+                case Expression.NotIn:
+                    this.target.SetActive(!this.enableAcquirableAts.Contains(this._fetcher.Await.AcquirableAt));
+                    break;
+                case Expression.Less:
+                    this.target.SetActive(this.enableAcquirableAt > this._fetcher.Await.AcquirableAt);
+                    break;
+                case Expression.LessEqual:
+                    this.target.SetActive(this.enableAcquirableAt >= this._fetcher.Await.AcquirableAt);
+                    break;
+                case Expression.Greater:
+                    this.target.SetActive(this.enableAcquirableAt < this._fetcher.Await.AcquirableAt);
+                    break;
+                case Expression.GreaterEqual:
+                    this.target.SetActive(this.enableAcquirableAt <= this._fetcher.Await.AcquirableAt);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
         }
     }
 
@@ -70,16 +72,19 @@ namespace Gs2.Unity.UiKit.Gs2Exchange.Localization
     /// Dependent components
     /// </summary>
 
-    public partial class Gs2ExchangeAwaitLocalizationVariables
+    public partial class Gs2ExchangeOwnAwaitAcquirableAtEnabler
     {
         private Gs2ExchangeOwnAwaitFetcher _fetcher;
 
-        public void Awake() {
-            this.target.enabled = false;
+        public void Awake()
+        {
             this._fetcher = GetComponent<Gs2ExchangeOwnAwaitFetcher>() ?? GetComponentInParent<Gs2ExchangeOwnAwaitFetcher>();
-
             if (this._fetcher == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ExchangeAwaitFetcher.");
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ExchangeOwnAwaitFetcher.");
+                enabled = false;
+            }
+            if (this.target == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: target is not set.");
                 enabled = false;
             }
         }
@@ -88,6 +93,9 @@ namespace Gs2.Unity.UiKit.Gs2Exchange.Localization
         {
             this._fetcher = GetComponent<Gs2ExchangeOwnAwaitFetcher>() ?? GetComponentInParent<Gs2ExchangeOwnAwaitFetcher>(true);
             if (this._fetcher == null) {
+                return true;
+            }
+            if (this.target == null) {
                 return true;
             }
             return false;
@@ -121,7 +129,7 @@ namespace Gs2.Unity.UiKit.Gs2Exchange.Localization
     /// Public properties
     /// </summary>
 
-    public partial class Gs2ExchangeAwaitLocalizationVariables
+    public partial class Gs2ExchangeOwnAwaitAcquirableAtEnabler
     {
 
     }
@@ -130,18 +138,31 @@ namespace Gs2.Unity.UiKit.Gs2Exchange.Localization
     /// Parameters for Inspector
     /// </summary>
 
-    public partial class Gs2ExchangeAwaitLocalizationVariables
+    public partial class Gs2ExchangeOwnAwaitAcquirableAtEnabler
     {
-        public LocalizeStringEvent target;
+        public enum Expression {
+            In,
+            NotIn,
+            Less,
+            LessEqual,
+            Greater,
+            GreaterEqual,
+        }
+
+        public Expression expression;
+
+        public List<long> enableAcquirableAts;
+
+        public long enableAcquirableAt;
+
+        public GameObject target;
     }
 
     /// <summary>
     /// Event handlers
     /// </summary>
-    public partial class Gs2ExchangeAwaitLocalizationVariables
+    public partial class Gs2ExchangeOwnAwaitAcquirableAtEnabler
     {
-
+        
     }
 }
-
-#endif

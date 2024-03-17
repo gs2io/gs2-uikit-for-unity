@@ -24,33 +24,31 @@
 
 #pragma warning disable CS0472
 
+using Gs2.Unity.Gs2Exchange.ScriptableObject;
+using Gs2.Unity.UiKit.Gs2Core.Fetcher;
 using UnityEditor;
 using UnityEngine;
 
-namespace Gs2.Unity.UiKit.Gs2Exchange.Editor
+namespace Gs2.Unity.UiKit.Gs2Exchange.Enabler.Editor
 {
-    [CustomEditor(typeof(Gs2ExchangeAwaitSkipActionLabel))]
-    public class Gs2ExchangeAwaitSkipActionLabelEditorExtension : UnityEditor.Editor
+    [CustomEditor(typeof(Gs2ExchangeSkipByUserIdEnabler))]
+    public class Gs2ExchangeSkipByUserIdEnablerEditorExtension : UnityEditor.Editor
     {
         public override void OnInspectorGUI() {
-            var original = target as Gs2ExchangeAwaitSkipActionLabel;
+            var original = target as Gs2ExchangeSkipByUserIdEnabler;
 
             if (original == null) return;
 
-            if (original.action == null) {
-                EditorGUILayout.HelpBox("Gs2ExchangeAwaitSkipAction not found.", MessageType.Error);
-                if (GUILayout.Button("Add Context")) {
-                    original.gameObject.AddComponent<Gs2ExchangeAwaitSkipAction>();
-                }
-                return;
+            var fetcher = original.GetComponent<IAcquireActionsFetcher>() ?? original.GetComponentInParent<IAcquireActionsFetcher>(true);
+            if (fetcher == null) {
+                EditorGUILayout.HelpBox("IAcquireActionsFetcher not found.", MessageType.Error);
             }
 
             serializedObject.Update();
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("action"), true);
-            original.format = EditorGUILayout.TextField("Format", original.format);
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("includeAcquireActions"), true);
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("notIncludeAcquireActions"), true);
 
-            GUILayout.Label("Add Format Parameter");
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("onUpdate"), true);
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("target"), true);
             serializedObject.ApplyModifiedProperties();
         }
     }

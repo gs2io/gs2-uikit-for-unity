@@ -103,6 +103,11 @@ namespace Gs2.Unity.UiKit.Gs2Exchange.Label.Editor
                     GUI.FocusControl("");
                     EditorUtility.SetDirty(original);
                 }
+                if (GUILayout.Button("UserData:SkipSeconds")) {
+                    original.format += "{userData:skipSeconds}";
+                    GUI.FocusControl("");
+                    EditorUtility.SetDirty(original);
+                }
                 if (GUILayout.Button("UserData:Config")) {
                     original.format += "{userData:config}";
                     GUI.FocusControl("");
@@ -110,6 +115,11 @@ namespace Gs2.Unity.UiKit.Gs2Exchange.Label.Editor
                 }
                 if (GUILayout.Button("UserData:ExchangedAt")) {
                     original.format += "{userData:exchangedAt}";
+                    GUI.FocusControl("");
+                    EditorUtility.SetDirty(original);
+                }
+                if (GUILayout.Button("UserData:AcquirableAt")) {
+                    original.format += "{userData:acquirableAt}";
                     GUI.FocusControl("");
                     EditorUtility.SetDirty(original);
                 }

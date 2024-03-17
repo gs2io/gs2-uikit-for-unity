@@ -26,17 +26,16 @@
 
 using Gs2.Unity.Gs2Exchange.ScriptableObject;
 using Gs2.Unity.UiKit.Gs2Exchange.Context;
-using Gs2.Unity.UiKit.Gs2Exchange.Fetcher;
 using UnityEditor;
 using UnityEngine;
 
 namespace Gs2.Unity.UiKit.Gs2Exchange.Editor
 {
-    [CustomEditor(typeof(Gs2ExchangeAwaitSkipAction))]
-    public class Gs2ExchangeAwaitSkipActionEditorExtension : UnityEditor.Editor
+    [CustomEditor(typeof(Gs2ExchangeOwnAwaitSkipSecondsEnabler))]
+    public class Gs2ExchangeOwnAwaitSkipSecondsEnablerEditorExtension : UnityEditor.Editor
     {
         public override void OnInspectorGUI() {
-            var original = target as Gs2ExchangeAwaitSkipAction;
+            var original = target as Gs2ExchangeOwnAwaitSkipSecondsEnabler;
 
             if (original == null) return;
 
@@ -48,17 +47,17 @@ namespace Gs2.Unity.UiKit.Gs2Exchange.Editor
                 }
             }
             else {
-                if (context.transform.GetComponentInParent<Gs2ExchangeOwnAwaitList>(true) != null) {
+                if (context.gameObject.GetComponentInParent<Gs2ExchangeOwnAwaitList>(true) != null) {
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2ExchangeOwnAwaitContext), false);
                     EditorGUI.EndDisabledGroup();
-                    EditorGUILayout.HelpBox("Await is auto assign from Gs2ExchangeAwaitList.", MessageType.Info);
+                    EditorGUILayout.HelpBox("Await is auto assign from Gs2ExchangeOwnAwaitList.", MessageType.Info);
                 }
                 else {
                     EditorGUI.BeginDisabledGroup(true);
                     EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2ExchangeOwnAwaitContext), false);
                     EditorGUI.indentLevel++;
-                    context.Await = EditorGUILayout.ObjectField("OwnAwait", context.Await, typeof(OwnAwait), false) as OwnAwait;
+                    context.Await = EditorGUILayout.ObjectField("Await", context.Await, typeof(OwnAwait), false) as OwnAwait;
                     if (context.Await != null) {
                         EditorGUI.indentLevel++;
                         EditorGUILayout.TextField("NamespaceName", context.Await?.NamespaceName?.ToString());
@@ -71,9 +70,16 @@ namespace Gs2.Unity.UiKit.Gs2Exchange.Editor
             }
 
             serializedObject.Update();
-            serializedObject.ApplyModifiedProperties();
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("expression"), true);
 
-            DrawDefaultInspector();
+            if (original.expression == Gs2ExchangeOwnAwaitSkipSecondsEnabler.Expression.In || original.expression == Gs2ExchangeOwnAwaitSkipSecondsEnabler.Expression.NotIn) {
+                EditorGUILayout.PropertyField(serializedObject.FindProperty("enableSkipSecondses"), true);
+            } else {
+                EditorGUILayout.PropertyField(serializedObject.FindProperty("enableSkipSeconds"), true);
+            }
+
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("target"), true);
+            serializedObject.ApplyModifiedProperties();
         }
     }
 }

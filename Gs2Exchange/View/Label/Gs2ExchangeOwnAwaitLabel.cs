@@ -43,6 +43,7 @@ namespace Gs2.Unity.UiKit.Gs2Exchange
         private void OnFetched()
         {
             var exchangedAt = this._fetcher.Await.ExchangedAt == null ? DateTime.Now : UnixTime.FromUnixTime(_fetcher.Await.ExchangedAt).ToLocalTime();
+            var acquirableAt = this._fetcher.Await.AcquirableAt == null ? DateTime.Now : UnixTime.FromUnixTime(_fetcher.Await.AcquirableAt).ToLocalTime();
             this.onUpdate?.Invoke(
                 this.format.Replace(
                     "{userId}", $"{this._fetcher?.Await?.UserId}"
@@ -50,6 +51,8 @@ namespace Gs2.Unity.UiKit.Gs2Exchange
                     "{rateName}", $"{this._fetcher?.Await?.RateName}"
                 ).Replace(
                     "{name}", $"{this._fetcher?.Await?.Name}"
+                ).Replace(
+                    "{skipSeconds}", $"{this._fetcher?.Await?.SkipSeconds}"
                 ).Replace(
                     "{config}", $"{this._fetcher?.Await?.Config}"
                 ).Replace(
@@ -72,6 +75,26 @@ namespace Gs2.Unity.UiKit.Gs2Exchange
                     "{exchangedAt:mm}", exchangedAt.ToString("mm")
                 ).Replace(
                     "{exchangedAt:ss}", exchangedAt.ToString("ss")
+                ).Replace(
+                    "{acquirableAt:yyyy}", acquirableAt.ToString("yyyy")
+                ).Replace(
+                    "{acquirableAt:yy}", acquirableAt.ToString("yy")
+                ).Replace(
+                    "{acquirableAt:MM}", acquirableAt.ToString("MM")
+                ).Replace(
+                    "{acquirableAt:MMM}", acquirableAt.ToString("MMM")
+                ).Replace(
+                    "{acquirableAt:dd}", acquirableAt.ToString("dd")
+                ).Replace(
+                    "{acquirableAt:hh}", acquirableAt.ToString("hh")
+                ).Replace(
+                    "{acquirableAt:HH}", acquirableAt.ToString("HH")
+                ).Replace(
+                    "{acquirableAt:tt}", acquirableAt.ToString("tt")
+                ).Replace(
+                    "{acquirableAt:mm}", acquirableAt.ToString("mm")
+                ).Replace(
+                    "{acquirableAt:ss}", acquirableAt.ToString("ss")
                 )
             );
         }

@@ -25,31 +25,44 @@
 #pragma warning disable CS0472
 
 using System;
-using Gs2.Gs2JobQueue.Request;
-using Gs2.Unity.Gs2JobQueue.ScriptableObject;
+using Gs2.Gs2Exchange.Request;
+using Gs2.Unity.Gs2Exchange.ScriptableObject;
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Core.Fetcher;
-using Gs2.Unity.UiKit.Gs2JobQueue.Context;
-using Gs2.Unity.UiKit.Gs2JobQueue.Fetcher;
+using Gs2.Unity.UiKit.Gs2Exchange.Context;
+using Gs2.Unity.UiKit.Gs2Exchange.Fetcher;
 using Gs2.Util.LitJson;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace Gs2.Unity.UiKit.Gs2JobQueue.Label
+namespace Gs2.Unity.UiKit.Gs2Exchange.Label
 {
     /// <summary>
     /// Main
     /// </summary>
 
-	[AddComponentMenu("GS2 UIKit/JobQueue/Job/View/Label/Transaction/Gs2JobQueuePushByUserIdLabel")]
-    public partial class Gs2JobQueuePushByUserIdLabel : MonoBehaviour
+	[AddComponentMenu("GS2 UIKit/Exchange/Await/View/Label/Transaction/Gs2ExchangeSkipByUserIdLabel")]
+    public partial class Gs2ExchangeSkipByUserIdLabel : MonoBehaviour
     {
         private void OnFetched()
         {
+            if (this._userDataFetcher == null) {
+                var context = gameObject.AddComponent<Gs2ExchangeOwnAwaitContext>();
+                context.SetOwnAwait(
+                    OwnAwait.New(
+                        Namespace.New(
+                            this._fetcher.Request.NamespaceName
+                        ),
+                        this._fetcher.Request.AwaitName
+                    )
+                );
+                this._userDataFetcher = gameObject.AddComponent<Gs2ExchangeOwnAwaitFetcher>();
+                this._userDataFetcher.OnFetched.AddListener(this._onFetched);
+            }
             if ((!this._fetcher?.Fetched ?? false) || this._fetcher.Request == null) {
                 return;
             }
-            if ((!this._userDataFetcher?.Fetched ?? false) || this._userDataFetcher.Job == null) {
+            if ((!this._userDataFetcher?.Fetched ?? false) || this._userDataFetcher.Await == null) {
                 return;
             }
             this.onUpdate?.Invoke(
@@ -60,26 +73,41 @@ namespace Gs2.Unity.UiKit.Gs2JobQueue.Label
                     "{userId}",
                     $"{this._fetcher.Request.UserId}"
                 ).Replace(
-                    "{jobs}",
-                    $"{this._fetcher.Request.Jobs}"
+                    "{awaitName}",
+                    $"{this._fetcher.Request.AwaitName}"
+                ).Replace(
+                    "{skipType}",
+                    $"{this._fetcher.Request.SkipType}"
+                ).Replace(
+                    "{minutes}",
+                    $"{this._fetcher.Request.Minutes}"
+                ).Replace(
+                    "{rate}",
+                    $"{this._fetcher.Request.Rate}"
                 ).Replace(
                     "{timeOffsetToken}",
                     $"{this._fetcher.Request.TimeOffsetToken}"
                 ).Replace(
-                    "{userData:jobId}",
-                    $"{this._userDataFetcher.Job.JobId}"
+                    "{userData:userId}",
+                    $"{this._userDataFetcher.Await.UserId}"
                 ).Replace(
-                    "{userData:scriptId}",
-                    $"{this._userDataFetcher.Job.ScriptId}"
+                    "{userData:rateName}",
+                    $"{this._userDataFetcher.Await.RateName}"
                 ).Replace(
-                    "{userData:args}",
-                    $"{this._userDataFetcher.Job.Args}"
+                    "{userData:name}",
+                    $"{this._userDataFetcher.Await.Name}"
                 ).Replace(
-                    "{userData:currentRetryCount}",
-                    $"{this._userDataFetcher.Job.CurrentRetryCount}"
+                    "{userData:skipSeconds}",
+                    $"{this._userDataFetcher.Await.SkipSeconds}"
                 ).Replace(
-                    "{userData:maxTryCount}",
-                    $"{this._userDataFetcher.Job.MaxTryCount}"
+                    "{userData:config}",
+                    $"{this._userDataFetcher.Await.Config}"
+                ).Replace(
+                    "{userData:exchangedAt}",
+                    $"{this._userDataFetcher.Await.ExchangedAt}"
+                ).Replace(
+                    "{userData:acquirableAt}",
+                    $"{this._userDataFetcher.Await.AcquirableAt}"
                 )
             );
         }
@@ -89,24 +117,24 @@ namespace Gs2.Unity.UiKit.Gs2JobQueue.Label
     /// Dependent components
     /// </summary>
 
-    public partial class Gs2JobQueuePushByUserIdLabel
+    public partial class Gs2ExchangeSkipByUserIdLabel
     {
-        private Gs2JobQueuePushByUserIdFetcher _fetcher;
-        private Gs2JobQueueOwnJobFetcher _userDataFetcher;
+        private Gs2ExchangeSkipByUserIdFetcher _fetcher;
+        private Gs2ExchangeOwnAwaitFetcher _userDataFetcher;
 
         public void Awake()
         {
-            this._fetcher = GetComponent<Gs2JobQueuePushByUserIdFetcher>() ?? GetComponentInParent<Gs2JobQueuePushByUserIdFetcher>();
+            this._fetcher = GetComponent<Gs2ExchangeSkipByUserIdFetcher>() ?? GetComponentInParent<Gs2ExchangeSkipByUserIdFetcher>();
             if (this._fetcher == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2JobQueuePushByUserIdFetcher.");
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ExchangeSkipByUserIdFetcher.");
                 enabled = false;
             }
-            this._userDataFetcher = GetComponent<Gs2JobQueueOwnJobFetcher>() ?? GetComponentInParent<Gs2JobQueueOwnJobFetcher>();
+            this._userDataFetcher = GetComponent<Gs2ExchangeOwnAwaitFetcher>() ?? GetComponentInParent<Gs2ExchangeOwnAwaitFetcher>();
         }
 
         public virtual bool HasError()
         {
-            this._fetcher = GetComponent<Gs2JobQueuePushByUserIdFetcher>() ?? GetComponentInParent<Gs2JobQueuePushByUserIdFetcher>(true);
+            this._fetcher = GetComponent<Gs2ExchangeSkipByUserIdFetcher>() ?? GetComponentInParent<Gs2ExchangeSkipByUserIdFetcher>(true);
             if (this._fetcher == null) {
                 return true;
             }
@@ -149,7 +177,7 @@ namespace Gs2.Unity.UiKit.Gs2JobQueue.Label
     /// Public properties
     /// </summary>
 
-    public partial class Gs2JobQueuePushByUserIdLabel
+    public partial class Gs2ExchangeSkipByUserIdLabel
     {
 
     }
@@ -158,7 +186,7 @@ namespace Gs2.Unity.UiKit.Gs2JobQueue.Label
     /// Parameters for Inspector
     /// </summary>
 
-    public partial class Gs2JobQueuePushByUserIdLabel
+    public partial class Gs2ExchangeSkipByUserIdLabel
     {
         public string format;
     }
@@ -166,7 +194,7 @@ namespace Gs2.Unity.UiKit.Gs2JobQueue.Label
     /// <summary>
     /// Event handlers
     /// </summary>
-    public partial class Gs2JobQueuePushByUserIdLabel
+    public partial class Gs2ExchangeSkipByUserIdLabel
     {
         [Serializable]
         private class UpdateEvent : UnityEvent<string>

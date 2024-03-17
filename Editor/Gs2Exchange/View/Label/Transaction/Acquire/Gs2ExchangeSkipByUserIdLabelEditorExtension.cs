@@ -24,32 +24,32 @@
 
 #pragma warning disable CS0472
 
-using Gs2.Unity.UiKit.Gs2JobQueue.Fetcher;
+using Gs2.Unity.UiKit.Gs2Exchange.Fetcher;
 using UnityEditor;
 using UnityEngine;
 
-namespace Gs2.Unity.UiKit.Gs2JobQueue.Label.Editor
+namespace Gs2.Unity.UiKit.Gs2Exchange.Label.Editor
 {
-    [CustomEditor(typeof(Gs2JobQueueDeleteJobByUserIdLabel))]
-    public class Gs2JobQueueDeleteJobByUserIdLabelEditorExtension : UnityEditor.Editor
+    [CustomEditor(typeof(Gs2ExchangeSkipByUserIdLabel))]
+    public class Gs2ExchangeSkipByUserIdLabelEditorExtension : UnityEditor.Editor
     {
         public override void OnInspectorGUI() {
-            var original = target as Gs2JobQueueDeleteJobByUserIdLabel;
+            var original = target as Gs2ExchangeSkipByUserIdLabel;
 
             if (original == null) return;
 
-            var fetcher = original.GetComponent<Gs2JobQueueDeleteJobByUserIdFetcher>() ?? original.GetComponentInParent<Gs2JobQueueDeleteJobByUserIdFetcher>(true);
-             var userDataFetcher = original.GetComponent<Gs2JobQueueOwnJobFetcher>() ?? original.GetComponentInParent<Gs2JobQueueOwnJobFetcher>(true);
+            var fetcher = original.GetComponent<Gs2ExchangeSkipByUserIdFetcher>() ?? original.GetComponentInParent<Gs2ExchangeSkipByUserIdFetcher>(true);
+             var userDataFetcher = original.GetComponent<Gs2ExchangeOwnAwaitFetcher>() ?? original.GetComponentInParent<Gs2ExchangeOwnAwaitFetcher>(true);
             if (fetcher == null) {
-                EditorGUILayout.HelpBox("Gs2JobQueueDeleteJobByUserIdFetcher not found.", MessageType.Error);
+                EditorGUILayout.HelpBox("Gs2ExchangeSkipByUserIdFetcher not found.", MessageType.Error);
                 if (GUILayout.Button("Add Fetcher")) {
-                    original.gameObject.AddComponent<Gs2JobQueueDeleteJobByUserIdFetcher>();
+                    original.gameObject.AddComponent<Gs2ExchangeSkipByUserIdFetcher>();
                 }
             }
             if (userDataFetcher == null) {
-                EditorGUILayout.HelpBox("Gs2JobQueueOwnJobFetcher not found. Adding a Fetcher allows more values to be used.", MessageType.Warning);
+                EditorGUILayout.HelpBox("Gs2ExchangeOwnAwaitFetcher not found. Adding a Fetcher allows more values to be used.", MessageType.Warning);
                 if (GUILayout.Button("Add Fetcher")) {
-                    original.gameObject.AddComponent<Gs2JobQueueOwnJobFetcher>();
+                    original.gameObject.AddComponent<Gs2ExchangeOwnAwaitFetcher>();
                 }
             }
 
@@ -67,8 +67,23 @@ namespace Gs2.Unity.UiKit.Gs2JobQueue.Label.Editor
                 GUI.FocusControl("");
                 EditorUtility.SetDirty(original);
             }
-            if (GUILayout.Button("JobName")) {
-                original.format += "{jobName}";
+            if (GUILayout.Button("AwaitName")) {
+                original.format += "{awaitName}";
+                GUI.FocusControl("");
+                EditorUtility.SetDirty(original);
+            }
+            if (GUILayout.Button("SkipType")) {
+                original.format += "{skipType}";
+                GUI.FocusControl("");
+                EditorUtility.SetDirty(original);
+            }
+            if (GUILayout.Button("Minutes")) {
+                original.format += "{minutes}";
+                GUI.FocusControl("");
+                EditorUtility.SetDirty(original);
+            }
+            if (GUILayout.Button("Rate")) {
+                original.format += "{rate}";
                 GUI.FocusControl("");
                 EditorUtility.SetDirty(original);
             }
@@ -78,28 +93,38 @@ namespace Gs2.Unity.UiKit.Gs2JobQueue.Label.Editor
                 EditorUtility.SetDirty(original);
             }
             if (userDataFetcher != null) {
-                if (GUILayout.Button("UserData:JobId")) {
-                    original.format += "{userData:jobId}";
+                if (GUILayout.Button("UserData:UserId")) {
+                    original.format += "{userData:userId}";
                     GUI.FocusControl("");
                     EditorUtility.SetDirty(original);
                 }
-                if (GUILayout.Button("UserData:ScriptId")) {
-                    original.format += "{userData:scriptId}";
+                if (GUILayout.Button("UserData:RateName")) {
+                    original.format += "{userData:rateName}";
                     GUI.FocusControl("");
                     EditorUtility.SetDirty(original);
                 }
-                if (GUILayout.Button("UserData:Args")) {
-                    original.format += "{userData:args}";
+                if (GUILayout.Button("UserData:Name")) {
+                    original.format += "{userData:name}";
                     GUI.FocusControl("");
                     EditorUtility.SetDirty(original);
                 }
-                if (GUILayout.Button("UserData:CurrentRetryCount")) {
-                    original.format += "{userData:currentRetryCount}";
+                if (GUILayout.Button("UserData:SkipSeconds")) {
+                    original.format += "{userData:skipSeconds}";
                     GUI.FocusControl("");
                     EditorUtility.SetDirty(original);
                 }
-                if (GUILayout.Button("UserData:MaxTryCount")) {
-                    original.format += "{userData:maxTryCount}";
+                if (GUILayout.Button("UserData:Config")) {
+                    original.format += "{userData:config}";
+                    GUI.FocusControl("");
+                    EditorUtility.SetDirty(original);
+                }
+                if (GUILayout.Button("UserData:ExchangedAt")) {
+                    original.format += "{userData:exchangedAt}";
+                    GUI.FocusControl("");
+                    EditorUtility.SetDirty(original);
+                }
+                if (GUILayout.Button("UserData:AcquirableAt")) {
+                    original.format += "{userData:acquirableAt}";
                     GUI.FocusControl("");
                     EditorUtility.SetDirty(original);
                 }

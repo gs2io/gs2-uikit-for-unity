@@ -76,6 +76,9 @@ namespace Gs2.Unity.UiKit.Gs2JobQueue.Label
                     "{jobName}",
                     $"{this._fetcher.Request.JobName}"
                 ).Replace(
+                    "{timeOffsetToken}",
+                    $"{this._fetcher.Request.TimeOffsetToken}"
+                ).Replace(
                     "{userData:jobId}",
                     $"{this._userDataFetcher.Job.JobId}"
                 ).Replace(

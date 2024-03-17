@@ -25,7 +25,7 @@
 #pragma warning disable CS0472
 
 using System;
-using Gs2.Core.Util;
+using System.Collections.Generic;
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Exchange.Fetcher;
 using UnityEngine;
@@ -37,37 +37,14 @@ namespace Gs2.Unity.UiKit.Gs2Exchange
     /// Main
     /// </summary>
 
-	[AddComponentMenu("GS2 UIKit/Exchange/Await/View/Label/Gs2ExchangeAwaitSkipActionLabel")]
-    public partial class Gs2ExchangeAwaitSkipActionLabel : MonoBehaviour
+	[AddComponentMenu("GS2 UIKit/Exchange/Await/Fetcher/Properties/AcquirableAt/Gs2ExchangeOwnAwaitAcquirableAtFetcher")]
+    public partial class Gs2ExchangeOwnAwaitAcquirableAtFetcher : MonoBehaviour
     {
-        private void OnChange()
+        private void OnFetched()
         {
-            this.onUpdate?.Invoke(
-                this.format
+            onUpdate?.Invoke(
+                _fetcher.Await.AcquirableAt
             );
-        }
-
-        public void Awake() {
-            if (this.action == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2AccountAccountAuthenticationAction.");
-                enabled = false;
-            }
-        }
-
-        public virtual bool HasError()
-        {
-            if (this.action == null) {
-                return true;
-            }
-            return false;
-        }
-
-        public void OnEnable() {
-            this.action.OnChange.AddListener(OnChange);
-        }
-
-        public void OnDisable() {
-            this.action.OnChange.RemoveListener(OnChange);
         }
     }
 
@@ -75,16 +52,58 @@ namespace Gs2.Unity.UiKit.Gs2Exchange
     /// Dependent components
     /// </summary>
 
-    public partial class Gs2ExchangeAwaitSkipActionLabel
+    public partial class Gs2ExchangeOwnAwaitAcquirableAtFetcher
     {
-        
+        private Gs2ExchangeOwnAwaitFetcher _fetcher;
+
+        public void Awake()
+        {
+            this._fetcher = GetComponent<Gs2ExchangeOwnAwaitFetcher>() ?? GetComponentInParent<Gs2ExchangeOwnAwaitFetcher>();
+
+            if (this._fetcher == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ExchangeOwnAwaitFetcher.");
+                enabled = false;
+            }
+        }
+
+        public virtual bool HasError()
+        {
+            this._fetcher = GetComponent<Gs2ExchangeOwnAwaitFetcher>() ?? GetComponentInParent<Gs2ExchangeOwnAwaitFetcher>(true);
+            if (this._fetcher == null) {
+                return true;
+            }
+            return false;
+        }
+
+        private UnityAction _onFetched;
+
+        public void OnEnable()
+        {
+            this._onFetched = () =>
+            {
+                OnFetched();
+            };
+            this._fetcher.OnFetched.AddListener(this._onFetched);
+
+            if (this._fetcher.Fetched) {
+                OnFetched();
+            }
+        }
+
+        public void OnDisable()
+        {
+            if (this._onFetched != null) {
+                this._fetcher.OnFetched.RemoveListener(this._onFetched);
+                this._onFetched = null;
+            }
+        }
     }
 
     /// <summary>
     /// Public properties
     /// </summary>
 
-    public partial class Gs2ExchangeAwaitSkipActionLabel
+    public partial class Gs2ExchangeOwnAwaitAcquirableAtFetcher
     {
 
     }
@@ -92,20 +111,19 @@ namespace Gs2.Unity.UiKit.Gs2Exchange
     /// <summary>
     /// Parameters for Inspector
     /// </summary>
-
-    public partial class Gs2ExchangeAwaitSkipActionLabel
+    
+    public partial class Gs2ExchangeOwnAwaitAcquirableAtFetcher
     {
-        public Gs2ExchangeAwaitSkipAction action;
-        public string format;
+
     }
 
     /// <summary>
     /// Event handlers
     /// </summary>
-    public partial class Gs2ExchangeAwaitSkipActionLabel
+    public partial class Gs2ExchangeOwnAwaitAcquirableAtFetcher
     {
         [Serializable]
-        private class UpdateEvent : UnityEvent<string>
+        private class UpdateEvent : UnityEvent<long>
         {
 
         }
@@ -113,7 +131,7 @@ namespace Gs2.Unity.UiKit.Gs2Exchange
         [SerializeField]
         private UpdateEvent onUpdate = new UpdateEvent();
 
-        public event UnityAction<string> OnUpdate
+        public event UnityAction<long> OnUpdate
         {
             add => onUpdate.AddListener(value);
             remove => onUpdate.RemoveListener(value);

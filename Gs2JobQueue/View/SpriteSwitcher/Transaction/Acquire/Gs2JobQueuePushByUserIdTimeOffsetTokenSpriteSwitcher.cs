@@ -25,63 +25,52 @@
 #pragma warning disable CS0472
 
 using System;
+using System.Linq;
+using System.Collections.Generic;
 using Gs2.Gs2JobQueue.Request;
-using Gs2.Unity.Gs2JobQueue.ScriptableObject;
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Core.Fetcher;
-using Gs2.Unity.UiKit.Gs2JobQueue.Context;
 using Gs2.Unity.UiKit.Gs2JobQueue.Fetcher;
 using Gs2.Util.LitJson;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace Gs2.Unity.UiKit.Gs2JobQueue.Label
+namespace Gs2.Unity.UiKit.Gs2JobQueue.SpriteSwitcher
 {
     /// <summary>
     /// Main
     /// </summary>
 
-	[AddComponentMenu("GS2 UIKit/JobQueue/Job/View/Label/Transaction/Gs2JobQueuePushByUserIdLabel")]
-    public partial class Gs2JobQueuePushByUserIdLabel : MonoBehaviour
+	[AddComponentMenu("GS2 UIKit/JobQueue/Job/View/SpriteSwitcher/Transaction/Properties/TimeOffsetToken/Gs2JobQueuePushByUserIdTimeOffsetTokenSpriteSwitcher")]
+    public partial class Gs2JobQueuePushByUserIdTimeOffsetTokenSpriteSwitcher : MonoBehaviour
     {
         private void OnFetched()
         {
-            if ((!this._fetcher?.Fetched ?? false) || this._fetcher.Request == null) {
-                return;
+            switch(this.expression)
+            {
+                case Expression.In:
+                    if (this.applyTimeOffsetTokens.Contains(this._fetcher.Request?.TimeOffsetToken ?? "")) {
+                        this.onUpdate.Invoke(this.sprite);
+                    }
+                    break;
+                case Expression.NotIn:
+                    if (!this.applyTimeOffsetTokens.Contains(this._fetcher.Request?.TimeOffsetToken ?? "")) {
+                        this.onUpdate.Invoke(this.sprite);
+                    }
+                    break;
+                case Expression.StartsWith:
+                    if ((this._fetcher.Request?.TimeOffsetToken ?? "").StartsWith(this.applyTimeOffsetToken)) {
+                        this.onUpdate.Invoke(this.sprite);
+                    }
+                    break;
+                case Expression.EndsWith:
+                    if ((this._fetcher.Request?.TimeOffsetToken ?? "").EndsWith(this.applyTimeOffsetToken)) {
+                        this.onUpdate.Invoke(this.sprite);
+                    }
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
-            if ((!this._userDataFetcher?.Fetched ?? false) || this._userDataFetcher.Job == null) {
-                return;
-            }
-            this.onUpdate?.Invoke(
-                this.format.Replace(
-                    "{namespaceName}",
-                    $"{this._fetcher.Request.NamespaceName}"
-                ).Replace(
-                    "{userId}",
-                    $"{this._fetcher.Request.UserId}"
-                ).Replace(
-                    "{jobs}",
-                    $"{this._fetcher.Request.Jobs}"
-                ).Replace(
-                    "{timeOffsetToken}",
-                    $"{this._fetcher.Request.TimeOffsetToken}"
-                ).Replace(
-                    "{userData:jobId}",
-                    $"{this._userDataFetcher.Job.JobId}"
-                ).Replace(
-                    "{userData:scriptId}",
-                    $"{this._userDataFetcher.Job.ScriptId}"
-                ).Replace(
-                    "{userData:args}",
-                    $"{this._userDataFetcher.Job.Args}"
-                ).Replace(
-                    "{userData:currentRetryCount}",
-                    $"{this._userDataFetcher.Job.CurrentRetryCount}"
-                ).Replace(
-                    "{userData:maxTryCount}",
-                    $"{this._userDataFetcher.Job.MaxTryCount}"
-                )
-            );
         }
     }
 
@@ -89,10 +78,9 @@ namespace Gs2.Unity.UiKit.Gs2JobQueue.Label
     /// Dependent components
     /// </summary>
 
-    public partial class Gs2JobQueuePushByUserIdLabel
+    public partial class Gs2JobQueuePushByUserIdTimeOffsetTokenSpriteSwitcher
     {
         private Gs2JobQueuePushByUserIdFetcher _fetcher;
-        private Gs2JobQueueOwnJobFetcher _userDataFetcher;
 
         public void Awake()
         {
@@ -101,13 +89,19 @@ namespace Gs2.Unity.UiKit.Gs2JobQueue.Label
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2JobQueuePushByUserIdFetcher.");
                 enabled = false;
             }
-            this._userDataFetcher = GetComponent<Gs2JobQueueOwnJobFetcher>() ?? GetComponentInParent<Gs2JobQueueOwnJobFetcher>();
+            if (this.sprite == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: sprite is not set.");
+                enabled = false;
+            }
         }
 
         public virtual bool HasError()
         {
             this._fetcher = GetComponent<Gs2JobQueuePushByUserIdFetcher>() ?? GetComponentInParent<Gs2JobQueuePushByUserIdFetcher>(true);
             if (this._fetcher == null) {
+                return true;
+            }
+            if (this.sprite == null) {
                 return true;
             }
             return false;
@@ -125,21 +119,12 @@ namespace Gs2.Unity.UiKit.Gs2JobQueue.Label
             if (this._fetcher.Fetched) {
                 OnFetched();
             }
-            if (this._userDataFetcher != null) {
-                this._userDataFetcher.OnFetched.AddListener(this._onFetched);
-                if (this._userDataFetcher.Fetched) {
-                    OnFetched();
-                }
-            }
         }
 
         public void OnDisable()
         {
             if (this._onFetched != null) {
                 this._fetcher.OnFetched.RemoveListener(this._onFetched);
-                if (this._userDataFetcher != null) {
-                    this._userDataFetcher.OnFetched.RemoveListener(this._onFetched);
-                }
                 this._onFetched = null;
             }
         }
@@ -149,7 +134,7 @@ namespace Gs2.Unity.UiKit.Gs2JobQueue.Label
     /// Public properties
     /// </summary>
 
-    public partial class Gs2JobQueuePushByUserIdLabel
+    public partial class Gs2JobQueuePushByUserIdTimeOffsetTokenSpriteSwitcher
     {
 
     }
@@ -158,18 +143,31 @@ namespace Gs2.Unity.UiKit.Gs2JobQueue.Label
     /// Parameters for Inspector
     /// </summary>
 
-    public partial class Gs2JobQueuePushByUserIdLabel
+    public partial class Gs2JobQueuePushByUserIdTimeOffsetTokenSpriteSwitcher
     {
-        public string format;
+        public enum Expression {
+            In,
+            NotIn,
+            StartsWith,
+            EndsWith,
+        }
+
+        public Expression expression;
+
+        public List<string> applyTimeOffsetTokens;
+
+        public string applyTimeOffsetToken;
+
+        public Sprite sprite;
     }
 
     /// <summary>
     /// Event handlers
     /// </summary>
-    public partial class Gs2JobQueuePushByUserIdLabel
+    public partial class Gs2JobQueuePushByUserIdTimeOffsetTokenSpriteSwitcher
     {
         [Serializable]
-        private class UpdateEvent : UnityEvent<string>
+        private class UpdateEvent : UnityEvent<Sprite>
         {
 
         }
@@ -177,7 +175,7 @@ namespace Gs2.Unity.UiKit.Gs2JobQueue.Label
         [SerializeField]
         private UpdateEvent onUpdate = new UpdateEvent();
 
-        public event UnityAction<string> OnUpdate
+        public event UnityAction<Sprite> OnUpdate
         {
             add => this.onUpdate.AddListener(value);
             remove => this.onUpdate.RemoveListener(value);

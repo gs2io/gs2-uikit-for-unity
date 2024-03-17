@@ -89,6 +89,11 @@ namespace Gs2.Unity.UiKit.Gs2Exchange.Editor
                 GUI.FocusControl("");
                 EditorUtility.SetDirty(original);
             }
+            if (GUILayout.Button("SkipSeconds")) {
+                original.format += "{skipSeconds}";
+                GUI.FocusControl("");
+                EditorUtility.SetDirty(original);
+            }
             if (GUILayout.Button("Config")) {
                 original.format += "{config}";
                 GUI.FocusControl("");
@@ -141,6 +146,56 @@ namespace Gs2.Unity.UiKit.Gs2Exchange.Editor
             }
             if (GUILayout.Button("ExchangedAt(Sec:09)")) {
                 original.format += "{exchangedAt:ss}";
+                GUI.FocusControl("");
+                EditorUtility.SetDirty(original);
+            }
+            if (GUILayout.Button("AcquirableAt(Year:2020)")) {
+                original.format += "{acquirableAt:yyyy}";
+                GUI.FocusControl("");
+                EditorUtility.SetDirty(original);
+            }
+            if (GUILayout.Button("AcquirableAt(Year:20)")) {
+                original.format += "{acquirableAt:yy}";
+                GUI.FocusControl("");
+                EditorUtility.SetDirty(original);
+            }
+            if (GUILayout.Button("AcquirableAt(Month:12)")) {
+                original.format += "{acquirableAt:MM}";
+                GUI.FocusControl("");
+                EditorUtility.SetDirty(original);
+            }
+            if (GUILayout.Button("AcquirableAt(Month:Dec)")) {
+                original.format += "{acquirableAt:MMM}";
+                GUI.FocusControl("");
+                EditorUtility.SetDirty(original);
+            }
+            if (GUILayout.Button("AcquirableAt(Day:25)")) {
+                original.format += "{acquirableAt:dd}";
+                GUI.FocusControl("");
+                EditorUtility.SetDirty(original);
+            }
+            if (GUILayout.Button("AcquirableAt(Hour:6)")) {
+                original.format += "{acquirableAt:hh}";
+                GUI.FocusControl("");
+                EditorUtility.SetDirty(original);
+            }
+            if (GUILayout.Button("AcquirableAt(Hour:18)")) {
+                original.format += "{acquirableAt:HH}";
+                GUI.FocusControl("");
+                EditorUtility.SetDirty(original);
+            }
+            if (GUILayout.Button("AcquirableAt(AM/PM)")) {
+                original.format += "{acquirableAt:tt}";
+                GUI.FocusControl("");
+                EditorUtility.SetDirty(original);
+            }
+            if (GUILayout.Button("AcquirableAt(Min:05)")) {
+                original.format += "{acquirableAt:mm}";
+                GUI.FocusControl("");
+                EditorUtility.SetDirty(original);
+            }
+            if (GUILayout.Button("AcquirableAt(Sec:09)")) {
+                original.format += "{acquirableAt:ss}";
                 GUI.FocusControl("");
                 EditorUtility.SetDirty(original);
             }
