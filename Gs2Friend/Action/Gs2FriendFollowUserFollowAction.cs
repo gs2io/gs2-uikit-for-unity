@@ -63,10 +63,9 @@ namespace Gs2.Unity.UiKit.Gs2Friend
                 gameSessionHolder.GameSession
             ).Follow(
                 this._context.FollowUser.WithProfile
-            ).FollowUser(
-                this._context.FollowUser.TargetUserId
             );
             var future = domain.FollowFuture(
+                this._context.FollowUser.TargetUserId
             );
             yield return future;
             if (future.Error != null)
