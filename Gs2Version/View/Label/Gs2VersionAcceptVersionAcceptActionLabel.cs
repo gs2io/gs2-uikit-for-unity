@@ -43,7 +43,9 @@ namespace Gs2.Unity.UiKit.Gs2Version
         private void OnChange()
         {
             this.onUpdate?.Invoke(
-                this.format
+                this.format.Replace(
+                    "{version}", $"{this.action?.Version}"
+                )
             );
         }
 

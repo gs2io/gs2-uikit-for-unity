@@ -47,28 +47,32 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Fetcher
     /// </summary>
 
 	[AddComponentMenu("GS2 UIKit/Inventory/ReferenceOf/Fetcher/Consume/Gs2InventoryVerifyReferenceOfByUserIdFetcher")]
-    public partial class Gs2InventoryVerifyReferenceOfByUserIdFetcher : Gs2InventoryOwnItemSetContext
+    public partial class Gs2InventoryVerifyReferenceOfByUserIdFetcher : Gs2InventoryOwnReferenceOfContext
     {
         private void Fetch()
         {
             if (this._context != null) {
                 if (this._context.ConsumeAction.Action == "Gs2Inventory:VerifyReferenceOfByUserId") {
                     Request = VerifyReferenceOfByUserIdRequest.FromJson(JsonMapper.ToObject(this._context.ConsumeAction.Request));
-                    if (ItemSet == null || (
-                            ItemSet.NamespaceName == Request.NamespaceName &&
-                            ItemSet.InventoryName == Request.InventoryName &&
-                            ItemSet.ItemName == Request.ItemName &&
-                            ItemSet.ItemSetName == Request.ItemSetName)
+                    if (ReferenceOf == null || (
+                            ReferenceOf.NamespaceName == Request.NamespaceName &&
+                            ReferenceOf.InventoryName == Request.InventoryName &&
+                            ReferenceOf.ItemName == Request.ItemName &&
+                            ReferenceOf.ItemSetName == Request.ItemSetName &&
+                            ReferenceOf.ReferenceOf == Request.ReferenceOf)
                     ) {
-                        ItemSet = OwnItemSet.New(
-                            OwnInventory.New(
-                                Namespace.New(
-                                    Request.NamespaceName
+                        ReferenceOf = OwnReferenceOf.New(
+                            OwnItemSet.New(
+                                OwnInventory.New(
+                                    Namespace.New(
+                                        Request.NamespaceName
+                                    ),
+                                    Request.InventoryName
                                 ),
-                                Request.InventoryName
+                                Request.ItemName,
+                                Request.ItemSetName
                             ),
-                            Request.ItemName,
-                            Request.ItemSetName
+                            Request.ReferenceOf
                         );
                     }
                     Fetched = true;
@@ -78,21 +82,25 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Fetcher
                 var action = this._fetcher.ConsumeActions().FirstOrDefault(v => v.Action == "Gs2Inventory:VerifyReferenceOfByUserId");
                 if (action != null) {
                     Request = VerifyReferenceOfByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
-                    if (ItemSet == null || (
-                            ItemSet.NamespaceName == Request.NamespaceName &&
-                            ItemSet.InventoryName == Request.InventoryName &&
-                            ItemSet.ItemName == Request.ItemName &&
-                            ItemSet.ItemSetName == Request.ItemSetName)
+                    if (ReferenceOf == null || (
+                            ReferenceOf.NamespaceName == Request.NamespaceName &&
+                            ReferenceOf.InventoryName == Request.InventoryName &&
+                            ReferenceOf.ItemName == Request.ItemName &&
+                            ReferenceOf.ItemSetName == Request.ItemSetName &&
+                            ReferenceOf.ReferenceOf == Request.ReferenceOf)
                     ) {
-                        ItemSet = OwnItemSet.New(
-                            OwnInventory.New(
-                                Namespace.New(
-                                    Request.NamespaceName
+                        ReferenceOf = OwnReferenceOf.New(
+                            OwnItemSet.New(
+                                OwnInventory.New(
+                                    Namespace.New(
+                                        Request.NamespaceName
+                                    ),
+                                    Request.InventoryName
                                 ),
-                                Request.InventoryName
+                                Request.ItemName,
+                                Request.ItemSetName
                             ),
-                            Request.ItemName,
-                            Request.ItemSetName
+                            Request.ReferenceOf
                         );
                     }
                     Fetched = true;

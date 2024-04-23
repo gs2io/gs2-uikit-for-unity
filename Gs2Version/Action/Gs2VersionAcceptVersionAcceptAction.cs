@@ -65,6 +65,7 @@ namespace Gs2.Unity.UiKit.Gs2Version
                 this._context.AcceptVersion.VersionName
             );
             var future = domain.AcceptFuture(
+                Version
             );
             yield return future;
             if (future.Error != null)
@@ -162,6 +163,13 @@ namespace Gs2.Unity.UiKit.Gs2Version
     public partial class Gs2VersionAcceptVersionAcceptAction
     {
         public bool WaitAsyncProcessComplete;
+        public Gs2.Unity.Gs2Version.Model.EzVersion Version;
+
+        public void SetVersion(Gs2.Unity.Gs2Version.Model.EzVersion value) {
+            this.Version = value;
+            this.onChangeVersion.Invoke(this.Version);
+            this.OnChange.Invoke();
+        }
     }
 
     /// <summary>
@@ -169,6 +177,20 @@ namespace Gs2.Unity.UiKit.Gs2Version
     /// </summary>
     public partial class Gs2VersionAcceptVersionAcceptAction
     {
+
+        [Serializable]
+        private class ChangeVersionEvent : UnityEvent<Gs2.Unity.Gs2Version.Model.EzVersion>
+        {
+
+        }
+
+        [SerializeField]
+        private ChangeVersionEvent onChangeVersion = new ChangeVersionEvent();
+        public event UnityAction<Gs2.Unity.Gs2Version.Model.EzVersion> OnChangeVersion
+        {
+            add => this.onChangeVersion.AddListener(value);
+            remove => this.onChangeVersion.RemoveListener(value);
+        }
 
         [Serializable]
         private class AcceptStartEvent : UnityEvent

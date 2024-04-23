@@ -55,6 +55,7 @@ namespace Gs2.Unity.UiKit.Gs2Inventory.Editor
                     EditorGUILayout.TextField("InventoryName", original.ReferenceOf?.InventoryName?.ToString());
                     EditorGUILayout.TextField("ItemName", original.ReferenceOf?.ItemName?.ToString());
                     EditorGUILayout.TextField("ItemSetName", original.ReferenceOf?.ItemSetName?.ToString());
+                    EditorGUILayout.TextField("ReferenceOf", original.ReferenceOf?.ReferenceOf?.ToString());
                     EditorGUI.indentLevel--;
                 }
                 EditorGUI.EndDisabledGroup();
