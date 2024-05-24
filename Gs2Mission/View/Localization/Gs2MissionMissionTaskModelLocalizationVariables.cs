@@ -50,6 +50,15 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Localization
             this.target.StringReference["metadata"] = new StringVariable {
                 Value = _fetcher?.MissionTaskModel?.Metadata ?? "",
             };
+            this.target.StringReference["verifyCompleteType"] = new StringVariable {
+                Value = _fetcher?.MissionTaskModel?.VerifyCompleteType ?? "",
+            };
+            this.target.StringReference["challengePeriodEventId"] = new StringVariable {
+                Value = _fetcher?.MissionTaskModel?.ChallengePeriodEventId ?? "",
+            };
+            this.target.StringReference["premiseMissionTaskName"] = new StringVariable {
+                Value = _fetcher?.MissionTaskModel?.PremiseMissionTaskName ?? "",
+            };
             this.target.StringReference["counterName"] = new StringVariable {
                 Value = _fetcher?.MissionTaskModel?.CounterName ?? "",
             };
@@ -58,12 +67,6 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Localization
             };
             this.target.StringReference["targetValue"] = new LongVariable {
                 Value = _fetcher?.MissionTaskModel?.TargetValue ?? 0,
-            };
-            this.target.StringReference["challengePeriodEventId"] = new StringVariable {
-                Value = _fetcher?.MissionTaskModel?.ChallengePeriodEventId ?? "",
-            };
-            this.target.StringReference["premiseMissionTaskName"] = new StringVariable {
-                Value = _fetcher?.MissionTaskModel?.PremiseMissionTaskName ?? "",
             };
             this.target.enabled = true;
         }

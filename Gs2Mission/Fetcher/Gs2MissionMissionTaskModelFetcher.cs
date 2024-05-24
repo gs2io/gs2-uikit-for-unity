@@ -48,7 +48,7 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Fetcher
     /// </summary>
 
 	[AddComponentMenu("GS2 UIKit/Mission/MissionTaskModel/Fetcher/Gs2MissionMissionTaskModelFetcher")]
-    public partial class Gs2MissionMissionTaskModelFetcher : MonoBehaviour, IAcquireActionsFetcher
+    public partial class Gs2MissionMissionTaskModelFetcher : MonoBehaviour, IAcquireActionsFetcher, IConsumeActionsFetcher
     {
         private EzMissionTaskModelDomain _domain;
         private ulong? _callbackId;
@@ -143,6 +143,25 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Fetcher
         }
 
         GameObject IAcquireActionsFetcher.GameObject() {
+            return gameObject;
+        }
+
+        public List<Unity.Core.Model.EzConsumeAction> ConsumeActions(string context = "default") {
+            if (!Fetched) {
+                return new List<Unity.Core.Model.EzConsumeAction>();
+            }
+            return MissionTaskModel.VerifyCompleteConsumeActions.Denormalize();
+        }
+
+        bool IConsumeActionsFetcher.IsFetched() {
+            return this.Fetched;
+        }
+
+        UnityEvent IConsumeActionsFetcher.OnFetchedEvent() {
+            return this.OnFetched;
+        }
+
+        GameObject IConsumeActionsFetcher.GameObject() {
             return gameObject;
         }
     }

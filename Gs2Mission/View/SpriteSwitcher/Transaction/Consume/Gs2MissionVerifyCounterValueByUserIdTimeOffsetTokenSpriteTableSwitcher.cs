@@ -25,48 +25,33 @@
 #pragma warning disable CS0472
 
 using System;
-using Gs2.Core.Util;
+using System.Linq;
+using System.Collections.Generic;
+using Gs2.Gs2Mission.Request;
 using Gs2.Unity.UiKit.Core;
+using Gs2.Unity.UiKit.Gs2Core.Fetcher;
 using Gs2.Unity.UiKit.Gs2Mission.Fetcher;
+using Gs2.Util.LitJson;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace Gs2.Unity.UiKit.Gs2Mission
+namespace Gs2.Unity.UiKit.Gs2Mission.SpriteSwitcher
 {
     /// <summary>
     /// Main
     /// </summary>
 
-	[AddComponentMenu("GS2 UIKit/Mission/MissionTaskModel/View/Label/Gs2MissionMissionTaskModelLabel")]
-    public partial class Gs2MissionMissionTaskModelLabel : MonoBehaviour
+	[AddComponentMenu("GS2 UIKit/Mission/Counter/View/SpriteSwitcher/Transaction/Properties/TimeOffsetToken/Gs2MissionVerifyCounterValueByUserIdTimeOffsetTokenSpriteTableSwitcher")]
+    public partial class Gs2MissionVerifyCounterValueByUserIdTimeOffsetTokenSpriteTableSwitcher : MonoBehaviour
     {
         private void OnFetched()
         {
-            this.onUpdate?.Invoke(
-                this.format.Replace(
-                    "{name}", $"{this._fetcher?.MissionTaskModel?.Name}"
-                ).Replace(
-                    "{metadata}", $"{this._fetcher?.MissionTaskModel?.Metadata}"
-                ).Replace(
-                    "{verifyCompleteType}", $"{this._fetcher?.MissionTaskModel?.VerifyCompleteType}"
-                ).Replace(
-                    "{targetCounter}", $"{this._fetcher?.MissionTaskModel?.TargetCounter}"
-                ).Replace(
-                    "{verifyCompleteConsumeActions}", $"{this._fetcher?.MissionTaskModel?.VerifyCompleteConsumeActions}"
-                ).Replace(
-                    "{completeAcquireActions}", $"{this._fetcher?.MissionTaskModel?.CompleteAcquireActions}"
-                ).Replace(
-                    "{challengePeriodEventId}", $"{this._fetcher?.MissionTaskModel?.ChallengePeriodEventId}"
-                ).Replace(
-                    "{premiseMissionTaskName}", $"{this._fetcher?.MissionTaskModel?.PremiseMissionTaskName}"
-                ).Replace(
-                    "{counterName}", $"{this._fetcher?.MissionTaskModel?.CounterName}"
-                ).Replace(
-                    "{targetResetType}", $"{this._fetcher?.MissionTaskModel?.TargetResetType}"
-                ).Replace(
-                    "{targetValue}", $"{this._fetcher?.MissionTaskModel?.TargetValue}"
-                )
-            );
+            if (this.sprites.Count(v => v.value == this._fetcher.Request.TimeOffsetToken) > 0) {
+                this.onUpdate.Invoke(sprites.Find(v => v.value == this._fetcher.Request.TimeOffsetToken).sprite);
+            }
+            else {
+                this.onUpdate.Invoke(this.defaultSprite);
+            }
         }
     }
 
@@ -74,23 +59,30 @@ namespace Gs2.Unity.UiKit.Gs2Mission
     /// Dependent components
     /// </summary>
 
-    public partial class Gs2MissionMissionTaskModelLabel
+    public partial class Gs2MissionVerifyCounterValueByUserIdTimeOffsetTokenSpriteTableSwitcher
     {
-        private Gs2MissionMissionTaskModelFetcher _fetcher;
+        private Gs2MissionVerifyCounterValueByUserIdFetcher _fetcher;
 
         public void Awake()
         {
-            this._fetcher = GetComponent<Gs2MissionMissionTaskModelFetcher>() ?? GetComponentInParent<Gs2MissionMissionTaskModelFetcher>();
+            this._fetcher = GetComponent<Gs2MissionVerifyCounterValueByUserIdFetcher>() ?? GetComponentInParent<Gs2MissionVerifyCounterValueByUserIdFetcher>();
             if (this._fetcher == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MissionMissionTaskModelFetcher.");
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MissionVerifyCounterValueByUserIdFetcher.");
+                enabled = false;
+            }
+            if (this.sprites == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: sprite is not set.");
                 enabled = false;
             }
         }
 
         public virtual bool HasError()
         {
-            this._fetcher = GetComponent<Gs2MissionMissionTaskModelFetcher>() ?? GetComponentInParent<Gs2MissionMissionTaskModelFetcher>(true);
+            this._fetcher = GetComponent<Gs2MissionVerifyCounterValueByUserIdFetcher>() ?? GetComponentInParent<Gs2MissionVerifyCounterValueByUserIdFetcher>(true);
             if (this._fetcher == null) {
+                return true;
+            }
+            if (this.sprites == null) {
                 return true;
             }
             return false;
@@ -105,7 +97,6 @@ namespace Gs2.Unity.UiKit.Gs2Mission
                 OnFetched();
             };
             this._fetcher.OnFetched.AddListener(this._onFetched);
-
             if (this._fetcher.Fetched) {
                 OnFetched();
             }
@@ -124,7 +115,7 @@ namespace Gs2.Unity.UiKit.Gs2Mission
     /// Public properties
     /// </summary>
 
-    public partial class Gs2MissionMissionTaskModelLabel
+    public partial class Gs2MissionVerifyCounterValueByUserIdTimeOffsetTokenSpriteTableSwitcher
     {
 
     }
@@ -133,18 +124,26 @@ namespace Gs2.Unity.UiKit.Gs2Mission
     /// Parameters for Inspector
     /// </summary>
 
-    public partial class Gs2MissionMissionTaskModelLabel
+    public partial class Gs2MissionVerifyCounterValueByUserIdTimeOffsetTokenSpriteTableSwitcher
     {
-        public string format;
+        [System.Serializable]
+        public class SpriteTableEntry
+        {
+            public string value;
+            public Sprite sprite;
+        }
+
+        public List<SpriteTableEntry> sprites;
+        public Sprite defaultSprite;
     }
 
     /// <summary>
     /// Event handlers
     /// </summary>
-    public partial class Gs2MissionMissionTaskModelLabel
+    public partial class Gs2MissionVerifyCounterValueByUserIdTimeOffsetTokenSpriteTableSwitcher
     {
         [Serializable]
-        private class UpdateEvent : UnityEvent<string>
+        private class UpdateEvent : UnityEvent<Sprite>
         {
 
         }
@@ -152,7 +151,7 @@ namespace Gs2.Unity.UiKit.Gs2Mission
         [SerializeField]
         private UpdateEvent onUpdate = new UpdateEvent();
 
-        public event UnityAction<string> OnUpdate
+        public event UnityAction<Sprite> OnUpdate
         {
             add => this.onUpdate.AddListener(value);
             remove => this.onUpdate.RemoveListener(value);

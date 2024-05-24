@@ -25,48 +25,40 @@
 #pragma warning disable CS0472
 
 using System;
-using Gs2.Core.Util;
+using System.Collections.Generic;
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Mission.Fetcher;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace Gs2.Unity.UiKit.Gs2Mission
+namespace Gs2.Unity.UiKit.Gs2Mission.Enabler
 {
     /// <summary>
     /// Main
     /// </summary>
 
-	[AddComponentMenu("GS2 UIKit/Mission/MissionTaskModel/View/Label/Gs2MissionMissionTaskModelLabel")]
-    public partial class Gs2MissionMissionTaskModelLabel : MonoBehaviour
+	[AddComponentMenu("GS2 UIKit/Mission/MissionTaskModel/View/Enabler/Properties/VerifyCompleteType/Gs2MissionMissionTaskModelVerifyCompleteTypeEnabler")]
+    public partial class Gs2MissionMissionTaskModelVerifyCompleteTypeEnabler : MonoBehaviour
     {
         private void OnFetched()
         {
-            this.onUpdate?.Invoke(
-                this.format.Replace(
-                    "{name}", $"{this._fetcher?.MissionTaskModel?.Name}"
-                ).Replace(
-                    "{metadata}", $"{this._fetcher?.MissionTaskModel?.Metadata}"
-                ).Replace(
-                    "{verifyCompleteType}", $"{this._fetcher?.MissionTaskModel?.VerifyCompleteType}"
-                ).Replace(
-                    "{targetCounter}", $"{this._fetcher?.MissionTaskModel?.TargetCounter}"
-                ).Replace(
-                    "{verifyCompleteConsumeActions}", $"{this._fetcher?.MissionTaskModel?.VerifyCompleteConsumeActions}"
-                ).Replace(
-                    "{completeAcquireActions}", $"{this._fetcher?.MissionTaskModel?.CompleteAcquireActions}"
-                ).Replace(
-                    "{challengePeriodEventId}", $"{this._fetcher?.MissionTaskModel?.ChallengePeriodEventId}"
-                ).Replace(
-                    "{premiseMissionTaskName}", $"{this._fetcher?.MissionTaskModel?.PremiseMissionTaskName}"
-                ).Replace(
-                    "{counterName}", $"{this._fetcher?.MissionTaskModel?.CounterName}"
-                ).Replace(
-                    "{targetResetType}", $"{this._fetcher?.MissionTaskModel?.TargetResetType}"
-                ).Replace(
-                    "{targetValue}", $"{this._fetcher?.MissionTaskModel?.TargetValue}"
-                )
-            );
+            switch(this.expression)
+            {
+                case Expression.In:
+                    this.target.SetActive(this.enableVerifyCompleteTypes.Contains(this._fetcher.MissionTaskModel?.VerifyCompleteType ?? ""));
+                    break;
+                case Expression.NotIn:
+                    this.target.SetActive(!this.enableVerifyCompleteTypes.Contains(this._fetcher.MissionTaskModel?.VerifyCompleteType ?? ""));
+                    break;
+                case Expression.StartsWith:
+                    this.target.SetActive((this._fetcher.MissionTaskModel?.VerifyCompleteType ?? "").StartsWith(this.enableVerifyCompleteType));
+                    break;
+                case Expression.EndsWith:
+                    this.target.SetActive((this._fetcher.MissionTaskModel?.VerifyCompleteType ?? "").EndsWith(this.enableVerifyCompleteType));
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
         }
     }
 
@@ -74,7 +66,7 @@ namespace Gs2.Unity.UiKit.Gs2Mission
     /// Dependent components
     /// </summary>
 
-    public partial class Gs2MissionMissionTaskModelLabel
+    public partial class Gs2MissionMissionTaskModelVerifyCompleteTypeEnabler
     {
         private Gs2MissionMissionTaskModelFetcher _fetcher;
 
@@ -85,12 +77,19 @@ namespace Gs2.Unity.UiKit.Gs2Mission
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MissionMissionTaskModelFetcher.");
                 enabled = false;
             }
+            if (this.target == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: target is not set.");
+                enabled = false;
+            }
         }
 
         public virtual bool HasError()
         {
             this._fetcher = GetComponent<Gs2MissionMissionTaskModelFetcher>() ?? GetComponentInParent<Gs2MissionMissionTaskModelFetcher>(true);
             if (this._fetcher == null) {
+                return true;
+            }
+            if (this.target == null) {
                 return true;
             }
             return false;
@@ -124,7 +123,7 @@ namespace Gs2.Unity.UiKit.Gs2Mission
     /// Public properties
     /// </summary>
 
-    public partial class Gs2MissionMissionTaskModelLabel
+    public partial class Gs2MissionMissionTaskModelVerifyCompleteTypeEnabler
     {
 
     }
@@ -133,29 +132,29 @@ namespace Gs2.Unity.UiKit.Gs2Mission
     /// Parameters for Inspector
     /// </summary>
 
-    public partial class Gs2MissionMissionTaskModelLabel
+    public partial class Gs2MissionMissionTaskModelVerifyCompleteTypeEnabler
     {
-        public string format;
+        public enum Expression {
+            In,
+            NotIn,
+            StartsWith,
+            EndsWith,
+        }
+
+        public Expression expression;
+
+        public List<string> enableVerifyCompleteTypes;
+
+        public string enableVerifyCompleteType;
+
+        public GameObject target;
     }
 
     /// <summary>
     /// Event handlers
     /// </summary>
-    public partial class Gs2MissionMissionTaskModelLabel
+    public partial class Gs2MissionMissionTaskModelVerifyCompleteTypeEnabler
     {
-        [Serializable]
-        private class UpdateEvent : UnityEvent<string>
-        {
-
-        }
-
-        [SerializeField]
-        private UpdateEvent onUpdate = new UpdateEvent();
-
-        public event UnityAction<string> OnUpdate
-        {
-            add => this.onUpdate.AddListener(value);
-            remove => this.onUpdate.RemoveListener(value);
-        }
+        
     }
 }

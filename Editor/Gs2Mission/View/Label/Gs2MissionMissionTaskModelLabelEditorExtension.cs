@@ -83,18 +83,18 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Editor
                 GUI.FocusControl("");
                 EditorUtility.SetDirty(original);
             }
-            if (GUILayout.Button("CounterName")) {
-                original.format += "{counterName}";
+            if (GUILayout.Button("VerifyCompleteType")) {
+                original.format += "{verifyCompleteType}";
                 GUI.FocusControl("");
                 EditorUtility.SetDirty(original);
             }
-            if (GUILayout.Button("TargetResetType")) {
-                original.format += "{targetResetType}";
+            if (GUILayout.Button("TargetCounter")) {
+                original.format += "{targetCounter}";
                 GUI.FocusControl("");
                 EditorUtility.SetDirty(original);
             }
-            if (GUILayout.Button("TargetValue")) {
-                original.format += "{targetValue}";
+            if (GUILayout.Button("VerifyCompleteConsumeActions")) {
+                original.format += "{verifyCompleteConsumeActions}";
                 GUI.FocusControl("");
                 EditorUtility.SetDirty(original);
             }
@@ -110,6 +110,21 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Editor
             }
             if (GUILayout.Button("PremiseMissionTaskName")) {
                 original.format += "{premiseMissionTaskName}";
+                GUI.FocusControl("");
+                EditorUtility.SetDirty(original);
+            }
+            if (GUILayout.Button("CounterName")) {
+                original.format += "{counterName}";
+                GUI.FocusControl("");
+                EditorUtility.SetDirty(original);
+            }
+            if (GUILayout.Button("TargetResetType")) {
+                original.format += "{targetResetType}";
+                GUI.FocusControl("");
+                EditorUtility.SetDirty(original);
+            }
+            if (GUILayout.Button("TargetValue")) {
+                original.format += "{targetValue}";
                 GUI.FocusControl("");
                 EditorUtility.SetDirty(original);
             }
