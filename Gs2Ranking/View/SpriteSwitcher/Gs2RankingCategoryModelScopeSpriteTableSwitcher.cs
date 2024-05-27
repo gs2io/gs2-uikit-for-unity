@@ -25,38 +25,30 @@
 #pragma warning disable CS0472
 
 using System;
-using Gs2.Core.Util;
+using System.Collections.Generic;
+using System.Linq;
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Ranking.Fetcher;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace Gs2.Unity.UiKit.Gs2Ranking
+namespace Gs2.Unity.UiKit.Gs2Ranking.SpriteSwitcher
 {
     /// <summary>
     /// Main
     /// </summary>
 
-	[AddComponentMenu("GS2 UIKit/Ranking/CategoryModel/View/Label/Gs2RankingCategoryModelLabel")]
-    public partial class Gs2RankingCategoryModelLabel : MonoBehaviour
+	[AddComponentMenu("GS2 UIKit/Ranking/CategoryModel/View/SpriteSwitcher/Properties/Scope/Gs2RankingCategoryModelScopeSpriteTableSwitcher")]
+    public partial class Gs2RankingCategoryModelScopeSpriteTableSwitcher : MonoBehaviour
     {
         private void OnFetched()
         {
-            this.onUpdate?.Invoke(
-                this.format.Replace(
-                    "{name}", $"{this._fetcher?.CategoryModel?.Name}"
-                ).Replace(
-                    "{metadata}", $"{this._fetcher?.CategoryModel?.Metadata}"
-                ).Replace(
-                    "{scope}", $"{this._fetcher?.CategoryModel?.Scope}"
-                ).Replace(
-                    "{globalRankingSetting}", $"{this._fetcher?.CategoryModel?.GlobalRankingSetting}"
-                ).Replace(
-                    "{entryPeriodEventId}", $"{this._fetcher?.CategoryModel?.EntryPeriodEventId}"
-                ).Replace(
-                    "{accessPeriodEventId}", $"{this._fetcher?.CategoryModel?.AccessPeriodEventId}"
-                )
-            );
+            if (this.sprites.Count(v => v.value == this._fetcher.CategoryModel.Scope) > 0) {
+                this.onUpdate.Invoke(sprites.Find(v => v.value == _fetcher.CategoryModel.Scope).sprite);
+            }
+            else {
+                this.onUpdate.Invoke(this.defaultSprite);
+            }
         }
     }
 
@@ -64,7 +56,7 @@ namespace Gs2.Unity.UiKit.Gs2Ranking
     /// Dependent components
     /// </summary>
 
-    public partial class Gs2RankingCategoryModelLabel
+    public partial class Gs2RankingCategoryModelScopeSpriteTableSwitcher
     {
         private Gs2RankingCategoryModelFetcher _fetcher;
 
@@ -75,12 +67,19 @@ namespace Gs2.Unity.UiKit.Gs2Ranking
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2RankingCategoryModelFetcher.");
                 enabled = false;
             }
+            if (this.sprites == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: sprite is not set.");
+                enabled = false;
+            }
         }
 
         public virtual bool HasError()
         {
             this._fetcher = GetComponent<Gs2RankingCategoryModelFetcher>() ?? GetComponentInParent<Gs2RankingCategoryModelFetcher>(true);
             if (this._fetcher == null) {
+                return true;
+            }
+            if (this.sprites == null) {
                 return true;
             }
             return false;
@@ -95,7 +94,6 @@ namespace Gs2.Unity.UiKit.Gs2Ranking
                 OnFetched();
             };
             this._fetcher.OnFetched.AddListener(this._onFetched);
-
             if (this._fetcher.Fetched) {
                 OnFetched();
             }
@@ -114,7 +112,7 @@ namespace Gs2.Unity.UiKit.Gs2Ranking
     /// Public properties
     /// </summary>
 
-    public partial class Gs2RankingCategoryModelLabel
+    public partial class Gs2RankingCategoryModelScopeSpriteTableSwitcher
     {
 
     }
@@ -123,18 +121,26 @@ namespace Gs2.Unity.UiKit.Gs2Ranking
     /// Parameters for Inspector
     /// </summary>
 
-    public partial class Gs2RankingCategoryModelLabel
+    public partial class Gs2RankingCategoryModelScopeSpriteTableSwitcher
     {
-        public string format;
+        [System.Serializable]
+        public class SpriteTableEntry
+        {
+            public string value;
+            public Sprite sprite;
+        }
+
+        public List<SpriteTableEntry> sprites;
+        public Sprite defaultSprite;
     }
 
     /// <summary>
     /// Event handlers
     /// </summary>
-    public partial class Gs2RankingCategoryModelLabel
+    public partial class Gs2RankingCategoryModelScopeSpriteTableSwitcher
     {
         [Serializable]
-        private class UpdateEvent : UnityEvent<string>
+        private class UpdateEvent : UnityEvent<Sprite>
         {
 
         }
@@ -142,10 +148,10 @@ namespace Gs2.Unity.UiKit.Gs2Ranking
         [SerializeField]
         private UpdateEvent onUpdate = new UpdateEvent();
 
-        public event UnityAction<string> OnUpdate
+        public event UnityAction<Sprite> OnUpdate
         {
-            add => this.onUpdate.AddListener(value);
-            remove => this.onUpdate.RemoveListener(value);
+            add => onUpdate.AddListener(value);
+            remove => onUpdate.RemoveListener(value);
         }
     }
 }

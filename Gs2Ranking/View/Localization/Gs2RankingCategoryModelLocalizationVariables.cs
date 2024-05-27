@@ -50,6 +50,9 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Localization
             this.target.StringReference["metadata"] = new StringVariable {
                 Value = _fetcher?.CategoryModel?.Metadata ?? "",
             };
+            this.target.StringReference["scope"] = new StringVariable {
+                Value = _fetcher?.CategoryModel?.Scope ?? "",
+            };
             this.target.StringReference["entryPeriodEventId"] = new StringVariable {
                 Value = _fetcher?.CategoryModel?.EntryPeriodEventId ?? "",
             };

@@ -25,38 +25,40 @@
 #pragma warning disable CS0472
 
 using System;
-using Gs2.Core.Util;
+using System.Collections.Generic;
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Ranking.Fetcher;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace Gs2.Unity.UiKit.Gs2Ranking
+namespace Gs2.Unity.UiKit.Gs2Ranking.Enabler
 {
     /// <summary>
     /// Main
     /// </summary>
 
-	[AddComponentMenu("GS2 UIKit/Ranking/CategoryModel/View/Label/Gs2RankingCategoryModelLabel")]
-    public partial class Gs2RankingCategoryModelLabel : MonoBehaviour
+	[AddComponentMenu("GS2 UIKit/Ranking/CategoryModel/View/Enabler/Properties/Scope/Gs2RankingCategoryModelScopeEnabler")]
+    public partial class Gs2RankingCategoryModelScopeEnabler : MonoBehaviour
     {
         private void OnFetched()
         {
-            this.onUpdate?.Invoke(
-                this.format.Replace(
-                    "{name}", $"{this._fetcher?.CategoryModel?.Name}"
-                ).Replace(
-                    "{metadata}", $"{this._fetcher?.CategoryModel?.Metadata}"
-                ).Replace(
-                    "{scope}", $"{this._fetcher?.CategoryModel?.Scope}"
-                ).Replace(
-                    "{globalRankingSetting}", $"{this._fetcher?.CategoryModel?.GlobalRankingSetting}"
-                ).Replace(
-                    "{entryPeriodEventId}", $"{this._fetcher?.CategoryModel?.EntryPeriodEventId}"
-                ).Replace(
-                    "{accessPeriodEventId}", $"{this._fetcher?.CategoryModel?.AccessPeriodEventId}"
-                )
-            );
+            switch(this.expression)
+            {
+                case Expression.In:
+                    this.target.SetActive(this.enableScopes.Contains(this._fetcher.CategoryModel?.Scope ?? ""));
+                    break;
+                case Expression.NotIn:
+                    this.target.SetActive(!this.enableScopes.Contains(this._fetcher.CategoryModel?.Scope ?? ""));
+                    break;
+                case Expression.StartsWith:
+                    this.target.SetActive((this._fetcher.CategoryModel?.Scope ?? "").StartsWith(this.enableScope));
+                    break;
+                case Expression.EndsWith:
+                    this.target.SetActive((this._fetcher.CategoryModel?.Scope ?? "").EndsWith(this.enableScope));
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
         }
     }
 
@@ -64,7 +66,7 @@ namespace Gs2.Unity.UiKit.Gs2Ranking
     /// Dependent components
     /// </summary>
 
-    public partial class Gs2RankingCategoryModelLabel
+    public partial class Gs2RankingCategoryModelScopeEnabler
     {
         private Gs2RankingCategoryModelFetcher _fetcher;
 
@@ -75,12 +77,19 @@ namespace Gs2.Unity.UiKit.Gs2Ranking
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2RankingCategoryModelFetcher.");
                 enabled = false;
             }
+            if (this.target == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: target is not set.");
+                enabled = false;
+            }
         }
 
         public virtual bool HasError()
         {
             this._fetcher = GetComponent<Gs2RankingCategoryModelFetcher>() ?? GetComponentInParent<Gs2RankingCategoryModelFetcher>(true);
             if (this._fetcher == null) {
+                return true;
+            }
+            if (this.target == null) {
                 return true;
             }
             return false;
@@ -114,7 +123,7 @@ namespace Gs2.Unity.UiKit.Gs2Ranking
     /// Public properties
     /// </summary>
 
-    public partial class Gs2RankingCategoryModelLabel
+    public partial class Gs2RankingCategoryModelScopeEnabler
     {
 
     }
@@ -123,29 +132,29 @@ namespace Gs2.Unity.UiKit.Gs2Ranking
     /// Parameters for Inspector
     /// </summary>
 
-    public partial class Gs2RankingCategoryModelLabel
+    public partial class Gs2RankingCategoryModelScopeEnabler
     {
-        public string format;
+        public enum Expression {
+            In,
+            NotIn,
+            StartsWith,
+            EndsWith,
+        }
+
+        public Expression expression;
+
+        public List<string> enableScopes;
+
+        public string enableScope;
+
+        public GameObject target;
     }
 
     /// <summary>
     /// Event handlers
     /// </summary>
-    public partial class Gs2RankingCategoryModelLabel
+    public partial class Gs2RankingCategoryModelScopeEnabler
     {
-        [Serializable]
-        private class UpdateEvent : UnityEvent<string>
-        {
-
-        }
-
-        [SerializeField]
-        private UpdateEvent onUpdate = new UpdateEvent();
-
-        public event UnityAction<string> OnUpdate
-        {
-            add => this.onUpdate.AddListener(value);
-            remove => this.onUpdate.RemoveListener(value);
-        }
+        
     }
 }

@@ -84,6 +84,16 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Editor
                 GUI.FocusControl("");
                 EditorUtility.SetDirty(original);
             }
+            if (GUILayout.Button("Scope")) {
+                original.format += "{scope}";
+                GUI.FocusControl("");
+                EditorUtility.SetDirty(original);
+            }
+            if (GUILayout.Button("GlobalRankingSetting")) {
+                original.format += "{globalRankingSetting}";
+                GUI.FocusControl("");
+                EditorUtility.SetDirty(original);
+            }
             if (GUILayout.Button("EntryPeriodEventId")) {
                 original.format += "{entryPeriodEventId}";
                 GUI.FocusControl("");
