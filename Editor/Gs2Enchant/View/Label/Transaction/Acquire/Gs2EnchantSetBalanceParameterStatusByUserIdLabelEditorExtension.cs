@@ -103,11 +103,6 @@ namespace Gs2.Unity.UiKit.Gs2Enchant.Label.Editor
                     GUI.FocusControl("");
                     EditorUtility.SetDirty(original);
                 }
-                if (GUILayout.Button("UserData:ParameterValues:Changed")) {
-                    original.format += "{userData:parameterValues:changed}";
-                    GUI.FocusControl("");
-                    EditorUtility.SetDirty(original);
-                }
             }
             EditorGUILayout.PropertyField(serializedObject.FindProperty("onUpdate"), true);
             serializedObject.ApplyModifiedProperties();
