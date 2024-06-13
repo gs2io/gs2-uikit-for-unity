@@ -43,8 +43,17 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking.Editor
             serializedObject.Update();
 
             if (original.SeasonModel == null) {
-                EditorGUILayout.HelpBox("SeasonModel not assigned.", MessageType.Error);
-                EditorGUILayout.PropertyField(serializedObject.FindProperty("_seasonModel"), true);
+                var list = original.GetComponentInParent<Gs2MatchmakingSeasonModelList>(true);
+                if (list != null) {
+                    EditorGUILayout.HelpBox("SeasonModel is auto assign from Gs2MatchmakingSeasonModelList.", MessageType.Info);
+                    EditorGUI.BeginDisabledGroup(true);
+                    EditorGUILayout.ObjectField("List", list, typeof(Gs2MatchmakingSeasonModelList), false);
+                    EditorGUI.EndDisabledGroup();
+                }
+                else {
+                    EditorGUILayout.HelpBox("SeasonModel not assigned.", MessageType.Error);
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("_seasonModel"), true);
+                }
             }
             else {
                 original.SeasonModel = EditorGUILayout.ObjectField("SeasonModel", original.SeasonModel, typeof(SeasonModel), false) as SeasonModel;

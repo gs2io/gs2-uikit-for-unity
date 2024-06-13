@@ -46,6 +46,9 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking.Context
 
         public virtual bool HasError() {
             if (SeasonModel == null) {
+                if (GetComponentInParent<Gs2MatchmakingSeasonModelList>(true) != null) {
+                    return false;
+                }
                 return true;
             }
             return false;
