@@ -20,7 +20,7 @@ using Gs2.Unity.UiKit.Core;
 using UnityEditor;
 using UnityEngine;
 
-namespace Gs2.Unity.UiKit.Gs2Stamina.Editor
+namespace Gs2.Unity.UiKit.Editor.Core.View.Label
 {
     [CustomEditor(typeof(Gs2CoreTimeSpanLabel))]
     public class Gs2CoreTimeSpanLabelEditorExtension : UnityEditor.Editor

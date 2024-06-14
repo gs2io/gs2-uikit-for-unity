@@ -1,7 +1,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace Editor.Gs2Grade.Prefabs
+namespace Gs2.Unity.UiKit.Editor.Gs2Grade.Prefabs
 {
     public static class Gs2GradeGradeModelExperienceModelIdValue
     {

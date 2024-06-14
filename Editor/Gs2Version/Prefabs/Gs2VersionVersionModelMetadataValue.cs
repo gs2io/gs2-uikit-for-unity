@@ -1,7 +1,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace Editor.Gs2Version.Prefabs
+namespace Gs2.Unity.UiKit.Editor.Gs2Version.Prefabs
 {
     public static class Gs2VersionVersionModelMetadataValue
     {

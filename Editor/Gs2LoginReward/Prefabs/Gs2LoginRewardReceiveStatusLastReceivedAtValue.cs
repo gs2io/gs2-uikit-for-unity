@@ -1,7 +1,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace Editor.Gs2LoginReward.Prefabs
+namespace Gs2.Unity.UiKit.Editor.Gs2LoginReward.Prefabs
 {
     public static class Gs2LoginRewardReceiveStatusLastReceivedAtValue
     {

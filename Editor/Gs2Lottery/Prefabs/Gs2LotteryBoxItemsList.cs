@@ -1,7 +1,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace Editor.Gs2Lottery.Prefabs
+namespace Gs2.Unity.UiKit.Editor.Gs2Lottery.Prefabs
 {
     public static class Gs2LotteryBoxItemsList
     {

@@ -1,7 +1,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace Editor.Gs2Experience.Prefabs
+namespace Gs2.Unity.UiKit.Editor.Gs2Experience.Prefabs
 {
     public static class Gs2ExperienceStatusRankValueWithCapValueValue
     {

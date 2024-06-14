@@ -1,7 +1,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace Editor.Gs2Realtime.Prefabs
+namespace Gs2.Unity.UiKit.Editor.Gs2Realtime.Prefabs
 {
     public static class Gs2RealtimeRoomEncryptionKeyValue
     {

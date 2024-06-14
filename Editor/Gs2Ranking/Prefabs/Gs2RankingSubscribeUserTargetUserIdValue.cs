@@ -1,7 +1,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace Editor.Gs2Ranking.Prefabs
+namespace Gs2.Unity.UiKit.Editor.Gs2Ranking.Prefabs
 {
     public static class Gs2RankingSubscribeUserTargetUserIdValue
     {

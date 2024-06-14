@@ -1,7 +1,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace Editor.Gs2Enchant.Prefabs
+namespace Gs2.Unity.UiKit.Editor.Gs2Enchant.Prefabs
 {
     public static class Gs2EnchantBalanceParameterModelMetadataValue
     {

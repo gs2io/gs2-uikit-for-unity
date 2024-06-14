@@ -1,7 +1,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace Editor.Gs2Datastore.Prefabs
+namespace Gs2.Unity.UiKit.Editor.Gs2Datastore.Prefabs
 {
     public static class Gs2DatastoreDataObjectPrepareDownloadOwnDataButton
     {

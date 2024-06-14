@@ -1,7 +1,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace Editor.Gs2Money.Prefabs
+namespace Gs2.Unity.UiKit.Editor.Gs2Money.Prefabs
 {
     public static class Gs2MoneyAcquireActionDepositPriceValue
     {

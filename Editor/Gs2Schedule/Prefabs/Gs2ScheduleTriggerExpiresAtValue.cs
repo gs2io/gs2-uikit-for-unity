@@ -1,7 +1,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace Editor.Gs2Schedule.Prefabs
+namespace Gs2.Unity.UiKit.Editor.Gs2Schedule.Prefabs
 {
     public static class Gs2ScheduleTriggerExpiresAtValue
     {

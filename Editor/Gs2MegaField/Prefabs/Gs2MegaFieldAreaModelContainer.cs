@@ -1,7 +1,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace Editor.Gs2MegaField.Prefabs
+namespace Gs2.Unity.UiKit.Editor.Gs2MegaField.Prefabs
 {
     public static class Gs2MegaFieldAreaModelContainer
     {

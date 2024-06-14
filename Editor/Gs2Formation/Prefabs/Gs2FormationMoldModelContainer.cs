@@ -1,7 +1,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace Editor.Gs2Formation.Prefabs
+namespace Gs2.Unity.UiKit.Editor.Gs2Formation.Prefabs
 {
     public static class Gs2FormationMoldModelContainer
     {

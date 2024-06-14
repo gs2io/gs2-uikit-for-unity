@@ -1,7 +1,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace Editor.Gs2SkillTree.Prefabs
+namespace Gs2.Unity.UiKit.Editor.Gs2SkillTree.Prefabs
 {
     public static class Gs2SkillTreeNodeModelList
     {

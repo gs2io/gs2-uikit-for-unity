@@ -1,7 +1,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace Editor.Gs2Idle.Prefabs
+namespace Gs2.Unity.UiKit.Editor.Gs2Idle.Prefabs
 {
     public static class Gs2IdleCategoryModelDefaultMaximumIdleMinutesValue
     {

@@ -1,7 +1,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace Editor.Gs2Friend.Prefabs
+namespace Gs2.Unity.UiKit.Editor.Gs2Friend.Prefabs
 {
     public static class Gs2FriendProfileFollowerProfileValue
     {

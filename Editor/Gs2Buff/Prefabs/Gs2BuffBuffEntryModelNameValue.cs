@@ -1,7 +1,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace Editor.Gs2Buff.Prefabs
+namespace Gs2.Unity.UiKit.Editor.Gs2Buff.Prefabs
 {
     public static class Gs2BuffBuffEntryModelNameValue
     {

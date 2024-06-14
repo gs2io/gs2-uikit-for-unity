@@ -1,7 +1,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace Editor.Gs2Stamina.Prefabs
+namespace Gs2.Unity.UiKit.Editor.Gs2Stamina.Prefabs
 {
     public static class Gs2StaminaStaminaList
     {

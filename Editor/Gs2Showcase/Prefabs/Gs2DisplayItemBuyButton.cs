@@ -1,7 +1,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace Editor.Gs2Showcase.Prefabs
+namespace Gs2.Unity.UiKit.Editor.Gs2Showcase.Prefabs
 {
     public static class Gs2ShowcaseDisplayItemBuyButton
     {

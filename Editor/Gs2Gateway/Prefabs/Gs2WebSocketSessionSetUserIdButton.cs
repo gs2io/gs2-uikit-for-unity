@@ -1,7 +1,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace Editor.Gs2Gateway.Prefabs
+namespace Gs2.Unity.UiKit.Editor.Gs2Gateway.Prefabs
 {
     public static class Gs2GatewayWebSocketSessionSetUserIdButton
     {

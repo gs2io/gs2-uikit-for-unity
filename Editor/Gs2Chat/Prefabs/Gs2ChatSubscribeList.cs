@@ -1,7 +1,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace Editor.Gs2Chat.Prefabs
+namespace Gs2.Unity.UiKit.Editor.Gs2Chat.Prefabs
 {
     public static class Gs2ChatSubscribeList
     {

@@ -1,7 +1,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace Editor.Gs2Inventory.Prefabs
+namespace Gs2.Unity.UiKit.Editor.Gs2Inventory.Prefabs
 {
     public static class Gs2InventoryAcquireActionAcquireAmountValue
     {

@@ -1,7 +1,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace Editor.Gs2Quest.Prefabs
+namespace Gs2.Unity.UiKit.Editor.Gs2Quest.Prefabs
 {
     public static class Gs2QuestQuestModelMetadataValue
     {

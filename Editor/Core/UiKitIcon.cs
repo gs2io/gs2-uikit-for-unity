@@ -1,7 +1,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace Editor.Core
+namespace Gs2.Unity.UiKit.Editor.Core
 {
     public class UiKitIcon
     {

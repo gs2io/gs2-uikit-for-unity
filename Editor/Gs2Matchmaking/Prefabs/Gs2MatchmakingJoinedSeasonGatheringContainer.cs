@@ -1,7 +1,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace Editor.Gs2Matchmaking.Prefabs
+namespace Gs2.Unity.UiKit.Editor.Gs2Matchmaking.Prefabs
 {
     public static class Gs2MatchmakingJoinedSeasonGatheringContainer
     {

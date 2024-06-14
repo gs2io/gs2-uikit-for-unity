@@ -1,7 +1,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace Editor.Gs2Inbox.Prefabs
+namespace Gs2.Unity.UiKit.Editor.Gs2Inbox.Prefabs
 {
     public static class Gs2InboxMessageReadAtCountDownValue
     {

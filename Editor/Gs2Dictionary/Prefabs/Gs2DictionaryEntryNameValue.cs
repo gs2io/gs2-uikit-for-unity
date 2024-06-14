@@ -1,7 +1,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace Editor.Gs2Dictionary.Prefabs
+namespace Gs2.Unity.UiKit.Editor.Gs2Dictionary.Prefabs
 {
     public static class Gs2DictionaryEntryNameValue
     {

@@ -1,7 +1,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace Editor.Gs2SeasonRating.Prefabs
+namespace Gs2.Unity.UiKit.Editor.Gs2SeasonRating.Prefabs
 {
     public static class Gs2SeasonRatingSeasonModelContainer
     {

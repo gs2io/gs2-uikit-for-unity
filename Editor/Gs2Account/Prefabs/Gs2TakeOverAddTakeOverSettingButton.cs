@@ -1,7 +1,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace Editor.Gs2Account.Prefabs
+namespace Gs2.Unity.UiKit.Editor.Gs2Account.Prefabs
 {
     public static class Gs2AccountTakeOverAddTakeOverSettingButton
     {

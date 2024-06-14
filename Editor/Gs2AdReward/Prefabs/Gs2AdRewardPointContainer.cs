@@ -1,7 +1,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace Editor.Gs2AdReward.Prefabs
+namespace Gs2.Unity.UiKit.Editor.Gs2AdReward.Prefabs
 {
     public static class Gs2AdRewardPointContainer
     {

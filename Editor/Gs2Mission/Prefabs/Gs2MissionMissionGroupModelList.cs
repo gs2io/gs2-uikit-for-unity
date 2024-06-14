@@ -1,7 +1,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace Editor.Gs2Mission.Prefabs
+namespace Gs2.Unity.UiKit.Editor.Gs2Mission.Prefabs
 {
     public static class Gs2MissionMissionGroupModelList
     {
