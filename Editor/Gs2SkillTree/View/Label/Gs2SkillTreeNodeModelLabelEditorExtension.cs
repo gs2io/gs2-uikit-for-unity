@@ -84,6 +84,11 @@ namespace Gs2.Unity.UiKit.Gs2SkillTree.Editor
                 GUI.FocusControl("");
                 EditorUtility.SetDirty(original);
             }
+            if (GUILayout.Button("ReleaseVerifyActions")) {
+                original.format += "{releaseVerifyActions}";
+                GUI.FocusControl("");
+                EditorUtility.SetDirty(original);
+            }
             if (GUILayout.Button("ReleaseConsumeActions")) {
                 original.format += "{releaseConsumeActions}";
                 GUI.FocusControl("");

@@ -48,7 +48,7 @@ namespace Gs2.Unity.UiKit.Gs2Exchange.Fetcher
     /// </summary>
 
 	[AddComponentMenu("GS2 UIKit/Exchange/RateModel/Fetcher/Gs2ExchangeRateModelFetcher")]
-    public partial class Gs2ExchangeRateModelFetcher : MonoBehaviour, IAcquireActionsFetcher, IConsumeActionsFetcher
+    public partial class Gs2ExchangeRateModelFetcher : MonoBehaviour, IAcquireActionsFetcher, IConsumeActionsFetcher, IVerifyActionsFetcher
     {
         private EzRateModelDomain _domain;
         private ulong? _callbackId;
@@ -160,6 +160,25 @@ namespace Gs2.Unity.UiKit.Gs2Exchange.Fetcher
         }
 
         GameObject IConsumeActionsFetcher.GameObject() {
+            return gameObject;
+        }
+
+        public List<Unity.Core.Model.EzVerifyAction> VerifyActions(string context = "default") {
+            if (!Fetched) {
+                return new List<Unity.Core.Model.EzVerifyAction>();
+            }
+            return RateModel.VerifyActions.Denormalize();
+        }
+
+        bool IVerifyActionsFetcher.IsFetched() {
+            return this.Fetched;
+        }
+
+        UnityEvent IVerifyActionsFetcher.OnFetchedEvent() {
+            return this.OnFetched;
+        }
+
+        GameObject IVerifyActionsFetcher.GameObject() {
             return gameObject;
         }
     }

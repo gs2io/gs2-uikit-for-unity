@@ -60,6 +60,8 @@ namespace Gs2.Unity.UiKit.Gs2LoginReward
                 ).Replace(
                     "{missedReceiveRelief}", $"{this._fetcher?.BonusModel?.MissedReceiveRelief}"
                 ).Replace(
+                    "{missedReceiveReliefVerifyActions}", $"{this._fetcher?.BonusModel?.MissedReceiveReliefVerifyActions}"
+                ).Replace(
                     "{missedReceiveReliefConsumeActions}", $"{this._fetcher?.BonusModel?.MissedReceiveReliefConsumeActions}"
                 )
             );

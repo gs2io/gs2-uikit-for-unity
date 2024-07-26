@@ -48,6 +48,8 @@ namespace Gs2.Unity.UiKit.Gs2SkillTree
                 ).Replace(
                     "{metadata}", $"{this._fetcher?.NodeModel?.Metadata}"
                 ).Replace(
+                    "{releaseVerifyActions}", $"{this._fetcher?.NodeModel?.ReleaseVerifyActions}"
+                ).Replace(
                     "{releaseConsumeActions}", $"{this._fetcher?.NodeModel?.ReleaseConsumeActions}"
                 ).Replace(
                     "{returnAcquireActions}", $"{this._fetcher?.NodeModel?.ReturnAcquireActions}"

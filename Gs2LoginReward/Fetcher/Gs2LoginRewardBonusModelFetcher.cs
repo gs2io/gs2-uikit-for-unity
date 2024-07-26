@@ -48,7 +48,7 @@ namespace Gs2.Unity.UiKit.Gs2LoginReward.Fetcher
     /// </summary>
 
 	[AddComponentMenu("GS2 UIKit/LoginReward/BonusModel/Fetcher/Gs2LoginRewardBonusModelFetcher")]
-    public partial class Gs2LoginRewardBonusModelFetcher : MonoBehaviour, IConsumeActionsFetcher
+    public partial class Gs2LoginRewardBonusModelFetcher : MonoBehaviour, IConsumeActionsFetcher, IVerifyActionsFetcher
     {
         private EzBonusModelDomain _domain;
         private ulong? _callbackId;
@@ -141,6 +141,25 @@ namespace Gs2.Unity.UiKit.Gs2LoginReward.Fetcher
         }
 
         GameObject IConsumeActionsFetcher.GameObject() {
+            return gameObject;
+        }
+
+        public List<Unity.Core.Model.EzVerifyAction> VerifyActions(string context = "default") {
+            if (!Fetched) {
+                return new List<Unity.Core.Model.EzVerifyAction>();
+            }
+            return BonusModel.MissedReceiveReliefVerifyActions.Denormalize();
+        }
+
+        bool IVerifyActionsFetcher.IsFetched() {
+            return this.Fetched;
+        }
+
+        UnityEvent IVerifyActionsFetcher.OnFetchedEvent() {
+            return this.OnFetched;
+        }
+
+        GameObject IVerifyActionsFetcher.GameObject() {
             return gameObject;
         }
     }

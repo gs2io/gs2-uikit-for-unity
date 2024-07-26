@@ -52,6 +52,8 @@ namespace Gs2.Unity.UiKit.Gs2Exchange
                 ).Replace(
                     "{lockTime}", $"{this._fetcher?.RateModel?.LockTime}"
                 ).Replace(
+                    "{verifyActions}", $"{this._fetcher?.RateModel?.VerifyActions}"
+                ).Replace(
                     "{consumeActions}", $"{this._fetcher?.RateModel?.ConsumeActions}"
                 ).Replace(
                     "{acquireActions}", $"{this._fetcher?.RateModel?.AcquireActions}"

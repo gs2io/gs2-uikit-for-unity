@@ -114,6 +114,11 @@ namespace Gs2.Unity.UiKit.Gs2LoginReward.Editor
                 GUI.FocusControl("");
                 EditorUtility.SetDirty(original);
             }
+            if (GUILayout.Button("MissedReceiveReliefVerifyActions")) {
+                original.format += "{missedReceiveReliefVerifyActions}";
+                GUI.FocusControl("");
+                EditorUtility.SetDirty(original);
+            }
             if (GUILayout.Button("MissedReceiveReliefConsumeActions")) {
                 original.format += "{missedReceiveReliefConsumeActions}";
                 GUI.FocusControl("");

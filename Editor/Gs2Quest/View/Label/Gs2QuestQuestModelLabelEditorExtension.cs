@@ -103,6 +103,11 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Editor
                 GUI.FocusControl("");
                 EditorUtility.SetDirty(original);
             }
+            if (GUILayout.Button("VerifyActions")) {
+                original.format += "{verifyActions}";
+                GUI.FocusControl("");
+                EditorUtility.SetDirty(original);
+            }
             if (GUILayout.Button("ConsumeActions")) {
                 original.format += "{consumeActions}";
                 GUI.FocusControl("");

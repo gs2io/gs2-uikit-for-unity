@@ -56,6 +56,8 @@ namespace Gs2.Unity.UiKit.Gs2Quest
                 ).Replace(
                     "{firstCompleteAcquireActions}", $"{this._fetcher?.QuestModel?.FirstCompleteAcquireActions}"
                 ).Replace(
+                    "{verifyActions}", $"{this._fetcher?.QuestModel?.VerifyActions}"
+                ).Replace(
                     "{consumeActions}", $"{this._fetcher?.QuestModel?.ConsumeActions}"
                 ).Replace(
                     "{failedAcquireActions}", $"{this._fetcher?.QuestModel?.FailedAcquireActions}"

@@ -48,7 +48,7 @@ namespace Gs2.Unity.UiKit.Gs2SkillTree.Fetcher
     /// </summary>
 
 	[AddComponentMenu("GS2 UIKit/SkillTree/NodeModel/Fetcher/Gs2SkillTreeNodeModelFetcher")]
-    public partial class Gs2SkillTreeNodeModelFetcher : MonoBehaviour, IAcquireActionsFetcher, IConsumeActionsFetcher
+    public partial class Gs2SkillTreeNodeModelFetcher : MonoBehaviour, IAcquireActionsFetcher, IConsumeActionsFetcher, IVerifyActionsFetcher
     {
         private EzNodeModelDomain _domain;
         private ulong? _callbackId;
@@ -160,6 +160,25 @@ namespace Gs2.Unity.UiKit.Gs2SkillTree.Fetcher
         }
 
         GameObject IConsumeActionsFetcher.GameObject() {
+            return gameObject;
+        }
+
+        public List<Unity.Core.Model.EzVerifyAction> VerifyActions(string context = "default") {
+            if (!Fetched) {
+                return new List<Unity.Core.Model.EzVerifyAction>();
+            }
+            return NodeModel.ReleaseVerifyActions.Denormalize();
+        }
+
+        bool IVerifyActionsFetcher.IsFetched() {
+            return this.Fetched;
+        }
+
+        UnityEvent IVerifyActionsFetcher.OnFetchedEvent() {
+            return this.OnFetched;
+        }
+
+        GameObject IVerifyActionsFetcher.GameObject() {
             return gameObject;
         }
     }
