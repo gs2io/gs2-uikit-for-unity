@@ -62,9 +62,6 @@ namespace Gs2.Unity.UiKit.Gs2Stamina.Localization
             this.target.StringReference["recoverValue"] = new IntVariable {
                 Value = _fetcher?.Stamina?.RecoverValue ?? 0,
             };
-            this.target.StringReference["nextRecoverAt"] = new LongVariable {
-                Value = _fetcher?.Stamina?.NextRecoverAt ?? 0,
-            };
             this.target.enabled = true;
         }
     }

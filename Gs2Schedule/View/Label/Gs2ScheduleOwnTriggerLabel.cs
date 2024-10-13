@@ -42,8 +42,8 @@ namespace Gs2.Unity.UiKit.Gs2Schedule
     {
         private void OnFetched()
         {
-            var createdAt = this._fetcher.Trigger.CreatedAt == null ? DateTime.Now : UnixTime.FromUnixTime(_fetcher.Trigger.CreatedAt).ToLocalTime();
-            var expiresAt = this._fetcher.Trigger.ExpiresAt == null ? DateTime.Now : UnixTime.FromUnixTime(_fetcher.Trigger.ExpiresAt).ToLocalTime();
+            var createdAt = this._fetcher.Trigger.CreatedAt == null ? DateTime.Now : _fetcher.Trigger.CreatedAt.ToLocalTime();
+            var expiresAt = this._fetcher.Trigger.ExpiresAt == null ? DateTime.Now : _fetcher.Trigger.ExpiresAt.ToLocalTime();
             this.onUpdate?.Invoke(
                 this.format.Replace(
                     "{triggerId}", $"{this._fetcher?.Trigger?.TriggerId}"

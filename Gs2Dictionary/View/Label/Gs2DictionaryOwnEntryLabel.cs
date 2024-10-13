@@ -42,7 +42,7 @@ namespace Gs2.Unity.UiKit.Gs2Dictionary
     {
         private void OnFetched()
         {
-            var acquiredAt = this._fetcher.Entry.AcquiredAt == null ? DateTime.Now : UnixTime.FromUnixTime(_fetcher.Entry.AcquiredAt).ToLocalTime();
+            var acquiredAt = this._fetcher.Entry.AcquiredAt == null ? DateTime.Now : _fetcher.Entry.AcquiredAt.ToLocalTime();
             this.onUpdate?.Invoke(
                 this.format.Replace(
                     "{entryId}", $"{this._fetcher?.Entry?.EntryId}"

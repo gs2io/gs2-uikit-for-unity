@@ -66,7 +66,7 @@ namespace Gs2.Unity.UiKit.Gs2Dictionary.Fetcher
             this._domain = clientHolder.Gs2.Dictionary.Namespace(
                 this.Context.EntryModel.NamespaceName
             ).EntryModel(
-                this.Context.EntryModel.EntryName
+                this.Context.EntryModel.EntryModelName
             );;
             var future = this._domain.SubscribeWithInitialCallFuture(
                 item =>

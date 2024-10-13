@@ -61,7 +61,7 @@ namespace Gs2.Unity.UiKit.Gs2Dictionary.Editor
                 if (original.EntryModel != null) {
                     EditorGUI.indentLevel++;
                     EditorGUILayout.TextField("NamespaceName", original.EntryModel?.NamespaceName?.ToString());
-                    EditorGUILayout.TextField("EntryName", original.EntryModel?.EntryName?.ToString());
+                    EditorGUILayout.TextField("EntryModelName", original.EntryModel?.EntryModelName?.ToString());
                     EditorGUI.indentLevel--;
                 }
                 EditorGUI.EndDisabledGroup();

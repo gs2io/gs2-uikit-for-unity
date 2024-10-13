@@ -56,15 +56,6 @@ namespace Gs2.Unity.UiKit.Gs2Inbox.Localization
             this.target.StringReference["isRead"] = new BoolVariable {
                 Value = _fetcher?.Message?.IsRead ?? false,
             };
-            this.target.StringReference["receivedAt"] = new LongVariable {
-                Value = _fetcher?.Message?.ReceivedAt ?? 0,
-            };
-            this.target.StringReference["readAt"] = new LongVariable {
-                Value = _fetcher?.Message?.ReadAt ?? 0,
-            };
-            this.target.StringReference["expiresAt"] = new LongVariable {
-                Value = _fetcher?.Message?.ExpiresAt ?? 0,
-            };
             this.target.enabled = true;
         }
     }

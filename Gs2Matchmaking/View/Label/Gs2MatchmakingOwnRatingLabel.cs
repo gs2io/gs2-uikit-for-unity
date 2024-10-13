@@ -42,8 +42,8 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking
     {
         private void OnFetched()
         {
-            var createdAt = this._fetcher.Rating.CreatedAt == null ? DateTime.Now : UnixTime.FromUnixTime(_fetcher.Rating.CreatedAt).ToLocalTime();
-            var updatedAt = this._fetcher.Rating.UpdatedAt == null ? DateTime.Now : UnixTime.FromUnixTime(_fetcher.Rating.UpdatedAt).ToLocalTime();
+            var createdAt = this._fetcher.Rating.CreatedAt == null ? DateTime.Now : _fetcher.Rating.CreatedAt.ToLocalTime();
+            var updatedAt = this._fetcher.Rating.UpdatedAt == null ? DateTime.Now : _fetcher.Rating.UpdatedAt.ToLocalTime();
             this.onUpdate?.Invoke(
                 this.format.Replace(
                     "{ratingId}", $"{this._fetcher?.Rating?.RatingId}"

@@ -56,12 +56,6 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking.Localization
             this.target.StringReference["rateValue"] = new FloatVariable {
                 Value = _fetcher?.Rating?.RateValue ?? 0,
             };
-            this.target.StringReference["createdAt"] = new LongVariable {
-                Value = _fetcher?.Rating?.CreatedAt ?? 0,
-            };
-            this.target.StringReference["updatedAt"] = new LongVariable {
-                Value = _fetcher?.Rating?.UpdatedAt ?? 0,
-            };
             this.target.enabled = true;
         }
     }

@@ -42,9 +42,9 @@ namespace Gs2.Unity.UiKit.Gs2Inbox
     {
         private void OnFetched()
         {
-            var receivedAt = this._fetcher.Message.ReceivedAt == null ? DateTime.Now : UnixTime.FromUnixTime(_fetcher.Message.ReceivedAt).ToLocalTime();
-            var readAt = this._fetcher.Message.ReadAt == null ? DateTime.Now : UnixTime.FromUnixTime(_fetcher.Message.ReadAt).ToLocalTime();
-            var expiresAt = this._fetcher.Message.ExpiresAt == null ? DateTime.Now : UnixTime.FromUnixTime(_fetcher.Message.ExpiresAt).ToLocalTime();
+            var receivedAt = this._fetcher.Message.ReceivedAt == null ? DateTime.Now : _fetcher.Message.ReceivedAt.ToLocalTime();
+            var readAt = this._fetcher.Message.ReadAt == null ? DateTime.Now : _fetcher.Message.ReadAt.ToLocalTime();
+            var expiresAt = this._fetcher.Message.ExpiresAt == null ? DateTime.Now : _fetcher.Message.ExpiresAt.ToLocalTime();
             this.onUpdate?.Invoke(
                 this.format.Replace(
                     "{messageId}", $"{this._fetcher?.Message?.MessageId}"

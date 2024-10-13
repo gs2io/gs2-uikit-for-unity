@@ -42,8 +42,8 @@ namespace Gs2.Unity.UiKit.Gs2Schedule
     {
         private void OnFetched()
         {
-            var absoluteBegin = this._fetcher.Event.AbsoluteBegin == null ? DateTime.Now : UnixTime.FromUnixTime(_fetcher.Event.AbsoluteBegin).ToLocalTime();
-            var absoluteEnd = this._fetcher.Event.AbsoluteEnd == null ? DateTime.Now : UnixTime.FromUnixTime(_fetcher.Event.AbsoluteEnd).ToLocalTime();
+            var absoluteBegin = this._fetcher.Event.AbsoluteBegin == null ? DateTime.Now : _fetcher.Event.AbsoluteBegin.ToLocalTime();
+            var absoluteEnd = this._fetcher.Event.AbsoluteEnd == null ? DateTime.Now : _fetcher.Event.AbsoluteEnd.ToLocalTime();
             this.onUpdate?.Invoke(
                 this.format.Replace(
                     "{name}", $"{this._fetcher?.Event?.Name}"

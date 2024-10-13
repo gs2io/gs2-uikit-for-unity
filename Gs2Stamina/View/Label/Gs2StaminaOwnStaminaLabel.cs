@@ -42,7 +42,7 @@ namespace Gs2.Unity.UiKit.Gs2Stamina
     {
         private void OnFetched()
         {
-            var nextRecoverAt = this._fetcher.Stamina.NextRecoverAt == null ? DateTime.Now : UnixTime.FromUnixTime(_fetcher.Stamina.NextRecoverAt).ToLocalTime();
+            var nextRecoverAt = this._fetcher.Stamina.NextRecoverAt == null ? DateTime.Now : _fetcher.Stamina.NextRecoverAt.ToDateTime();
             this.onUpdate?.Invoke(
                 this.format.Replace(
                     "{staminaName}", $"{this._fetcher?.Stamina?.StaminaName}"

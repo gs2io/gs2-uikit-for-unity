@@ -70,7 +70,7 @@ namespace Gs2.Unity.UiKit.Gs2Dictionary.Context
             this._context.SetOwnEntry(
                 OwnEntry.New(
                     _originalContext.EntryModel.Namespace,
-                    _originalContext.EntryModel.entryName
+                    _originalContext.EntryModel.entryModelName
                 )
             );
         }

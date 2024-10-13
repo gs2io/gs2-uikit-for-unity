@@ -53,9 +53,6 @@ namespace Gs2.Unity.UiKit.Gs2Dictionary.Localization
             this.target.StringReference["name"] = new StringVariable {
                 Value = _fetcher?.Entry?.Name ?? "",
             };
-            this.target.StringReference["acquiredAt"] = new LongVariable {
-                Value = _fetcher?.Entry?.AcquiredAt ?? 0,
-            };
             this.target.enabled = true;
         }
     }

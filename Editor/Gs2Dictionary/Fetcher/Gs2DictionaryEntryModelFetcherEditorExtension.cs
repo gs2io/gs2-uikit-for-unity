@@ -68,7 +68,7 @@ namespace Gs2.Unity.UiKit.Gs2Dictionary.Editor
                     if (context.EntryModel != null) {
                         EditorGUI.indentLevel++;
                         EditorGUILayout.TextField("NamespaceName", context.EntryModel?.NamespaceName?.ToString());
-                        EditorGUILayout.TextField("EntryName", context.EntryModel?.EntryName?.ToString());
+                        EditorGUILayout.TextField("EntryModelName", context.EntryModel?.EntryModelName?.ToString());
                         EditorGUI.indentLevel--;
                     }
                     EditorGUI.indentLevel--;

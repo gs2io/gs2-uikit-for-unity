@@ -56,12 +56,6 @@ namespace Gs2.Unity.UiKit.Gs2Schedule.Localization
             this.target.StringReference["repeatType"] = new StringVariable {
                 Value = _fetcher?.Event?.RepeatType ?? "",
             };
-            this.target.StringReference["absoluteBegin"] = new LongVariable {
-                Value = _fetcher?.Event?.AbsoluteBegin ?? 0,
-            };
-            this.target.StringReference["absoluteEnd"] = new LongVariable {
-                Value = _fetcher?.Event?.AbsoluteEnd ?? 0,
-            };
             this.target.StringReference["repeatBeginDayOfMonth"] = new IntVariable {
                 Value = _fetcher?.Event?.RepeatBeginDayOfMonth ?? 0,
             };

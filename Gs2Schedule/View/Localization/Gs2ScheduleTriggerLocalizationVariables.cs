@@ -50,12 +50,6 @@ namespace Gs2.Unity.UiKit.Gs2Schedule.Localization
             this.target.StringReference["name"] = new StringVariable {
                 Value = _fetcher?.Trigger?.Name ?? "",
             };
-            this.target.StringReference["createdAt"] = new LongVariable {
-                Value = _fetcher?.Trigger?.CreatedAt ?? 0,
-            };
-            this.target.StringReference["expiresAt"] = new LongVariable {
-                Value = _fetcher?.Trigger?.ExpiresAt ?? 0,
-            };
             this.target.enabled = true;
         }
     }

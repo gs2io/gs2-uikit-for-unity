@@ -68,7 +68,7 @@ namespace Gs2.Unity.UiKit.Gs2Dictionary.Fetcher
             ).Me(
                 gameSessionHolder.GameSession
             ).Entry(
-                this.Context.Entry.EntryName
+                this.Context.Entry.EntryModelName
             );;
             var future = this._domain.SubscribeWithInitialCallFuture(
                 item =>

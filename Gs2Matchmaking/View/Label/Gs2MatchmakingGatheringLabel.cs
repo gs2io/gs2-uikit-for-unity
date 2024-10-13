@@ -42,9 +42,9 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking
     {
         private void OnFetched()
         {
-            var expiresAt = this._fetcher.Gathering.ExpiresAt == null ? DateTime.Now : UnixTime.FromUnixTime(_fetcher.Gathering.ExpiresAt).ToLocalTime();
-            var createdAt = this._fetcher.Gathering.CreatedAt == null ? DateTime.Now : UnixTime.FromUnixTime(_fetcher.Gathering.CreatedAt).ToLocalTime();
-            var updatedAt = this._fetcher.Gathering.UpdatedAt == null ? DateTime.Now : UnixTime.FromUnixTime(_fetcher.Gathering.UpdatedAt).ToLocalTime();
+            var expiresAt = this._fetcher.Gathering.ExpiresAt == null ? DateTime.Now : _fetcher.Gathering.ExpiresAt.ToLocalTime();
+            var createdAt = this._fetcher.Gathering.CreatedAt == null ? DateTime.Now : _fetcher.Gathering.CreatedAt.ToLocalTime();
+            var updatedAt = this._fetcher.Gathering.UpdatedAt == null ? DateTime.Now : _fetcher.Gathering.UpdatedAt.ToLocalTime();
             this.onUpdate?.Invoke(
                 this.format.Replace(
                     "{gatheringId}", $"{this._fetcher?.Gathering?.GatheringId}"

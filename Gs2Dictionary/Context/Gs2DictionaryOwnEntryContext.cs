@@ -93,7 +93,7 @@ namespace Gs2.Unity.UiKit.Gs2Dictionary.Context
                 Namespace.New(
                     entry.NamespaceName
                 ),
-                entry.EntryName
+                entry.EntryModelName
             );
             this._entry = entry;
 

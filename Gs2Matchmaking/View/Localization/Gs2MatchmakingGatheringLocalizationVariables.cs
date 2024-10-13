@@ -53,15 +53,6 @@ namespace Gs2.Unity.UiKit.Gs2Matchmaking.Localization
             this.target.StringReference["metadata"] = new StringVariable {
                 Value = _fetcher?.Gathering?.Metadata ?? "",
             };
-            this.target.StringReference["expiresAt"] = new LongVariable {
-                Value = _fetcher?.Gathering?.ExpiresAt ?? 0,
-            };
-            this.target.StringReference["createdAt"] = new LongVariable {
-                Value = _fetcher?.Gathering?.CreatedAt ?? 0,
-            };
-            this.target.StringReference["updatedAt"] = new LongVariable {
-                Value = _fetcher?.Gathering?.UpdatedAt ?? 0,
-            };
             this.target.enabled = true;
         }
     }
