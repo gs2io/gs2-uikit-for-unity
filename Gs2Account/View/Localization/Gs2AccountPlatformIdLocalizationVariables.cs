@@ -53,9 +53,6 @@ namespace Gs2.Unity.UiKit.Gs2Account.Localization
             this.target.StringReference["userId"] = new StringVariable {
                 Value = _fetcher?.PlatformId?.UserId ?? "",
             };
-            this.target.StringReference["createdAt"] = new LongVariable {
-                Value = _fetcher?.PlatformId?.CreatedAt ?? 0,
-            };
             this.target.enabled = true;
         }
     }

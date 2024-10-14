@@ -42,7 +42,7 @@ namespace Gs2.Unity.UiKit.Gs2Account
     {
         private void OnFetched()
         {
-            var createdAt = this._fetcher.Account.CreatedAt == null ? DateTime.Now : UnixTime.FromUnixTime(_fetcher.Account.CreatedAt).ToLocalTime();
+            var createdAt = this._fetcher.Account.CreatedAt == null ? DateTime.Now : _fetcher.Account.CreatedAt.ToLocalTime();
             this.onUpdate?.Invoke(
                 this.format.Replace(
                     "{userId}", $"{this._fetcher?.Account?.UserId}"

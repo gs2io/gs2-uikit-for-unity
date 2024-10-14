@@ -42,7 +42,7 @@ namespace Gs2.Unity.UiKit.Gs2Inventory
     {
         private void OnFetched()
         {
-            var expiresAt = this._fetcher.ItemSet[index].ExpiresAt == null ? DateTime.Now : UnixTime.FromUnixTime(_fetcher.ItemSet[index].ExpiresAt).ToLocalTime();
+            var expiresAt = this._fetcher.ItemSet[index].ExpiresAt == null ? DateTime.Now : _fetcher.ItemSet[index].ExpiresAt.ToLocalTime();
             this.onUpdate?.Invoke(
                 this.format.Replace(
                     "{itemSetId}", $"{this._fetcher?.ItemSet?[index].ItemSetId}"

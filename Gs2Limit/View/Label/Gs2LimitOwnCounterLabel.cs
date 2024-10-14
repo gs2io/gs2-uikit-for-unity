@@ -42,8 +42,8 @@ namespace Gs2.Unity.UiKit.Gs2Limit
     {
         private void OnFetched()
         {
-            var createdAt = this._fetcher.Counter.CreatedAt == null ? DateTime.Now : UnixTime.FromUnixTime(_fetcher.Counter.CreatedAt).ToLocalTime();
-            var updatedAt = this._fetcher.Counter.UpdatedAt == null ? DateTime.Now : UnixTime.FromUnixTime(_fetcher.Counter.UpdatedAt).ToLocalTime();
+            var createdAt = this._fetcher.Counter.CreatedAt == null ? DateTime.Now : _fetcher.Counter.CreatedAt.ToLocalTime();
+            var updatedAt = this._fetcher.Counter.UpdatedAt == null ? DateTime.Now : _fetcher.Counter.UpdatedAt.ToLocalTime();
             this.onUpdate?.Invoke(
                 this.format.Replace(
                     "{counterId}", $"{this._fetcher?.Counter?.CounterId}"

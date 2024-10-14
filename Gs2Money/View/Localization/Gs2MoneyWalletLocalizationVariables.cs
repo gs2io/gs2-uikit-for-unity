@@ -56,9 +56,6 @@ namespace Gs2.Unity.UiKit.Gs2Money.Localization
             this.target.StringReference["shareFree"] = new BoolVariable {
                 Value = _fetcher?.Wallet?.ShareFree ?? false,
             };
-            this.target.StringReference["updatedAt"] = new LongVariable {
-                Value = _fetcher?.Wallet?.UpdatedAt ?? 0,
-            };
             this.target.enabled = true;
         }
     }

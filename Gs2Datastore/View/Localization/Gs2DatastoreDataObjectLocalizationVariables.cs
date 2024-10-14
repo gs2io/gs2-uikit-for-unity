@@ -62,12 +62,6 @@ namespace Gs2.Unity.UiKit.Gs2Datastore.Localization
             this.target.StringReference["generation"] = new StringVariable {
                 Value = _fetcher?.DataObject?.Generation ?? "",
             };
-            this.target.StringReference["createdAt"] = new LongVariable {
-                Value = _fetcher?.DataObject?.CreatedAt ?? 0,
-            };
-            this.target.StringReference["updatedAt"] = new LongVariable {
-                Value = _fetcher?.DataObject?.UpdatedAt ?? 0,
-            };
             this.target.enabled = true;
         }
     }

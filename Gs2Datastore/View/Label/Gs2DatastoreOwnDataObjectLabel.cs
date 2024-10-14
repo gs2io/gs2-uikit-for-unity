@@ -42,8 +42,8 @@ namespace Gs2.Unity.UiKit.Gs2Datastore
     {
         private void OnFetched()
         {
-            var createdAt = this._fetcher.DataObject.CreatedAt == null ? DateTime.Now : UnixTime.FromUnixTime(_fetcher.DataObject.CreatedAt).ToLocalTime();
-            var updatedAt = this._fetcher.DataObject.UpdatedAt == null ? DateTime.Now : UnixTime.FromUnixTime(_fetcher.DataObject.UpdatedAt).ToLocalTime();
+            var createdAt = this._fetcher.DataObject.CreatedAt == null ? DateTime.Now : _fetcher.DataObject.CreatedAt.ToLocalTime();
+            var updatedAt = this._fetcher.DataObject.UpdatedAt == null ? DateTime.Now : _fetcher.DataObject.UpdatedAt.ToLocalTime();
             this.onUpdate?.Invoke(
                 this.format.Replace(
                     "{dataObjectId}", $"{this._fetcher?.DataObject?.DataObjectId}"

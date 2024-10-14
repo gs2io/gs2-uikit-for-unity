@@ -56,12 +56,6 @@ namespace Gs2.Unity.UiKit.Gs2Limit.Localization
             this.target.StringReference["count"] = new IntVariable {
                 Value = _fetcher?.Counter?.Count ?? 0,
             };
-            this.target.StringReference["createdAt"] = new LongVariable {
-                Value = _fetcher?.Counter?.CreatedAt ?? 0,
-            };
-            this.target.StringReference["updatedAt"] = new LongVariable {
-                Value = _fetcher?.Counter?.UpdatedAt ?? 0,
-            };
             this.target.enabled = true;
         }
     }

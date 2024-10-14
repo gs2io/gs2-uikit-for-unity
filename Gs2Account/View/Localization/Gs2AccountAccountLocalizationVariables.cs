@@ -50,9 +50,6 @@ namespace Gs2.Unity.UiKit.Gs2Account.Localization
             this.target.StringReference["password"] = new StringVariable {
                 Value = _fetcher?.Account?.Password ?? "",
             };
-            this.target.StringReference["createdAt"] = new LongVariable {
-                Value = _fetcher?.Account?.CreatedAt ?? 0,
-            };
             this.target.enabled = true;
         }
     }

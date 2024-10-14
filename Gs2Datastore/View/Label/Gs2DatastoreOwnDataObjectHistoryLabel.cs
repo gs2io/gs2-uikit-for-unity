@@ -42,7 +42,7 @@ namespace Gs2.Unity.UiKit.Gs2Datastore
     {
         private void OnFetched()
         {
-            var createdAt = this._fetcher.DataObjectHistory.CreatedAt == null ? DateTime.Now : UnixTime.FromUnixTime(_fetcher.DataObjectHistory.CreatedAt).ToLocalTime();
+            var createdAt = this._fetcher.DataObjectHistory.CreatedAt == null ? DateTime.Now : _fetcher.DataObjectHistory.CreatedAt.ToLocalTime();
             this.onUpdate?.Invoke(
                 this.format.Replace(
                     "{dataObjectHistoryId}", $"{this._fetcher?.DataObjectHistory?.DataObjectHistoryId}"

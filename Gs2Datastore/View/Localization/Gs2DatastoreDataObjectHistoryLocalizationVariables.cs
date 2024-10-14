@@ -53,9 +53,6 @@ namespace Gs2.Unity.UiKit.Gs2Datastore.Localization
             this.target.StringReference["contentLength"] = new LongVariable {
                 Value = _fetcher?.DataObjectHistory?.ContentLength ?? 0,
             };
-            this.target.StringReference["createdAt"] = new LongVariable {
-                Value = _fetcher?.DataObjectHistory?.CreatedAt ?? 0,
-            };
             this.target.enabled = true;
         }
     }

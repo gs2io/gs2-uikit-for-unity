@@ -47,9 +47,6 @@ namespace Gs2.Unity.UiKit.Gs2LoginReward.Localization
             this.target.StringReference["bonusModelName"] = new StringVariable {
                 Value = _fetcher?.ReceiveStatus?.BonusModelName ?? "",
             };
-            this.target.StringReference["lastReceivedAt"] = new LongVariable {
-                Value = _fetcher?.ReceiveStatus?.LastReceivedAt ?? 0,
-            };
             this.target.enabled = true;
         }
     }

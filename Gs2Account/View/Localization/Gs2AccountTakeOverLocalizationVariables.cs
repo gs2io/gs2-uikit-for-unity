@@ -53,9 +53,6 @@ namespace Gs2.Unity.UiKit.Gs2Account.Localization
             this.target.StringReference["userIdentifier"] = new StringVariable {
                 Value = _fetcher?.TakeOver?.UserIdentifier ?? "",
             };
-            this.target.StringReference["createdAt"] = new LongVariable {
-                Value = _fetcher?.TakeOver?.CreatedAt ?? 0,
-            };
             this.target.enabled = true;
         }
     }

@@ -42,7 +42,7 @@ namespace Gs2.Unity.UiKit.Gs2LoginReward
     {
         private void OnFetched()
         {
-            var lastReceivedAt = this._fetcher.ReceiveStatus.LastReceivedAt == null ? DateTime.Now : UnixTime.FromUnixTime(_fetcher.ReceiveStatus.LastReceivedAt).ToLocalTime();
+            var lastReceivedAt = this._fetcher.ReceiveStatus.LastReceivedAt == null ? DateTime.Now : _fetcher.ReceiveStatus.LastReceivedAt.ToLocalTime();
             this.onUpdate?.Invoke(
                 this.format.Replace(
                     "{bonusModelName}", $"{this._fetcher?.ReceiveStatus?.BonusModelName}"
