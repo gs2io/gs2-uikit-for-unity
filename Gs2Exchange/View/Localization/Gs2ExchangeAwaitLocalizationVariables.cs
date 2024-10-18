@@ -56,12 +56,6 @@ namespace Gs2.Unity.UiKit.Gs2Exchange.Localization
             this.target.StringReference["skipSeconds"] = new IntVariable {
                 Value = _fetcher?.Await?.SkipSeconds ?? 0,
             };
-            this.target.StringReference["exchangedAt"] = new LongVariable {
-                Value = _fetcher?.Await?.ExchangedAt ?? 0,
-            };
-            this.target.StringReference["acquirableAt"] = new LongVariable {
-                Value = _fetcher?.Await?.AcquirableAt ?? 0,
-            };
             this.target.enabled = true;
         }
     }

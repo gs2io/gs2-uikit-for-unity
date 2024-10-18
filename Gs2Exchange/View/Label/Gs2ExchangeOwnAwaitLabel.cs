@@ -42,8 +42,8 @@ namespace Gs2.Unity.UiKit.Gs2Exchange
     {
         private void OnFetched()
         {
-            var exchangedAt = this._fetcher.Await.ExchangedAt == null ? DateTime.Now : UnixTime.FromUnixTime(_fetcher.Await.ExchangedAt).ToLocalTime();
-            var acquirableAt = this._fetcher.Await.AcquirableAt == null ? DateTime.Now : UnixTime.FromUnixTime(_fetcher.Await.AcquirableAt).ToLocalTime();
+            var exchangedAt = this._fetcher.Await.ExchangedAt == null ? DateTime.Now : _fetcher.Await.ExchangedAt.ToLocalTime();
+            var acquirableAt = this._fetcher.Await.AcquirableAt == null ? DateTime.Now : _fetcher.Await.AcquirableAt.ToLocalTime();
             this.onUpdate?.Invoke(
                 this.format.Replace(
                     "{userId}", $"{this._fetcher?.Await?.UserId}"
