@@ -86,6 +86,9 @@ namespace Gs2.Unity.UiKit.Gs2Experience.Label
                     "{acquireActions}",
                     $"{this._fetcher.Request.AcquireActions}"
                 ).Replace(
+                    "{baseRate}",
+                    $"{this._fetcher.Request.BaseRate}"
+                ).Replace(
                     "{timeOffsetToken}",
                     $"{this._fetcher.Request.TimeOffsetToken}"
                 ).Replace(
