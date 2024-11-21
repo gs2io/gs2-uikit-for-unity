@@ -42,7 +42,7 @@ namespace Gs2.Unity.UiKit.Gs2Chat
     {
         private void OnFetched()
         {
-            var createdAt = this._fetcher.Message.CreatedAt == null ? DateTime.Now : UnixTime.FromUnixTime(_fetcher.Message.CreatedAt).ToLocalTime();
+            var createdAt = this._fetcher.Message.CreatedAt == null ? DateTime.Now : _fetcher.Message.CreatedAt.ToLocalTime();
             this.onUpdate?.Invoke(
                 this.format.Replace(
                     "{name}", $"{this._fetcher?.Message?.Name}"

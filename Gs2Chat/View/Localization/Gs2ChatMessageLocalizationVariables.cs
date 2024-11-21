@@ -59,9 +59,6 @@ namespace Gs2.Unity.UiKit.Gs2Chat.Localization
             this.target.StringReference["metadata"] = new StringVariable {
                 Value = _fetcher?.Message?.Metadata ?? "",
             };
-            this.target.StringReference["createdAt"] = new LongVariable {
-                Value = _fetcher?.Message?.CreatedAt ?? 0,
-            };
             this.target.enabled = true;
         }
     }
