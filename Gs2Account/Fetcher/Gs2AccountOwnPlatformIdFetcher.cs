@@ -70,8 +70,7 @@ namespace Gs2.Unity.UiKit.Gs2Account.Fetcher
             ).Me(
                 gameSessionHolder.GameSession
             ).PlatformId(
-                this.Context.PlatformId.Type,
-                this.Context.PlatformId.UserIdentifier
+                this.Context.PlatformId.Type
             );;
             var future = this._domain.SubscribeWithInitialCallFuture(
                 item =>

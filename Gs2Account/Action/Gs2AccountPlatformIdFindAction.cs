@@ -64,8 +64,7 @@ namespace Gs2.Unity.UiKit.Gs2Account
             ).Me(
                 gameSessionHolder.GameSession
             ).PlatformId(
-                this._context.PlatformId.Type,
-                this._context.PlatformId.UserIdentifier
+                this._context.PlatformId.Type
             );
             var future = domain.FindPlatformUserFuture(
             );
