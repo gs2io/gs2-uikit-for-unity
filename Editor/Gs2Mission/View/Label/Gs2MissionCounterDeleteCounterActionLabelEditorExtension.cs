@@ -29,18 +29,18 @@ using UnityEngine;
 
 namespace Gs2.Unity.UiKit.Gs2Mission.Editor
 {
-    [CustomEditor(typeof(Gs2MissionCounterGetCounterActionLabel))]
-    public class Gs2MissionCounterGetCounterActionLabelEditorExtension : UnityEditor.Editor
+    [CustomEditor(typeof(Gs2MissionCounterDeleteCounterActionLabel))]
+    public class Gs2MissionCounterDeleteCounterActionLabelEditorExtension : UnityEditor.Editor
     {
         public override void OnInspectorGUI() {
-            var original = target as Gs2MissionCounterGetCounterActionLabel;
+            var original = target as Gs2MissionCounterDeleteCounterActionLabel;
 
             if (original == null) return;
 
             if (original.action == null) {
-                EditorGUILayout.HelpBox("Gs2MissionCounterGetCounterAction not found.", MessageType.Error);
+                EditorGUILayout.HelpBox("Gs2MissionCounterDeleteCounterAction not found.", MessageType.Error);
                 if (GUILayout.Button("Add Context")) {
-                    original.gameObject.AddComponent<Gs2MissionCounterGetCounterAction>();
+                    original.gameObject.AddComponent<Gs2MissionCounterDeleteCounterAction>();
                 }
                 return;
             }

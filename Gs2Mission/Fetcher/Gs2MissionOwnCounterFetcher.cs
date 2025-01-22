@@ -26,6 +26,7 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Text;
 using Gs2.Core.Exception;
 using Gs2.Unity.Core.Exception;
@@ -34,6 +35,8 @@ using Gs2.Unity.Gs2Mission.Model;
 using Gs2.Unity.Gs2Mission.ScriptableObject;
 using Gs2.Unity.Util;
 using Gs2.Unity.UiKit.Core;
+using Gs2.Unity.UiKit.Core.Model;
+using Gs2.Unity.UiKit.Gs2Core.Fetcher;
 using Gs2.Unity.UiKit.Gs2Mission.Context;
 using UnityEngine;
 using UnityEngine.Events;
@@ -60,63 +63,28 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Fetcher
             yield return new WaitUntil(() => gameSessionHolder.Initialized);
             yield return new WaitUntil(() => Context != null && this.Context.Counter != null);
 
-            _domain = clientHolder.Gs2.Mission.Namespace(
+            this._domain = clientHolder.Gs2.Mission.Namespace(
                 this.Context.Counter.NamespaceName
             ).Me(
                 gameSessionHolder.GameSession
             ).Counter(
                 this.Context.Counter.CounterName
-            );
-            this._callbackId = this._domain.Subscribe(
+            );;
+            var future = this._domain.SubscribeWithInitialCallFuture(
                 item =>
                 {
+                    retryWaitSecond = 0;
                     Counter = item;
                     Fetched = true;
                     this.OnFetched.Invoke();
                 }
             );
-
-            while (true) {
-                var future = this._domain.ModelFuture();
-                yield return future;
-                if (future.Error != null) {
-                    yield return new WaitForSeconds(retryWaitSecond);
-                    retryWaitSecond *= 2;
-                }
-                else {
-                    Counter = future.Result;
-                    Fetched = true;
-                    this.OnFetched.Invoke();
-                    break;
-                }
+            yield return future;
+            if (future.Error != null) {
+                this.onError.Invoke(future.Error, null);
+                yield break;
             }
-        }
-    }
-
-    /// <summary>
-    /// Dependent components
-    /// </summary>
-
-    public partial class Gs2MissionOwnCounterFetcher
-    {
-        public Gs2MissionOwnCounterContext Context { get; private set; }
-
-        public void Awake()
-        {
-            Context = GetComponent<Gs2MissionOwnCounterContext>() ?? GetComponentInParent<Gs2MissionOwnCounterContext>();
-            if (Context == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MissionOwnCounterContext.");
-                enabled = false;
-            }
-        }
-
-        public virtual bool HasError()
-        {
-            Context = GetComponent<Gs2MissionOwnCounterContext>() ?? GetComponentInParent<Gs2MissionOwnCounterContext>(true);
-            if (Context == null) {
-                return true;
-            }
-            return false;
+            this._callbackId = future.Result;
         }
 
         public void OnUpdateContext() {
@@ -146,6 +114,45 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Fetcher
             );
             this._callbackId = null;
         }
+
+        public void SetTemporaryCounter(
+            Gs2.Unity.Gs2Mission.Model.EzCounter counter
+        ) {
+            Counter = counter;
+            this.OnFetched.Invoke();
+        }
+
+        public void RollbackTemporaryCounter(
+        ) {
+            OnUpdateContext();
+        }
+    }
+
+    /// <summary>
+    /// Dependent components
+    /// </summary>
+
+    public partial class Gs2MissionOwnCounterFetcher
+    {
+        public Gs2MissionOwnCounterContext Context { get; private set; }
+
+        public void Awake()
+        {
+            Context = GetComponent<Gs2MissionOwnCounterContext>() ?? GetComponentInParent<Gs2MissionOwnCounterContext>();
+            if (Context == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MissionOwnCounterContext.");
+                enabled = false;
+            }
+        }
+
+        public virtual bool HasError()
+        {
+            Context = GetComponent<Gs2MissionOwnCounterContext>() ?? GetComponentInParent<Gs2MissionOwnCounterContext>(true);
+            if (Context == null) {
+                return true;
+            }
+            return false;
+        }
     }
 
     /// <summary>
@@ -154,7 +161,7 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Fetcher
 
     public partial class Gs2MissionOwnCounterFetcher
     {
-        public EzCounter Counter { get; protected set; }
+        public Gs2.Unity.Gs2Mission.Model.EzCounter Counter { get; protected set; }
         public bool Fetched { get; protected set; }
         public UnityEvent OnFetched = new UnityEvent();
     }

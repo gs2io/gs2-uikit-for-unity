@@ -32,11 +32,11 @@ using UnityEngine;
 
 namespace Gs2.Unity.UiKit.Gs2Mission.Editor
 {
-    [CustomEditor(typeof(Gs2MissionCounterGetCounterAction))]
-    public class Gs2MissionCounterGetCounterActionEditorExtension : UnityEditor.Editor
+    [CustomEditor(typeof(Gs2MissionCounterDeleteCounterAction))]
+    public class Gs2MissionCounterDeleteCounterActionEditorExtension : UnityEditor.Editor
     {
         public override void OnInspectorGUI() {
-            var original = target as Gs2MissionCounterGetCounterAction;
+            var original = target as Gs2MissionCounterDeleteCounterAction;
 
             if (original == null) return;
 

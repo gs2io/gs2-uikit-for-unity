@@ -37,8 +37,8 @@ namespace Gs2.Unity.UiKit.Gs2Mission
     /// Main
     /// </summary>
 
-	[AddComponentMenu("GS2 UIKit/Mission/Counter/View/Label/Gs2MissionCounterGetCounterActionLabel")]
-    public partial class Gs2MissionCounterGetCounterActionLabel : MonoBehaviour
+	[AddComponentMenu("GS2 UIKit/Mission/Counter/View/Label/Gs2MissionCounterDeleteCounterActionLabel")]
+    public partial class Gs2MissionCounterDeleteCounterActionLabel : MonoBehaviour
     {
         private void OnChange()
         {
@@ -75,7 +75,7 @@ namespace Gs2.Unity.UiKit.Gs2Mission
     /// Dependent components
     /// </summary>
 
-    public partial class Gs2MissionCounterGetCounterActionLabel
+    public partial class Gs2MissionCounterDeleteCounterActionLabel
     {
         
     }
@@ -84,7 +84,7 @@ namespace Gs2.Unity.UiKit.Gs2Mission
     /// Public properties
     /// </summary>
 
-    public partial class Gs2MissionCounterGetCounterActionLabel
+    public partial class Gs2MissionCounterDeleteCounterActionLabel
     {
 
     }
@@ -93,16 +93,16 @@ namespace Gs2.Unity.UiKit.Gs2Mission
     /// Parameters for Inspector
     /// </summary>
 
-    public partial class Gs2MissionCounterGetCounterActionLabel
+    public partial class Gs2MissionCounterDeleteCounterActionLabel
     {
-        public Gs2MissionCounterGetCounterAction action;
+        public Gs2MissionCounterDeleteCounterAction action;
         public string format;
     }
 
     /// <summary>
     /// Event handlers
     /// </summary>
-    public partial class Gs2MissionCounterGetCounterActionLabel
+    public partial class Gs2MissionCounterDeleteCounterActionLabel
     {
         [Serializable]
         private class UpdateEvent : UnityEvent<string>

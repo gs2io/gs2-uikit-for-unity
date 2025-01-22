@@ -44,7 +44,7 @@ using UnityEditor;
 
 namespace Gs2.Unity.UiKit.Gs2Mission
 {
-    public partial class Gs2MissionCounterGetCounterAction : MonoBehaviour
+    public partial class Gs2MissionCounterDeleteCounterAction : MonoBehaviour
     {
         private IEnumerator Process()
         {
@@ -54,7 +54,7 @@ namespace Gs2.Unity.UiKit.Gs2Mission
             yield return new WaitUntil(() => clientHolder.Initialized);
             yield return new WaitUntil(() => gameSessionHolder.Initialized);
 
-            this.onGetCounterStart.Invoke();
+            this.onDeleteCounterStart.Invoke();
 
             
             var domain = clientHolder.Gs2.Mission.Namespace(
@@ -64,7 +64,7 @@ namespace Gs2.Unity.UiKit.Gs2Mission
             ).Counter(
                 this._context.Counter.CounterName
             );
-            var future = domain.GetCounterFuture(
+            var future = domain.DeleteCounterFuture(
             );
             yield return future;
             if (future.Error != null)
@@ -88,7 +88,7 @@ namespace Gs2.Unity.UiKit.Gs2Mission
                             yield break;
                         }
 
-                        this.onGetCounterComplete.Invoke(future3.Result);
+                        this.onDeleteCounterComplete.Invoke(future3.Result);
                     }
 
                     this.onError.Invoke(future.Error, Retry);
@@ -106,7 +106,7 @@ namespace Gs2.Unity.UiKit.Gs2Mission
                 yield break;
             }
 
-            this.onGetCounterComplete.Invoke(future2.Result);
+            this.onDeleteCounterComplete.Invoke(future2.Result);
         }
 
         public void OnEnable()
@@ -124,7 +124,7 @@ namespace Gs2.Unity.UiKit.Gs2Mission
     /// Dependent components
     /// </summary>
 
-    public partial class Gs2MissionCounterGetCounterAction
+    public partial class Gs2MissionCounterDeleteCounterAction
     {
         private Gs2MissionOwnCounterContext _context;
 
@@ -151,7 +151,7 @@ namespace Gs2.Unity.UiKit.Gs2Mission
     /// Public properties
     /// </summary>
 
-    public partial class Gs2MissionCounterGetCounterAction
+    public partial class Gs2MissionCounterDeleteCounterAction
     {
 
     }
@@ -159,7 +159,7 @@ namespace Gs2.Unity.UiKit.Gs2Mission
     /// <summary>
     /// Parameters for Inspector
     /// </summary>
-    public partial class Gs2MissionCounterGetCounterAction
+    public partial class Gs2MissionCounterDeleteCounterAction
     {
         public bool WaitAsyncProcessComplete;
     }
@@ -167,36 +167,36 @@ namespace Gs2.Unity.UiKit.Gs2Mission
     /// <summary>
     /// Event handlers
     /// </summary>
-    public partial class Gs2MissionCounterGetCounterAction
+    public partial class Gs2MissionCounterDeleteCounterAction
     {
 
         [Serializable]
-        private class GetCounterStartEvent : UnityEvent
+        private class DeleteCounterStartEvent : UnityEvent
         {
 
         }
 
         [SerializeField]
-        private GetCounterStartEvent onGetCounterStart = new GetCounterStartEvent();
+        private DeleteCounterStartEvent onDeleteCounterStart = new DeleteCounterStartEvent();
 
-        public event UnityAction OnGetCounterStart
+        public event UnityAction OnDeleteCounterStart
         {
-            add => this.onGetCounterStart.AddListener(value);
-            remove => this.onGetCounterStart.RemoveListener(value);
+            add => this.onDeleteCounterStart.AddListener(value);
+            remove => this.onDeleteCounterStart.RemoveListener(value);
         }
 
         [Serializable]
-        private class GetCounterCompleteEvent : UnityEvent<EzCounter>
+        private class DeleteCounterCompleteEvent : UnityEvent<EzCounter>
         {
 
         }
 
         [SerializeField]
-        private GetCounterCompleteEvent onGetCounterComplete = new GetCounterCompleteEvent();
-        public event UnityAction<EzCounter> OnGetCounterComplete
+        private DeleteCounterCompleteEvent onDeleteCounterComplete = new DeleteCounterCompleteEvent();
+        public event UnityAction<EzCounter> OnDeleteCounterComplete
         {
-            add => this.onGetCounterComplete.AddListener(value);
-            remove => this.onGetCounterComplete.RemoveListener(value);
+            add => this.onDeleteCounterComplete.AddListener(value);
+            remove => this.onDeleteCounterComplete.RemoveListener(value);
         }
 
         public UnityEvent OnChange = new UnityEvent();
@@ -216,13 +216,13 @@ namespace Gs2.Unity.UiKit.Gs2Mission
     /// <summary>
     /// Context Menu
     /// </summary>
-    public partial class Gs2MissionCounterGetCounterAction
+    public partial class Gs2MissionCounterDeleteCounterAction
     {
-        [MenuItem("GameObject/Game Server Services/Mission/Counter/Action/GetCounter", priority = 0)]
+        [MenuItem("GameObject/Game Server Services/Mission/Counter/Action/DeleteCounter", priority = 0)]
         private static void CreateButton()
         {
-            var prefab = AssetDatabase.LoadAssetAtPath<Gs2MissionCounterGetCounterAction>(
-                "Packages/io.gs2.unity.sdk.uikit/Gs2Mission/Prefabs/Action/Gs2MissionCounterGetCounterAction.prefab"
+            var prefab = AssetDatabase.LoadAssetAtPath<Gs2MissionCounterDeleteCounterAction>(
+                "Packages/io.gs2.unity.sdk.uikit/Gs2Mission/Prefabs/Action/Gs2MissionCounterDeleteCounterAction.prefab"
             );
 
             var instance = PrefabUtility.InstantiatePrefab(prefab, Selection.activeTransform);
