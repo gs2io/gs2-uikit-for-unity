@@ -71,6 +71,7 @@ namespace Gs2.Unity.UiKit.Gs2Dictionary.Editor
             }
             
             serializedObject.Update();
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("onError"), true);
             serializedObject.ApplyModifiedProperties();
         }
     }

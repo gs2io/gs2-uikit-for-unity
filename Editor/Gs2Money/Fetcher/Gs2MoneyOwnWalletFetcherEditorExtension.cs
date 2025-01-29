@@ -63,6 +63,7 @@ namespace Gs2.Unity.UiKit.Gs2Money.Editor
             }
             
             serializedObject.Update();
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("onError"), true);
             serializedObject.ApplyModifiedProperties();
         }
     }

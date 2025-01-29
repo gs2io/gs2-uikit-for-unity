@@ -62,6 +62,7 @@ namespace Gs2.Unity.UiKit.Gs2AdReward.Editor
             }
             
             serializedObject.Update();
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("onError"), true);
             serializedObject.ApplyModifiedProperties();
         }
     }
