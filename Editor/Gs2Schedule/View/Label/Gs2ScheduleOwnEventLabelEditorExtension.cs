@@ -230,6 +230,7 @@ namespace Gs2.Unity.UiKit.Gs2Schedule.Editor
                 GUI.FocusControl("");
                 EditorUtility.SetDirty(original);
             }
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("onUpdate"), true);
             serializedObject.ApplyModifiedProperties();
         }
     }
