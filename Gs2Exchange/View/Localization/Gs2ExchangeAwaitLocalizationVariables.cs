@@ -73,7 +73,7 @@ namespace Gs2.Unity.UiKit.Gs2Exchange.Localization
             this._fetcher = GetComponent<Gs2ExchangeOwnAwaitFetcher>() ?? GetComponentInParent<Gs2ExchangeOwnAwaitFetcher>();
 
             if (this._fetcher == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ExchangeAwaitFetcher.");
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ExchangeOwnAwaitFetcher.");
                 enabled = false;
             }
         }

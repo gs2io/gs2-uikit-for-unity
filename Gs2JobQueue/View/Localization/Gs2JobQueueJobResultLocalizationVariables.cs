@@ -67,7 +67,7 @@ namespace Gs2.Unity.UiKit.Gs2JobQueue.Localization
             this._fetcher = GetComponent<Gs2JobQueueOwnJobResultFetcher>() ?? GetComponentInParent<Gs2JobQueueOwnJobResultFetcher>();
 
             if (this._fetcher == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2JobQueueJobResultFetcher.");
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2JobQueueOwnJobResultFetcher.");
                 enabled = false;
             }
         }

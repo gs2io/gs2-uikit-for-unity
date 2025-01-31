@@ -73,7 +73,7 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Localization
             this._fetcher = GetComponent<Gs2QuestOwnProgressFetcher>() ?? GetComponentInParent<Gs2QuestOwnProgressFetcher>();
 
             if (this._fetcher == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2QuestProgressFetcher.");
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2QuestOwnProgressFetcher.");
                 enabled = false;
             }
         }

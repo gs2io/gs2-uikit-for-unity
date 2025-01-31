@@ -70,7 +70,7 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Localization
             this._fetcher = GetComponent<Gs2FormationOwnMoldFetcher>() ?? GetComponentInParent<Gs2FormationOwnMoldFetcher>();
 
             if (this._fetcher == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2FormationMoldFetcher.");
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2FormationOwnMoldFetcher.");
                 enabled = false;
             }
         }

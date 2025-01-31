@@ -67,7 +67,7 @@ namespace Gs2.Unity.UiKit.Gs2Formation.Localization
             this._fetcher = GetComponent<Gs2FormationOwnFormFetcher>() ?? GetComponentInParent<Gs2FormationOwnFormFetcher>();
 
             if (this._fetcher == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2FormationFormFetcher.");
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2FormationOwnFormFetcher.");
                 enabled = false;
             }
         }

@@ -82,7 +82,7 @@ namespace Gs2.Unity.UiKit.Gs2StateMachine.Localization
             this._fetcher = GetComponent<Gs2StateMachineOwnStatusFetcher>() ?? GetComponentInParent<Gs2StateMachineOwnStatusFetcher>();
 
             if (this._fetcher == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2StateMachineStatusFetcher.");
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2StateMachineOwnStatusFetcher.");
                 enabled = false;
             }
         }

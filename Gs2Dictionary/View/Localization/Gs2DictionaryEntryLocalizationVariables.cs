@@ -70,7 +70,7 @@ namespace Gs2.Unity.UiKit.Gs2Dictionary.Localization
             this._fetcher = GetComponent<Gs2DictionaryOwnEntryFetcher>() ?? GetComponentInParent<Gs2DictionaryOwnEntryFetcher>();
 
             if (this._fetcher == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2DictionaryEntryFetcher.");
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2DictionaryOwnEntryFetcher.");
                 enabled = false;
             }
         }

@@ -64,7 +64,7 @@ namespace Gs2.Unity.UiKit.Gs2AdReward.Localization
             this._fetcher = GetComponent<Gs2AdRewardOwnPointFetcher>() ?? GetComponentInParent<Gs2AdRewardOwnPointFetcher>();
 
             if (this._fetcher == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2AdRewardPointFetcher.");
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2AdRewardOwnPointFetcher.");
                 enabled = false;
             }
         }

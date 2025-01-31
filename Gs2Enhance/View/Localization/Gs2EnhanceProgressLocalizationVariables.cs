@@ -76,7 +76,7 @@ namespace Gs2.Unity.UiKit.Gs2Enhance.Localization
             this._fetcher = GetComponent<Gs2EnhanceOwnProgressFetcher>() ?? GetComponentInParent<Gs2EnhanceOwnProgressFetcher>();
 
             if (this._fetcher == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2EnhanceProgressFetcher.");
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2EnhanceOwnProgressFetcher.");
                 enabled = false;
             }
         }

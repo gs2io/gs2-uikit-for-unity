@@ -67,7 +67,7 @@ namespace Gs2.Unity.UiKit.Gs2SkillTree.Localization
             this._fetcher = GetComponent<Gs2SkillTreeOwnStatusFetcher>() ?? GetComponentInParent<Gs2SkillTreeOwnStatusFetcher>();
 
             if (this._fetcher == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2SkillTreeStatusFetcher.");
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2SkillTreeOwnStatusFetcher.");
                 enabled = false;
             }
         }

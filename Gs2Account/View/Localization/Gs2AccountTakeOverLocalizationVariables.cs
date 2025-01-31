@@ -70,7 +70,7 @@ namespace Gs2.Unity.UiKit.Gs2Account.Localization
             this._fetcher = GetComponent<Gs2AccountOwnTakeOverFetcher>() ?? GetComponentInParent<Gs2AccountOwnTakeOverFetcher>();
 
             if (this._fetcher == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2AccountTakeOverFetcher.");
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2AccountOwnTakeOverFetcher.");
                 enabled = false;
             }
         }

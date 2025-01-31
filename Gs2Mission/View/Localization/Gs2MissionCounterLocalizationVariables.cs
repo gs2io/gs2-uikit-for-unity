@@ -64,7 +64,7 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Localization
             this._fetcher = GetComponent<Gs2MissionOwnCounterFetcher>() ?? GetComponentInParent<Gs2MissionOwnCounterFetcher>();
 
             if (this._fetcher == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MissionCounterFetcher.");
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MissionOwnCounterFetcher.");
                 enabled = false;
             }
         }

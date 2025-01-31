@@ -70,7 +70,7 @@ namespace Gs2.Unity.UiKit.Gs2Gateway.Localization
             this._fetcher = GetComponent<Gs2GatewayOwnWebSocketSessionFetcher>() ?? GetComponentInParent<Gs2GatewayOwnWebSocketSessionFetcher>();
 
             if (this._fetcher == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2GatewayWebSocketSessionFetcher.");
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2GatewayOwnWebSocketSessionFetcher.");
                 enabled = false;
             }
         }

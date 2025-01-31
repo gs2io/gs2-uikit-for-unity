@@ -70,7 +70,7 @@ namespace Gs2.Unity.UiKit.Gs2Account.Localization
             this._fetcher = GetComponent<Gs2AccountOwnPlatformIdFetcher>() ?? GetComponentInParent<Gs2AccountOwnPlatformIdFetcher>();
 
             if (this._fetcher == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2AccountPlatformIdFetcher.");
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2AccountOwnPlatformIdFetcher.");
                 enabled = false;
             }
         }

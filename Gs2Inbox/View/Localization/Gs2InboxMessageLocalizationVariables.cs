@@ -73,7 +73,7 @@ namespace Gs2.Unity.UiKit.Gs2Inbox.Localization
             this._fetcher = GetComponent<Gs2InboxOwnMessageFetcher>() ?? GetComponentInParent<Gs2InboxOwnMessageFetcher>();
 
             if (this._fetcher == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2InboxMessageFetcher.");
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2InboxOwnMessageFetcher.");
                 enabled = false;
             }
         }

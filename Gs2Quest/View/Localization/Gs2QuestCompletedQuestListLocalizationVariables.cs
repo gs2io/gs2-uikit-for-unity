@@ -64,7 +64,7 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Localization
             this._fetcher = GetComponent<Gs2QuestOwnCompletedQuestListFetcher>() ?? GetComponentInParent<Gs2QuestOwnCompletedQuestListFetcher>();
 
             if (this._fetcher == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2QuestCompletedQuestListFetcher.");
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2QuestOwnCompletedQuestListFetcher.");
                 enabled = false;
             }
         }

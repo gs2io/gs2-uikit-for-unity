@@ -73,7 +73,7 @@ namespace Gs2.Unity.UiKit.Gs2Money.Localization
             this._fetcher = GetComponent<Gs2MoneyOwnWalletFetcher>() ?? GetComponentInParent<Gs2MoneyOwnWalletFetcher>();
 
             if (this._fetcher == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MoneyWalletFetcher.");
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2MoneyOwnWalletFetcher.");
                 enabled = false;
             }
         }

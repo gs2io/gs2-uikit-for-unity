@@ -67,7 +67,7 @@ namespace Gs2.Unity.UiKit.Gs2Account.Localization
             this._fetcher = GetComponent<Gs2AccountOwnAccountFetcher>() ?? GetComponentInParent<Gs2AccountOwnAccountFetcher>();
 
             if (this._fetcher == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2AccountAccountFetcher.");
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2AccountOwnAccountFetcher.");
                 enabled = false;
             }
         }

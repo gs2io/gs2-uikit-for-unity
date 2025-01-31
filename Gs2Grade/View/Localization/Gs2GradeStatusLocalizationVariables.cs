@@ -70,7 +70,7 @@ namespace Gs2.Unity.UiKit.Gs2Grade.Localization
             this._fetcher = GetComponent<Gs2GradeOwnStatusFetcher>() ?? GetComponentInParent<Gs2GradeOwnStatusFetcher>();
 
             if (this._fetcher == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2GradeStatusFetcher.");
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2GradeOwnStatusFetcher.");
                 enabled = false;
             }
         }

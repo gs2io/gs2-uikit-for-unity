@@ -67,7 +67,7 @@ namespace Gs2.Unity.UiKit.Gs2Version.Localization
             this._fetcher = GetComponent<Gs2VersionOwnAcceptVersionFetcher>() ?? GetComponentInParent<Gs2VersionOwnAcceptVersionFetcher>();
 
             if (this._fetcher == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2VersionAcceptVersionFetcher.");
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2VersionOwnAcceptVersionFetcher.");
                 enabled = false;
             }
         }

@@ -67,7 +67,7 @@ namespace Gs2.Unity.UiKit.Gs2Ranking.Localization
             this._fetcher = GetComponent<Gs2RankingOwnSubscribeUserFetcher>() ?? GetComponentInParent<Gs2RankingOwnSubscribeUserFetcher>();
 
             if (this._fetcher == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2RankingSubscribeUserFetcher.");
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2RankingOwnSubscribeUserFetcher.");
                 enabled = false;
             }
         }
