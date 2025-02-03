@@ -82,6 +82,9 @@ namespace Gs2.Unity.UiKit.Gs2Schedule.Label
                     "{ttl}",
                     $"{this._fetcher.Request.Ttl}"
                 ).Replace(
+                    "{eventId}",
+                    $"{this._fetcher.Request.EventId}"
+                ).Replace(
                     "{timeOffsetToken}",
                     $"{this._fetcher.Request.TimeOffsetToken}"
                 ).Replace(
