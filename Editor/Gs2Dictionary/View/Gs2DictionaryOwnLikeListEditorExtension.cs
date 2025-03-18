@@ -25,48 +25,43 @@
 #pragma warning disable CS0472
 
 using Gs2.Unity.Gs2Dictionary.ScriptableObject;
-using Gs2.Unity.UiKit.Gs2Dictionary.Context;
 using Gs2.Unity.UiKit.Gs2Dictionary.Fetcher;
 using UnityEditor;
 using UnityEngine;
 
 namespace Gs2.Unity.UiKit.Gs2Dictionary.Editor
 {
-    [CustomEditor(typeof(Gs2DictionaryOwnLikeContext))]
-    public class Gs2DictionaryOwnLikeContextEditorExtension : UnityEditor.Editor
+    [CustomEditor(typeof(Gs2DictionaryOwnLikeList))]
+    public class Gs2DictionaryOwnLikeListEditorExtension : UnityEditor.Editor
     {
         public override void OnInspectorGUI() {
-            var original = target as Gs2DictionaryOwnLikeContext;
+            var original = target as Gs2DictionaryOwnLikeList;
 
             if (original == null) return;
 
-            serializedObject.Update();
-
-            if (original.Like == null) {
-                var list = original.GetComponentInParent<Gs2DictionaryOwnLikeList>(true);
-                if (list != null) {
-                    EditorGUILayout.HelpBox("Like is auto assign from Gs2DictionaryOwnLikeList.", MessageType.Info);
-                    EditorGUI.BeginDisabledGroup(true);
-                    EditorGUILayout.ObjectField("List", list, typeof(Gs2DictionaryOwnLikeList), false);
-                    EditorGUI.EndDisabledGroup();
-                }
-                else {
-                    EditorGUILayout.HelpBox("OwnLike not assigned.", MessageType.Error);
-                    EditorGUILayout.PropertyField(serializedObject.FindProperty("_like"), true);
+            var fetcher = original.GetComponent<Gs2DictionaryOwnLikeListFetcher>() ?? original.GetComponentInParent<Gs2DictionaryOwnLikeListFetcher>(true);
+            if (fetcher == null) {
+                EditorGUILayout.HelpBox("Gs2DictionaryOwnLikeListFetcher not found.", MessageType.Error);
+                if (GUILayout.Button("Add ListFetcher")) {
+                    original.gameObject.AddComponent<Gs2DictionaryOwnLikeListFetcher>();
                 }
             }
             else {
-                original.Like = EditorGUILayout.ObjectField("OwnLike", original.Like, typeof(OwnLike), false) as OwnLike;
                 EditorGUI.BeginDisabledGroup(true);
-                if (original.Like != null) {
+                EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2DictionaryOwnLikeListFetcher), false);
+                EditorGUI.indentLevel++;
+                if (fetcher.Context != null) {
+                    EditorGUILayout.ObjectField("Namespace", fetcher.Context.Namespace, typeof(Namespace), false);
                     EditorGUI.indentLevel++;
-                    EditorGUILayout.TextField("NamespaceName", original.Like?.NamespaceName?.ToString());
-                    EditorGUILayout.TextField("EntryModelName", original.Like?.EntryModelName?.ToString());
                     EditorGUI.indentLevel--;
                 }
+                EditorGUI.indentLevel--;
                 EditorGUI.EndDisabledGroup();
             }
 
+            serializedObject.Update();
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("prefab"), true);
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("maximumItems"), true);
             serializedObject.ApplyModifiedProperties();
         }
     }

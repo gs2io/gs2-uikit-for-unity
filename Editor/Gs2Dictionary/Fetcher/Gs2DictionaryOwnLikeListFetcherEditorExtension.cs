@@ -32,41 +32,35 @@ using UnityEngine;
 
 namespace Gs2.Unity.UiKit.Gs2Dictionary.Editor
 {
-    [CustomEditor(typeof(Gs2DictionaryOwnLikeContext))]
-    public class Gs2DictionaryOwnLikeContextEditorExtension : UnityEditor.Editor
+    [CustomEditor(typeof(Gs2DictionaryOwnLikeListFetcher))]
+    public class Gs2DictionaryOwnLikeListFetcherEditorExtension : UnityEditor.Editor
     {
         public override void OnInspectorGUI() {
-            var original = target as Gs2DictionaryOwnLikeContext;
+            var original = target as Gs2DictionaryOwnLikeListFetcher;
 
             if (original == null) return;
 
-            serializedObject.Update();
-
-            if (original.Like == null) {
-                var list = original.GetComponentInParent<Gs2DictionaryOwnLikeList>(true);
-                if (list != null) {
-                    EditorGUILayout.HelpBox("Like is auto assign from Gs2DictionaryOwnLikeList.", MessageType.Info);
-                    EditorGUI.BeginDisabledGroup(true);
-                    EditorGUILayout.ObjectField("List", list, typeof(Gs2DictionaryOwnLikeList), false);
-                    EditorGUI.EndDisabledGroup();
-                }
-                else {
-                    EditorGUILayout.HelpBox("OwnLike not assigned.", MessageType.Error);
-                    EditorGUILayout.PropertyField(serializedObject.FindProperty("_like"), true);
+            var context = original.GetComponent<Gs2DictionaryNamespaceContext>() ?? original.GetComponentInParent<Gs2DictionaryNamespaceContext>(true);
+            if (context == null) {
+                EditorGUILayout.HelpBox("Gs2DictionaryNamespaceContext not found.", MessageType.Error);
+                if (GUILayout.Button("Add Context")) {
+                    original.gameObject.AddComponent<Gs2DictionaryNamespaceContext>();
                 }
             }
             else {
-                original.Like = EditorGUILayout.ObjectField("OwnLike", original.Like, typeof(OwnLike), false) as OwnLike;
                 EditorGUI.BeginDisabledGroup(true);
-                if (original.Like != null) {
-                    EditorGUI.indentLevel++;
-                    EditorGUILayout.TextField("NamespaceName", original.Like?.NamespaceName?.ToString());
-                    EditorGUILayout.TextField("EntryModelName", original.Like?.EntryModelName?.ToString());
-                    EditorGUI.indentLevel--;
-                }
+                EditorGUILayout.ObjectField("Context", context.gameObject, typeof(Gs2DictionaryNamespaceContext), false);
+                EditorGUI.indentLevel++;
+                context.Namespace = EditorGUILayout.ObjectField("Namespace", context.Namespace, typeof(Namespace), false) as Namespace;
+                EditorGUI.indentLevel++;
+                EditorGUILayout.TextField("NamespaceName", context.Namespace?.NamespaceName?.ToString());
+                EditorGUI.indentLevel--;
+                EditorGUI.indentLevel--;
                 EditorGUI.EndDisabledGroup();
             }
 
+            serializedObject.Update();
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("onError"), true);
             serializedObject.ApplyModifiedProperties();
         }
     }

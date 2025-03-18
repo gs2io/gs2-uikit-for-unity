@@ -45,6 +45,9 @@ namespace Gs2.Unity.UiKit.Gs2Dictionary.Context
         }
         public virtual bool HasError() {
             if (Like == null) {
+                if (GetComponentInParent<Gs2DictionaryOwnLikeList>(true) != null) {
+                    return false;
+                }
                 return true;
             }
             return false;
