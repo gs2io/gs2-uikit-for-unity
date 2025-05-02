@@ -47,6 +47,8 @@ namespace Gs2.Unity.UiKit.Gs2Chat
                     "{name}", $"{this._fetcher?.Room?.Name}"
                 ).Replace(
                     "{metadata}", $"{this._fetcher?.Room?.Metadata}"
+                ).Replace(
+                    "{whiteListUserIds}", $"{this._fetcher?.Room?.WhiteListUserIds}"
                 )
             );
         }
