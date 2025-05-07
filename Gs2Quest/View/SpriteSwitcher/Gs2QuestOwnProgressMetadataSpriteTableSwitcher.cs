@@ -24,42 +24,31 @@
 
 #pragma warning disable CS0472
 
-#if GS2_ENABLE_LOCALIZATION
-
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Quest.Fetcher;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.Localization.Components;
-using UnityEngine.Localization.SmartFormat.PersistentVariables;
 
-namespace Gs2.Unity.UiKit.Gs2Quest.Localization
+namespace Gs2.Unity.UiKit.Gs2Quest.SpriteSwitcher
 {
     /// <summary>
     /// Main
     /// </summary>
 
-    [AddComponentMenu("GS2 UIKit/Quest/Progress/View/Localization/Gs2QuestProgressLocalizationVariables")]
-    public partial class Gs2QuestProgressLocalizationVariables : MonoBehaviour
+	[AddComponentMenu("GS2 UIKit/Quest/Progress/View/SpriteSwitcher/Properties/Metadata/Gs2QuestOwnProgressMetadataSpriteTableSwitcher")]
+    public partial class Gs2QuestOwnProgressMetadataSpriteTableSwitcher : MonoBehaviour
     {
         private void OnFetched()
         {
-            this.target.StringReference["progressId"] = new StringVariable {
-                Value = _fetcher?.Progress?.ProgressId ?? "",
-            };
-            this.target.StringReference["transactionId"] = new StringVariable {
-                Value = _fetcher?.Progress?.TransactionId ?? "",
-            };
-            this.target.StringReference["questModelId"] = new StringVariable {
-                Value = _fetcher?.Progress?.QuestModelId ?? "",
-            };
-            this.target.StringReference["randomSeed"] = new LongVariable {
-                Value = _fetcher?.Progress?.RandomSeed ?? 0,
-            };
-            this.target.StringReference["metadata"] = new StringVariable {
-                Value = _fetcher?.Progress?.Metadata ?? "",
-            };
-            this.target.enabled = true;
+            if (this.sprites.Count(v => v.value == _fetcher.Progress.Metadata) > 0) {
+                this.onUpdate.Invoke(this.sprites.Find(v => v.value == _fetcher.Progress.Metadata).sprite);
+            }
+            else {
+                this.onUpdate.Invoke(this.defaultSprite);
+            }
         }
     }
 
@@ -67,16 +56,19 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Localization
     /// Dependent components
     /// </summary>
 
-    public partial class Gs2QuestProgressLocalizationVariables
+    public partial class Gs2QuestOwnProgressMetadataSpriteTableSwitcher
     {
         private Gs2QuestOwnProgressFetcher _fetcher;
 
-        public void Awake() {
-            this.target.enabled = false;
+        public void Awake()
+        {
             this._fetcher = GetComponent<Gs2QuestOwnProgressFetcher>() ?? GetComponentInParent<Gs2QuestOwnProgressFetcher>();
-
             if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2QuestOwnProgressFetcher.");
+                enabled = false;
+            }
+            if (this.sprites == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: sprite is not set.");
                 enabled = false;
             }
         }
@@ -85,6 +77,9 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Localization
         {
             this._fetcher = GetComponent<Gs2QuestOwnProgressFetcher>() ?? GetComponentInParent<Gs2QuestOwnProgressFetcher>(true);
             if (this._fetcher == null) {
+                return true;
+            }
+            if (this.sprites == null) {
                 return true;
             }
             return false;
@@ -118,7 +113,7 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Localization
     /// Public properties
     /// </summary>
 
-    public partial class Gs2QuestProgressLocalizationVariables
+    public partial class Gs2QuestOwnProgressMetadataSpriteTableSwitcher
     {
 
     }
@@ -127,18 +122,37 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Localization
     /// Parameters for Inspector
     /// </summary>
 
-    public partial class Gs2QuestProgressLocalizationVariables
+    public partial class Gs2QuestOwnProgressMetadataSpriteTableSwitcher
     {
-        public LocalizeStringEvent target;
+        [System.Serializable]
+        public class SpriteTableEntry
+        {
+            public string value;
+            public Sprite sprite;
+        }
+
+        public List<SpriteTableEntry> sprites;
+        public Sprite defaultSprite;
     }
 
     /// <summary>
     /// Event handlers
     /// </summary>
-    public partial class Gs2QuestProgressLocalizationVariables
+    public partial class Gs2QuestOwnProgressMetadataSpriteTableSwitcher
     {
+        [Serializable]
+        private class UpdateEvent : UnityEvent<Sprite>
+        {
 
+        }
+
+        [SerializeField]
+        private UpdateEvent onUpdate = new UpdateEvent();
+
+        public event UnityAction<Sprite> OnUpdate
+        {
+            add => onUpdate.AddListener(value);
+            remove => onUpdate.RemoveListener(value);
+        }
     }
 }
-
-#endif

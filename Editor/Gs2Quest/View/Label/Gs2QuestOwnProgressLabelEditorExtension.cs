@@ -85,6 +85,11 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Editor
                 GUI.FocusControl("");
                 EditorUtility.SetDirty(original);
             }
+            if (GUILayout.Button("Metadata")) {
+                original.format += "{metadata}";
+                GUI.FocusControl("");
+                EditorUtility.SetDirty(original);
+            }
             if (GUILayout.Button("Rewards")) {
                 original.format += "{rewards}";
                 GUI.FocusControl("");

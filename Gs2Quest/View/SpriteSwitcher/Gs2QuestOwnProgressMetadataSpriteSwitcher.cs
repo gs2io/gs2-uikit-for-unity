@@ -24,42 +24,49 @@
 
 #pragma warning disable CS0472
 
-#if GS2_ENABLE_LOCALIZATION
-
+using System;
+using System.Collections.Generic;
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Quest.Fetcher;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.Localization.Components;
-using UnityEngine.Localization.SmartFormat.PersistentVariables;
 
-namespace Gs2.Unity.UiKit.Gs2Quest.Localization
+namespace Gs2.Unity.UiKit.Gs2Quest.SpriteSwitcher
 {
     /// <summary>
     /// Main
     /// </summary>
 
-    [AddComponentMenu("GS2 UIKit/Quest/Progress/View/Localization/Gs2QuestProgressLocalizationVariables")]
-    public partial class Gs2QuestProgressLocalizationVariables : MonoBehaviour
+	[AddComponentMenu("GS2 UIKit/Quest/Progress/View/SpriteSwitcher/Properties/Metadata/Gs2QuestOwnProgressMetadataSpriteSwitcher")]
+    public partial class Gs2QuestOwnProgressMetadataSpriteSwitcher : MonoBehaviour
     {
         private void OnFetched()
         {
-            this.target.StringReference["progressId"] = new StringVariable {
-                Value = _fetcher?.Progress?.ProgressId ?? "",
-            };
-            this.target.StringReference["transactionId"] = new StringVariable {
-                Value = _fetcher?.Progress?.TransactionId ?? "",
-            };
-            this.target.StringReference["questModelId"] = new StringVariable {
-                Value = _fetcher?.Progress?.QuestModelId ?? "",
-            };
-            this.target.StringReference["randomSeed"] = new LongVariable {
-                Value = _fetcher?.Progress?.RandomSeed ?? 0,
-            };
-            this.target.StringReference["metadata"] = new StringVariable {
-                Value = _fetcher?.Progress?.Metadata ?? "",
-            };
-            this.target.enabled = true;
+            switch(this.expression)
+            {
+                case Expression.In:
+                    if (this.applyMetadatas.Contains(this._fetcher.Progress?.Metadata ?? "")) {
+                        this.onUpdate.Invoke(this.sprite);
+                    }
+                    break;
+                case Expression.NotIn:
+                    if (!this.applyMetadatas.Contains(this._fetcher.Progress?.Metadata ?? "")) {
+                        this.onUpdate.Invoke(this.sprite);
+                    }
+                    break;
+                case Expression.StartsWith:
+                    if ((this._fetcher.Progress?.Metadata ?? "").StartsWith(this.applyMetadata)) {
+                        this.onUpdate.Invoke(this.sprite);
+                    }
+                    break;
+                case Expression.EndsWith:
+                    if ((this._fetcher.Progress?.Metadata ?? "").EndsWith(this.applyMetadata)) {
+                        this.onUpdate.Invoke(this.sprite);
+                    }
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
         }
     }
 
@@ -67,16 +74,20 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Localization
     /// Dependent components
     /// </summary>
 
-    public partial class Gs2QuestProgressLocalizationVariables
+    public partial class Gs2QuestOwnProgressMetadataSpriteSwitcher
     {
         private Gs2QuestOwnProgressFetcher _fetcher;
 
-        public void Awake() {
-            this.target.enabled = false;
+        public void Awake()
+        {
             this._fetcher = GetComponent<Gs2QuestOwnProgressFetcher>() ?? GetComponentInParent<Gs2QuestOwnProgressFetcher>();
 
             if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2QuestOwnProgressFetcher.");
+                enabled = false;
+            }
+            if (this.sprite == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: sprite is not set.");
                 enabled = false;
             }
         }
@@ -85,6 +96,9 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Localization
         {
             this._fetcher = GetComponent<Gs2QuestOwnProgressFetcher>() ?? GetComponentInParent<Gs2QuestOwnProgressFetcher>(true);
             if (this._fetcher == null) {
+                return true;
+            }
+            if (this.sprite == null) {
                 return true;
             }
             return false;
@@ -118,7 +132,7 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Localization
     /// Public properties
     /// </summary>
 
-    public partial class Gs2QuestProgressLocalizationVariables
+    public partial class Gs2QuestOwnProgressMetadataSpriteSwitcher
     {
 
     }
@@ -127,18 +141,42 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Localization
     /// Parameters for Inspector
     /// </summary>
 
-    public partial class Gs2QuestProgressLocalizationVariables
+    public partial class Gs2QuestOwnProgressMetadataSpriteSwitcher
     {
-        public LocalizeStringEvent target;
+        public enum Expression {
+            In,
+            NotIn,
+            StartsWith,
+            EndsWith,
+        }
+
+        public Expression expression;
+
+        public List<string> applyMetadatas;
+
+        public string applyMetadata;
+
+        public Sprite sprite;
     }
 
     /// <summary>
     /// Event handlers
     /// </summary>
-    public partial class Gs2QuestProgressLocalizationVariables
+    public partial class Gs2QuestOwnProgressMetadataSpriteSwitcher
     {
+        [Serializable]
+        private class UpdateEvent : UnityEvent<Sprite>
+        {
 
+        }
+
+        [SerializeField]
+        private UpdateEvent onUpdate = new UpdateEvent();
+
+        public event UnityAction<Sprite> OnUpdate
+        {
+            add => onUpdate.AddListener(value);
+            remove => onUpdate.RemoveListener(value);
+        }
     }
 }
-
-#endif

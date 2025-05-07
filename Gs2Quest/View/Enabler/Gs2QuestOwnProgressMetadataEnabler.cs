@@ -24,42 +24,41 @@
 
 #pragma warning disable CS0472
 
-#if GS2_ENABLE_LOCALIZATION
-
+using System;
+using System.Collections.Generic;
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Quest.Fetcher;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.Localization.Components;
-using UnityEngine.Localization.SmartFormat.PersistentVariables;
 
-namespace Gs2.Unity.UiKit.Gs2Quest.Localization
+namespace Gs2.Unity.UiKit.Gs2Quest.Enabler
 {
     /// <summary>
     /// Main
     /// </summary>
 
-    [AddComponentMenu("GS2 UIKit/Quest/Progress/View/Localization/Gs2QuestProgressLocalizationVariables")]
-    public partial class Gs2QuestProgressLocalizationVariables : MonoBehaviour
+	[AddComponentMenu("GS2 UIKit/Quest/Progress/View/Enabler/Properties/Metadata/Gs2QuestOwnProgressMetadataEnabler")]
+    public partial class Gs2QuestOwnProgressMetadataEnabler : MonoBehaviour
     {
         private void OnFetched()
         {
-            this.target.StringReference["progressId"] = new StringVariable {
-                Value = _fetcher?.Progress?.ProgressId ?? "",
-            };
-            this.target.StringReference["transactionId"] = new StringVariable {
-                Value = _fetcher?.Progress?.TransactionId ?? "",
-            };
-            this.target.StringReference["questModelId"] = new StringVariable {
-                Value = _fetcher?.Progress?.QuestModelId ?? "",
-            };
-            this.target.StringReference["randomSeed"] = new LongVariable {
-                Value = _fetcher?.Progress?.RandomSeed ?? 0,
-            };
-            this.target.StringReference["metadata"] = new StringVariable {
-                Value = _fetcher?.Progress?.Metadata ?? "",
-            };
-            this.target.enabled = true;
+            switch(this.expression)
+            {
+                case Expression.In:
+                    this.target.SetActive(this.enableMetadatas.Contains(this._fetcher.Progress?.Metadata ?? ""));
+                    break;
+                case Expression.NotIn:
+                    this.target.SetActive(!this.enableMetadatas.Contains(this._fetcher.Progress?.Metadata ?? ""));
+                    break;
+                case Expression.StartsWith:
+                    this.target.SetActive((this._fetcher.Progress?.Metadata ?? "").StartsWith(this.enableMetadata));
+                    break;
+                case Expression.EndsWith:
+                    this.target.SetActive((this._fetcher.Progress?.Metadata ?? "").EndsWith(this.enableMetadata));
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
         }
     }
 
@@ -67,16 +66,19 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Localization
     /// Dependent components
     /// </summary>
 
-    public partial class Gs2QuestProgressLocalizationVariables
+    public partial class Gs2QuestOwnProgressMetadataEnabler
     {
         private Gs2QuestOwnProgressFetcher _fetcher;
 
-        public void Awake() {
-            this.target.enabled = false;
+        public void Awake()
+        {
             this._fetcher = GetComponent<Gs2QuestOwnProgressFetcher>() ?? GetComponentInParent<Gs2QuestOwnProgressFetcher>();
-
             if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2QuestOwnProgressFetcher.");
+                enabled = false;
+            }
+            if (this.target == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: target is not set.");
                 enabled = false;
             }
         }
@@ -85,6 +87,9 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Localization
         {
             this._fetcher = GetComponent<Gs2QuestOwnProgressFetcher>() ?? GetComponentInParent<Gs2QuestOwnProgressFetcher>(true);
             if (this._fetcher == null) {
+                return true;
+            }
+            if (this.target == null) {
                 return true;
             }
             return false;
@@ -118,7 +123,7 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Localization
     /// Public properties
     /// </summary>
 
-    public partial class Gs2QuestProgressLocalizationVariables
+    public partial class Gs2QuestOwnProgressMetadataEnabler
     {
 
     }
@@ -127,18 +132,29 @@ namespace Gs2.Unity.UiKit.Gs2Quest.Localization
     /// Parameters for Inspector
     /// </summary>
 
-    public partial class Gs2QuestProgressLocalizationVariables
+    public partial class Gs2QuestOwnProgressMetadataEnabler
     {
-        public LocalizeStringEvent target;
+        public enum Expression {
+            In,
+            NotIn,
+            StartsWith,
+            EndsWith,
+        }
+
+        public Expression expression;
+
+        public List<string> enableMetadatas;
+
+        public string enableMetadata;
+
+        public GameObject target;
     }
 
     /// <summary>
     /// Event handlers
     /// </summary>
-    public partial class Gs2QuestProgressLocalizationVariables
+    public partial class Gs2QuestOwnProgressMetadataEnabler
     {
-
+        
     }
 }
-
-#endif
