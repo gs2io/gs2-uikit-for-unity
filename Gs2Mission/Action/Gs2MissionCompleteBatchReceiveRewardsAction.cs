@@ -65,7 +65,8 @@ namespace Gs2.Unity.UiKit.Gs2Mission
                 this._context.Complete.MissionGroupName
             );
             var future = domain.BatchReceiveRewardsFuture(
-                MissionTaskNames.ToArray()
+                MissionTaskNames.ToArray(),
+                Config.ToArray()
             );
             yield return future;
             if (future.Error != null)
@@ -153,10 +154,17 @@ namespace Gs2.Unity.UiKit.Gs2Mission
     {
         public bool WaitAsyncProcessComplete;
         public List<string> MissionTaskNames;
+        public List<Gs2.Unity.Gs2Mission.Model.EzConfig> Config;
 
         public void SetMissionTaskNames(List<string> value) {
             this.MissionTaskNames = value;
             this.onChangeMissionTaskNames.Invoke(this.MissionTaskNames);
+            this.OnChange.Invoke();
+        }
+
+        public void SetConfig(List<Gs2.Unity.Gs2Mission.Model.EzConfig> value) {
+            this.Config = value;
+            this.onChangeConfig.Invoke(this.Config);
             this.OnChange.Invoke();
         }
     }
@@ -179,6 +187,20 @@ namespace Gs2.Unity.UiKit.Gs2Mission
         {
             add => this.onChangeMissionTaskNames.AddListener(value);
             remove => this.onChangeMissionTaskNames.RemoveListener(value);
+        }
+
+        [Serializable]
+        private class ChangeConfigEvent : UnityEvent<List<Gs2.Unity.Gs2Mission.Model.EzConfig>>
+        {
+
+        }
+
+        [SerializeField]
+        private ChangeConfigEvent onChangeConfig = new ChangeConfigEvent();
+        public event UnityAction<List<Gs2.Unity.Gs2Mission.Model.EzConfig>> OnChangeConfig
+        {
+            add => this.onChangeConfig.AddListener(value);
+            remove => this.onChangeConfig.RemoveListener(value);
         }
 
         [Serializable]

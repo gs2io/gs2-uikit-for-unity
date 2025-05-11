@@ -45,6 +45,8 @@ namespace Gs2.Unity.UiKit.Gs2Mission
             this.onUpdate?.Invoke(
                 this.format.Replace(
                     "{missionTaskNames}", $"{this.action?.MissionTaskNames}"
+                ).Replace(
+                    "{config}", $"{this.action?.Config}"
                 )
             );
         }
