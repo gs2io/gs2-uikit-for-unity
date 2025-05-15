@@ -50,6 +50,9 @@ namespace Gs2.Unity.UiKit.Gs2Showcase.Localization
             this.target.StringReference["metadata"] = new StringVariable {
                 Value = _fetcher?.Showcase?.Metadata ?? "",
             };
+            this.target.StringReference["salesPeriodEventId"] = new StringVariable {
+                Value = _fetcher?.Showcase?.SalesPeriodEventId ?? "",
+            };
             this.target.enabled = true;
         }
     }

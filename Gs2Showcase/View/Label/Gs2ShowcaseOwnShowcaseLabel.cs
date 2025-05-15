@@ -49,6 +49,8 @@ namespace Gs2.Unity.UiKit.Gs2Showcase
                     "{metadata}", $"{this._fetcher?.Showcase?.Metadata}"
                 ).Replace(
                     "{displayItems}", $"{this._fetcher?.Showcase?.DisplayItems}"
+                ).Replace(
+                    "{salesPeriodEventId}", $"{this._fetcher?.Showcase?.SalesPeriodEventId}"
                 )
             );
         }

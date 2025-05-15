@@ -81,6 +81,11 @@ namespace Gs2.Unity.UiKit.Gs2Showcase.Editor
                 GUI.FocusControl("");
                 EditorUtility.SetDirty(original);
             }
+            if (GUILayout.Button("SalesPeriodEventId")) {
+                original.format += "{salesPeriodEventId}";
+                GUI.FocusControl("");
+                EditorUtility.SetDirty(original);
+            }
             EditorGUILayout.PropertyField(serializedObject.FindProperty("onUpdate"), true);
             serializedObject.ApplyModifiedProperties();
         }
