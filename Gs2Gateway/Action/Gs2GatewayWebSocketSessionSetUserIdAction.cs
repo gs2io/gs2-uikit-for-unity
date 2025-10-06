@@ -64,7 +64,8 @@ namespace Gs2.Unity.UiKit.Gs2Gateway
             ).WebSocketSession(
             );
             var future = domain.SetUserIdFuture(
-                AllowConcurrentAccess
+                AllowConcurrentAccess,
+                SessionId
             );
             yield return future;
             if (future.Error != null)
@@ -163,10 +164,17 @@ namespace Gs2.Unity.UiKit.Gs2Gateway
     {
         public bool WaitAsyncProcessComplete;
         public bool AllowConcurrentAccess;
+        public string SessionId;
 
         public void SetAllowConcurrentAccess(bool value) {
             this.AllowConcurrentAccess = value;
             this.onChangeAllowConcurrentAccess.Invoke(this.AllowConcurrentAccess);
+            this.OnChange.Invoke();
+        }
+
+        public void SetSessionId(string value) {
+            this.SessionId = value;
+            this.onChangeSessionId.Invoke(this.SessionId);
             this.OnChange.Invoke();
         }
     }
@@ -189,6 +197,20 @@ namespace Gs2.Unity.UiKit.Gs2Gateway
         {
             add => this.onChangeAllowConcurrentAccess.AddListener(value);
             remove => this.onChangeAllowConcurrentAccess.RemoveListener(value);
+        }
+
+        [Serializable]
+        private class ChangeSessionIdEvent : UnityEvent<string>
+        {
+
+        }
+
+        [SerializeField]
+        private ChangeSessionIdEvent onChangeSessionId = new ChangeSessionIdEvent();
+        public event UnityAction<string> OnChangeSessionId
+        {
+            add => this.onChangeSessionId.AddListener(value);
+            remove => this.onChangeSessionId.RemoveListener(value);
         }
 
         [Serializable]

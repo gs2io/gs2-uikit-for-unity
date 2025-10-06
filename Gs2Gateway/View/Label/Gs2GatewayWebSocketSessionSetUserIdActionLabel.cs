@@ -45,6 +45,8 @@ namespace Gs2.Unity.UiKit.Gs2Gateway
             this.onUpdate?.Invoke(
                 this.format.Replace(
                     "{allowConcurrentAccess}", $"{this.action?.AllowConcurrentAccess}"
+                ).Replace(
+                    "{sessionId}", $"{this.action?.SessionId}"
                 )
             );
         }
