@@ -24,51 +24,29 @@
 
 #pragma warning disable CS0472
 
-#if GS2_ENABLE_LOCALIZATION
-
+using System;
+using System.Collections.Generic;
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Limit.Fetcher;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.Localization.Components;
-using UnityEngine.Localization.SmartFormat.PersistentVariables;
 
-namespace Gs2.Unity.UiKit.Gs2Limit.Localization
+namespace Gs2.Unity.UiKit.Gs2Limit
 {
     /// <summary>
     /// Main
     /// </summary>
 
-    [AddComponentMenu("GS2 UIKit/Limit/LimitModel/View/Localization/Gs2LimitLimitModelLocalizationVariables")]
-    public partial class Gs2LimitLimitModelLocalizationVariables : MonoBehaviour
+	[AddComponentMenu("GS2 UIKit/Limit/LimitModel/Fetcher/Properties/AnchorTimestamp/Gs2LimitLimitModelAnchorTimestampFetcher")]
+    public partial class Gs2LimitLimitModelAnchorTimestampFetcher : MonoBehaviour
     {
         private void OnFetched()
         {
-            this.target.StringReference["limitModelId"] = new StringVariable {
-                Value = _fetcher?.LimitModel?.LimitModelId ?? "",
-            };
-            this.target.StringReference["name"] = new StringVariable {
-                Value = _fetcher?.LimitModel?.Name ?? "",
-            };
-            this.target.StringReference["metadata"] = new StringVariable {
-                Value = _fetcher?.LimitModel?.Metadata ?? "",
-            };
-            this.target.StringReference["resetType"] = new StringVariable {
-                Value = _fetcher?.LimitModel?.ResetType ?? "",
-            };
-            this.target.StringReference["resetDayOfMonth"] = new IntVariable {
-                Value = _fetcher?.LimitModel?.ResetDayOfMonth ?? 0,
-            };
-            this.target.StringReference["resetDayOfWeek"] = new StringVariable {
-                Value = _fetcher?.LimitModel?.ResetDayOfWeek ?? "",
-            };
-            this.target.StringReference["resetHour"] = new IntVariable {
-                Value = _fetcher?.LimitModel?.ResetHour ?? 0,
-            };
-            this.target.StringReference["days"] = new IntVariable {
-                Value = _fetcher?.LimitModel?.Days ?? 0,
-            };
-            this.target.enabled = true;
+            if (this._fetcher.LimitModel.AnchorTimestamp != null) {
+                onUpdate?.Invoke(
+                    this._fetcher.LimitModel.AnchorTimestamp
+                );
+            }
         }
     }
 
@@ -76,14 +54,13 @@ namespace Gs2.Unity.UiKit.Gs2Limit.Localization
     /// Dependent components
     /// </summary>
 
-    public partial class Gs2LimitLimitModelLocalizationVariables
+    public partial class Gs2LimitLimitModelAnchorTimestampFetcher
     {
         private Gs2LimitLimitModelFetcher _fetcher;
 
-        public void Awake() {
-            this.target.enabled = false;
+        public void Awake()
+        {
             this._fetcher = GetComponent<Gs2LimitLimitModelFetcher>() ?? GetComponentInParent<Gs2LimitLimitModelFetcher>();
-
             if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2LimitLimitModelFetcher.");
                 enabled = false;
@@ -127,7 +104,7 @@ namespace Gs2.Unity.UiKit.Gs2Limit.Localization
     /// Public properties
     /// </summary>
 
-    public partial class Gs2LimitLimitModelLocalizationVariables
+    public partial class Gs2LimitLimitModelAnchorTimestampFetcher
     {
 
     }
@@ -135,19 +112,30 @@ namespace Gs2.Unity.UiKit.Gs2Limit.Localization
     /// <summary>
     /// Parameters for Inspector
     /// </summary>
-
-    public partial class Gs2LimitLimitModelLocalizationVariables
+    
+    public partial class Gs2LimitLimitModelAnchorTimestampFetcher
     {
-        public LocalizeStringEvent target;
+
     }
 
     /// <summary>
     /// Event handlers
     /// </summary>
-    public partial class Gs2LimitLimitModelLocalizationVariables
+    public partial class Gs2LimitLimitModelAnchorTimestampFetcher
     {
+        [Serializable]
+        private class UpdateEvent : UnityEvent<long>
+        {
 
+        }
+
+        [SerializeField]
+        private UpdateEvent onUpdate = new UpdateEvent();
+
+        public event UnityAction<long> OnUpdate
+        {
+            add => onUpdate.AddListener(value);
+            remove => onUpdate.RemoveListener(value);
+        }
     }
 }
-
-#endif

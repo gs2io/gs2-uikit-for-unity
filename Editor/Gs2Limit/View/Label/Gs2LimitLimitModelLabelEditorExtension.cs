@@ -109,6 +109,61 @@ namespace Gs2.Unity.UiKit.Gs2Limit.Editor
                 GUI.FocusControl("");
                 EditorUtility.SetDirty(original);
             }
+            if (GUILayout.Button("AnchorTimestamp(Year:2020)")) {
+                original.format += "{anchorTimestamp:yyyy}";
+                GUI.FocusControl("");
+                EditorUtility.SetDirty(original);
+            }
+            if (GUILayout.Button("AnchorTimestamp(Year:20)")) {
+                original.format += "{anchorTimestamp:yy}";
+                GUI.FocusControl("");
+                EditorUtility.SetDirty(original);
+            }
+            if (GUILayout.Button("AnchorTimestamp(Month:12)")) {
+                original.format += "{anchorTimestamp:MM}";
+                GUI.FocusControl("");
+                EditorUtility.SetDirty(original);
+            }
+            if (GUILayout.Button("AnchorTimestamp(Month:Dec)")) {
+                original.format += "{anchorTimestamp:MMM}";
+                GUI.FocusControl("");
+                EditorUtility.SetDirty(original);
+            }
+            if (GUILayout.Button("AnchorTimestamp(Day:25)")) {
+                original.format += "{anchorTimestamp:dd}";
+                GUI.FocusControl("");
+                EditorUtility.SetDirty(original);
+            }
+            if (GUILayout.Button("AnchorTimestamp(Hour:6)")) {
+                original.format += "{anchorTimestamp:hh}";
+                GUI.FocusControl("");
+                EditorUtility.SetDirty(original);
+            }
+            if (GUILayout.Button("AnchorTimestamp(Hour:18)")) {
+                original.format += "{anchorTimestamp:HH}";
+                GUI.FocusControl("");
+                EditorUtility.SetDirty(original);
+            }
+            if (GUILayout.Button("AnchorTimestamp(AM/PM)")) {
+                original.format += "{anchorTimestamp:tt}";
+                GUI.FocusControl("");
+                EditorUtility.SetDirty(original);
+            }
+            if (GUILayout.Button("AnchorTimestamp(Min:05)")) {
+                original.format += "{anchorTimestamp:mm}";
+                GUI.FocusControl("");
+                EditorUtility.SetDirty(original);
+            }
+            if (GUILayout.Button("AnchorTimestamp(Sec:09)")) {
+                original.format += "{anchorTimestamp:ss}";
+                GUI.FocusControl("");
+                EditorUtility.SetDirty(original);
+            }
+            if (GUILayout.Button("Days")) {
+                original.format += "{days}";
+                GUI.FocusControl("");
+                EditorUtility.SetDirty(original);
+            }
             EditorGUILayout.PropertyField(serializedObject.FindProperty("onUpdate"), true);
             serializedObject.ApplyModifiedProperties();
         }

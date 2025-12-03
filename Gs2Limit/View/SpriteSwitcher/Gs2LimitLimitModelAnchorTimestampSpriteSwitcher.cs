@@ -25,7 +25,7 @@
 #pragma warning disable CS0472
 
 using System;
-using Gs2.Core.Util;
+using System.Collections.Generic;
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Limit.Fetcher;
 using UnityEngine;
@@ -37,51 +37,46 @@ namespace Gs2.Unity.UiKit.Gs2Limit
     /// Main
     /// </summary>
 
-	[AddComponentMenu("GS2 UIKit/Limit/LimitModel/View/Label/Gs2LimitLimitModelLabel")]
-    public partial class Gs2LimitLimitModelLabel : MonoBehaviour
+	[AddComponentMenu("GS2 UIKit/Limit/LimitModel/View/SpriteSwitcher/Properties/AnchorTimestamp/Gs2LimitLimitModelAnchorTimestampSpriteSwitcher")]
+    public partial class Gs2LimitLimitModelAnchorTimestampSpriteSwitcher : MonoBehaviour
     {
         private void OnFetched()
         {
-            var anchorTimestamp = this._fetcher.LimitModel.AnchorTimestamp == null ? DateTime.Now : _fetcher.LimitModel.AnchorTimestamp.ToLocalTime();
-            this.onUpdate?.Invoke(
-                this.format.Replace(
-                    "{limitModelId}", $"{this._fetcher?.LimitModel?.LimitModelId}"
-                ).Replace(
-                    "{name}", $"{this._fetcher?.LimitModel?.Name}"
-                ).Replace(
-                    "{metadata}", $"{this._fetcher?.LimitModel?.Metadata}"
-                ).Replace(
-                    "{resetType}", $"{this._fetcher?.LimitModel?.ResetType}"
-                ).Replace(
-                    "{resetDayOfMonth}", $"{this._fetcher?.LimitModel?.ResetDayOfMonth}"
-                ).Replace(
-                    "{resetDayOfWeek}", $"{this._fetcher?.LimitModel?.ResetDayOfWeek}"
-                ).Replace(
-                    "{resetHour}", $"{this._fetcher?.LimitModel?.ResetHour}"
-                ).Replace(
-                    "{anchorTimestamp:yyyy}", anchorTimestamp.ToString("yyyy")
-                ).Replace(
-                    "{anchorTimestamp:yy}", anchorTimestamp.ToString("yy")
-                ).Replace(
-                    "{anchorTimestamp:MM}", anchorTimestamp.ToString("MM")
-                ).Replace(
-                    "{anchorTimestamp:MMM}", anchorTimestamp.ToString("MMM")
-                ).Replace(
-                    "{anchorTimestamp:dd}", anchorTimestamp.ToString("dd")
-                ).Replace(
-                    "{anchorTimestamp:hh}", anchorTimestamp.ToString("hh")
-                ).Replace(
-                    "{anchorTimestamp:HH}", anchorTimestamp.ToString("HH")
-                ).Replace(
-                    "{anchorTimestamp:tt}", anchorTimestamp.ToString("tt")
-                ).Replace(
-                    "{anchorTimestamp:mm}", anchorTimestamp.ToString("mm")
-                ).Replace(
-                    "{anchorTimestamp:ss}", anchorTimestamp.ToString("ss")
-                ).Replace(
-                    "{days}", $"{this._fetcher?.LimitModel?.Days}"
-                )
-            );
+            switch(this.expression)
+            {
+                case Expression.In:
+                    if (this.applyAnchorTimestamps.Contains(this._fetcher.LimitModel.AnchorTimestamp)) {
+                        this.onUpdate.Invoke(this.sprite);
+                    }
+                    break;
+                case Expression.NotIn:
+                    if (!this.applyAnchorTimestamps.Contains(this._fetcher.LimitModel.AnchorTimestamp)) {
+                        this.onUpdate.Invoke(this.sprite);
+                    }
+                    break;
+                case Expression.Less:
+                    if (this.applyAnchorTimestamp > this._fetcher.LimitModel.AnchorTimestamp) {
+                        this.onUpdate.Invoke(this.sprite);
+                    }
+                    break;
+                case Expression.LessEqual:
+                    if (this.applyAnchorTimestamp >= this._fetcher.LimitModel.AnchorTimestamp) {
+                        this.onUpdate.Invoke(this.sprite);
+                    }
+                    break;
+                case Expression.Greater:
+                    if (this.applyAnchorTimestamp < this._fetcher.LimitModel.AnchorTimestamp) {
+                        this.onUpdate.Invoke(this.sprite);
+                    }
+                    break;
+                case Expression.GreaterEqual:
+                    if (this.applyAnchorTimestamp <= this._fetcher.LimitModel.AnchorTimestamp) {
+                        this.onUpdate.Invoke(this.sprite);
+                    }
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
         }
     }
 
@@ -89,7 +84,7 @@ namespace Gs2.Unity.UiKit.Gs2Limit
     /// Dependent components
     /// </summary>
 
-    public partial class Gs2LimitLimitModelLabel
+    public partial class Gs2LimitLimitModelAnchorTimestampSpriteSwitcher
     {
         private Gs2LimitLimitModelFetcher _fetcher;
 
@@ -100,12 +95,19 @@ namespace Gs2.Unity.UiKit.Gs2Limit
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2LimitLimitModelFetcher.");
                 enabled = false;
             }
+            if (this.sprite == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: sprite is not set.");
+                enabled = false;
+            }
         }
 
         public virtual bool HasError()
         {
             this._fetcher = GetComponent<Gs2LimitLimitModelFetcher>() ?? GetComponentInParent<Gs2LimitLimitModelFetcher>(true);
             if (this._fetcher == null) {
+                return true;
+            }
+            if (this.sprite == null) {
                 return true;
             }
             return false;
@@ -139,7 +141,7 @@ namespace Gs2.Unity.UiKit.Gs2Limit
     /// Public properties
     /// </summary>
 
-    public partial class Gs2LimitLimitModelLabel
+    public partial class Gs2LimitLimitModelAnchorTimestampSpriteSwitcher
     {
 
     }
@@ -148,18 +150,33 @@ namespace Gs2.Unity.UiKit.Gs2Limit
     /// Parameters for Inspector
     /// </summary>
 
-    public partial class Gs2LimitLimitModelLabel
+    public partial class Gs2LimitLimitModelAnchorTimestampSpriteSwitcher
     {
-        public string format;
+        public enum Expression {
+            In,
+            NotIn,
+            Less,
+            LessEqual,
+            Greater,
+            GreaterEqual,
+        }
+
+        public Expression expression;
+
+        public List<long> applyAnchorTimestamps;
+
+        public long applyAnchorTimestamp;
+
+        public Sprite sprite;
     }
 
     /// <summary>
     /// Event handlers
     /// </summary>
-    public partial class Gs2LimitLimitModelLabel
+    public partial class Gs2LimitLimitModelAnchorTimestampSpriteSwitcher
     {
         [Serializable]
-        private class UpdateEvent : UnityEvent<string>
+        private class UpdateEvent : UnityEvent<Sprite>
         {
 
         }
@@ -167,10 +184,10 @@ namespace Gs2.Unity.UiKit.Gs2Limit
         [SerializeField]
         private UpdateEvent onUpdate = new UpdateEvent();
 
-        public event UnityAction<string> OnUpdate
+        public event UnityAction<Sprite> OnUpdate
         {
-            add => this.onUpdate.AddListener(value);
-            remove => this.onUpdate.RemoveListener(value);
+            add => onUpdate.AddListener(value);
+            remove => onUpdate.RemoveListener(value);
         }
     }
 }

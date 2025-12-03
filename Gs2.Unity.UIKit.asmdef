@@ -9,7 +9,8 @@
         "UnityEngine.Purchasing",
         "UnityEngine.Purchasing.Stores",
         "Unity.Localization",
-        "AppleAuth"
+        "AppleAuth",
+        "Unity.Purchasing"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

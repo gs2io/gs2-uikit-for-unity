@@ -24,51 +24,47 @@
 
 #pragma warning disable CS0472
 
-#if GS2_ENABLE_LOCALIZATION
-
+using System;
+using System.Collections.Generic;
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Limit.Fetcher;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.Localization.Components;
-using UnityEngine.Localization.SmartFormat.PersistentVariables;
 
-namespace Gs2.Unity.UiKit.Gs2Limit.Localization
+namespace Gs2.Unity.UiKit.Gs2Limit
 {
     /// <summary>
     /// Main
     /// </summary>
 
-    [AddComponentMenu("GS2 UIKit/Limit/LimitModel/View/Localization/Gs2LimitLimitModelLocalizationVariables")]
-    public partial class Gs2LimitLimitModelLocalizationVariables : MonoBehaviour
+	[AddComponentMenu("GS2 UIKit/Limit/LimitModel/View/Enabler/Properties/Days/Gs2LimitLimitModelDaysEnabler")]
+    public partial class Gs2LimitLimitModelDaysEnabler : MonoBehaviour
     {
         private void OnFetched()
         {
-            this.target.StringReference["limitModelId"] = new StringVariable {
-                Value = _fetcher?.LimitModel?.LimitModelId ?? "",
-            };
-            this.target.StringReference["name"] = new StringVariable {
-                Value = _fetcher?.LimitModel?.Name ?? "",
-            };
-            this.target.StringReference["metadata"] = new StringVariable {
-                Value = _fetcher?.LimitModel?.Metadata ?? "",
-            };
-            this.target.StringReference["resetType"] = new StringVariable {
-                Value = _fetcher?.LimitModel?.ResetType ?? "",
-            };
-            this.target.StringReference["resetDayOfMonth"] = new IntVariable {
-                Value = _fetcher?.LimitModel?.ResetDayOfMonth ?? 0,
-            };
-            this.target.StringReference["resetDayOfWeek"] = new StringVariable {
-                Value = _fetcher?.LimitModel?.ResetDayOfWeek ?? "",
-            };
-            this.target.StringReference["resetHour"] = new IntVariable {
-                Value = _fetcher?.LimitModel?.ResetHour ?? 0,
-            };
-            this.target.StringReference["days"] = new IntVariable {
-                Value = _fetcher?.LimitModel?.Days ?? 0,
-            };
-            this.target.enabled = true;
+            switch(this.expression)
+            {
+                case Expression.In:
+                    this.target.SetActive(this.enableDayses.Contains(this._fetcher.LimitModel.Days));
+                    break;
+                case Expression.NotIn:
+                    this.target.SetActive(!this.enableDayses.Contains(this._fetcher.LimitModel.Days));
+                    break;
+                case Expression.Less:
+                    this.target.SetActive(this.enableDays > this._fetcher.LimitModel.Days);
+                    break;
+                case Expression.LessEqual:
+                    this.target.SetActive(this.enableDays >= this._fetcher.LimitModel.Days);
+                    break;
+                case Expression.Greater:
+                    this.target.SetActive(this.enableDays < this._fetcher.LimitModel.Days);
+                    break;
+                case Expression.GreaterEqual:
+                    this.target.SetActive(this.enableDays <= this._fetcher.LimitModel.Days);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
         }
     }
 
@@ -76,16 +72,19 @@ namespace Gs2.Unity.UiKit.Gs2Limit.Localization
     /// Dependent components
     /// </summary>
 
-    public partial class Gs2LimitLimitModelLocalizationVariables
+    public partial class Gs2LimitLimitModelDaysEnabler
     {
         private Gs2LimitLimitModelFetcher _fetcher;
 
-        public void Awake() {
-            this.target.enabled = false;
+        public void Awake()
+        {
             this._fetcher = GetComponent<Gs2LimitLimitModelFetcher>() ?? GetComponentInParent<Gs2LimitLimitModelFetcher>();
-
             if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2LimitLimitModelFetcher.");
+                enabled = false;
+            }
+            if (this.target == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: target is not set.");
                 enabled = false;
             }
         }
@@ -94,6 +93,9 @@ namespace Gs2.Unity.UiKit.Gs2Limit.Localization
         {
             this._fetcher = GetComponent<Gs2LimitLimitModelFetcher>() ?? GetComponentInParent<Gs2LimitLimitModelFetcher>(true);
             if (this._fetcher == null) {
+                return true;
+            }
+            if (this.target == null) {
                 return true;
             }
             return false;
@@ -127,7 +129,7 @@ namespace Gs2.Unity.UiKit.Gs2Limit.Localization
     /// Public properties
     /// </summary>
 
-    public partial class Gs2LimitLimitModelLocalizationVariables
+    public partial class Gs2LimitLimitModelDaysEnabler
     {
 
     }
@@ -136,18 +138,31 @@ namespace Gs2.Unity.UiKit.Gs2Limit.Localization
     /// Parameters for Inspector
     /// </summary>
 
-    public partial class Gs2LimitLimitModelLocalizationVariables
+    public partial class Gs2LimitLimitModelDaysEnabler
     {
-        public LocalizeStringEvent target;
+        public enum Expression {
+            In,
+            NotIn,
+            Less,
+            LessEqual,
+            Greater,
+            GreaterEqual,
+        }
+
+        public Expression expression;
+
+        public List<int> enableDayses;
+
+        public int enableDays;
+
+        public GameObject target;
     }
 
     /// <summary>
     /// Event handlers
     /// </summary>
-    public partial class Gs2LimitLimitModelLocalizationVariables
+    public partial class Gs2LimitLimitModelDaysEnabler
     {
-
+        
     }
 }
-
-#endif
