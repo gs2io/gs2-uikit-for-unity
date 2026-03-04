@@ -46,6 +46,9 @@ namespace Gs2.Unity.UiKit.Gs2Enhance.Context
 
         public virtual bool HasError() {
             if (UnleashRateModel == null) {
+                if (GetComponentInParent<Gs2EnhanceUnleashRateModelList>(true) != null) {
+                    return false;
+                }
                 return true;
             }
             return false;

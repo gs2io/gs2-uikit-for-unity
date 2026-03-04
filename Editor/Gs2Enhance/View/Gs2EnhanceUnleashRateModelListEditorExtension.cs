@@ -25,48 +25,43 @@
 #pragma warning disable CS0472
 
 using Gs2.Unity.Gs2Enhance.ScriptableObject;
-using Gs2.Unity.UiKit.Gs2Enhance.Context;
 using Gs2.Unity.UiKit.Gs2Enhance.Fetcher;
 using UnityEditor;
 using UnityEngine;
 
 namespace Gs2.Unity.UiKit.Gs2Enhance.Editor
 {
-    [CustomEditor(typeof(Gs2EnhanceUnleashRateModelContext))]
-    public class Gs2EnhanceUnleashRateModelContextEditorExtension : UnityEditor.Editor
+    [CustomEditor(typeof(Gs2EnhanceUnleashRateModelList))]
+    public class Gs2EnhanceUnleashRateModelListEditorExtension : UnityEditor.Editor
     {
         public override void OnInspectorGUI() {
-            var original = target as Gs2EnhanceUnleashRateModelContext;
+            var original = target as Gs2EnhanceUnleashRateModelList;
 
             if (original == null) return;
 
-            serializedObject.Update();
-
-            if (original.UnleashRateModel == null) {
-                var list = original.GetComponentInParent<Gs2EnhanceUnleashRateModelList>(true);
-                if (list != null) {
-                    EditorGUILayout.HelpBox("UnleashRateModel is auto assign from Gs2EnhanceUnleashRateModelList.", MessageType.Info);
-                    EditorGUI.BeginDisabledGroup(true);
-                    EditorGUILayout.ObjectField("List", list, typeof(Gs2EnhanceUnleashRateModelList), false);
-                    EditorGUI.EndDisabledGroup();
-                }
-                else {
-                    EditorGUILayout.HelpBox("UnleashRateModel not assigned.", MessageType.Error);
-                    EditorGUILayout.PropertyField(serializedObject.FindProperty("_unleashRateModel"), true);
+            var fetcher = original.GetComponent<Gs2EnhanceUnleashRateModelListFetcher>() ?? original.GetComponentInParent<Gs2EnhanceUnleashRateModelListFetcher>(true);
+            if (fetcher == null) {
+                EditorGUILayout.HelpBox("Gs2EnhanceUnleashRateModelListFetcher not found.", MessageType.Error);
+                if (GUILayout.Button("Add ListFetcher")) {
+                    original.gameObject.AddComponent<Gs2EnhanceUnleashRateModelListFetcher>();
                 }
             }
             else {
-                original.UnleashRateModel = EditorGUILayout.ObjectField("UnleashRateModel", original.UnleashRateModel, typeof(UnleashRateModel), false) as UnleashRateModel;
                 EditorGUI.BeginDisabledGroup(true);
-                if (original.UnleashRateModel != null) {
+                EditorGUILayout.ObjectField("Fetcher", fetcher.gameObject, typeof(Gs2EnhanceUnleashRateModelListFetcher), false);
+                EditorGUI.indentLevel++;
+                if (fetcher.Context != null) {
+                    EditorGUILayout.ObjectField("Namespace", fetcher.Context.Namespace, typeof(Namespace), false);
                     EditorGUI.indentLevel++;
-                    EditorGUILayout.TextField("NamespaceName", original.UnleashRateModel?.NamespaceName?.ToString());
-                    EditorGUILayout.TextField("RateName", original.UnleashRateModel?.RateName?.ToString());
                     EditorGUI.indentLevel--;
                 }
+                EditorGUI.indentLevel--;
                 EditorGUI.EndDisabledGroup();
             }
 
+            serializedObject.Update();
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("prefab"), true);
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("maximumItems"), true);
             serializedObject.ApplyModifiedProperties();
         }
     }
