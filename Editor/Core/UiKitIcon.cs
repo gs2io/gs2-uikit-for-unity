@@ -14,12 +14,22 @@ namespace Gs2.Unity.UiKit.Editor.Core
         private static void OnLoad() {
             texture = Resources.Load("gs2-logo") as Texture;
             errorTexture = Resources.Load("gs2-logo-error") as Texture;
+#if UNITY_6000_4_OR_NEWER
+            EditorApplication.hierarchyWindowItemByEntityIdOnGUI += OnGUI;
+#else
             EditorApplication.hierarchyWindowItemOnGUI += OnGUI;
+#endif
         }
     
+#if UNITY_6000_4_OR_NEWER
+        private static void OnGUI( EntityId entityId, Rect selectionRect )
+        {
+            var gameObject = EditorUtility.EntityIdToObject( entityId ) as GameObject;
+#else
         private static void OnGUI( int instanceID, Rect selectionRect )
         {
             var gameObject = EditorUtility.InstanceIDToObject( instanceID ) as GameObject;
+#endif
             if ( gameObject == null )
             {
                 return;
