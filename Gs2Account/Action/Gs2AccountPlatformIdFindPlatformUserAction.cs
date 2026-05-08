@@ -67,6 +67,7 @@ namespace Gs2.Unity.UiKit.Gs2Account
                 this._context.PlatformId.Type
             );
             var future = domain.FindPlatformUserFuture(
+                this.UserIdentifier
             );
             yield return future;
             if (future.Error != null)
@@ -150,6 +151,12 @@ namespace Gs2.Unity.UiKit.Gs2Account
     public partial class Gs2AccountPlatformIdFindPlatformUserAction
     {
         public bool WaitAsyncProcessComplete;
+        public string UserIdentifier;
+
+        public void SetUserIdentifier(string value) {
+            this.UserIdentifier = value;
+            this.OnChange.Invoke();
+        }
     }
 
     /// <summary>

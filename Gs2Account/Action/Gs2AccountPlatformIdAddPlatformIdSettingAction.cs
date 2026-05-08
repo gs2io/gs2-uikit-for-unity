@@ -67,6 +67,7 @@ namespace Gs2.Unity.UiKit.Gs2Account
                 this.Type
             );
             var future = domain.AddPlatformIdSettingFuture(
+                this.UserIdentifier
             );
             yield return future;
             if (future.Error != null)
@@ -165,6 +166,7 @@ namespace Gs2.Unity.UiKit.Gs2Account
     {
         public bool WaitAsyncProcessComplete;
         public int Type;
+        public string UserIdentifier;
 
         public void SetType(int value) {
             this.Type = value;
@@ -181,6 +183,12 @@ namespace Gs2.Unity.UiKit.Gs2Account
         public void IncreaseType() {
             this.Type += 1;
             this.onChangeType.Invoke(this.Type);
+            this.OnChange.Invoke();
+        }
+
+        public void SetUserIdentifier(string value) {
+            this.UserIdentifier = value;
+            this.onChangeUserIdentifier.Invoke(this.UserIdentifier);
             this.OnChange.Invoke();
         }
     }
