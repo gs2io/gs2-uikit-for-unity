@@ -25,7 +25,7 @@
 #pragma warning disable CS0472
 
 using System;
-using Gs2.Core.Util;
+using System.Collections.Generic;
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Schedule.Fetcher;
 using UnityEngine;
@@ -37,59 +37,13 @@ namespace Gs2.Unity.UiKit.Gs2Schedule
     /// Main
     /// </summary>
 
-	[AddComponentMenu("GS2 UIKit/Schedule/Trigger/View/Label/Gs2ScheduleOwnTriggerLabel")]
-    public partial class Gs2ScheduleOwnTriggerLabel : MonoBehaviour
+	[AddComponentMenu("GS2 UIKit/Schedule/Trigger/Fetcher/Properties/TriggeredAt/Gs2ScheduleOwnTriggerTriggeredAtFetcher")]
+    public partial class Gs2ScheduleOwnTriggerTriggeredAtFetcher : MonoBehaviour
     {
         private void OnFetched()
         {
-            var triggeredAt = this._fetcher.Trigger.TriggeredAt == null ? DateTime.Now : _fetcher.Trigger.TriggeredAt.ToLocalTime();
-            var expiresAt = this._fetcher.Trigger.ExpiresAt == null ? DateTime.Now : _fetcher.Trigger.ExpiresAt.ToLocalTime();
-            this.onUpdate?.Invoke(
-                this.format.Replace(
-                    "{triggerId}", $"{this._fetcher?.Trigger?.TriggerId}"
-                ).Replace(
-                    "{name}", $"{this._fetcher?.Trigger?.Name}"
-                ).Replace(
-                    "{triggeredAt:yyyy}", triggeredAt.ToString("yyyy")
-                ).Replace(
-                    "{triggeredAt:yy}", triggeredAt.ToString("yy")
-                ).Replace(
-                    "{triggeredAt:MM}", triggeredAt.ToString("MM")
-                ).Replace(
-                    "{triggeredAt:MMM}", triggeredAt.ToString("MMM")
-                ).Replace(
-                    "{triggeredAt:dd}", triggeredAt.ToString("dd")
-                ).Replace(
-                    "{triggeredAt:hh}", triggeredAt.ToString("hh")
-                ).Replace(
-                    "{triggeredAt:HH}", triggeredAt.ToString("HH")
-                ).Replace(
-                    "{triggeredAt:tt}", triggeredAt.ToString("tt")
-                ).Replace(
-                    "{triggeredAt:mm}", triggeredAt.ToString("mm")
-                ).Replace(
-                    "{triggeredAt:ss}", triggeredAt.ToString("ss")
-                ).Replace(
-                    "{expiresAt:yyyy}", expiresAt.ToString("yyyy")
-                ).Replace(
-                    "{expiresAt:yy}", expiresAt.ToString("yy")
-                ).Replace(
-                    "{expiresAt:MM}", expiresAt.ToString("MM")
-                ).Replace(
-                    "{expiresAt:MMM}", expiresAt.ToString("MMM")
-                ).Replace(
-                    "{expiresAt:dd}", expiresAt.ToString("dd")
-                ).Replace(
-                    "{expiresAt:hh}", expiresAt.ToString("hh")
-                ).Replace(
-                    "{expiresAt:HH}", expiresAt.ToString("HH")
-                ).Replace(
-                    "{expiresAt:tt}", expiresAt.ToString("tt")
-                ).Replace(
-                    "{expiresAt:mm}", expiresAt.ToString("mm")
-                ).Replace(
-                    "{expiresAt:ss}", expiresAt.ToString("ss")
-                )
+            onUpdate?.Invoke(
+                _fetcher.Trigger.TriggeredAt
             );
         }
     }
@@ -98,13 +52,14 @@ namespace Gs2.Unity.UiKit.Gs2Schedule
     /// Dependent components
     /// </summary>
 
-    public partial class Gs2ScheduleOwnTriggerLabel
+    public partial class Gs2ScheduleOwnTriggerTriggeredAtFetcher
     {
         private Gs2ScheduleOwnTriggerFetcher _fetcher;
 
         public void Awake()
         {
             this._fetcher = GetComponent<Gs2ScheduleOwnTriggerFetcher>() ?? GetComponentInParent<Gs2ScheduleOwnTriggerFetcher>();
+
             if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ScheduleOwnTriggerFetcher.");
                 enabled = false;
@@ -148,7 +103,7 @@ namespace Gs2.Unity.UiKit.Gs2Schedule
     /// Public properties
     /// </summary>
 
-    public partial class Gs2ScheduleOwnTriggerLabel
+    public partial class Gs2ScheduleOwnTriggerTriggeredAtFetcher
     {
 
     }
@@ -156,19 +111,19 @@ namespace Gs2.Unity.UiKit.Gs2Schedule
     /// <summary>
     /// Parameters for Inspector
     /// </summary>
-
-    public partial class Gs2ScheduleOwnTriggerLabel
+    
+    public partial class Gs2ScheduleOwnTriggerTriggeredAtFetcher
     {
-        public string format;
+
     }
 
     /// <summary>
     /// Event handlers
     /// </summary>
-    public partial class Gs2ScheduleOwnTriggerLabel
+    public partial class Gs2ScheduleOwnTriggerTriggeredAtFetcher
     {
         [Serializable]
-        private class UpdateEvent : UnityEvent<string>
+        private class UpdateEvent : UnityEvent<long>
         {
 
         }
@@ -176,10 +131,10 @@ namespace Gs2.Unity.UiKit.Gs2Schedule
         [SerializeField]
         private UpdateEvent onUpdate = new UpdateEvent();
 
-        public event UnityAction<string> OnUpdate
+        public event UnityAction<long> OnUpdate
         {
-            add => this.onUpdate.AddListener(value);
-            remove => this.onUpdate.RemoveListener(value);
+            add => onUpdate.AddListener(value);
+            remove => onUpdate.RemoveListener(value);
         }
     }
 }

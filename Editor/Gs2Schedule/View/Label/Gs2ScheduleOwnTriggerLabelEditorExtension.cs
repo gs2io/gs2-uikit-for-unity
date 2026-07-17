@@ -85,53 +85,53 @@ namespace Gs2.Unity.UiKit.Gs2Schedule.Editor
                 GUI.FocusControl("");
                 EditorUtility.SetDirty(original);
             }
-            if (GUILayout.Button("CreatedAt(Year:2020)")) {
-                original.format += "{createdAt:yyyy}";
+            if (GUILayout.Button("TriggeredAt(Year:2020)")) {
+                original.format += "{triggeredAt:yyyy}";
                 GUI.FocusControl("");
                 EditorUtility.SetDirty(original);
             }
-            if (GUILayout.Button("CreatedAt(Year:20)")) {
-                original.format += "{createdAt:yy}";
+            if (GUILayout.Button("TriggeredAt(Year:20)")) {
+                original.format += "{triggeredAt:yy}";
                 GUI.FocusControl("");
                 EditorUtility.SetDirty(original);
             }
-            if (GUILayout.Button("CreatedAt(Month:12)")) {
-                original.format += "{createdAt:MM}";
+            if (GUILayout.Button("TriggeredAt(Month:12)")) {
+                original.format += "{triggeredAt:MM}";
                 GUI.FocusControl("");
                 EditorUtility.SetDirty(original);
             }
-            if (GUILayout.Button("CreatedAt(Month:Dec)")) {
-                original.format += "{createdAt:MMM}";
+            if (GUILayout.Button("TriggeredAt(Month:Dec)")) {
+                original.format += "{triggeredAt:MMM}";
                 GUI.FocusControl("");
                 EditorUtility.SetDirty(original);
             }
-            if (GUILayout.Button("CreatedAt(Day:25)")) {
-                original.format += "{createdAt:dd}";
+            if (GUILayout.Button("TriggeredAt(Day:25)")) {
+                original.format += "{triggeredAt:dd}";
                 GUI.FocusControl("");
                 EditorUtility.SetDirty(original);
             }
-            if (GUILayout.Button("CreatedAt(Hour:6)")) {
-                original.format += "{createdAt:hh}";
+            if (GUILayout.Button("TriggeredAt(Hour:6)")) {
+                original.format += "{triggeredAt:hh}";
                 GUI.FocusControl("");
                 EditorUtility.SetDirty(original);
             }
-            if (GUILayout.Button("CreatedAt(Hour:18)")) {
-                original.format += "{createdAt:HH}";
+            if (GUILayout.Button("TriggeredAt(Hour:18)")) {
+                original.format += "{triggeredAt:HH}";
                 GUI.FocusControl("");
                 EditorUtility.SetDirty(original);
             }
-            if (GUILayout.Button("CreatedAt(AM/PM)")) {
-                original.format += "{createdAt:tt}";
+            if (GUILayout.Button("TriggeredAt(AM/PM)")) {
+                original.format += "{triggeredAt:tt}";
                 GUI.FocusControl("");
                 EditorUtility.SetDirty(original);
             }
-            if (GUILayout.Button("CreatedAt(Min:05)")) {
-                original.format += "{createdAt:mm}";
+            if (GUILayout.Button("TriggeredAt(Min:05)")) {
+                original.format += "{triggeredAt:mm}";
                 GUI.FocusControl("");
                 EditorUtility.SetDirty(original);
             }
-            if (GUILayout.Button("CreatedAt(Sec:09)")) {
-                original.format += "{createdAt:ss}";
+            if (GUILayout.Button("TriggeredAt(Sec:09)")) {
+                original.format += "{triggeredAt:ss}";
                 GUI.FocusControl("");
                 EditorUtility.SetDirty(original);
             }

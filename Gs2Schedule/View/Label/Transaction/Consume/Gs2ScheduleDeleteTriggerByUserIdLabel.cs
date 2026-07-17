@@ -85,8 +85,8 @@ namespace Gs2.Unity.UiKit.Gs2Schedule.Label
                     "{userData:name}",
                     $"{this._userDataFetcher.Trigger.Name}"
                 ).Replace(
-                    "{userData:createdAt}",
-                    $"{this._userDataFetcher.Trigger.CreatedAt}"
+                    "{userData:triggeredAt}",
+                    $"{this._userDataFetcher.Trigger.TriggeredAt}"
                 ).Replace(
                     "{userData:expiresAt}",
                     $"{this._userDataFetcher.Trigger.ExpiresAt}"

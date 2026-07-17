@@ -37,14 +37,46 @@ namespace Gs2.Unity.UiKit.Gs2Schedule
     /// Main
     /// </summary>
 
-	[AddComponentMenu("GS2 UIKit/Schedule/Trigger/Fetcher/Properties/CreatedAt/Gs2ScheduleOwnTriggerCreatedAtFetcher")]
-    public partial class Gs2ScheduleOwnTriggerCreatedAtFetcher : MonoBehaviour
+	[AddComponentMenu("GS2 UIKit/Schedule/Trigger/View/SpriteSwitcher/Properties/TriggeredAt/Gs2ScheduleOwnTriggerTriggeredAtSpriteSwitcher")]
+    public partial class Gs2ScheduleOwnTriggerTriggeredAtSpriteSwitcher : MonoBehaviour
     {
         private void OnFetched()
         {
-            onUpdate?.Invoke(
-                _fetcher.Trigger.CreatedAt
-            );
+            switch(this.expression)
+            {
+                case Expression.In:
+                    if (this.applyTriggeredAts.Contains(this._fetcher.Trigger.TriggeredAt)) {
+                        this.onUpdate.Invoke(this.sprite);
+                    }
+                    break;
+                case Expression.NotIn:
+                    if (!this.applyTriggeredAts.Contains(this._fetcher.Trigger.TriggeredAt)) {
+                        this.onUpdate.Invoke(this.sprite);
+                    }
+                    break;
+                case Expression.Less:
+                    if (this.applyTriggeredAt > this._fetcher.Trigger.TriggeredAt) {
+                        this.onUpdate.Invoke(this.sprite);
+                    }
+                    break;
+                case Expression.LessEqual:
+                    if (this.applyTriggeredAt >= this._fetcher.Trigger.TriggeredAt) {
+                        this.onUpdate.Invoke(this.sprite);
+                    }
+                    break;
+                case Expression.Greater:
+                    if (this.applyTriggeredAt < this._fetcher.Trigger.TriggeredAt) {
+                        this.onUpdate.Invoke(this.sprite);
+                    }
+                    break;
+                case Expression.GreaterEqual:
+                    if (this.applyTriggeredAt <= this._fetcher.Trigger.TriggeredAt) {
+                        this.onUpdate.Invoke(this.sprite);
+                    }
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
         }
     }
 
@@ -52,16 +84,19 @@ namespace Gs2.Unity.UiKit.Gs2Schedule
     /// Dependent components
     /// </summary>
 
-    public partial class Gs2ScheduleOwnTriggerCreatedAtFetcher
+    public partial class Gs2ScheduleOwnTriggerTriggeredAtSpriteSwitcher
     {
         private Gs2ScheduleOwnTriggerFetcher _fetcher;
 
         public void Awake()
         {
             this._fetcher = GetComponent<Gs2ScheduleOwnTriggerFetcher>() ?? GetComponentInParent<Gs2ScheduleOwnTriggerFetcher>();
-
             if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2ScheduleOwnTriggerFetcher.");
+                enabled = false;
+            }
+            if (this.sprite == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: sprite is not set.");
                 enabled = false;
             }
         }
@@ -70,6 +105,9 @@ namespace Gs2.Unity.UiKit.Gs2Schedule
         {
             this._fetcher = GetComponent<Gs2ScheduleOwnTriggerFetcher>() ?? GetComponentInParent<Gs2ScheduleOwnTriggerFetcher>(true);
             if (this._fetcher == null) {
+                return true;
+            }
+            if (this.sprite == null) {
                 return true;
             }
             return false;
@@ -103,7 +141,7 @@ namespace Gs2.Unity.UiKit.Gs2Schedule
     /// Public properties
     /// </summary>
 
-    public partial class Gs2ScheduleOwnTriggerCreatedAtFetcher
+    public partial class Gs2ScheduleOwnTriggerTriggeredAtSpriteSwitcher
     {
 
     }
@@ -111,19 +149,34 @@ namespace Gs2.Unity.UiKit.Gs2Schedule
     /// <summary>
     /// Parameters for Inspector
     /// </summary>
-    
-    public partial class Gs2ScheduleOwnTriggerCreatedAtFetcher
-    {
 
+    public partial class Gs2ScheduleOwnTriggerTriggeredAtSpriteSwitcher
+    {
+        public enum Expression {
+            In,
+            NotIn,
+            Less,
+            LessEqual,
+            Greater,
+            GreaterEqual,
+        }
+
+        public Expression expression;
+
+        public List<long> applyTriggeredAts;
+
+        public long applyTriggeredAt;
+
+        public Sprite sprite;
     }
 
     /// <summary>
     /// Event handlers
     /// </summary>
-    public partial class Gs2ScheduleOwnTriggerCreatedAtFetcher
+    public partial class Gs2ScheduleOwnTriggerTriggeredAtSpriteSwitcher
     {
         [Serializable]
-        private class UpdateEvent : UnityEvent<long>
+        private class UpdateEvent : UnityEvent<Sprite>
         {
 
         }
@@ -131,7 +184,7 @@ namespace Gs2.Unity.UiKit.Gs2Schedule
         [SerializeField]
         private UpdateEvent onUpdate = new UpdateEvent();
 
-        public event UnityAction<long> OnUpdate
+        public event UnityAction<Sprite> OnUpdate
         {
             add => onUpdate.AddListener(value);
             remove => onUpdate.RemoveListener(value);

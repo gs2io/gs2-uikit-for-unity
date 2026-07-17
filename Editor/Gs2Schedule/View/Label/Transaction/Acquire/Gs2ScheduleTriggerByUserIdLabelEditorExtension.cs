@@ -103,8 +103,8 @@ namespace Gs2.Unity.UiKit.Gs2Schedule.Label.Editor
                     GUI.FocusControl("");
                     EditorUtility.SetDirty(original);
                 }
-                if (GUILayout.Button("UserData:CreatedAt")) {
-                    original.format += "{userData:createdAt}";
+                if (GUILayout.Button("UserData:TriggeredAt")) {
+                    original.format += "{userData:triggeredAt}";
                     GUI.FocusControl("");
                     EditorUtility.SetDirty(original);
                 }
