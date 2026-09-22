@@ -104,6 +104,11 @@ namespace Gs2.Unity.UiKit.Gs2SkillTree.Editor
                 GUI.FocusControl("");
                 EditorUtility.SetDirty(original);
             }
+            if (GUILayout.Button("PremiseNodeNames")) {
+                original.format += "{premiseNodeNames}";
+                GUI.FocusControl("");
+                EditorUtility.SetDirty(original);
+            }
             EditorGUILayout.PropertyField(serializedObject.FindProperty("onUpdate"), true);
             serializedObject.ApplyModifiedProperties();
         }

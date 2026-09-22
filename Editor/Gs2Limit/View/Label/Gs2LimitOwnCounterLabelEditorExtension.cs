@@ -95,6 +95,56 @@ namespace Gs2.Unity.UiKit.Gs2Limit.Editor
                 GUI.FocusControl("");
                 EditorUtility.SetDirty(original);
             }
+            if (GUILayout.Button("NextResetAt(Year:2020)")) {
+                original.format += "{nextResetAt:yyyy}";
+                GUI.FocusControl("");
+                EditorUtility.SetDirty(original);
+            }
+            if (GUILayout.Button("NextResetAt(Year:20)")) {
+                original.format += "{nextResetAt:yy}";
+                GUI.FocusControl("");
+                EditorUtility.SetDirty(original);
+            }
+            if (GUILayout.Button("NextResetAt(Month:12)")) {
+                original.format += "{nextResetAt:MM}";
+                GUI.FocusControl("");
+                EditorUtility.SetDirty(original);
+            }
+            if (GUILayout.Button("NextResetAt(Month:Dec)")) {
+                original.format += "{nextResetAt:MMM}";
+                GUI.FocusControl("");
+                EditorUtility.SetDirty(original);
+            }
+            if (GUILayout.Button("NextResetAt(Day:25)")) {
+                original.format += "{nextResetAt:dd}";
+                GUI.FocusControl("");
+                EditorUtility.SetDirty(original);
+            }
+            if (GUILayout.Button("NextResetAt(Hour:6)")) {
+                original.format += "{nextResetAt:hh}";
+                GUI.FocusControl("");
+                EditorUtility.SetDirty(original);
+            }
+            if (GUILayout.Button("NextResetAt(Hour:18)")) {
+                original.format += "{nextResetAt:HH}";
+                GUI.FocusControl("");
+                EditorUtility.SetDirty(original);
+            }
+            if (GUILayout.Button("NextResetAt(AM/PM)")) {
+                original.format += "{nextResetAt:tt}";
+                GUI.FocusControl("");
+                EditorUtility.SetDirty(original);
+            }
+            if (GUILayout.Button("NextResetAt(Min:05)")) {
+                original.format += "{nextResetAt:mm}";
+                GUI.FocusControl("");
+                EditorUtility.SetDirty(original);
+            }
+            if (GUILayout.Button("NextResetAt(Sec:09)")) {
+                original.format += "{nextResetAt:ss}";
+                GUI.FocusControl("");
+                EditorUtility.SetDirty(original);
+            }
             if (GUILayout.Button("CreatedAt(Year:2020)")) {
                 original.format += "{createdAt:yyyy}";
                 GUI.FocusControl("");

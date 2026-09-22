@@ -93,6 +93,11 @@ namespace Gs2.Unity.UiKit.Gs2SkillTree.Label.Editor
                     GUI.FocusControl("");
                     EditorUtility.SetDirty(original);
                 }
+                if (GUILayout.Button("UserData:PropertyId")) {
+                    original.format += "{userData:propertyId}";
+                    GUI.FocusControl("");
+                    EditorUtility.SetDirty(original);
+                }
                 if (GUILayout.Button("UserData:ReleasedNodeNames")) {
                     original.format += "{userData:releasedNodeNames}";
                     GUI.FocusControl("");

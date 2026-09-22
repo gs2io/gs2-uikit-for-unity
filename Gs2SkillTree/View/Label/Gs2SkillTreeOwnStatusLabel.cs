@@ -48,6 +48,8 @@ namespace Gs2.Unity.UiKit.Gs2SkillTree
                 ).Replace(
                     "{userId}", $"{this._fetcher?.Status?.UserId}"
                 ).Replace(
+                    "{propertyId}", $"{this._fetcher?.Status?.PropertyId}"
+                ).Replace(
                     "{releasedNodeNames}", $"{this._fetcher?.Status?.ReleasedNodeNames}"
                 )
             );

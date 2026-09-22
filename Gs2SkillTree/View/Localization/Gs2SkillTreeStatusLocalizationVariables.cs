@@ -50,6 +50,9 @@ namespace Gs2.Unity.UiKit.Gs2SkillTree.Localization
             this.target.StringReference["userId"] = new StringVariable {
                 Value = _fetcher?.Status?.UserId ?? "",
             };
+            this.target.StringReference["propertyId"] = new StringVariable {
+                Value = _fetcher?.Status?.PropertyId ?? "",
+            };
             this.target.enabled = true;
         }
     }

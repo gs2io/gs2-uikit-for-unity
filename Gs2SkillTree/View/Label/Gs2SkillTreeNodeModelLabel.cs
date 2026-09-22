@@ -55,6 +55,8 @@ namespace Gs2.Unity.UiKit.Gs2SkillTree
                     "{returnAcquireActions}", $"{this._fetcher?.NodeModel?.ReturnAcquireActions}"
                 ).Replace(
                     "{restrainReturnRate}", $"{this._fetcher?.NodeModel?.RestrainReturnRate}"
+                ).Replace(
+                    "{premiseNodeNames}", $"{this._fetcher?.NodeModel?.PremiseNodeNames}"
                 )
             );
         }

@@ -90,6 +90,9 @@ namespace Gs2.Unity.UiKit.Gs2Mission.Label
                 ).Replace(
                     "{userData:receivedMissionTaskNames}",
                     $"{this._userDataFetcher.Complete.ReceivedMissionTaskNames}"
+                ).Replace(
+                    "{userData:nextResetAt}",
+                    $"{this._userDataFetcher.Complete.NextResetAt}"
                 )
             );
         }

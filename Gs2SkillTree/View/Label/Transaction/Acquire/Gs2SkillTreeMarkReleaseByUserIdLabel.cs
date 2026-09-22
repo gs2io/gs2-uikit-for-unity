@@ -88,6 +88,9 @@ namespace Gs2.Unity.UiKit.Gs2SkillTree.Label
                     "{userData:userId}",
                     $"{this._userDataFetcher.Status.UserId}"
                 ).Replace(
+                    "{userData:propertyId}",
+                    $"{this._userDataFetcher.Status.PropertyId}"
+                ).Replace(
                     "{userData:releasedNodeNames}",
                     $"{this._userDataFetcher.Status.ReleasedNodeNames}"
                 )

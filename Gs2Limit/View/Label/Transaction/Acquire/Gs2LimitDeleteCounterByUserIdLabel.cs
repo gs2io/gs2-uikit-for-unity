@@ -95,6 +95,9 @@ namespace Gs2.Unity.UiKit.Gs2Limit.Label
                     "{userData:count}",
                     $"{this._userDataFetcher.Counter.Count}"
                 ).Replace(
+                    "{userData:nextResetAt}",
+                    $"{this._userDataFetcher.Counter.NextResetAt}"
+                ).Replace(
                     "{userData:createdAt}",
                     $"{this._userDataFetcher.Counter.CreatedAt}"
                 ).Replace(

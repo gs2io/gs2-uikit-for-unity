@@ -103,6 +103,11 @@ namespace Gs2.Unity.UiKit.Gs2Limit.Label.Editor
                     GUI.FocusControl("");
                     EditorUtility.SetDirty(original);
                 }
+                if (GUILayout.Button("UserData:NextResetAt")) {
+                    original.format += "{userData:nextResetAt}";
+                    GUI.FocusControl("");
+                    EditorUtility.SetDirty(original);
+                }
                 if (GUILayout.Button("UserData:CreatedAt")) {
                     original.format += "{userData:createdAt}";
                     GUI.FocusControl("");

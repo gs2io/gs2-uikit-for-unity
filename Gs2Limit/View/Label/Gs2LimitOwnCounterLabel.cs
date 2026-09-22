@@ -42,6 +42,7 @@ namespace Gs2.Unity.UiKit.Gs2Limit
     {
         private void OnFetched()
         {
+            var nextResetAt = this._fetcher.Counter.NextResetAt == null ? DateTime.Now : _fetcher.Counter.NextResetAt.ToLocalTime();
             var createdAt = this._fetcher.Counter.CreatedAt == null ? DateTime.Now : _fetcher.Counter.CreatedAt.ToLocalTime();
             var updatedAt = this._fetcher.Counter.UpdatedAt == null ? DateTime.Now : _fetcher.Counter.UpdatedAt.ToLocalTime();
             this.onUpdate?.Invoke(
@@ -53,6 +54,26 @@ namespace Gs2.Unity.UiKit.Gs2Limit
                     "{name}", $"{this._fetcher?.Counter?.Name}"
                 ).Replace(
                     "{count}", $"{this._fetcher?.Counter?.Count}"
+                ).Replace(
+                    "{nextResetAt:yyyy}", nextResetAt.ToString("yyyy")
+                ).Replace(
+                    "{nextResetAt:yy}", nextResetAt.ToString("yy")
+                ).Replace(
+                    "{nextResetAt:MM}", nextResetAt.ToString("MM")
+                ).Replace(
+                    "{nextResetAt:MMM}", nextResetAt.ToString("MMM")
+                ).Replace(
+                    "{nextResetAt:dd}", nextResetAt.ToString("dd")
+                ).Replace(
+                    "{nextResetAt:hh}", nextResetAt.ToString("hh")
+                ).Replace(
+                    "{nextResetAt:HH}", nextResetAt.ToString("HH")
+                ).Replace(
+                    "{nextResetAt:tt}", nextResetAt.ToString("tt")
+                ).Replace(
+                    "{nextResetAt:mm}", nextResetAt.ToString("mm")
+                ).Replace(
+                    "{nextResetAt:ss}", nextResetAt.ToString("ss")
                 ).Replace(
                     "{createdAt:yyyy}", createdAt.ToString("yyyy")
                 ).Replace(

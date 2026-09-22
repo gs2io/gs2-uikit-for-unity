@@ -42,6 +42,7 @@ namespace Gs2.Unity.UiKit.Gs2Mission
     {
         private void OnFetched()
         {
+            var nextResetAt = this._fetcher.Complete.NextResetAt == null ? DateTime.Now : _fetcher.Complete.NextResetAt.ToLocalTime();
             this.onUpdate?.Invoke(
                 this.format.Replace(
                     "{missionGroupName}", $"{this._fetcher?.Complete?.MissionGroupName}"
@@ -49,6 +50,26 @@ namespace Gs2.Unity.UiKit.Gs2Mission
                     "{completedMissionTaskNames}", $"{this._fetcher?.Complete?.CompletedMissionTaskNames}"
                 ).Replace(
                     "{receivedMissionTaskNames}", $"{this._fetcher?.Complete?.ReceivedMissionTaskNames}"
+                ).Replace(
+                    "{nextResetAt:yyyy}", nextResetAt.ToString("yyyy")
+                ).Replace(
+                    "{nextResetAt:yy}", nextResetAt.ToString("yy")
+                ).Replace(
+                    "{nextResetAt:MM}", nextResetAt.ToString("MM")
+                ).Replace(
+                    "{nextResetAt:MMM}", nextResetAt.ToString("MMM")
+                ).Replace(
+                    "{nextResetAt:dd}", nextResetAt.ToString("dd")
+                ).Replace(
+                    "{nextResetAt:hh}", nextResetAt.ToString("hh")
+                ).Replace(
+                    "{nextResetAt:HH}", nextResetAt.ToString("HH")
+                ).Replace(
+                    "{nextResetAt:tt}", nextResetAt.ToString("tt")
+                ).Replace(
+                    "{nextResetAt:mm}", nextResetAt.ToString("mm")
+                ).Replace(
+                    "{nextResetAt:ss}", nextResetAt.ToString("ss")
                 )
             );
         }
