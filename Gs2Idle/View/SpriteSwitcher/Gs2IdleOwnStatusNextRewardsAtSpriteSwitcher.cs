@@ -25,7 +25,7 @@
 #pragma warning disable CS0472
 
 using System;
-using Gs2.Core.Util;
+using System.Collections.Generic;
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Idle.Fetcher;
 using UnityEngine;
@@ -37,43 +37,46 @@ namespace Gs2.Unity.UiKit.Gs2Idle
     /// Main
     /// </summary>
 
-	[AddComponentMenu("GS2 UIKit/Idle/Status/View/Label/Gs2IdleOwnStatusLabel")]
-    public partial class Gs2IdleOwnStatusLabel : MonoBehaviour
+	[AddComponentMenu("GS2 UIKit/Idle/Status/View/SpriteSwitcher/Properties/NextRewardsAt/Gs2IdleOwnStatusNextRewardsAtSpriteSwitcher")]
+    public partial class Gs2IdleOwnStatusNextRewardsAtSpriteSwitcher : MonoBehaviour
     {
         private void OnFetched()
         {
-            var nextRewardsAt = this._fetcher.Status.NextRewardsAt == null ? DateTime.Now : _fetcher.Status.NextRewardsAt.ToLocalTime();
-            this.onUpdate?.Invoke(
-                this.format.Replace(
-                    "{categoryName}", $"{this._fetcher?.Status?.CategoryName}"
-                ).Replace(
-                    "{randomSeed}", $"{this._fetcher?.Status?.RandomSeed}"
-                ).Replace(
-                    "{idleMinutes}", $"{this._fetcher?.Status?.IdleMinutes}"
-                ).Replace(
-                    "{maximumIdleMinutes}", $"{this._fetcher?.Status?.MaximumIdleMinutes}"
-                ).Replace(
-                    "{nextRewardsAt:yyyy}", nextRewardsAt.ToString("yyyy")
-                ).Replace(
-                    "{nextRewardsAt:yy}", nextRewardsAt.ToString("yy")
-                ).Replace(
-                    "{nextRewardsAt:MM}", nextRewardsAt.ToString("MM")
-                ).Replace(
-                    "{nextRewardsAt:MMM}", nextRewardsAt.ToString("MMM")
-                ).Replace(
-                    "{nextRewardsAt:dd}", nextRewardsAt.ToString("dd")
-                ).Replace(
-                    "{nextRewardsAt:hh}", nextRewardsAt.ToString("hh")
-                ).Replace(
-                    "{nextRewardsAt:HH}", nextRewardsAt.ToString("HH")
-                ).Replace(
-                    "{nextRewardsAt:tt}", nextRewardsAt.ToString("tt")
-                ).Replace(
-                    "{nextRewardsAt:mm}", nextRewardsAt.ToString("mm")
-                ).Replace(
-                    "{nextRewardsAt:ss}", nextRewardsAt.ToString("ss")
-                )
-            );
+            switch(this.expression)
+            {
+                case Expression.In:
+                    if (this.applyNextRewardsAts.Contains(this._fetcher.Status.NextRewardsAt)) {
+                        this.onUpdate.Invoke(this.sprite);
+                    }
+                    break;
+                case Expression.NotIn:
+                    if (!this.applyNextRewardsAts.Contains(this._fetcher.Status.NextRewardsAt)) {
+                        this.onUpdate.Invoke(this.sprite);
+                    }
+                    break;
+                case Expression.Less:
+                    if (this.applyNextRewardsAt > this._fetcher.Status.NextRewardsAt) {
+                        this.onUpdate.Invoke(this.sprite);
+                    }
+                    break;
+                case Expression.LessEqual:
+                    if (this.applyNextRewardsAt >= this._fetcher.Status.NextRewardsAt) {
+                        this.onUpdate.Invoke(this.sprite);
+                    }
+                    break;
+                case Expression.Greater:
+                    if (this.applyNextRewardsAt < this._fetcher.Status.NextRewardsAt) {
+                        this.onUpdate.Invoke(this.sprite);
+                    }
+                    break;
+                case Expression.GreaterEqual:
+                    if (this.applyNextRewardsAt <= this._fetcher.Status.NextRewardsAt) {
+                        this.onUpdate.Invoke(this.sprite);
+                    }
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
         }
     }
 
@@ -81,7 +84,7 @@ namespace Gs2.Unity.UiKit.Gs2Idle
     /// Dependent components
     /// </summary>
 
-    public partial class Gs2IdleOwnStatusLabel
+    public partial class Gs2IdleOwnStatusNextRewardsAtSpriteSwitcher
     {
         private Gs2IdleOwnStatusFetcher _fetcher;
 
@@ -92,12 +95,19 @@ namespace Gs2.Unity.UiKit.Gs2Idle
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2IdleOwnStatusFetcher.");
                 enabled = false;
             }
+            if (this.sprite == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: sprite is not set.");
+                enabled = false;
+            }
         }
 
         public virtual bool HasError()
         {
             this._fetcher = GetComponent<Gs2IdleOwnStatusFetcher>() ?? GetComponentInParent<Gs2IdleOwnStatusFetcher>(true);
             if (this._fetcher == null) {
+                return true;
+            }
+            if (this.sprite == null) {
                 return true;
             }
             return false;
@@ -131,7 +141,7 @@ namespace Gs2.Unity.UiKit.Gs2Idle
     /// Public properties
     /// </summary>
 
-    public partial class Gs2IdleOwnStatusLabel
+    public partial class Gs2IdleOwnStatusNextRewardsAtSpriteSwitcher
     {
 
     }
@@ -140,18 +150,33 @@ namespace Gs2.Unity.UiKit.Gs2Idle
     /// Parameters for Inspector
     /// </summary>
 
-    public partial class Gs2IdleOwnStatusLabel
+    public partial class Gs2IdleOwnStatusNextRewardsAtSpriteSwitcher
     {
-        public string format;
+        public enum Expression {
+            In,
+            NotIn,
+            Less,
+            LessEqual,
+            Greater,
+            GreaterEqual,
+        }
+
+        public Expression expression;
+
+        public List<long> applyNextRewardsAts;
+
+        public long applyNextRewardsAt;
+
+        public Sprite sprite;
     }
 
     /// <summary>
     /// Event handlers
     /// </summary>
-    public partial class Gs2IdleOwnStatusLabel
+    public partial class Gs2IdleOwnStatusNextRewardsAtSpriteSwitcher
     {
         [Serializable]
-        private class UpdateEvent : UnityEvent<string>
+        private class UpdateEvent : UnityEvent<Sprite>
         {
 
         }
@@ -159,10 +184,10 @@ namespace Gs2.Unity.UiKit.Gs2Idle
         [SerializeField]
         private UpdateEvent onUpdate = new UpdateEvent();
 
-        public event UnityAction<string> OnUpdate
+        public event UnityAction<Sprite> OnUpdate
         {
-            add => this.onUpdate.AddListener(value);
-            remove => this.onUpdate.RemoveListener(value);
+            add => onUpdate.AddListener(value);
+            remove => onUpdate.RemoveListener(value);
         }
     }
 }

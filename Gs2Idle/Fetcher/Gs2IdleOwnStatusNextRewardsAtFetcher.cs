@@ -25,7 +25,7 @@
 #pragma warning disable CS0472
 
 using System;
-using Gs2.Core.Util;
+using System.Collections.Generic;
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Idle.Fetcher;
 using UnityEngine;
@@ -37,42 +37,13 @@ namespace Gs2.Unity.UiKit.Gs2Idle
     /// Main
     /// </summary>
 
-	[AddComponentMenu("GS2 UIKit/Idle/Status/View/Label/Gs2IdleOwnStatusLabel")]
-    public partial class Gs2IdleOwnStatusLabel : MonoBehaviour
+	[AddComponentMenu("GS2 UIKit/Idle/Status/Fetcher/Properties/NextRewardsAt/Gs2IdleOwnStatusNextRewardsAtFetcher")]
+    public partial class Gs2IdleOwnStatusNextRewardsAtFetcher : MonoBehaviour
     {
         private void OnFetched()
         {
-            var nextRewardsAt = this._fetcher.Status.NextRewardsAt == null ? DateTime.Now : _fetcher.Status.NextRewardsAt.ToLocalTime();
-            this.onUpdate?.Invoke(
-                this.format.Replace(
-                    "{categoryName}", $"{this._fetcher?.Status?.CategoryName}"
-                ).Replace(
-                    "{randomSeed}", $"{this._fetcher?.Status?.RandomSeed}"
-                ).Replace(
-                    "{idleMinutes}", $"{this._fetcher?.Status?.IdleMinutes}"
-                ).Replace(
-                    "{maximumIdleMinutes}", $"{this._fetcher?.Status?.MaximumIdleMinutes}"
-                ).Replace(
-                    "{nextRewardsAt:yyyy}", nextRewardsAt.ToString("yyyy")
-                ).Replace(
-                    "{nextRewardsAt:yy}", nextRewardsAt.ToString("yy")
-                ).Replace(
-                    "{nextRewardsAt:MM}", nextRewardsAt.ToString("MM")
-                ).Replace(
-                    "{nextRewardsAt:MMM}", nextRewardsAt.ToString("MMM")
-                ).Replace(
-                    "{nextRewardsAt:dd}", nextRewardsAt.ToString("dd")
-                ).Replace(
-                    "{nextRewardsAt:hh}", nextRewardsAt.ToString("hh")
-                ).Replace(
-                    "{nextRewardsAt:HH}", nextRewardsAt.ToString("HH")
-                ).Replace(
-                    "{nextRewardsAt:tt}", nextRewardsAt.ToString("tt")
-                ).Replace(
-                    "{nextRewardsAt:mm}", nextRewardsAt.ToString("mm")
-                ).Replace(
-                    "{nextRewardsAt:ss}", nextRewardsAt.ToString("ss")
-                )
+            onUpdate?.Invoke(
+                _fetcher.Status.NextRewardsAt
             );
         }
     }
@@ -81,13 +52,14 @@ namespace Gs2.Unity.UiKit.Gs2Idle
     /// Dependent components
     /// </summary>
 
-    public partial class Gs2IdleOwnStatusLabel
+    public partial class Gs2IdleOwnStatusNextRewardsAtFetcher
     {
         private Gs2IdleOwnStatusFetcher _fetcher;
 
         public void Awake()
         {
             this._fetcher = GetComponent<Gs2IdleOwnStatusFetcher>() ?? GetComponentInParent<Gs2IdleOwnStatusFetcher>();
+
             if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2IdleOwnStatusFetcher.");
                 enabled = false;
@@ -131,7 +103,7 @@ namespace Gs2.Unity.UiKit.Gs2Idle
     /// Public properties
     /// </summary>
 
-    public partial class Gs2IdleOwnStatusLabel
+    public partial class Gs2IdleOwnStatusNextRewardsAtFetcher
     {
 
     }
@@ -139,19 +111,19 @@ namespace Gs2.Unity.UiKit.Gs2Idle
     /// <summary>
     /// Parameters for Inspector
     /// </summary>
-
-    public partial class Gs2IdleOwnStatusLabel
+    
+    public partial class Gs2IdleOwnStatusNextRewardsAtFetcher
     {
-        public string format;
+
     }
 
     /// <summary>
     /// Event handlers
     /// </summary>
-    public partial class Gs2IdleOwnStatusLabel
+    public partial class Gs2IdleOwnStatusNextRewardsAtFetcher
     {
         [Serializable]
-        private class UpdateEvent : UnityEvent<string>
+        private class UpdateEvent : UnityEvent<long>
         {
 
         }
@@ -159,10 +131,10 @@ namespace Gs2.Unity.UiKit.Gs2Idle
         [SerializeField]
         private UpdateEvent onUpdate = new UpdateEvent();
 
-        public event UnityAction<string> OnUpdate
+        public event UnityAction<long> OnUpdate
         {
-            add => this.onUpdate.AddListener(value);
-            remove => this.onUpdate.RemoveListener(value);
+            add => onUpdate.AddListener(value);
+            remove => onUpdate.RemoveListener(value);
         }
     }
 }

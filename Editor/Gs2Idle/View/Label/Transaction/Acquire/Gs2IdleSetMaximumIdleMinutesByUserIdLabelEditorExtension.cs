@@ -103,6 +103,11 @@ namespace Gs2.Unity.UiKit.Gs2Idle.Label.Editor
                     GUI.FocusControl("");
                     EditorUtility.SetDirty(original);
                 }
+                if (GUILayout.Button("UserData:NextRewardsAt")) {
+                    original.format += "{userData:nextRewardsAt}";
+                    GUI.FocusControl("");
+                    EditorUtility.SetDirty(original);
+                }
             }
             EditorGUILayout.PropertyField(serializedObject.FindProperty("onUpdate"), true);
             serializedObject.ApplyModifiedProperties();

@@ -94,6 +94,56 @@ namespace Gs2.Unity.UiKit.Gs2Idle.Editor
                 GUI.FocusControl("");
                 EditorUtility.SetDirty(original);
             }
+            if (GUILayout.Button("NextRewardsAt(Year:2020)")) {
+                original.format += "{nextRewardsAt:yyyy}";
+                GUI.FocusControl("");
+                EditorUtility.SetDirty(original);
+            }
+            if (GUILayout.Button("NextRewardsAt(Year:20)")) {
+                original.format += "{nextRewardsAt:yy}";
+                GUI.FocusControl("");
+                EditorUtility.SetDirty(original);
+            }
+            if (GUILayout.Button("NextRewardsAt(Month:12)")) {
+                original.format += "{nextRewardsAt:MM}";
+                GUI.FocusControl("");
+                EditorUtility.SetDirty(original);
+            }
+            if (GUILayout.Button("NextRewardsAt(Month:Dec)")) {
+                original.format += "{nextRewardsAt:MMM}";
+                GUI.FocusControl("");
+                EditorUtility.SetDirty(original);
+            }
+            if (GUILayout.Button("NextRewardsAt(Day:25)")) {
+                original.format += "{nextRewardsAt:dd}";
+                GUI.FocusControl("");
+                EditorUtility.SetDirty(original);
+            }
+            if (GUILayout.Button("NextRewardsAt(Hour:6)")) {
+                original.format += "{nextRewardsAt:hh}";
+                GUI.FocusControl("");
+                EditorUtility.SetDirty(original);
+            }
+            if (GUILayout.Button("NextRewardsAt(Hour:18)")) {
+                original.format += "{nextRewardsAt:HH}";
+                GUI.FocusControl("");
+                EditorUtility.SetDirty(original);
+            }
+            if (GUILayout.Button("NextRewardsAt(AM/PM)")) {
+                original.format += "{nextRewardsAt:tt}";
+                GUI.FocusControl("");
+                EditorUtility.SetDirty(original);
+            }
+            if (GUILayout.Button("NextRewardsAt(Min:05)")) {
+                original.format += "{nextRewardsAt:mm}";
+                GUI.FocusControl("");
+                EditorUtility.SetDirty(original);
+            }
+            if (GUILayout.Button("NextRewardsAt(Sec:09)")) {
+                original.format += "{nextRewardsAt:ss}";
+                GUI.FocusControl("");
+                EditorUtility.SetDirty(original);
+            }
             EditorGUILayout.PropertyField(serializedObject.FindProperty("onUpdate"), true);
             serializedObject.ApplyModifiedProperties();
         }

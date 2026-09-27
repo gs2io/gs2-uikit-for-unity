@@ -25,7 +25,7 @@
 #pragma warning disable CS0472
 
 using System;
-using Gs2.Core.Util;
+using System.Collections.Generic;
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Idle.Fetcher;
 using UnityEngine;
@@ -37,43 +37,34 @@ namespace Gs2.Unity.UiKit.Gs2Idle
     /// Main
     /// </summary>
 
-	[AddComponentMenu("GS2 UIKit/Idle/Status/View/Label/Gs2IdleOwnStatusLabel")]
-    public partial class Gs2IdleOwnStatusLabel : MonoBehaviour
+	[AddComponentMenu("GS2 UIKit/Idle/Status/View/Enabler/Properties/NextRewardsAt/Gs2IdleOwnStatusNextRewardsAtEnabler")]
+    public partial class Gs2IdleOwnStatusNextRewardsAtEnabler : MonoBehaviour
     {
         private void OnFetched()
         {
-            var nextRewardsAt = this._fetcher.Status.NextRewardsAt == null ? DateTime.Now : _fetcher.Status.NextRewardsAt.ToLocalTime();
-            this.onUpdate?.Invoke(
-                this.format.Replace(
-                    "{categoryName}", $"{this._fetcher?.Status?.CategoryName}"
-                ).Replace(
-                    "{randomSeed}", $"{this._fetcher?.Status?.RandomSeed}"
-                ).Replace(
-                    "{idleMinutes}", $"{this._fetcher?.Status?.IdleMinutes}"
-                ).Replace(
-                    "{maximumIdleMinutes}", $"{this._fetcher?.Status?.MaximumIdleMinutes}"
-                ).Replace(
-                    "{nextRewardsAt:yyyy}", nextRewardsAt.ToString("yyyy")
-                ).Replace(
-                    "{nextRewardsAt:yy}", nextRewardsAt.ToString("yy")
-                ).Replace(
-                    "{nextRewardsAt:MM}", nextRewardsAt.ToString("MM")
-                ).Replace(
-                    "{nextRewardsAt:MMM}", nextRewardsAt.ToString("MMM")
-                ).Replace(
-                    "{nextRewardsAt:dd}", nextRewardsAt.ToString("dd")
-                ).Replace(
-                    "{nextRewardsAt:hh}", nextRewardsAt.ToString("hh")
-                ).Replace(
-                    "{nextRewardsAt:HH}", nextRewardsAt.ToString("HH")
-                ).Replace(
-                    "{nextRewardsAt:tt}", nextRewardsAt.ToString("tt")
-                ).Replace(
-                    "{nextRewardsAt:mm}", nextRewardsAt.ToString("mm")
-                ).Replace(
-                    "{nextRewardsAt:ss}", nextRewardsAt.ToString("ss")
-                )
-            );
+            switch(this.expression)
+            {
+                case Expression.In:
+                    this.target.SetActive(this.enableNextRewardsAts.Contains(this._fetcher.Status.NextRewardsAt));
+                    break;
+                case Expression.NotIn:
+                    this.target.SetActive(!this.enableNextRewardsAts.Contains(this._fetcher.Status.NextRewardsAt));
+                    break;
+                case Expression.Less:
+                    this.target.SetActive(this.enableNextRewardsAt > this._fetcher.Status.NextRewardsAt);
+                    break;
+                case Expression.LessEqual:
+                    this.target.SetActive(this.enableNextRewardsAt >= this._fetcher.Status.NextRewardsAt);
+                    break;
+                case Expression.Greater:
+                    this.target.SetActive(this.enableNextRewardsAt < this._fetcher.Status.NextRewardsAt);
+                    break;
+                case Expression.GreaterEqual:
+                    this.target.SetActive(this.enableNextRewardsAt <= this._fetcher.Status.NextRewardsAt);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
         }
     }
 
@@ -81,7 +72,7 @@ namespace Gs2.Unity.UiKit.Gs2Idle
     /// Dependent components
     /// </summary>
 
-    public partial class Gs2IdleOwnStatusLabel
+    public partial class Gs2IdleOwnStatusNextRewardsAtEnabler
     {
         private Gs2IdleOwnStatusFetcher _fetcher;
 
@@ -92,12 +83,19 @@ namespace Gs2.Unity.UiKit.Gs2Idle
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2IdleOwnStatusFetcher.");
                 enabled = false;
             }
+            if (this.target == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: target is not set.");
+                enabled = false;
+            }
         }
 
         public virtual bool HasError()
         {
             this._fetcher = GetComponent<Gs2IdleOwnStatusFetcher>() ?? GetComponentInParent<Gs2IdleOwnStatusFetcher>(true);
             if (this._fetcher == null) {
+                return true;
+            }
+            if (this.target == null) {
                 return true;
             }
             return false;
@@ -131,7 +129,7 @@ namespace Gs2.Unity.UiKit.Gs2Idle
     /// Public properties
     /// </summary>
 
-    public partial class Gs2IdleOwnStatusLabel
+    public partial class Gs2IdleOwnStatusNextRewardsAtEnabler
     {
 
     }
@@ -140,29 +138,31 @@ namespace Gs2.Unity.UiKit.Gs2Idle
     /// Parameters for Inspector
     /// </summary>
 
-    public partial class Gs2IdleOwnStatusLabel
+    public partial class Gs2IdleOwnStatusNextRewardsAtEnabler
     {
-        public string format;
+        public enum Expression {
+            In,
+            NotIn,
+            Less,
+            LessEqual,
+            Greater,
+            GreaterEqual,
+        }
+
+        public Expression expression;
+
+        public List<long> enableNextRewardsAts;
+
+        public long enableNextRewardsAt;
+
+        public GameObject target;
     }
 
     /// <summary>
     /// Event handlers
     /// </summary>
-    public partial class Gs2IdleOwnStatusLabel
+    public partial class Gs2IdleOwnStatusNextRewardsAtEnabler
     {
-        [Serializable]
-        private class UpdateEvent : UnityEvent<string>
-        {
-
-        }
-
-        [SerializeField]
-        private UpdateEvent onUpdate = new UpdateEvent();
-
-        public event UnityAction<string> OnUpdate
-        {
-            add => this.onUpdate.AddListener(value);
-            remove => this.onUpdate.RemoveListener(value);
-        }
+        
     }
 }
