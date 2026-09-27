@@ -25,7 +25,7 @@
 #pragma warning disable CS0472
 
 using System;
-using Gs2.Core.Util;
+using System.Collections.Generic;
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Buff.Fetcher;
 using UnityEngine;
@@ -37,30 +37,46 @@ namespace Gs2.Unity.UiKit.Gs2Buff
     /// Main
     /// </summary>
 
-	[AddComponentMenu("GS2 UIKit/Buff/BuffEntryModel/View/Label/Gs2BuffBuffEntryModelLabel")]
-    public partial class Gs2BuffBuffEntryModelLabel : MonoBehaviour
+	[AddComponentMenu("GS2 UIKit/Buff/BuffEntryModel/View/SpriteSwitcher/Properties/Priority/Gs2BuffBuffEntryModelPrioritySpriteSwitcher")]
+    public partial class Gs2BuffBuffEntryModelPrioritySpriteSwitcher : MonoBehaviour
     {
         private void OnFetched()
         {
-            this.onUpdate?.Invoke(
-                this.format.Replace(
-                    "{name}", $"{this._fetcher?.BuffEntryModel?.Name}"
-                ).Replace(
-                    "{metadata}", $"{this._fetcher?.BuffEntryModel?.Metadata}"
-                ).Replace(
-                    "{targetType}", $"{this._fetcher?.BuffEntryModel?.TargetType}"
-                ).Replace(
-                    "{targetModel}", $"{this._fetcher?.BuffEntryModel?.TargetModel}"
-                ).Replace(
-                    "{targetAction}", $"{this._fetcher?.BuffEntryModel?.TargetAction}"
-                ).Replace(
-                    "{expression}", $"{this._fetcher?.BuffEntryModel?.Expression}"
-                ).Replace(
-                    "{priority}", $"{this._fetcher?.BuffEntryModel?.Priority}"
-                ).Replace(
-                    "{applyPeriodScheduleEventId}", $"{this._fetcher?.BuffEntryModel?.ApplyPeriodScheduleEventId}"
-                )
-            );
+            switch(this.expression)
+            {
+                case Expression.In:
+                    if (this.applyPriorities.Contains(this._fetcher.BuffEntryModel.Priority)) {
+                        this.onUpdate.Invoke(this.sprite);
+                    }
+                    break;
+                case Expression.NotIn:
+                    if (!this.applyPriorities.Contains(this._fetcher.BuffEntryModel.Priority)) {
+                        this.onUpdate.Invoke(this.sprite);
+                    }
+                    break;
+                case Expression.Less:
+                    if (this.applyPriority > this._fetcher.BuffEntryModel.Priority) {
+                        this.onUpdate.Invoke(this.sprite);
+                    }
+                    break;
+                case Expression.LessEqual:
+                    if (this.applyPriority >= this._fetcher.BuffEntryModel.Priority) {
+                        this.onUpdate.Invoke(this.sprite);
+                    }
+                    break;
+                case Expression.Greater:
+                    if (this.applyPriority < this._fetcher.BuffEntryModel.Priority) {
+                        this.onUpdate.Invoke(this.sprite);
+                    }
+                    break;
+                case Expression.GreaterEqual:
+                    if (this.applyPriority <= this._fetcher.BuffEntryModel.Priority) {
+                        this.onUpdate.Invoke(this.sprite);
+                    }
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
         }
     }
 
@@ -68,7 +84,7 @@ namespace Gs2.Unity.UiKit.Gs2Buff
     /// Dependent components
     /// </summary>
 
-    public partial class Gs2BuffBuffEntryModelLabel
+    public partial class Gs2BuffBuffEntryModelPrioritySpriteSwitcher
     {
         private Gs2BuffBuffEntryModelFetcher _fetcher;
 
@@ -79,12 +95,19 @@ namespace Gs2.Unity.UiKit.Gs2Buff
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2BuffBuffEntryModelFetcher.");
                 enabled = false;
             }
+            if (this.sprite == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: sprite is not set.");
+                enabled = false;
+            }
         }
 
         public virtual bool HasError()
         {
             this._fetcher = GetComponent<Gs2BuffBuffEntryModelFetcher>() ?? GetComponentInParent<Gs2BuffBuffEntryModelFetcher>(true);
             if (this._fetcher == null) {
+                return true;
+            }
+            if (this.sprite == null) {
                 return true;
             }
             return false;
@@ -118,7 +141,7 @@ namespace Gs2.Unity.UiKit.Gs2Buff
     /// Public properties
     /// </summary>
 
-    public partial class Gs2BuffBuffEntryModelLabel
+    public partial class Gs2BuffBuffEntryModelPrioritySpriteSwitcher
     {
 
     }
@@ -127,18 +150,33 @@ namespace Gs2.Unity.UiKit.Gs2Buff
     /// Parameters for Inspector
     /// </summary>
 
-    public partial class Gs2BuffBuffEntryModelLabel
+    public partial class Gs2BuffBuffEntryModelPrioritySpriteSwitcher
     {
-        public string format;
+        public enum Expression {
+            In,
+            NotIn,
+            Less,
+            LessEqual,
+            Greater,
+            GreaterEqual,
+        }
+
+        public Expression expression;
+
+        public List<int> applyPriorities;
+
+        public int applyPriority;
+
+        public Sprite sprite;
     }
 
     /// <summary>
     /// Event handlers
     /// </summary>
-    public partial class Gs2BuffBuffEntryModelLabel
+    public partial class Gs2BuffBuffEntryModelPrioritySpriteSwitcher
     {
         [Serializable]
-        private class UpdateEvent : UnityEvent<string>
+        private class UpdateEvent : UnityEvent<Sprite>
         {
 
         }
@@ -146,10 +184,10 @@ namespace Gs2.Unity.UiKit.Gs2Buff
         [SerializeField]
         private UpdateEvent onUpdate = new UpdateEvent();
 
-        public event UnityAction<string> OnUpdate
+        public event UnityAction<Sprite> OnUpdate
         {
-            add => this.onUpdate.AddListener(value);
-            remove => this.onUpdate.RemoveListener(value);
+            add => onUpdate.AddListener(value);
+            remove => onUpdate.RemoveListener(value);
         }
     }
 }

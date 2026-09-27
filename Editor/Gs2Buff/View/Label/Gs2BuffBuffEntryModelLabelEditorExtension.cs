@@ -104,6 +104,11 @@ namespace Gs2.Unity.UiKit.Gs2Buff.Editor
                 GUI.FocusControl("");
                 EditorUtility.SetDirty(original);
             }
+            if (GUILayout.Button("Priority")) {
+                original.format += "{priority}";
+                GUI.FocusControl("");
+                EditorUtility.SetDirty(original);
+            }
             if (GUILayout.Button("ApplyPeriodScheduleEventId")) {
                 original.format += "{applyPeriodScheduleEventId}";
                 GUI.FocusControl("");

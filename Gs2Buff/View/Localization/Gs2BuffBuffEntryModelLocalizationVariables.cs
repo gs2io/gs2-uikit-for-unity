@@ -56,6 +56,9 @@ namespace Gs2.Unity.UiKit.Gs2Buff.Localization
             this.target.StringReference["expression"] = new StringVariable {
                 Value = _fetcher?.BuffEntryModel?.Expression ?? "",
             };
+            this.target.StringReference["priority"] = new IntVariable {
+                Value = _fetcher?.BuffEntryModel?.Priority ?? 0,
+            };
             this.target.StringReference["applyPeriodScheduleEventId"] = new StringVariable {
                 Value = _fetcher?.BuffEntryModel?.ApplyPeriodScheduleEventId ?? "",
             };

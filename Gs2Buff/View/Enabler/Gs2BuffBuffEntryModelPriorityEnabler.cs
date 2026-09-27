@@ -25,7 +25,7 @@
 #pragma warning disable CS0472
 
 using System;
-using Gs2.Core.Util;
+using System.Collections.Generic;
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Buff.Fetcher;
 using UnityEngine;
@@ -37,30 +37,34 @@ namespace Gs2.Unity.UiKit.Gs2Buff
     /// Main
     /// </summary>
 
-	[AddComponentMenu("GS2 UIKit/Buff/BuffEntryModel/View/Label/Gs2BuffBuffEntryModelLabel")]
-    public partial class Gs2BuffBuffEntryModelLabel : MonoBehaviour
+	[AddComponentMenu("GS2 UIKit/Buff/BuffEntryModel/View/Enabler/Properties/Priority/Gs2BuffBuffEntryModelPriorityEnabler")]
+    public partial class Gs2BuffBuffEntryModelPriorityEnabler : MonoBehaviour
     {
         private void OnFetched()
         {
-            this.onUpdate?.Invoke(
-                this.format.Replace(
-                    "{name}", $"{this._fetcher?.BuffEntryModel?.Name}"
-                ).Replace(
-                    "{metadata}", $"{this._fetcher?.BuffEntryModel?.Metadata}"
-                ).Replace(
-                    "{targetType}", $"{this._fetcher?.BuffEntryModel?.TargetType}"
-                ).Replace(
-                    "{targetModel}", $"{this._fetcher?.BuffEntryModel?.TargetModel}"
-                ).Replace(
-                    "{targetAction}", $"{this._fetcher?.BuffEntryModel?.TargetAction}"
-                ).Replace(
-                    "{expression}", $"{this._fetcher?.BuffEntryModel?.Expression}"
-                ).Replace(
-                    "{priority}", $"{this._fetcher?.BuffEntryModel?.Priority}"
-                ).Replace(
-                    "{applyPeriodScheduleEventId}", $"{this._fetcher?.BuffEntryModel?.ApplyPeriodScheduleEventId}"
-                )
-            );
+            switch(this.expression)
+            {
+                case Expression.In:
+                    this.target.SetActive(this.enablePriorities.Contains(this._fetcher.BuffEntryModel.Priority));
+                    break;
+                case Expression.NotIn:
+                    this.target.SetActive(!this.enablePriorities.Contains(this._fetcher.BuffEntryModel.Priority));
+                    break;
+                case Expression.Less:
+                    this.target.SetActive(this.enablePriority > this._fetcher.BuffEntryModel.Priority);
+                    break;
+                case Expression.LessEqual:
+                    this.target.SetActive(this.enablePriority >= this._fetcher.BuffEntryModel.Priority);
+                    break;
+                case Expression.Greater:
+                    this.target.SetActive(this.enablePriority < this._fetcher.BuffEntryModel.Priority);
+                    break;
+                case Expression.GreaterEqual:
+                    this.target.SetActive(this.enablePriority <= this._fetcher.BuffEntryModel.Priority);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
         }
     }
 
@@ -68,7 +72,7 @@ namespace Gs2.Unity.UiKit.Gs2Buff
     /// Dependent components
     /// </summary>
 
-    public partial class Gs2BuffBuffEntryModelLabel
+    public partial class Gs2BuffBuffEntryModelPriorityEnabler
     {
         private Gs2BuffBuffEntryModelFetcher _fetcher;
 
@@ -79,12 +83,19 @@ namespace Gs2.Unity.UiKit.Gs2Buff
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2BuffBuffEntryModelFetcher.");
                 enabled = false;
             }
+            if (this.target == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: target is not set.");
+                enabled = false;
+            }
         }
 
         public virtual bool HasError()
         {
             this._fetcher = GetComponent<Gs2BuffBuffEntryModelFetcher>() ?? GetComponentInParent<Gs2BuffBuffEntryModelFetcher>(true);
             if (this._fetcher == null) {
+                return true;
+            }
+            if (this.target == null) {
                 return true;
             }
             return false;
@@ -118,7 +129,7 @@ namespace Gs2.Unity.UiKit.Gs2Buff
     /// Public properties
     /// </summary>
 
-    public partial class Gs2BuffBuffEntryModelLabel
+    public partial class Gs2BuffBuffEntryModelPriorityEnabler
     {
 
     }
@@ -127,29 +138,31 @@ namespace Gs2.Unity.UiKit.Gs2Buff
     /// Parameters for Inspector
     /// </summary>
 
-    public partial class Gs2BuffBuffEntryModelLabel
+    public partial class Gs2BuffBuffEntryModelPriorityEnabler
     {
-        public string format;
+        public enum Expression {
+            In,
+            NotIn,
+            Less,
+            LessEqual,
+            Greater,
+            GreaterEqual,
+        }
+
+        public Expression expression;
+
+        public List<int> enablePriorities;
+
+        public int enablePriority;
+
+        public GameObject target;
     }
 
     /// <summary>
     /// Event handlers
     /// </summary>
-    public partial class Gs2BuffBuffEntryModelLabel
+    public partial class Gs2BuffBuffEntryModelPriorityEnabler
     {
-        [Serializable]
-        private class UpdateEvent : UnityEvent<string>
-        {
-
-        }
-
-        [SerializeField]
-        private UpdateEvent onUpdate = new UpdateEvent();
-
-        public event UnityAction<string> OnUpdate
-        {
-            add => this.onUpdate.AddListener(value);
-            remove => this.onUpdate.RemoveListener(value);
-        }
+        
     }
 }
