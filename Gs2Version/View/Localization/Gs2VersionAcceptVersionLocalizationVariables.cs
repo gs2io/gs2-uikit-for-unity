@@ -50,6 +50,9 @@ namespace Gs2.Unity.UiKit.Gs2Version.Localization
             this.target.StringReference["userId"] = new StringVariable {
                 Value = _fetcher?.AcceptVersion?.UserId ?? "",
             };
+            this.target.StringReference["status"] = new StringVariable {
+                Value = _fetcher?.AcceptVersion?.Status ?? "",
+            };
             this.target.enabled = true;
         }
     }

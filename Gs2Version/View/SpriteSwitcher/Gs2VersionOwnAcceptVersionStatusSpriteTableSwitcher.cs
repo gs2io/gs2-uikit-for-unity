@@ -24,42 +24,31 @@
 
 #pragma warning disable CS0472
 
-#if GS2_ENABLE_LOCALIZATION
-
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Version.Fetcher;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.Localization.Components;
-using UnityEngine.Localization.SmartFormat.PersistentVariables;
 
-namespace Gs2.Unity.UiKit.Gs2Version.Localization
+namespace Gs2.Unity.UiKit.Gs2Version.SpriteSwitcher
 {
     /// <summary>
     /// Main
     /// </summary>
 
-    [AddComponentMenu("GS2 UIKit/Version/VersionModel/View/Localization/Gs2VersionVersionModelLocalizationVariables")]
-    public partial class Gs2VersionVersionModelLocalizationVariables : MonoBehaviour
+	[AddComponentMenu("GS2 UIKit/Version/AcceptVersion/View/SpriteSwitcher/Properties/Status/Gs2VersionOwnAcceptVersionStatusSpriteTableSwitcher")]
+    public partial class Gs2VersionOwnAcceptVersionStatusSpriteTableSwitcher : MonoBehaviour
     {
         private void OnFetched()
         {
-            this.target.StringReference["name"] = new StringVariable {
-                Value = _fetcher?.VersionModel?.Name ?? "",
-            };
-            this.target.StringReference["metadata"] = new StringVariable {
-                Value = _fetcher?.VersionModel?.Metadata ?? "",
-            };
-            this.target.StringReference["scope"] = new StringVariable {
-                Value = _fetcher?.VersionModel?.Scope ?? "",
-            };
-            this.target.StringReference["needSignature"] = new BoolVariable {
-                Value = _fetcher?.VersionModel?.NeedSignature ?? false,
-            };
-            this.target.StringReference["approveRequirement"] = new StringVariable {
-                Value = _fetcher?.VersionModel?.ApproveRequirement ?? "",
-            };
-            this.target.enabled = true;
+            if (this.sprites.Count(v => v.value == _fetcher.AcceptVersion.Status) > 0) {
+                this.onUpdate.Invoke(this.sprites.Find(v => v.value == _fetcher.AcceptVersion.Status).sprite);
+            }
+            else {
+                this.onUpdate.Invoke(this.defaultSprite);
+            }
         }
     }
 
@@ -67,24 +56,30 @@ namespace Gs2.Unity.UiKit.Gs2Version.Localization
     /// Dependent components
     /// </summary>
 
-    public partial class Gs2VersionVersionModelLocalizationVariables
+    public partial class Gs2VersionOwnAcceptVersionStatusSpriteTableSwitcher
     {
-        private Gs2VersionVersionModelFetcher _fetcher;
+        private Gs2VersionOwnAcceptVersionFetcher _fetcher;
 
-        public void Awake() {
-            this.target.enabled = false;
-            this._fetcher = GetComponent<Gs2VersionVersionModelFetcher>() ?? GetComponentInParent<Gs2VersionVersionModelFetcher>();
-
+        public void Awake()
+        {
+            this._fetcher = GetComponent<Gs2VersionOwnAcceptVersionFetcher>() ?? GetComponentInParent<Gs2VersionOwnAcceptVersionFetcher>();
             if (this._fetcher == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2VersionVersionModelFetcher.");
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2VersionOwnAcceptVersionFetcher.");
+                enabled = false;
+            }
+            if (this.sprites == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: sprite is not set.");
                 enabled = false;
             }
         }
 
         public virtual bool HasError()
         {
-            this._fetcher = GetComponent<Gs2VersionVersionModelFetcher>() ?? GetComponentInParent<Gs2VersionVersionModelFetcher>(true);
+            this._fetcher = GetComponent<Gs2VersionOwnAcceptVersionFetcher>() ?? GetComponentInParent<Gs2VersionOwnAcceptVersionFetcher>(true);
             if (this._fetcher == null) {
+                return true;
+            }
+            if (this.sprites == null) {
                 return true;
             }
             return false;
@@ -118,7 +113,7 @@ namespace Gs2.Unity.UiKit.Gs2Version.Localization
     /// Public properties
     /// </summary>
 
-    public partial class Gs2VersionVersionModelLocalizationVariables
+    public partial class Gs2VersionOwnAcceptVersionStatusSpriteTableSwitcher
     {
 
     }
@@ -127,18 +122,37 @@ namespace Gs2.Unity.UiKit.Gs2Version.Localization
     /// Parameters for Inspector
     /// </summary>
 
-    public partial class Gs2VersionVersionModelLocalizationVariables
+    public partial class Gs2VersionOwnAcceptVersionStatusSpriteTableSwitcher
     {
-        public LocalizeStringEvent target;
+        [System.Serializable]
+        public class SpriteTableEntry
+        {
+            public string value;
+            public Sprite sprite;
+        }
+
+        public List<SpriteTableEntry> sprites;
+        public Sprite defaultSprite;
     }
 
     /// <summary>
     /// Event handlers
     /// </summary>
-    public partial class Gs2VersionVersionModelLocalizationVariables
+    public partial class Gs2VersionOwnAcceptVersionStatusSpriteTableSwitcher
     {
+        [Serializable]
+        private class UpdateEvent : UnityEvent<Sprite>
+        {
 
+        }
+
+        [SerializeField]
+        private UpdateEvent onUpdate = new UpdateEvent();
+
+        public event UnityAction<Sprite> OnUpdate
+        {
+            add => onUpdate.AddListener(value);
+            remove => onUpdate.RemoveListener(value);
+        }
     }
 }
-
-#endif

@@ -24,42 +24,41 @@
 
 #pragma warning disable CS0472
 
-#if GS2_ENABLE_LOCALIZATION
-
+using System;
+using System.Collections.Generic;
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Version.Fetcher;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.Localization.Components;
-using UnityEngine.Localization.SmartFormat.PersistentVariables;
 
-namespace Gs2.Unity.UiKit.Gs2Version.Localization
+namespace Gs2.Unity.UiKit.Gs2Version.Enabler
 {
     /// <summary>
     /// Main
     /// </summary>
 
-    [AddComponentMenu("GS2 UIKit/Version/VersionModel/View/Localization/Gs2VersionVersionModelLocalizationVariables")]
-    public partial class Gs2VersionVersionModelLocalizationVariables : MonoBehaviour
+	[AddComponentMenu("GS2 UIKit/Version/VersionModel/View/Enabler/Properties/ApproveRequirement/Gs2VersionVersionModelApproveRequirementEnabler")]
+    public partial class Gs2VersionVersionModelApproveRequirementEnabler : MonoBehaviour
     {
         private void OnFetched()
         {
-            this.target.StringReference["name"] = new StringVariable {
-                Value = _fetcher?.VersionModel?.Name ?? "",
-            };
-            this.target.StringReference["metadata"] = new StringVariable {
-                Value = _fetcher?.VersionModel?.Metadata ?? "",
-            };
-            this.target.StringReference["scope"] = new StringVariable {
-                Value = _fetcher?.VersionModel?.Scope ?? "",
-            };
-            this.target.StringReference["needSignature"] = new BoolVariable {
-                Value = _fetcher?.VersionModel?.NeedSignature ?? false,
-            };
-            this.target.StringReference["approveRequirement"] = new StringVariable {
-                Value = _fetcher?.VersionModel?.ApproveRequirement ?? "",
-            };
-            this.target.enabled = true;
+            switch(this.expression)
+            {
+                case Expression.In:
+                    this.target.SetActive(this.enableApproveRequirements.Contains(this._fetcher.VersionModel?.ApproveRequirement ?? ""));
+                    break;
+                case Expression.NotIn:
+                    this.target.SetActive(!this.enableApproveRequirements.Contains(this._fetcher.VersionModel?.ApproveRequirement ?? ""));
+                    break;
+                case Expression.StartsWith:
+                    this.target.SetActive((this._fetcher.VersionModel?.ApproveRequirement ?? "").StartsWith(this.enableApproveRequirement));
+                    break;
+                case Expression.EndsWith:
+                    this.target.SetActive((this._fetcher.VersionModel?.ApproveRequirement ?? "").EndsWith(this.enableApproveRequirement));
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
         }
     }
 
@@ -67,16 +66,19 @@ namespace Gs2.Unity.UiKit.Gs2Version.Localization
     /// Dependent components
     /// </summary>
 
-    public partial class Gs2VersionVersionModelLocalizationVariables
+    public partial class Gs2VersionVersionModelApproveRequirementEnabler
     {
         private Gs2VersionVersionModelFetcher _fetcher;
 
-        public void Awake() {
-            this.target.enabled = false;
+        public void Awake()
+        {
             this._fetcher = GetComponent<Gs2VersionVersionModelFetcher>() ?? GetComponentInParent<Gs2VersionVersionModelFetcher>();
-
             if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2VersionVersionModelFetcher.");
+                enabled = false;
+            }
+            if (this.target == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: target is not set.");
                 enabled = false;
             }
         }
@@ -85,6 +87,9 @@ namespace Gs2.Unity.UiKit.Gs2Version.Localization
         {
             this._fetcher = GetComponent<Gs2VersionVersionModelFetcher>() ?? GetComponentInParent<Gs2VersionVersionModelFetcher>(true);
             if (this._fetcher == null) {
+                return true;
+            }
+            if (this.target == null) {
                 return true;
             }
             return false;
@@ -118,7 +123,7 @@ namespace Gs2.Unity.UiKit.Gs2Version.Localization
     /// Public properties
     /// </summary>
 
-    public partial class Gs2VersionVersionModelLocalizationVariables
+    public partial class Gs2VersionVersionModelApproveRequirementEnabler
     {
 
     }
@@ -127,18 +132,29 @@ namespace Gs2.Unity.UiKit.Gs2Version.Localization
     /// Parameters for Inspector
     /// </summary>
 
-    public partial class Gs2VersionVersionModelLocalizationVariables
+    public partial class Gs2VersionVersionModelApproveRequirementEnabler
     {
-        public LocalizeStringEvent target;
+        public enum Expression {
+            In,
+            NotIn,
+            StartsWith,
+            EndsWith,
+        }
+
+        public Expression expression;
+
+        public List<string> enableApproveRequirements;
+
+        public string enableApproveRequirement;
+
+        public GameObject target;
     }
 
     /// <summary>
     /// Event handlers
     /// </summary>
-    public partial class Gs2VersionVersionModelLocalizationVariables
+    public partial class Gs2VersionVersionModelApproveRequirementEnabler
     {
-
+        
     }
 }
-
-#endif

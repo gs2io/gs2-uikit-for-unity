@@ -25,42 +25,48 @@
 #pragma warning disable CS0472
 
 using System;
-using Gs2.Core.Util;
+using System.Collections.Generic;
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Version.Fetcher;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace Gs2.Unity.UiKit.Gs2Version
+namespace Gs2.Unity.UiKit.Gs2Version.SpriteSwitcher
 {
     /// <summary>
     /// Main
     /// </summary>
 
-	[AddComponentMenu("GS2 UIKit/Version/VersionModel/View/Label/Gs2VersionVersionModelLabel")]
-    public partial class Gs2VersionVersionModelLabel : MonoBehaviour
+	[AddComponentMenu("GS2 UIKit/Version/VersionModel/View/SpriteSwitcher/Properties/ApproveRequirement/Gs2VersionVersionModelApproveRequirementSpriteSwitcher")]
+    public partial class Gs2VersionVersionModelApproveRequirementSpriteSwitcher : MonoBehaviour
     {
         private void OnFetched()
         {
-            this.onUpdate?.Invoke(
-                this.format.Replace(
-                    "{name}", $"{this._fetcher?.VersionModel?.Name}"
-                ).Replace(
-                    "{metadata}", $"{this._fetcher?.VersionModel?.Metadata}"
-                ).Replace(
-                    "{warningVersion}", $"{this._fetcher?.VersionModel?.WarningVersion}"
-                ).Replace(
-                    "{errorVersion}", $"{this._fetcher?.VersionModel?.ErrorVersion}"
-                ).Replace(
-                    "{scope}", $"{this._fetcher?.VersionModel?.Scope}"
-                ).Replace(
-                    "{currentVersion}", $"{this._fetcher?.VersionModel?.CurrentVersion}"
-                ).Replace(
-                    "{needSignature}", $"{this._fetcher?.VersionModel?.NeedSignature}"
-                ).Replace(
-                    "{approveRequirement}", $"{this._fetcher?.VersionModel?.ApproveRequirement}"
-                )
-            );
+            switch(this.expression)
+            {
+                case Expression.In:
+                    if (this.applyApproveRequirements.Contains(this._fetcher.VersionModel?.ApproveRequirement ?? "")) {
+                        this.onUpdate.Invoke(this.sprite);
+                    }
+                    break;
+                case Expression.NotIn:
+                    if (!this.applyApproveRequirements.Contains(this._fetcher.VersionModel?.ApproveRequirement ?? "")) {
+                        this.onUpdate.Invoke(this.sprite);
+                    }
+                    break;
+                case Expression.StartsWith:
+                    if ((this._fetcher.VersionModel?.ApproveRequirement ?? "").StartsWith(this.applyApproveRequirement)) {
+                        this.onUpdate.Invoke(this.sprite);
+                    }
+                    break;
+                case Expression.EndsWith:
+                    if ((this._fetcher.VersionModel?.ApproveRequirement ?? "").EndsWith(this.applyApproveRequirement)) {
+                        this.onUpdate.Invoke(this.sprite);
+                    }
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
         }
     }
 
@@ -68,7 +74,7 @@ namespace Gs2.Unity.UiKit.Gs2Version
     /// Dependent components
     /// </summary>
 
-    public partial class Gs2VersionVersionModelLabel
+    public partial class Gs2VersionVersionModelApproveRequirementSpriteSwitcher
     {
         private Gs2VersionVersionModelFetcher _fetcher;
 
@@ -79,12 +85,19 @@ namespace Gs2.Unity.UiKit.Gs2Version
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2VersionVersionModelFetcher.");
                 enabled = false;
             }
+            if (this.sprite == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: sprite is not set.");
+                enabled = false;
+            }
         }
 
         public virtual bool HasError()
         {
             this._fetcher = GetComponent<Gs2VersionVersionModelFetcher>() ?? GetComponentInParent<Gs2VersionVersionModelFetcher>(true);
             if (this._fetcher == null) {
+                return true;
+            }
+            if (this.sprite == null) {
                 return true;
             }
             return false;
@@ -99,7 +112,6 @@ namespace Gs2.Unity.UiKit.Gs2Version
                 OnFetched();
             };
             this._fetcher.OnFetched.AddListener(this._onFetched);
-
             if (this._fetcher.Fetched) {
                 OnFetched();
             }
@@ -118,7 +130,7 @@ namespace Gs2.Unity.UiKit.Gs2Version
     /// Public properties
     /// </summary>
 
-    public partial class Gs2VersionVersionModelLabel
+    public partial class Gs2VersionVersionModelApproveRequirementSpriteSwitcher
     {
 
     }
@@ -127,18 +139,31 @@ namespace Gs2.Unity.UiKit.Gs2Version
     /// Parameters for Inspector
     /// </summary>
 
-    public partial class Gs2VersionVersionModelLabel
+    public partial class Gs2VersionVersionModelApproveRequirementSpriteSwitcher
     {
-        public string format;
+        public enum Expression {
+            In,
+            NotIn,
+            StartsWith,
+            EndsWith,
+        }
+
+        public Expression expression;
+
+        public List<string> applyApproveRequirements;
+
+        public string applyApproveRequirement;
+
+        public Sprite sprite;
     }
 
     /// <summary>
     /// Event handlers
     /// </summary>
-    public partial class Gs2VersionVersionModelLabel
+    public partial class Gs2VersionVersionModelApproveRequirementSpriteSwitcher
     {
         [Serializable]
-        private class UpdateEvent : UnityEvent<string>
+        private class UpdateEvent : UnityEvent<Sprite>
         {
 
         }
@@ -146,7 +171,7 @@ namespace Gs2.Unity.UiKit.Gs2Version
         [SerializeField]
         private UpdateEvent onUpdate = new UpdateEvent();
 
-        public event UnityAction<string> OnUpdate
+        public event UnityAction<Sprite> OnUpdate
         {
             add => this.onUpdate.AddListener(value);
             remove => this.onUpdate.RemoveListener(value);

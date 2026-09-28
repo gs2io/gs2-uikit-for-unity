@@ -26,6 +26,7 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Text;
 using Gs2.Core.Exception;
 using Gs2.Unity.Core.Exception;
@@ -34,6 +35,8 @@ using Gs2.Unity.Gs2Version.Model;
 using Gs2.Unity.Gs2Version.ScriptableObject;
 using Gs2.Unity.Util;
 using Gs2.Unity.UiKit.Core;
+using Gs2.Unity.UiKit.Core.Model;
+using Gs2.Unity.UiKit.Gs2Core.Fetcher;
 using Gs2.Unity.UiKit.Gs2Version.Context;
 using UnityEngine;
 using UnityEngine.Events;
@@ -60,63 +63,28 @@ namespace Gs2.Unity.UiKit.Gs2Version.Fetcher
             yield return new WaitUntil(() => gameSessionHolder.Initialized);
             yield return new WaitUntil(() => Context != null && this.Context.AcceptVersion != null);
 
-            _domain = clientHolder.Gs2.Version.Namespace(
+            this._domain = clientHolder.Gs2.Version.Namespace(
                 this.Context.AcceptVersion.NamespaceName
             ).Me(
                 gameSessionHolder.GameSession
             ).AcceptVersion(
                 this.Context.AcceptVersion.VersionName
-            );
-            this._callbackId = this._domain.Subscribe(
+            );;
+            var future = this._domain.SubscribeWithInitialCallFuture(
                 item =>
                 {
+                    retryWaitSecond = 0;
                     AcceptVersion = item;
                     Fetched = true;
                     this.OnFetched.Invoke();
                 }
             );
-
-            while (true) {
-                var future = this._domain.ModelFuture();
-                yield return future;
-                if (future.Error != null) {
-                    yield return new WaitForSeconds(retryWaitSecond);
-                    retryWaitSecond *= 2;
-                }
-                else {
-                    AcceptVersion = future.Result;
-                    Fetched = true;
-                    this.OnFetched.Invoke();
-                    break;
-                }
+            yield return future;
+            if (future.Error != null) {
+                this.onError.Invoke(future.Error, null);
+                yield break;
             }
-        }
-    }
-
-    /// <summary>
-    /// Dependent components
-    /// </summary>
-
-    public partial class Gs2VersionOwnAcceptVersionFetcher
-    {
-        public Gs2VersionOwnAcceptVersionContext Context { get; private set; }
-
-        public void Awake()
-        {
-            Context = GetComponent<Gs2VersionOwnAcceptVersionContext>() ?? GetComponentInParent<Gs2VersionOwnAcceptVersionContext>();
-            if (Context == null) {
-                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2VersionOwnAcceptVersionContext.");
-                enabled = false;
-            }
-        }
-
-        public virtual bool HasError()
-        {
-            Context = GetComponent<Gs2VersionOwnAcceptVersionContext>() ?? GetComponentInParent<Gs2VersionOwnAcceptVersionContext>(true);
-            if (Context == null) {
-                return true;
-            }
-            return false;
+            this._callbackId = future.Result;
         }
 
         public void OnUpdateContext() {
@@ -146,6 +114,45 @@ namespace Gs2.Unity.UiKit.Gs2Version.Fetcher
             );
             this._callbackId = null;
         }
+
+        public void SetTemporaryAcceptVersion(
+            Gs2.Unity.Gs2Version.Model.EzAcceptVersion acceptVersion
+        ) {
+            AcceptVersion = acceptVersion;
+            this.OnFetched.Invoke();
+        }
+
+        public void RollbackTemporaryAcceptVersion(
+        ) {
+            OnUpdateContext();
+        }
+    }
+
+    /// <summary>
+    /// Dependent components
+    /// </summary>
+
+    public partial class Gs2VersionOwnAcceptVersionFetcher
+    {
+        public Gs2VersionOwnAcceptVersionContext Context { get; private set; }
+
+        public void Awake()
+        {
+            Context = GetComponent<Gs2VersionOwnAcceptVersionContext>() ?? GetComponentInParent<Gs2VersionOwnAcceptVersionContext>();
+            if (Context == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2VersionOwnAcceptVersionContext.");
+                enabled = false;
+            }
+        }
+
+        public virtual bool HasError()
+        {
+            Context = GetComponent<Gs2VersionOwnAcceptVersionContext>() ?? GetComponentInParent<Gs2VersionOwnAcceptVersionContext>(true);
+            if (Context == null) {
+                return true;
+            }
+            return false;
+        }
     }
 
     /// <summary>
@@ -154,7 +161,7 @@ namespace Gs2.Unity.UiKit.Gs2Version.Fetcher
 
     public partial class Gs2VersionOwnAcceptVersionFetcher
     {
-        public EzAcceptVersion AcceptVersion { get; protected set; }
+        public Gs2.Unity.Gs2Version.Model.EzAcceptVersion AcceptVersion { get; protected set; }
         public bool Fetched { get; protected set; }
         public UnityEvent OnFetched = new UnityEvent();
     }

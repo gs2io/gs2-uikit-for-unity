@@ -109,6 +109,11 @@ namespace Gs2.Unity.UiKit.Gs2Version.Editor
                 GUI.FocusControl("");
                 EditorUtility.SetDirty(original);
             }
+            if (GUILayout.Button("ApproveRequirement")) {
+                original.format += "{approveRequirement}";
+                GUI.FocusControl("");
+                EditorUtility.SetDirty(original);
+            }
             EditorGUILayout.PropertyField(serializedObject.FindProperty("onUpdate"), true);
             serializedObject.ApplyModifiedProperties();
         }

@@ -25,34 +25,48 @@
 #pragma warning disable CS0472
 
 using System;
-using Gs2.Core.Util;
+using System.Collections.Generic;
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Version.Fetcher;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace Gs2.Unity.UiKit.Gs2Version
+namespace Gs2.Unity.UiKit.Gs2Version.SpriteSwitcher
 {
     /// <summary>
     /// Main
     /// </summary>
 
-	[AddComponentMenu("GS2 UIKit/Version/AcceptVersion/View/Label/Gs2VersionOwnAcceptVersionLabel")]
-    public partial class Gs2VersionOwnAcceptVersionLabel : MonoBehaviour
+	[AddComponentMenu("GS2 UIKit/Version/AcceptVersion/View/SpriteSwitcher/Properties/Status/Gs2VersionOwnAcceptVersionStatusSpriteSwitcher")]
+    public partial class Gs2VersionOwnAcceptVersionStatusSpriteSwitcher : MonoBehaviour
     {
         private void OnFetched()
         {
-            this.onUpdate?.Invoke(
-                this.format.Replace(
-                    "{versionName}", $"{this._fetcher?.AcceptVersion?.VersionName}"
-                ).Replace(
-                    "{userId}", $"{this._fetcher?.AcceptVersion?.UserId}"
-                ).Replace(
-                    "{version}", $"{this._fetcher?.AcceptVersion?.Version}"
-                ).Replace(
-                    "{status}", $"{this._fetcher?.AcceptVersion?.Status}"
-                )
-            );
+            switch(this.expression)
+            {
+                case Expression.In:
+                    if (this.applyStatuses.Contains(this._fetcher.AcceptVersion?.Status ?? "")) {
+                        this.onUpdate.Invoke(this.sprite);
+                    }
+                    break;
+                case Expression.NotIn:
+                    if (!this.applyStatuses.Contains(this._fetcher.AcceptVersion?.Status ?? "")) {
+                        this.onUpdate.Invoke(this.sprite);
+                    }
+                    break;
+                case Expression.StartsWith:
+                    if ((this._fetcher.AcceptVersion?.Status ?? "").StartsWith(this.applyStatus)) {
+                        this.onUpdate.Invoke(this.sprite);
+                    }
+                    break;
+                case Expression.EndsWith:
+                    if ((this._fetcher.AcceptVersion?.Status ?? "").EndsWith(this.applyStatus)) {
+                        this.onUpdate.Invoke(this.sprite);
+                    }
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
         }
     }
 
@@ -60,15 +74,20 @@ namespace Gs2.Unity.UiKit.Gs2Version
     /// Dependent components
     /// </summary>
 
-    public partial class Gs2VersionOwnAcceptVersionLabel
+    public partial class Gs2VersionOwnAcceptVersionStatusSpriteSwitcher
     {
         private Gs2VersionOwnAcceptVersionFetcher _fetcher;
 
         public void Awake()
         {
             this._fetcher = GetComponent<Gs2VersionOwnAcceptVersionFetcher>() ?? GetComponentInParent<Gs2VersionOwnAcceptVersionFetcher>();
+
             if (this._fetcher == null) {
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2VersionOwnAcceptVersionFetcher.");
+                enabled = false;
+            }
+            if (this.sprite == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: sprite is not set.");
                 enabled = false;
             }
         }
@@ -77,6 +96,9 @@ namespace Gs2.Unity.UiKit.Gs2Version
         {
             this._fetcher = GetComponent<Gs2VersionOwnAcceptVersionFetcher>() ?? GetComponentInParent<Gs2VersionOwnAcceptVersionFetcher>(true);
             if (this._fetcher == null) {
+                return true;
+            }
+            if (this.sprite == null) {
                 return true;
             }
             return false;
@@ -110,7 +132,7 @@ namespace Gs2.Unity.UiKit.Gs2Version
     /// Public properties
     /// </summary>
 
-    public partial class Gs2VersionOwnAcceptVersionLabel
+    public partial class Gs2VersionOwnAcceptVersionStatusSpriteSwitcher
     {
 
     }
@@ -119,18 +141,31 @@ namespace Gs2.Unity.UiKit.Gs2Version
     /// Parameters for Inspector
     /// </summary>
 
-    public partial class Gs2VersionOwnAcceptVersionLabel
+    public partial class Gs2VersionOwnAcceptVersionStatusSpriteSwitcher
     {
-        public string format;
+        public enum Expression {
+            In,
+            NotIn,
+            StartsWith,
+            EndsWith,
+        }
+
+        public Expression expression;
+
+        public List<string> applyStatuses;
+
+        public string applyStatus;
+
+        public Sprite sprite;
     }
 
     /// <summary>
     /// Event handlers
     /// </summary>
-    public partial class Gs2VersionOwnAcceptVersionLabel
+    public partial class Gs2VersionOwnAcceptVersionStatusSpriteSwitcher
     {
         [Serializable]
-        private class UpdateEvent : UnityEvent<string>
+        private class UpdateEvent : UnityEvent<Sprite>
         {
 
         }
@@ -138,10 +173,10 @@ namespace Gs2.Unity.UiKit.Gs2Version
         [SerializeField]
         private UpdateEvent onUpdate = new UpdateEvent();
 
-        public event UnityAction<string> OnUpdate
+        public event UnityAction<Sprite> OnUpdate
         {
-            add => this.onUpdate.AddListener(value);
-            remove => this.onUpdate.RemoveListener(value);
+            add => onUpdate.AddListener(value);
+            remove => onUpdate.RemoveListener(value);
         }
     }
 }

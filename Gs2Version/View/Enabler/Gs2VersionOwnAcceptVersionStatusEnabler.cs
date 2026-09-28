@@ -25,34 +25,40 @@
 #pragma warning disable CS0472
 
 using System;
-using Gs2.Core.Util;
+using System.Collections.Generic;
 using Gs2.Unity.UiKit.Core;
 using Gs2.Unity.UiKit.Gs2Version.Fetcher;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace Gs2.Unity.UiKit.Gs2Version
+namespace Gs2.Unity.UiKit.Gs2Version.Enabler
 {
     /// <summary>
     /// Main
     /// </summary>
 
-	[AddComponentMenu("GS2 UIKit/Version/AcceptVersion/View/Label/Gs2VersionOwnAcceptVersionLabel")]
-    public partial class Gs2VersionOwnAcceptVersionLabel : MonoBehaviour
+	[AddComponentMenu("GS2 UIKit/Version/AcceptVersion/View/Enabler/Properties/Status/Gs2VersionOwnAcceptVersionStatusEnabler")]
+    public partial class Gs2VersionOwnAcceptVersionStatusEnabler : MonoBehaviour
     {
         private void OnFetched()
         {
-            this.onUpdate?.Invoke(
-                this.format.Replace(
-                    "{versionName}", $"{this._fetcher?.AcceptVersion?.VersionName}"
-                ).Replace(
-                    "{userId}", $"{this._fetcher?.AcceptVersion?.UserId}"
-                ).Replace(
-                    "{version}", $"{this._fetcher?.AcceptVersion?.Version}"
-                ).Replace(
-                    "{status}", $"{this._fetcher?.AcceptVersion?.Status}"
-                )
-            );
+            switch(this.expression)
+            {
+                case Expression.In:
+                    this.target.SetActive(this.enableStatuses.Contains(this._fetcher.AcceptVersion?.Status ?? ""));
+                    break;
+                case Expression.NotIn:
+                    this.target.SetActive(!this.enableStatuses.Contains(this._fetcher.AcceptVersion?.Status ?? ""));
+                    break;
+                case Expression.StartsWith:
+                    this.target.SetActive((this._fetcher.AcceptVersion?.Status ?? "").StartsWith(this.enableStatus));
+                    break;
+                case Expression.EndsWith:
+                    this.target.SetActive((this._fetcher.AcceptVersion?.Status ?? "").EndsWith(this.enableStatus));
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
         }
     }
 
@@ -60,7 +66,7 @@ namespace Gs2.Unity.UiKit.Gs2Version
     /// Dependent components
     /// </summary>
 
-    public partial class Gs2VersionOwnAcceptVersionLabel
+    public partial class Gs2VersionOwnAcceptVersionStatusEnabler
     {
         private Gs2VersionOwnAcceptVersionFetcher _fetcher;
 
@@ -71,12 +77,19 @@ namespace Gs2.Unity.UiKit.Gs2Version
                 Debug.LogError($"{gameObject.GetFullPath()}: Couldn't find the Gs2VersionOwnAcceptVersionFetcher.");
                 enabled = false;
             }
+            if (this.target == null) {
+                Debug.LogError($"{gameObject.GetFullPath()}: target is not set.");
+                enabled = false;
+            }
         }
 
         public virtual bool HasError()
         {
             this._fetcher = GetComponent<Gs2VersionOwnAcceptVersionFetcher>() ?? GetComponentInParent<Gs2VersionOwnAcceptVersionFetcher>(true);
             if (this._fetcher == null) {
+                return true;
+            }
+            if (this.target == null) {
                 return true;
             }
             return false;
@@ -110,7 +123,7 @@ namespace Gs2.Unity.UiKit.Gs2Version
     /// Public properties
     /// </summary>
 
-    public partial class Gs2VersionOwnAcceptVersionLabel
+    public partial class Gs2VersionOwnAcceptVersionStatusEnabler
     {
 
     }
@@ -119,29 +132,29 @@ namespace Gs2.Unity.UiKit.Gs2Version
     /// Parameters for Inspector
     /// </summary>
 
-    public partial class Gs2VersionOwnAcceptVersionLabel
+    public partial class Gs2VersionOwnAcceptVersionStatusEnabler
     {
-        public string format;
+        public enum Expression {
+            In,
+            NotIn,
+            StartsWith,
+            EndsWith,
+        }
+
+        public Expression expression;
+
+        public List<string> enableStatuses;
+
+        public string enableStatus;
+
+        public GameObject target;
     }
 
     /// <summary>
     /// Event handlers
     /// </summary>
-    public partial class Gs2VersionOwnAcceptVersionLabel
+    public partial class Gs2VersionOwnAcceptVersionStatusEnabler
     {
-        [Serializable]
-        private class UpdateEvent : UnityEvent<string>
-        {
-
-        }
-
-        [SerializeField]
-        private UpdateEvent onUpdate = new UpdateEvent();
-
-        public event UnityAction<string> OnUpdate
-        {
-            add => this.onUpdate.AddListener(value);
-            remove => this.onUpdate.RemoveListener(value);
-        }
+        
     }
 }
