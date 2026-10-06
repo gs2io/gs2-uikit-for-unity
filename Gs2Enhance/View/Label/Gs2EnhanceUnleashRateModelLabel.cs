@@ -52,6 +52,8 @@ namespace Gs2.Unity.UiKit.Gs2Enhance
                 ).Replace(
                     "{gradeModelId}", $"{this._fetcher?.UnleashRateModel?.GradeModelId}"
                 ).Replace(
+                    "{groupKeyHierarchy}", $"{this._fetcher?.UnleashRateModel?.GroupKeyHierarchy}"
+                ).Replace(
                     "{gradeEntries}", $"{this._fetcher?.UnleashRateModel?.GradeEntries}"
                 )
             );

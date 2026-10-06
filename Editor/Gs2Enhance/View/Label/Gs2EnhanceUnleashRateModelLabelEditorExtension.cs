@@ -94,6 +94,11 @@ namespace Gs2.Unity.UiKit.Gs2Enhance.Editor
                 GUI.FocusControl("");
                 EditorUtility.SetDirty(original);
             }
+            if (GUILayout.Button("GroupKeyHierarchy")) {
+                original.format += "{groupKeyHierarchy}";
+                GUI.FocusControl("");
+                EditorUtility.SetDirty(original);
+            }
             if (GUILayout.Button("GradeEntries")) {
                 original.format += "{gradeEntries}";
                 GUI.FocusControl("");
