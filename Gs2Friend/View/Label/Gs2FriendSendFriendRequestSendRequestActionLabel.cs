@@ -43,7 +43,9 @@ namespace Gs2.Unity.UiKit.Gs2Friend
         private void OnChange()
         {
             this.onUpdate?.Invoke(
-                this.format
+                this.format.Replace(
+                    "{withProfile}", $"{this.action?.WithProfile}"
+                )
             );
         }
 

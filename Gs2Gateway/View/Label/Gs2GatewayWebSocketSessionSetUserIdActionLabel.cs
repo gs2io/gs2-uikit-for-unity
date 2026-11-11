@@ -47,6 +47,8 @@ namespace Gs2.Unity.UiKit.Gs2Gateway
                     "{allowConcurrentAccess}", $"{this.action?.AllowConcurrentAccess}"
                 ).Replace(
                     "{sessionId}", $"{this.action?.SessionId}"
+                ).Replace(
+                    "{force}", $"{this.action?.Force}"
                 )
             );
         }

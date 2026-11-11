@@ -63,7 +63,8 @@ namespace Gs2.Unity.UiKit.Gs2Friend
                 gameSessionHolder.GameSession
             );
             var future = domain.SendRequestFuture(
-                this._context.SendFriendRequest.TargetUserId
+                this._context.SendFriendRequest.TargetUserId,
+                WithProfile
             );
             yield return future;
             if (future.Error != null)
@@ -161,6 +162,13 @@ namespace Gs2.Unity.UiKit.Gs2Friend
     public partial class Gs2FriendSendFriendRequestSendRequestAction
     {
         public bool WaitAsyncProcessComplete;
+        public bool WithProfile;
+
+        public void SetWithProfile(bool value) {
+            this.WithProfile = value;
+            this.onChangeWithProfile.Invoke(this.WithProfile);
+            this.OnChange.Invoke();
+        }
     }
 
     /// <summary>
@@ -168,6 +176,20 @@ namespace Gs2.Unity.UiKit.Gs2Friend
     /// </summary>
     public partial class Gs2FriendSendFriendRequestSendRequestAction
     {
+
+        [Serializable]
+        private class ChangeWithProfileEvent : UnityEvent<bool>
+        {
+
+        }
+
+        [SerializeField]
+        private ChangeWithProfileEvent onChangeWithProfile = new ChangeWithProfileEvent();
+        public event UnityAction<bool> OnChangeWithProfile
+        {
+            add => this.onChangeWithProfile.AddListener(value);
+            remove => this.onChangeWithProfile.RemoveListener(value);
+        }
 
         [Serializable]
         private class SendRequestStartEvent : UnityEvent

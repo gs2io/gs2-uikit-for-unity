@@ -65,7 +65,8 @@ namespace Gs2.Unity.UiKit.Gs2Gateway
             );
             var future = domain.SetUserIdFuture(
                 AllowConcurrentAccess,
-                SessionId
+                SessionId,
+                Force
             );
             yield return future;
             if (future.Error != null)
@@ -165,6 +166,7 @@ namespace Gs2.Unity.UiKit.Gs2Gateway
         public bool WaitAsyncProcessComplete;
         public bool AllowConcurrentAccess;
         public string SessionId;
+        public bool Force;
 
         public void SetAllowConcurrentAccess(bool value) {
             this.AllowConcurrentAccess = value;
@@ -175,6 +177,12 @@ namespace Gs2.Unity.UiKit.Gs2Gateway
         public void SetSessionId(string value) {
             this.SessionId = value;
             this.onChangeSessionId.Invoke(this.SessionId);
+            this.OnChange.Invoke();
+        }
+
+        public void SetForce(bool value) {
+            this.Force = value;
+            this.onChangeForce.Invoke(this.Force);
             this.OnChange.Invoke();
         }
     }
@@ -211,6 +219,20 @@ namespace Gs2.Unity.UiKit.Gs2Gateway
         {
             add => this.onChangeSessionId.AddListener(value);
             remove => this.onChangeSessionId.RemoveListener(value);
+        }
+
+        [Serializable]
+        private class ChangeForceEvent : UnityEvent<bool>
+        {
+
+        }
+
+        [SerializeField]
+        private ChangeForceEvent onChangeForce = new ChangeForceEvent();
+        public event UnityAction<bool> OnChangeForce
+        {
+            add => this.onChangeForce.AddListener(value);
+            remove => this.onChangeForce.RemoveListener(value);
         }
 
         [Serializable]

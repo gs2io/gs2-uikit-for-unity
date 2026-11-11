@@ -50,6 +50,11 @@ namespace Gs2.Unity.UiKit.Gs2Friend.Editor
             original.format = EditorGUILayout.TextField("Format", original.format);
 
             GUILayout.Label("Add Format Parameter");
+            if (GUILayout.Button("WithProfile")) {
+                original.format += "{withProfile}";
+                GUI.FocusControl("");
+                EditorUtility.SetDirty(original);
+            }
             EditorGUILayout.PropertyField(serializedObject.FindProperty("onUpdate"), true);
             serializedObject.ApplyModifiedProperties();
         }
