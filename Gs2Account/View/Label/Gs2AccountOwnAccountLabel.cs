@@ -43,6 +43,7 @@ namespace Gs2.Unity.UiKit.Gs2Account
         private void OnFetched()
         {
             var createdAt = this._fetcher.Account.CreatedAt == null ? DateTime.Now : _fetcher.Account.CreatedAt.ToLocalTime();
+            var deletionScheduledAt = this._fetcher.Account.DeletionScheduledAt == null ? DateTime.Now : _fetcher.Account.DeletionScheduledAt.ToLocalTime();
             this.onUpdate?.Invoke(
                 this.format.Replace(
                     "{userId}", $"{this._fetcher?.Account?.UserId}"
@@ -68,6 +69,26 @@ namespace Gs2.Unity.UiKit.Gs2Account
                     "{createdAt:mm}", createdAt.ToString("mm")
                 ).Replace(
                     "{createdAt:ss}", createdAt.ToString("ss")
+                ).Replace(
+                    "{deletionScheduledAt:yyyy}", deletionScheduledAt.ToString("yyyy")
+                ).Replace(
+                    "{deletionScheduledAt:yy}", deletionScheduledAt.ToString("yy")
+                ).Replace(
+                    "{deletionScheduledAt:MM}", deletionScheduledAt.ToString("MM")
+                ).Replace(
+                    "{deletionScheduledAt:MMM}", deletionScheduledAt.ToString("MMM")
+                ).Replace(
+                    "{deletionScheduledAt:dd}", deletionScheduledAt.ToString("dd")
+                ).Replace(
+                    "{deletionScheduledAt:hh}", deletionScheduledAt.ToString("hh")
+                ).Replace(
+                    "{deletionScheduledAt:HH}", deletionScheduledAt.ToString("HH")
+                ).Replace(
+                    "{deletionScheduledAt:tt}", deletionScheduledAt.ToString("tt")
+                ).Replace(
+                    "{deletionScheduledAt:mm}", deletionScheduledAt.ToString("mm")
+                ).Replace(
+                    "{deletionScheduledAt:ss}", deletionScheduledAt.ToString("ss")
                 )
             );
         }

@@ -125,6 +125,56 @@ namespace Gs2.Unity.UiKit.Gs2Account.Editor
                 GUI.FocusControl("");
                 EditorUtility.SetDirty(original);
             }
+            if (GUILayout.Button("DeletionScheduledAt(Year:2020)")) {
+                original.format += "{deletionScheduledAt:yyyy}";
+                GUI.FocusControl("");
+                EditorUtility.SetDirty(original);
+            }
+            if (GUILayout.Button("DeletionScheduledAt(Year:20)")) {
+                original.format += "{deletionScheduledAt:yy}";
+                GUI.FocusControl("");
+                EditorUtility.SetDirty(original);
+            }
+            if (GUILayout.Button("DeletionScheduledAt(Month:12)")) {
+                original.format += "{deletionScheduledAt:MM}";
+                GUI.FocusControl("");
+                EditorUtility.SetDirty(original);
+            }
+            if (GUILayout.Button("DeletionScheduledAt(Month:Dec)")) {
+                original.format += "{deletionScheduledAt:MMM}";
+                GUI.FocusControl("");
+                EditorUtility.SetDirty(original);
+            }
+            if (GUILayout.Button("DeletionScheduledAt(Day:25)")) {
+                original.format += "{deletionScheduledAt:dd}";
+                GUI.FocusControl("");
+                EditorUtility.SetDirty(original);
+            }
+            if (GUILayout.Button("DeletionScheduledAt(Hour:6)")) {
+                original.format += "{deletionScheduledAt:hh}";
+                GUI.FocusControl("");
+                EditorUtility.SetDirty(original);
+            }
+            if (GUILayout.Button("DeletionScheduledAt(Hour:18)")) {
+                original.format += "{deletionScheduledAt:HH}";
+                GUI.FocusControl("");
+                EditorUtility.SetDirty(original);
+            }
+            if (GUILayout.Button("DeletionScheduledAt(AM/PM)")) {
+                original.format += "{deletionScheduledAt:tt}";
+                GUI.FocusControl("");
+                EditorUtility.SetDirty(original);
+            }
+            if (GUILayout.Button("DeletionScheduledAt(Min:05)")) {
+                original.format += "{deletionScheduledAt:mm}";
+                GUI.FocusControl("");
+                EditorUtility.SetDirty(original);
+            }
+            if (GUILayout.Button("DeletionScheduledAt(Sec:09)")) {
+                original.format += "{deletionScheduledAt:ss}";
+                GUI.FocusControl("");
+                EditorUtility.SetDirty(original);
+            }
             EditorGUILayout.PropertyField(serializedObject.FindProperty("onUpdate"), true);
             serializedObject.ApplyModifiedProperties();
         }
