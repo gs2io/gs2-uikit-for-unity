@@ -60,7 +60,7 @@ namespace Gs2.Unity.UiKit.Gs2Account
             var domain = clientHolder.Gs2.Account.Namespace(
                 this._context.Account.NamespaceName
             ).Account(
-                this._context.Account.UserId
+                UserId
             );
             var future = domain.CancelDeletionFuture(
                 Password
@@ -162,10 +162,16 @@ namespace Gs2.Unity.UiKit.Gs2Account
     {
         public bool WaitAsyncProcessComplete;
         public string Password;
+        public string UserId;
 
         public void SetPassword(string value) {
             this.Password = value;
             this.onChangePassword.Invoke(this.Password);
+            this.OnChange.Invoke();
+        }
+        public void SetUserId(string value) {
+            this.UserId = value;
+            this.onChangeUserId.Invoke(this.UserId);
             this.OnChange.Invoke();
         }
     }
@@ -188,6 +194,20 @@ namespace Gs2.Unity.UiKit.Gs2Account
         {
             add => this.onChangePassword.AddListener(value);
             remove => this.onChangePassword.RemoveListener(value);
+        }
+
+        [Serializable]
+        private class ChangeUserIdEvent : UnityEvent<string>
+        {
+
+        }
+
+        [SerializeField]
+        private ChangeUserIdEvent onChangeUserId = new ChangeUserIdEvent();
+        public event UnityAction<string> OnChangeUserId
+        {
+            add => this.onChangeUserId.AddListener(value);
+            remove => this.onChangeUserId.RemoveListener(value);
         }
 
         [Serializable]
