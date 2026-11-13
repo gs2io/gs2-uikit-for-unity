@@ -139,6 +139,56 @@ namespace Gs2.Unity.UiKit.Gs2Account.Editor
                 GUI.FocusControl("");
                 EditorUtility.SetDirty(original);
             }
+            if (GUILayout.Button("ExpiresAt(Year:2020)")) {
+                original.format += "{expiresAt:yyyy}";
+                GUI.FocusControl("");
+                EditorUtility.SetDirty(original);
+            }
+            if (GUILayout.Button("ExpiresAt(Year:20)")) {
+                original.format += "{expiresAt:yy}";
+                GUI.FocusControl("");
+                EditorUtility.SetDirty(original);
+            }
+            if (GUILayout.Button("ExpiresAt(Month:12)")) {
+                original.format += "{expiresAt:MM}";
+                GUI.FocusControl("");
+                EditorUtility.SetDirty(original);
+            }
+            if (GUILayout.Button("ExpiresAt(Month:Dec)")) {
+                original.format += "{expiresAt:MMM}";
+                GUI.FocusControl("");
+                EditorUtility.SetDirty(original);
+            }
+            if (GUILayout.Button("ExpiresAt(Day:25)")) {
+                original.format += "{expiresAt:dd}";
+                GUI.FocusControl("");
+                EditorUtility.SetDirty(original);
+            }
+            if (GUILayout.Button("ExpiresAt(Hour:6)")) {
+                original.format += "{expiresAt:hh}";
+                GUI.FocusControl("");
+                EditorUtility.SetDirty(original);
+            }
+            if (GUILayout.Button("ExpiresAt(Hour:18)")) {
+                original.format += "{expiresAt:HH}";
+                GUI.FocusControl("");
+                EditorUtility.SetDirty(original);
+            }
+            if (GUILayout.Button("ExpiresAt(AM/PM)")) {
+                original.format += "{expiresAt:tt}";
+                GUI.FocusControl("");
+                EditorUtility.SetDirty(original);
+            }
+            if (GUILayout.Button("ExpiresAt(Min:05)")) {
+                original.format += "{expiresAt:mm}";
+                GUI.FocusControl("");
+                EditorUtility.SetDirty(original);
+            }
+            if (GUILayout.Button("ExpiresAt(Sec:09)")) {
+                original.format += "{expiresAt:ss}";
+                GUI.FocusControl("");
+                EditorUtility.SetDirty(original);
+            }
             EditorGUILayout.PropertyField(serializedObject.FindProperty("onUpdate"), true);
             serializedObject.ApplyModifiedProperties();
         }

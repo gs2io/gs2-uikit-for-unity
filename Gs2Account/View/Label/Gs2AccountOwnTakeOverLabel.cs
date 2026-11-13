@@ -43,6 +43,7 @@ namespace Gs2.Unity.UiKit.Gs2Account
         private void OnFetched()
         {
             var createdAt = this._fetcher.TakeOver.CreatedAt == null ? DateTime.Now : _fetcher.TakeOver.CreatedAt.ToLocalTime();
+            var expiresAt = this._fetcher.TakeOver.ExpiresAt == null ? DateTime.Now : _fetcher.TakeOver.ExpiresAt.ToLocalTime();
             this.onUpdate?.Invoke(
                 this.format.Replace(
                     "{userId}", $"{this._fetcher?.TakeOver?.UserId}"
@@ -70,6 +71,26 @@ namespace Gs2.Unity.UiKit.Gs2Account
                     "{createdAt:mm}", createdAt.ToString("mm")
                 ).Replace(
                     "{createdAt:ss}", createdAt.ToString("ss")
+                ).Replace(
+                    "{expiresAt:yyyy}", expiresAt.ToString("yyyy")
+                ).Replace(
+                    "{expiresAt:yy}", expiresAt.ToString("yy")
+                ).Replace(
+                    "{expiresAt:MM}", expiresAt.ToString("MM")
+                ).Replace(
+                    "{expiresAt:MMM}", expiresAt.ToString("MMM")
+                ).Replace(
+                    "{expiresAt:dd}", expiresAt.ToString("dd")
+                ).Replace(
+                    "{expiresAt:hh}", expiresAt.ToString("hh")
+                ).Replace(
+                    "{expiresAt:HH}", expiresAt.ToString("HH")
+                ).Replace(
+                    "{expiresAt:tt}", expiresAt.ToString("tt")
+                ).Replace(
+                    "{expiresAt:mm}", expiresAt.ToString("mm")
+                ).Replace(
+                    "{expiresAt:ss}", expiresAt.ToString("ss")
                 )
             );
         }
